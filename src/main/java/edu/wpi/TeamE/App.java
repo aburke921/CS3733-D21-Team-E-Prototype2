@@ -15,6 +15,7 @@ public class App extends Application {
     App.primaryStage = primaryStage;
   }
 
+
   @Override
   public void init() {
     System.out.println("Starting Up");
@@ -24,7 +25,7 @@ public class App extends Application {
   public void start(Stage primaryStage) {
     App.primaryStage = primaryStage;
     try {
-      Parent root = FXMLLoader.load(getClass().getResource("fxml/Scene1.fxml"));
+      Parent root = FXMLLoader.load(getClass().getResource("fxml/Default.fxml"));
       Scene scene = new Scene(root);
       primaryStage.setScene(scene);
       primaryStage.show();

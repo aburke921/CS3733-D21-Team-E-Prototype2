@@ -11,7 +11,9 @@ public class App extends Application {
 
   private static Stage primaryStage;
 
-
+  public static void setPrimaryStage(Stage primaryStage) {
+    App.primaryStage = primaryStage;
+  }
 
   @Override
   public void init() {

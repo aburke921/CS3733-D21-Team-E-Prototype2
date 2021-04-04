@@ -28,4 +28,5 @@ public class Scene1Test extends ApplicationTest {
     clickOn("Advance Scene");
     verifyThat("Scene 2", Node::isVisible);
   }
+
 }

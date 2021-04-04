@@ -1,6 +1,6 @@
-package edu.wpi.teamname.views;
+package edu.wpi.TeamE.views;
 
-import edu.wpi.teamname.App;
+import edu.wpi.TeamE.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,17 +20,24 @@ public class MedicineDelivery {
 
     @FXML private MenuButton departmentInput;
 
-
+    /**
+     * Return back to default page
+     * @param actionEvent
+     */
     @FXML
     private void handleButton(ActionEvent actionEvent) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/sample/sample.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
+    /**
+     * Sets value of drop down list to the selected value
+     * @param actionEvent
+     */
     @FXML
     private void selectDepartment(ActionEvent actionEvent) {
         String department = ((MenuItem) actionEvent.getSource()).getText();

@@ -38,7 +38,7 @@ public class SanitationServices {
   }
 
   /**
-   * Sets value of drop down list to the selected value
+   * Sets value of drop down list to the selected value(departments)
    * @param actionEvent
    */
   @FXML
@@ -46,11 +46,19 @@ public class SanitationServices {
     String department = ((MenuItem) actionEvent.getSource()).getText();
     departmentInput.setText(department);
   }
+  /**
+   * Sets value of drop down list to the selected value(Service Types)
+   * @param actionEvent
+   */
   @FXML
   private void selectServiceType(ActionEvent actionEvent) {
     String service = ((MenuItem) actionEvent.getSource()).getText();
     ServiceTypeinput.setText(service);
   }
+  /**
+   * Sets value of drop down list to the selected value(Room/Hallway)
+   * @param actionEvent
+   */
   @FXML
   private void SelectType(ActionEvent actionEvent) {
     String type = ((MenuItem) actionEvent.getSource()).getText();

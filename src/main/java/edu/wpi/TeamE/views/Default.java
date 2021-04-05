@@ -49,5 +49,9 @@ public class Default {
             ex.printStackTrace();
         }
     }
+    
+    @FXML
+    public void getHelpDefault(ActionEvent actionEvent) {
+    }
 }
 

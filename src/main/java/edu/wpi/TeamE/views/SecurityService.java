@@ -40,7 +40,7 @@ public class SecurityService {
     @FXML
     public void toDefault(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/teamname/views/Default.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();

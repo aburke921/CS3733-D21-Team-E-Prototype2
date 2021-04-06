@@ -12,36 +12,33 @@ import java.io.IOException;
 public class SecurityService {
 
     @FXML
-    private TextArea locationForSecurityService;
+    private Button helpSecurityService;
 
     @FXML
-    private Button helpButton;
+    private TextField locationOfDelivery;
 
     @FXML
-    private CheckBox lowSecurityLevel;
+    private MenuButton levelOfSecurity;
 
     @FXML
-    private CheckBox mediumSecurityLevel;
+    private MenuButton levelOfUrgency;
 
     @FXML
-    private CheckBox highSecurityLevel;
+    private TextArea reasonForRequest;
 
     @FXML
-    private CheckBox urgent;
+    private Button submitSecurityRequest;
 
     @FXML
-    private CheckBox nonUrgent;
+    private Button cancelSecurityRequest;
 
     @FXML
-    private TextArea descriptionForSecurityService;
+    public void helpSecurityService(ActionEvent event) {
+
+    }
 
     @FXML
-    private Button submitForSecurityService;
-
-    @FXML
-    private Button cancelSecurityServiceRequest;
-
-    private void toDefault(ActionEvent e) {
+    public void toDefault(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/teamname/views/Default.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
@@ -49,38 +46,5 @@ public class SecurityService {
             ex.printStackTrace();
         }
     }
-
-    public void securityServiceHelp(ActionEvent anEvent) {
-
-    }
-
-    public void highSecurity() {
-        this.highSecurityLevel.setSelected(true);
-    }
-
-    public void mediumSecurity() {
-        this.mediumSecurityLevel.setSelected(true);
-    }
-
-    public void lowSecurity() {
-        this.lowSecurityLevel.setSelected(true);
-    }
-
-    public void urgentSelected() {
-        this.urgent.setSelected(true);
-    }
-
-    public void nonUrgentSelected() {
-        this.nonUrgent.setSelected(true);
-    }
-
-    public void submitForm(ActionEvent anAction) {
-        toDefault(anAction);
-    }
-
-    public void cancelForm(ActionEvent anAction) {
-        toDefault(anAction);
-    }
-
 
 }

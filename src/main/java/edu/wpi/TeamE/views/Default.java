@@ -49,6 +49,18 @@ public class Default {
             ex.printStackTrace();
         }
     }
+
+    @FXML
+    private void toSecurity(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/SecurityService.fxml"));
+            App.getPrimaryStage().getScene().setRoot(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
     
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {

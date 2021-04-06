@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" type="FlowPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.SecurityService">
+    <children>
+        <VBox alignment="CENTER" prefHeight="399.0" prefWidth="600.0">
+            <children>
+                <HBox prefHeight="38.0" prefWidth="513.0">
+                    <children>
+                        <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #5727d8;">
+                            <children>
+                                <Label prefHeight="38.0" prefWidth="486.0" text="Security Service Requests" textFill="WHITE">
+                                    <font>
+                                        <Font size="20.0" />
+                                    </font>
+                                    <FlowPane.margin>
+                                        <Insets left="10.0" />
+                                    </FlowPane.margin>
+                                </Label>
+                            </children>
+                        </FlowPane>
+                        <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #5727d8;">
+                            <children>
+                                <Button fx:id="helpButton" mnemonicParsing="false" onAction="#securityServiceHelp" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: #5727d8; -fx-border-color: gray;" text="Help" textFill="WHITE" />
+                            </children>
+                        </FlowPane>
+                    </children>
+                </HBox>
+                <HBox prefHeight="610.0" prefWidth="519.0">
+                    <children>
+                        <FlowPane prefHeight="361.0" prefWidth="299.0">
+                            <children>
+                                <VBox prefHeight="349.0" prefWidth="264.0">
+                                    <children>
+                                        <Label prefHeight="23.0" prefWidth="77.0">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                        </Label>
+                                        <Label layoutX="10.0" layoutY="10.0" prefHeight="27.0" prefWidth="120.0" text="Location">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>
+                                        </Label>
+                              <TextArea fx:id="locationForSecurityService" prefHeight="43.0" prefWidth="264.0" promptText="Enter location" />
+                                        <Label prefHeight="33.0" prefWidth="175.0" text="Level of Security">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>sc
+                                        </Label>
+                              <CheckBox fx:id="lowSecurityLevel" mnemonicParsing="false" onAction="#lowSecurity" text="Low" />
+                              <CheckBox fx:id="mediumSecurityLevel" mnemonicParsing="false" onAction="#mediumSecurity" text="Medium" />
+                              <CheckBox fx:id="highSecurityLevel" mnemonicParsing="false" onAction="#highSecurity" text="High" />
+                                        <Label prefHeight="27.0" prefWidth="121.0" text="Urgency">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                            <VBox.margin>
+                                                <Insets top="10.0" />
+                                            </VBox.margin>
+                                        </Label>
+                              <CheckBox fx:id="urgent" mnemonicParsing="false" onAction="#urgentSelected" text="Urgent" />
+                              <CheckBox fx:id="nonUrgent" mnemonicParsing="false" onAction="#nonUrgentSelected" text="Non-Urgent" />
+                                    </children>
+                                    <FlowPane.margin>
+                                        <Insets left="10.0" />
+                                    </FlowPane.margin>
+                                </VBox>
+                            </children>
+                        </FlowPane>
+                        <FlowPane prefHeight="361.0" prefWidth="329.0">
+                            <children>
+                                <VBox prefHeight="363.0" prefWidth="259.0">
+                                    <children>
+                                        <Label text="Reason for Security">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                        </Label>
+                                        <TextArea fx:id="descriptionForSecurityService" prefHeight="124.0" prefWidth="259.0" promptText="Add Description" />
+                                        <GridPane>
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Button fx:id="submitForSecurityService" mnemonicParsing="false" onAction="#submitForm" style="-fx-background-color: #5727d8;" text="Submit" textFill="WHITE" GridPane.halignment="CENTER" />
+                                                <Button fx:id="cancelSecurityServiceRequest" mnemonicParsing="false" onAction="#cancelForm" style="-fx-background-color: white; -fx-border-color: #5727d8;" text="Cancel" textFill="#5727d8" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                            </children>
+                                            <VBox.margin>
+                                                <Insets top="40.0" />
+                                            </VBox.margin>
+                                        </GridPane>
+                                    </children>
+                                    <FlowPane.margin>
+                                        <Insets left="20.0" />
+                                    </FlowPane.margin>
+                                </VBox>
+                            </children>
+                        </FlowPane>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</fx:root>

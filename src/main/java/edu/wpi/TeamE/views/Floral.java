@@ -31,9 +31,9 @@ public class Floral {
 
 
     @FXML
-    private void toDefault(ActionEvent e) {
+    void toDefault(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/teamname/views/Default.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -85,5 +85,24 @@ public class Floral {
 
     public void checkOffNone(ActionEvent a) {
         this.noneBox.setSelected(true);
+    }
+
+    @FXML
+    void initialize() {
+        assert patientName != null;
+        assert roomNum != null;
+        assert message != null;
+        assert roseBox != null;
+        assert tulipBox != null;
+        assert carnationBox != null;
+        assert assortmentBox != null;
+        assert singleBox != null;
+        assert halfDozBox != null;
+        assert dozBox != null;
+        assert roundBox != null;
+        assert squareBox != null;
+        assert tallBox != null;
+        assert noneBox != null;
+
     }
 }

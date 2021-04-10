@@ -9,7 +9,7 @@ import java.util.LinkedList;
  * DF Search Implementation
  * Contains specific implementation of DFS
  */
-public class DFSearch extends Searcher {
+public class DFSSearch extends Searcher {
 
     /**
      * Searches for a Path from startId to endId

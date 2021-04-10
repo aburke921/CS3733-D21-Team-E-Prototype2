@@ -100,4 +100,17 @@ public class makeConnection {
     }
 
 
+    public void deleteAllTables() {
+
+        try {
+            Statement stmt = this.connection.createStatement();
+            stmt.execute("drop table hasEdge");
+            stmt.execute("drop table node");
+        } catch (SQLException e) {
+            // e.printStackTrace();
+        }
+    }
+
+
+
 }

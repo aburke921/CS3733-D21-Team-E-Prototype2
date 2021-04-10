@@ -3,6 +3,7 @@ package edu.wpi.TeamE.databases;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class makeConnection {
@@ -31,6 +32,71 @@ public class makeConnection {
             e.printStackTrace();
         }
 
+    }
+
+
+    public void createTables() {
+
+        try {
+        /*
+        Query Performed:
+
+        CREATE TABLE node (
+            nodeID    varchar(31) primary key,
+            xCoord    int not null,
+            yCoord    int not null,
+            floor     varchar(5) not null,
+            building  varchar(20),
+            nodeType  varchar(10),
+            longName  varchar(50),
+            shortName varchar(35),
+            unique (xCoord, yCoord, floor));
+
+        CREATE TABLE hasEdge (
+            edgeID    varchar(63) primary key,
+            startNode varchar(31) not null references node (nodeID),
+            endNode   varchar(31) not null references node (nodeID),
+            unique (startNode, endNode));
+
+         */
+
+            Statement stmt = this.connection.createStatement();
+            stmt.execute(
+                    "create table node"
+                            + "("
+                            + "    nodeID    varchar(31) primary key,"
+                            + "    xCoord    int not null,"
+                            + "    yCoord    int not null,"
+                            + "    floor     varchar(5) not null,"
+                            + "    building  varchar(20),"
+                            + "    nodeType  varchar(10),"
+                            + "    longName  varchar(50),"
+                            + "    shortName varchar(35),"
+                            + "    unique (xCoord, yCoord, floor)"
+                            + ")");
+
+        } catch (SQLException e) {
+            // e.printStackTrace();
+        }
+
+        try {
+
+            Statement stmt = connection.createStatement();
+            stmt.execute(
+                    "create table hasEdge"
+                            + "("
+                            + "    edgeID    varchar(63) primary key,"
+                            + "    startNode varchar(31) not null references node (nodeID),"
+                            + "    endNode   varchar(31) not null references node (nodeID),"
+                            + "    unique (startNode, endNode)"
+                            + ")");
+
+            // Needs a way to calculate edgeID, either in Java or by a sql trigger
+            // Probably in Java since it's a PK
+
+        } catch (SQLException e) {
+            // e.printStackTrace();
+        }
     }
 
 

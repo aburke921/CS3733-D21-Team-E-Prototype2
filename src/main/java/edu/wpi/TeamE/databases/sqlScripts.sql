@@ -23,6 +23,48 @@ create table hasEdge
     endNode   varchar(31) not null references node (nodeID),
     unique (startNode, endNode)
 );
+
+-- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1
+SELECT startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) AS distance
+FROM
+    (SELECT startNode, endNode, node.xCoord AS startX, node.yCoord AS startY, endX, endY
+     FROM node,
+          (SELECT startNode, endNode, xCoord AS endX, yCoord AS endY
+           FROM node,
+                (SELECT startNode, endNode
+                 FROM hasEdge
+                 WHERE startNode = '________') wantedEdges
+           WHERE nodeID = startNode) wantedEdgesStartInfo
+     WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable;
+
+
+-- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 2
+SELECT startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) AS distance
+FROM
+    (SELECT startNode, endNode, node.xCoord AS startX, node.yCoord AS startY, endX, endY
+     FROM node,
+          (SELECT startNode, endNode, xCoord AS endX, yCoord AS endY
+           FROM node,
+                (SELECT startNode, endNode
+                 FROM hasEdge
+                 WHERE endNode = '________') wantedEdges
+           WHERE nodeID = startNode) wantedEdgesStartInfo
+     WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable;
+
+
+-- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 3
+SELECT startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) AS distance
+FROM
+    (SELECT startNode, endNode, node.xCoord AS startX, node.yCoord AS startY, endX, endY
+     FROM node,
+          (SELECT startNode, endNode, xCoord AS endX, yCoord AS endY
+           FROM node,
+                (SELECT startNode, endNode
+                 FROM hasEdge) wantedEdges
+           WHERE nodeID = startNode) wantedEdgesStartInfo
+     WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable;
+
+
 -- Needs a way to calculate edgeID, either in Java or by a sql trigger
 -- probably in Java since it's a PK
 

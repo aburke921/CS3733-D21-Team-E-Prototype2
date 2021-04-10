@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Properties;
 
 public class makeConnection {
@@ -196,5 +193,93 @@ public class makeConnection {
     }
 
 
+    public void lengthFromEdges(int searchType, String nodeID) {
+
+    /*
+    Query Performed:
+
+       SELECT startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) AS distance
+       FROM
+           (SELECT startNode, endNode, node.xCoord AS startX, node.yCoord AS startY, endX, endY
+           FROM node,
+                   (SELECT startNode, endNode, xCoord AS endX, yCoord AS endY
+                   FROM node,
+                           (SELECT startNode, endNode
+                           FROM hasEdge
+                           WHERE startNode = 'CHALL015L1') wantedEdges
+                   WHERE nodeID = startNode) wantedEdgesStartInfo
+           WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable;
+    */
+
+        try {
+
+            Statement stmt = this.connection.createStatement();
+            // Do they want WHERE startNode = nodeID
+            // Do they want WHERE endNode = nodeID
+            // Do they want for the whole edgesTable
+
+            String sqlQuery =
+                    "SELECT startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) AS distance "
+                            + "FROM (SELECT startNode, endNode, node.xCoord AS startX, node.yCoord AS startY, endX, endY "
+                            + "FROM node,(SELECT startNode, endNode, xCoord AS endX, yCoord AS endY "
+                            + "FROM node, (SELECT startNode, endNode "
+                            + "FROM hasEdge ";
+
+            String restOfQuery = "";
+
+            // Gets length for the given startNode
+            if (searchType == 1) {
+                restOfQuery =
+                        "WHERE startNode = '"
+                                + nodeID
+                                + "') wantedEdges "
+                                + "WHERE nodeID = startNode) wantedEdgesStartInfo "
+                                + "WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable";
+
+                sqlQuery = sqlQuery + restOfQuery;
+            }
+
+            //Gets length for the given endNode
+            if (searchType == 2) {
+                restOfQuery =
+                        "WHERE endNode = '"
+                                + nodeID
+                                + "') wantedEdges "
+                                + "WHERE nodeID = startNode) wantedEdgesStartInfo "
+                                + "WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable";
+
+                sqlQuery = sqlQuery + restOfQuery;
+            }
+            //Gets length for the whole table
+            if (searchType == 3) {
+                restOfQuery =
+                        ") wantedEdges "
+                                + "WHERE nodeID = startNode) wantedEdgesStartInfo "
+                                + "WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable";
+
+                sqlQuery = sqlQuery + restOfQuery;
+            }
+
+            ResultSet rset = stmt.executeQuery(sqlQuery);
+
+            while (rset.next()) {
+
+                String startNode = rset.getString("startNode");
+                String endNode = rset.getString("endNode");
+                double distance = rset.getDouble("distance");
+
+                System.out.println(
+                        "startNode: " + startNode + "    endNode: " + endNode + "    distance: " + distance);
+                System.out.println();
+            }
+
+            rset.close();
+            stmt.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQLException e <-- located in the main big try/catch statement of lengthFromEdges");
+        }
+    }
 
 }

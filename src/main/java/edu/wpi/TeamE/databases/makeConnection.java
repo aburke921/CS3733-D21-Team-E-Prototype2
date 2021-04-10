@@ -1,5 +1,9 @@
 package edu.wpi.TeamE.databases;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -108,6 +112,86 @@ public class makeConnection {
             stmt.execute("drop table node");
         } catch (SQLException e) {
             // e.printStackTrace();
+        }
+    }
+
+
+    public void populateTable(String tableName, String csvFileName) {
+
+        try {
+            // creates a file with the file name we are looking to read
+            File file = new File(csvFileName);
+            // used to read data from a file
+            FileReader fr = new FileReader(file);
+
+            // used to read the text from a character-based input stream.
+            BufferedReader br = new BufferedReader(fr);
+
+            String line;
+            String[] tempArr;
+
+            // reads first line (this is the header of each file and we don't need it)
+            br.readLine();
+
+            // if there is something in the file (after line 1)
+            while ((line = br.readLine()) != null) {
+
+                // adds arguments into the array separated by the commas ("," is when it knows the next
+                // index)
+                tempArr = line.split(",");
+
+                String sqlQuery = "";
+                if (tableName == "node") {
+                    sqlQuery =
+                            "INSERT INTO node VALUES ("
+                                    + "'"
+                                    + tempArr[0]
+                                    + "',"
+                                    + Integer.valueOf(tempArr[1])
+                                    + ","
+                                    + Integer.valueOf(tempArr[2])
+                                    + ",'"
+                                    + tempArr[3]
+                                    + "',"
+                                    + " '"
+                                    + tempArr[4]
+                                    + "',"
+                                    + " '"
+                                    + tempArr[5]
+                                    + "',"
+                                    + " '"
+                                    + tempArr[6]
+                                    + "',"
+                                    + " '"
+                                    + tempArr[7]
+                                    + "')";
+                }
+                if (tableName == "hasEdge") {
+                    sqlQuery =
+                            "INSERT INTO hasEdge VALUES ('"
+                                    + tempArr[0]
+                                    + "', '"
+                                    + tempArr[1]
+                                    + "', '"
+                                    + tempArr[2]
+                                    + "')";
+                }
+
+
+                try {
+                    Statement stmt = this.connection.createStatement();
+
+                    //executes the SQL insert statement (inserts the data into the table)
+                    stmt.execute(sqlQuery);
+                } catch (SQLException e) {
+                    // e.printStackTrace();
+                }
+            }
+
+            // closes the BufferedReader
+            br.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
     }
 

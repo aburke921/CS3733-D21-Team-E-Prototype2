@@ -10,8 +10,11 @@ import java.util.Properties;
 public class makeConnection {
 
     Connection connection;
-
-    //Constructor
+//Added Javadoc statements
+//Statements for makeConnection(), createTables(), deleteAllTables(), populateTable(), lengthFromEdges()
+    /**
+     * Constructor makes the database connection
+     */
     public makeConnection(){
         // Initialize DB
         System.out.println("Starting connection to Apache Derby\n");
@@ -35,7 +38,10 @@ public class makeConnection {
 
     }
 
-
+    /**
+     * Creates node and hasEdge tables
+     * try/catch phrase set up in case the tables all ready exist
+     */
     public void createTables() {
 
         try {
@@ -101,6 +107,10 @@ public class makeConnection {
     }
 
 
+    /**
+     * Deletes node and hasEdges table
+     * try/catch phrase set up in case the tables all ready do not exist
+     */
     public void deleteAllTables() {
 
         try {
@@ -112,7 +122,11 @@ public class makeConnection {
         }
     }
 
-
+    /**
+     * Reads csv & inserts into table
+     * @param tableName name of the table that needs to be populated
+     * @param csvFileName name of the csv file that is going to be read
+     */
     public void populateTable(String tableName, String csvFileName) {
 
         try {
@@ -192,7 +206,18 @@ public class makeConnection {
         }
     }
 
-
+    /**
+     * Calculates edge distances
+     * calculates the distance between two nodes.
+     * - Given searchType = 1, the method will calculate the distance
+     * of all the edges that have the given nodeID as its startNode.
+     * - Given searchType = 2, the method will calcualte the distance
+     * of all the edges that have the given nodeID as its endNode.
+     * - Given searchType = 3, the method will calculate the distance
+     * of all the edges in the hasEdge table.
+     * @param searchType is the type of query that is needed on the data.
+     * @param nodeID is the node the function uses to calculate how far other nodes are to it (other nodes that are its edge pair)
+     */
     public void lengthFromEdges(int searchType, String nodeID) {
 
     /*

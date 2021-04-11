@@ -6,11 +6,10 @@
 
 -- Create Statements:
 
-create table node
-(
-    nodeID    varchar(31) primary key,
-    xCoord    int        not null,
-    yCoord    int        not null,
+CREATE TABLE node (
+    nodeID varchar(31) primary key,
+    xCoord    int not null,
+    yCoord    int not null,
     floor     varchar(5) not null,
     building  varchar(20),
     nodeType  varchar(10),
@@ -19,11 +18,12 @@ create table node
     unique (xCoord, yCoord, floor)
 );
 
-create table hasEdge
-(
+CREATE TABLE hasEdge (
     edgeID    varchar(63) primary key,
-    startNode varchar(31) not null references node (nodeID),
-    endNode   varchar(31) not null references node (nodeID),
+    startNode varchar(31) not null references node (nodeID)
+        ON DELETE CASCADE,
+    endNode   varchar(31) not null references node (nodeID)
+        ON DELETE CASCADE,
     unique (startNode, endNode)
 );
 

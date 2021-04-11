@@ -10,6 +10,10 @@ import java.io.IOException;
 
 public class Default {
 
+    /**
+     * Move to Service Request page
+     * @param e
+     */
     @FXML
     private void toServiceRequests(ActionEvent e) {
         try {
@@ -20,6 +24,10 @@ public class Default {
         }
     }
 
+    /**
+     * Move to Map Editor page
+     * @param e
+     */
     @FXML
     private void toMapEditor(ActionEvent e) {
         try {
@@ -30,6 +38,10 @@ public class Default {
         }
     }
 
+    /**
+     * Move to Path Finder page
+     * @param e
+     */
     @FXML
     private void toPathFinder(ActionEvent e) {
         try {
@@ -40,10 +52,18 @@ public class Default {
         }
     }
 
-
-
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {
+    }
+
+    /**
+     * Terminate application
+     * @param e
+     */
+    @FXML
+    private void shutdown(ActionEvent e) {
+        App app = new App();
+        app.stop();
     }
 }
 

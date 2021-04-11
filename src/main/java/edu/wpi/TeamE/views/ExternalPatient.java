@@ -16,7 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
-public class ExternalPatient {
+public class ExternalPatient extends ServiceRequestFormComponents  {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -73,37 +73,6 @@ public class ExternalPatient {
     @FXML
     void getHelpExternalPatient(ActionEvent event) {
 
-    }
-
-    /**
-     * Returns to default page
-     * @param event {@link ActionEvent} info for the cancel button call, passed automatically by system.
-     */
-    @FXML
-    void handleButtonCancel(ActionEvent event) {
-        try {
-            System.out.println(event); //Print the ActionEvent to console
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * Returns to default page
-     * todo, in future iterations this button should SUBMIT instead
-     * @param event {@link ActionEvent} info for the submit button call, passed automatically by system.
-     */
-    @FXML
-    void handleButtonSubmit(ActionEvent event) {
-        try {
-            System.out.println(event); //Print the ActionEvent to console
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

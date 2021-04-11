@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.MedicineDelivery">
+<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="body" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.MedicineDelivery">
     <children>
         <VBox alignment="CENTER" prefHeight="399.0" prefWidth="600.0">
             <children>
@@ -51,19 +51,12 @@
                                                 <Font size="18.0" />
                                             </font>
                                         </Label>
-                                        <TextField fx:id="roomNumInput" prefHeight="43.0" prefWidth="264.0" promptText="Room Number">
-                                            <opaqueInsets>
-                                                <Insets />
-                                            </opaqueInsets>
-                                        </TextField>
-                                        <MenuButton fx:id="departmentInput" mnemonicParsing="false" prefHeight="43.0" prefWidth="264.0" style="-fx-background-color: white; -fx-border-color: #b5b0b0;" text="Department" textFill="#b5b0b0">
-                                            <items>
-                                                <MenuItem mnemonicParsing="false" onAction="#selectDepartment" text="Surgery" />
-                                                <MenuItem mnemonicParsing="false" onAction="#selectDepartment" text="Emergency Room" />
-                                                <MenuItem mnemonicParsing="false" onAction="#selectDepartment" text="Intensive Care Unit" />
-                                                <MenuItem mnemonicParsing="false" onAction="#selectDepartment" text="Radiology" />
-                                            </items>
-                                        </MenuButton>
+                                        <JFXTextField fx:id="roomNumInput" promptText="Room Number">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                            </VBox.margin>
+                                        </JFXTextField>
+                                        <JFXComboBox prefHeight="27.0" prefWidth="265.0" promptText="Department" />
                                         <Label text="Medicine">
                                             <font>
                                                 <Font size="18.0" />
@@ -72,7 +65,7 @@
                                                 <Insets top="20.0" />
                                             </VBox.margin>
                                         </Label>
-                                        <TextField fx:id="medicineNameInput" prefHeight="40.0" prefWidth="264.0" promptText="Medicine Name" />
+                                        <JFXTextField fx:id="medicineNameInput" promptText="Medicine Name" />
                                         <Label text="Dosage">
                                             <font>
                                                 <Font size="18.0" />
@@ -81,8 +74,12 @@
                                                 <Insets top="20.0" />
                                             </VBox.margin>
                                         </Label>
-                                        <TextField fx:id="doseQuantityInput" prefHeight="45.0" prefWidth="264.0" promptText="Quantity" />
-                                        <TextField fx:id="doseMeasureInput" prefHeight="49.0" prefWidth="264.0" promptText="g/mL" />
+                                        <JFXTextField fx:id="doseQuantityInput" promptText="Quantity">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" />
+                                            </VBox.margin>
+                                        </JFXTextField>
+                                        <JFXTextField fx:id="doseMeasureInput" promptText="g/mL" />
                                     </children>
                                     <FlowPane.margin>
                                         <Insets left="10.0" />
@@ -99,7 +96,7 @@
                                                 <Font size="18.0" />
                                             </font>
                                         </Label>
-                                        <TextArea fx:id="specialInstructInput" prefHeight="179.0" prefWidth="259.0" promptText="Add Description" />
+                                        <JFXTextArea fx:id="specialInstructInput" promptText="Detailed Description" />
                                         <Label prefHeight="23.0" prefWidth="107.0" text="Signature">
                                             <font>
                                                 <Font size="18.0" />
@@ -108,8 +105,8 @@
                                                 <Insets top="20.0" />
                                             </VBox.margin>
                                         </Label>
-                                        <TextField fx:id="signatureInput" prefHeight="39.0" prefWidth="259.0" />
-                                        <GridPane>
+                                        <JFXTextField fx:id="signatureInput" />
+                                        <GridPane alignment="CENTER">
                                             <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -118,8 +115,8 @@
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <Button fx:id="submit" mnemonicParsing="false" onAction="#handleButton" style="-fx-background-color: -fx--primary;" text="Submit" textFill="WHITE" GridPane.halignment="CENTER" />
-                                                <Button fx:id="cancel" mnemonicParsing="false" onAction="#handleButton" style="-fx-background-color: white; -fx-border-color: -fx--primary;" text="Cancel" textFill="#006db3" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                                <JFXButton fx:id="cancel" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" />
+                                                <JFXButton fx:id="submit" onAction="#handleButtonSubmit" styleClass="submit-button" text="Submit" GridPane.columnIndex="1" />
                                             </children>
                                             <VBox.margin>
                                                 <Insets top="20.0" />

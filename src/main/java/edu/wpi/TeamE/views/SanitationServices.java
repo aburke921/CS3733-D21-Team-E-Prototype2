@@ -8,7 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import java.io.IOException;
 
-public class SanitationServices {
+public class SanitationServices extends ServiceRequestFormComponents {
 
 
   @FXML
@@ -22,20 +22,6 @@ public class SanitationServices {
   @FXML private MenuButton departmentInput;
   @FXML private MenuButton typeInput;
   @FXML private MenuButton ServiceTypeinput;
-
-  /**
-   * Return back to default page
-   * @param actionEvent
-   */
-  @FXML
-  private void handleButton(ActionEvent actionEvent) {
-    try {
-      Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-      App.getPrimaryStage().getScene().setRoot(root);
-    } catch (IOException ex) {
-      ex.printStackTrace();
-    }
-  }
 
   /**
    * Sets value of drop down list to the selected value(departments)

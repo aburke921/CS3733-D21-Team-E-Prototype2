@@ -130,8 +130,8 @@
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <Button fx:id="submit" mnemonicParsing="false" onAction="#handleButton" style="-fx-background-color: -fx--primary;" text="Submit" textFill="WHITE" GridPane.halignment="CENTER" />
-                                                <Button fx:id="cancel" mnemonicParsing="false" onAction="#handleButton" style="-fx-background-color: white; -fx-border-color: -fx--primary;" text="Cancel" textFill="#039be5" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                                <Button fx:id="submit" mnemonicParsing="false" onAction="#handleButtonSubmit" style="-fx-background-color: -fx--primary;" text="Submit" textFill="WHITE" GridPane.halignment="CENTER" />
+                                                <Button fx:id="cancel" mnemonicParsing="false" onAction="#handleButtonCancel" style="-fx-background-color: white; -fx-border-color: -fx--primary;" text="Cancel" textFill="#039be5" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                                             </children>
                                             <VBox.margin>
                                                 <Insets top="20.0" />

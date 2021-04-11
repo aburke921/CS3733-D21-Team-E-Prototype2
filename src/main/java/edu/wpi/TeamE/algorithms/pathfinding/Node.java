@@ -9,6 +9,7 @@ import java.util.Map;
  * Handles node info
  */
 public class Node implements Comparable<Node>, Iterable<Node> {
+    private int xCoord, yCoord;
     //mapping of node information
     private HashMap<String, String> nodeInfo;
 
@@ -29,18 +30,9 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     }
 
     /**
-     * @param _nodeInfo map of node's information
-     */
-    public Node(Map<String, String> _nodeInfo){
-        this();
-
-        nodeInfo = new HashMap<>(_nodeInfo);
-    }
-
-    /**
      * Overloaded Constructor for Nodes, keeps lots of info
      */
-    public Node(String _id, String _x, String _y,
+    public Node(String _id, int _x, int _y,
                 String _floor, String _building,
                 String _nodeType, String _longName,
                 String _shortName){
@@ -48,8 +40,6 @@ public class Node implements Comparable<Node>, Iterable<Node> {
 
         nodeInfo = new HashMap<>(8);
         nodeInfo.put("id", _id);
-        nodeInfo.put("xCoord", _x);
-        nodeInfo.put("yCoord", _y);
         nodeInfo.put("floor", _floor);
         nodeInfo.put("building", _building);
         nodeInfo.put("type", _nodeType);
@@ -71,14 +61,14 @@ public class Node implements Comparable<Node>, Iterable<Node> {
      * @return a parsed int of the 'xCoord' key
      */
     public int getX(){
-        return Integer.parseInt(nodeInfo.get("xCoord"));
+        return xCoord;
     }
 
     /**
      * @return a parsed int of the 'yCoord' key
      */
     public int getY(){
-        return Integer.parseInt(nodeInfo.get("yCoord"));
+        return yCoord;
     }
 
     /**

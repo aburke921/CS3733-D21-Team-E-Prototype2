@@ -1,42 +1,112 @@
 package edu.wpi.TeamE.databases;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
+import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import javafx.util.Pair;
+
+import java.sql.*;
+import java.util.*;
 
 public class functions {
 
 
-    public static Connection makeConnection() {
+	public static Connection makeConnection() {
 
-        // Initialize DB
-        System.out.println("Starting connection to Apache Derby\n");
-        Connection connection;
-        try {
+		// Initialize connection to DB
+		System.out.println("Starting connection to Apache Derby\n");
+		Connection connection;
+		try {
 
-            Properties props = new Properties();
-            props.put("user", "admin");
-            props.put("password", "admin");
+			Properties props = new Properties();
+			props.put("user", "admin");
+			props.put("password", "admin");
 
-            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 
-            // remove :memory to have persistent database
-            try {
-                connection = DriverManager.getConnection("jdbc:derby:/Users/ashley/Documents/IntelliJ_Projects/Algo2/Database;create=true", props);
+			// remove :memory to have persistent database
+			try {
+				connection = DriverManager.getConnection("jdbc:derby:/Users/ashley/Documents/IntelliJ_Projects/Algo2/Database;create=true", props);
+				return connection;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-//                refactorTables(connection);
-
-                // deleteAllTables(connection);
-
-                return connection;
-
-            } catch (SQLException e) {
-                // e.printStackTrace();
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+	/**
+	 * Given a NodeID, gives the xCoord, yCoord, Floor and Type of that node from Nodes
+	 *
+	 * @param con    is just the DB connection for this run
+	 * @param nodeID is the nodeID of the nodes you want info from
+	 */
+	/*public static Node getNodeLite(Connection con, int nodeID) {
+		String selectString = "select xCoord, yCoord, floor, nodeType from node where nodeID = ?";
+		try (PreparedStatement selectNode = con.prepareStatement(selectString)) {
+			con.setAutoCommit(false);
+			selectNode.setInt(1, nodeID);
+			ResultSet resultSet = selectNode.executeQuery();
+			int xCoord = resultSet.getInt("xCoord");
+			int yCoord = resultSet.getInt("yCoord");
+			String floor = resultSet.getString("floor");
+			String nodeType = resultSet.getString("nodeType");
+			resultSet.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Node node = new Node();
+		return node;
+	}
+*/
+	/**
+	 * Given a NodeID, gives the xCoord, yCoord, Floor and Type of that node from Nodes
+	 *
+	 * @param con    is just the DB connection for this run
+	 * @param nodeID is the nodeID of the nodes you want info from
+	 */
+	/*public static Node getNodeLiteUnprepared(Connection con, int nodeID) {
+		try {
+			Statement statement = con.createStatement();
+			ResultSet resultSet = statement.executeQuery("select xCoord, yCoord, floor, nodeType from node where nodeID = " + nodeID);
+			while (resultSet.next()) {
+				int xCoord = resultSet.getInt("xCoord");
+				int yCoord = resultSet.getInt("yCoord");
+				String floor = resultSet.getString("floor");
+				String nodeType = resultSet.getString("nodeType");
+			}
+			resultSet.close();
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Node node = new Node();
+		return node;
+	}
+*/
+	/**
+	 * Given a NodeID, gives the xCoord, yCoord, Floor and Type of that node from Nodes
+	 *
+	 * @param con    is just the DB connection for this run
+	 * @param nodeID is the nodeID of the nodes you want info from
+	 */
+	/*public static void getNeighbors(Connection con, int nodeID) {
+		String getNeighborS = "select startNode as neighborID, length from edgeLength where endNode = ? union select endNode as neighborID, length from edgeLength where startNode = ?";
+		try (PreparedStatement getNeighborPS = con.prepareStatement(getNeighborS)) {
+			con.setAutoCommit(false);
+			getNeighborPS.setInt(1, nodeID);
+			getNeighborPS.setInt(2, nodeID);
+			ResultSet resultSet = getNeighborPS.executeQuery();
+			List<Map.Entry<Float,Short>> pairList;
+			Pair<Integer, Float> integerFloatPairs;
+			while (resultSet.next()) {
+				pairList.add(new AbstractMap.SimpleEntry<>(resultSet.getInt("neighborID"), resultSet.getInt("neighborID")));
+				Pair<Integer, Float> pair = new Pair<>(resultSet.getInt("neighborID"), resultSet.getFloat("length"));
+				int neighborID = resultSet.getInt("neighborID");
+			}
+			resultSet.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}*/
 }

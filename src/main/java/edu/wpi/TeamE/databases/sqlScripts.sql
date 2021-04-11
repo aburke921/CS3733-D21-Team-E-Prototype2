@@ -108,18 +108,18 @@ from node;
 update node
 set xCoord = 1,
     yCoord = 2
-where nodeID = 'abc';
+where nodeID = ?;
 
 -- 3 – Update Node Location Long Name
 
 update node
 set longName = 'LongName'
-where nodeID = 'abc';
+where nodeID = ?;
 
 -- 4 – Edge Information
 
 select *
-from hasEdge
+from hasEdge;
 
 -- 5 – Exit Program
 
@@ -130,7 +130,7 @@ from hasEdge
 
 select xCoord, yCoord, floor, nodeType
 from node
-where nodeID = nodeID;
+where nodeID = ?;
 
 -- getNeighbors(nodeID)
 -- From hasEdge
@@ -138,11 +138,11 @@ where nodeID = nodeID;
 -- gives nodeID of all neighbors
 select startNode as neighborID
 from hasEdge
-where endNode = nodeID
+where endNode = ?
 union
 select endNode as neighborID
 from hasEdge
-where startNode = nodeID;
+where startNode = ?;
 
 -- new table for hasEdge+distance
 create table edgeLength

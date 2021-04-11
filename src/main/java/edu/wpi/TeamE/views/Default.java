@@ -11,9 +11,9 @@ import java.io.IOException;
 public class Default {
 
     @FXML
-    private void toFloralDelivery(ActionEvent e) {
+    private void toServiceRequests(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Floral.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/ServiceRequests.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -21,9 +21,9 @@ public class Default {
     }
 
     @FXML
-    private void toExternalPatient(ActionEvent e) {
+    private void toMapEditor(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/ExternalPatient.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditor.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -31,29 +31,9 @@ public class Default {
     }
 
     @FXML
-    private void toMedicineDelivery(ActionEvent e) {
+    private void toPathFinder(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MedicineDelivery.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void toSanitation(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Sanitation.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void toSecurity(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/SecurityService.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/PathFinder.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -61,7 +41,7 @@ public class Default {
     }
 
 
-    
+
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {
     }

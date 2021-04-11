@@ -15,13 +15,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.MedicineDelivery">
+<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.MedicineDelivery">
     <children>
         <VBox alignment="CENTER" prefHeight="399.0" prefWidth="600.0">
             <children>
                 <HBox prefHeight="38.0" prefWidth="513.0">
                     <children>
-                        <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #5727d8;">
+                        <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;">
                             <children>
                                 <Label prefHeight="38.0" prefWidth="486.0" text="Medicine Delivery Request Form" textFill="WHITE">
                                     <font>
@@ -33,9 +33,9 @@
                                 </Label>
                             </children>
                         </FlowPane>
-                        <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #5727d8;">
+                        <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;">
                             <children>
-                                <Button mnemonicParsing="false" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: #5727d8; -fx-border-color: gray;" text="Help" textFill="WHITE" />
+                                <Button mnemonicParsing="false" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Help" textFill="WHITE" />
                             </children>
                         </FlowPane>
                     </children>
@@ -118,8 +118,8 @@
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <Button fx:id="submit" mnemonicParsing="false" onAction="#handleButton" style="-fx-background-color: #5727d8;" text="Submit" textFill="WHITE" GridPane.halignment="CENTER" />
-                                                <Button fx:id="cancel" mnemonicParsing="false" onAction="#handleButton" style="-fx-background-color: white; -fx-border-color: #5727d8;" text="Cancel" textFill="#5727d8" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                                <Button fx:id="submit" mnemonicParsing="false" onAction="#handleButton" style="-fx-background-color: -fx--primary;" text="Submit" textFill="WHITE" GridPane.halignment="CENTER" />
+                                                <Button fx:id="cancel" mnemonicParsing="false" onAction="#handleButton" style="-fx-background-color: white; -fx-border-color: -fx--primary;" text="Cancel" textFill="#006db3" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                                             </children>
                                             <VBox.margin>
                                                 <Insets top="20.0" />

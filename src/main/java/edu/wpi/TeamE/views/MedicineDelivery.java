@@ -17,7 +17,6 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     @FXML private TextField doseMeasureInput;
     @FXML private TextArea specialInstructInput;
     @FXML private TextField signatureInput;
-
     @FXML private MenuButton departmentInput;
 
 

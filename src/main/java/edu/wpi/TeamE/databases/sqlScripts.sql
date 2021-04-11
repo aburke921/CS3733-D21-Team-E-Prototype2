@@ -20,10 +20,9 @@ CREATE TABLE node (
 
 CREATE TABLE hasEdge (
     edgeID    varchar(63) primary key,
-    startNode varchar(31) not null references node (nodeID)
-        ON DELETE CASCADE,
-    endNode   varchar(31) not null references node (nodeID)
-        ON DELETE CASCADE,
+    startNode varchar(31) not null references node (nodeID),
+    endNode   varchar(31) not null references node (nodeID),
+    length FLOAT,
     unique (startNode, endNode)
 );
 
@@ -154,6 +153,18 @@ create table edgeLength
     primary key (startNode, endNode)
 );
 
+CREATE TRIGGER calculateLength
+    before INSERT ON hasEdge
+    FOR EACH ROW
+BEGIN
+
+    SELECT sqrt(((miniX - maxiX) * (miniX - maxiX)) + ((miniY - maxiY) * (miniY - maxiY))) into :new.length
+    FROM (SELECT min(xCoord) as miniX, max(xCoord) as maxiX, min(yCoord) as miniY, max(yCoord) as maxiY
+        FROM (SELECT nodeID, xCoord, yCoord
+        FROM node
+        WHERE nodeID = :new.startNode OR nodeID = :new.endNode));
+END;
+/
 
 
 

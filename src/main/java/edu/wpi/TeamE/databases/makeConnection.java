@@ -10,8 +10,7 @@ import java.util.Properties;
 public class makeConnection {
 
     Connection connection;
-//Added Javadoc statements
-//Statements for makeConnection(), createTables(), deleteAllTables(), populateTable(), lengthFromEdges()
+
     /**
      * Constructor makes the database connection
      */
@@ -28,7 +27,7 @@ public class makeConnection {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 
             try {
-                connection = DriverManager.getConnection("jdbc:derby:/Users/ashley/Documents/IntelliJ_Projects/Algo2/Database;create=true", props);
+                this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
             } catch (SQLException e) {
                 // e.printStackTrace();
             }
@@ -94,7 +93,8 @@ public class makeConnection {
                             + "("
                             + "    edgeID    varchar(63) primary key,"
                             + "    startNode varchar(31) not null references node (nodeID),"
-                            + "    endNode   varchar(31) not null references node (nodeID),"
+                            + "    endNode   varchar(31) not null references node (nodeID), "
+                            + "    length    float, "
                             + "    unique (startNode, endNode)"
                             + ")");
 
@@ -104,6 +104,31 @@ public class makeConnection {
         } catch (SQLException e) {
             // e.printStackTrace();
         }
+
+        try {
+
+            Statement stmt = connection.createStatement();
+            String sqlQuery = "CREATE TRIGGER calculateLength " +
+                    "AFTER INSERT ON hasEdge " +
+                    "REFERENCING NEW AS newRow FOR EACH ROW MODE DB2SQL" +
+                    "    newRow.length := SELECT sqrt(((miniX - maxiX) * (miniX - maxiX)) + ((miniY - maxiY) * (miniY - maxiY))) " +
+                    "    FROM (SELECT min(xCoord) as miniX, max(xCoord) as maxiX, min(yCoord) as miniY, max(yCoord) as maxiY " +
+                    "        FROM (SELECT nodeID, xCoord, yCoord " +
+                    "        FROM node " +
+                    "        WHERE nodeID = newRow.startNode OR nodeID = newRow.endNode)); ";
+
+
+
+            stmt.execute(sqlQuery);
+
+            // Needs a way to calculate edgeID, either in Java or by a sql trigger
+            // Probably in Java since it's a PK
+
+        } catch (SQLException e) {
+             e.printStackTrace();
+        }
+
+
     }
 
 
@@ -115,6 +140,7 @@ public class makeConnection {
 
         try {
             Statement stmt = this.connection.createStatement();
+            stmt.execute("drop trigger calculateLength");
             stmt.execute("drop table hasEdge");
             stmt.execute("drop table node");
         } catch (SQLException e) {
@@ -185,7 +211,9 @@ public class makeConnection {
                                     + tempArr[1]
                                     + "', '"
                                     + tempArr[2]
-                                    + "')";
+                                    + "', "
+                                    + " "
+                                    + ")";
                 }
 
 
@@ -194,6 +222,7 @@ public class makeConnection {
 
                     //executes the SQL insert statement (inserts the data into the table)
                     stmt.execute(sqlQuery);
+
                 } catch (SQLException e) {
                     // e.printStackTrace();
                 }
@@ -219,29 +248,13 @@ public class makeConnection {
      * @param nodeID is the node the function uses to calculate how far other nodes are to it (other nodes that are its edge pair)
      */
     public void lengthFromEdges(int searchType, String nodeID) {
+//create this so it is a trigger
+//need another function that actually returns the stuff algo are looking for
 
-    /*
-    Query Performed:
-
-       SELECT startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) AS distance
-       FROM
-           (SELECT startNode, endNode, node.xCoord AS startX, node.yCoord AS startY, endX, endY
-           FROM node,
-                   (SELECT startNode, endNode, xCoord AS endX, yCoord AS endY
-                   FROM node,
-                           (SELECT startNode, endNode
-                           FROM hasEdge
-                           WHERE startNode = 'CHALL015L1') wantedEdges
-                   WHERE nodeID = startNode) wantedEdgesStartInfo
-           WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable;
-    */
 
         try {
 
             Statement stmt = this.connection.createStatement();
-            // Do they want WHERE startNode = nodeID
-            // Do they want WHERE endNode = nodeID
-            // Do they want for the whole edgesTable
 
             String sqlQuery =
                     "SELECT startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) AS distance "
@@ -307,4 +320,15 @@ public class makeConnection {
         }
     }
 
+
+    public static void main(String[] args){
+        makeConnection connection = new makeConnection();
+
+        System.out.println("made it here!");
+        connection.deleteAllTables();
+        connection.createTables();
+        connection.populateTable("node", "L1Nodes.csv");
+        connection.populateTable("hasEdge", "L1Edges.csv");
+
+    }
 }

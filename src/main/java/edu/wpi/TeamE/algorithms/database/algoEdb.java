@@ -1,5 +1,7 @@
 package edu.wpi.TeamE.algorithms.database;
 
+import edu.wpi.TeamE.algorithms.pathfinding.Node;
+
 import java.util.Map;
 
 public class algoEdb {
@@ -7,10 +9,10 @@ public class algoEdb {
     /**
      * query the Node table to get the nodes field data
      * i.e. xCoord, yCoord, floor, etc
-     * @return a map of strings containing all of these fields
+     * @return an array of strings containing all of these fields
      *         key is the field type, value is the data
      */
-    public static Map<String, String> getNode(String nodeId){
+    public static Node getNode(String nodeId){
         return null;
     }
 

@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 
-public class SecurityService {
+public class SecurityService extends ServiceRequestFormComponents {
 
     @FXML
     private Button helpSecurityService;
@@ -35,16 +35,6 @@ public class SecurityService {
     @FXML
     public void helpSecurityService(ActionEvent event) {
 
-    }
-
-    @FXML
-    public void toDefault(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
     }
 
     @FXML

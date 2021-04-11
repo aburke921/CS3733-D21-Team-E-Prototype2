@@ -19,7 +19,7 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 
-public class MapEditor {
+
 public class MapEditor extends Application {
 
     @FXML
@@ -35,7 +35,7 @@ public class MapEditor extends Application {
 
     public void getHelpDefault(ActionEvent e) {
     }
-}
+
         public static void main(String[] args) {
             Application.launch(args);
         }

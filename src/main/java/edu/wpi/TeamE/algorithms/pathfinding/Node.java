@@ -38,7 +38,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         this();
         xCoord = _x;
         yCoord = _y;
-        nodeInfo = new HashMap<>(8);
+        nodeInfo = new HashMap<>(6);
         nodeInfo.put("id", _id);
         nodeInfo.put("floor", _floor);
         nodeInfo.put("building", _building);
@@ -50,7 +50,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
 
     /**
      * @param info String representation of what info is requested
-     *             should be 'xCoord', 'yCoord', etc
+     *             should be 'id', 'floor', 'building', 'type', 'longName', 'shortName'
      * @return returns the requested information
      */
     public String get(String info){
@@ -58,14 +58,14 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     }
 
     /**
-     * @return a parsed int of the 'xCoord' key
+     * @return The X Coordinate
      */
     public int getX(){
         return xCoord;
     }
 
     /**
-     * @return a parsed int of the 'yCoord' key
+     * @return The Y Coordinate
      */
     public int getY(){
         return yCoord;

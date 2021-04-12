@@ -327,6 +327,29 @@ public class makeConnection {
 //
 //    }
 
+	/**
+	 * Given a NodeID, gives the xCoord, yCoord, Floor and Type of that node from Nodes
+	 *
+	 * @param nodeID is the nodeID of the nodes you want info from
+	 * @return a Node with only xCoord, yCoord, floor and nodeType not null
+	 */
+	public Node getNodeLite(String nodeID) {
+		String getNodeLiteS = "select xCoord, yCoord, floor, nodeType from node where nodeID = ?";
+		try (PreparedStatement getNodeLitePS = connection.prepareStatement(getNodeLiteS)) {
+			connection.setAutoCommit(false);
+			getNodeLitePS.setString(1, nodeID);
+			ResultSet getNodeLiteRS = getNodeLitePS.executeQuery();
+			int xCoord = getNodeLiteRS.getInt("xCoord");
+			int yCoord = getNodeLiteRS.getInt("yCoord");
+			String floor = getNodeLiteRS.getString("floor");
+			String nodeType = getNodeLiteRS.getString("nodeType");
+			getNodeLiteRS.close();
+			return new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/**
 	 * gets edge information for all edges containing given nodeID

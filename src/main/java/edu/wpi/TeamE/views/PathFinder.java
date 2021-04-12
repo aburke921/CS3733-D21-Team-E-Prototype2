@@ -116,8 +116,9 @@ public class PathFinder {
     }
 
     /**
-     * todo
-     * @param event calling fcn's (Find Path Button) event info
+     * todo Uses {@link Searcher}'s search() function to find the best path,
+     * given the two current start and end positions ({@link #startNodeID} and {@link #endNodeID}).
+     * @param event calling function's (Find Path Button) event info
      */
     @FXML
     public void findPath(ActionEvent event) {
@@ -173,10 +174,10 @@ public class PathFinder {
     }
 
     /**
-     * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML.
-     * Namely, adds FloorMap PNG, fills dropdowns with DB data
+     * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
+     * Namely, adds FloorMap PNG and fills dropdowns with DB data
      */
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    @FXML
     void initialize() {
         assert startLocationList != null : "fx:id=\"bathroomList\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert endLocationList != null : "fx:id=\"bathroomList\" was not injected: check your FXML file 'PathFinder.fxml'.";

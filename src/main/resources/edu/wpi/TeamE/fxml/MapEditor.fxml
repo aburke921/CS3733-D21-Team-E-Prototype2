@@ -58,17 +58,22 @@
                                 </columnConstraints>
                                 <rowConstraints>
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
                                     <JFXTextField maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="X-Cord" GridPane.columnIndex="1" fx:id="xCordInput" />
-                                    <JFXTextField fx:id="locationInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Location" />
+                                    <JFXTextField fx:id="longNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Long Name" />
                                     <JFXTextField fx:id="yCordInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Y-Cord" GridPane.columnIndex="2" />
                                     <JFXTextField fx:id="idInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="ID" GridPane.columnIndex="3" />
+                                    <JFXTextField fx:id="shortNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Short Name" GridPane.rowIndex="1" />
+                                    <JFXTextField fx:id="floorInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Floor Input" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <JFXTextField fx:id="typeInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Type" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                    <JFXTextField fx:id="buildingInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Building" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                               <FlowPane prefHeight="41.0" prefWidth="297.0">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Add Node">
+                                    <Button mnemonicParsing="false" onAction="#addNodeButton" text="Add Node">
                                        <FlowPane.margin>
                                           <Insets right="10.0" top="10.0" />
                                        </FlowPane.margin>
@@ -78,7 +83,7 @@
                                           <Insets right="10.0" top="10.0" />
                                        </FlowPane.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" text="Delete Node">
+                                    <Button mnemonicParsing="false" onAction="#deleteNodeButton" text="Delete Node">
                                        <FlowPane.margin>
                                           <Insets top="10.0" />
                                        </FlowPane.margin>

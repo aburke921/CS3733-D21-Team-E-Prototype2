@@ -91,7 +91,7 @@ public class PathFinder {
     @FXML
     void selectStartNode(ActionEvent event) {
         String dropdownSelected = ((JFXComboBox) event.getSource()).getValue().toString();
-        System.out.println("selected Start dropdownSelected (node Name): " + dropdownSelected);
+        System.out.println("\nselected start node name: " + dropdownSelected);
         startNodeID = resolveID(dropdownSelected);
         System.out.println("node ID resolved to: " + startNodeID);
 
@@ -108,7 +108,7 @@ public class PathFinder {
     @FXML
     void selectEndNode(ActionEvent event) {
         String dropdownSelected = ((JFXComboBox) event.getSource()).getValue().toString();
-        System.out.println("selected End dropdownSelected: " + dropdownSelected);
+        System.out.println("\nselected end node name: " + dropdownSelected);
         endNodeID = resolveID(dropdownSelected);
         System.out.println("node ID resolved to: " + endNodeID);
 
@@ -117,8 +117,9 @@ public class PathFinder {
     }
 
     /**
-     * todo
-     * @param event calling fcn's (Find Path Button) event info
+     * todo Uses {@link Searcher}'s search() function to find the best path,
+     * given the two current start and end positions ({@link #startNodeID} and {@link #endNodeID}).
+     * @param event calling function's (Find Path Button) event info
      */
     @FXML
     public void findPath(ActionEvent event) {
@@ -207,10 +208,35 @@ public class PathFinder {
     }
 
     /**
-     * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML.
-     * Namely, adds FloorMap PNG, fills dropdowns with DB data
+     * Draws map path given....
+     * todo... would be called by findPath()?
      */
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    public void drawMap() {
+//        double xcoord = (double) 1748 / 10;
+//        double ycoord = (double) 1336 / 10;
+//
+//        double xcoord2 = (double) 1910 / 10;
+//        double ycoord2 = (double) 1465 / 10;
+//
+//        Circle circle = new Circle(xcoord, ycoord, 2, Color.RED);
+//        Circle circle2 = new Circle(xcoord2, ycoord2, 2, Color.RED);
+//        Line line = new Line(xcoord, ycoord, xcoord2, ycoord2);
+//        line.setStroke(Color.RED);
+//
+//        pane.getChildren().addAll(circle, circle2, line);
+
+        /*
+        How would we define an unknown # of circles? In the example above, I see that
+            each circle has an explicit name/declaration... can this be changed so we can
+            creat them in a loop?
+         */
+    }
+
+    /**
+     * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
+     * Namely, adds FloorMap PNG and fills dropdowns with DB data
+     */
+    @FXML
     void initialize() {
         assert startLocationList != null : "fx:id=\"bathroomList\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert endLocationList != null : "fx:id=\"bathroomList\" was not injected: check your FXML file 'PathFinder.fxml'.";
@@ -226,6 +252,7 @@ public class PathFinder {
         ArrayList<Node> nodeArrayList = connection.getAllNodes();
 
         //add to Observable List
+        System.out.println("Begin Adding to Dropdown List...");
         for (Node node : nodeArrayList) { //loop through list
             //this iterator will return a Node object
             //which is just a container for all the node info like id, floor, building, etc
@@ -240,16 +267,19 @@ public class PathFinder {
             int yCoord = node.getY();
 
             //print info
-            System.out.println("Node ID:" + id + "\nxCoord: " + xCoord + "\nyCoord:" + yCoord + "\n---");
+            System.out.println("    Node ID:" + id + "\n    xCoord: " + xCoord + "\n    yCoord:" + yCoord + "\n  ---");
 
             //add to list
             list.add(longName);
             listOfId.add(id); //for ID lookups later todo maybe just use nodeArrayList?
         }
+        System.out.println("...Finished Adding to Dropdown List");
 
         //add ObservableList to dropdowns
         startLocationList.setItems(list);
         endLocationList.setItems(list);
+
+        System.out.println("PathFinder Init Finished.");
     }
 
     /**

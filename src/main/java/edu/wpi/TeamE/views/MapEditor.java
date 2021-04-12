@@ -1,10 +1,10 @@
 package edu.wpi.TeamE.views;
+import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
@@ -28,9 +28,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+
 public class MapEditor {
 
-    @FXML private TreeTableView<NodeTest> treeTable;
+    @FXML private TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Node> treeTable;
     @FXML private FlowPane theStage;
 
 
@@ -52,50 +53,50 @@ public class MapEditor {
             Application.launch(args);
         }*/
 
-    public void prepareNodes(ArrayList<NodeTest> array, TreeTableView<NodeTest> table) {
+    public void prepareNodes(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array, TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Node> table) {
         if (table.getRoot() == null) {
-            NodeTest root = new NodeTest("Location", 10);
-            final TreeItem<NodeTest> rootNode = new TreeItem<NodeTest>(root);
+            edu.wpi.TeamE.algorithms.pathfinding.Node root = new edu.wpi.TeamE.algorithms.pathfinding.Node("Location", 2, 2, "location", "location", "location", "location", "location");
+            final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node> rootNode = new TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node>(root);
             table.setRoot(rootNode);
-            TreeTableColumn<NodeTest, String> column = new TreeTableColumn<>("Location");
+            /*TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, String> column = new TreeTableColumn<>("Location");
             column.setPrefWidth(150);
-            column.setCellValueFactory((CellDataFeatures<NodeTest, String> p) ->
-                    new ReadOnlyStringWrapper(p.getValue().getValue().name));
-            table.getColumns().add(column);
+            column.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getX()));
+            table.getColumns().add(column);*/
             //column 2
-            TreeTableColumn<NodeTest, Number> column2 = new TreeTableColumn<>("X-Cord");
+            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> column2 = new TreeTableColumn<>("X-Cord");
             column2.setPrefWidth(150);
-            column2.setCellValueFactory((CellDataFeatures<NodeTest, Number> p) ->
-                    new ReadOnlyIntegerWrapper(p.getValue().getValue().num));
+            column2.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> p) ->
+                    new ReadOnlyIntegerWrapper(p.getValue().getValue().getX()));
             table.getColumns().add(column2);
             //column 3
-            TreeTableColumn<NodeTest, Number> column3 = new TreeTableColumn<>("Y-Cord");
+            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> column3 = new TreeTableColumn<>("Y-Cord");
             column3.setPrefWidth(150);
-            column3.setCellValueFactory((CellDataFeatures<NodeTest, Number> p) ->
-                    new ReadOnlyIntegerWrapper(p.getValue().getValue().num));
+            column3.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> p) ->
+                    new ReadOnlyIntegerWrapper(p.getValue().getValue().getY()));
             table.getColumns().add(column3);
             //column 4
-            TreeTableColumn<NodeTest, Number> column4 = new TreeTableColumn<>("ID");
+            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> column4 = new TreeTableColumn<>("ID");
             column4.setPrefWidth(150);
-            column4.setCellValueFactory((CellDataFeatures<NodeTest, Number> p) ->
-                    new ReadOnlyIntegerWrapper(p.getValue().getValue().num));
+            column4.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> p) ->
+                    new ReadOnlyIntegerWrapper(p.getValue().getValue().getX()));
             table.getColumns().add(column4);
             //column 5
-            TreeTableColumn<NodeTest, Number> column5 = new TreeTableColumn<>("Floor");
+            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> column5 = new TreeTableColumn<>("Floor");
             column5.setPrefWidth(150);
-            column5.setCellValueFactory((CellDataFeatures<NodeTest, Number> p) ->
-                    new ReadOnlyIntegerWrapper(p.getValue().getValue().num));
+            column5.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> p) ->
+                    new ReadOnlyIntegerWrapper(p.getValue().getValue().getY()));
             table.getColumns().add(column5);
             for (int i = 0; i < array.size(); i++) {
-                NodeTest s = array.get(i);
-                int n = array.get(i).num;
-                final TreeItem<NodeTest> node = new TreeItem<NodeTest>(s);
+                edu.wpi.TeamE.algorithms.pathfinding.Node s = array.get(i);
+                int n = array.get(i).getX();
+                final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node> node = new TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node>(s);
                 table.getRoot().getChildren().add(node);
             }
         }
     }
 
-    public void editNode(ArrayList<NodeTest> array, TreeTableView<String> table) {
+    public void editNode(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array, TreeTableView<String> table) {
         TreeItem<String> node = table.getSelectionModel().getSelectedItem();
         if (table.getSelectionModel().getSelectedItem() != null) {
             //function that takes in string (?) which will call to node that wants to be edited and
@@ -108,80 +109,39 @@ public class MapEditor {
         }
     }
 
-    public void addNode(ArrayList<NodeTest> array, TreeTableView<String> table) {
+    public void addNode(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array, TreeTableView<String> table) {
         //function that takes in users inputted info, updates database
     }
 
-    public void deleteNode(ArrayList<NodeTest> array, TreeTableView<String> table) {
+    public void deleteNode(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array, TreeTableView<String> table) {
         TreeItem<String> node = table.getSelectionModel().getSelectedItem();
         if (table.getSelectionModel().getSelectedItem() != null) {
             //function that takes in identifier of selected node, deletes the node
         }
     }
 
-        /*public void start(Stage stage) {
-            stage.setTitle("Tree Table View Samples");
-            final Scene scene = new Scene(new Group(), 200, 400);
-            Group sceneRoot = (Group)scene.getRoot();
-
-            /* CODE
-            //creating the nodes for the array
-            NodeTest node0 = new NodeTest("Bathroom", 5);
-            NodeTest node1 = new NodeTest("Bathroom2", 5);
-            //creating array
-            ArrayList<NodeTest> array = new ArrayList<NodeTest>();
-            //adding nodes
-            array.add(node0);
-            array.add(node1);
-            //creating root node
-            final TreeItem<NodeTest> test = new TreeItem<NodeTest>(node0);
-            test.setExpanded(true);
-            //running fcn
-            //prepareNodes(array, test);
-            /*END
-
-
-            //Creating a column for name
-            TreeTableColumn<NodeTest, String> column = new TreeTableColumn<>("Location");
-            column.setPrefWidth(150);
-
-            //Defining cell content
-            column.setCellValueFactory((CellDataFeatures<NodeTest, String> p) ->
-                    new ReadOnlyStringWrapper(p.getValue().getValue().name));
-
-            //creating a column for num
-            TreeTableColumn<NodeTest, Number> column2 = new TreeTableColumn<>("Floor");
-            column2.setPrefWidth(150);
-
-            //Defining cell content
-            column2.setCellValueFactory((CellDataFeatures<NodeTest, Number> p) ->
-                    new ReadOnlyIntegerWrapper(p.getValue().getValue().num));
-
-
-            //Creating a tree table view
-            final TreeTableView<NodeTest> treeTableView = new TreeTableView<NodeTest>(test);
-            treeTableView.getColumns().add(column);
-            treeTableView.getColumns().add(column2);
-            treeTableView.setPrefWidth(1000);
-            treeTableView.setShowRoot(true);
-            sceneRoot.getChildren().add(treeTableView);
-            stage.setScene(scene);
-            stage.show();
-        } */
 
     public void startTableButton(ActionEvent actionEvent) {
-        //creating the nodes for the array
-        NodeTest node0 = new NodeTest("Bathroom", 5);
-        NodeTest node1 = new NodeTest("Bathroom2", 5);
+        //creating the root for the array
+        edu.wpi.TeamE.algorithms.pathfinding.Node node0 = new
+                edu.wpi.TeamE.algorithms.pathfinding.Node("Location",
+                2, 2, "location", "location",
+                "location", "location", "location");
         //creating array
-        ArrayList<NodeTest> array = new ArrayList<NodeTest>();
-        //adding nodes
-        array.add(node0);
-        array.add(node1);
+        ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array = new ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node>();
         //creating root node
-        final TreeItem<NodeTest> test = new TreeItem<NodeTest>(node0);
+        final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node> test = new TreeItem<Node>(node0);
         test.setExpanded(true);
-        //running fcn
+
+        //will be in init later
+        File file = new File("L1Nodes.csv");
+        makeConnection connection = new makeConnection();
+        connection.deleteAllTables();
+        connection.createTables();
+        connection.populateTable("node", file);
+        //will be in init later
+
+        array = connection.getAllNodes();
         prepareNodes(array, treeTable);
     }
     @FXML

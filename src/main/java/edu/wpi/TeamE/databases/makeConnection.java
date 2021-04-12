@@ -410,6 +410,7 @@ public class makeConnection {
 			stmt.close();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.err.println("getAllNodes Error");
 		}
         return nodesArray;

@@ -1,9 +1,6 @@
 package edu.wpi.TeamE.databases;
 
-//import java.io.BufferedReader;
-//import java.io.File;
-//import java.io.FileReader;
-//import java.io.IOException;
+
 import java.io.*;
 import java.sql.*;
 import java.util.Properties;
@@ -32,9 +29,11 @@ public class makeConnection {
                 this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
             } catch (SQLException e) {
                 // e.printStackTrace();
+                System.err.println("error with the DriverManager");
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            System.err.println("error with the EmbeddedDriver class.forName thing");
         }
 
     }
@@ -46,28 +45,6 @@ public class makeConnection {
     public void createTables() {
 
         try {
-        /*
-        Query Performed:
-
-        CREATE TABLE node (
-            nodeID    varchar(31) primary key,
-            xCoord    int not null,
-            yCoord    int not null,
-            floor     varchar(5) not null,
-            building  varchar(20),
-            nodeType  varchar(10),
-            longName  varchar(50),
-            shortName varchar(35),
-            unique (xCoord, yCoord, floor));
-
-        CREATE TABLE hasEdge (
-            edgeID    varchar(63) primary key,
-            startNode varchar(31) not null references node (nodeID),
-            endNode   varchar(31) not null references node (nodeID),
-            unique (startNode, endNode));
-
-         */
-
             Statement stmt = this.connection.createStatement();
             stmt.execute(
                     "create table node"
@@ -85,6 +62,7 @@ public class makeConnection {
 
         } catch (SQLException e) {
             // e.printStackTrace();
+            System.err.println("error creating node table");
         }
 
         try {
@@ -105,32 +83,8 @@ public class makeConnection {
 
         } catch (SQLException e) {
             // e.printStackTrace();
+            System.err.println("error creating hasEdge table");
         }
-
-//        try {
-//
-//            Statement stmt = connection.createStatement();
-//            String sqlQuery = "CREATE TRIGGER calculateLength " +
-//                    "AFTER INSERT ON hasEdge " +
-//                    "REFERENCING NEW AS newRow FOR EACH ROW MODE DB2SQL" +
-//                    "    newRow.length := SELECT sqrt(((miniX - maxiX) * (miniX - maxiX)) + ((miniY - maxiY) * (miniY - maxiY))) " +
-//                    "    FROM (SELECT min(xCoord) as miniX, max(xCoord) as maxiX, min(yCoord) as miniY, max(yCoord) as maxiY " +
-//                    "        FROM (SELECT nodeID, xCoord, yCoord " +
-//                    "        FROM node " +
-//                    "        WHERE nodeID = newRow.startNode OR nodeID = newRow.endNode)); ";
-//
-//
-//
-//            stmt.execute(sqlQuery);
-//
-//            // Needs a way to calculate edgeID, either in Java or by a sql trigger
-//            // Probably in Java since it's a PK
-//
-//        } catch (SQLException e) {
-//             e.printStackTrace();
-//        }
-
-
     }
 
 
@@ -142,12 +96,12 @@ public class makeConnection {
 
         try {
             Statement stmt = this.connection.createStatement();
-//            stmt.execute("drop trigger calculateLength");
             stmt.execute("drop table hasEdge");
             stmt.execute("drop table node");
             stmt.close();
         } catch (SQLException e) {
             // e.printStackTrace();
+            System.err.println("deleteAllTables() not working");
         }
     }
 
@@ -222,11 +176,6 @@ public class makeConnection {
                 try {
                     Statement stmt = this.connection.createStatement();
 
-                    //executes the SQL insert statement (inserts the data into the table)
-//                    if(tableName.equals("hasEdge")){
-//                        System.out.println("before");
-//                    writer.flush();
-//                    }
                     stmt.execute(sqlQuery);
 
 
@@ -243,8 +192,8 @@ public class makeConnection {
                     stmt.close();
 
                 } catch (SQLException e) {
-                    e.printStackTrace();
-                    //System.err.println("calling addLength try/catch error");
+//                    e.printStackTrace();
+                    System.err.println("populateTable() inner try/catch error");
                 }
             }
 
@@ -252,91 +201,7 @@ public class makeConnection {
             br.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();
-        }
-    }
-
-    /**
-     * Calculates edge distances
-     * calculates the distance between two nodes.
-     * - Given searchType = 1, the method will calculate the distance
-     * of all the edges that have the given nodeID as its startNode.
-     * - Given searchType = 2, the method will calcualte the distance
-     * of all the edges that have the given nodeID as its endNode.
-     * - Given searchType = 3, the method will calculate the distance
-     * of all the edges in the hasEdge table.
-     * @param searchType is the type of query that is needed on the data.
-     * @param nodeID is the node the function uses to calculate how far other nodes are to it (other nodes that are its edge pair)
-     */
-    public void lengthFromEdges(int searchType, String nodeID) {
-//create this so it is a trigger
-//need another function that actually returns the stuff algo are looking for
-
-
-        try {
-
-            Statement stmt = this.connection.createStatement();
-
-            String sqlQuery =
-                    "SELECT startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) AS distance "
-                            + "FROM (SELECT startNode, endNode, node.xCoord AS startX, node.yCoord AS startY, endX, endY "
-                            + "FROM node,(SELECT startNode, endNode, xCoord AS endX, yCoord AS endY "
-                            + "FROM node, (SELECT startNode, endNode "
-                            + "FROM hasEdge ";
-
-            String restOfQuery = "";
-
-            // Gets length for the given startNode
-            if (searchType == 1) {
-                restOfQuery =
-                        "WHERE startNode = '"
-                                + nodeID
-                                + "') wantedEdges "
-                                + "WHERE nodeID = startNode) wantedEdgesStartInfo "
-                                + "WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable";
-
-                sqlQuery = sqlQuery + restOfQuery;
-            }
-
-            //Gets length for the given endNode
-            if (searchType == 2) {
-                restOfQuery =
-                        "WHERE endNode = '"
-                                + nodeID
-                                + "') wantedEdges "
-                                + "WHERE nodeID = startNode) wantedEdgesStartInfo "
-                                + "WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable";
-
-                sqlQuery = sqlQuery + restOfQuery;
-            }
-            //Gets length for the whole table
-            if (searchType == 3) {
-                restOfQuery =
-                        ") wantedEdges "
-                                + "WHERE nodeID = startNode) wantedEdgesStartInfo "
-                                + "WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable";
-
-                sqlQuery = sqlQuery + restOfQuery;
-            }
-
-            ResultSet rset = stmt.executeQuery(sqlQuery);
-
-            while (rset.next()) {
-
-                String startNode = rset.getString("startNode");
-                String endNode = rset.getString("endNode");
-                double distance = rset.getDouble("distance");
-
-                System.out.println(
-                        "startNode: " + startNode + "    endNode: " + endNode + "    distance: " + distance);
-                System.out.println();
-            }
-
-            rset.close();
-            stmt.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("SQLException e <-- located in the main big try/catch statement of lengthFromEdges");
+            System.err.println("populateTable() outer try/catch error");
         }
     }
 
@@ -353,12 +218,10 @@ public class makeConnection {
 
         try {
 
-//            System.out.println("First try/catch");
             stmt = this.connection.createStatement();
 
             sqlQuery = "SELECT xCoord, yCoord FROM node WHERE nodeID = '" + startNode + "'";
 
-            //executes the SQL insert statement (inserts the data into the table)
             rset = stmt.executeQuery(sqlQuery);
 
             while (rset.next()) {
@@ -374,7 +237,7 @@ public class makeConnection {
         }
 
         try{
-//            System.out.println("Second try/catch");
+
             stmt = this.connection.createStatement();
 
             sqlQuery = "SELECT xCoord, yCoord FROM node WHERE nodeID = '" + endNode + "'";
@@ -397,7 +260,7 @@ public class makeConnection {
 
 
         try{
-//            System.out.println("Third try/catch");
+
             double length;
 
             double xLength = Math.pow((startX - endX), 2);

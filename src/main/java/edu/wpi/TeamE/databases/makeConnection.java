@@ -61,9 +61,9 @@ public class makeConnection {
 
 			try {
 				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
-				this.connection.setAutoCommit(false);
+				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
-				// e.printStackTrace();
+				e.printStackTrace();
 				System.err.println("error with the DriverManager");
 			}
 		} catch (ClassNotFoundException e) {
@@ -107,8 +107,8 @@ public class makeConnection {
 					"create table hasEdge"
 							+ "("
 							+ "    edgeID    varchar(63) primary key,"
-							+ "    startNode varchar(31) not null references node (nodeID),"
-							+ "    endNode   varchar(31) not null references node (nodeID), "
+							+ "    startNode varchar(31) not null references node (nodeID) on delete cascade,"
+							+ "    endNode   varchar(31) not null references node (nodeID) on delete cascade, "
 							+ "    length    float, "
 							+ "    unique (startNode, endNode)"
 							+ ")");
@@ -617,18 +617,12 @@ public class makeConnection {
 
 		System.out.println("made it here!");
 		connection.deleteAllTables();
+		System.out.println("1.");
 		connection.createTables();
-		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
-		connection.populateTable("node", nodes);
-		connection.populateTable("hasEdge", edges);
-
-		// getsAllNodes (returns ArrayList<Node>)
-		connection.getAllNodes();
-
-		//connection.populateTable("node", "L1Nodes.csv");
-		//connection.populateTable("hasEdge", "L1Edges.csv");
-		//System.out.println(connection.deleteEdge("CCONF002L1"));
+		System.out.println("2..");
+		connection.populateTable("node", new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv"));
+		connection.populateTable("hasEdge", new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv"));
+		System.out.println("3...");
 	}
 }
 

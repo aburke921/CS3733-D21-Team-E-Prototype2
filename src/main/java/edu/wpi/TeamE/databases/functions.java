@@ -43,7 +43,6 @@ public class functions {
 	public static Node getNodeLite(Connection con, String nodeID) {
 		String selectString = "select xCoord, yCoord, floor, nodeType from node where nodeID = ?";
 		try (PreparedStatement selectNode = con.prepareStatement(selectString)) {
-			con.setAutoCommit(false);
 			selectNode.setString(1, nodeID);
 			ResultSet resultSet = selectNode.executeQuery();
 			int xCoord = resultSet.getInt("xCoord");

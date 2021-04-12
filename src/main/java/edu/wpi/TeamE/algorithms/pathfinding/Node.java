@@ -16,6 +16,9 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     //otherwise null
     private Node next;
 
+    //an array containing the ids of this node's neighbors
+    private String[] neighborIds;
+
     //cost estimate for A*
     private Double costEst;
 
@@ -33,7 +36,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
      */
     public Node(String _id, int _x, int _y,
                 String _floor, String _building,
-                String _nodeType, String _longName,
+                String _type, String _longName,
                 String _shortName){
         this();
         xCoord = _x;
@@ -42,11 +45,10 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         nodeInfo.put("id", _id);
         nodeInfo.put("floor", _floor);
         nodeInfo.put("building", _building);
-        nodeInfo.put("type", _nodeType);
+        nodeInfo.put("type", _type);
         nodeInfo.put("longName", _longName);
         nodeInfo.put("shortName", _shortName);
     }
-
 
     /**
      * @param info String representation of what info is requested
@@ -93,6 +95,14 @@ public class Node implements Comparable<Node>, Iterable<Node> {
      */
     public Node getNext(){
         return next;
+    }
+
+    public void setNeighborIds(String[] _neighborIds){
+        neighborIds = _neighborIds;
+    }
+
+    public String[] getNeighborIds(){
+        return neighborIds;
     }
 
     /**

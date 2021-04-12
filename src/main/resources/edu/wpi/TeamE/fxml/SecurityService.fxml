@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -15,15 +15,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.SecurityService">
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="600.0" styleClass="body" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.SecurityService">
     <children>
         <VBox alignment="CENTER" prefHeight="399.0" prefWidth="600.0">
             <children>
                 <HBox prefHeight="38.0" prefWidth="513.0">
                     <children>
-                        <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #5727d8;">
+                        <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;">
                             <children>
-                                <Label prefHeight="38.0" prefWidth="486.0" text="Security Service Requests" textFill="WHITE">
+                                <Label prefHeight="38.0" prefWidth="486.0" text="Security Service Request" textFill="WHITE">
                                     <font>
                                         <Font size="20.0" />
                                     </font>
@@ -33,9 +35,9 @@
                                 </Label>
                             </children>
                         </FlowPane>
-                        <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #5727d8;">
+                        <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;">
                             <children>
-                                <Button fx:id="helpSecurityService" mnemonicParsing="false" onAction="#helpSecurityService" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: #5727d8; -fx-border-color: gray;" text="Help" textFill="WHITE" />
+                                <Button fx:id="helpSecurityService" mnemonicParsing="false" onAction="#getHelpSecurityService" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Help" textFill="WHITE" />
                             </children>
                         </FlowPane>
                     </children>
@@ -46,48 +48,34 @@
                             <children>
                                 <VBox prefHeight="155.0" prefWidth="264.0">
                                     <children>
-                                        <Label prefHeight="23.0" prefWidth="122.0" text="Location">
-                                            <font>
-                                                <Font size="18.0" />
-                                            </font>
-                                            <padding>
-                                                <Insets top="10.0" />
-                                            </padding>
-                                        </Label>
-                                        <TextField fx:id="locationOfDelivery" prefHeight="43.0" prefWidth="264.0" promptText="Location">
-                                            <opaqueInsets>
-                                                <Insets />
-                                            </opaqueInsets>
-                                        </TextField>
-                                        <Label layoutX="10.0" layoutY="10.0" prefHeight="27.0" prefWidth="233.0" text="Level of Security Required">
-                                            <font>
-                                                <Font size="18.0" />
-                                            </font>
+                                        <JFXTextField fx:id="locationOfDelivery" promptText="Location">
                                             <VBox.margin>
-                                                <Insets top="10.0" />
+                                                <Insets bottom="10.0" top="20.0" />
                                             </VBox.margin>
-                                        </Label>
-                              <MenuButton fx:id="levelOfSecurity" mnemonicParsing="false" prefHeight="43.0" prefWidth="264.0" text="Select Security Level">
-                                <items>
-                                  <MenuItem mnemonicParsing="false" onAction="#selectSecurityLevel" text="Low" />
-                                  <MenuItem mnemonicParsing="false" onAction="#selectSecurityLevel" text="Medium" />
-                                  <MenuItem mnemonicParsing="false" onAction="#selectSecurityLevel" text="High" />
-                                </items>
-                              </MenuButton>
-                              <Label layoutX="10.0" layoutY="10.0" prefHeight="37.0" prefWidth="164.0" text="Level of Urgency">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets top="10.0" />
-                                 </padding>
-                              </Label>
-                              <MenuButton fx:id="levelOfUrgency" mnemonicParsing="false" prefHeight="43.0" prefWidth="264.0" text="Select Urgency">
-                                <items>
-                                  <MenuItem mnemonicParsing="false" onAction="#selectUrgency" text="Urgent" />
-                                  <MenuItem mnemonicParsing="false" onAction="#selectUrgency" text="Non-Urgent" />
-                                </items>
-                              </MenuButton>
+                                        </JFXTextField>
+                                        <JFXComboBox fx:id="levelOfSecurity" prefHeight="27.0" prefWidth="268.0" promptText="Level of Security Required">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" top="20.0" />
+                                            </VBox.margin>
+                                            <items>
+                                                <FXCollections fx:factory="observableArrayList">
+                                                    <String fx:id="low" fx:value="Low" />
+                                                    <String fx:id="medium" fx:value="Medium" />
+                                                    <String fx:id="high" fx:value="High" />
+                                                </FXCollections>
+                                            </items>
+                                        </JFXComboBox>
+                                        <JFXComboBox fx:id="levelOfUrgency" prefHeight="27.0" prefWidth="274.0" promptText="Level of Urgency">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" top="20.0" />
+                                            </VBox.margin>
+                                            <items>
+                                                <FXCollections fx:factory="observableArrayList">
+                                                    <String fx:id="urgent" fx:value="Urgent" />
+                                                    <String fx:id="nonurgent" fx:value="Non-Urgent" />
+                                                </FXCollections>
+                                            </items>
+                                        </JFXComboBox>
                                     </children>
                                     <FlowPane.margin>
                                         <Insets left="10.0" />
@@ -111,32 +99,27 @@
                             <children>
                                 <VBox prefHeight="397.0" prefWidth="259.0">
                                     <children>
-                                        <Label prefHeight="37.0" prefWidth="174.0" text="Reason for Request">
-                                            <font>
-                                                <Font size="18.0" />
-                                            </font>
-                                            <padding>
-                                                <Insets bottom="10.0" />
-                                            </padding>
-                                        </Label>
-                                        <TextArea fx:id="reasonForRequest" prefHeight="88.0" prefWidth="259.0" promptText="Enter Reason" />
+                                        <JFXTextArea fx:id="reasonForRequest" prefHeight="85.0" prefWidth="259.0" promptText="Reason for Request">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" top="20.0" />
+                                            </VBox.margin>
+                                        </JFXTextArea>
                                         <GridPane>
                                             <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="69.0" />
                                             </columnConstraints>
                                             <rowConstraints>
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <Button fx:id="submitSecurityRequest" mnemonicParsing="false" onAction="#toDefault" style="-fx-background-color: #5727d8;" text="Submit" textFill="WHITE" GridPane.halignment="CENTER" />
-                                                <Button fx:id="cancelSecurityRequest" mnemonicParsing="false" onAction="#toDefault" style="-fx-background-color: white; -fx-border-color: #5727d8;" text="Cancel" textFill="#5727d8" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                                <JFXButton fx:id="cancelSecurityRequest" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" GridPane.halignment="RIGHT" />
+                                                <JFXButton fx:id="submitSecurityRequest" onAction="#handleButtonSubmit" styleClass="submit-button" text="Submit" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
                                             </children>
                                             <VBox.margin>
-                                                <Insets top="40.0" />
+                                                <Insets top="20.0" />
                                             </VBox.margin>
                                         </GridPane>
-                                        <HBox prefHeight="168.0" prefWidth="259.0" />
                                     </children>
                                     <FlowPane.margin>
                                         <Insets left="20.0" />

@@ -8,7 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import java.io.IOException;
 
-public class MedicineDelivery {
+public class MedicineDelivery extends ServiceRequestFormComponents {
 
     @FXML
     private TextField roomNumInput;
@@ -17,22 +17,8 @@ public class MedicineDelivery {
     @FXML private TextField doseMeasureInput;
     @FXML private TextArea specialInstructInput;
     @FXML private TextField signatureInput;
-
     @FXML private MenuButton departmentInput;
 
-    /**
-     * Return back to default page
-     * @param actionEvent
-     */
-    @FXML
-    private void handleButton(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
 
     /**
      * Sets value of drop down list to the selected value

@@ -442,7 +442,7 @@ public class makeConnection {
 	/**
 	 * adds a node with said data to the database
 	 *
-	 * @return int (the amount of rows affected by executing this statement, should be 1 in this case)
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 
 	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
@@ -474,7 +474,7 @@ public class makeConnection {
 	 * adds an edge with said data to the database
 	 * both startNode and endNode has to already exist in node table
 	 *
-	 * @return int (the amount of rows affected by executing this statement, should be 1 in this case)
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 
 	public int addEdge(String edgeID, String startNode, String endNode) {
@@ -488,9 +488,9 @@ public class makeConnection {
 			// addEdgePS.setFloat(4, (Math.sqrt(Math.pow(startNode.getX() - endNode.getX(), 2) + Math.pow(startNode.getY() - endNode.getY(), 2))));
 			int addEdgeRS = addEdgePS.executeUpdate();
 			if (addEdgeRS == 0) {
-				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
+				System.err.println("addEdge Result = 0, probably bad cuz no rows was affected");
 			} else if (addEdgeRS != 1) {
-				System.err.println("addNode Result =" + addEdgeRS + ", probably bad cuz " + addEdgeRS + " rows was affected");
+				System.err.println("addEdge Result =" + addEdgeRS + ", probably bad cuz " + addEdgeRS + " rows was affected");
 			}
 			return addEdgeRS; // addEdgeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
@@ -533,27 +533,34 @@ public class makeConnection {
 
 
 	/**
-	 * any edge containing the given nodeID (startNode or endNode) is deleted
+	 * Deletes edge(s) between the given two nodes, they can be in any order
 	 *
-	 * @param nodeID
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
 	 */
-	public int deleteEdge(String nodeID) {
 
-		try {
-			Statement stmt = this.connection.createStatement();
-
-			String sqlQuery = "DELETE FROM hasEdge WHERE startNode = '" + nodeID + "' OR endNode = '" + nodeID + "'";
-
-			stmt.executeUpdate(sqlQuery);
-			stmt.close();
-
-			return 1;
+	public int deleteEdge(String nodeID1, String nodeID2) {
+		String deleteEdgeS = "delete from hasEdge where startNode = ? and endNode = ?; delete from hasEdge where endNode = ? and startNode = ?";
+		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
+		try (PreparedStatement deleteEdgePS = connection.prepareStatement(deleteEdgeS)) {
+			connection.setAutoCommit(false);
+			deleteEdgePS.setString(1, nodeID1);
+			deleteEdgePS.setString(2, nodeID2);
+			deleteEdgePS.setString(3, nodeID1);
+			deleteEdgePS.setString(4, nodeID2);
+			int deleteEdgeRS = deleteEdgePS.executeUpdate();
+			if (deleteEdgeRS == 0) {
+				System.err.println("deleteEdge Result = 0, probably bad cuz no rows was affected");
+			} else if (deleteEdgeRS == 2) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS + ", it's weird cuz " + deleteEdgeRS + " rows was affected");
+			} else if (deleteEdgeRS != 1) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS + ", probably bad cuz " + deleteEdgeRS + " rows was affected");
+			}
+			return deleteEdgeRS;
+			// deleteEdgeRS = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("Error");
-			return 0;
 		}
+		return 0;
 	}
 
 

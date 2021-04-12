@@ -89,34 +89,7 @@ public class makeConnection {
     */
 
 
-	/**
-	 * Constructor makes the database connection
-	 */
-//	public makeConnection() {
-//		// Initialize DB
-//		System.out.println("Starting connection to Apache Derby\n");
-//		try {
-//
-//			//Makes it so a username and password (hardcoded) is needed to access the database data
-//			Properties props = new Properties();
-//			props.put("user", "admin");
-//			props.put("password", "admin");
-//
-//			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-//
-//			try {
-//				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
-//				// this.connection.setAutoCommit(false);
-//			} catch (SQLException e) {
-//				// e.printStackTrace();
-//				System.err.println("error with the DriverManager");
-//			}
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
-//			System.err.println("error with the EmbeddedDriver class.forName thing");
-//		}
-//
-//	}
+
 
 	/**
 	 * Creates node and hasEdge tables
@@ -539,7 +512,6 @@ public class makeConnection {
 	}
 
 
-
 	/**
 	 * adds a node with said data to the database
 	 *
@@ -576,25 +548,24 @@ public class makeConnection {
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
-
-	////////TESTtttttttt////////
 	public int addEdge(String edgeID, String startNode, String endNode) {
-		String addEdgeS = "insert into hasEdge values (?, ?, ?)";
+		String addEdgeS = "insert into hasEdge (edgeID, startNode, endNode) values (?, ?, ?)";
 		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
 			addEdgePS.setString(1, edgeID);
 			addEdgePS.setString(2, startNode);
 			addEdgePS.setString(3, endNode);
-			// TODO: make a coordinate look-up so we can calculate and input the length of the edge
-			// addEdgePS.setFloat(4, (Math.sqrt(Math.pow(startNode.getX() - endNode.getX(), 2) + Math.pow(startNode.getY() - endNode.getY(), 2))));
+
 			int addEdgeRS = addEdgePS.executeUpdate();
 			if (addEdgeRS == 0) {
 				System.err.println("addEdge Result = 0, probably bad cuz no rows was affected");
 			} else if (addEdgeRS != 1) {
 				System.err.println("addEdge Result =" + addEdgeRS + ", probably bad cuz " + addEdgeRS + " rows was affected");
 			}
+			addLength(startNode, endNode);
 			return addEdgeRS; // addEdgeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.err.println("addEdge() error in the try/catch");
 		}
 		return 0;
 	}
@@ -901,24 +872,15 @@ public class makeConnection {
 		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
 
 		makeConnection connection = makeConnection.makeConnection();
-
-		makeConnection connection1 = makeConnection.makeConnection();
 		connection.deleteAllTables();
-		connection1.createTables();
+		connection.createTables();
 		connection.populateTable("node", nodes);
 		connection.populateTable("hasEdge", edges);
-//		makeConnection connection = new makeConnection();
-//
-//		System.out.println("made it here!");
-//		connection.deleteAllTables();
-//		connection.createTables();
-//		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-//		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
-//		connection.populateTable("node", nodes);
-//		connection.populateTable("hasEdge", edges);
+		connection.addNode("node1", 1, 1, "Floor", "Building", "nodeType", "longName", "shortName");
+		connection.addNode("node2", 1, 11, "Floor", "Building", "nodeType", "longName", "shortName");
 
-		// getsAllNodes (returns ArrayList<Node>)
-//		connection.getAllNodes();
+		connection.addEdge("node1_node2", "node1", "node2");
+
 
 	}
 }

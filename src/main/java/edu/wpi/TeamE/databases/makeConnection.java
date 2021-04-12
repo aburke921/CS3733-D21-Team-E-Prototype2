@@ -1,6 +1,7 @@
 package edu.wpi.TeamE.databases;
 
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import javafx.util.Pair;
 
 import java.io.BufferedReader;
@@ -14,8 +15,6 @@ import java.util.Properties;
 public class makeConnection {
 
 	Connection connection;
-
-	//Node Node = new Node();
 
     /*
 
@@ -318,19 +317,28 @@ public class makeConnection {
 	public Node getNodeInfo(String nodeID) {
 		String getNodeInfoS = "select * from node where nodeID = ?";
 		try (PreparedStatement getNodeInfoPS = connection.prepareStatement(getNodeInfoS)) {
+
 			getNodeInfoPS.setString(1, nodeID);
+
 			ResultSet getNodeInfoRS = getNodeInfoPS.executeQuery();
-			int xCoord = getNodeInfoRS.getInt("xCoord");
-			int yCoord = getNodeInfoRS.getInt("yCoord");
-			String floor = getNodeInfoRS.getString("floor");
-			String building = getNodeInfoRS.getString("building");
-			String nodeType = getNodeInfoRS.getString("nodeType");
-			String longName = getNodeInfoRS.getString("longName");
-			String shortName = getNodeInfoRS.getString("shortName");
+
+			while(getNodeInfoRS.next()) {
+				int xCoord = getNodeInfoRS.getInt("xCoord");
+				int yCoord = getNodeInfoRS.getInt("yCoord");
+				String floor = getNodeInfoRS.getString("floor");
+				String building = getNodeInfoRS.getString("building");
+				String nodeType = getNodeInfoRS.getString("nodeType");
+				String longName = getNodeInfoRS.getString("longName");
+				String shortName = getNodeInfoRS.getString("shortName");
+				return new Node(nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName);
+			}
+
 			getNodeInfoRS.close();
-			return new Node(nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName);
+			getNodeInfoPS.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.err.println("cannot print out nodeInfo");
 		}
 		return null;
 	}
@@ -344,16 +352,24 @@ public class makeConnection {
 	public Node getNodeLite(String nodeID) {
 		String getNodeLiteS = "select xCoord, yCoord, floor, nodeType from node where nodeID = ?";
 		try (PreparedStatement getNodeLitePS = connection.prepareStatement(getNodeLiteS)) {
+
 			getNodeLitePS.setString(1, nodeID);
 			ResultSet getNodeLiteRS = getNodeLitePS.executeQuery();
-			int xCoord = getNodeLiteRS.getInt("xCoord");
-			int yCoord = getNodeLiteRS.getInt("yCoord");
-			String floor = getNodeLiteRS.getString("floor");
-			String nodeType = getNodeLiteRS.getString("nodeType");
+
+			while(getNodeLiteRS.next()) {
+				int xCoord = getNodeLiteRS.getInt("xCoord");
+				int yCoord = getNodeLiteRS.getInt("yCoord");
+				String floor = getNodeLiteRS.getString("floor");
+				String nodeType = getNodeLiteRS.getString("nodeType");
+				return new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
+			}
+
 			getNodeLiteRS.close();
-			return new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
+			getNodeLitePS.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.err.println("Could not get nodeLite Info");
 		}
 		return null;
 	}
@@ -364,13 +380,14 @@ public class makeConnection {
 	 * @param nodeID
 	 * @return Pair<Integer, String> map with edge information
 	 */
+
 	public ArrayList<Pair<Float, String>> getEdgeInfo(String nodeID) {
 
-		ArrayList<Pair<Float, String>> pair = null;
+		ArrayList<Pair<Float, String>> pair = new ArrayList<Pair<Float, String>>();
 
 		try {
 			Statement stmt = this.connection.createStatement();
-			String query = "select startNode from hasEdge where endNode = " + nodeID;
+			String query = "select * from hasEdge where endNode = '" + nodeID + "'";
 			ResultSet rset = stmt.executeQuery(query);
 
 			while (rset.next()) {
@@ -389,7 +406,7 @@ public class makeConnection {
 
 		try {
 			Statement stmt = this.connection.createStatement();
-			String query = "select endNode from hasEdge where startNode = " + nodeID;
+			String query = "select * from hasEdge where startNode = '" + nodeID + "'";
 			ResultSet rset = stmt.executeQuery(query);
 
 			while (rset.next()) {
@@ -402,7 +419,7 @@ public class makeConnection {
 			rset.close();
 			stmt.close();
 		} catch (SQLException e) {
-			System.err.println("startNode Error");
+			System.err.println("endNode Error");
 		}
 
 		return pair;
@@ -445,6 +462,38 @@ public class makeConnection {
 		return nodesArray;
 	}
 
+
+	/**
+	 * gets all edges and each edge's attribute
+	 * @return ArrayList<Edge>
+	 */
+	public ArrayList<Edge> getAllEdges() {
+		ArrayList<Edge> edgesArray = new ArrayList<>();
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from hasEdge";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String edgeID = rset.getString("edgeID");
+				String startNode = rset.getString("startNode");
+				String endNode = rset.getString("endNode");
+
+				edgesArray.add(new Edge(edgeID, startNode, endNode));
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllEdges Error");
+		}
+		return edgesArray;
+	}
+
+
+
 	/**
 	 * adds a node with said data to the database
 	 *
@@ -482,6 +531,7 @@ public class makeConnection {
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 
+	////////TESTtttttttt////////
 	public int addEdge(String edgeID, String startNode, String endNode) {
 		String addEdgeS = "insert into hasEdge values (?, ?, ?)";
 		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
@@ -517,8 +567,66 @@ public class makeConnection {
 	 * @param shortName
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 */
+
+	////////TEST////////
 	public int modifyNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-		return 0;
+
+		String finalQuery = "update node set ";
+		String xCoordUpdate = "";
+		String yCoordUpdate = "";
+		String floorUpdate = "";
+		String buildingUpdate = "";
+		String nodeTypeUpdate = "";
+		String longNameUpdate = "";
+		String shortNameUpdate = "";
+
+		// had to convert int to Integer to check if input was null
+		// idk if this really works
+		Integer xCoordObject = new Integer(xCoord);
+		Integer yCoordObject = new Integer(yCoord);
+
+		if(xCoordObject != null) {
+			xCoordUpdate = "xCoord = " + xCoord;
+		}
+
+		if(yCoordObject != null) {
+			yCoordUpdate = "yCoord = " + yCoord;
+		}
+
+		if(floor != null) {
+			floorUpdate = "floor = " + floor;
+		}
+
+		if(building != null) {
+			buildingUpdate = "building = " + building;
+		}
+
+		if(nodeType != null) {
+			nodeTypeUpdate = "nodeType = " + nodeType;
+		}
+
+		if(longName != null) {
+			longNameUpdate = "longName = " + longName;
+		}
+
+		if(shortName != null) {
+			shortNameUpdate = "shortName = " + shortName;
+		}
+
+		finalQuery = finalQuery + xCoordUpdate + yCoordUpdate + floorUpdate + buildingUpdate + nodeTypeUpdate + longNameUpdate + shortNameUpdate + "where nodeID = '" + nodeID + "'";
+
+		try {
+			Statement stmt = this.connection.createStatement();
+
+			stmt.executeUpdate(finalQuery);
+			stmt.close();
+
+			return 1;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();System.err.println("Error in updating node");
+			return 0;
+		}
 	}
 
 
@@ -531,8 +639,117 @@ public class makeConnection {
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 * need to check that both startNode and endNode already exist in node table
 	 */
+
+	////////FIGURE OUT AND TEST////////
 	public int modifyEdge(String edgeID, String startNode, String endNode) {
-		return 0;
+
+		// when user wants to change the edgeID
+			// they should also put in the startNode and endNode
+			// database has to check if the startNode and endNode exist in node table
+
+		// when the user wants the change the startNode
+			// they should have to put in the edgeID (the endNode in the edgeID should stay the same)
+			// database has to check if the startNode exists in the node table
+
+		// when the user wants to change the endNode
+			// they should have to put in the edgeID (the startNode in the edgeID should stay the same)
+			// database has to check if the endNode exists in the node table
+
+		// QUESTION IS:
+			// should UI require all fields to be filled regardless of what part the user is modifying
+			// OR
+			// should UI require all fields to be filled only when the edgeID is being changed?
+
+
+
+		String checkStartNode = "select * from node where nodeID = " + startNode;
+		String checkEndNode = "select * from node where nodeID = " + endNode;
+
+		String finalQuery = "update hasEdge set ";
+
+		String edgeIDUpdate = "";
+		String startNodeUpdate = "";
+		String endNodeUpdate = "";
+
+		int checkedBoth = 0;
+		int checkedStart = 0;
+		int checkedEnd = 0;
+
+		if(edgeID != null) {
+			try{
+				Statement stmt = this.connection.createStatement();
+				stmt.executeQuery(checkStartNode);
+				checkedBoth = 1;
+			}
+			catch(SQLException e) {
+				System.err.println("sorry the start node doesn't exist");
+			}
+
+			try{
+				Statement stmt = this.connection.createStatement();
+				stmt.executeQuery(checkEndNode);
+				checkedBoth = 2;
+			}
+			catch(SQLException e) {
+				System.err.println("sorry the end node does not exist");
+			}
+
+			// only if both the startNode and endNode exist, then we update the edgeID
+			if (checkedBoth == 2) {
+				edgeIDUpdate = "edgeID = " + edgeID;
+			}
+		}
+
+		if(startNode != null) {
+			try{
+				Statement stmt = this.connection.createStatement();
+				stmt.executeQuery(checkStartNode);
+				checkedStart = 1;
+			}
+			catch(SQLException e) {
+				System.err.println("sorry the start node doesn't exist");
+			}
+
+			// only update if startNode is checked
+			if (checkedStart == 1) {
+				startNodeUpdate = "startNode = " + startNode;
+			}
+
+		}
+
+		if(endNode != null) {
+			try{
+				Statement stmt = this.connection.createStatement();
+				stmt.executeQuery(checkEndNode);
+				checkedEnd = 1;
+			}
+			catch(SQLException e) {
+				System.err.println("sorry the end node doesn't exist");
+			}
+
+			if (checkedEnd == 1) {
+				endNodeUpdate = "endNode = " + endNode;
+			}
+
+		}
+
+		// need to figure this out
+		// right now it updates the DB where the startnode and endnode are the same but this doesn't make sense
+		finalQuery = finalQuery + edgeIDUpdate + startNodeUpdate + endNodeUpdate + "where edgeID = " + edgeID;
+
+		try {
+			Statement stmt = this.connection.createStatement();
+
+			stmt.executeUpdate(finalQuery);
+			stmt.close();
+
+			return 1;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating edge");
+			return 0;
+		}
 	}
 
 
@@ -541,6 +758,8 @@ public class makeConnection {
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
 	 */
+
+	////////TEST////////
 	public int deleteEdge(String nodeID1, String nodeID2) {
 		String deleteEdgeS = "delete from hasEdge where startNode = ? and endNode = ?; delete from hasEdge where endNode = ? and startNode = ?";
 		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
@@ -597,6 +816,7 @@ public class makeConnection {
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
+
 	public int deleteNode(String nodeID) {
 		String deleteNodeS = "delete from node where nodeID = ?";
 		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
@@ -621,6 +841,8 @@ public class makeConnection {
 	 *
 	 * @return String[] of nodeIDs
 	 */
+
+	// WRITE //
 	public String[] getListofNodeIDS() {
 		String[] array = {};
 		return array;
@@ -639,12 +861,7 @@ public class makeConnection {
 		connection.populateTable("node", nodes);
 		connection.populateTable("hasEdge", edges);
 
-		// getsAllNodes (returns ArrayList<Node>)
-		connection.getAllNodes();
 
-		//connection.populateTable("node", "L1Nodes.csv");
-		//connection.populateTable("hasEdge", "L1Edges.csv");
-		//System.out.println(connection.deleteEdge("CCONF002L1"));
 	}
 }
 

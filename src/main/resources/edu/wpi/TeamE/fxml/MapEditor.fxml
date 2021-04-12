@@ -45,6 +45,7 @@
                            <children>
                               <TreeTableView fx:id="treeTable" prefHeight="200.0" prefWidth="341.0" />
                               <Button mnemonicParsing="false" onAction="#startTableButton" text="Load Data" />
+                              <Button mnemonicParsing="false" onAction="#toFileUpload" text="Go To File Upload" />
                            </children>
                                 </VBox>
                         <FlowPane prefHeight="41.0" prefWidth="250.0">

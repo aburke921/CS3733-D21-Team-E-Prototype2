@@ -233,6 +233,7 @@ public class makeConnection {
         }
     }
 
+
     public void addLength(String startNode, String endNode) {
 
         String sqlQuery;
@@ -466,26 +467,19 @@ public class makeConnection {
     public int deleteEdge(String nodeID) {
 
         try {
-
-
             Statement stmt = this.connection.createStatement();
 
-            String sqlQuery = "";
+            String sqlQuery = "DELETE FROM hasEdge WHERE startNode = '" + nodeID + "' OR endNode = '" + nodeID + "'";
 
-            ResultSet rset = stmt.executeQuery(sqlQuery);
-
-            while (rset.next()) {
-
-                int startX = rset.getInt("xCoord");
-                String startY = rset.getString("nodeID");
-            }
-            rset.close();
+            stmt.executeUpdate(sqlQuery);
             stmt.close();
-        }catch (SQLException e){
-            System.err.println("Error");
-        }
 
+            return 1;
+        }catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error");
             return 0;
+        }
     }
 
 
@@ -518,6 +512,6 @@ public class makeConnection {
         connection.createTables();
         connection.populateTable("node", "L1Nodes.csv");
         connection.populateTable("hasEdge", "L1Edges.csv");
-
+        System.out.println(connection.deleteEdge("CCONF002L1"));
     }
 }

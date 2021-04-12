@@ -331,8 +331,50 @@ public class makeConnection {
      * @param nodeID
      * @return Pair<Integer, String> map with edge information
      */
-    public Pair<Integer, String> getEdgeInfo(String nodeID) {
-        Pair<Integer, String> pair = new Pair<Integer, String>(0, "");
+    public ArrayList<Pair<Float, String>> getEdgeInfo(String nodeID) {
+
+        ArrayList<Pair<Float, String>> pair = null;
+
+        try {
+            Statement stmt = this.connection.createStatement();
+            String query = "select startNode from hasEdge where endNode = " + nodeID;
+            ResultSet rset = stmt.executeQuery(query);
+
+            while (rset.next()) {
+                float length = rset.getFloat("length");
+                String startNodeID = rset.getString("startNode");
+
+                pair.add(new Pair<>(length, startNodeID));
+            }
+
+            rset.close();
+            stmt.close();
+
+        }
+        catch (SQLException e){
+            System.err.println("startNode Error");
+        }
+
+        try {
+            Statement stmt = this.connection.createStatement();
+            String query = "select endNode from hasEdge where startNode = " + nodeID;
+            ResultSet rset = stmt.executeQuery(query);
+
+            while (rset.next()) {
+                float length = rset.getFloat("length");
+                String endNodeID = rset.getString("endNode");
+
+                pair.add(new Pair<>(length, endNodeID));
+            }
+
+            rset.close();
+            stmt.close();
+        }
+
+        catch (SQLException e){
+            System.err.println("startNode Error");
+        }
+
         return pair;
     }
 
@@ -474,8 +516,8 @@ public class makeConnection {
         System.out.println("made it here!");
         connection.deleteAllTables();
         connection.createTables();
-        connection.populateTable("node", "nodes.csv");
-        connection.populateTable("hasEdge", "edges.csv");
+        connection.populateTable("node", "L1Nodes.csv");
+        connection.populateTable("hasEdge", "L1Edges.csv");
 
     }
 }

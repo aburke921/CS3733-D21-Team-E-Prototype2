@@ -24,7 +24,7 @@ public class functions {
 
 			// remove :memory to have persistent database
 			try {
-				connection = DriverManager.getConnection("jdbc:derby:/Users/ashley/Documents/IntelliJ_Projects/Algo2/Database;create=true", props);
+				connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
 				return connection;
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -109,4 +109,5 @@ public class functions {
 			e.printStackTrace();
 		}
 	}*/
+
 }

@@ -2,7 +2,6 @@ package edu.wpi.TeamE.algorithms.pathfinding;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Node Class, lots of specific Node implementation stuff

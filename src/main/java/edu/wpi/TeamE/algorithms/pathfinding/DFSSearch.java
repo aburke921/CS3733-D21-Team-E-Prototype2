@@ -11,6 +11,10 @@ import java.util.LinkedList;
  */
 public class DFSSearch extends Searcher {
 
+    public DFSSearch(){
+        super();
+    }
+
     /**
      * Searches for a Path from startId to endId
      * Utilizing the Depth First Search Algorithm
@@ -22,8 +26,8 @@ public class DFSSearch extends Searcher {
     public Path search(String startId, String endId){
 
         //get node info from database
-        Node start = algoEdb.getNode(startId);
-        Node end = algoEdb.getNode(endId);
+        Node start = getNode(startId);
+        Node end = getNode(endId);
 
         //stack (rep by linkedlist) of nodes to search next
         LinkedList<Node> potentials = new LinkedList<>();
@@ -53,12 +57,12 @@ public class DFSSearch extends Searcher {
             current = potentials.pop();
             visited.add(current);
 
-            String[] neighborIds = algoEdb.getNeighbors(current.get("id"));
+            String[] neighborIds = getNeighbors(current.get("id"));
 
             //for each neighbor, add to potentials if
             //it hasnt been visited and isn't already a potential
             for(String neighborId : neighborIds){
-                Node neighbor = algoEdb.getNode(neighborId);
+                Node neighbor = getNode(neighborId);
                 if(!visited.contains(neighbor) && !potentials.contains(neighbor)){
                     cameFrom.put(neighbor, current);
                     potentials.push(neighbor);

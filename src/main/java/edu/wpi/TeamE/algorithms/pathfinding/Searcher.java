@@ -3,11 +3,41 @@ package edu.wpi.TeamE.algorithms.pathfinding;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import edu.wpi.TeamE.algorithms.database.algoEdb;
+
 /**
  * Abstract Searcher Class for Pathfinding API
  * On creation can be initialized to A* or DFS (already implemented) or others that can be added later
  */
 public abstract class Searcher {
+
+    private HashMap<String, Node> cache;
+
+    public Searcher(){
+        cache = new HashMap<>();
+    }
+
+    public Node getNode(String nodeId){
+        if(!cache.containsKey(nodeId)){
+            cacheNode(nodeId);
+        }
+        return cache.get(nodeId);
+    }
+
+    public String[] getNeighbors(String nodeId){
+        if(!cache.containsKey(nodeId)){
+            cacheNode(nodeId);
+        }
+        return cache.get(nodeId).getNeighborIds();
+    }
+
+    private void cacheNode(String nodeId){
+        Node node = algoEdb.getNode(nodeId);
+        String[] neighbors = algoEdb.getNeighbors(nodeId);
+        node.setNeighborIds(neighbors);
+        cache.put(nodeId, node);
+    }
+
     /**
      * Generic Search method for UI
      * Searches between Start and End Nodes for path

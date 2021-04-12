@@ -5,10 +5,13 @@ import com.jfoenix.controls.JFXComboBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
 import edu.wpi.TeamE.algorithms.pathfinding.*;
+import edu.wpi.TeamE.databases.*;
+
 import edu.wpi.TeamE.App;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -127,8 +130,8 @@ public class PathFinder {
         System.out.println("FINDING PATH...");
 
         //get selected nodes
-        String startNode = ""; //todo, will dropdown link directly to a node value or must this be resolved?
-        String endNode = ""; //todo
+        String startNode = ""; //todo, need to resolve ID from dropdown values
+        String endNode = ""; //todo, need to resolve ID from dropdown values
 
         //Execute A* Search
         Searcher aStar = new AStarSearch();
@@ -168,8 +171,38 @@ public class PathFinder {
         Image image = new Image("edu/wpi/TeamE/FirstFloorMap.png");
         imageView.setImage(image);
 
-        //todo need function that returns data with Coordinates and human readable names, along with whatever we need to send to the A* function
-        ObservableList<String> list = FXCollections.observableArrayList("eEXIT00101","eEXIT00201","ePARK00101","ePARK00201", "ePARK00301");
+
+        //DB connection todo doesnt always work after Map Editor has muddled the DB
+        makeConnection connection = new makeConnection();
+
+        //get All nodes
+        ArrayList<Node> nodeArrayList = connection.getAllNodes();
+
+        //convert/add to Observable List
+        ObservableList<String> list = FXCollections.observableArrayList();
+        ObservableList<String> listOfId = FXCollections.observableArrayList(); //todo
+        for (Node node : nodeArrayList) { //loop through list
+            //this iterator will return a Node object
+            //which is just a container for all the node info like id, floor, building, etc
+            String id = node.get("id");
+            String floor = node.get("floor");
+            String building = node.get("building");
+            String type = node.get("type");
+            String longName = node.get("longName");
+            String shortName = node.get("shortName");
+            //coordinates are ints so they have to be stored separate
+            int xCoord = node.getX();
+            int yCoord = node.getY();
+
+            //print info
+            System.out.println("Node ID:" + id + "\nxCoord: " + xCoord + "\nyCoord:" + yCoord + "\n---");
+
+            //add to list
+            list.add(longName);
+            listOfId.add(id); //todo
+        }
+
+        //add ObservableList to dropdowns
         startLocationList.setItems(list);
         endLocationList.setItems(list);
     }

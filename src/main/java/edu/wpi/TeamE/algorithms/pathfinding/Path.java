@@ -22,13 +22,6 @@ public class Path {
     }
 
     /**
-     * @return true if no nodes in list
-     */
-    public boolean isEmpty(){
-        return pathEnd == pathHead;
-    }
-
-    /**
      * @return the first node in list
      */
     public Node peek(){
@@ -51,9 +44,7 @@ public class Path {
      * @param p Path to append, if path is empty nothing happens
      */
     public void add(Path p) {
-        if(!p.isEmpty()){
-            add(p.peek());
-        }
+        add(p.peek());
     }
 
     /**
@@ -73,14 +64,21 @@ public class Path {
 
     /**
      * Prints a string rep. of the Path
+     * @param labels a list of the labels you want to print, everything but xCoord and yCoord
      */
-    public void print(){
+    public void print(String... labels){
         System.out.print("Path: \n\t");
         Iterator<Node> itr = iterator();
         while(itr.hasNext()){
-            System.out.printf("%s, ", itr.next());
+            Node next = itr.next();
+            for(String label : labels){
+                System.out.printf("%s : %s, ", label, next.get(label));
+            }
         }
         System.out.println();
+    }
+    public void print(){
+        print("id", "floor", "building", "type", "longName", "shortName");
     }
 
     /**
@@ -103,7 +101,7 @@ public class Path {
 
     /**
      * @param a,b booleans to compare
-     * @return whether these bools are equal
+     * @return true if a,b are equal
      */
     private boolean equals(boolean a, boolean b){
         //double implication

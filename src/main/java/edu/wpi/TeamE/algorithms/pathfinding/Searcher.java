@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
- * Abstract Seacher Class for Pathfinding API
+ * Abstract Searcher Class for Pathfinding API
  * On creation can be initialized to A* or DFS (already implemented) or others that can be added later
  */
 public abstract class Searcher {
     /**
      * Generic Search method for UI
-     * Seraches between Start and End Nodes for path
+     * Searches between Start and End Nodes for path
      * Searching algorithm can be A* or DFS (more can be added in the future)
      *
      * @param startId The NodeID of the start node as a string
@@ -27,7 +27,7 @@ public abstract class Searcher {
      * @return Path of nodes following start
      * start is not included because it didn't 'comeFrom' any node so it's value in map is null
      */
-    Path reconstructPath(HashMap<Node, Node> cameFrom, Node end) {
+    protected Path reconstructPath(HashMap<Node, Node> cameFrom, Node end) {
         LinkedList<Node> stack = new LinkedList<>();
         //push onto stack
         for(Node current = end; cameFrom.containsKey(current); current = cameFrom.get(current)){

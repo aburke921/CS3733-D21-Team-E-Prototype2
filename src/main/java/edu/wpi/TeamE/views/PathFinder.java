@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -109,7 +110,7 @@ public class PathFinder {
         String dropdownSelected = ((JFXComboBox) event.getSource()).getValue().toString();
         System.out.println("selected End dropdownSelected: " + dropdownSelected);
         endNodeID = resolveID(dropdownSelected);
-        System.out.println("node ID resolved to: " + startNodeID);
+        System.out.println("node ID resolved to: " + endNodeID);
 
 //        String longName = getLongName(dropdownSelected); //Given by database
 //        endLocationList.setValue(longName);
@@ -121,6 +122,7 @@ public class PathFinder {
      */
     @FXML
     public void findPath(ActionEvent event) {
+
 
         //todo commented section here serves as good example for how shapes will be made
 //        double xcoord = (double) 1748 / 10;
@@ -136,6 +138,9 @@ public class PathFinder {
 //
 //        pane.getChildren().addAll(circle, circle2, line);
 
+        System.out.print("\nCLEARING MAP...");
+
+        pane.getChildren().clear();
 
         System.out.print("\nFINDING PATH...");
 
@@ -146,30 +151,59 @@ public class PathFinder {
 
         //Execute A* Search
         System.out.print("A* Search with startNodeID of " + startNode + ", and endNodeID of " + endNodeID + "\n");
-        Searcher aStar = new AStarSearch();
+        AStarSearch aStar = new AStarSearch();
         Path foundPath = aStar.search(startNode, endNode); //todo error here - this is a question for Algo.
 
         //build path
-        Iterator<edu.wpi.TeamE.algorithms.pathfinding.Node> nodeIterator = foundPath.iterator(); //create iterable list
+        Iterator<Node> nodeIterator = foundPath.iterator(); //create iterable list
+        Group g = new Group();
+
+        //Use these variables to keep track of the coordinates of the previous node
+        double prevXCoord = 0;
+        double prevYCoord = 0;
+
         while(nodeIterator.hasNext()){ //loop through list
             //this iterator will return a Node object
-            //which is just a container for all the node info like id, floor, building, etc
+            //which is just a container for all the node info like itscoordinates
             Node node = nodeIterator.next();
-            String id = node.get("id");
-            String floor = node.get("floor");
-            String building = node.get("building");
-            String type = node.get("type");
-            String longName = node.get("longName");
-            String shortName = node.get("shortName");
-            //coordinates are ints so they have to be stored separate
-            int xCoord = node.getX();
-            int yCoord = node.getY();
 
+            //Resize the coordinates to match the resized image
+            double xCoord = (double) node.getX() / 10;
+            double yCoord = (double) node.getY() / 10;
+
+            if (node.get("id") == startNodeID) { //if current node is the starting node
+                prevXCoord = xCoord;
+                prevYCoord = yCoord;
+
+                //place a red dot on the location
+                Circle circle = new Circle(xCoord, yCoord, 2, Color.RED);
+                g.getChildren().add(circle);
+            }
+            else if (node.get("id") == endNodeID) { //if current node is the ending node
+                //place a red dot on the location
+                Circle circle = new Circle(xCoord, yCoord, 2, Color.RED);
+                //create a line between this node and the previous node
+                Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+
+                g.getChildren().addAll(circle, line);
+            }
+            else {
+                //create a line between this node and the previous node
+                Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                g.getChildren().add(line);
+
+                //update the coordinates for the previous node
+                prevXCoord = xCoord;
+                prevYCoord = yCoord;
+            }
             //print info
-            System.out.println("Node ID:" + id + "\nxCoord: " + xCoord + "\nyCoord:" + yCoord + "\n---");
+            System.out.println("xCoord: " + xCoord + "\nyCoord:" + yCoord + "\n---");
             //todo, potentially add this data to table - need to get startNode & endNode first, so tests can be run
             //todo build Map Shapes of of given path
         }
+
+        //add all objects to the scene
+        pane.getChildren().add(g);
     }
 
     /**

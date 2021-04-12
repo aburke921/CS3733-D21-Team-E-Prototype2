@@ -538,8 +538,8 @@ public class makeConnection {
 			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return 0;
 		}
-		return 0;
 	}
 
 	/**
@@ -767,7 +767,6 @@ public class makeConnection {
 			if (checkedEnd == 1) {
 				endNodeUpdate = "endNode = " + endNode;
 			}
-
 		}
 
 		// need to figure this out
@@ -797,8 +796,6 @@ public class makeConnection {
 	 * if count == 1 || count == 2, edges have been deleted
 	 * else no edges exist with inputted nodes
 	 */
-
-
 	public int deleteEdge(String nodeID1, String nodeID2) {
 
 		String deleteEdgeS1 = "delete from hasEdge where startNode = ? and endNode = ?";
@@ -856,31 +853,6 @@ public class makeConnection {
 		return count;
 	}
 
-	/**
-	 * any edge containing the given nodeID (startNode or endNode) is deleted
-	 *
-	 * @param nodeID
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
-	 */
-	/*
-	public int deleteEdge(String nodeID) {
-
-		try {
-			Statement stmt = this.connection.createStatement();
-
-			String sqlQuery = "DELETE FROM hasEdge WHERE startNode = '" + nodeID + "' OR endNode = '" + nodeID + "'";
-
-			stmt.executeUpdate(sqlQuery);
-			stmt.close();
-
-			return 1;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error");
-			return 0;
-		}
-	}
-	*/
 
 	/**
 	 * matches the nodeID to a node and deletes it from DB
@@ -907,23 +879,45 @@ public class makeConnection {
 		}
 	}
 
+
+
 	/**
 	 * gets list of nodeIDS
 	 *
 	 * @return String[] of nodeIDs
 	 */
+	public ArrayList<String> getListofNodeIDS() {
+		ArrayList<String> listOfNodeIDs = new ArrayList<>();
 
-	// WRITE //
-	public String[] getListofNodeIDS() {
-		String[] array = {};
-		return array;
+		String deleteNodeS = "SELECT nodeID FROM node";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("nodeID");
+				listOfNodeIDs.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeIDs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println("getListofNodeIDS error try/catch");
+			return listOfNodeIDs;
+		}
+
 	}
 
 
 	public static void main(String[] args) {
 		System.out.println("STARTING UP!!!");
-		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+//		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+//		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+
+		File nodes = new File("L1Nodes.csv");
+		File edges = new File("L1Edges.csv");
 
 		makeConnection connection = makeConnection.makeConnection();
 		connection.deleteAllTables();

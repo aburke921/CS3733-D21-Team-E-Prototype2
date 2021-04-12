@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.MapEditor">
+<FlowPane fx:id="theStage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.MapEditor">
     <children>
         <VBox alignment="CENTER" prefHeight="399.0" prefWidth="600.0">
             <children>
@@ -45,7 +45,7 @@
                                     <children>
                                         <TreeTableView fx:id="treeTable" prefHeight="200.0" prefWidth="341.0" />
                                         <Button mnemonicParsing="false" onAction="#startTableButton" text="Load Data" />
-                              <Button mnemonicParsing="false" text="Upload Data" />
+                              <Button mnemonicParsing="false" onAction="#fileOpener" text="Upload Data" />
                                     </children>
                                 </VBox>
                                 <FlowPane prefHeight="41.0" prefWidth="250.0">

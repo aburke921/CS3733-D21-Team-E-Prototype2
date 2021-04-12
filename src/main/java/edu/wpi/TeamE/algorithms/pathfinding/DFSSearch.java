@@ -22,8 +22,8 @@ public class DFSSearch extends Searcher {
     public Path search(String startId, String endId){
 
         //get node info from database
-        Node start = new Node(algoEdb.getNode(startId));
-        Node end = new Node(algoEdb.getNode(endId));
+        Node start = algoEdb.getNode(startId);
+        Node end = algoEdb.getNode(endId);
 
         //stack (rep by linkedlist) of nodes to search next
         LinkedList<Node> potentials = new LinkedList<>();
@@ -58,7 +58,7 @@ public class DFSSearch extends Searcher {
             //for each neighbor, add to potentials if
             //it hasnt been visited and isn't already a potential
             for(String neighborId : neighborIds){
-                Node neighbor = new Node(algoEdb.getNode(neighborId));
+                Node neighbor = algoEdb.getNode(neighborId);
                 if(!visited.contains(neighbor) && !potentials.contains(neighbor)){
                     cameFrom.put(neighbor, current);
                     potentials.push(neighbor);

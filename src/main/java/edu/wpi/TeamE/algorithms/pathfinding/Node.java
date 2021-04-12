@@ -2,13 +2,13 @@ package edu.wpi.TeamE.algorithms.pathfinding;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Node Class, lots of specific Node implementation stuff
  * Handles node info
  */
 public class Node implements Comparable<Node>, Iterable<Node> {
+    private int xCoord, yCoord;
     //mapping of node information
     private HashMap<String, String> nodeInfo;
 
@@ -29,27 +29,17 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     }
 
     /**
-     * @param _nodeInfo map of node's information
-     */
-    public Node(Map<String, String> _nodeInfo){
-        this();
-
-        nodeInfo = new HashMap<>(_nodeInfo);
-    }
-
-    /**
      * Overloaded Constructor for Nodes, keeps lots of info
      */
-    public Node(String _id, String _x, String _y,
+    public Node(String _id, int _x, int _y,
                 String _floor, String _building,
                 String _nodeType, String _longName,
                 String _shortName){
         this();
-
-        nodeInfo = new HashMap<>(8);
+        xCoord = _x;
+        yCoord = _y;
+        nodeInfo = new HashMap<>(6);
         nodeInfo.put("id", _id);
-        nodeInfo.put("xCoord", _x);
-        nodeInfo.put("yCoord", _y);
         nodeInfo.put("floor", _floor);
         nodeInfo.put("building", _building);
         nodeInfo.put("type", _nodeType);
@@ -60,7 +50,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
 
     /**
      * @param info String representation of what info is requested
-     *             should be 'xCoord', 'yCoord', etc
+     *             should be 'id', 'floor', 'building', 'type', 'longName', 'shortName'
      * @return returns the requested information
      */
     public String get(String info){
@@ -68,17 +58,17 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     }
 
     /**
-     * @return a parsed int of the 'xCoord' key
+     * @return The X Coordinate
      */
     public int getX(){
-        return Integer.parseInt(nodeInfo.get("xCoord"));
+        return xCoord;
     }
 
     /**
-     * @return a parsed int of the 'yCoord' key
+     * @return The Y Coordinate
      */
     public int getY(){
-        return Integer.parseInt(nodeInfo.get("yCoord"));
+        return yCoord;
     }
 
     /**
@@ -111,14 +101,6 @@ public class Node implements Comparable<Node>, Iterable<Node> {
      */
     public boolean equals(Node n){
         return get("id").equalsIgnoreCase(n.get("id"));
-    }
-
-    /**
-     * @return string rep. which includes 'id' and 'longName'
-     */
-    @Override
-    public String toString() {
-        return "Id : " + get("id") + ",  Name: " + get("longName");
     }
 
     /**

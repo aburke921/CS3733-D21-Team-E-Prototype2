@@ -26,7 +26,7 @@ public class Edb {
       switch (firstArg) {
         case 1:
           {
-            System.out.println("1 – Node Information\n");
+            System.out.println("1 - Node Information\n");
             Connection connection = makeConnection();
             try {
 
@@ -69,7 +69,7 @@ public class Edb {
 
         case 2:
           {
-            System.out.println("2 – Update Node Coordinates\n");
+            System.out.println("2 - Update Node Coordinates\n");
             Scanner input = new Scanner(System.in);
             System.out.println("Which node are you trying to update on?\n");
             String nodeID = input.nextLine();
@@ -105,7 +105,7 @@ public class Edb {
 
         case 3:
           {
-            System.out.println("3 – Update Node Location Long Name\n");
+            System.out.println("3 - Update Node Location Long Name\n");
             Scanner input = new Scanner(System.in);
             System.out.println("Which node are you trying to update on?\n");
             String nodeID = input.nextLine();
@@ -132,7 +132,7 @@ public class Edb {
 
         case 4:
           {
-            System.out.println("4 – Edge Information\n");
+            System.out.println("4 - Edge Information\n");
             Connection connection = makeConnection();
             try {
               assert connection != null;
@@ -165,27 +165,27 @@ public class Edb {
 
         case 5:
           {
-            System.out.println("5 – Exit Program\n");
+            System.out.println("5 - Exit Program\n");
             System.exit(0);
             break;
           }
 
         default:
           System.out.println(
-              "1 – Node Information\n"
-                  + "2 – Update Node Coordinates\n"
-                  + "3 – Update Node Location Long Name\n"
-                  + "4 – Edge Information\n"
-                  + "5 – Exit Program\n");
+              "1 - Node Information\n"
+                  + "2 - Update Node Coordinates\n"
+                  + "3 - Update Node Location Long Name\n"
+                  + "4 - Edge Information\n"
+                  + "5 - Exit Program\n");
           System.exit(0);
       }
     } else {
       System.out.println(
-          "1 – Node Information\n"
-              + "2 – Update Node Coordinates\n"
-              + "3 – Update Node Location Long Name\n"
-              + "4 – Edge Information\n"
-              + "5 – Exit Program\n");
+          "1 - Node Information\n"
+              + "2 - Update Node Coordinates\n"
+              + "3 - Update Node Location Long Name\n"
+              + "4 - Edge Information\n"
+              + "5 - Exit Program\n");
 
       System.exit(0);
     }
@@ -395,6 +395,57 @@ public class Edb {
     }
   }
 
+  public static void populateEdgeLength(Connection connection) {
+
+    ArrayList<String[]> dbEdges = new ArrayList<>();
+
+    try {
+
+      // creates a file with the file name we are looking to read
+      File file = new File("L1Edges.csv");
+      // used to read data from a file
+      FileReader fr = new FileReader(file);
+
+      // used to read the text from a character-based input stream.
+      BufferedReader br = new BufferedReader(fr);
+
+      String line;
+      String[] tempArr;
+
+      // reads first line (this is the header of each file and we don't need it)
+      br.readLine();
+
+      // if there is something in the file (after line 1)
+      while ((line = br.readLine()) != null) {
+
+        // adds arguments into the array separated by the commas ("," is when it knows the next
+        // index)
+        tempArr = line.split(",");
+
+        // inserts the line of data read from the csv file into the hasEdge table
+        dbEdges.add(tempArr);
+      }
+
+      // System.out.println("edges file read");
+
+      // closes the BufferedReader
+      br.close();
+    } catch (IOException ioe) {
+      ioe.printStackTrace();
+    }
+
+    for (String[] edge : dbEdges) {
+      try {
+        Statement stmt = connection.createStatement();
+        /*stmt.execute(
+                "insert into edgeLength values ('" + edge[1] + "', '" + edge[2] + "', '" +
+                        (Math.sqrt(Math.pow(edge[1].getX() - edge[2].getX(), 2) + Math.pow(edge[1].getY() - edge[2].getY(), 2))) + "')"); // WIP*/
+      } catch (SQLException e) {
+        // e.printStackTrace();
+      }
+    }
+  }
+
   /*
 
   first time this program is run, the tables will be created and populated
@@ -412,12 +463,14 @@ public class Edb {
       createTables(connection);
       populateNodes(connection);
       populateHasEdge(connection);
+      populateEdgeLength(connection);
       throw new SQLException();
     } catch (SQLException e) {
       deleteAllTables(connection);
       createTables(connection);
       populateNodes(connection);
       populateHasEdge(connection);
+      populateEdgeLength(connection);
     }
   }
 }

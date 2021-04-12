@@ -3,6 +3,7 @@ package edu.wpi.TeamE.algorithms.pathfinding;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import edu.wpi.TeamE.algorithms.database.algoCSV;
 import edu.wpi.TeamE.algorithms.database.makeConnection;
 
 /**
@@ -48,8 +49,10 @@ public abstract class Searcher {
      */
     private void cacheNode(String nodeId){
         if(!cache.containsKey(nodeId)){
-            Node node = con.getNodeInfo(nodeId);
-            HashMap<String, Double> neighbors = con.getNeighbors(nodeId);
+            //Node node = con.getNodeInfo(nodeId);
+            Node node = algoCSV.getNode(nodeId);
+            //HashMap<String, Double> neighbors = con.getNeighbors(nodeId);
+            HashMap<String, Double> neighbors = algoCSV.getNeighbors(nodeId);
             node.setNeighbors(neighbors);
             cache.put(nodeId, node);
         }

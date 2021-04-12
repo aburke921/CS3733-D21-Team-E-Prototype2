@@ -12,7 +12,7 @@ plugins {
     id 'application'
     id 'java'
 }
-mainClassName = 'edu.wpi.TeamE.Main'
+mainClassName = 'edu.wpi.TeamE.algorithms.pathfinding.Testing'
 
 
 //These are the repositories where Gradle looks for dependencies.

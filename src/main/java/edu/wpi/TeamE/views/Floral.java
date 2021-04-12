@@ -12,7 +12,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-public class Floral {
+public class Floral extends ServiceRequestFormComponents {
 
     @FXML private TextField patientName;
     @FXML private TextField roomNum;
@@ -28,17 +28,6 @@ public class Floral {
     @FXML private CheckBox squareBox;
     @FXML private CheckBox tallBox;
     @FXML private CheckBox noneBox;
-
-
-    @FXML
-    void toDefault(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
 
     public void getHelpFloralDelivery(ActionEvent actionEvent) {
     }

@@ -15,13 +15,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="434.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.SanitationServices">
+<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="434.0" prefWidth="600.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.SanitationServices">
     <children>
         <VBox alignment="CENTER" prefHeight="399.0" prefWidth="600.0">
             <children>
                 <HBox prefHeight="38.0" prefWidth="513.0">
                     <children>
-                        <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #5727d8;">
+                        <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;">
                             <children>
                                 <Label prefHeight="38.0" prefWidth="486.0" text="Sanitation Services Request Form" textFill="WHITE">
                                     <font>
@@ -33,9 +33,9 @@
                                 </Label>
                             </children>
                         </FlowPane>
-                        <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #5727d8;">
+                        <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;">
                             <children>
-                                <Button mnemonicParsing="false" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: #5727d8; -fx-border-color: gray;" text="Help" textFill="WHITE" />
+                                <Button mnemonicParsing="false" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Help" textFill="WHITE" />
                             </children>
                         </FlowPane>
                     </children>
@@ -51,14 +51,14 @@
                                                 <Font size="18.0" />
                                             </font>
                                         </Label>
-                              <MenuButton fx:id="departmentInput" layoutX="10.0" layoutY="80.0" mnemonicParsing="false" onAction="#selectDepartment" prefHeight="43.0" prefWidth="264.0" style="-fx-background-color: white; -fx-border-color: #b5b0b0;" text="Department" textFill="#b5b0b0">
-                                 <items>
-                                    <MenuItem mnemonicParsing="false" onAction="#selectDepartment" text="Surgery" />
-                                    <MenuItem mnemonicParsing="false" onAction="#selectDepartment" text="Emergency Room" />
-                                    <MenuItem mnemonicParsing="false" onAction="#selectDepartment" text="Intensive Care Unit" />
-                                    <MenuItem mnemonicParsing="false" onAction="#selectDepartment" text="Radiology" />
-                                 </items>
-                              </MenuButton>
+                                        <MenuButton fx:id="departmentInput" layoutX="10.0" layoutY="80.0" mnemonicParsing="false" onAction="#selectDepartment" prefHeight="43.0" prefWidth="264.0" style="-fx-background-color: white; -fx-border-color: #b5b0b0;" text="Department" textFill="#b5b0b0">
+                                            <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#selectDepartment" text="Surgery" />
+                                                <MenuItem mnemonicParsing="false" onAction="#selectDepartment" text="Emergency Room" />
+                                                <MenuItem mnemonicParsing="false" onAction="#selectDepartment" text="Intensive Care Unit" />
+                                                <MenuItem mnemonicParsing="false" onAction="#selectDepartment" text="Radiology" />
+                                            </items>
+                                        </MenuButton>
                                         <MenuButton fx:id="typeInput" mnemonicParsing="false" onAction="#SelectType" prefHeight="43.0" prefWidth="264.0" style="-fx-background-color: white; -fx-border-color: #b5b0b0;" text="Room/Hallway" textFill="#b5b0b0">
                                             <items>
                                                 <MenuItem mnemonicParsing="false" onAction="#SelectType" text="Room" />
@@ -78,14 +78,14 @@
                                                 <Insets top="20.0" />
                                             </VBox.margin>
                                         </Label>
-                              <MenuButton fx:id="ServiceTypeinput" mnemonicParsing="false" onAction="#selectServiceType" prefHeight="43.0" prefWidth="264.0" style="-fx-background-color: white; -fx-border-color: #b5b0b0;" text="Service" textFill="#b5b0b0">
-                                 <items>
-                                    <MenuItem mnemonicParsing="false" onAction="#selectServiceType" text="Urine Cleanup" />
-                                    <MenuItem mnemonicParsing="false" onAction="#selectServiceType" text="Feces cleanup" />
-                                    <MenuItem mnemonicParsing="false" onAction="#selectServiceType" text="Preparation Cleanup" />
-                                    <MenuItem mnemonicParsing="false" onAction="#selectServiceType" text="Trash Removal" />
-                                 </items>
-                              </MenuButton>
+                                        <MenuButton fx:id="ServiceTypeinput" mnemonicParsing="false" onAction="#selectServiceType" prefHeight="43.0" prefWidth="264.0" style="-fx-background-color: white; -fx-border-color: #b5b0b0;" text="Service" textFill="#b5b0b0">
+                                            <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#selectServiceType" text="Urine Cleanup" />
+                                                <MenuItem mnemonicParsing="false" onAction="#selectServiceType" text="Feces cleanup" />
+                                                <MenuItem mnemonicParsing="false" onAction="#selectServiceType" text="Preparation Cleanup" />
+                                                <MenuItem mnemonicParsing="false" onAction="#selectServiceType" text="Trash Removal" />
+                                            </items>
+                                        </MenuButton>
                                         <Label text="Severity of Mess">
                                             <font>
                                                 <Font size="18.0" />
@@ -130,8 +130,8 @@
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <Button fx:id="submit" mnemonicParsing="false" onAction="#handleButton" style="-fx-background-color: #5727d8;" text="Submit" textFill="WHITE" GridPane.halignment="CENTER" />
-                                                <Button fx:id="cancel" mnemonicParsing="false" onAction="#handleButton" style="-fx-background-color: white; -fx-border-color: #5727d8;" text="Cancel" textFill="#5727d8" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                                <Button fx:id="submit" mnemonicParsing="false" onAction="#handleButtonSubmit" style="-fx-background-color: -fx--primary;" text="Submit" textFill="WHITE" GridPane.halignment="CENTER" />
+                                                <Button fx:id="cancel" mnemonicParsing="false" onAction="#handleButtonCancel" style="-fx-background-color: white; -fx-border-color: -fx--primary;" text="Cancel" textFill="#039be5" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                                             </children>
                                             <VBox.margin>
                                                 <Insets top="20.0" />

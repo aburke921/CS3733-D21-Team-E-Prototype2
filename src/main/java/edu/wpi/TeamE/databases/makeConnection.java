@@ -440,17 +440,9 @@ public class makeConnection {
 	}
 
 	/**
-	 * adds a node to DB, returning 0 or 1 depending on whether operation was successful
+	 * adds a node with said data to the database
 	 *
-	 * @param nodeID
-	 * @param xCoord
-	 * @param yCoord
-	 * @param floor
-	 * @param building
-	 * @param nodeType
-	 * @param longName
-	 * @param shortName
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+	 * @return int (the amount of rows affected by executing this statement, should be 1 in this case)
 	 */
 
 	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
@@ -478,18 +470,32 @@ public class makeConnection {
 		return 0;
 	}
 
-
 	/**
-	 * adds a edge to DB, returning 0 or 1 depending on whether operation was successful
+	 * adds an edge with said data to the database
+	 * both startNode and endNode has to already exist in node table
 	 *
-	 * @param edgeID
-	 * @param startNode
-	 * @param endNode
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
-	 * need to check that both startNode and endNode already exist in node table
+	 * @return int (the amount of rows affected by executing this statement, should be 1 in this case)
 	 */
 
 	public int addEdge(String edgeID, String startNode, String endNode) {
+		String addEdgeS = "insert into hasEdge values (?, ?, ?)";
+		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
+			connection.setAutoCommit(false);
+			addEdgePS.setString(1, edgeID);
+			addEdgePS.setString(2, startNode);
+			addEdgePS.setString(3, endNode);
+			// TODO: make a coordinate look-up so we can calculate and input the length of the edge
+			// addEdgePS.setFloat(4, (Math.sqrt(Math.pow(startNode.getX() - endNode.getX(), 2) + Math.pow(startNode.getY() - endNode.getY(), 2))));
+			int addEdgeRS = addEdgePS.executeUpdate();
+			if (addEdgeRS == 0) {
+				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
+			} else if (addEdgeRS != 1) {
+				System.err.println("addNode Result =" + addEdgeRS + ", probably bad cuz " + addEdgeRS + " rows was affected");
+			}
+			return addEdgeRS; // addEdgeRS = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return 0;
 	}
 

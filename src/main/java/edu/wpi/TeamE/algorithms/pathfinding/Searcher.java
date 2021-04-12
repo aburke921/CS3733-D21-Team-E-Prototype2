@@ -11,12 +11,22 @@ import edu.wpi.TeamE.algorithms.database.algoEdb;
  */
 public abstract class Searcher {
 
+    //this is a local cache of nodes which have been worked with in the past
     private HashMap<String, Node> cache;
 
+
+    /**
+     * Super constructor, initializes cache
+     */
     public Searcher(){
         cache = new HashMap<>();
     }
 
+
+    /**
+     * @param nodeId the Id of the node you wish to receive
+     * @return the requested node
+     */
     public Node getNode(String nodeId){
         if(!cache.containsKey(nodeId)){
             cacheNode(nodeId);
@@ -24,6 +34,10 @@ public abstract class Searcher {
         return cache.get(nodeId);
     }
 
+    /**
+     * @param nodeId The Id of the node you want to get the neighbors of
+     * @return the neighbors of that node
+     */
     public String[] getNeighbors(String nodeId){
         if(!cache.containsKey(nodeId)){
             cacheNode(nodeId);
@@ -31,6 +45,9 @@ public abstract class Searcher {
         return cache.get(nodeId).getNeighborIds();
     }
 
+    /**
+     * @param nodeId the id of the node you wish to cache
+     */
     private void cacheNode(String nodeId){
         Node node = algoEdb.getNode(nodeId);
         String[] neighbors = algoEdb.getNeighbors(nodeId);

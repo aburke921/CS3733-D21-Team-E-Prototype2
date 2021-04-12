@@ -13,6 +13,36 @@ public class makeConnection {
     Connection connection;
 
 
+    /*
+
+    EASY COPY AND PAST CODE----------------
+
+
+
+    try {
+        Statement stmt = this.connection.createStatement();
+
+        String sqlQuery = "";
+
+        ResultSet rset = stmt.executeQuery(sqlQuery);
+
+        while (rset.next()) {
+
+            int startX = rset.getInt("xCoord");
+            String startY = rset.getString("nodeID");
+        }
+        rset.close();
+        stmt.close();
+    }catch (SQLException e){
+        System.err.println("Error");
+    }
+
+    */
+
+
+
+
+
     /**
      * Constructor makes the database connection
      */
@@ -330,6 +360,11 @@ public class makeConnection {
      */
 
     public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+
+
+
+
+
         return 0;
     }
 
@@ -387,7 +422,28 @@ public class makeConnection {
      * @return int (0 if node couldn't be added, 1 if the node was added successfully)
      */
     public int deleteEdge(String nodeID) {
-        return 0;
+
+        try {
+
+
+            Statement stmt = this.connection.createStatement();
+
+            String sqlQuery = "";
+
+            ResultSet rset = stmt.executeQuery(sqlQuery);
+
+            while (rset.next()) {
+
+                int startX = rset.getInt("xCoord");
+                String startY = rset.getString("nodeID");
+            }
+            rset.close();
+            stmt.close();
+        }catch (SQLException e){
+            System.err.println("Error");
+        }
+
+            return 0;
     }
 
 

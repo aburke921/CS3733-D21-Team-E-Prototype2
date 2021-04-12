@@ -512,6 +512,7 @@ public class makeConnection {
 	}
 
 
+
 	/**
 	 * adds a node with said data to the database
 	 *
@@ -548,6 +549,7 @@ public class makeConnection {
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
+
 	public int addEdge(String edgeID, String startNode, String endNode) {
 		String addEdgeS = "insert into hasEdge (edgeID, startNode, endNode) values (?, ?, ?)";
 		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
@@ -583,12 +585,12 @@ public class makeConnection {
 	 * @param longName
 	 * @param shortName
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+	 *
 	 */
 
-	////////TEST////////
-	public int modifyNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+	public int modifyNode(String nodeID, Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
 
-		String finalQuery = "update node set ";
+		//String finalQuery = "update node set ";
 		String xCoordUpdate = "";
 		String yCoordUpdate = "";
 		String floorUpdate = "";
@@ -597,45 +599,66 @@ public class makeConnection {
 		String longNameUpdate = "";
 		String shortNameUpdate = "";
 
-		// had to convert int to Integer to check if input was null
-		// idk if this really works
-		Integer xCoordObject = new Integer(xCoord);
-		Integer yCoordObject = new Integer(yCoord);
+		boolean added = false;
 
-		if(xCoordObject != null) {
-			xCoordUpdate = "xCoord = " + xCoord;
+		String query = "update node set ";
+
+		if (xCoord != null) {
+			query = query + " xCoord = " + xCoord;
+			//xCoordUpdate = "xCoord = " + xCoord;
+			added = true;
 		}
 
-		if(yCoordObject != null) {
-			yCoordUpdate = "yCoord = " + yCoord;
+		if(yCoord != null) {
+			if(added == true) {
+				query = query + ", ";
+			}
+			query = query + " yCoord = " + yCoord;
+			added = true;
 		}
 
 		if(floor != null) {
-			floorUpdate = "floor = " + floor;
+			if(added == true) {
+				query = query + ", ";
+			}
+			query = query + " floor = '" + floor + "'";
+			added = true;
 		}
 
 		if(building != null) {
-			buildingUpdate = "building = " + building;
+			if(added == true) {
+				query = query + ", ";
+			}
+			query = query + " building = '" + building + "',";
 		}
 
 		if(nodeType != null) {
-			nodeTypeUpdate = "nodeType = " + nodeType;
+			if(added == true) {
+				query = query + ", ";
+			}
+			query = query + " nodeType = '" + nodeType + "',";
 		}
 
 		if(longName != null) {
-			longNameUpdate = "longName = " + longName;
+			if(added == true) {
+				query = query + ", ";
+			}
+			query = query + " longName = '" + longName + "',";
 		}
 
 		if(shortName != null) {
-			shortNameUpdate = "shortName = " + shortName;
+			if(added == true) {
+				query = query + ", ";
+			}
+			query = query + " shortName = '" + shortName + "'";
 		}
 
-		finalQuery = finalQuery + xCoordUpdate + yCoordUpdate + floorUpdate + buildingUpdate + nodeTypeUpdate + longNameUpdate + shortNameUpdate + "where nodeID = '" + nodeID + "'";
+		query = query + " where nodeID = '" + nodeID + "'";
 
 		try {
 			Statement stmt = this.connection.createStatement();
 
-			stmt.executeUpdate(finalQuery);
+			stmt.executeUpdate(query);
 			stmt.close();
 
 			return 1;
@@ -876,11 +899,20 @@ public class makeConnection {
 		connection.createTables();
 		connection.populateTable("node", nodes);
 		connection.populateTable("hasEdge", edges);
-		connection.addNode("node1", 1, 1, "Floor", "Building", "nodeType", "longName", "shortName");
-		connection.addNode("node2", 1, 11, "Floor", "Building", "nodeType", "longName", "shortName");
 
-		connection.addEdge("node1_node2", "node1", "node2");
+		connection.modifyNode("ACONF00102", null, null, "h4", null , null , null , null);
+//		makeConnection connection = new makeConnection();
+//
+//		System.out.println("made it here!");
+//		connection.deleteAllTables();
+//		connection.createTables();
+//		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+//		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+//		connection.populateTable("node", nodes);
+//		connection.populateTable("hasEdge", edges);
 
+		// getsAllNodes (returns ArrayList<Node>)
+//		connection.getAllNodes();
 
 	}
 }

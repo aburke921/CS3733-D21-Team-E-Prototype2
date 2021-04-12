@@ -12,7 +12,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.stage.Stage;
 
 public class PathFinder {
 
@@ -28,8 +37,14 @@ public class PathFinder {
     @FXML // fx:id="bathroomList"
     private JFXComboBox<String> endLocationList; // Value injected by FXMLLoader
 
+    @FXML // fx:id="imageView"
+    private ImageView imageView;
+
+    @FXML // fx:id="pane"
+    private Pane pane;
+
     @FXML
-    private void toDefault(ActionEvent e) {
+    private void toDefault(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
@@ -64,13 +79,30 @@ public class PathFinder {
     }
 
     @FXML
-    public void findPath(ActionEvent actionEvent) {
+    public void findPath(ActionEvent event) {
+
+        double xcoord = (double) 1748 / 10;
+        double ycoord = (double) 1336 / 10;
+
+        double xcoord2 = (double) 1910 / 10;
+        double ycoord2 = (double) 1465 / 10;
+
+        Circle circle = new Circle(xcoord, ycoord, 2, Color.RED);
+        Circle circle2 = new Circle(xcoord2, ycoord2, 2, Color.RED);
+        Line line = new Line(xcoord, ycoord, xcoord2, ycoord2);
+        line.setStroke(Color.RED);
+
+        pane.getChildren().addAll(circle, circle2, line);
+
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert startLocationList != null : "fx:id=\"bathroomList\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert endLocationList != null : "fx:id=\"bathroomList\" was not injected: check your FXML file 'PathFinder.fxml'.";
+
+        Image image = new Image("edu/wpi/TeamE/FirstFloorMap.png");
+        imageView.setImage(image);
 
         ObservableList<String> list = FXCollections.observableArrayList("eEXIT00101","eEXIT00201","ePARK00101","ePARK00201", "ePARK00301"); //todo pull item list from CSV?
         startLocationList.setItems(list);

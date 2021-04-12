@@ -5,11 +5,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -38,71 +38,36 @@
                         </FlowPane>
                     </children>
                 </HBox>
-                <HBox prefHeight="610.0" prefWidth="519.0">
+                <HBox prefHeight="58.0" prefWidth="600.0">
                     <children>
-                        <FlowPane prefHeight="361.0" prefWidth="299.0">
-                            <children>
-                        <FlowPane prefHeight="361.0" prefWidth="299.0">
-                           <children>
-                              <VBox prefHeight="318.0" prefWidth="231.0">
-                                 <FlowPane.margin>
-                                    <Insets left="10.0" />
-                                 </FlowPane.margin>
-                                 <children>
-                                    <JFXComboBox fx:id="startLocationList" onAction="#selectStartNode" prefHeight="25.0" prefWidth="233.0" promptText="Start Location">
-                                       <VBox.margin>
-                                          <Insets bottom="10.0" top="20.0" />
-                                       </VBox.margin>
-                                    </JFXComboBox>
-                                    <JFXComboBox fx:id="endLocationList" layoutX="10.0" layoutY="30.0" onAction="#selectEndNode" prefHeight="25.0" prefWidth="233.0" promptText="End Location">
-                                       <VBox.margin>
-                                          <Insets top="20.0" />
-                                       </VBox.margin>
-                                    </JFXComboBox>
-                                    <JFXButton fx:id="findPathButton" onAction="#findPath" styleClass="submit-button" text="Find Path">
-                                       <VBox.margin>
-                                          <Insets top="20.0" />
-                                       </VBox.margin>
-                                    </JFXButton>
-                                 </children>
-                              </VBox>
-                              <FlowPane prefHeight="41.0" prefWidth="250.0">
-                                 <children>
-                                    <Button fx:id="backButton" mnemonicParsing="false" onAction="#toDefault" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE">
-                                       <FlowPane.margin>
-                                          <Insets left="20.0" />
-                                       </FlowPane.margin>
-                                    </Button>
-                                 </children>
-                              </FlowPane>
-                           </children>
-                        </FlowPane>
-                            </children>
-                        </FlowPane>
-                        <FlowPane prefHeight="361.0" prefWidth="329.0">
-                            <children>
-                                <VBox prefHeight="363.0" prefWidth="259.0">
-                                    <FlowPane.margin>
-                                        <Insets left="20.0" />
-                                    </FlowPane.margin>
-                                    <children>
-                                        <GridPane>
-                                            <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
-                                        </GridPane>
-                                    </children>
-                                </VBox>
-                            </children>
-                        </FlowPane>
+                  <JFXComboBox fx:id="startLocationList" onAction="#selectStartNode" prefHeight="25.0" prefWidth="233.0" promptText="Start Location">
+                     <HBox.margin>
+                        <Insets left="20.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXComboBox>
+                  <JFXComboBox fx:id="endLocationList" onAction="#selectEndNode" prefHeight="25.0" prefWidth="233.0" promptText="End Location">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXComboBox>
+                  <JFXButton fx:id="findPathButton" onAction="#findPath" styleClass="submit-button" text="Find Path">
+                     <HBox.margin>
+                        <Insets left="15.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
                     </children>
                 </HBox>
+            <StackPane prefHeight="54.0" prefWidth="600.0">
+               <children>
+                  <ImageView fx:id="imageView" fitHeight="340.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true" />
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Pane fx:id="pane" layoutX="50.0" prefHeight="340.0" prefWidth="500.0" />
+                        <Button fx:id="backButton" layoutX="14.0" layoutY="281.0" mnemonicParsing="false" onAction="#toDefault" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" />
+                     </children>
+                  </Pane>
+               </children>
+            </StackPane>
             </children>
         </VBox>
     </children>

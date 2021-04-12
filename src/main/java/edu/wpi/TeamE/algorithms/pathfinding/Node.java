@@ -37,7 +37,8 @@ public class Node implements Comparable<Node>, Iterable<Node> {
                 String _nodeType, String _longName,
                 String _shortName){
         this();
-
+        xCoord = _x;
+        yCoord = _y;
         nodeInfo = new HashMap<>(8);
         nodeInfo.put("id", _id);
         nodeInfo.put("floor", _floor);
@@ -101,14 +102,6 @@ public class Node implements Comparable<Node>, Iterable<Node> {
      */
     public boolean equals(Node n){
         return get("id").equalsIgnoreCase(n.get("id"));
-    }
-
-    /**
-     * @return string rep. which includes 'id' and 'longName'
-     */
-    @Override
-    public String toString() {
-        return "Id : " + get("id") + ",  Name: " + get("longName");
     }
 
     /**

@@ -221,7 +221,7 @@ public class makeConnection {
 					stmt.close();
 
 				} catch (SQLException e) {
-//                    e.printStackTrace();
+					e.printStackTrace();
 					System.err.println("populateTable() inner try/catch error");
 				}
 			}
@@ -507,7 +507,7 @@ public class makeConnection {
 		makeConnection connection = new makeConnection();
 
 		System.out.println("made it here!");
-		//connection.deleteAllTables();
+		connection.deleteAllTables();
 		connection.createTables();
 		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
 		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");

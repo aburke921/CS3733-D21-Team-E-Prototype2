@@ -202,6 +202,10 @@ public class MapEditor {
             //openFile(file);
             //file.getAbsolutePath();
             makeConnection connection = new makeConnection();
+            connection.deleteAllTables();
+            // TODO: delete node table only plzzzzzzzzzzzzz
+            connection.createTables();
+            // TODO: create node table only plzzzzzzzzzzzzz
             connection.populateTable("node", file);
             //database's fcn for file uploading goes here, param is file
             //when submit button is pressed, update/refresh?

@@ -794,32 +794,66 @@ public class makeConnection {
 	 * Deletes edge(s) between the given two nodes, they can be in any order
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
+	 * if count == 1 || count == 2, edges have been deleted
+	 * else no edges exist with inputted nodes
 	 */
 
-	////////TEST////////
+
 	public int deleteEdge(String nodeID1, String nodeID2) {
-		String deleteEdgeS = "delete from hasEdge where startNode = ? and endNode = ?; delete from hasEdge where endNode = ? and startNode = ?";
+
+		String deleteEdgeS1 = "delete from hasEdge where startNode = ? and endNode = ?";
+		String deleteEdgeS2 = "delete from hasEdge where endNode = ? and startNode = ?";
+
+		int count = 0;
 		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
-		try (PreparedStatement deleteEdgePS = connection.prepareStatement(deleteEdgeS)) {
-			deleteEdgePS.setString(1, nodeID1);
-			deleteEdgePS.setString(2, nodeID2);
-			deleteEdgePS.setString(3, nodeID1);
-			deleteEdgePS.setString(4, nodeID2);
-			int deleteEdgeRS = deleteEdgePS.executeUpdate();
-			if (deleteEdgeRS == 0) {
-				System.err.println("deleteEdge Result = 0, probably bad cuz no rows was affected");
-			} else if (deleteEdgeRS == 2) {
-				System.out.println("deleteEdge Result =" + deleteEdgeRS + ", it's weird cuz " + deleteEdgeRS + " rows was affected");
-			} else if (deleteEdgeRS != 1) {
-				System.err.println("deleteEdge Result =" + deleteEdgeRS + ", probably bad cuz " + deleteEdgeRS + " rows was affected");
+		try (PreparedStatement deleteEdgePS1 = connection.prepareStatement(deleteEdgeS1)) {
+			deleteEdgePS1.setString(1, nodeID1);
+			deleteEdgePS1.setString(2, nodeID2);
+
+			int deleteEdgeRS1 = deleteEdgePS1.executeUpdate();
+
+			if (deleteEdgeRS1 == 0) {
+				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
+			} else if (deleteEdgeRS1 == 2) {
+				System.out.println("deleteEdge Result =" + deleteEdgeRS1 + ", it's weird cuz " + deleteEdgeRS1 + " rows was affected");
+			} else if (deleteEdgeRS1 != 1) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS1 + ", just bad because this should never occur");
 			}
-			return deleteEdgeRS;
-			// deleteEdgeRS = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+			System.out.println("Number of rows affected: " + deleteEdgeRS1);
+			count = 1;
+			// deleteEdgeRS1 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("deleteEdge() tyr/catch error");
+			count = 0;
 		}
-		return 0;
+
+		try (PreparedStatement deleteEdgePS2 = connection.prepareStatement(deleteEdgeS2)) {
+			deleteEdgePS2.setString(1, nodeID1);
+			deleteEdgePS2.setString(2, nodeID2);
+
+			int deleteEdgeRS2 = deleteEdgePS2.executeUpdate();
+
+			if (deleteEdgeRS2 == 0) {
+				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
+			} else if (deleteEdgeRS2 == 2) {
+				System.out.println("deleteEdge Result =" + deleteEdgeRS2 + ", it's weird cuz " + deleteEdgeRS2 + " rows was affected");
+			} else if (deleteEdgeRS2 != 1) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS2 + ", just bad because this should never occur");
+			}
+			System.out.println("Number of rows affected: " + deleteEdgeRS2);
+			count += count;
+			// deleteEdgeRS2 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("deleteEdge() tyr/catch error");
+			if (count == 0) {
+				count = 0;
+			}
+			else
+				count = 1;
+		}
+		return count;
 	}
 
 	/**
@@ -869,8 +903,8 @@ public class makeConnection {
 			// deleteNode = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return 0;
 		}
-		return 0;
 	}
 
 	/**
@@ -896,9 +930,6 @@ public class makeConnection {
 		connection.createTables();
 		connection.populateTable("node", nodes);
 		connection.populateTable("hasEdge", edges);
-//		connection.addNode("node1", 1, 1, "floor", "building", "nodeType", "longName", "shortName");
-
-//		connection.deleteNode("node1");
 
 
 	}

@@ -582,14 +582,26 @@ public class makeConnection {
 
 
 	/**
-	 * matches the nodeID to a node and deletes it from DB, returning 0 or 1 depending on whether operation was successful
+	 * matches the nodeID to a node and deletes it from DB
 	 *
-	 * @param nodeID
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
-	 * make sure the edges containing this node are deleted
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 	public int deleteNode(String nodeID) {
-		// has to call deleteEdge(nodeID) before deleting the node
+		String deleteNodeS = "delete from node where nodeID = ?";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+			deleteNodePS.setString(1, nodeID);
+			// We might encounter issues if on delete cascade didn't work
+			int deleteNodeRS = deleteNodePS.executeUpdate();
+			if (deleteNodeRS == 0) {
+				System.err.println("deleteNode Result = 0, probably bad cuz no rows was affected");
+			} else if (deleteNodeRS != 1) {
+				System.err.println("deleteNode Result =" + deleteNodeRS + ", probably bad cuz " + deleteNodeRS + " rows was affected");
+			}
+			return deleteNodeRS;
+			// deleteNode = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return 0;
 	}
 

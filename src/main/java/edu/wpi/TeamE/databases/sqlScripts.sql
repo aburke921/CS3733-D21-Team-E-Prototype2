@@ -22,8 +22,8 @@ CREATE TABLE node
 CREATE TABLE hasEdge
 (
     edgeID    varchar(63) primary key,
-    startNode varchar(31) not null references node (nodeID),
-    endNode   varchar(31) not null references node (nodeID),
+    startNode varchar(31) not null references node (nodeID) on delete cascade,
+    endNode   varchar(31) not null references node (nodeID) on delete cascade,
     length    FLOAT,
     unique (startNode, endNode)
 );
@@ -75,6 +75,12 @@ values (?, ?, ?, ?, ?, ?, ?, ?);
 
 insert into hasEdge
 values (?, ?, ?, ?);
+
+-- deleteNode()
+
+delete
+from node
+where nodeID = ?;
 
 -- deleteEdge()
 
@@ -168,8 +174,8 @@ where startNode = ?;
 -- new table for hasEdge+distance
 create table edgeLength
 (
-    startNode varchar(31) references node (nodeID),
-    endNode   varchar(31) references node (nodeID),
+    startNode varchar(31) references node (nodeID) on delete cascade,
+    endNode   varchar(31) references node (nodeID) on delete cascade,
     length    float,
     primary key (startNode, endNode)
 );

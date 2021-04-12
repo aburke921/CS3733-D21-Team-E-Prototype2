@@ -104,7 +104,8 @@ public class PathFinder {
         Image image = new Image("edu/wpi/TeamE/FirstFloorMap.png");
         imageView.setImage(image);
 
-        ObservableList<String> list = FXCollections.observableArrayList("eEXIT00101","eEXIT00201","ePARK00101","ePARK00201", "ePARK00301"); //todo pull item list from CSV?
+        //todo need function that returns data with Coordinates and human readable names, along with whatever we need to send to the A* function
+        ObservableList<String> list = FXCollections.observableArrayList("eEXIT00101","eEXIT00201","ePARK00101","ePARK00201", "ePARK00301");
         startLocationList.setItems(list);
         endLocationList.setItems(list);
     }

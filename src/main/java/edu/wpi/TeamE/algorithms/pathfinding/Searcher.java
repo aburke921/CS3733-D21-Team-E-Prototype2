@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
- * Abstract Seacher Class for Pathfinding API
+ * Abstract Searcher Class for Pathfinding API
  * On creation can be initialized to A* or DFS (already implemented) or others that can be added later
  */
 public abstract class Searcher {
     /**
      * Generic Search method for UI
-     * Seraches between Start and End Nodes for path
+     * Searches between Start and End Nodes for path
      * Searching algorithm can be A* or DFS (more can be added in the future)
      *
      * @param startId The NodeID of the start node as a string

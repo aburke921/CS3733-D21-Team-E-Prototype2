@@ -1,4 +1,5 @@
 package edu.wpi.TeamE.views;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.application.Application;
@@ -32,9 +33,20 @@ import java.util.logging.Logger;
 public class MapEditor {
 
     @FXML private TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Node> treeTable;
-    @FXML private FlowPane theStage;
+    @FXML private JFXTextField xCordInput;
+    @FXML private JFXTextField yCordInput;
+    @FXML private JFXTextField idInput;
+    @FXML private JFXTextField floorInput;
+    @FXML private JFXTextField typeInput;
+    @FXML private JFXTextField buildingInput;
+    @FXML private JFXTextField longNameInput;
+    @FXML private JFXTextField shortNameInput;
 
 
+    /**
+     * brings user to the map editor navigation page
+     * @param e
+     */
     @FXML
     private void toNavigation(ActionEvent e) {
         try {
@@ -45,17 +57,20 @@ public class MapEditor {
         }
     }
 
-
+    /**
+     * brings user to the help page
+     * @param e
+     */
     public void getHelpDefault(ActionEvent e) {
     }
 
-       /* public static void main(String[] args) {
-            Application.launch(args);
-        }
-
-        should be 'id', 'floor', 'building', 'type', 'longName', 'shortName'
-        */
-
+    /**
+     * When the table is empty (aka no root), create the proper columns
+     * Go through the array of Nodes and create a treeItem for each one,
+     * add each one to the treeTable
+     * @param array
+     * @param table
+     */
     public void prepareNodes(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array, TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Node> table) {
         if (table.getRoot() == null) {
             edu.wpi.TeamE.algorithms.pathfinding.Node node0 = new
@@ -111,39 +126,140 @@ public class MapEditor {
             column8.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
             table.getColumns().add(column8);
+        }
+        if(table.getRoot().getChildren().isEmpty() == false) {
+            table.getRoot().getChildren().remove(0, array.size());
+        }
             for (int i = 0; i < array.size(); i++) {
                 edu.wpi.TeamE.algorithms.pathfinding.Node s = array.get(i);
-                int n = array.get(i).getX();
+                //int n = array.get(i).getX();
                 final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node> node = new TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node>(s);
                 table.getRoot().getChildren().add(node);
             }
         }
-    }
 
-    public void editNode(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array, TreeTableView<String> table) {
-        TreeItem<String> node = table.getSelectionModel().getSelectedItem();
+
+    /**
+     * looks at each field that the user could input into, whichever ones are not empty
+     * the information is extracted and the node that the user selected is edited using
+     * database's edit node fcn
+     * @param array
+     * @param table
+     */
+    public void editNode(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array, TreeTableView<Node> table) {
+        TreeItem<Node> node = table.getSelectionModel().getSelectedItem();
         if (table.getSelectionModel().getSelectedItem() != null) {
-            //function that takes in string (?) which will call to node that wants to be edited and
-            //inputted info from user, returns void
-            /*for(int i = 0; i < array.size(); i++) {
-                if(node.equals(array.get(i).name)) {
+            String nodeID = table.getSelectionModel().getSelectedItem().getValue().get("id");
+            //TODO add in database editNode fcn using all variables
+            if(floorInput.getText() != null) {
+                String floor = floorInput.getText();
+            } else {
+                String floor = null;
+            }
+            if(longNameInput.getText() != null) {
+                String longName = longNameInput.getText();
+            } else {
+                String longName = null;
+            }
+            if(shortNameInput.getText() != null) {
+                String shortName = shortNameInput.getText();
+            } else {
+                String shortName = null;
+            }
+            if(typeInput.getText() != null) {
+                String type = typeInput.getText();
+            } else {
+                String type = null;
+            }
+            if(buildingInput.getText() != null) {
+                String building = buildingInput.getText();
+            } else {
+                String building = null;
+            }
 
                 }
-            }*/
+            }
+
+
+    /**
+     * retrieves all the inputted info from the user, creates a new node and adds it to database
+     * using database's addNode fcn
+     * @return
+     */
+    public int addNode() {
+        int i = 0;
+        //TODO figure out what to do with array
+        ArrayList<Node> array = new ArrayList<Node>();
+        //TODO will be in init
+       //will be in init
+        File file = new File("L1Nodes.csv");
+        makeConnection connection = new makeConnection();
+        connection.deleteAllTables();
+        connection.createTables();
+        //connection.populateTable("node", file);
+
+        int xVal = Integer.parseInt(xCordInput.getText());
+        int yVal = Integer.parseInt(yCordInput.getText());
+        i = connection.addNode(idInput.getText(), xVal, yVal, floorInput.getText(), buildingInput.getText(), typeInput.getText(), longNameInput.getText(), shortNameInput.getText());
+        System.out.println(i);
+        if(i == 1) {
+            Node n = new Node(idInput.getText(), xVal, yVal, floorInput.getText(), buildingInput.getText(), typeInput.getText(), longNameInput.getText(), shortNameInput.getText());
+            array.add(n);
+            prepareNodes(array, treeTable);
+        } else {
+            System.out.println("Error");
         }
+        return i;
     }
 
-    public void addNode(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array, TreeTableView<String> table) {
-        //function that takes in users inputted info, updates database
+    /**
+     * calls the addNode fcn when the add node button is pressed
+     * @param e
+     */
+    public void addNodeButton(ActionEvent e) {
+        //TODO figure out what array input to use
+        addNode();
+        //prepareNodes(array, treeTable);
     }
 
-    public void deleteNode(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array, TreeTableView<String> table) {
-        TreeItem<String> node = table.getSelectionModel().getSelectedItem();
+    /**
+     * retrieves the ID of the selected item in the table, passes that into deleteNode fcn from database
+     * @param array
+     * @param table
+     */
+
+    public void deleteNode(ArrayList<Node> array, TreeTableView<Node> table) {
+        TreeItem<Node> node = table.getSelectionModel().getSelectedItem();
         if (table.getSelectionModel().getSelectedItem() != null) {
-            //function that takes in identifier of selected node, deletes the node
+            System.out.println(table.getSelectionModel().getSelectedItem().getValue().get("id"));
+            for(int i = 0; i < array.size(); i++) {
+                if(array.get(i).get("id") == table.getSelectionModel().getSelectedItem().getValue().get("id")) {
+                    //TODO get connection stuff
+                    //connection.deleteNode(array.get(i).get("id"));
+
+                }
+
+            }
         }
     }
 
+    /**
+     * calls the deleteNode fcn when the delete button is clicked
+     * @param e
+     */
+
+    public void deleteNodeButton(ActionEvent e) {
+        //TODO figure out what array input to use
+        ArrayList<Node> array = new ArrayList<Node>();
+        deleteNode(array, treeTable);
+        //prepareNodes(array, treeTable);
+    }
+
+    /**
+     * when refresh button is clicked, retrieves the arrayList of Nodes,
+     * calls the function to display data using the array (prepareNodes)
+     * @param actionEvent
+     */
 
     public void startTableButton(ActionEvent actionEvent) {
         //creating the root for the array
@@ -168,6 +284,7 @@ public class MapEditor {
         array = connection.getAllNodes();
         prepareNodes(array, treeTable);
     }
+
     @FXML
     public void toFileUpload() {
         try {

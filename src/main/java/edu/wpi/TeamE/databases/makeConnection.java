@@ -518,7 +518,6 @@ public class makeConnection {
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
-
 	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
 		String addNodeS = "insert into node values (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
@@ -549,7 +548,6 @@ public class makeConnection {
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
-
 	public int addEdge(String edgeID, String startNode, String endNode) {
 		String addEdgeS = "insert into hasEdge (edgeID, startNode, endNode) values (?, ?, ?)";
 		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
@@ -587,7 +585,6 @@ public class makeConnection {
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 *
 	 */
-
 	public int modifyNode(String nodeID, Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
 
 		//String finalQuery = "update node set ";
@@ -899,20 +896,10 @@ public class makeConnection {
 		connection.createTables();
 		connection.populateTable("node", nodes);
 		connection.populateTable("hasEdge", edges);
+//		connection.addNode("node1", 1, 1, "floor", "building", "nodeType", "longName", "shortName");
 
-		connection.modifyNode("ACONF00102", null, null, "h4", null , null , null , null);
-//		makeConnection connection = new makeConnection();
-//
-//		System.out.println("made it here!");
-//		connection.deleteAllTables();
-//		connection.createTables();
-//		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-//		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
-//		connection.populateTable("node", nodes);
-//		connection.populateTable("hasEdge", edges);
+//		connection.deleteNode("node1");
 
-		// getsAllNodes (returns ArrayList<Node>)
-//		connection.getAllNodes();
 
 	}
 }

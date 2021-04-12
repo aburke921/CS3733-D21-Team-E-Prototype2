@@ -51,6 +51,10 @@ public class PathFinder {
     @FXML // fx:id="pane"
     private Pane pane;
 
+    /**
+     * Returns to default page.
+     * @param event calling event info
+     */
     @FXML
     private void toDefault(ActionEvent event) {
         try {
@@ -63,9 +67,15 @@ public class PathFinder {
 
     @FXML
     void getHelpDefault(ActionEvent event) {
-
+        //todo
     }
 
+    /**
+     * Gets selected item from startNode dropdown.
+     * todo, chosen result should be saved to global variable?
+     * todo, judging from comments, this will get full node info from DB?
+     * @param event calling event info
+     */
     @FXML
     void selectStartNode(ActionEvent event) {
         String nodeID = ((JFXComboBox) event.getSource()).getValue().toString();
@@ -77,9 +87,16 @@ public class PathFinder {
 
     }
 
+    /**
+     * Gets selected item from endNode dropdown.
+     * todo, chosen result should be saved to global variable?
+     * todo, judging from comments, this will get full node info from DB?
+     * @param event calling event info
+     */
     @FXML
     void selectEndNode(ActionEvent event) {
         String nodeID = ((JFXComboBox) event.getSource()).getValue().toString();
+        System.out.println("nodeID: " + nodeID);
         /*
         String longName = getLongName(nodeID); //Given by database
         endLocationList.setValue(longName);
@@ -104,6 +121,10 @@ public class PathFinder {
 
     }
 
+    /**
+     * Method called by FXMLLoader when initialization is complete. Sets up initial fields in FXML.
+     * Namely, adds FloorMap PNG, todo fills dropdowns with DB data
+     */
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert startLocationList != null : "fx:id=\"bathroomList\" was not injected: check your FXML file 'PathFinder.fxml'.";

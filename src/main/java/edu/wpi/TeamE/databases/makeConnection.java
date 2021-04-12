@@ -63,7 +63,7 @@ public class makeConnection {
 				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
 				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 				System.err.println("error with the DriverManager");
 			}
 		} catch (ClassNotFoundException e) {
@@ -249,36 +249,29 @@ public class makeConnection {
 		Statement stmt;
 
 		try {
-
 			stmt = this.connection.createStatement();
-
 			sqlQuery = "SELECT xCoord, yCoord FROM node WHERE nodeID = '" + startNode + "'";
-
 			rset = stmt.executeQuery(sqlQuery);
 
 			while (rset.next()) {
-
 				startX = rset.getInt("xCoord");
 				startY = rset.getInt("yCoord");
 			}
 			rset.close();
 			stmt.close();
+
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			System.err.println("WHERE nodeID = startNode try/catch failed");
 		}
 
 		try {
-
 			stmt = this.connection.createStatement();
-
 			sqlQuery = "SELECT xCoord, yCoord FROM node WHERE nodeID = '" + endNode + "'";
-
 			//executes the SQL insert statement (inserts the data into the table)
 			rset = stmt.executeQuery(sqlQuery);
 
 			while (rset.next()) {
-
 				endX = rset.getInt("xCoord");
 				endY = rset.getInt("yCoord");
 			}
@@ -292,9 +285,7 @@ public class makeConnection {
 
 
 		try {
-
 			double length;
-
 			double xLength = Math.pow((startX - endX), 2);
 			double yLength = Math.pow((startY - endY), 2);
 
@@ -419,7 +410,6 @@ public class makeConnection {
 
 	/**
 	 * gets all Nodes (each row in node table)
-	 *
 	 * @return ArrayList of Node objects
 	 * need Node constructor from UI/UX team
 	 */
@@ -571,10 +561,36 @@ public class makeConnection {
 			// deleteEdgeRS = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.err.println("deleteEdge() tyr/catch error");
 		}
 		return 0;
 	}
 
+	/**
+	 * any edge containing the given nodeID (startNode or endNode) is deleted
+	 *
+	 * @param nodeID
+	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+	 */
+	/*
+	public int deleteEdge(String nodeID) {
+
+		try {
+			Statement stmt = this.connection.createStatement();
+
+			String sqlQuery = "DELETE FROM hasEdge WHERE startNode = '" + nodeID + "' OR endNode = '" + nodeID + "'";
+
+			stmt.executeUpdate(sqlQuery);
+			stmt.close();
+
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error");
+			return 0;
+		}
+	}
+	*/
 
 	/**
 	 * matches the nodeID to a node and deletes it from DB
@@ -617,12 +633,18 @@ public class makeConnection {
 
 		System.out.println("made it here!");
 		connection.deleteAllTables();
-		System.out.println("1.");
 		connection.createTables();
-		System.out.println("2..");
-		connection.populateTable("node", new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv"));
-		connection.populateTable("hasEdge", new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv"));
-		System.out.println("3...");
+		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+		connection.populateTable("node", nodes);
+		connection.populateTable("hasEdge", edges);
+
+		// getsAllNodes (returns ArrayList<Node>)
+		connection.getAllNodes();
+
+		//connection.populateTable("node", "L1Nodes.csv");
+		//connection.populateTable("hasEdge", "L1Edges.csv");
+		//System.out.println(connection.deleteEdge("CCONF002L1"));
 	}
 }
 

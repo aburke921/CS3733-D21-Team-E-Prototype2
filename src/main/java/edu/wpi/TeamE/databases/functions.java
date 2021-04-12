@@ -1,12 +1,8 @@
 package edu.wpi.TeamE.databases;
 
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
-import javafx.util.Pair;
 
 import java.sql.*;
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 public class functions {
@@ -55,8 +51,7 @@ public class functions {
 			String floor = resultSet.getString("floor");
 			String nodeType = resultSet.getString("nodeType");
 			resultSet.close();
-			Node node = new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
-			return node;
+			return new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

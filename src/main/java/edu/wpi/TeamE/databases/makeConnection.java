@@ -1,6 +1,6 @@
 package edu.wpi.TeamE.databases;
-import edu.wpi.TeamE.algorithms.pathfinding.Node;
 
+import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import javafx.util.Pair;
 
 import java.io.BufferedReader;
@@ -380,12 +380,13 @@ public class makeConnection {
 
 	/**
 	 * gets all Nodes (each row in node table)
+	 *
 	 * @return ArrayList of Node objects
 	 * need Node constructor from UI/UX team
 	 */
 
-    public ArrayList<Node> getAllNodes() {
-        ArrayList<Node> nodesArray = new ArrayList<>();
+	public ArrayList<Node> getAllNodes() {
+		ArrayList<Node> nodesArray = new ArrayList<>();
 
 		try {
 			Statement stmt = this.connection.createStatement();
@@ -412,8 +413,8 @@ public class makeConnection {
 		} catch (SQLException e) {
 			System.err.println("getAllNodes Error");
 		}
-        return nodesArray;
-    }
+		return nodesArray;
+	}
 
 	/**
 	 * adds a node to DB, returning 0 or 1 depending on whether operation was successful
@@ -430,8 +431,27 @@ public class makeConnection {
 	 */
 
 	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-
-
+		String addNodeS = "insert into node values (?, ?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
+			connection.setAutoCommit(false);
+			addNodePS.setString(1, nodeID);
+			addNodePS.setInt(2, xCoord);
+			addNodePS.setInt(3, yCoord);
+			addNodePS.setString(4, floor);
+			addNodePS.setString(5, building);
+			addNodePS.setString(6, nodeType);
+			addNodePS.setString(7, longName);
+			addNodePS.setString(8, shortName);
+			int addNodeRS = addNodePS.executeUpdate();
+			if (addNodeRS == 0) {
+				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
+			} else if (addNodeRS != 1) {
+				System.err.println("addNode Result =" + addNodeRS + ", probably bad cuz " + addNodeRS + " rows was affected");
+			}
+			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return 0;
 	}
 

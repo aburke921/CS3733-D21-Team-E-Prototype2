@@ -116,26 +116,12 @@ public class PathFinder {
     }
 
     /**
-     * todo
-     * @param event calling fcn's (Find Path Button) event info
+     * todo Uses {@link Searcher}'s search() function to find the best path,
+     * given the two current start and end positions ({@link #startNodeID} and {@link #endNodeID}).
+     * @param event calling function's (Find Path Button) event info
      */
     @FXML
     public void findPath(ActionEvent event) {
-
-        //todo commented section here serves as good example for how shapes will be made
-//        double xcoord = (double) 1748 / 10;
-//        double ycoord = (double) 1336 / 10;
-//
-//        double xcoord2 = (double) 1910 / 10;
-//        double ycoord2 = (double) 1465 / 10;
-//
-//        Circle circle = new Circle(xcoord, ycoord, 2, Color.RED);
-//        Circle circle2 = new Circle(xcoord2, ycoord2, 2, Color.RED);
-//        Line line = new Line(xcoord, ycoord, xcoord2, ycoord2);
-//        line.setStroke(Color.RED);
-//
-//        pane.getChildren().addAll(circle, circle2, line);
-
 
         System.out.print("\nFINDING PATH...");
 
@@ -173,10 +159,35 @@ public class PathFinder {
     }
 
     /**
-     * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML.
-     * Namely, adds FloorMap PNG, fills dropdowns with DB data
+     * Draws map path given....
+     * todo... would be called by findPath()?
      */
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    public void drawMap() {
+//        double xcoord = (double) 1748 / 10;
+//        double ycoord = (double) 1336 / 10;
+//
+//        double xcoord2 = (double) 1910 / 10;
+//        double ycoord2 = (double) 1465 / 10;
+//
+//        Circle circle = new Circle(xcoord, ycoord, 2, Color.RED);
+//        Circle circle2 = new Circle(xcoord2, ycoord2, 2, Color.RED);
+//        Line line = new Line(xcoord, ycoord, xcoord2, ycoord2);
+//        line.setStroke(Color.RED);
+//
+//        pane.getChildren().addAll(circle, circle2, line);
+
+        /*
+        How would we define an unknown # of circles? In the example above, I see that
+            each circle has an explicit name/declaration... can this be changed so we can
+            creat them in a loop?
+         */
+    }
+
+    /**
+     * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
+     * Namely, adds FloorMap PNG and fills dropdowns with DB data
+     */
+    @FXML
     void initialize() {
         assert startLocationList != null : "fx:id=\"bathroomList\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert endLocationList != null : "fx:id=\"bathroomList\" was not injected: check your FXML file 'PathFinder.fxml'.";

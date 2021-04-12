@@ -1,8 +1,11 @@
 package edu.wpi.TeamE.databases;
 
 
+import javafx.util.Pair;
+
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class makeConnection {
@@ -178,15 +181,10 @@ public class makeConnection {
 
                     stmt.execute(sqlQuery);
 
-
-
-//                    System.out.println("after");
-//                    writer.flush();
-
                     if(tableName.equals("hasEdge")){
-                        System.out.println("Calling addLength");
+                        //System.out.println("Calling addLength");
                         addLength(tempArr[1], tempArr[2]);
-                        System.out.println("after calling addLength");
+                        //System.out.println("after calling addLength");
                     }
 
                     stmt.close();
@@ -284,6 +282,133 @@ public class makeConnection {
 
 
 
+    }
+
+
+    /**
+     * gets given nodeID's attributes
+     * @param nodeID
+     * @return a Node object with the matching nodeID
+     * need Node constructor from Algorithms team
+     */
+//    public Node getNodeInfo(String nodeID) {
+//
+//    }
+
+
+    /**
+     * gets edge information for all edges containing given nodeID
+     * @param nodeID
+     * @return Pair<Integer, String> map with edge information
+     */
+    public Pair<Integer, String> getEdgeInfo(String nodeID) {
+        Pair<Integer, String> pair = new Pair<Integer, String>(0, "");
+        return pair;
+    }
+
+    /**
+     * gets all Nodes (each row in node table)
+     * @return ArrayList of Node objects
+     * need Node constructor from UI/UX team
+     */
+//    public ArrayList<Nodes> getAllNodes() {
+//        ArrayList<Nodes> nodes = new ArrayList<Nodes>();
+//        return nodes;
+//    }
+
+    /**
+     * adds a node to DB, returning 0 or 1 depending on whether operation was successful
+     * @param nodeID
+     * @param xCoord
+     * @param yCoord
+     * @param floor
+     * @param building
+     * @param nodeType
+     * @param longName
+     * @param shortName
+     * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+     */
+
+    public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+        return 0;
+    }
+
+
+
+    /**
+     * adds a edge to DB, returning 0 or 1 depending on whether operation was successful
+     * @param edgeID
+     * @param startNode
+     * @param endNode
+     * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+     * need to check that both startNode and endNode already exist in node table
+     */
+
+    public int addEdge(String edgeID, String startNode, String endNode) {
+        return 0;
+    }
+
+
+
+    /**
+     * modifies a node, updating the DB, returning 0 or 1 depending on whether operation was successful
+     * @param nodeID
+     * @param xCoord
+     * @param yCoord
+     * @param floor
+     * @param building
+     * @param nodeType
+     * @param longName
+     * @param shortName
+     * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+     */
+    public int modifyNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+        return 0;
+    }
+
+
+
+    /**
+     * modifies an edge, updating the DB, returning 0 or 1 depending on whether operation was successful
+     * @param edgeID
+     * @param startNode
+     * @param endNode
+     * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+     * need to check that both startNode and endNode already exist in node table
+     */
+    public int modifyEdge(String edgeID, String startNode, String endNode) {
+        return 0;
+    }
+
+
+    /**
+     * any edge containing the given nodeID (startNode or endNode) is deleted
+     * @param nodeID
+     * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+     */
+    public int deleteEdge(String nodeID) {
+        return 0;
+    }
+
+
+    /**
+     * matches the nodeID to a node and deletes it from DB, returning 0 or 1 depending on whether operation was successful
+     * @param nodeID
+     * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+     * make sure the edges containing this node are deleted
+     */
+    public int deleteNode(String nodeID) {
+        // has to call deleteEdge(nodeID) before deleting the node
+        return 0;
+    }
+
+    /**
+     * gets list of nodeIDS
+     * @return String[] of nodeIDs
+     */
+    public String[] getListofNodeIDS() {
+        String[] array = {};
+        return array;
     }
 
 

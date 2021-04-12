@@ -25,7 +25,7 @@ JFXTextField, JFXTextArea, JFXComboBox {
     -fx-background-color: -fx--primary;
 }
 
-.cancel-button { /*todo, a reddish color for cancle buttons?*/
+.cancel-button { /*todo, a reddish color for cancel buttons?*/
     -jfx-button-type: FLAT;
     -fx-border-color: -fx--secondary-light;
     /*-fx-background-radius: 100px;*/

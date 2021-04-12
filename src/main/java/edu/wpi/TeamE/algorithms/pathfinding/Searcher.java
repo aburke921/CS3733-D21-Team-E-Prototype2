@@ -3,7 +3,7 @@ package edu.wpi.TeamE.algorithms.pathfinding;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import edu.wpi.TeamE.algorithms.database.algoEdb;
+import edu.wpi.TeamE.algorithms.database.makeConnection;
 
 /**
  * Abstract Searcher Class for Pathfinding API
@@ -14,12 +14,14 @@ public abstract class Searcher {
     //this is a local cache of nodes which have been worked with in the past
     private HashMap<String, Node> cache;
 
+    private makeConnection con;
 
     /**
      * Super constructor, initializes cache
      */
     public Searcher(){
         cache = new HashMap<>();
+        con = new makeConnection();
     }
 
 
@@ -38,7 +40,7 @@ public abstract class Searcher {
      * @param nodeId The Id of the node you want to get the neighbors of
      * @return the neighbors of that node
      */
-    public String[] getNeighbors(String nodeId){
+    public HashMap<String, Double> getNeighbors(String nodeId){
         if(!cache.containsKey(nodeId)){
             cacheNode(nodeId);
         }
@@ -49,8 +51,8 @@ public abstract class Searcher {
      * @param nodeId the id of the node you wish to cache
      */
     private void cacheNode(String nodeId){
-        Node node = algoEdb.getNode(nodeId);
-        String[] neighbors = algoEdb.getNeighbors(nodeId);
+        Node node = con.getNodeInfo(nodeId);
+        HashMap<String, Double> neighbors = con.getNeighbors(nodeId);
         node.setNeighborIds(neighbors);
         cache.put(nodeId, node);
     }

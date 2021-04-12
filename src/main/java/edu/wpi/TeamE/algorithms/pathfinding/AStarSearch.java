@@ -1,6 +1,5 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
-import edu.wpi.TeamE.algorithms.database.algoEdb;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
@@ -54,11 +53,11 @@ public class AStarSearch extends Searcher {
 
             current = potentials.poll();
 
-            String[] neighborIds = getNeighbors(current.get("id"));
+            HashMap<String, Double> neighbors = getNeighbors(current.get("id"));
 
-            for(String neighborId : neighborIds){
+            for(String neighborId : neighbors.keySet()){
                 Node neighbor = getNode(neighborId);
-                Double neighborCost = prevCost.get(current) + dist(current, neighbor);
+                Double neighborCost = prevCost.get(current) + neighbors.get(neighborId);
                 if(!prevCost.containsKey(neighbor) || neighborCost < prevCost.get(neighbor)){
                     prevCost.put(neighbor, neighborCost);
                     cameFrom.put(neighbor, current);

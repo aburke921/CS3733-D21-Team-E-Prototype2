@@ -1,6 +1,5 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
-import edu.wpi.TeamE.algorithms.database.algoEdb;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -57,11 +56,11 @@ public class DFSSearch extends Searcher {
             current = potentials.pop();
             visited.add(current);
 
-            String[] neighborIds = getNeighbors(current.get("id"));
+            HashMap<String, Double> neighbors = getNeighbors(current.get("id"));
 
             //for each neighbor, add to potentials if
             //it hasnt been visited and isn't already a potential
-            for(String neighborId : neighborIds){
+            for(String neighborId : neighbors.keySet()){
                 Node neighbor = getNode(neighborId);
                 if(!visited.contains(neighbor) && !potentials.contains(neighbor)){
                     cameFrom.put(neighbor, current);

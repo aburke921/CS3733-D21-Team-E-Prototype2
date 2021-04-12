@@ -17,7 +17,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     private Node next;
 
     //an array containing the ids of this node's neighbors
-    private String[] neighborIds;
+    private HashMap<String, Double> neighbors;
 
     //cost estimate for A*
     private Double costEst;
@@ -97,12 +97,12 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         return next;
     }
 
-    public void setNeighborIds(String[] _neighborIds){
-        neighborIds = _neighborIds;
+    public void setNeighborIds(HashMap<String, Double> _neighbors){
+        neighbors = _neighbors;
     }
 
-    public String[] getNeighborIds(){
-        return neighborIds;
+    public HashMap<String, Double> getNeighborIds(){
+        return neighbors;
     }
 
     /**

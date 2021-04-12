@@ -149,7 +149,7 @@ public class PathFinder {
         Searcher aStar = new AStarSearch();
         Path foundPath = aStar.search(startNode, endNode); //todo error here - this is a question for Algo.
 
-        //build path todo
+        //build path
         Iterator<edu.wpi.TeamE.algorithms.pathfinding.Node> nodeIterator = foundPath.iterator(); //create iterable list
         while(nodeIterator.hasNext()){ //loop through list
             //this iterator will return a Node object
@@ -167,7 +167,8 @@ public class PathFinder {
 
             //print info
             System.out.println("Node ID:" + id + "\nxCoord: " + xCoord + "\nyCoord:" + yCoord + "\n---");
-            //todo, add this data to table - need to get startNode & endNode first, so tests can be run
+            //todo, potentially add this data to table - need to get startNode & endNode first, so tests can be run
+            //todo build Map Shapes of of given path
         }
     }
 

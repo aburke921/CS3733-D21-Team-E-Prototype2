@@ -63,6 +63,18 @@ public class MapEditor {
                 column2.setCellValueFactory((CellDataFeatures<NodeTest, Number> p) ->
                         new ReadOnlyIntegerWrapper(p.getValue().getValue().num));
                 table.getColumns().add(column2);
+                //column 3
+                TreeTableColumn<NodeTest, Number> column3 = new TreeTableColumn<>("Y-Cord");
+                column3.setPrefWidth(150);
+                column3.setCellValueFactory((CellDataFeatures<NodeTest, Number> p) ->
+                        new ReadOnlyIntegerWrapper(p.getValue().getValue().num));
+                table.getColumns().add(column3);
+                //column 4
+                TreeTableColumn<NodeTest, Number> column4 = new TreeTableColumn<>("ID");
+                column4.setPrefWidth(150);
+                column4.setCellValueFactory((CellDataFeatures<NodeTest, Number> p) ->
+                        new ReadOnlyIntegerWrapper(p.getValue().getValue().num));
+                table.getColumns().add(column4);
                 for (int i = 0; i < array.size(); i++) {
                     NodeTest s = array.get(i);
                     int n = array.get(i).num;

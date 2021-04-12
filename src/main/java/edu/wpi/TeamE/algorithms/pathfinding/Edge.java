@@ -43,4 +43,21 @@ public class Edge{
     public String getId(){
         return id;
     }
+
+    /**
+     *
+     * @return returns id of start node
+     */
+    public String getStartNodeId() {
+        return startNodeId;
+    }
+
+    /**
+     *
+     * @return returns id of end node
+     */
+    public String getEndNodeId() {
+        return endNodeId;
+    }
+
 }

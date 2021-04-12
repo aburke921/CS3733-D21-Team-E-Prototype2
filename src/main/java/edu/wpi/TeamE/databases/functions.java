@@ -4,7 +4,10 @@ import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import javafx.util.Pair;
 
 import java.sql.*;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 public class functions {
 
@@ -41,24 +44,26 @@ public class functions {
 	 * @param con    is just the DB connection for this run
 	 * @param nodeID is the nodeID of the nodes you want info from
 	 */
-	/*public static Node getNodeLite(Connection con, int nodeID) {
+	public static Node getNodeLite(Connection con, String nodeID) {
 		String selectString = "select xCoord, yCoord, floor, nodeType from node where nodeID = ?";
 		try (PreparedStatement selectNode = con.prepareStatement(selectString)) {
 			con.setAutoCommit(false);
-			selectNode.setInt(1, nodeID);
+			selectNode.setString(1, nodeID);
 			ResultSet resultSet = selectNode.executeQuery();
 			int xCoord = resultSet.getInt("xCoord");
 			int yCoord = resultSet.getInt("yCoord");
 			String floor = resultSet.getString("floor");
 			String nodeType = resultSet.getString("nodeType");
 			resultSet.close();
+			Node node = new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
+			return node;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		Node node = new Node();
 		return node;
 	}
-*/
+
 	/**
 	 * Given a NodeID, gives the xCoord, yCoord, Floor and Type of that node from Nodes
 	 *
@@ -105,6 +110,8 @@ public class functions {
 				int neighborID = resultSet.getInt("neighborID");
 			}
 			resultSet.close();
+			//Node node = new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
+			//return node;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

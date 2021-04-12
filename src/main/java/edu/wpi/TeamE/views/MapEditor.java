@@ -1,4 +1,5 @@
 package edu.wpi.TeamE.views;
+import edu.wpi.TeamE.databases.makeConnection;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -198,10 +199,10 @@ public class MapEditor {
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
         if (file != null) {
-            openFile(file);
+            //openFile(file);
             //file.getAbsolutePath();
-            //makeConnection connection = new makeConnection();
-            //connection.populateTable("node", file);
+            makeConnection connection = new makeConnection();
+            connection.populateTable("node", file);
             //database's fcn for file uploading goes here, param is file
             //when submit button is pressed, update/refresh?
         }

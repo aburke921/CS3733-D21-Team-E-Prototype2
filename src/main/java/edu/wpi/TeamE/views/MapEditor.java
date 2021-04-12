@@ -29,10 +29,8 @@ import java.util.logging.Logger;
 
 public class MapEditor {
 
-    @FXML
-    private TreeTableView<NodeTest> treeTable;
-    @FXML
-    private FlowPane theStage;
+    @FXML private TreeTableView<NodeTest> treeTable;
+    @FXML private FlowPane theStage;
 
 
     @FXML
@@ -190,17 +188,31 @@ public class MapEditor {
     }
 
 
-
+    /**
+     *opens the file explorer on user's device, allows user to select CSV file,
+     * uploads file to database, refreshes page
+     * @param e actionevent
+     */
     public void fileOpener(final ActionEvent e) {
+
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
         if (file != null) {
+            openFile(file);
+            //file.getAbsolutePath();
+            //makeConnection connection = new makeConnection();
+            //connection.populateTable("node", file);
             //database's fcn for file uploading goes here, param is file
+            //when submit button is pressed, update/refresh?
         }
     }
 
     private Desktop desktop = Desktop.getDesktop();
 
+    /**
+     * opens the file chosen by user
+     * @param file File
+     */
     private void openFile(File file) {
         try {
             desktop.open(file);

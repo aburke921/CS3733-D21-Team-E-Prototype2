@@ -108,6 +108,22 @@ public class PathFinder {
     @FXML
     public void findPath(ActionEvent event) {
 
+        double xcoord = (double) 1748 / 10;
+        double ycoord = (double) 1336 / 10;
+
+        double xcoord2 = (double) 1910 / 10;
+        double ycoord2 = (double) 1465 / 10;
+
+        Circle circle = new Circle(xcoord, ycoord, 2, Color.RED);
+        Circle circle2 = new Circle(xcoord2, ycoord2, 2, Color.RED);
+        Line line = new Line(xcoord, ycoord, xcoord2, ycoord2);
+        line.setStroke(Color.RED);
+
+        pane.getChildren().addAll(circle, circle2, line);
+
+
+
+        //todo potential start of findPath()
         System.out.println("FINDING PATH...");
 
         //get selected nodes
@@ -138,22 +154,6 @@ public class PathFinder {
             System.out.println("Node ID:" + id + "\nxCoord: " + xCoord + "\nyCoord:" + yCoord + "\n---");
             //todo, add this data to table - need to get startNode & endNode first, so tests can be run
         }
-
-
-
-        double xcoord = (double) 1748 / 10;
-        double ycoord = (double) 1336 / 10;
-
-        double xcoord2 = (double) 1910 / 10;
-        double ycoord2 = (double) 1465 / 10;
-
-        Circle circle = new Circle(xcoord, ycoord, 2, Color.RED);
-        Circle circle2 = new Circle(xcoord2, ycoord2, 2, Color.RED);
-        Line line = new Line(xcoord, ycoord, xcoord2, ycoord2);
-        line.setStroke(Color.RED);
-
-        pane.getChildren().addAll(circle, circle2, line);
-
     }
 
     /**

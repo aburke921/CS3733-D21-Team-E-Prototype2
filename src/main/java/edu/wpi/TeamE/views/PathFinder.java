@@ -1,5 +1,6 @@
 package edu.wpi.TeamE.views;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -30,6 +32,12 @@ public class PathFinder {
 
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
+
+    @FXML // fix:id="findPathButton"
+    public JFXButton findPathButton; // Value injected by FXMLLoader
+
+    @FXML // fix:id="backButton"
+    public Button backButton; // Value injected by FXMLLoader
 
     @FXML // fx:id="startLocationList"
     private JFXComboBox<String> startLocationList; // Value injected by FXMLLoader

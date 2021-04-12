@@ -56,8 +56,13 @@ test {
 // with the Main method you want run!
 jar {
     manifest {
-        attributes 'Main-Class': 'edu.wpi.TeamE.Main'
+        attributes 'Main-Class': 'edu.wpi.TeamE.algorithms.pathfinding.Testing'
     }
+}
+
+//Added for Testing Only
+run{
+    standardInput = System.in
 }
 
 

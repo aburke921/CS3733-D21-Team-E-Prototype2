@@ -97,11 +97,11 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         return next;
     }
 
-    public void setNeighborIds(HashMap<String, Double> _neighbors){
+    public void setNeighbors(HashMap<String, Double> _neighbors){
         neighbors = _neighbors;
     }
 
-    public HashMap<String, Double> getNeighborIds(){
+    public HashMap<String, Double> getNeighbors(){
         return neighbors;
     }
 

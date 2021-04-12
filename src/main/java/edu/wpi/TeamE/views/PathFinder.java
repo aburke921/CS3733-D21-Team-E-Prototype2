@@ -52,7 +52,7 @@ public class PathFinder {
     private Pane pane;
 
     /**
-     * Returns to default page.
+     * Returns to {@link edu.wpi.TeamE.views.Default} page.
      * @param event calling event info
      */
     @FXML
@@ -67,11 +67,11 @@ public class PathFinder {
 
     @FXML
     void getHelpDefault(ActionEvent event) {
-        //todo
+        //todo, create help modal (refactor name, this was taken from Default page, hence the name)
     }
 
     /**
-     * Gets selected item from startNode dropdown.
+     * Gets selected item from {@link #startLocationList} dropdown.
      * todo, chosen result should be saved to global variable?
      * todo, judging from comments, this will get full node info from DB?
      * @param event calling event info
@@ -79,6 +79,7 @@ public class PathFinder {
     @FXML
     void selectStartNode(ActionEvent event) {
         String nodeID = ((JFXComboBox) event.getSource()).getValue().toString();
+        System.out.println("selected Start nodeID: " + nodeID);
 
         /*
         String longName = getLongName(nodeID); //Given by database
@@ -88,7 +89,7 @@ public class PathFinder {
     }
 
     /**
-     * Gets selected item from endNode dropdown.
+     * Gets selected item from {@link #endLocationList} dropdown.
      * todo, chosen result should be saved to global variable?
      * todo, judging from comments, this will get full node info from DB?
      * @param event calling event info
@@ -96,7 +97,7 @@ public class PathFinder {
     @FXML
     void selectEndNode(ActionEvent event) {
         String nodeID = ((JFXComboBox) event.getSource()).getValue().toString();
-        System.out.println("nodeID: " + nodeID);
+        System.out.println("selected End nodeID: " + nodeID);
         /*
         String longName = getLongName(nodeID); //Given by database
         endLocationList.setValue(longName);
@@ -122,7 +123,7 @@ public class PathFinder {
     }
 
     /**
-     * Method called by FXMLLoader when initialization is complete. Sets up initial fields in FXML.
+     * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML.
      * Namely, adds FloorMap PNG, todo fills dropdowns with DB data
      */
     @FXML // This method is called by the FXMLLoader when initialization is complete

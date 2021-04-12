@@ -27,7 +27,7 @@ public abstract class Searcher {
      * @return Path of nodes following start
      * start is not included because it didn't 'comeFrom' any node so it's value in map is null
      */
-    Path reconstructPath(HashMap<Node, Node> cameFrom, Node end) {
+    protected Path reconstructPath(HashMap<Node, Node> cameFrom, Node end) {
         LinkedList<Node> stack = new LinkedList<>();
         //push onto stack
         for(Node current = end; cameFrom.containsKey(current); current = cameFrom.get(current)){

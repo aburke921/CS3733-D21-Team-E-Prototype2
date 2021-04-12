@@ -30,9 +30,7 @@ public abstract class Searcher {
      * @return the requested node
      */
     public Node getNode(String nodeId){
-        if(!cache.containsKey(nodeId)){
-            cacheNode(nodeId);
-        }
+        cacheNode(nodeId);
         return cache.get(nodeId);
     }
 
@@ -41,20 +39,20 @@ public abstract class Searcher {
      * @return the neighbors of that node
      */
     public HashMap<String, Double> getNeighbors(String nodeId){
-        if(!cache.containsKey(nodeId)){
-            cacheNode(nodeId);
-        }
-        return cache.get(nodeId).getNeighborIds();
+        cacheNode(nodeId);
+        return cache.get(nodeId).getNeighbors();
     }
 
     /**
      * @param nodeId the id of the node you wish to cache
      */
     private void cacheNode(String nodeId){
-        Node node = con.getNodeInfo(nodeId);
-        HashMap<String, Double> neighbors = con.getNeighbors(nodeId);
-        node.setNeighborIds(neighbors);
-        cache.put(nodeId, node);
+        if(!cache.containsKey(nodeId)){
+            Node node = con.getNodeInfo(nodeId);
+            HashMap<String, Double> neighbors = con.getNeighbors(nodeId);
+            node.setNeighbors(neighbors);
+            cache.put(nodeId, node);
+        }
     }
 
     /**

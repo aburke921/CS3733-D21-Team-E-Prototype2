@@ -1,6 +1,6 @@
 package edu.wpi.TeamE.databases;
-import edu.wpi.TeamE.algorithms.pathfinding.Node;
 
+import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import javafx.util.Pair;
 
 import java.io.BufferedReader;
@@ -61,6 +61,7 @@ public class makeConnection {
 
 			try {
 				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
+				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
 				// e.printStackTrace();
 				System.err.println("error with the DriverManager");
@@ -106,8 +107,8 @@ public class makeConnection {
 					"create table hasEdge"
 							+ "("
 							+ "    edgeID    varchar(63) primary key,"
-							+ "    startNode varchar(31) not null references node (nodeID),"
-							+ "    endNode   varchar(31) not null references node (nodeID), "
+							+ "    startNode varchar(31) not null references node (nodeID) on delete cascade,"
+							+ "    endNode   varchar(31) not null references node (nodeID) on delete cascade, "
 							+ "    length    float, "
 							+ "    unique (startNode, endNode)"
 							+ ")");
@@ -248,36 +249,29 @@ public class makeConnection {
 		Statement stmt;
 
 		try {
-
 			stmt = this.connection.createStatement();
-
 			sqlQuery = "SELECT xCoord, yCoord FROM node WHERE nodeID = '" + startNode + "'";
-
 			rset = stmt.executeQuery(sqlQuery);
 
 			while (rset.next()) {
-
 				startX = rset.getInt("xCoord");
 				startY = rset.getInt("yCoord");
 			}
 			rset.close();
 			stmt.close();
+
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			System.err.println("WHERE nodeID = startNode try/catch failed");
 		}
 
 		try {
-
 			stmt = this.connection.createStatement();
-
 			sqlQuery = "SELECT xCoord, yCoord FROM node WHERE nodeID = '" + endNode + "'";
-
 			//executes the SQL insert statement (inserts the data into the table)
 			rset = stmt.executeQuery(sqlQuery);
 
 			while (rset.next()) {
-
 				endX = rset.getInt("xCoord");
 				endY = rset.getInt("yCoord");
 			}
@@ -291,9 +285,7 @@ public class makeConnection {
 
 
 		try {
-
 			double length;
-
 			double xLength = Math.pow((startX - endX), 2);
 			double yLength = Math.pow((startY - endY), 2);
 
@@ -318,15 +310,53 @@ public class makeConnection {
 
 
 	/**
-	 * gets given nodeID's attributes
-	 * @param nodeID
+	 * gets a node's all attributes given nodeID
+	 *
 	 * @return a Node object with the matching nodeID
-	 * need Node constructor from Algorithms team
 	 */
-//    public Node getNodeInfo(String nodeID) {
-//
-//    }
 
+	public Node getNodeInfo(String nodeID) {
+		String getNodeInfoS = "select * from node where nodeID = ?";
+		try (PreparedStatement getNodeInfoPS = connection.prepareStatement(getNodeInfoS)) {
+			getNodeInfoPS.setString(1, nodeID);
+			ResultSet getNodeInfoRS = getNodeInfoPS.executeQuery();
+			int xCoord = getNodeInfoRS.getInt("xCoord");
+			int yCoord = getNodeInfoRS.getInt("yCoord");
+			String floor = getNodeInfoRS.getString("floor");
+			String building = getNodeInfoRS.getString("building");
+			String nodeType = getNodeInfoRS.getString("nodeType");
+			String longName = getNodeInfoRS.getString("longName");
+			String shortName = getNodeInfoRS.getString("shortName");
+			getNodeInfoRS.close();
+			return new Node(nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Given a NodeID, gives the xCoord, yCoord, Floor and Type of that node from Nodes
+	 *
+	 * @param nodeID is the nodeID of the nodes you want info from
+	 * @return a Node with only xCoord, yCoord, floor and nodeType not null
+	 */
+	public Node getNodeLite(String nodeID) {
+		String getNodeLiteS = "select xCoord, yCoord, floor, nodeType from node where nodeID = ?";
+		try (PreparedStatement getNodeLitePS = connection.prepareStatement(getNodeLiteS)) {
+			getNodeLitePS.setString(1, nodeID);
+			ResultSet getNodeLiteRS = getNodeLitePS.executeQuery();
+			int xCoord = getNodeLiteRS.getInt("xCoord");
+			int yCoord = getNodeLiteRS.getInt("yCoord");
+			String floor = getNodeLiteRS.getString("floor");
+			String nodeType = getNodeLiteRS.getString("nodeType");
+			getNodeLiteRS.close();
+			return new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/**
 	 * gets edge information for all edges containing given nodeID
@@ -384,8 +414,8 @@ public class makeConnection {
 	 * need Node constructor from UI/UX team
 	 */
 
-    public ArrayList<Node> getAllNodes() {
-        ArrayList<Node> nodesArray = new ArrayList<>();
+	public ArrayList<Node> getAllNodes() {
+		ArrayList<Node> nodesArray = new ArrayList<>();
 
 		try {
 			Statement stmt = this.connection.createStatement();
@@ -412,41 +442,64 @@ public class makeConnection {
 		} catch (SQLException e) {
 			System.err.println("getAllNodes Error");
 		}
-        return nodesArray;
-    }
+		return nodesArray;
+	}
 
 	/**
-	 * adds a node to DB, returning 0 or 1 depending on whether operation was successful
+	 * adds a node with said data to the database
 	 *
-	 * @param nodeID
-	 * @param xCoord
-	 * @param yCoord
-	 * @param floor
-	 * @param building
-	 * @param nodeType
-	 * @param longName
-	 * @param shortName
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 
 	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-
-
+		String addNodeS = "insert into node values (?, ?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
+			addNodePS.setString(1, nodeID);
+			addNodePS.setInt(2, xCoord);
+			addNodePS.setInt(3, yCoord);
+			addNodePS.setString(4, floor);
+			addNodePS.setString(5, building);
+			addNodePS.setString(6, nodeType);
+			addNodePS.setString(7, longName);
+			addNodePS.setString(8, shortName);
+			int addNodeRS = addNodePS.executeUpdate();
+			if (addNodeRS == 0) {
+				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
+			} else if (addNodeRS != 1) {
+				System.err.println("addNode Result =" + addNodeRS + ", probably bad cuz " + addNodeRS + " rows was affected");
+			}
+			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return 0;
 	}
 
-
 	/**
-	 * adds a edge to DB, returning 0 or 1 depending on whether operation was successful
+	 * adds an edge with said data to the database
+	 * both startNode and endNode has to already exist in node table
 	 *
-	 * @param edgeID
-	 * @param startNode
-	 * @param endNode
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
-	 * need to check that both startNode and endNode already exist in node table
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 
 	public int addEdge(String edgeID, String startNode, String endNode) {
+		String addEdgeS = "insert into hasEdge values (?, ?, ?)";
+		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
+			addEdgePS.setString(1, edgeID);
+			addEdgePS.setString(2, startNode);
+			addEdgePS.setString(3, endNode);
+			// TODO: make a coordinate look-up so we can calculate and input the length of the edge
+			// addEdgePS.setFloat(4, (Math.sqrt(Math.pow(startNode.getX() - endNode.getX(), 2) + Math.pow(startNode.getY() - endNode.getY(), 2))));
+			int addEdgeRS = addEdgePS.executeUpdate();
+			if (addEdgeRS == 0) {
+				System.err.println("addEdge Result = 0, probably bad cuz no rows was affected");
+			} else if (addEdgeRS != 1) {
+				System.err.println("addEdge Result =" + addEdgeRS + ", probably bad cuz " + addEdgeRS + " rows was affected");
+			}
+			return addEdgeRS; // addEdgeRS = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return 0;
 	}
 
@@ -484,11 +537,42 @@ public class makeConnection {
 
 
 	/**
+	 * Deletes edge(s) between the given two nodes, they can be in any order
+	 *
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
+	 */
+	public int deleteEdge(String nodeID1, String nodeID2) {
+		String deleteEdgeS = "delete from hasEdge where startNode = ? and endNode = ?; delete from hasEdge where endNode = ? and startNode = ?";
+		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
+		try (PreparedStatement deleteEdgePS = connection.prepareStatement(deleteEdgeS)) {
+			deleteEdgePS.setString(1, nodeID1);
+			deleteEdgePS.setString(2, nodeID2);
+			deleteEdgePS.setString(3, nodeID1);
+			deleteEdgePS.setString(4, nodeID2);
+			int deleteEdgeRS = deleteEdgePS.executeUpdate();
+			if (deleteEdgeRS == 0) {
+				System.err.println("deleteEdge Result = 0, probably bad cuz no rows was affected");
+			} else if (deleteEdgeRS == 2) {
+				System.out.println("deleteEdge Result =" + deleteEdgeRS + ", it's weird cuz " + deleteEdgeRS + " rows was affected");
+			} else if (deleteEdgeRS != 1) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS + ", probably bad cuz " + deleteEdgeRS + " rows was affected");
+			}
+			return deleteEdgeRS;
+			// deleteEdgeRS = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("deleteEdge() tyr/catch error");
+		}
+		return 0;
+	}
+
+	/**
 	 * any edge containing the given nodeID (startNode or endNode) is deleted
 	 *
 	 * @param nodeID
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 */
+	/*
 	public int deleteEdge(String nodeID) {
 
 		try {
@@ -506,17 +590,29 @@ public class makeConnection {
 			return 0;
 		}
 	}
-
+	*/
 
 	/**
-	 * matches the nodeID to a node and deletes it from DB, returning 0 or 1 depending on whether operation was successful
+	 * matches the nodeID to a node and deletes it from DB
 	 *
-	 * @param nodeID
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
-	 * make sure the edges containing this node are deleted
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 	public int deleteNode(String nodeID) {
-		// has to call deleteEdge(nodeID) before deleting the node
+		String deleteNodeS = "delete from node where nodeID = ?";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+			deleteNodePS.setString(1, nodeID);
+			// We might encounter issues if on delete cascade didn't work
+			int deleteNodeRS = deleteNodePS.executeUpdate();
+			if (deleteNodeRS == 0) {
+				System.err.println("deleteNode Result = 0, probably bad cuz no rows was affected");
+			} else if (deleteNodeRS != 1) {
+				System.err.println("deleteNode Result =" + deleteNodeRS + ", probably bad cuz " + deleteNodeRS + " rows was affected");
+			}
+			return deleteNodeRS;
+			// deleteNode = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return 0;
 	}
 

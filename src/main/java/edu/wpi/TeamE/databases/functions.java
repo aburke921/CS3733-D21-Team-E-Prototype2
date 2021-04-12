@@ -60,8 +60,7 @@ public class functions {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		Node node = new Node();
-		return node;
+		return null;
 	}
 
 	/**

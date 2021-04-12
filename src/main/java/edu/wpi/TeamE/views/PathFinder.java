@@ -90,7 +90,7 @@ public class PathFinder {
     @FXML
     void selectStartNode(ActionEvent event) {
         String dropdownSelected = ((JFXComboBox) event.getSource()).getValue().toString();
-        System.out.println("selected Start dropdownSelected (node Name): " + dropdownSelected);
+        System.out.println("\nselected start node name: " + dropdownSelected);
         startNodeID = resolveID(dropdownSelected);
         System.out.println("node ID resolved to: " + startNodeID);
 
@@ -107,7 +107,7 @@ public class PathFinder {
     @FXML
     void selectEndNode(ActionEvent event) {
         String dropdownSelected = ((JFXComboBox) event.getSource()).getValue().toString();
-        System.out.println("selected End dropdownSelected: " + dropdownSelected);
+        System.out.println("\nselected end node name: " + dropdownSelected);
         endNodeID = resolveID(dropdownSelected);
         System.out.println("node ID resolved to: " + startNodeID);
 
@@ -192,6 +192,7 @@ public class PathFinder {
         ArrayList<Node> nodeArrayList = connection.getAllNodes();
 
         //add to Observable List
+        System.out.println("Begin Adding to Dropdown List...");
         for (Node node : nodeArrayList) { //loop through list
             //this iterator will return a Node object
             //which is just a container for all the node info like id, floor, building, etc
@@ -206,16 +207,19 @@ public class PathFinder {
             int yCoord = node.getY();
 
             //print info
-            System.out.println("Node ID:" + id + "\nxCoord: " + xCoord + "\nyCoord:" + yCoord + "\n---");
+            System.out.println("    Node ID:" + id + "\n    xCoord: " + xCoord + "\n    yCoord:" + yCoord + "\n  ---");
 
             //add to list
             list.add(longName);
             listOfId.add(id); //for ID lookups later todo maybe just use nodeArrayList?
         }
+        System.out.println("...Finished Adding to Dropdown List");
 
         //add ObservableList to dropdowns
         startLocationList.setItems(list);
         endLocationList.setItems(list);
+
+        System.out.println("PathFinder Init Finished.");
     }
 
     /**

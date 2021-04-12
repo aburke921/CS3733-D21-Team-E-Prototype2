@@ -8,44 +8,32 @@ import javafx.scene.Parent;
 
 import java.io.IOException;
 
-public class Default {
+public class MapEditorNavigation {
 
-    /**
-     * Move to Service Request page
-     * @param e
-     */
     @FXML
-    private void toServiceRequests(ActionEvent e) {
+    private void toDefault(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/ServiceRequests.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    /**
-     * Move to Map Editor page
-     * @param e
-     */
     @FXML
     private void toMapEditor(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditorNavigation.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditor.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    /**
-     * Move to Path Finder page
-     * @param e
-     */
     @FXML
-    private void toPathFinder(ActionEvent e) {
+    private void toMapFileUpload(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/PathFinder.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapFileUpload.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -54,16 +42,6 @@ public class Default {
 
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {
-    }
-
-    /**
-     * Terminate application
-     * @param e
-     */
-    @FXML
-    private void shutdown(ActionEvent e) {
-        App app = new App();
-        app.stop();
     }
 }
 

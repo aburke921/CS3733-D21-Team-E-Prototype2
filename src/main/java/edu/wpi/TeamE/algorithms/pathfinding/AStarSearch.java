@@ -23,8 +23,8 @@ public class AStarSearch extends Searcher {
     public Path search(String startId, String endId){
 
         //get nodes from database
-        Node start = new Node(algoEdb.getNode(startId));
-        Node end = new Node(algoEdb.getNode(endId));
+        Node start = algoEdb.getNode(startId);
+        Node end = algoEdb.getNode(endId);
 
         System.out.printf("\nFinding path from '%s' to '%s'\n...\n", start.get("longName"), end.get("longName"));
 
@@ -53,7 +53,7 @@ public class AStarSearch extends Searcher {
             String[] neighborIds = algoEdb.getNeighbors(current.get("id"));
 
             for(String neighborId : neighborIds){
-                Node neighbor = new Node(algoEdb.getNode(neighborId));
+                Node neighbor = algoEdb.getNode(neighborId);
                 Double neighborCost = prevCost.get(current) + dist(current, neighbor);
                 if(!prevCost.containsKey(neighbor) || neighborCost < prevCost.get(neighbor)){
                     prevCost.put(neighbor, neighborCost);

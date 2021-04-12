@@ -34,9 +34,9 @@ public class MapEditor {
 
 
     @FXML
-    private void toDefault(ActionEvent e) {
+    private void toNavigation(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditorNavigation.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();

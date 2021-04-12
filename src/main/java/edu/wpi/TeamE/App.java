@@ -16,6 +16,7 @@ public class App extends Application {
   }
 
 
+
   @Override
   public void init() {
     System.out.println("Starting Up");
@@ -39,9 +40,9 @@ public class App extends Application {
     return primaryStage;
   }
 
-
   @Override
   public void stop() {
     System.out.println("Shutting Down");
+    System.exit(0);
   }
 }

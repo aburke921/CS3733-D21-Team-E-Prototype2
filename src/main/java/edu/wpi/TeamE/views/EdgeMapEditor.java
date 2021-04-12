@@ -128,6 +128,7 @@ public class EdgeMapEditor {
         connection.populateTable("edge", file);
         //will be in init later
 
+        //Commented until getAllEdges is added
 //        array = connection.getAllEdges();
 //        prepareEdges(array, treeTable);
     }
@@ -165,7 +166,7 @@ public class EdgeMapEditor {
         }
     }
 
-    private Desktop desktop = Desktop.getDesktop();
+    final private Desktop desktop = Desktop.getDesktop();
 
     /**
      * opens the file chosen by user

@@ -22,7 +22,7 @@
                     <children>
                         <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;">
                             <children>
-                                <Label prefHeight="38.0" prefWidth="486.0" text="Node Map Editor" textFill="WHITE">
+                                <Label prefHeight="38.0" prefWidth="486.0" text="Edge Map Editor" textFill="WHITE">
                                     <font>
                                         <Font size="20.0" />
                                     </font>
@@ -60,10 +60,9 @@
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <JFXTextField maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="X-Cord" GridPane.columnIndex="1" fx:id="xCordInput" />
-                                                <JFXTextField fx:id="locationInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Location" />
-                                                <JFXTextField fx:id="yCordInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Y-Cord" GridPane.columnIndex="2" />
-                                                <JFXTextField fx:id="idInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="ID" GridPane.columnIndex="3" />
+                                                <JFXTextField fx:id="edgeID" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Edge ID" />
+                                                <JFXTextField fx:id="edgeStartNode" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Edge Start Node" GridPane.columnIndex="2" />
+                                                <JFXTextField fx:id="edgeEndNode" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Edge End Node" GridPane.columnIndex="3" />
                                             </children>
                                         </GridPane>
                                         <FlowPane prefHeight="41.0" prefWidth="297.0">

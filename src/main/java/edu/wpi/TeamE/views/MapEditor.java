@@ -58,11 +58,14 @@ public class MapEditor {
 
     public void prepareNodes(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array, TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Node> table) {
         if (table.getRoot() == null) {
-            edu.wpi.TeamE.algorithms.pathfinding.Node root = new edu.wpi.TeamE.algorithms.pathfinding.Node("Location", 2, 2, "location", "location", "location", "location", "location");
-            final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node> rootNode = new TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node>(root);
+            edu.wpi.TeamE.algorithms.pathfinding.Node node0 = new
+                    edu.wpi.TeamE.algorithms.pathfinding.Node("ID",
+                    0, 0, "Floor", "Building",
+                    "Node Type", "Long Name", "Short Name");
+            final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node> rootNode = new TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node>(node0);
             table.setRoot(rootNode);
             TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, String> column = new TreeTableColumn<>("Location");
-            column.setPrefWidth(150);
+            column.setPrefWidth(320);
             column.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("longName")));
             table.getColumns().add(column);
@@ -145,9 +148,9 @@ public class MapEditor {
     public void startTableButton(ActionEvent actionEvent) {
         //creating the root for the array
         edu.wpi.TeamE.algorithms.pathfinding.Node node0 = new
-                edu.wpi.TeamE.algorithms.pathfinding.Node("Location",
-                2, 2, "location", "location",
-                "location", "location", "location");
+                edu.wpi.TeamE.algorithms.pathfinding.Node("ID",
+                0, 0, "Floor", "Building",
+                "Node Type", "Long Name", "Short Name");
         //creating array
         ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array = new ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node>();
         //creating root node

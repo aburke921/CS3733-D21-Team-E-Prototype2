@@ -61,6 +61,7 @@ public class makeConnection {
 
 			try {
 				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
+				this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
 				// e.printStackTrace();
 				System.err.println("error with the DriverManager");
@@ -326,7 +327,6 @@ public class makeConnection {
 	public Node getNodeInfo(String nodeID) {
 		String getNodeInfoS = "select * from node where nodeID = ?";
 		try (PreparedStatement getNodeInfoPS = connection.prepareStatement(getNodeInfoS)) {
-			connection.setAutoCommit(false);
 			getNodeInfoPS.setString(1, nodeID);
 			ResultSet getNodeInfoRS = getNodeInfoPS.executeQuery();
 			int xCoord = getNodeInfoRS.getInt("xCoord");
@@ -353,7 +353,6 @@ public class makeConnection {
 	public Node getNodeLite(String nodeID) {
 		String getNodeLiteS = "select xCoord, yCoord, floor, nodeType from node where nodeID = ?";
 		try (PreparedStatement getNodeLitePS = connection.prepareStatement(getNodeLiteS)) {
-			connection.setAutoCommit(false);
 			getNodeLitePS.setString(1, nodeID);
 			ResultSet getNodeLiteRS = getNodeLitePS.executeQuery();
 			int xCoord = getNodeLiteRS.getInt("xCoord");
@@ -465,7 +464,6 @@ public class makeConnection {
 	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
 		String addNodeS = "insert into node values (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
-			connection.setAutoCommit(false);
 			addNodePS.setString(1, nodeID);
 			addNodePS.setInt(2, xCoord);
 			addNodePS.setInt(3, yCoord);
@@ -497,7 +495,6 @@ public class makeConnection {
 	public int addEdge(String edgeID, String startNode, String endNode) {
 		String addEdgeS = "insert into hasEdge values (?, ?, ?)";
 		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
-			connection.setAutoCommit(false);
 			addEdgePS.setString(1, edgeID);
 			addEdgePS.setString(2, startNode);
 			addEdgePS.setString(3, endNode);
@@ -554,12 +551,10 @@ public class makeConnection {
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
 	 */
-
 	public int deleteEdge(String nodeID1, String nodeID2) {
 		String deleteEdgeS = "delete from hasEdge where startNode = ? and endNode = ?; delete from hasEdge where endNode = ? and startNode = ?";
 		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
 		try (PreparedStatement deleteEdgePS = connection.prepareStatement(deleteEdgeS)) {
-			connection.setAutoCommit(false);
 			deleteEdgePS.setString(1, nodeID1);
 			deleteEdgePS.setString(2, nodeID2);
 			deleteEdgePS.setString(3, nodeID1);
@@ -568,7 +563,7 @@ public class makeConnection {
 			if (deleteEdgeRS == 0) {
 				System.err.println("deleteEdge Result = 0, probably bad cuz no rows was affected");
 			} else if (deleteEdgeRS == 2) {
-				System.err.println("deleteEdge Result =" + deleteEdgeRS + ", it's weird cuz " + deleteEdgeRS + " rows was affected");
+				System.out.println("deleteEdge Result =" + deleteEdgeRS + ", it's weird cuz " + deleteEdgeRS + " rows was affected");
 			} else if (deleteEdgeRS != 1) {
 				System.err.println("deleteEdge Result =" + deleteEdgeRS + ", probably bad cuz " + deleteEdgeRS + " rows was affected");
 			}

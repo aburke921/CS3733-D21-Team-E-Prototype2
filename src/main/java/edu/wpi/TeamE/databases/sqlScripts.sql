@@ -94,6 +94,10 @@ from hasEdge
 where endNode = ?
   and startNode = ?;
 
+-- getNodeInfo()
+select *
+from node
+where nodeID = ?;
 
 -- NOT YET IMPLEMENTED / PLANNING STAGES:-----------------------------------------------------
 

@@ -318,14 +318,31 @@ public class makeConnection {
 
 
 	/**
-	 * gets given nodeID's attributes
-	 * @param nodeID
+	 * gets a node's all attributes given nodeID
+	 *
 	 * @return a Node object with the matching nodeID
-	 * need Node constructor from Algorithms team
 	 */
-//    public Node getNodeInfo(String nodeID) {
-//
-//    }
+
+	public Node getNodeInfo(String nodeID) {
+		String getNodeInfoS = "select * from node where nodeID = ?";
+		try (PreparedStatement getNodeInfoPS = connection.prepareStatement(getNodeInfoS)) {
+			connection.setAutoCommit(false);
+			getNodeInfoPS.setString(1, nodeID);
+			ResultSet getNodeInfoRS = getNodeInfoPS.executeQuery();
+			int xCoord = getNodeInfoRS.getInt("xCoord");
+			int yCoord = getNodeInfoRS.getInt("yCoord");
+			String floor = getNodeInfoRS.getString("floor");
+			String building = getNodeInfoRS.getString("building");
+			String nodeType = getNodeInfoRS.getString("nodeType");
+			String longName = getNodeInfoRS.getString("longName");
+			String shortName = getNodeInfoRS.getString("shortName");
+			getNodeInfoRS.close();
+			return new Node(nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/**
 	 * Given a NodeID, gives the xCoord, yCoord, Floor and Type of that node from Nodes

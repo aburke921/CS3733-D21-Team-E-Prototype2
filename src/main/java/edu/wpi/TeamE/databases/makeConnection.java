@@ -1,5 +1,5 @@
 package edu.wpi.TeamE.databases;
-
+import edu.wpi.TeamE.algorithms.pathfinding.Node;
 
 import javafx.util.Pair;
 
@@ -15,6 +15,7 @@ public class makeConnection {
 
 	Connection connection;
 
+	//Node Node = new Node();
 
     /*
 
@@ -382,10 +383,37 @@ public class makeConnection {
 	 * @return ArrayList of Node objects
 	 * need Node constructor from UI/UX team
 	 */
-//    public ArrayList<Nodes> getAllNodes() {
-//        ArrayList<Nodes> nodes = new ArrayList<Nodes>();
-//        return nodes;
-//    }
+
+    public ArrayList<Node> getAllNodes() {
+        ArrayList<Node> nodesArray = new ArrayList<>();
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from node";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String NodeID = rset.getString("NodeID");
+				int xCoord = rset.getInt("xCoord");
+				int yCoord = rset.getInt("yCoord");
+				String floor = rset.getString("floor");
+				String building = rset.getString("building");
+				String nodeType = rset.getString("nodeType");
+				String longName = rset.getString("longName");
+				String shortName = rset.getString("shortName");
+
+				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
+
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllNodes Error");
+		}
+        return nodesArray;
+    }
 
 	/**
 	 * adds a node to DB, returning 0 or 1 depending on whether operation was successful
@@ -504,6 +532,7 @@ public class makeConnection {
 
 
 	public static void main(String[] args) {
+
 		makeConnection connection = new makeConnection();
 
 		System.out.println("made it here!");
@@ -513,6 +542,9 @@ public class makeConnection {
 		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
 		connection.populateTable("node", nodes);
 		connection.populateTable("hasEdge", edges);
+
+		// getsAllNodes (returns ArrayList<Node>)
+		connection.getAllNodes();
 
 		//connection.populateTable("node", "L1Nodes.csv");
 		//connection.populateTable("hasEdge", "L1Edges.csv");

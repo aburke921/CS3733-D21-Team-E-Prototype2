@@ -31,7 +31,7 @@ public class Testing {
         //unfortunately this does not include coordinates
         path.print("id", "longName");
         //or leave it blank and it will default to all of them
-        optimalPath.print();
+        optimalPath.print("id", "longName");
 
     }
 }

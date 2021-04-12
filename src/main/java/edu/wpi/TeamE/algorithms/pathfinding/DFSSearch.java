@@ -47,7 +47,7 @@ public class DFSSearch extends Searcher {
             if(current.equals(end)){
                 //success case
                 Path path = new Path();
-                path.add(start);
+                path.add(start.copy());
                 path.add(reconstructPath(cameFrom, current));
                 return path;
             }

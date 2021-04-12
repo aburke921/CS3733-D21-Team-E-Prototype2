@@ -105,6 +105,16 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         return neighbors;
     }
 
+    public void addNeighbor(Node newNeighbor){
+        //neighbors.put(newNeighbor.get("id"), dist())
+    }
+
+
+    public Node copy(){
+        return new Node(get("id"), xCoord, yCoord, get("floor"), get("building"), get("type"),
+                get("longName"), get("shortName"));
+    }
+
     /**
      * @param n node to compare with this
      * @return true if the two nodes 'id's  are equal

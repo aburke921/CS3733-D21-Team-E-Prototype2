@@ -71,6 +71,28 @@ FROM (SELECT startNode, endNode, node.xCoord AS startX, node.yCoord AS startY, e
 insert into node
 values (?, ?, ?, ?, ?, ?, ?, ?);
 
+-- addEdge()
+
+insert into hasEdge
+values (?, ?, ?, ?);
+
+-- deleteEdge()
+
+delete
+from hasEdge
+where startNode = ? and endNode = ?
+   or endNode = ? and startNode = ?;
+
+-- or
+
+delete
+from hasEdge
+where startNode = ?
+  and endNode = ?;
+delete
+from hasEdge
+where endNode = ?
+  and startNode = ?;
 
 
 -- NOT YET IMPLEMENTED / PLANNING STAGES:-----------------------------------------------------

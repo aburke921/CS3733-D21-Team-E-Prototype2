@@ -5,15 +5,16 @@ import com.jfoenix.controls.JFXComboBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
+import edu.wpi.TeamE.algorithms.pathfinding.*;
 import edu.wpi.TeamE.App;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -106,6 +107,39 @@ public class PathFinder {
 
     @FXML
     public void findPath(ActionEvent event) {
+
+        System.out.println("FINDING PATH...");
+
+        //get selected nodes
+        String startNode = ""; //todo, will dropdown link directly to a node value or must this be resolved?
+        String endNode = ""; //todo
+
+        //Execute A* Search
+        Searcher aStar = new AStarSearch();
+        Path foundPath = aStar.search(startNode, endNode);
+
+        //build path
+        Iterator<edu.wpi.TeamE.algorithms.pathfinding.Node> nodeIterator = foundPath.iterator(); //create iterable list
+        while(nodeIterator.hasNext()){ //loop through list
+            //this iterator will return a Node object
+            //which is just a container for all the node info like id, floor, building, etc
+            Node node = nodeIterator.next();
+            String id = node.get("id");
+            String floor = node.get("floor");
+            String building = node.get("building");
+            String type = node.get("type");
+            String longName = node.get("longName");
+            String shortName = node.get("shortName");
+            //coordinates are ints so they have to be stored separate
+            int xCoord = node.getX();
+            int yCoord = node.getY();
+
+            //print info
+            System.out.println("Node ID:" + id + "\nxCoord: " + xCoord + "\nyCoord:" + yCoord + "\n---");
+            //todo, add this data to table - need to get startNode & endNode first, so tests can be run
+        }
+
+
 
         double xcoord = (double) 1748 / 10;
         double ycoord = (double) 1336 / 10;

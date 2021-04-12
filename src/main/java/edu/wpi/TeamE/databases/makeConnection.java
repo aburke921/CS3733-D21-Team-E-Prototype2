@@ -14,7 +14,53 @@ import java.util.Properties;
 
 public class makeConnection {
 
-	Connection connection;
+
+	// static variable singleInstance of type SingleConnection
+	public static makeConnection singleInstance = null;
+
+	public Connection connection;
+
+	// private constructor restricted to this class itself
+	public makeConnection()
+	{
+		// Initialize DB
+		System.out.println("Starting connection to Apache Derby\n");
+		try {
+
+			//Makes it so a username and password (hardcoded) is needed to access the database data
+			Properties props = new Properties();
+			props.put("user", "admin");
+			props.put("password", "admin");
+
+			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+
+			try {
+				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
+				// this.connection.setAutoCommit(false);
+			} catch (SQLException e) {
+				// e.printStackTrace();
+				System.err.println("error with the DriverManager");
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			System.err.println("error with the EmbeddedDriver class.forName thing");
+		}
+	}
+
+	// static method to create instance of Singleton class
+	public static makeConnection makeConnection()
+	{
+		// To ensure only one instance is created
+		if (singleInstance == null)
+		{
+			singleInstance = new makeConnection();
+		}
+		return singleInstance;
+	}
+
+//	Connection connection;
+
+	//Node Node = new Node();
 
     /*
 
@@ -46,31 +92,31 @@ public class makeConnection {
 	/**
 	 * Constructor makes the database connection
 	 */
-	public makeConnection() {
-		// Initialize DB
-		System.out.println("Starting connection to Apache Derby\n");
-		try {
-
-			//Makes it so a username and password (hardcoded) is needed to access the database data
-			Properties props = new Properties();
-			props.put("user", "admin");
-			props.put("password", "admin");
-
-			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-
-			try {
-				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
-				// this.connection.setAutoCommit(false);
-			} catch (SQLException e) {
-				// e.printStackTrace();
-				System.err.println("error with the DriverManager");
-			}
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			System.err.println("error with the EmbeddedDriver class.forName thing");
-		}
-
-	}
+//	public makeConnection() {
+//		// Initialize DB
+//		System.out.println("Starting connection to Apache Derby\n");
+//		try {
+//
+//			//Makes it so a username and password (hardcoded) is needed to access the database data
+//			Properties props = new Properties();
+//			props.put("user", "admin");
+//			props.put("password", "admin");
+//
+//			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+//
+//			try {
+//				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
+//				// this.connection.setAutoCommit(false);
+//			} catch (SQLException e) {
+//				// e.printStackTrace();
+//				System.err.println("error with the DriverManager");
+//			}
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//			System.err.println("error with the EmbeddedDriver class.forName thing");
+//		}
+//
+//	}
 
 	/**
 	 * Creates node and hasEdge tables
@@ -662,8 +708,8 @@ public class makeConnection {
 
 
 
-		String checkStartNode = "select * from node where nodeID = " + startNode;
-		String checkEndNode = "select * from node where nodeID = " + endNode;
+		String checkStartNode = "select * from node where nodeID = '" + startNode + "'";
+		String checkEndNode = "select * from node where nodeID = '" + endNode + "'";
 
 		String finalQuery = "update hasEdge set ";
 
@@ -850,17 +896,29 @@ public class makeConnection {
 
 
 	public static void main(String[] args) {
-
-		makeConnection connection = new makeConnection();
-
-		System.out.println("made it here!");
-		connection.deleteAllTables();
-		connection.createTables();
+		System.out.println("STARTING UP!!!");
 		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
 		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+
+		makeConnection connection = makeConnection.makeConnection();
+
+		makeConnection connection1 = makeConnection.makeConnection();
+		connection.deleteAllTables();
+		connection1.createTables();
 		connection.populateTable("node", nodes);
 		connection.populateTable("hasEdge", edges);
+//		makeConnection connection = new makeConnection();
+//
+//		System.out.println("made it here!");
+//		connection.deleteAllTables();
+//		connection.createTables();
+//		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+//		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+//		connection.populateTable("node", nodes);
+//		connection.populateTable("hasEdge", edges);
 
+		// getsAllNodes (returns ArrayList<Node>)
+//		connection.getAllNodes();
 
 	}
 }

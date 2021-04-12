@@ -195,7 +195,7 @@ public class MapEditor {
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
         if (file != null) {
-            openFile(file);
+            //database's fcn for file uploading goes here, param is file
         }
     }
 

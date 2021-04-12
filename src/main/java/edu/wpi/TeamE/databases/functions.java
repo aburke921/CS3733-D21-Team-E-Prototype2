@@ -102,7 +102,7 @@ public class functions {
 			getNeighborPS.setInt(1, nodeID);
 			getNeighborPS.setInt(2, nodeID);
 			ResultSet resultSet = getNeighborPS.executeQuery();
-			List<Map.Entry<Float,Short>> pairList;
+			List<Map.Entry<Float, Short>> pairList;
 			Pair<Integer, Float> integerFloatPairs;
 			while (resultSet.next()) {
 				pairList.add(new AbstractMap.SimpleEntry<>(resultSet.getInt("neighborID"), resultSet.getInt("neighborID")));

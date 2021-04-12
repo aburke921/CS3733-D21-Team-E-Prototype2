@@ -2,9 +2,10 @@ package edu.wpi.TeamE.algorithms.database;
 
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class algoEdb {
+public class makeConnection {
 
     /**
      * query the Node table to get the nodes field data
@@ -12,7 +13,7 @@ public class algoEdb {
      * @return an array of strings containing all of these fields
      *         key is the field type, value is the data
      */
-    public static Node getNode(String nodeId){
+    public Node getNodeInfo(String nodeID){
         return null;
     }
 
@@ -20,7 +21,7 @@ public class algoEdb {
      * query the Edge table to get every node which shares an edge with nodeId
      * @return an string array containing each neighbors nodeId
      */
-    public static String[] getNeighbors(String nodeId){
+    public HashMap<String, Double> getNeighbors(String nodeId){
         return null;
     }
 

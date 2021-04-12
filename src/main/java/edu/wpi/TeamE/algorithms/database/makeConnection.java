@@ -3,7 +3,6 @@ package edu.wpi.TeamE.algorithms.database;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class makeConnection {
 

@@ -51,18 +51,21 @@ public class MapEditor {
 
        /* public static void main(String[] args) {
             Application.launch(args);
-        }*/
+        }
+
+        should be 'id', 'floor', 'building', 'type', 'longName', 'shortName'
+        */
 
     public void prepareNodes(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array, TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Node> table) {
         if (table.getRoot() == null) {
             edu.wpi.TeamE.algorithms.pathfinding.Node root = new edu.wpi.TeamE.algorithms.pathfinding.Node("Location", 2, 2, "location", "location", "location", "location", "location");
             final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node> rootNode = new TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node>(root);
             table.setRoot(rootNode);
-            /*TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, String> column = new TreeTableColumn<>("Location");
+            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, String> column = new TreeTableColumn<>("Location");
             column.setPrefWidth(150);
             column.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, String> p) ->
-                    new ReadOnlyStringWrapper(p.getValue().getValue().getX()));
-            table.getColumns().add(column);*/
+                    new ReadOnlyStringWrapper(p.getValue().getValue().get("longName")));
+            table.getColumns().add(column);
             //column 2
             TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> column2 = new TreeTableColumn<>("X-Cord");
             column2.setPrefWidth(150);
@@ -76,17 +79,35 @@ public class MapEditor {
                     new ReadOnlyIntegerWrapper(p.getValue().getValue().getY()));
             table.getColumns().add(column3);
             //column 4
-            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> column4 = new TreeTableColumn<>("ID");
+            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, String> column4 = new TreeTableColumn<>("ID");
             column4.setPrefWidth(150);
-            column4.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> p) ->
-                    new ReadOnlyIntegerWrapper(p.getValue().getValue().getX()));
+            column4.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().get("id")));
             table.getColumns().add(column4);
             //column 5
-            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> column5 = new TreeTableColumn<>("Floor");
+            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, String> column5 = new TreeTableColumn<>("Floor");
             column5.setPrefWidth(150);
-            column5.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, Number> p) ->
-                    new ReadOnlyIntegerWrapper(p.getValue().getValue().getY()));
+            column5.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().get("floor")));
             table.getColumns().add(column5);
+            //column 6
+            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, String> column6 = new TreeTableColumn<>("Building");
+            column6.setPrefWidth(150);
+            column6.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().get("building")));
+            table.getColumns().add(column6);
+            //column 7
+            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, String> column7 = new TreeTableColumn<>("Short Name");
+            column7.setPrefWidth(150);
+            column7.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().get("shortName")));
+            table.getColumns().add(column7);
+            //column 8
+            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Node, String> column8 = new TreeTableColumn<>("Type");
+            column8.setPrefWidth(150);
+            column8.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Node, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
+            table.getColumns().add(column8);
             for (int i = 0; i < array.size(); i++) {
                 edu.wpi.TeamE.algorithms.pathfinding.Node s = array.get(i);
                 int n = array.get(i).getX();

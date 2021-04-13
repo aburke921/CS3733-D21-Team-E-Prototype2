@@ -67,7 +67,7 @@ public class PathFinder {
 
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
-     * @param event calling event info
+     * @param event calling event info.
      */
     @FXML
     private void toDefault(ActionEvent event) {
@@ -86,7 +86,7 @@ public class PathFinder {
 
     /**
      * Gets selected item from {@link #startLocationList} dropdown.
-     * @param event calling event info
+     * @param event calling event info.
      */
     @FXML
     void selectStartNode(ActionEvent event) {
@@ -95,6 +95,7 @@ public class PathFinder {
         startNodeID = resolveID(dropdownSelected);
         System.out.println("node ID resolved to: " + startNodeID);
 
+        // findPath button validation
         if (startLocationList.getSelectionModel().isEmpty() ||
                 endLocationList.getSelectionModel().isEmpty()) {
             findPathButton.setDisable(true);
@@ -105,7 +106,7 @@ public class PathFinder {
 
     /**
      * Gets selected item from {@link #endLocationList} dropdown.
-     * @param event calling event info
+     * @param event calling event info.
      */
     @FXML
     void selectEndNode(ActionEvent event) {
@@ -114,6 +115,7 @@ public class PathFinder {
         endNodeID = resolveID(dropdownSelected);
         System.out.println("node ID resolved to: " + endNodeID);
 
+        // findPath button validation
         if (startLocationList.getSelectionModel().isEmpty() ||
                 endLocationList.getSelectionModel().isEmpty()) {
             findPathButton.setDisable(true);
@@ -125,7 +127,7 @@ public class PathFinder {
     /**
      * todo Uses {@link Searcher}'s search() function to find the best path,
      * given the two current start and end positions ({@link #startNodeID} and {@link #endNodeID}).
-     * @param event calling function's (Find Path Button) event info
+     * @param event calling function's (Find Path Button) event info.
      */
     @FXML
     public void findPath(ActionEvent event) {
@@ -229,7 +231,7 @@ public class PathFinder {
 
     /**
      * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
-     * Namely, adds FloorMap PNG and fills dropdowns with DB data
+     * Namely, adds FloorMap PNG and fills dropdowns with DB data.
      */
     @FXML
     void initialize() {
@@ -281,11 +283,11 @@ public class PathFinder {
     }
 
     /**
-     * Gets a node's ID from it's longName
+     * Gets a node's ID from it's longName.
      *
      * Implementation: Searches through "list" until longName is found,
      *  Then gets "listOfId"'s value at this index. Both lists must be initialised
-     *  for proper functioning
+     *  for proper functioning.
      *
      * @param longName "longName" of node to be resolved
      * @return Node ID

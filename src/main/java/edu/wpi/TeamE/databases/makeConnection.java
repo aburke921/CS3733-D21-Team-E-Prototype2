@@ -35,6 +35,11 @@ public class makeConnection {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 
 			try {
+				/*
+				 * Before making this connectin make sure you're database tab in Intellij
+				 * Is not connected to the database! This will cause the DriverManager to
+				 * Throw an SQLException and goof a bunch of stuff up!
+				 */
 				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
 				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
@@ -442,7 +447,7 @@ public class makeConnection {
 			stmt.close();
 
 		} catch (SQLException e) {
-			System.err.println("getAllNodes Error");
+			System.err.println("getAllNodes Error : " + e);
 		}
 		return nodesArray;
 	}
@@ -470,7 +475,7 @@ public class makeConnection {
 			stmt.close();
 
 		} catch (SQLException e) {
-			System.err.println("getAllEdges Error");
+			System.err.println("getAllEdges Error : " + e);
 		}
 		return edgesArray;
 	}

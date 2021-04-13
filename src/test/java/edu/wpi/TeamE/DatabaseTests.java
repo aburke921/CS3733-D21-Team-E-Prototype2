@@ -1,6 +1,7 @@
 package edu.wpi.TeamE;
 
 import edu.wpi.TeamE.databases.makeConnection;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,11 +12,16 @@ import java.util.ArrayList;
 
 public class DatabaseTests {
 
+    makeConnection connection;
+
+    @BeforeAll
+    public void setConnection(){
+        connection = makeConnection.makeConnection();
+    }
+
     @Test
     @DisplayName("testGetListofNodeIDS")
     public void testGetListofNodeIDS(){
-
-        makeConnection connection = makeConnection.makeConnection();
 
         File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
         File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
@@ -43,4 +49,7 @@ public class DatabaseTests {
 
         assertTrue(listOfNodeIDs.equals(connection.getListofNodeIDS()));
     }
+
+
+
 }

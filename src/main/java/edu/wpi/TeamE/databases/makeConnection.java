@@ -89,8 +89,6 @@ public class makeConnection {
     */
 
 
-
-
 	/**
 	 * Creates node and hasEdge tables
 	 * try/catch phrase set up in case the tables all ready exist
@@ -336,7 +334,6 @@ public class makeConnection {
 	public Node getNodeInfo(String nodeID) {
 		String getNodeInfoS = "select * from node where nodeID = ?";
 		try (PreparedStatement getNodeInfoPS = connection.prepareStatement(getNodeInfoS)) {
-
 			getNodeInfoPS.setString(1, nodeID);
 
 			ResultSet getNodeInfoRS = getNodeInfoPS.executeQuery();
@@ -358,8 +355,8 @@ public class makeConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("cannot print out nodeInfo");
-		}
-		return null;
+			return null;
+    }
 	}
 
 	/**
@@ -371,8 +368,7 @@ public class makeConnection {
 	public Node getNodeLite(String nodeID) {
 		String getNodeLiteS = "select xCoord, yCoord, floor, nodeType from node where nodeID = ?";
 		try (PreparedStatement getNodeLitePS = connection.prepareStatement(getNodeLiteS)) {
-
-			getNodeLitePS.setString(1, nodeID);
+      getNodeLitePS.setString(1, nodeID);
 			ResultSet getNodeLiteRS = getNodeLitePS.executeQuery();
 
 			while(getNodeLiteRS.next()) {
@@ -389,8 +385,8 @@ public class makeConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Could not get nodeLite Info");
+      return null;
 		}
-		return null;
 	}
 
 	/**
@@ -481,14 +477,12 @@ public class makeConnection {
 		return nodesArray;
 	}
 
-
 	/**
 	 * gets all edges and each edge's attribute
 	 * @return ArrayList<Edge>
 	 */
 	public ArrayList<Edge> getAllEdges() {
 		ArrayList<Edge> edgesArray = new ArrayList<>();
-
 		try {
 			Statement stmt = this.connection.createStatement();
 			String query = "select * from hasEdge";
@@ -554,7 +548,6 @@ public class makeConnection {
 			addEdgePS.setString(1, edgeID);
 			addEdgePS.setString(2, startNode);
 			addEdgePS.setString(3, endNode);
-
 			int addEdgeRS = addEdgePS.executeUpdate();
 			if (addEdgeRS == 0) {
 				System.err.println("addEdge Result = 0, probably bad cuz no rows was affected");
@@ -566,8 +559,8 @@ public class makeConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("addEdge() error in the try/catch");
-		}
-		return 0;
+			return 0;
+    }
 	}
 
 
@@ -689,6 +682,7 @@ public class makeConnection {
 
 		String storedEndNode = "";
 		String storedStartNode = "";
+
 
 		try {
 			Statement stmt = this.connection.createStatement();
@@ -828,7 +822,7 @@ public class makeConnection {
 		}
 		return count;
 	}
-
+	*/
 
 	/**
 	 * matches the nodeID to a node and deletes it from DB

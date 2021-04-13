@@ -1,6 +1,5 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
-import edu.wpi.TeamE.algorithms.database.algoEdb;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
@@ -10,6 +9,10 @@ import java.util.PriorityQueue;
  * Required for use of A* as pathfinding solution
  */
 public class AStarSearch extends Searcher {
+
+    public AStarSearch(){
+        super();
+    }
 
     /**
      * Searches for a Path from startId to endId
@@ -23,8 +26,8 @@ public class AStarSearch extends Searcher {
     public Path search(String startId, String endId){
 
         //get nodes from database
-        Node start = algoEdb.getNode(startId);
-        Node end = algoEdb.getNode(endId);
+        Node start = getNode(startId);
+        Node end = getNode(endId);
 
         System.out.printf("\nFinding path from '%s' to '%s'\n...\n", start.get("longName"), end.get("longName"));
 
@@ -43,18 +46,18 @@ public class AStarSearch extends Searcher {
             if(current.equals(end)){
                 //success case
                 Path path = new Path();
-                path.add(start);
+                path.add(start.copy());
                 path.add(reconstructPath(cameFrom, current));
                 return path;
             }
 
             current = potentials.poll();
 
-            String[] neighborIds = algoEdb.getNeighbors(current.get("id"));
+            HashMap<String, Double> neighbors = getNeighbors(current.get("id"));
 
-            for(String neighborId : neighborIds){
-                Node neighbor = algoEdb.getNode(neighborId);
-                Double neighborCost = prevCost.get(current) + dist(current, neighbor);
+            for(String neighborId : neighbors.keySet()){
+                Node neighbor = getNode(neighborId);
+                Double neighborCost = prevCost.get(current) + neighbors.get(neighborId);
                 if(!prevCost.containsKey(neighbor) || neighborCost < prevCost.get(neighbor)){
                     prevCost.put(neighbor, neighborCost);
                     cameFrom.put(neighbor, current);

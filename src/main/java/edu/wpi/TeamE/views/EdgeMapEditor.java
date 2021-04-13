@@ -3,6 +3,7 @@ import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.Group;
@@ -61,7 +62,7 @@ public class EdgeMapEditor {
     public void prepareEdges(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Edge> array, TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Edge> table) {
         if (table.getRoot() == null) {
             edu.wpi.TeamE.algorithms.pathfinding.Edge edge0 = new
-                    edu.wpi.TeamE.algorithms.pathfinding.Edge("ID", "0", "1");
+                    edu.wpi.TeamE.algorithms.pathfinding.Edge("ID", "0", "1", 0.00);
             final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Edge> rootEdge = new TreeItem<>(edge0);
             table.setRoot(rootEdge);
             //column 1 - ID
@@ -82,6 +83,12 @@ public class EdgeMapEditor {
             column3.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Edge, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().getEndNodeId()));
             table.getColumns().add(column3);
+//            //column 4 - Length
+//            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Edge, Double> column4 = new TreeTableColumn<>("Length");
+//            column4.setPrefWidth(320);
+//            column4.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Edge, Double> p) ->
+//                    new ReadOnlyDoubleWrapper(p.getValue().getValue().getLength())
+//            table.getColumns().add(column4);
         }
     }
 
@@ -113,7 +120,7 @@ public class EdgeMapEditor {
     public void startTableButton(ActionEvent actionEvent) {
         //creating the root for the array
         edu.wpi.TeamE.algorithms.pathfinding.Edge edge0 = new
-                edu.wpi.TeamE.algorithms.pathfinding.Edge("ID", "0", "0");
+                edu.wpi.TeamE.algorithms.pathfinding.Edge("ID", "0", "0", 0.00);
         //creating array
         ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Edge> array = new ArrayList<>();
         //creating root edge
@@ -129,8 +136,8 @@ public class EdgeMapEditor {
         //will be in init later
 
         //Commented until getAllEdges is added
-//        array = connection.getAllEdges();
-//        prepareEdges(array, treeTable);
+        array = connection.getAllEdges();
+        prepareEdges(array, treeTable);
     }
     @FXML
     public void toFileUpload() {

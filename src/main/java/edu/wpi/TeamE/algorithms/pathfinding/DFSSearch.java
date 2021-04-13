@@ -1,6 +1,5 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
-import edu.wpi.TeamE.algorithms.database.algoEdb;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -10,6 +9,10 @@ import java.util.LinkedList;
  * Contains specific implementation of DFS
  */
 public class DFSSearch extends Searcher {
+
+    public DFSSearch(){
+        super();
+    }
 
     /**
      * Searches for a Path from startId to endId
@@ -22,8 +25,8 @@ public class DFSSearch extends Searcher {
     public Path search(String startId, String endId){
 
         //get node info from database
-        Node start = algoEdb.getNode(startId);
-        Node end = algoEdb.getNode(endId);
+        Node start = getNode(startId);
+        Node end = getNode(endId);
 
         //stack (rep by linkedlist) of nodes to search next
         LinkedList<Node> potentials = new LinkedList<>();
@@ -44,7 +47,7 @@ public class DFSSearch extends Searcher {
             if(current.equals(end)){
                 //success case
                 Path path = new Path();
-                path.add(start);
+                path.add(start.copy());
                 path.add(reconstructPath(cameFrom, current));
                 return path;
             }
@@ -53,12 +56,12 @@ public class DFSSearch extends Searcher {
             current = potentials.pop();
             visited.add(current);
 
-            String[] neighborIds = algoEdb.getNeighbors(current.get("id"));
+            HashMap<String, Double> neighbors = getNeighbors(current.get("id"));
 
             //for each neighbor, add to potentials if
             //it hasnt been visited and isn't already a potential
-            for(String neighborId : neighborIds){
-                Node neighbor = algoEdb.getNode(neighborId);
+            for(String neighborId : neighbors.keySet()){
+                Node neighbor = getNode(neighborId);
                 if(!visited.contains(neighbor) && !potentials.contains(neighbor)){
                     cameFrom.put(neighbor, current);
                     potentials.push(neighbor);

@@ -1,13 +1,67 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+
+import edu.wpi.TeamE.databases.makeConnection;
 
 /**
  * Abstract Searcher Class for Pathfinding API
  * On creation can be initialized to A* or DFS (already implemented) or others that can be added later
  */
 public abstract class Searcher {
+
+    //this is a local cache of nodes which have been worked with in the past
+    private final HashMap<String, Node> graph;
+
+    private final makeConnection con;
+
+    /**
+     * Super constructor, initializes cache
+     */
+    public Searcher(){
+        graph = new HashMap<>();
+        con = new makeConnection();
+        ArrayList<Edge> edges = con.getAllEdges();
+        ArrayList<Node> nodes = con.getAllNodes();
+
+        for(Node node : nodes){
+            graph.put(node.get("id"), node);
+        }
+        for(Edge edge : edges){
+            Node n0 = graph.get(edge.getNode(0));
+            Node n1 = graph.get(edge.getNode(1));
+
+            n0.addNeighbor(n1, edge.getLength());
+            n1.addNeighbor(n0, edge.getLength());
+        }
+    }
+
+    /**
+     * @param nodeId the Id of the node you wish to receive
+     * @return the requested node
+     */
+    public Node getNode(String nodeId){
+        return graph.get(nodeId);
+    }
+
+    /**
+     * @param nodeId The Id of the node you want to get the neighbors of
+     * @return the neighbors of that node
+     */
+    public HashMap<String, Double> getNeighbors(String nodeId){
+        return graph.get(nodeId).getNeighbors();
+    }
+
+    /**
+     * TODO:Check the database to see if the graph has been edited by user
+     */
+    private void updateGraph(){
+
+    }
+
+
     /**
      * Generic Search method for UI
      * Searches between Start and End Nodes for path
@@ -37,7 +91,7 @@ public abstract class Searcher {
         Path path = new Path();
         //pop off of stack onto linked list
         while(!stack.isEmpty()){
-            path.add(stack.pop());
+            path.add(stack.pop().copy());
         }
 
         return path;

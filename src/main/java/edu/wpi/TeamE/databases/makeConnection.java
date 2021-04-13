@@ -9,7 +9,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Properties;
 
 public class makeConnection {
@@ -362,36 +361,51 @@ public class makeConnection {
 	/**
 	 * gets edge information for all edges containing given nodeID
 	 *
-	 * @param nodeId
+	 * @param nodeID
 	 * @return Pair<Integer, String> map with edge information
 	 */
-	public HashMap<String, Double> getNeighbors(String nodeId){
-		HashMap<String, Double> neighborIds = new HashMap<>();
+	public ArrayList<Pair<Float, String>> getEdgeInfo(String nodeID) {
+
+		ArrayList<Pair<Float, String>> pair = null;
+
 		try {
-			ResultSet endNodes = query("select startNode from hasEdge where endNode = " + nodeId);
-			while (endNodes.next()) {
-				String neighborId = endNodes.getString("endNode");
-				Double edgeLength = (double) endNodes.getFloat("length");
-				neighborIds.put(neighborId, edgeLength);
+			Statement stmt = this.connection.createStatement();
+			String query = "select startNode from hasEdge where endNode = " + nodeID;
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				float length = rset.getFloat("length");
+				String startNodeID = rset.getString("startNode");
+
+				pair.add(new Pair<>(length, startNodeID));
 			}
-			endNodes.close();
-			ResultSet startNodes = query("select startNode from hasEdge where endNode = " + nodeId);
-			while (startNodes.next()) {
-				String neighborId = startNodes.getString("startNode");
-				Double edgeLength = (double) startNodes.getFloat("length");
-				neighborIds.put(neighborId, edgeLength);
-			}
-			startNodes.close();
-		} catch (SQLException sqle){
-			System.out.println("getNeighbors Error: " + sqle);
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("startNode Error");
 		}
-		return neighborIds;
-	}
-	private ResultSet query(String query) throws SQLException{
-		Statement stmt = connection.createStatement();
-		ResultSet rset = stmt.executeQuery(query);
-		stmt.close();
-		return rset;
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select endNode from hasEdge where startNode = " + nodeID;
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				float length = rset.getFloat("length");
+				String endNodeID = rset.getString("endNode");
+
+				pair.add(new Pair<>(length, endNodeID));
+			}
+
+			rset.close();
+			stmt.close();
+		} catch (SQLException e) {
+			System.err.println("startNode Error");
+		}
+
+		return pair;
 	}
 
 	/**

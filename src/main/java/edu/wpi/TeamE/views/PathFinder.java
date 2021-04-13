@@ -159,7 +159,7 @@ public class PathFinder {
             double xCoord = (double) node.getX() / 10;
             double yCoord = (double) node.getY() / 10;
 
-            if (node.get("id") == startNodeID) { //if current node is the starting node
+            if (node.get("id").equals(startNodeID)) { //if current node is the starting node
                 prevXCoord = xCoord;
                 prevYCoord = yCoord;
 
@@ -167,7 +167,7 @@ public class PathFinder {
                 Circle circle = new Circle(xCoord, yCoord, 2, Color.RED);
                 g.getChildren().add(circle);
             }
-            else if (node.get("id") == endNodeID) { //if current node is the ending node
+            else if (node.get("id").equals(endNodeID)) { //if current node is the ending node
                 //place a red dot on the location
                 Circle circle = new Circle(xCoord, yCoord, 2, Color.RED);
                 //create a line between this node and the previous node
@@ -189,8 +189,6 @@ public class PathFinder {
             }
             //print info
             System.out.println("xCoord: " + xCoord + "\nyCoord:" + yCoord + "\n---");
-            //todo, potentially add this data to table - need to get startNode & endNode first, so tests can be run
-            //todo build Map Shapes of of given path
         }
 
         //add all objects to the scene
@@ -203,14 +201,14 @@ public class PathFinder {
      */
     @FXML
     void initialize() {
-        assert startLocationList != null : "fx:id=\"bathroomList\" was not injected: check your FXML file 'PathFinder.fxml'.";
-        assert endLocationList != null : "fx:id=\"bathroomList\" was not injected: check your FXML file 'PathFinder.fxml'.";
+        assert startLocationList != null : "fx:id=\"startLocationList\" was not injected: check your FXML file 'PathFinder.fxml'.";
+        assert endLocationList != null : "fx:id=\"endLocationList\" was not injected: check your FXML file 'PathFinder.fxml'.";
 
         Image image = new Image("edu/wpi/TeamE/FirstFloorMap.png");
         imageView.setImage(image);
 
 
-        //DB connection todo doesnt always work after Map Editor has muddled the DB?
+        //DB connection todo set up w/ new fcn DB is making
         makeConnection connection = new makeConnection();
 
         //get All nodes

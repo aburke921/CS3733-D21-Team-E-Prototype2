@@ -1,5 +1,6 @@
 package edu.wpi.TeamE.databases;
 
+import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import javafx.util.Pair;
 
@@ -423,7 +424,7 @@ public class makeConnection {
 			ResultSet rset = stmt.executeQuery(query);
 
 			while (rset.next()) {
-				String NodeID = rset.getString("NodeID");
+				String NodeID = rset.getString("nodeID");
 				int xCoord = rset.getInt("xCoord");
 				int yCoord = rset.getInt("yCoord");
 				String floor = rset.getString("floor");
@@ -443,6 +444,28 @@ public class makeConnection {
 			System.err.println("getAllNodes Error");
 		}
 		return nodesArray;
+	}
+	public ArrayList<Edge> getAllEdges() {
+		ArrayList<Edge> edgesArray = new ArrayList<>();
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from edge";
+			ResultSet rset = stmt.executeQuery(query);
+
+			String edgeId = rset.getString("edgeId");
+			String node0Id = rset.getString("startNode");
+			String node1Id = rset.getString("endNode");
+			Double length = (double)rset.getFloat("length");
+			edgesArray.add(new Edge(edgeId, node0Id, node1Id, length));
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllEdges Error");
+		}
+		return edgesArray;
 	}
 
 	/**

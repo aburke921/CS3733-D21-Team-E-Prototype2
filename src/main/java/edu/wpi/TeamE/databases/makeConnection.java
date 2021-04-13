@@ -638,178 +638,90 @@ public class makeConnection {
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 * need to check that both startNode and endNode already exist in node table
 	 */
-
-	////////FIGURE OUT AND TEST////////
 	public int modifyEdge(String edgeID, String startNode, String endNode) {
-
-		if(endNode == null) {
-			// !!!!!! user is required to type in edgeID !!!!!! //
-
-			// user wants to modify startNode ///
-
-			// select * from node where nodeID = givenStartNode
-			String checkStartNode = "select nodeID from node where nodeID = '" + startNode + "'";
-
-			String storedEndNode = "";
-			String storedStartNode = "";
+		boolean correctEdgeID = false;
+		boolean correctStartNode = false;
+		boolean correctEndNode = false;
 
 
-			try {
-				Statement stmt = this.connection.createStatement();
-				stmt.executeQuery(checkStartNode);
+		// !!!!!! user is required to type in edgeID !!!!!! //
+
+		//1. check that they gave a valid edgeID
+		//2. check that they gave a valid nodeID they want to change to the startNode
+		//			or
+		//3. check that they gave a valid nodeID they want to change to the endNode
+
+		String checkEdgeID = "select edgeID from hasEdge where edgeID = ?";
+		try (PreparedStatement prepState1 = connection.prepareStatement(checkEdgeID)) {
+			prepState1.setString(1, edgeID);
+			ResultSet rset1 = prepState1.executeQuery();
+
+			if(rset1.next()){
+				correctEdgeID = true;
 			}
-			catch(SQLException e) {
+
+		}catch(SQLException e){
+			//e.printStackTrace();
+			return 0;
+		}
+
+		if(startNode != null){
+			String checkStartNode = "select nodeID from node where nodeID = ?";
+			try (PreparedStatement prepState2 = connection.prepareStatement(checkStartNode)) {
+				prepState2.setString(1, startNode);
+				ResultSet rset2 = prepState2.executeQuery();
+
+				if(rset2.next()) {
+					correctStartNode = true;
+				}
+
+			}catch(SQLException e) {
 				System.err.println("given start node does not exist");
 				//e.printStackTrace();
 				return 0;
 			}
+		}
 
-			// first get the endNode where edgeID = givenEdgeID
-			String getEndNodeQuery = "select endNode from hasEdge where edgeID = " + edgeID;
-			String storedStartNodeQuery = "select startNode from hasEdge where edgeID = " + edgeID;
+		if(endNode != null){
+			String checkEndNode = "select nodeID from node where nodeID = ?";
+			try (PreparedStatement prepState3 = connection.prepareStatement(checkEndNode)) {
+				prepState3.setString(1, endNode);
+				ResultSet rset3 = prepState3.executeQuery();
 
-			try{
-				Statement stmt = this.connection.createStatement();
-
-				ResultSet rset = stmt.executeQuery(getEndNodeQuery);
-
-
-				while(rset.next()) {
-					storedEndNode = rset.getString("endNode");
-				}
-				rset.close();
-
-				ResultSet rset2 = stmt.executeQuery(storedStartNodeQuery);
-
-				while(rset2.next()) {
-					storedStartNode = rset2.getString("startNode");
-
+				if(rset3.next()) {
+					correctEndNode = true;
 				}
 
-				rset2.close();
-				stmt.close();
-			}
-			catch(SQLException e) {
-				System.err.println("given edgeID does not exist");
-				e.printStackTrace();
-				return 0;
-			}
 
-			// create newEdgeID = "givenStartNode" + "_" + "endNode";
-
-			String newEdgeID = startNode + "_" + storedEndNode;
-
-			String checkNewEdgeIDQuery = "select edgeID from hasEdge where edgeID = " + newEdgeID;
-			try {
-				// checking if the newly created edge is already an edge
-				// select * from hasEdge where edgeID = newEdgeID
-
-				Statement stmt = this.connection.createStatement();
-				stmt.executeQuery(checkNewEdgeIDQuery);
-
-				stmt.close();
-
-				System.err.println("edge with given input already exists");
-				return 0;
-			}
-			catch(SQLException e) {
+			}catch(SQLException e) {
 				//e.printStackTrace();
+				return 0;
+			}
+		}
 
-				// deleteEdge(givenEdgeID);
-				// deletes original edge
 
-				deleteEdge(storedStartNode, storedEndNode);
 
-				// addEdge(newEdgeID, givenStartNode, endNode)
-				addEdge(newEdgeID, startNode, storedEndNode);
+		if((correctEdgeID && correctStartNode) || (correctEdgeID && correctEndNode) || (correctEdgeID && correctStartNode && correctEndNode)){
+			String[] nodes = edgeID.split("_");
+			deleteEdge(nodes[0], nodes[1]);
+			if(startNode == null){
+				String newEdgeID = nodes[0] + "_" + endNode;
+				addEdge(newEdgeID, nodes[0], endNode);
+				return 1;
+			}
+			if(endNode == null){
+				String newEdgeID = startNode + "_" + nodes[1];
+				addEdge(newEdgeID, startNode, nodes[1]);
+				return 1;
+			}
+			else{
+				String newEdgeID = startNode + "_" + endNode;
+				addEdge(newEdgeID, startNode, endNode);
 				return 1;
 			}
 		}
 
-		else if (startNode == null) {
-			// !!!!!! user is required to type in edgeID !!!!!! //
-
-			// user wants to modify endNode ///
-
-			// select * from node where nodeID = givenEndNode
-			String checkEndNode = "select nodeID from node where nodeID = '" + endNode + "'";
-
-			String storedStartNode = "";
-			String storedEndNode = "";
-
-
-			try {
-				Statement stmt = this.connection.createStatement();
-				stmt.executeQuery(checkEndNode);
-			}
-			catch(SQLException e) {
-				System.err.println("given end node does not exist");
-				//e.printStackTrace();
-				return 0;
-			}
-
-			// first get the startNode where edgeID = givenEdgeID
-			String getStartNodeQuery = "select startNode from hasEdge where edgeID = " + edgeID;
-			String storeEndNodeQuery = "select endNode from hasEdge where edgeID = " + edgeID;
-
-			try{
-				Statement stmt = this.connection.createStatement();
-
-				ResultSet rset = stmt.executeQuery(getStartNodeQuery);
-
-
-				while(rset.next()) {
-					storedStartNode = rset.getString("startNode");
-				}
-				rset.close();
-
-				ResultSet rset2 = stmt.executeQuery(storeEndNodeQuery);
-
-				while(rset2.next()) {
-					storedEndNode = rset2.getString("endNode");
-
-				}
-
-				rset2.close();
-				stmt.close();
-			}
-			catch(SQLException e) {
-				System.err.println("given edgeID does not exist");
-				//e.printStackTrace();
-				return 0;
-			}
-
-			// create newEdgeID = "givenEndNode" + "_" + "storedStartNode";
-
-			String newEdgeID = storedStartNode + "_" + endNode;
-
-			String checkNewEdgeIDQuery = "select edgeID from hasEdge where edgeID = " + newEdgeID;
-			try {
-				// checking if the newly created edge is already an edge
-				// select * from hasEdge where edgeID = newEdgeID
-
-				Statement stmt = this.connection.createStatement();
-				stmt.executeQuery(checkNewEdgeIDQuery);
-
-				stmt.close();
-
-				System.err.println("edge with given input already exists");
-				return 0;
-			}
-			catch(SQLException e) {
-				//e.printStackTrace();
-
-				// deleteEdge(givenEdgeID);
-				// deletes original edge
-
-				deleteEdge(storedStartNode, storedEndNode);
-
-				// addEdge(newEdgeID, givenStartNode, endNode)
-				addEdge(newEdgeID, storedStartNode, endNode);
-				return 1;
-			}
-		}
-
+		System.err.println("startNode or endNode does not exist but no SQL error");
 		return 0;
 	}
 
@@ -934,7 +846,7 @@ public class makeConnection {
 
 	}
 
-
+/*
 	public File getNewCSVFile(String tableName){
 		File newCSV = new File(".csv");
 
@@ -987,6 +899,9 @@ public class makeConnection {
 		return newCSV;
 	}
 
+
+ */
+
 	public static void main(String[] args) {
 		System.out.println("STARTING UP!!!");
 		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
@@ -1007,7 +922,7 @@ public class makeConnection {
 		connection.addEdge("test2_test3", "test2", "test3");
 		connection.addEdge("test1_test3", "test1", "test3");
 
-		int i = connection.modifyEdge("test1_test2", null, "test3");
+		int i = connection.modifyEdge("test1_test2", "test3", "test4");
 		System.out.println(i);
 	}
 }

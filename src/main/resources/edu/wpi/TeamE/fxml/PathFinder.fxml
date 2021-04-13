@@ -50,7 +50,7 @@
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXComboBox>
-                  <JFXButton fx:id="findPathButton" onAction="#findPath" styleClass="submit-button" text="Find Path">
+                  <JFXButton fx:id="findPathButton" disable="true" onAction="#findPath" styleClass="submit-button" text="Find Path">
                      <HBox.margin>
                         <Insets left="15.0" top="10.0" />
                      </HBox.margin>

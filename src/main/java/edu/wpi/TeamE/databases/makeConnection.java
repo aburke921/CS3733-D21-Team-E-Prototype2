@@ -356,7 +356,8 @@ public class makeConnection {
 			e.printStackTrace();
 			System.err.println("cannot print out nodeInfo");
 			return null;
-    }
+		}
+		return null;
 	}
 
 	/**
@@ -385,8 +386,9 @@ public class makeConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Could not get nodeLite Info");
-      return null;
+		  return null;
 		}
+		return null;
 	}
 
 	/**
@@ -448,7 +450,7 @@ public class makeConnection {
 
 	public ArrayList<Node> getAllNodes() {
 		ArrayList<Node> nodesArray = new ArrayList<>();
-
+//observable list -- UI
 		try {
 			Statement stmt = this.connection.createStatement();
 			String query = "select * from node";
@@ -754,8 +756,6 @@ public class makeConnection {
 			addEdge(newEdgeID, startNode, storedEndNode);
 			return 1;
 		}
-
-
 	}
 
 
@@ -822,7 +822,7 @@ public class makeConnection {
 		}
 		return count;
 	}
-	*/
+
 
 	/**
 	 * matches the nodeID to a node and deletes it from DB
@@ -881,16 +881,27 @@ public class makeConnection {
 	}
 
 
+//	public File getNewCSVFile(){
+//
+//		File newCSV = new File();
+//
+//
+//	}
+
 	public static void main(String[] args) {
 		System.out.println("STARTING UP!!!");
 		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
 		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
 
 		makeConnection connection = makeConnection.makeConnection();
+
+
+		makeConnection connection1 = makeConnection.makeConnection();
+
 		connection.deleteAllTables();
-		connection.createTables();
+		connection1.createTables();
 		connection.populateTable("node", nodes);
-		connection.populateTable("hasEdge", edges);
+		connection1.populateTable("hasEdge", edges);
 
 		connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
 		connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");

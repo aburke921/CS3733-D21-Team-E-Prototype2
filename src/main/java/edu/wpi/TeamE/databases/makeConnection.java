@@ -2,6 +2,8 @@ package edu.wpi.TeamE.databases;
 
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.util.Pair;
 import java.io.*;
 import java.io.BufferedReader;
@@ -450,6 +452,69 @@ public class makeConnection {
 			System.err.println("getAllNodes Error : " + e);
 		}
 		return nodesArray;
+	}
+
+	/**
+	 * gets all Nodes that have the given FLOOR value
+	 * @param floorName the value to check for in FLOOR column
+	 * @return ArrayList of Node objects
+	 */
+	public ArrayList<Node> getAllNodesByFloor(String floorName) {
+		ArrayList<Node> nodesArray = new ArrayList<>();
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from node WHERE '" + floorName + "' = FLOOR";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String NodeID = rset.getString("nodeID");
+				int xCoord = rset.getInt("xCoord");
+				int yCoord = rset.getInt("yCoord");
+				String floor = rset.getString("floor");
+				String building = rset.getString("building");
+				String nodeType = rset.getString("nodeType");
+				String longName = rset.getString("longName");
+				String shortName = rset.getString("shortName");
+
+				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
+
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllNodes Error : " + e);
+		}
+		return nodesArray;
+	}
+
+	/**
+	 * Gets all node long names for a specified FLOOR column value.
+	 * @param floorName the value to check for in FLOOR column
+	 * @return ObservableList of node long names.
+	 */
+	public ObservableList<String> getAllNodeLongNamesByFloor(String floorName) {
+		ObservableList<String> listOfNodeIDs =  FXCollections.observableArrayList();
+
+		String deleteNodeS = "SELECT LONGNAME FROM node WHERE '" + floorName + "' = FLOOR";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("LONGNAME");
+				listOfNodeIDs.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeIDs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println("getListofNodeIDS error try/catch");
+			return listOfNodeIDs;
+		}
 	}
 
 	/**

@@ -248,7 +248,8 @@ public class PathFinder {
         makeConnection connection = new makeConnection();
 
         //get All nodes
-        ArrayList<Node> nodeArrayList = connection.getAllNodes(); //todo error here when DB is empty, is this a check for us or DB? getAllNodes() might need to validate the existence of a node first
+//        ArrayList<Node> nodeArrayList = connection.getAllNodes(); //todo error here when DB is empty, is this a check for us or DB? getAllNodes() might need to validate the existence of a node first
+        ArrayList<Node> nodeArrayList = connection.getAllNodesByFloor("1"); //todo set up so that floors can be changed
 
         //add to Observable List
         System.out.println("Begin Adding to Dropdown List...");

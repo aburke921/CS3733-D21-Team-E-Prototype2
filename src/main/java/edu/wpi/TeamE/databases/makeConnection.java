@@ -680,112 +680,88 @@ public class makeConnection {
 	////////FIGURE OUT AND TEST////////
 	public int modifyEdge(String edgeID, String startNode, String endNode) {
 
-		// when user wants to change the edgeID
-			// they should also put in the startNode and endNode
-			// database has to check if the startNode and endNode exist in node table
+		// !!!!!! user is required to type in edgeID !!!!!! //
 
-		// when the user wants the change the startNode
-			// they should have to put in the edgeID (the endNode in the edgeID should stay the same)
-			// database has to check if the startNode exists in the node table
+		// user wants to modify startNode ///
 
-		// when the user wants to change the endNode
-			// they should have to put in the edgeID (the startNode in the edgeID should stay the same)
-			// database has to check if the endNode exists in the node table
+		// select * from node where nodeID = givenStartNode
+		String checkStartNode = "select nodeID from node where nodeID = '" + startNode + "'";
 
-		// QUESTION IS:
-			// should UI require all fields to be filled regardless of what part the user is modifying
-			// OR
-			// should UI require all fields to be filled only when the edgeID is being changed?
-
-
-
-		String checkStartNode = "select * from node where nodeID = '" + startNode + "'";
-		String checkEndNode = "select * from node where nodeID = '" + endNode + "'";
-
-		String finalQuery = "update hasEdge set ";
-
-		String edgeIDUpdate = "";
-		String startNodeUpdate = "";
-		String endNodeUpdate = "";
-
-		int checkedBoth = 0;
-		int checkedStart = 0;
-		int checkedEnd = 0;
-
-		if(edgeID != null) {
-			try{
-				Statement stmt = this.connection.createStatement();
-				stmt.executeQuery(checkStartNode);
-				checkedBoth = 1;
-			}
-			catch(SQLException e) {
-				System.err.println("sorry the start node doesn't exist");
-			}
-
-			try{
-				Statement stmt = this.connection.createStatement();
-				stmt.executeQuery(checkEndNode);
-				checkedBoth = 2;
-			}
-			catch(SQLException e) {
-				System.err.println("sorry the end node does not exist");
-			}
-
-			// only if both the startNode and endNode exist, then we update the edgeID
-			if (checkedBoth == 2) {
-				edgeIDUpdate = "edgeID = " + edgeID;
-			}
-		}
-
-		if(startNode != null) {
-			try{
-				Statement stmt = this.connection.createStatement();
-				stmt.executeQuery(checkStartNode);
-				checkedStart = 1;
-			}
-			catch(SQLException e) {
-				System.err.println("sorry the start node doesn't exist");
-			}
-
-			// only update if startNode is checked
-			if (checkedStart == 1) {
-				startNodeUpdate = "startNode = " + startNode;
-			}
-
-		}
-
-		if(endNode != null) {
-			try{
-				Statement stmt = this.connection.createStatement();
-				stmt.executeQuery(checkEndNode);
-				checkedEnd = 1;
-			}
-			catch(SQLException e) {
-				System.err.println("sorry the end node doesn't exist");
-			}
-
-			if (checkedEnd == 1) {
-				endNodeUpdate = "endNode = " + endNode;
-			}
-		}
-
-		// need to figure this out
-		// right now it updates the DB where the startnode and endnode are the same but this doesn't make sense
-		finalQuery = finalQuery + edgeIDUpdate + startNodeUpdate + endNodeUpdate + "where edgeID = " + edgeID;
+		String storedEndNode = "";
+		String storedStartNode = "";
 
 		try {
 			Statement stmt = this.connection.createStatement();
-
-			stmt.executeUpdate(finalQuery);
-			stmt.close();
-
-			return 1;
+			stmt.executeQuery(checkStartNode);
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error in updating edge");
+		catch(SQLException e) {
+			System.err.println("given start node does not exist");
+			//e.printStackTrace();
 			return 0;
 		}
+
+		// first get the endNode where edgeID = givenEdgeID
+		String getEndNodeQuery = "select endNode from hasEdge where edgeID = " + edgeID;
+		String storedStartNodeQuery = "select startNode from hasEdge where edgeID = " + edgeID;
+
+		try{
+			Statement stmt = this.connection.createStatement();
+
+			ResultSet rset = stmt.executeQuery(getEndNodeQuery);
+
+
+			while(rset.next()) {
+				storedEndNode = rset.getString("endNode");
+			}
+			rset.close();
+
+			ResultSet rset2 = stmt.executeQuery(storedStartNodeQuery);
+
+			while(rset2.next()) {
+				storedStartNode = rset2.getString("startNode");
+
+			}
+
+			rset2.close();
+			stmt.close();
+		}
+		catch(SQLException e) {
+			System.err.println("given edgeID does not exist");
+			e.printStackTrace();
+			return 0;
+		}
+
+		// create newEdgeID = "givenStartNode" + "_" + "endNode";
+
+		String newEdgeID = startNode + "_" + storedEndNode;
+
+		String checkNewEdgeIDQuery = "select edgeID from hasEdge where edgeID = " + newEdgeID;
+		try {
+			// checking if the newly created edge is already an edge
+			// select * from hasEdge where edgeID = newEdgeID
+
+			Statement stmt = this.connection.createStatement();
+			stmt.executeQuery(checkNewEdgeIDQuery);
+
+			stmt.close();
+
+			System.err.println("edge with given input already exists");
+			return 0;
+		}
+		catch(SQLException e) {
+			//e.printStackTrace();
+
+			// deleteEdge(givenEdgeID);
+			// deletes original edge
+
+			deleteEdge(storedStartNode, storedEndNode);
+
+			// addEdge(newEdgeID, givenStartNode, endNode)
+			addEdge(newEdgeID, startNode, storedEndNode);
+			return 1;
+		}
+
+
 	}
 
 
@@ -913,11 +889,8 @@ public class makeConnection {
 
 	public static void main(String[] args) {
 		System.out.println("STARTING UP!!!");
-//		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-//		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
-
-		File nodes = new File("L1Nodes.csv");
-		File edges = new File("L1Edges.csv");
+		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
 
 		makeConnection connection = makeConnection.makeConnection();
 		connection.deleteAllTables();
@@ -925,7 +898,17 @@ public class makeConnection {
 		connection.populateTable("node", nodes);
 		connection.populateTable("hasEdge", edges);
 
+		connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
+		connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
+		connection.addNode("test3", 3, 3,"test", "test", "test", "test", "test");
+		connection.addNode("test4", 4, 4,"test", "test", "test", "test", "test");
 
+		connection.addEdge("test1_test2", "test1", "test2");
+		connection.addEdge("test2_test3", "test2", "test3");
+		connection.addEdge("test1_test3", "test1", "test3");
+
+		int i = connection.modifyEdge("test7_test2", "test4", null);
+		System.out.println(i);
 	}
 }
 

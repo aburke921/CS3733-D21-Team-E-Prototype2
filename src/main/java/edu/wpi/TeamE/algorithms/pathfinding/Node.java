@@ -105,8 +105,8 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         return neighbors;
     }
 
-    public void addNeighbor(Node newNeighbor){
-        //neighbors.put(newNeighbor.get("id"), dist())
+    public void addNeighbor(Node newNeighbor, Double dist){
+        neighbors.put(newNeighbor.get("id"), dist);
     }
 
 

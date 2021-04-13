@@ -124,25 +124,6 @@ public class PathFinder {
     @FXML
     public void findPath(ActionEvent event) {
 
-
-        //todo commented section here serves as good example for how shapes will be made
-//        double xcoord = (double) 1748 / 10;
-//        double ycoord = (double) 1336 / 10;
-//
-//        double xcoord2 = (double) 1910 / 10;
-//        double ycoord2 = (double) 1465 / 10;
-//
-//        Circle circle = new Circle(xcoord, ycoord, 2, Color.RED);
-//        Circle circle2 = new Circle(xcoord2, ycoord2, 2, Color.RED);
-//        Line line = new Line(xcoord, ycoord, xcoord2, ycoord2);
-//        line.setStroke(Color.RED);
-//
-//        pane.getChildren().addAll(circle, circle2, line);
-
-        System.out.print("\nCLEARING MAP...");
-
-        pane.getChildren().clear();
-
         System.out.print("\nFINDING PATH...");
 
         //get selected nodes
@@ -152,12 +133,26 @@ public class PathFinder {
 
         //Execute A* Search
         System.out.print("A* Search with startNodeID of " + startNode + ", and endNodeID of " + endNodeID + "\n");
-        AStarSearch aStar = new AStarSearch();
+        Searcher aStar = new AStarSearch();
         Path foundPath = aStar.search(startNode, endNode); //todo error here - this is a question for Algo.
 
+        drawMap(foundPath);
+    }
+
+    /**
+     * Draws map path given....
+     * todo... would be called by findPath()?
+     */
+    public void drawMap(Path path) {
+
+        System.out.print("\nCLEARING MAP...");
+
+        pane.getChildren().clear();
+
         //build path
-        Iterator<Node> nodeIterator = foundPath.iterator(); //create iterable list
-        Group g = new Group();
+        Iterator<Node> nodeIterator = path.iterator(); //create iterable list
+
+        Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
         //Use these variables to keep track of the coordinates of the previous node
         double prevXCoord = 0;
@@ -165,7 +160,7 @@ public class PathFinder {
 
         while(nodeIterator.hasNext()){ //loop through list
             //this iterator will return a Node object
-            //which is just a container for all the node info like itscoordinates
+            //which is just a container for all the node info like its coordinates
             Node node = nodeIterator.next();
 
             //Resize the coordinates to match the resized image
@@ -185,12 +180,15 @@ public class PathFinder {
                 Circle circle = new Circle(xCoord, yCoord, 2, Color.RED);
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                line.setStroke(Color.RED);
 
                 g.getChildren().addAll(circle, line);
             }
             else {
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                line.setStroke(Color.RED);
+
                 g.getChildren().add(line);
 
                 //update the coordinates for the previous node
@@ -205,31 +203,6 @@ public class PathFinder {
 
         //add all objects to the scene
         pane.getChildren().add(g);
-    }
-
-    /**
-     * Draws map path given....
-     * todo... would be called by findPath()?
-     */
-    public void drawMap() {
-//        double xcoord = (double) 1748 / 10;
-//        double ycoord = (double) 1336 / 10;
-//
-//        double xcoord2 = (double) 1910 / 10;
-//        double ycoord2 = (double) 1465 / 10;
-//
-//        Circle circle = new Circle(xcoord, ycoord, 2, Color.RED);
-//        Circle circle2 = new Circle(xcoord2, ycoord2, 2, Color.RED);
-//        Line line = new Line(xcoord, ycoord, xcoord2, ycoord2);
-//        line.setStroke(Color.RED);
-//
-//        pane.getChildren().addAll(circle, circle2, line);
-
-        /*
-        How would we define an unknown # of circles? In the example above, I see that
-            each circle has an explicit name/declaration... can this be changed so we can
-            creat them in a loop?
-         */
     }
 
     /**

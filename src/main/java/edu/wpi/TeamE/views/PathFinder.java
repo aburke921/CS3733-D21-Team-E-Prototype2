@@ -48,7 +48,7 @@ public class PathFinder {
     @FXML // fx:id="startLocationList"
     private JFXComboBox<String> startLocationList; // Value injected by FXMLLoader
 
-    @FXML // fx:id="bathroomList"
+    @FXML // fx:id="endLocationList"
     private JFXComboBox<String> endLocationList; // Value injected by FXMLLoader
 
     @FXML // fx:id="imageView"
@@ -61,9 +61,9 @@ public class PathFinder {
 
     private String endNodeID; // selected ending value's ID
 
-    ObservableList<String> list = FXCollections.observableArrayList(); //declaration
-
     ObservableList<String> listOfId = FXCollections.observableArrayList(); //declaration
+
+    ArrayList<String> nodeIDArrayList;
 
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
@@ -89,11 +89,14 @@ public class PathFinder {
      * @param event calling event info.
      */
     @FXML
-    void selectStartNode(ActionEvent event) {
+    void selectStartNode(ActionEvent event) { //todo is only called if a different name is chosen from dropdown, won't update for duplicate names
         String dropdownSelected = ((JFXComboBox) event.getSource()).getValue().toString();
         System.out.println("\nselected start node name: " + dropdownSelected);
-        startNodeID = resolveID(dropdownSelected);
-        System.out.println("node ID resolved to: " + startNodeID);
+
+        //get index and ID of selected item in dropdown
+        int startLocationListSelectedIndex = startLocationList.getSelectionModel().getSelectedIndex();
+        startNodeID = nodeIDArrayList.get(startLocationListSelectedIndex);
+        System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + startNodeID);
 
         // findPath button validation
         if (startLocationList.getSelectionModel().isEmpty() ||
@@ -109,11 +112,14 @@ public class PathFinder {
      * @param event calling event info.
      */
     @FXML
-    void selectEndNode(ActionEvent event) {
+    void selectEndNode(ActionEvent event) { //todo is only called if a different name is chosen from dropdown, won't update for duplicate names
         String dropdownSelected = ((JFXComboBox) event.getSource()).getValue().toString();
         System.out.println("\nselected end node name: " + dropdownSelected);
-        endNodeID = resolveID(dropdownSelected);
-        System.out.println("node ID resolved to: " + endNodeID);
+
+        //get index of selected item in dropdown
+        int endLocationListSelectedIndex = endLocationList.getSelectionModel().getSelectedIndex();
+        endNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
+        System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + endNodeID);
 
         // findPath button validation
         if (startLocationList.getSelectionModel().isEmpty() ||
@@ -125,7 +131,7 @@ public class PathFinder {
     }
 
     /**
-     * todo Uses {@link Searcher}'s search() function to find the best path,
+     * Uses {@link Searcher}'s search() function to find the best path,
      * given the two current start and end positions ({@link #startNodeID} and {@link #endNodeID}).
      * @param event calling function's (Find Path Button) event info.
      */
@@ -134,14 +140,10 @@ public class PathFinder {
 
         System.out.print("\nFINDING PATH...");
 
-        //get selected nodes
-        String startNode = startNodeID;
-        String endNode = endNodeID;
-
         //Execute A* Search
-        System.out.print("A* Search with startNodeID of " + startNode + ", and endNodeID of " + endNodeID + "\n");
+        System.out.print("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
         Searcher aStar = new AStarSearch();
-        Path foundPath = aStar.search(startNode, endNode); //todo error here - this is a question for Algo.
+        Path foundPath = aStar.search(startNodeID, endNodeID);
 
         drawMap(foundPath);
     }
@@ -203,7 +205,7 @@ public class PathFinder {
                 prevYCoord = yCoord;
             }
             //print info
-            System.out.println("xCoord: " + xCoord + "\nyCoord:" + yCoord + "\n---");
+//            System.out.println("xCoord: " + xCoord + "\nyCoord:" + yCoord + "\n---");
         }
 
         //add all objects to the scene
@@ -234,12 +236,14 @@ public class PathFinder {
      */
     @FXML
     void initialize() {
+        System.out.println("Begin PathFinder Init");
+
         assert startLocationList != null : "fx:id=\"startLocationList\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert endLocationList != null : "fx:id=\"endLocationList\" was not injected: check your FXML file 'PathFinder.fxml'.";
 
+        //load image
         Image image = new Image("edu/wpi/TeamE/FirstFloorMap.png");
         imageView.setImage(image);
-
 
         //todo, temp db connect
         TEMPORARYCreateDB();
@@ -247,59 +251,19 @@ public class PathFinder {
         //DB connection todo set up w/ new fcn DB is making?
         makeConnection connection = new makeConnection();
 
-        //get All nodes
-//        ArrayList<Node> nodeArrayList = connection.getAllNodes(); //todo error here when DB is empty, is this a check for us or DB? getAllNodes() might need to validate the existence of a node first
-        ArrayList<Node> nodeArrayList = connection.getAllNodesByFloor("1"); //todo set up so that floors can be changed
+        //Get longNames & IDs
+        System.out.print("Begin Adding to Dropdown List... ");
+        ObservableList<String> longNameArrayList = connection.getAllNodeLongNamesByFloor("1");
+        nodeIDArrayList = connection.getListofNodeIDS();
+        listOfId.addAll(nodeIDArrayList);
 
-        //add to Observable List
-        System.out.println("Begin Adding to Dropdown List...");
-        for (Node node : nodeArrayList) { //loop through list todo, remove unnecessary code once implementation is more final.
-            //this iterator will return a Node object
-            //which is just a container for all the node info like id, floor, building, etc
-            String id = node.get("id");
-            String floor = node.get("floor");
-            String building = node.get("building");
-            String type = node.get("type");
-            String longName = node.get("longName");
-            String shortName = node.get("shortName");
-            //coordinates are ints so they have to be stored separate
-            int xCoord = node.getX();
-            int yCoord = node.getY();
+        //add ObservableLists to dropdowns
+        startLocationList.setItems(longNameArrayList);
+        endLocationList.setItems(longNameArrayList);
+        System.out.println("done");
 
-            //print info
-            System.out.println("    Node ID:" + id + "\n    xCoord: " + xCoord + "\n    yCoord:" + yCoord + "\n  ---");
 
-            //add to list
-            list.add(longName);
-            listOfId.add(id); //for ID lookups later todo maybe just use nodeArrayList?
-        }
-        System.out.println("...Finished Adding to Dropdown List");
-
-        //add ObservableList to dropdowns
-        startLocationList.setItems(list);
-        endLocationList.setItems(list);
-
-        System.out.println("PathFinder Init Finished.");
+        System.out.println("Finish PathFinder Init.");
     }
 
-    /**
-     * Gets a node's ID from it's longName.
-     *
-     * Implementation: Searches through "list" until longName is found,
-     *  Then gets "listOfId"'s value at this index. Both lists must be initialised
-     *  for proper functioning.
-     *
-     * @param longName "longName" of node to be resolved
-     * @return Node ID
-     */
-    private String resolveID(String longName) {
-        assert list.size() == listOfId.size();
-        for (int i = 0; i < list.size(); i++) {
-            if (longName.equals(list.get(i))) {
-                System.out.println("Correlating index is " + i);
-                return listOfId.get(i); //found correlating index
-            }
-        }
-        return null;
-    }
 }

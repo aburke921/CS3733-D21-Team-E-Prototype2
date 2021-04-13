@@ -1,4 +1,5 @@
 package edu.wpi.TeamE.views;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
@@ -37,6 +38,9 @@ public class EdgeMapEditor {
 
     @FXML private TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Edge> treeTable;
     @FXML private FlowPane theStage;
+    @FXML private JFXTextField idInput;
+    @FXML private JFXTextField startNodeIDInput;
+    @FXML private  JFXTextField endNodeIDInput;
 
 
     @FXML
@@ -117,15 +121,35 @@ public class EdgeMapEditor {
         }
     }
 
-    public void addEdge(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Edge> array, TreeTableView<String> table) {
+    public void addEdge(TreeTableView<Edge> table) {
         //function that takes in users inputted info, updates database
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Edge> array = connection.getAllEdges();
+        connection.addEdge(idInput.getText(), startNodeIDInput.getText(), endNodeIDInput.getText());
     }
 
-    public void deleteEdge(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Edge> array, TreeTableView<String> table) {
-        TreeItem<String> edge = table.getSelectionModel().getSelectedItem();
-        if (table.getSelectionModel().getSelectedItem() != null) {
-            //function that takes in identifier of selected edge, deletes the edge
+    public void addEdgeButton(ActionEvent e) {
+        addEdge(treeTable);
+    }
+
+
+
+    public void deleteEdge(TreeTableView<Edge> table) {
+        Edge edge = table.getSelectionModel().getSelectedItem().getValue();
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Edge> array = connection.getAllEdges();
+        if(table.getSelectionModel().getSelectedItem().getValue().getId() != null) {
+            for(int i = 0; i < array.size(); i++) {
+                if(array.get(i).getId() == edge.getId()) {
+                    connection.deleteEdge(edge.getStartNodeId(), edge.getEndNodeId());
+                    return;
+                }
+            }
         }
+    }
+
+    public void deleteEdgeButton(ActionEvent e) {
+        deleteEdge(treeTable);
     }
 
 

@@ -1,10 +1,10 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import edu.wpi.TeamE.algorithms.database.algoCSV;
-import edu.wpi.TeamE.algorithms.database.makeConnection;
+import edu.wpi.TeamE.databases.makeConnection;
 
 /**
  * Abstract Searcher Class for Pathfinding API
@@ -13,26 +13,37 @@ import edu.wpi.TeamE.algorithms.database.makeConnection;
 public abstract class Searcher {
 
     //this is a local cache of nodes which have been worked with in the past
-    private HashMap<String, Node> cache;
+    private final HashMap<String, Node> graph;
 
-    private makeConnection con;
+    private final makeConnection con;
 
     /**
      * Super constructor, initializes cache
      */
     public Searcher(){
-        cache = new HashMap<>();
+        graph = new HashMap<>();
         con = new makeConnection();
-    }
+        ArrayList<Edge> edges = con.getAllEdges();
+        ArrayList<Node> nodes = con.getAllNodes();
 
+        for(Node node : nodes){
+            graph.put(node.get("id"), node);
+        }
+        for(Edge edge : edges){
+            Node n0 = graph.get(edge.getNode(0));
+            Node n1 = graph.get(edge.getNode(1));
+
+            n0.addNeighbor(n1, edge.length());
+            n1.addNeighbor(n0, edge.length());
+        }
+    }
 
     /**
      * @param nodeId the Id of the node you wish to receive
      * @return the requested node
      */
     public Node getNode(String nodeId){
-        cacheNode(nodeId);
-        return cache.get(nodeId);
+        return graph.get(nodeId);
     }
 
     /**
@@ -40,23 +51,16 @@ public abstract class Searcher {
      * @return the neighbors of that node
      */
     public HashMap<String, Double> getNeighbors(String nodeId){
-        cacheNode(nodeId);
-        return cache.get(nodeId).getNeighbors();
+        return graph.get(nodeId).getNeighbors();
     }
 
     /**
-     * @param nodeId the id of the node you wish to cache
+     * TODO:Check the database to see if the graph has been edited by user
      */
-    private void cacheNode(String nodeId){
-        if(!cache.containsKey(nodeId)){
-            //Node node = con.getNodeInfo(nodeId);
-            Node node = algoCSV.getNode(nodeId);
-            //HashMap<String, Double> neighbors = con.getNeighbors(nodeId);
-            HashMap<String, Double> neighbors = algoCSV.getNeighbors(nodeId);
-            node.setNeighbors(neighbors);
-            cache.put(nodeId, node);
-        }
+    private void updateGraph(){
+
     }
+
 
     /**
      * Generic Search method for UI

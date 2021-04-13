@@ -1,6 +1,7 @@
 package edu.wpi.TeamE.views;
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
+import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
@@ -59,7 +60,9 @@ public class EdgeMapEditor {
         should be 'id', 'floor', 'building', 'type', 'longName', 'shortName'
         */
 
-    public void prepareEdges(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Edge> array, TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Edge> table) {
+    public void prepareEdges(TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Edge> table) {
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Edge> array = connection.getAllEdges();
         if (table.getRoot() == null) {
             edu.wpi.TeamE.algorithms.pathfinding.Edge edge0 = new
                     edu.wpi.TeamE.algorithms.pathfinding.Edge("ID", "0", "1", 0.00);
@@ -90,6 +93,15 @@ public class EdgeMapEditor {
 //                    new ReadOnlyDoubleWrapper(p.getValue().getValue().getLength())
 //            table.getColumns().add(column4);
         }
+        if(table.getRoot().getChildren().isEmpty() == false) {
+            table.getRoot().getChildren().remove(0, array.size());
+        }
+        for (int i = 0; i < array.size(); i++) {
+            edu.wpi.TeamE.algorithms.pathfinding.Edge s = array.get(i);
+            //int n = array.get(i).getX();
+            final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Edge> edge = new TreeItem<>(s);
+            table.getRoot().getChildren().add(edge);
+        }
     }
 
     public void editEdge(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Edge> array, TreeTableView<String> table) {
@@ -118,26 +130,18 @@ public class EdgeMapEditor {
 
 
     public void startTableButton(ActionEvent actionEvent) {
+
         //creating the root for the array
         edu.wpi.TeamE.algorithms.pathfinding.Edge edge0 = new
-                edu.wpi.TeamE.algorithms.pathfinding.Edge("ID", "0", "0", 0.00);
+                edu.wpi.TeamE.algorithms.pathfinding.Edge("ID","StartNode","EndNode",0.00);
         //creating array
         ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Edge> array = new ArrayList<>();
-        //creating root edge
+        //creating root node
         final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Edge> test = new TreeItem<>(edge0);
         test.setExpanded(true);
 
-        //will be in init later
-        File file = new File("L1Edges.csv");
-        makeConnection connection = new makeConnection();
-        connection.deleteAllTables();
-        connection.createTables();
-        connection.populateTable("edge", file);
-        //will be in init later
 
-        //Commented until getAllEdges is added
-        array = connection.getAllEdges();
-        prepareEdges(array, treeTable);
+        prepareEdges(treeTable);
     }
     @FXML
     public void toFileUpload() {

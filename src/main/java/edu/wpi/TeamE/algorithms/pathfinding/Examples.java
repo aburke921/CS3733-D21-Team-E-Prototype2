@@ -6,8 +6,8 @@ public class Examples {
     public static void main(String[] args){
 
         //getting these are outside the scope of this program
-        String startNode = "";
-        String endNode = "";
+        String startNode = "eWALK01801";
+        String endNode = "ePARK00501";
 
         //these are the objects you can use to search
         DFSSearch dfs = new DFSSearch();

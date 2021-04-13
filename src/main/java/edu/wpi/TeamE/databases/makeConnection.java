@@ -502,7 +502,7 @@ public class makeConnection {
 			}
 			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return 0;
 		}
 	}
@@ -589,21 +589,24 @@ public class makeConnection {
 			if(added == true) {
 				query = query + ", ";
 			}
-			query = query + " building = '" + building + "',";
+			query = query + " building = '" + building + "'";
+			added = true;
 		}
 
 		if(nodeType != null) {
 			if(added == true) {
 				query = query + ", ";
 			}
-			query = query + " nodeType = '" + nodeType + "',";
+			query = query + " nodeType = '" + nodeType + "'";
+			added = true;
 		}
 
 		if(longName != null) {
 			if(added == true) {
 				query = query + ", ";
 			}
-			query = query + " longName = '" + longName + "',";
+			query = query + " longName = '" + longName + "'";
+			added = true;
 		}
 
 		if(shortName != null) {
@@ -611,12 +614,14 @@ public class makeConnection {
 				query = query + ", ";
 			}
 			query = query + " shortName = '" + shortName + "'";
+			added = true;
 		}
 
 		query = query + " where nodeID = '" + nodeID + "'";
 
 		try {
 			Statement stmt = this.connection.createStatement();
+			System.out.println(query);
 
 			stmt.executeUpdate(query);
 			stmt.close();

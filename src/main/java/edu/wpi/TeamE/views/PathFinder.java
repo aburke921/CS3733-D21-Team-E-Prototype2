@@ -3,6 +3,7 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -208,6 +209,24 @@ public class PathFinder {
         pane.getChildren().add(g);
     }
 
+    public void TEMPORARYCreateDB() { //todo
+        makeConnection connection = makeConnection.makeConnection();
+        System.out.println("STARTING UP!!!");
+        File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+        File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+        try {
+            connection.deleteAllTables();
+            System.out.println("1.");
+            connection.createTables();
+            System.out.println("2.");
+            connection.populateTable("node", nodes);
+            connection.populateTable("hasEdge", edges);
+        } catch (Exception e) {
+            // e.printStackTrace();
+            System.out.println("Nothing to delete");
+        }
+    }
+
     /**
      * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
      * Namely, adds FloorMap PNG and fills dropdowns with DB data
@@ -221,11 +240,14 @@ public class PathFinder {
         imageView.setImage(image);
 
 
-        //DB connection todo set up w/ new fcn DB is making
+        //todo, temp db connect
+        TEMPORARYCreateDB();
+
+        //DB connection todo set up w/ new fcn DB is making?
         makeConnection connection = new makeConnection();
 
         //get All nodes
-        ArrayList<Node> nodeArrayList = connection.getAllNodes();
+        ArrayList<Node> nodeArrayList = connection.getAllNodes(); //todo error here when DB is empty, is this a check for us or DB? getAllNodes() might need to validate the existence of a node first
 
         //add to Observable List
         System.out.println("Begin Adding to Dropdown List...");

@@ -98,7 +98,7 @@ public class PathFinder {
         startNodeID = nodeIDArrayList.get(startLocationListSelectedIndex);
         System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + startNodeID);
 
-        // findPath button validation
+        // findPath button validation todo, validation check for not having same start and end location
         if (startLocationList.getSelectionModel().isEmpty() ||
                 endLocationList.getSelectionModel().isEmpty()) {
             findPathButton.setDisable(true);
@@ -121,7 +121,7 @@ public class PathFinder {
         endNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
         System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + endNodeID);
 
-        // findPath button validation
+        // findPath button validation todo, validation check for not having same start and end location
         if (startLocationList.getSelectionModel().isEmpty() ||
                 endLocationList.getSelectionModel().isEmpty()) {
             findPathButton.setDisable(true);
@@ -245,8 +245,8 @@ public class PathFinder {
         Image image = new Image("edu/wpi/TeamE/FirstFloorMap.png");
         imageView.setImage(image);
 
-        //todo, temp db connect
-        TEMPORARYCreateDB();
+//        //todo, temp db connect
+//        TEMPORARYCreateDB();
 
         //DB connection todo set up w/ new fcn DB is making?
         makeConnection connection = new makeConnection();

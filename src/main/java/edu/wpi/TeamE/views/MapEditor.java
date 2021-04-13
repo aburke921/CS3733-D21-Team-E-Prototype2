@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import edu.wpi.TeamE.App;
@@ -25,6 +26,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 import java.io.IOException;
+import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,6 +45,20 @@ public class MapEditor {
     @FXML private JFXTextField shortNameInput;
 
 
+    @FXML
+    void initialize() {
+        assert treeTable != null : "fx:id=\"treeTable\" was not injected: check your FXML file 'MapEditor.fxml'.";
+        assert xCordInput != null : "fx:id=\"xCordInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
+        assert longNameInput != null : "fx:id=\"longNameInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
+        assert yCordInput != null : "fx:id=\"yCordInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
+        assert idInput != null : "fx:id=\"idInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
+        assert shortNameInput != null : "fx:id=\"shortNameInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
+        assert floorInput != null : "fx:id=\"floorInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
+        assert typeInput != null : "fx:id=\"typeInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
+        assert buildingInput != null : "fx:id=\"buildingInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
+        //assert backButton != null : "fx:id=\"backButton\" was not injected: check your FXML file 'MapEditor.fxml'.";
+        prepareNodes(treeTable);
+    }
     /**
      * brings user to the map editor navigation page
      * @param e
@@ -128,8 +144,8 @@ public class MapEditor {
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
             table.getColumns().add(column8);
         }
-        if(table.getRoot().getChildren().isEmpty() == false) {
-            table.getRoot().getChildren().remove(0, array.size());
+        if(table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
+            table.getRoot().getChildren().remove(0, array.size()-1);
         }
             for (int i = 0; i < array.size(); i++) {
                 edu.wpi.TeamE.algorithms.pathfinding.Node s = array.get(i);
@@ -148,6 +164,15 @@ public class MapEditor {
         ArrayList<Node> array = connection.getAllNodes();
         editNode(array, treeTable);
     }
+
+    UnaryOperator<TextFormatter.Change> integerFilter = change -> {
+        String newText = change.getControlNewText();
+        if (newText.matches("-?([1-9][0-9]*)?")) {
+            return change;
+        }
+        return null;
+    };
+
     /**
      * looks at each field that the user could input into, whichever ones are not empty
      * the information is extracted and the node that the user selected is edited using
@@ -166,32 +191,37 @@ public class MapEditor {
             String shortName = null;
             String type = null;
             String building = null;
-            if(floorInput.getText() != null) {
+            if (!floorInput.getText().equals("")) {
                 floor = floorInput.getText();
             }
-            if(longNameInput.getText() != null) {
+            if (!longNameInput.getText().equals("")) {
                 longName = longNameInput.getText();
             }
-            if(shortNameInput.getText() != null) {
-               shortName = shortNameInput.getText();
+            if (!shortNameInput.getText().equals("")) {
+                shortName = shortNameInput.getText();
             }
-            if(typeInput.getText() != null) {
+            if (!typeInput.getText().equals("")) {
                 type = typeInput.getText();
             }
-            if(buildingInput.getText() != null) {
+            if (!buildingInput.getText().equals("")) {
                 building = buildingInput.getText();
             }
-            if(xCordInput.getText() != null) {
-                 xVal = Integer.parseInt(xCordInput.getText());
+            if (!xCordInput.getText().equals("")) {
+                System.out.println(xCordInput.getText());
+                System.out.println("inside xcord");
+                xVal = Integer.parseInt(xCordInput.getText());
+                xVal = Integer.valueOf(xVal);
             }
-            if(yCordInput.getText() != null) {
+            if (!yCordInput.getText().equals("")) {
                 yVal = Integer.parseInt(yCordInput.getText());
+                yVal = Integer.valueOf(yVal);
             }
-            makeConnection connection = makeConnection.makeConnection();
-            connection.modifyNode(nodeID, xVal, yVal, floor, building, type, longName, shortName);
+                makeConnection connection = makeConnection.makeConnection();
+                connection.modifyNode(nodeID, xVal, yVal, floor, building, type, longName, shortName);
 
-                }
             }
+        }
+
 
 
 
@@ -201,7 +231,7 @@ public class MapEditor {
      * @return
      */
     public int addNode() {
-        int i = 0;
+        int i = -1;
         makeConnection connection = makeConnection.makeConnection();
         //ArrayList<Node> array = connection.getAllNodes();
         int xVal = Integer.parseInt(xCordInput.getText());
@@ -231,20 +261,24 @@ public class MapEditor {
      * @param table
      */
 
-    public void deleteNode(TreeTableView<Node> table) {
+    public int deleteNode(TreeTableView<Node> table) {
+        int s = -1;
         TreeItem<Node> node = table.getSelectionModel().getSelectedItem();
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<Node> array = connection.getAllNodes();
         if (table.getSelectionModel().getSelectedItem() != null) {
             System.out.println(table.getSelectionModel().getSelectedItem().getValue().get("id"));
             for(int i = 0; i < array.size(); i++) {
-                if(array.get(i).get("id") == table.getSelectionModel().getSelectedItem().getValue().get("id")) {
-                    connection.deleteNode(array.get(i).get("id"));
+
+                if(array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
+                    s = connection.deleteNode(array.get(i).get("id"));
+                    System.out.println(s);
 
                 }
 
             }
         }
+        return s;
     }
 
     /**

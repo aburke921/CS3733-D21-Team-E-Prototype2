@@ -26,25 +26,21 @@ public class App extends Application {
 		makeConnection connection = makeConnection.makeConnection();
 		System.out.println("Connected to the DB");
 
+		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+
 		try {
 			connection.deleteAllTables();
 			connection.createTables();
-			File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-			File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
 			connection.populateTable("node", nodes);
 			connection.populateTable("hasEdge", edges);
 			System.out.println("Tables were reset");
 		} catch (Exception e) {
-
 			connection.createTables();
-			File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-			File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
 			connection.populateTable("node", nodes);
 			connection.populateTable("hasEdge", edges);
 			System.out.println("Tables were created and populated");
 		}
-
-
 	}
 
 

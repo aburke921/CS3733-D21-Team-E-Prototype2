@@ -3,6 +3,7 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class PathFinder {
 
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
-     * @param event calling event info
+     * @param event calling event info.
      */
     @FXML
     private void toDefault(ActionEvent event) {
@@ -84,8 +85,8 @@ public class PathFinder {
     }
 
     /**
-     * Gets selected item from {@link #startLocationList} dropdown.
-     * @param event calling event info
+     * Gets the currently selected item from {@link #startLocationList} dropdown.
+     * @param event calling event info.
      */
     @FXML
     void selectStartNode(ActionEvent event) {
@@ -94,6 +95,7 @@ public class PathFinder {
         startNodeID = resolveID(dropdownSelected);
         System.out.println("node ID resolved to: " + startNodeID);
 
+        // findPath button validation
         if (startLocationList.getSelectionModel().isEmpty() ||
                 endLocationList.getSelectionModel().isEmpty()) {
             findPathButton.setDisable(true);
@@ -103,8 +105,8 @@ public class PathFinder {
     }
 
     /**
-     * Gets selected item from {@link #endLocationList} dropdown.
-     * @param event calling event info
+     * Gets the currently selected item from {@link #endLocationList} dropdown.
+     * @param event calling event info.
      */
     @FXML
     void selectEndNode(ActionEvent event) {
@@ -113,6 +115,7 @@ public class PathFinder {
         endNodeID = resolveID(dropdownSelected);
         System.out.println("node ID resolved to: " + endNodeID);
 
+        // findPath button validation
         if (startLocationList.getSelectionModel().isEmpty() ||
                 endLocationList.getSelectionModel().isEmpty()) {
             findPathButton.setDisable(true);
@@ -124,7 +127,7 @@ public class PathFinder {
     /**
      * todo Uses {@link Searcher}'s search() function to find the best path,
      * given the two current start and end positions ({@link #startNodeID} and {@link #endNodeID}).
-     * @param event calling function's (Find Path Button) event info
+     * @param event calling function's (Find Path Button) event info.
      */
     @FXML
     public void findPath(ActionEvent event) {
@@ -134,7 +137,6 @@ public class PathFinder {
         //get selected nodes
         String startNode = startNodeID;
         String endNode = endNodeID;
-        assert startNodeID != null && endNodeID != null; //todo, actual button validation
 
         //Execute A* Search
         System.out.print("A* Search with startNodeID of " + startNode + ", and endNodeID of " + endNodeID + "\n");
@@ -145,8 +147,8 @@ public class PathFinder {
     }
 
     /**
-     * Draws map path given....
-     * todo... would be called by findPath()?
+     * Draws map path given a complete {@link Path}.
+     * @param path the path to be drawn on the map.
      */
     public void drawMap(Path path) {
 
@@ -208,9 +210,27 @@ public class PathFinder {
         pane.getChildren().add(g);
     }
 
+    public void TEMPORARYCreateDB() { //todo
+        makeConnection connection = makeConnection.makeConnection();
+        System.out.println("STARTING UP!!!");
+        try {
+            connection.deleteAllTables();
+            System.out.println("1.");
+            connection.createTables();
+            System.out.println("2.");
+            File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+            File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+            connection.populateTable("node", nodes);
+            connection.populateTable("hasEdge", edges);
+        } catch (Exception e) {
+            // e.printStackTrace();
+            System.out.println("Nothing to delete");
+        }
+    }
+
     /**
      * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
-     * Namely, adds FloorMap PNG and fills dropdowns with DB data
+     * Namely, adds FloorMap PNG and fills dropdowns with DB data.
      */
     @FXML
     void initialize() {
@@ -221,11 +241,14 @@ public class PathFinder {
         imageView.setImage(image);
 
 
-        //DB connection todo set up w/ new fcn DB is making
+        //todo, temp db connect
+        TEMPORARYCreateDB();
+
+        //DB connection todo set up w/ new fcn DB is making?
         makeConnection connection = new makeConnection();
 
         //get All nodes
-        ArrayList<Node> nodeArrayList = connection.getAllNodes();
+        ArrayList<Node> nodeArrayList = connection.getAllNodes(); //todo error here when DB is empty, is this a check for us or DB? getAllNodes() might need to validate the existence of a node first
 
         //add to Observable List
         System.out.println("Begin Adding to Dropdown List...");
@@ -259,11 +282,11 @@ public class PathFinder {
     }
 
     /**
-     * Gets a node's ID from it's longName
+     * Gets a node's ID from it's longName.
      *
      * Implementation: Searches through "list" until longName is found,
      *  Then gets "listOfId"'s value at this index. Both lists must be initialised
-     *  for proper functioning
+     *  for proper functioning.
      *
      * @param longName "longName" of node to be resolved
      * @return Node ID

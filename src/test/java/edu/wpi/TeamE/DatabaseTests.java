@@ -72,7 +72,22 @@ public class DatabaseTests {
     @Test
     @DisplayName("testGetNodeLite")
     public void testGetNodeLite(){
+        try {
+            connection.deleteAllTables();
+            connection.createTables();
+            System.out.println("Tables were reset");
+        } catch (Exception e) {
+            connection.createTables();
+            System.out.println("Tables were created");
+        }
 
+        connection.addNode("test233", 22, 33, "floor", null, null, null, null);
+
+        Node testNode1 = new Node("test233", 22, 33, "floor", null, null, null, null);
+
+        Node testNode2 = connection.getNodeLite("test233");
+
+        assertTrue(testNode1.equals(testNode2));
     }
 
     @Test

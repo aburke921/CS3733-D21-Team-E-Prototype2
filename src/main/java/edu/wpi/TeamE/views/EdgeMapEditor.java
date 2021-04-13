@@ -108,17 +108,25 @@ public class EdgeMapEditor {
         }
     }
 
-    public void editEdge(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Edge> array, TreeTableView<String> table) {
-        TreeItem<String> edge = table.getSelectionModel().getSelectedItem();
+    public void editEdge(TreeTableView<Edge> table) {
         if (table.getSelectionModel().getSelectedItem() != null) {
-            //function that takes in string (?) which will call to edge that wants to be edited and
-            //inputted info from user, returns void
-            /*for(int i = 0; i < array.size(); i++) {
-                if(edge.equals(array.get(i).name)) {
-
-                }
-            }*/
+            String edgeID = table.getSelectionModel().getSelectedItem().getValue().getId();
+            String startID = null;
+            String endID = null;
+            if(!startNodeIDInput.getText().isEmpty()) {
+                startID = startNodeIDInput.getText();
+            }
+            if(!endNodeIDInput.getText().isEmpty()) {
+                endID = endNodeIDInput.getText();
+            }
+            makeConnection connection = makeConnection.makeConnection();
+            connection.modifyEdge(edgeID, startID, endID);
+            connection.deleteEdge(table.getSelectionModel().getSelectedItem().getValue().getStartNodeId(), table.getSelectionModel().getSelectedItem().getValue().getEndNodeId());
         }
+    }
+
+    public void editEdgeButton(ActionEvent e) {
+        editEdge(treeTable);
     }
 
     public void addEdge(TreeTableView<Edge> table) {

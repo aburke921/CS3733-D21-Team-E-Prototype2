@@ -182,6 +182,26 @@ public class DatabaseTests {
     @DisplayName("testDeleteEdge")
     public void testDeleteEdge(){
 
+        try {
+            connection.deleteAllTables();
+            connection.createTables();
+            System.out.println("Tables were reset");
+        } catch (Exception e) {
+            connection.createTables();
+            System.out.println("Tables were created");
+        }
+
+        // set result to 0
+        int testResult = 0;
+
+        connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
+        connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
+
+        connection.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
+
+        testResult = connection.deleteEdge("testEdge1", "testEdge2");
+
+        assertTrue(testResult == 1);
     }
 
     @Test

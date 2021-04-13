@@ -158,7 +158,24 @@ public class DatabaseTests {
     @Test
     @DisplayName("testModifyNode")
     public void testModifyNode(){
+        try {
+            connection.deleteAllTables();
+            connection.createTables();
+            System.out.println("Tables were reset");
+        } catch (Exception e) {
+            connection.createTables();
+            System.out.println("Tables were created");
+        }
 
+        // set result to 0
+        int testResult = 0;
+
+        connection.addNode("originalNode", 121, 122, "h1", "String", "String", "String", "String");
+
+        testResult = connection.modifyNode("originalNode", 100, null, null, null, null, null, null);
+
+
+        assertTrue(testResult == 1);
     }
 
     @Test

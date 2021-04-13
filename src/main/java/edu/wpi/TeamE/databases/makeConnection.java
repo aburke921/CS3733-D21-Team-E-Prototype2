@@ -2,6 +2,7 @@ package edu.wpi.TeamE.databases;
 
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import javafx.util.Pair;
 
 import java.io.BufferedReader;
@@ -14,7 +15,51 @@ import java.util.Properties;
 
 public class makeConnection {
 
-	Connection connection;
+
+	// static variable singleInstance of type SingleConnection
+	public static makeConnection singleInstance = null;
+
+	public Connection connection;
+
+	// private constructor restricted to this class itself
+	public makeConnection()
+	{
+		// Initialize DB
+		System.out.println("Starting connection to Apache Derby\n");
+		try {
+
+			//Makes it so a username and password (hardcoded) is needed to access the database data
+			Properties props = new Properties();
+			props.put("user", "admin");
+			props.put("password", "admin");
+
+			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+
+			try {
+				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
+				// this.connection.setAutoCommit(false);
+			} catch (SQLException e) {
+				// e.printStackTrace();
+				System.err.println("error with the DriverManager");
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			System.err.println("error with the EmbeddedDriver class.forName thing");
+		}
+	}
+
+	// static method to create instance of Singleton class
+	public static makeConnection makeConnection()
+	{
+		// To ensure only one instance is created
+		if (singleInstance == null)
+		{
+			singleInstance = new makeConnection();
+		}
+		return singleInstance;
+	}
+
+//	Connection connection;
 
 	//Node Node = new Node();
 
@@ -44,35 +89,6 @@ public class makeConnection {
 
     */
 
-
-	/**
-	 * Constructor makes the database connection
-	 */
-	public makeConnection() {
-		// Initialize DB
-		System.out.println("Starting connection to Apache Derby\n");
-		try {
-
-			//Makes it so a username and password (hardcoded) is needed to access the database data
-			Properties props = new Properties();
-			props.put("user", "admin");
-			props.put("password", "admin");
-
-			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-
-			try {
-				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
-				// this.connection.setAutoCommit(false);
-			} catch (SQLException e) {
-				// e.printStackTrace();
-				System.err.println("error with the DriverManager");
-			}
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			System.err.println("error with the EmbeddedDriver class.forName thing");
-		}
-
-	}
 
 	/**
 	 * Creates node and hasEdge tables
@@ -320,20 +336,28 @@ public class makeConnection {
 		String getNodeInfoS = "select * from node where nodeID = ?";
 		try (PreparedStatement getNodeInfoPS = connection.prepareStatement(getNodeInfoS)) {
 			getNodeInfoPS.setString(1, nodeID);
+
 			ResultSet getNodeInfoRS = getNodeInfoPS.executeQuery();
-			int xCoord = getNodeInfoRS.getInt("xCoord");
-			int yCoord = getNodeInfoRS.getInt("yCoord");
-			String floor = getNodeInfoRS.getString("floor");
-			String building = getNodeInfoRS.getString("building");
-			String nodeType = getNodeInfoRS.getString("nodeType");
-			String longName = getNodeInfoRS.getString("longName");
-			String shortName = getNodeInfoRS.getString("shortName");
+
+			while(getNodeInfoRS.next()) {
+				int xCoord = getNodeInfoRS.getInt("xCoord");
+				int yCoord = getNodeInfoRS.getInt("yCoord");
+				String floor = getNodeInfoRS.getString("floor");
+				String building = getNodeInfoRS.getString("building");
+				String nodeType = getNodeInfoRS.getString("nodeType");
+				String longName = getNodeInfoRS.getString("longName");
+				String shortName = getNodeInfoRS.getString("shortName");
+				return new Node(nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName);
+			}
+
 			getNodeInfoRS.close();
-			return new Node(nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName);
+			getNodeInfoPS.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		return null;
+			System.err.println("cannot print out nodeInfo");
+			return null;
+    }
 	}
 
 	/**
@@ -345,18 +369,25 @@ public class makeConnection {
 	public Node getNodeLite(String nodeID) {
 		String getNodeLiteS = "select xCoord, yCoord, floor, nodeType from node where nodeID = ?";
 		try (PreparedStatement getNodeLitePS = connection.prepareStatement(getNodeLiteS)) {
-			getNodeLitePS.setString(1, nodeID);
+      getNodeLitePS.setString(1, nodeID);
 			ResultSet getNodeLiteRS = getNodeLitePS.executeQuery();
-			int xCoord = getNodeLiteRS.getInt("xCoord");
-			int yCoord = getNodeLiteRS.getInt("yCoord");
-			String floor = getNodeLiteRS.getString("floor");
-			String nodeType = getNodeLiteRS.getString("nodeType");
+
+			while(getNodeLiteRS.next()) {
+				int xCoord = getNodeLiteRS.getInt("xCoord");
+				int yCoord = getNodeLiteRS.getInt("yCoord");
+				String floor = getNodeLiteRS.getString("floor");
+				String nodeType = getNodeLiteRS.getString("nodeType");
+				return new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
+			}
+
 			getNodeLiteRS.close();
-			return new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
+			getNodeLitePS.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.err.println("Could not get nodeLite Info");
+      return null;
 		}
-		return null;
 	}
 
 	/**
@@ -365,13 +396,14 @@ public class makeConnection {
 	 * @param nodeID
 	 * @return Pair<Integer, String> map with edge information
 	 */
+
 	public ArrayList<Pair<Float, String>> getEdgeInfo(String nodeID) {
 
-		ArrayList<Pair<Float, String>> pair = null;
+		ArrayList<Pair<Float, String>> pair = new ArrayList<Pair<Float, String>>();
 
 		try {
 			Statement stmt = this.connection.createStatement();
-			String query = "select startNode from hasEdge where endNode = " + nodeID;
+			String query = "select * from hasEdge where endNode = '" + nodeID + "'";
 			ResultSet rset = stmt.executeQuery(query);
 
 			while (rset.next()) {
@@ -390,7 +422,7 @@ public class makeConnection {
 
 		try {
 			Statement stmt = this.connection.createStatement();
-			String query = "select endNode from hasEdge where startNode = " + nodeID;
+			String query = "select * from hasEdge where startNode = '" + nodeID + "'";
 			ResultSet rset = stmt.executeQuery(query);
 
 			while (rset.next()) {
@@ -403,7 +435,7 @@ public class makeConnection {
 			rset.close();
 			stmt.close();
 		} catch (SQLException e) {
-			System.err.println("startNode Error");
+			System.err.println("endNode Error");
 		}
 
 		return pair;
@@ -469,11 +501,40 @@ public class makeConnection {
 	}
 
 	/**
+	 * gets all edges and each edge's attribute
+	 * @return ArrayList<Edge>
+	 */
+	public ArrayList<Edge> getAllEdges() {
+		ArrayList<Edge> edgesArray = new ArrayList<>();
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from hasEdge";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String edgeID = rset.getString("edgeID");
+				String startNode = rset.getString("startNode");
+				String endNode = rset.getString("endNode");
+
+				edgesArray.add(new Edge(edgeID, startNode, endNode));
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllEdges Error");
+		}
+		return edgesArray;
+	}
+
+
+
+	/**
 	 * adds a node with said data to the database
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
-
 	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
 		String addNodeS = "insert into node values (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
@@ -494,8 +555,8 @@ public class makeConnection {
 			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return 0;
 		}
-		return 0;
 	}
 
 	/**
@@ -504,26 +565,25 @@ public class makeConnection {
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
-
 	public int addEdge(String edgeID, String startNode, String endNode) {
-		String addEdgeS = "insert into hasEdge values (?, ?, ?)";
+		String addEdgeS = "insert into hasEdge (edgeID, startNode, endNode) values (?, ?, ?)";
 		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
 			addEdgePS.setString(1, edgeID);
 			addEdgePS.setString(2, startNode);
 			addEdgePS.setString(3, endNode);
-			// TODO: make a coordinate look-up so we can calculate and input the length of the edge
-			// addEdgePS.setFloat(4, (Math.sqrt(Math.pow(startNode.getX() - endNode.getX(), 2) + Math.pow(startNode.getY() - endNode.getY(), 2))));
 			int addEdgeRS = addEdgePS.executeUpdate();
 			if (addEdgeRS == 0) {
 				System.err.println("addEdge Result = 0, probably bad cuz no rows was affected");
 			} else if (addEdgeRS != 1) {
 				System.err.println("addEdge Result =" + addEdgeRS + ", probably bad cuz " + addEdgeRS + " rows was affected");
 			}
+			addLength(startNode, endNode);
 			return addEdgeRS; // addEdgeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		return 0;
+			System.err.println("addEdge() error in the try/catch");
+			return 0;
+    }
 	}
 
 
@@ -539,9 +599,87 @@ public class makeConnection {
 	 * @param longName
 	 * @param shortName
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+	 *
 	 */
-	public int modifyNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-		return 0;
+	public int modifyNode(String nodeID, Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+
+		//String finalQuery = "update node set ";
+		String xCoordUpdate = "";
+		String yCoordUpdate = "";
+		String floorUpdate = "";
+		String buildingUpdate = "";
+		String nodeTypeUpdate = "";
+		String longNameUpdate = "";
+		String shortNameUpdate = "";
+
+		boolean added = false;
+
+		String query = "update node set ";
+
+		if (xCoord != null) {
+			query = query + " xCoord = " + xCoord;
+			//xCoordUpdate = "xCoord = " + xCoord;
+			added = true;
+		}
+
+		if(yCoord != null) {
+			if(added == true) {
+				query = query + ", ";
+			}
+			query = query + " yCoord = " + yCoord;
+			added = true;
+		}
+
+		if(floor != null) {
+			if(added == true) {
+				query = query + ", ";
+			}
+			query = query + " floor = '" + floor + "'";
+			added = true;
+		}
+
+		if(building != null) {
+			if(added == true) {
+				query = query + ", ";
+			}
+			query = query + " building = '" + building + "',";
+		}
+
+		if(nodeType != null) {
+			if(added == true) {
+				query = query + ", ";
+			}
+			query = query + " nodeType = '" + nodeType + "',";
+		}
+
+		if(longName != null) {
+			if(added == true) {
+				query = query + ", ";
+			}
+			query = query + " longName = '" + longName + "',";
+		}
+
+		if(shortName != null) {
+			if(added == true) {
+				query = query + ", ";
+			}
+			query = query + " shortName = '" + shortName + "'";
+		}
+
+		query = query + " where nodeID = '" + nodeID + "'";
+
+		try {
+			Statement stmt = this.connection.createStatement();
+
+			stmt.executeUpdate(query);
+			stmt.close();
+
+			return 1;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();System.err.println("Error in updating node");
+			return 0;
+		}
 	}
 
 
@@ -554,8 +692,93 @@ public class makeConnection {
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 * need to check that both startNode and endNode already exist in node table
 	 */
+
+	////////FIGURE OUT AND TEST////////
 	public int modifyEdge(String edgeID, String startNode, String endNode) {
-		return 0;
+
+		// !!!!!! user is required to type in edgeID !!!!!! //
+
+		// user wants to modify startNode ///
+
+		// select * from node where nodeID = givenStartNode
+		String checkStartNode = "select nodeID from node where nodeID = '" + startNode + "'";
+
+		String storedEndNode = "";
+		String storedStartNode = "";
+
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			stmt.executeQuery(checkStartNode);
+		}
+		catch(SQLException e) {
+			System.err.println("given start node does not exist");
+			//e.printStackTrace();
+			return 0;
+		}
+
+		// first get the endNode where edgeID = givenEdgeID
+		String getEndNodeQuery = "select endNode from hasEdge where edgeID = " + edgeID;
+		String storedStartNodeQuery = "select startNode from hasEdge where edgeID = " + edgeID;
+
+		try{
+			Statement stmt = this.connection.createStatement();
+
+			ResultSet rset = stmt.executeQuery(getEndNodeQuery);
+
+
+			while(rset.next()) {
+				storedEndNode = rset.getString("endNode");
+			}
+			rset.close();
+
+			ResultSet rset2 = stmt.executeQuery(storedStartNodeQuery);
+
+			while(rset2.next()) {
+				storedStartNode = rset2.getString("startNode");
+
+			}
+
+			rset2.close();
+			stmt.close();
+		}
+		catch(SQLException e) {
+			System.err.println("given edgeID does not exist");
+			e.printStackTrace();
+			return 0;
+		}
+
+		// create newEdgeID = "givenStartNode" + "_" + "endNode";
+
+		String newEdgeID = startNode + "_" + storedEndNode;
+
+		String checkNewEdgeIDQuery = "select edgeID from hasEdge where edgeID = " + newEdgeID;
+		try {
+			// checking if the newly created edge is already an edge
+			// select * from hasEdge where edgeID = newEdgeID
+
+			Statement stmt = this.connection.createStatement();
+			stmt.executeQuery(checkNewEdgeIDQuery);
+
+			stmt.close();
+
+			System.err.println("edge with given input already exists");
+			return 0;
+		}
+		catch(SQLException e) {
+			//e.printStackTrace();
+
+			// deleteEdge(givenEdgeID);
+			// deletes original edge
+
+			deleteEdge(storedStartNode, storedEndNode);
+
+			// addEdge(newEdgeID, givenStartNode, endNode)
+			addEdge(newEdgeID, startNode, storedEndNode);
+			return 1;
+		}
+
+
 	}
 
 
@@ -563,55 +786,64 @@ public class makeConnection {
 	 * Deletes edge(s) between the given two nodes, they can be in any order
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
+	 * if count == 1 || count == 2, edges have been deleted
+	 * else no edges exist with inputted nodes
 	 */
 	public int deleteEdge(String nodeID1, String nodeID2) {
-		String deleteEdgeS = "delete from hasEdge where startNode = ? and endNode = ?; delete from hasEdge where endNode = ? and startNode = ?";
+
+		String deleteEdgeS1 = "delete from hasEdge where startNode = ? and endNode = ?";
+		String deleteEdgeS2 = "delete from hasEdge where endNode = ? and startNode = ?";
+
+		int count = 0;
 		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
-		try (PreparedStatement deleteEdgePS = connection.prepareStatement(deleteEdgeS)) {
-			deleteEdgePS.setString(1, nodeID1);
-			deleteEdgePS.setString(2, nodeID2);
-			deleteEdgePS.setString(3, nodeID1);
-			deleteEdgePS.setString(4, nodeID2);
-			int deleteEdgeRS = deleteEdgePS.executeUpdate();
-			if (deleteEdgeRS == 0) {
-				System.err.println("deleteEdge Result = 0, probably bad cuz no rows was affected");
-			} else if (deleteEdgeRS == 2) {
-				System.out.println("deleteEdge Result =" + deleteEdgeRS + ", it's weird cuz " + deleteEdgeRS + " rows was affected");
-			} else if (deleteEdgeRS != 1) {
-				System.err.println("deleteEdge Result =" + deleteEdgeRS + ", probably bad cuz " + deleteEdgeRS + " rows was affected");
+		try (PreparedStatement deleteEdgePS1 = connection.prepareStatement(deleteEdgeS1)) {
+			deleteEdgePS1.setString(1, nodeID1);
+			deleteEdgePS1.setString(2, nodeID2);
+
+			int deleteEdgeRS1 = deleteEdgePS1.executeUpdate();
+
+			if (deleteEdgeRS1 == 0) {
+				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
+			} else if (deleteEdgeRS1 == 2) {
+				System.out.println("deleteEdge Result =" + deleteEdgeRS1 + ", it's weird cuz " + deleteEdgeRS1 + " rows was affected");
+			} else if (deleteEdgeRS1 != 1) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS1 + ", just bad because this should never occur");
 			}
-			return deleteEdgeRS;
-			// deleteEdgeRS = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+			System.out.println("Number of rows affected: " + deleteEdgeRS1);
+			count = 1;
+			// deleteEdgeRS1 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("deleteEdge() tyr/catch error");
+			count = 0;
 		}
-		return 0;
-	}
 
-	/**
-	 * any edge containing the given nodeID (startNode or endNode) is deleted
-	 *
-	 * @param nodeID
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
-	 */
-	/*
-	public int deleteEdge(String nodeID) {
+		try (PreparedStatement deleteEdgePS2 = connection.prepareStatement(deleteEdgeS2)) {
+			deleteEdgePS2.setString(1, nodeID1);
+			deleteEdgePS2.setString(2, nodeID2);
 
-		try {
-			Statement stmt = this.connection.createStatement();
+			int deleteEdgeRS2 = deleteEdgePS2.executeUpdate();
 
-			String sqlQuery = "DELETE FROM hasEdge WHERE startNode = '" + nodeID + "' OR endNode = '" + nodeID + "'";
-
-			stmt.executeUpdate(sqlQuery);
-			stmt.close();
-
-			return 1;
+			if (deleteEdgeRS2 == 0) {
+				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
+			} else if (deleteEdgeRS2 == 2) {
+				System.out.println("deleteEdge Result =" + deleteEdgeRS2 + ", it's weird cuz " + deleteEdgeRS2 + " rows was affected");
+			} else if (deleteEdgeRS2 != 1) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS2 + ", just bad because this should never occur");
+			}
+			System.out.println("Number of rows affected: " + deleteEdgeRS2);
+			count += count;
+			// deleteEdgeRS2 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("Error");
-			return 0;
+			System.err.println("deleteEdge() tyr/catch error");
+			if (count == 0) {
+				count = 0;
+			}
+			else
+				count = 1;
 		}
+		return count;
 	}
 	*/
 
@@ -620,6 +852,7 @@ public class makeConnection {
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
+
 	public int deleteNode(String nodeID) {
 		String deleteNodeS = "delete from node where nodeID = ?";
 		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
@@ -635,39 +868,64 @@ public class makeConnection {
 			// deleteNode = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return 0;
 		}
-		return 0;
 	}
+
+
 
 	/**
 	 * gets list of nodeIDS
 	 *
 	 * @return String[] of nodeIDs
 	 */
-	public String[] getListofNodeIDS() {
-		String[] array = {};
-		return array;
+	public ArrayList<String> getListofNodeIDS() {
+		ArrayList<String> listOfNodeIDs = new ArrayList<>();
+
+		String deleteNodeS = "SELECT nodeID FROM node";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("nodeID");
+				listOfNodeIDs.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeIDs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println("getListofNodeIDS error try/catch");
+			return listOfNodeIDs;
+		}
+
 	}
 
 
 	public static void main(String[] args) {
-
-		makeConnection connection = new makeConnection();
-
-		System.out.println("made it here!");
-		connection.deleteAllTables();
-		connection.createTables();
+		System.out.println("STARTING UP!!!");
 		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
 		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+
+		makeConnection connection = makeConnection.makeConnection();
+		connection.deleteAllTables();
+		connection.createTables();
 		connection.populateTable("node", nodes);
 		connection.populateTable("hasEdge", edges);
 
-		// getsAllNodes (returns ArrayList<Node>)
-		connection.getAllNodes();
+		connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
+		connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
+		connection.addNode("test3", 3, 3,"test", "test", "test", "test", "test");
+		connection.addNode("test4", 4, 4,"test", "test", "test", "test", "test");
 
-		//connection.populateTable("node", "L1Nodes.csv");
-		//connection.populateTable("hasEdge", "L1Edges.csv");
-		//System.out.println(connection.deleteEdge("CCONF002L1"));
+		connection.addEdge("test1_test2", "test1", "test2");
+		connection.addEdge("test2_test3", "test2", "test3");
+		connection.addEdge("test1_test3", "test1", "test3");
+
+		int i = connection.modifyEdge("test7_test2", "test4", null);
+		System.out.println(i);
 	}
 }
 

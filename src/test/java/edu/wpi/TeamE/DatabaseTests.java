@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 public class DatabaseTests {
 
-	make new connection
-
-	edit the db
-
-	@Test
-	assertEqual xxx, xxx
+//	make new connection
+//
+//	edit the db
+//
+//	@Test
+//	assertEqual xxx, xxx
 }

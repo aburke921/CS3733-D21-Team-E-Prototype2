@@ -2,6 +2,8 @@ package edu.wpi.TeamE.databases;
 
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.util.Pair;
 import java.io.*;
 import java.io.BufferedReader;
@@ -454,7 +456,7 @@ public class makeConnection {
 
 	/**
 	 * gets all Nodes that have the given FLOOR value
-	 * @param floorName the value to check for in FLOOR
+	 * @param floorName the value to check for in FLOOR column
 	 * @return ArrayList of Node objects
 	 */
 	public ArrayList<Node> getAllNodesByFloor(String floorName) {
@@ -485,6 +487,34 @@ public class makeConnection {
 			System.err.println("getAllNodes Error : " + e);
 		}
 		return nodesArray;
+	}
+
+	/**
+	 * Gets all node long names for a specified FLOOR column value.
+	 * @param floorName the value to check for in FLOOR column
+	 * @return ObservableList of node long names.
+	 */
+	public ObservableList<String> getAllNodeLongNamesByFloor(String floorName) {
+		ObservableList<String> listOfNodeIDs =  FXCollections.observableArrayList();
+
+		String deleteNodeS = "SELECT LONGNAME FROM node WHERE '" + floorName + "' = FLOOR";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("LONGNAME");
+				listOfNodeIDs.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeIDs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println("getListofNodeIDS error try/catch");
+			return listOfNodeIDs;
+		}
 	}
 
 	/**

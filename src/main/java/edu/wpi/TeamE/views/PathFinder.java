@@ -85,7 +85,7 @@ public class PathFinder {
     }
 
     /**
-     * Gets selected item from {@link #startLocationList} dropdown.
+     * Gets the currently selected item from {@link #startLocationList} dropdown.
      * @param event calling event info.
      */
     @FXML
@@ -105,7 +105,7 @@ public class PathFinder {
     }
 
     /**
-     * Gets selected item from {@link #endLocationList} dropdown.
+     * Gets the currently selected item from {@link #endLocationList} dropdown.
      * @param event calling event info.
      */
     @FXML
@@ -137,7 +137,6 @@ public class PathFinder {
         //get selected nodes
         String startNode = startNodeID;
         String endNode = endNodeID;
-        assert startNodeID != null && endNodeID != null; //todo, actual button validation
 
         //Execute A* Search
         System.out.print("A* Search with startNodeID of " + startNode + ", and endNodeID of " + endNodeID + "\n");
@@ -148,8 +147,8 @@ public class PathFinder {
     }
 
     /**
-     * Draws map path given....
-     * todo... would be called by findPath()?
+     * Draws map path given a complete {@link Path}.
+     * @param path the path to be drawn on the map.
      */
     public void drawMap(Path path) {
 
@@ -214,13 +213,13 @@ public class PathFinder {
     public void TEMPORARYCreateDB() { //todo
         makeConnection connection = makeConnection.makeConnection();
         System.out.println("STARTING UP!!!");
-        File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-        File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
         try {
             connection.deleteAllTables();
             System.out.println("1.");
             connection.createTables();
             System.out.println("2.");
+            File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+            File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
             connection.populateTable("node", nodes);
             connection.populateTable("hasEdge", edges);
         } catch (Exception e) {

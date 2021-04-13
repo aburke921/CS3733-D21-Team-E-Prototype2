@@ -1,5 +1,6 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,23 +14,26 @@ import edu.wpi.TeamE.databases.makeConnection;
 public abstract class Searcher {
 
     //this is a local cache of nodes which have been worked with in the past
-    private final HashMap<String, Node> graph;
+    private HashMap<String, Node> graph;
 
-    private final makeConnection con;
+    private makeConnection con;
 
     /**
      * Super constructor, initializes cache
      */
     public Searcher(){
         graph = new HashMap<>();
-        con = new makeConnection();
+        con = makeConnection.makeConnection();
+
         ArrayList<Edge> edges = con.getAllEdges();
         ArrayList<Node> nodes = con.getAllNodes();
 
         for(Node node : nodes){
             graph.put(node.get("id"), node);
         }
+
         for(Edge edge : edges){
+            //todo Seamus proposed this change in earlier merge, might need to double check validity
             Node n0 = graph.get(edge.getNode(0));
             Node n1 = graph.get(edge.getNode(1));
 

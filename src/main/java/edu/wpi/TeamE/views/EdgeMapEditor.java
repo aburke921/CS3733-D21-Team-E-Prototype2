@@ -97,9 +97,9 @@ public class EdgeMapEditor {
 //                    new ReadOnlyDoubleWrapper(p.getValue().getValue().getLength())
 //            table.getColumns().add(column4);
         }
-        if(table.getRoot().getChildren().isEmpty() == false) {
-            table.getRoot().getChildren().remove(0, array.size());
-        }
+//        if(table.getRoot().getChildren().isEmpty() == false) {
+//            table.getRoot().getChildren().remove(0, array.size());
+//        }
         for (int i = 0; i < array.size(); i++) {
             edu.wpi.TeamE.algorithms.pathfinding.Edge s = array.get(i);
             //int n = array.get(i).getX();
@@ -126,6 +126,7 @@ public class EdgeMapEditor {
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<Edge> array = connection.getAllEdges();
         connection.addEdge(idInput.getText(), startNodeIDInput.getText(), endNodeIDInput.getText());
+        System.out.println("This happened");
     }
 
     public void addEdgeButton(ActionEvent e) {
@@ -217,6 +218,15 @@ public class EdgeMapEditor {
             );
 
         }
+    }
+
+    @FXML
+    void initialize() {
+        assert treeTable != null : "fx:id=\"treeTable\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
+        assert startNodeIDInput != null : "fx:id=\"xCordInput\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
+        assert endNodeIDInput != null : "fx:id=\"longNameInput\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
+        assert idInput != null : "fx:id=\"idInput\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
+        prepareEdges(treeTable);
     }
 
 

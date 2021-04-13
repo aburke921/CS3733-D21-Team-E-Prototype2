@@ -462,8 +462,8 @@ public class makeConnection {
 				String edgeID = rset.getString("edgeID");
 				String startNode = rset.getString("startNode");
 				String endNode = rset.getString("endNode");
-
-				edgesArray.add(new Edge(edgeID, startNode, endNode));
+				double length = rset.getDouble("length");
+				edgesArray.add(new Edge(edgeID, startNode, endNode, length));
 			}
 
 			rset.close();

@@ -1,0 +1,46 @@
+nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName
+eEXIT00101,1748,1321,1,Tower,EXIT,75 Francis Lobby Entrance,75 Francis Exit
+eEXIT00201,2099,1357,1,Tower,EXIT,Emergency Department Entrance,Emergency Entrance
+ePARK00101,381,1725,1,Parking,PARK,Left Parking Lot Spot 001,Parking Left 001
+ePARK00201,406,1725,1,Parking,PARK,Left Parking Lot Spot 002,Parking Left 002
+ePARK00301,431,1725,1,Parking,PARK,Left Parking Lot Spot 003,Parking Left 003
+ePARK00401,456,1725,1,Parking,PARK,Left Parking Lot Spot 004,Parking Left 004
+ePARK00501,481,1725,1,Parking,PARK,Left Parking Lot Spot 005,Parking Left 005
+ePARK00601,633,1846,1,Parking,PARK,Left Parking Lot Spot 006,Parking Left 006
+ePARK00701,633,1821,1,Parking,PARK,Left Parking Lot Spot 007,Parking Left 007
+ePARK00801,633,1796,1,Parking,PARK,Left Parking Lot Spot 008,Parking Left 008
+ePARK00901,633,1771,1,Parking,PARK,Left Parking Lot Spot 009,Parking Left 009
+ePARK01001,633,1746,1,Parking,PARK,Left Parking Lot Spot 010,Parking Left 010
+ePARK01101,3120,1205,1,Parking,PARK,Right Parking Lot Spot 001,Parking Right 001
+ePARK01201,3120,1230,1,Parking,PARK,Right Parking Lot Spot 002,Parking Right 002
+ePARK01301,3120,1255,1,Parking,PARK,Right Parking Lot Spot 003,Parking Right 003
+ePARK01401,3120,1280,1,Parking,PARK,Right Parking Lot Spot 004,Parking Right 004
+ePARK01501,3292,1280,1,Parking,PARK,Right Parking Lot Spot 005,Parking Right 005
+ePARK01601,3292,1302,1,Parking,PARK,Right Parking Lot Spot 006,Parking Right 006
+ePARK01701,3292,1324,1,Parking,PARK,Right Parking Lot Spot 007,Parking Right 007
+ePARK01801,3277,1417,1,Parking,PARK,Right Parking Lot Spot 008,Parking Right 008
+ePARK01901,3302,1417,1,Parking,PARK,Right Parking Lot Spot 009,Parking Right 009
+ePARK02001,3327,1417,1,Parking,PARK,Right Parking Lot Spot 010,Parking Right 010
+ePARK02101,3352,1417,1,Parking,PARK,Right Parking Lot Spot 011,Parking Right 011
+ePARK02201,3400,1310,1,Parking,PARK,Right Parking Lot Spot 012,Parking Right 012
+ePARK02301,3400,1335,1,Parking,PARK,Right Parking Lot Spot 013,Parking Right 013
+ePARK02401,3400,1360,1,Parking,PARK,Right Parking Lot Spot 014,Parking Right 014
+ePARK02501,3400,1385,1,Parking,PARK,Right Parking Lot Spot 015,Parking Right 015
+eWALK00101,431,1795,1,Parking,WALK,Left Parking Lot Walkway,Walkway
+eWALK00201,571,1795,1,Parking,WALK,Left Parking Lot Walkway,Walkway
+eWALK00301,650,1676,1,Parking,WALK,Francis Street Sidewalk to Left Parking Lot,Walkway
+eWALK00401,931,1707,1,Parking,WALK,Francis Street Sidewalk to Left Parking Lot,Walkway
+eWALK00501,1111,1707,1,Parking,WALK,Francis Street Sidewalk to Left Parking Lot,Walkway
+eWALK00601,1730,1684,1,Parking,WALK,Francis Street Sidewalk to Left Parking Lot,Walkway
+eWALK00701,1730,1544,1,Parking,WALK,Entrance Sidewalk,Walkway
+eWALK00801,2146,1536,1,Parking,WALK,Entrance Sidewalk,Walkway
+eWALK00901,2136,1455,1,Parking,WALK,Entrance Sidewalk,Walkway
+eWALK01001,1743,1372,1,Parking,WALK,75 Francis Lobby Entrance Sidewalk,Walkway
+eWALK01101,2068,1372,1,Parking,WALK,Emergency  Entrance Sidewalk,Walkway
+eWALK01201,2532,1545,1,Parking,WALK,Francis Street Sidewalk to Right Parking Lot,Walkway
+eWALK01301,3189,1551,1,Parking,WALK,Francis Street Sidewalk to Right Parking Lot,Walkway
+eWALK01401,3303,1547,1,Parking,WALK,Francis Street Sidewalk to Right Parking Lot,Walkway
+eWALK01501,3310,1483,1,Parking,WALK,Right Parking Lot Walkway,Walkway
+eWALK01601,3189,1360,1,Parking,WALK,Right Parking Lot Walkway,Walkway
+eWALK01701,3185,1292,1,Parking,WALK,Right Parking Lot Walkway,Walkway
+eWALK01801,3338,1352,1,Parking,WALK,Right Parking Lot Walkway,Walkway

@@ -16,6 +16,9 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     //otherwise null
     private Node next;
 
+    //an array containing the ids of this node's neighbors
+    private HashMap<String, Double> neighbors;
+
     //cost estimate for A*
     private Double costEst;
 
@@ -33,7 +36,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
      */
     public Node(String _id, int _x, int _y,
                 String _floor, String _building,
-                String _nodeType, String _longName,
+                String _type, String _longName,
                 String _shortName){
         this();
         xCoord = _x;
@@ -42,11 +45,10 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         nodeInfo.put("id", _id);
         nodeInfo.put("floor", _floor);
         nodeInfo.put("building", _building);
-        nodeInfo.put("type", _nodeType);
+        nodeInfo.put("type", _type);
         nodeInfo.put("longName", _longName);
         nodeInfo.put("shortName", _shortName);
     }
-
 
     /**
      * @param info String representation of what info is requested
@@ -93,6 +95,24 @@ public class Node implements Comparable<Node>, Iterable<Node> {
      */
     public Node getNext(){
         return next;
+    }
+
+    public void setNeighbors(HashMap<String, Double> _neighbors){
+        neighbors = _neighbors;
+    }
+
+    public HashMap<String, Double> getNeighbors(){
+        return neighbors;
+    }
+
+    public void addNeighbor(Node newNeighbor, Double dist){
+        neighbors.put(newNeighbor.get("id"), dist);
+    }
+
+
+    public Node copy(){
+        return new Node(get("id"), xCoord, yCoord, get("floor"), get("building"), get("type"),
+                get("longName"), get("shortName"));
     }
 
     /**

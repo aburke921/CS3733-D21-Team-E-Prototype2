@@ -9,6 +9,7 @@ public class Edge{
     private String id;
     private String startNodeId;
     private String endNodeId;
+    private Double length;
 
     /**
      * 'start' and 'end' are slight misnomers, the edge is undirected
@@ -16,10 +17,11 @@ public class Edge{
      * @param _startNode this is the "start" node
      * @param _endNode This is the "end" node
      */
-    public Edge(String _id, String _startNode, String _endNode){
+    public Edge(String _id, String _startNode, String _endNode, Double _length){
         id = _id;
         startNodeId = _startNode;
         endNodeId = _endNode;
+        length = _length;
     }
 
     /**
@@ -27,10 +29,10 @@ public class Edge{
      *             should have values of 'start' or 'end'
      * @return returns the id of the requested node
      */
-    public String getNode(String node) {
-        if (node.equalsIgnoreCase("START")) {
+    public String getNode(int node) {
+        if (node == 0) {
             return startNodeId;
-        } else if (node.equalsIgnoreCase("END")) {
+        } else if (node == 1) {
             return endNodeId;
         } else {
             return null;
@@ -42,5 +44,9 @@ public class Edge{
      */
     public String getId(){
         return id;
+    }
+
+    public Double length(){
+        return length;
     }
 }

@@ -1,7 +1,7 @@
 package edu.wpi.TeamE.databases;
 
-import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
+import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import javafx.util.Pair;
 
 import java.io.BufferedReader;
@@ -57,37 +57,6 @@ public class makeConnection {
 		}
 		return singleInstance;
 	}
-
-//	Connection connection;
-
-	//Node Node = new Node();
-
-    /*
-
-    EASY COPY AND PAST CODE----------------
-
-
-
-    try {
-        Statement stmt = this.connection.createStatement();
-
-        String sqlQuery = "";
-
-        ResultSet rset = stmt.executeQuery(sqlQuery);
-
-        while (rset.next()) {
-
-            int startX = rset.getInt("xCoord");
-            String startY = rset.getString("nodeID");
-        }
-        rset.close();
-        stmt.close();
-    }catch (SQLException e){
-        System.err.println("Error");
-    }
-
-    */
-
 
 	/**
 	 * Creates node and hasEdge tables
@@ -397,7 +366,6 @@ public class makeConnection {
 	 * @param nodeID
 	 * @return Pair<Integer, String> map with edge information
 	 */
-
 	public ArrayList<Pair<Float, String>> getEdgeInfo(String nodeID) {
 
 		ArrayList<Pair<Float, String>> pair = new ArrayList<Pair<Float, String>>();
@@ -457,7 +425,7 @@ public class makeConnection {
 			ResultSet rset = stmt.executeQuery(query);
 
 			while (rset.next()) {
-				String NodeID = rset.getString("NodeID");
+				String NodeID = rset.getString("nodeID");
 				int xCoord = rset.getInt("xCoord");
 				int yCoord = rset.getInt("yCoord");
 				String floor = rset.getString("floor");
@@ -562,7 +530,7 @@ public class makeConnection {
 			e.printStackTrace();
 			System.err.println("addEdge() error in the try/catch");
 			return 0;
-    }
+    	}
 	}
 
 
@@ -578,7 +546,6 @@ public class makeConnection {
 	 * @param longName
 	 * @param shortName
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
-	 *
 	 */
 	public int modifyNode(String nodeID, Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
 
@@ -829,7 +796,6 @@ public class makeConnection {
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
-
 	public int deleteNode(String nodeID) {
 		String deleteNodeS = "delete from node where nodeID = ?";
 		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
@@ -894,14 +860,10 @@ public class makeConnection {
 		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
 
 		makeConnection connection = makeConnection.makeConnection();
-
-
-		makeConnection connection1 = makeConnection.makeConnection();
-
 		connection.deleteAllTables();
-		connection1.createTables();
+		connection.createTables();
 		connection.populateTable("node", nodes);
-		connection1.populateTable("hasEdge", edges);
+		connection.populateTable("hasEdge", edges);
 
 		connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
 		connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");

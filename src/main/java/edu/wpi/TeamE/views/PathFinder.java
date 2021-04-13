@@ -85,7 +85,6 @@ public class PathFinder {
 
     /**
      * Gets selected item from {@link #startLocationList} dropdown.
-     * todo, judging from comments, this will get full node info from DB? For now, I am using my own resolveID
      * @param event calling event info
      */
     @FXML
@@ -95,14 +94,10 @@ public class PathFinder {
         startNodeID = resolveID(dropdownSelected);
         System.out.println("node ID resolved to: " + startNodeID);
 
-//        String longName = getLongName(dropdownSelected); //Given by database
-//        startLocationList.setValue(longName);
-
     }
 
     /**
      * Gets selected item from {@link #endLocationList} dropdown.
-     * todo, judging from comments, this will get full node info from DB? For now, I am using my own resolveID
      * @param event calling event info
      */
     @FXML
@@ -111,9 +106,6 @@ public class PathFinder {
         System.out.println("\nselected end node name: " + dropdownSelected);
         endNodeID = resolveID(dropdownSelected);
         System.out.println("node ID resolved to: " + endNodeID);
-
-//        String longName = getLongName(dropdownSelected); //Given by database
-//        endLocationList.setValue(longName);
     }
 
     /**

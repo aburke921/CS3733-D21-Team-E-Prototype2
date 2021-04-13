@@ -33,12 +33,9 @@ public abstract class Searcher {
         }
 
         for(Edge edge : edges){
-            //todo Seamus proposed this change in earlier merge, might need to double check validity
-            Node n0 = graph.get(edge.getNode(0));
-            Node n1 = graph.get(edge.getNode(1));
-
-            n0.addNeighbor(n1, edge.getLength());
-            n1.addNeighbor(n0, edge.getLength());
+            //todo This is based on earlier commit by Seamus, might need confirmation
+            graph.get(edge.getNode(0)).addNeighbor(edge.getNode(1), edge.getLength());
+            graph.get(edge.getNode(1)).addNeighbor(edge.getNode(0), edge.getLength());
         }
     }
 

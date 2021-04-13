@@ -207,7 +207,22 @@ public class DatabaseTests {
     @Test
     @DisplayName("testDeleteNode")
     public void testDeleteNode(){
+        try {
+            connection.deleteAllTables();
+            connection.createTables();
+            System.out.println("Tables were reset");
+        } catch (Exception e) {
+            connection.createTables();
+            System.out.println("Tables were created");
+        }
 
+        // set result to 0
+        int testResult = 0;
+
+        connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
+        testResult = connection.deleteNode("testEdge1");
+
+        assertTrue(testResult == 1);
     }
 
     @Test

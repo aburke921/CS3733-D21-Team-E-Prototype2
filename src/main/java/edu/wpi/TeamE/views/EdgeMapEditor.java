@@ -140,9 +140,9 @@ public class EdgeMapEditor {
         ArrayList<Edge> array = connection.getAllEdges();
         if(table.getSelectionModel().getSelectedItem().getValue().getId() != null) {
             for(int i = 0; i < array.size(); i++) {
-                if(array.get(i).getId() == edge.getId()) {
+                if(array.get(i).getId().equals(edge.getId())) {
+                    System.out.println("This lies between " + edge.getStartNodeId() + " and " + edge.getEndNodeId());
                     connection.deleteEdge(edge.getStartNodeId(), edge.getEndNodeId());
-                    return;
                 }
             }
         }
@@ -218,6 +218,8 @@ public class EdgeMapEditor {
 
         }
     }
+
+
 }
 
 

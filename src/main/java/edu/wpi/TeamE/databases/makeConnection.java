@@ -756,11 +756,12 @@ public class makeConnection {
 				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
 			} else if (deleteEdgeRS1 == 2) {
 				System.out.println("deleteEdge Result =" + deleteEdgeRS1 + ", it's weird cuz " + deleteEdgeRS1 + " rows was affected");
+				count = 1;
 			} else if (deleteEdgeRS1 != 1) {
 				System.err.println("deleteEdge Result =" + deleteEdgeRS1 + ", just bad because this should never occur");
 			}
 			System.out.println("Number of rows affected: " + deleteEdgeRS1);
-			count = 1;
+
 			// deleteEdgeRS1 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -778,11 +779,12 @@ public class makeConnection {
 				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
 			} else if (deleteEdgeRS2 == 2) {
 				System.out.println("deleteEdge Result =" + deleteEdgeRS2 + ", it's weird cuz " + deleteEdgeRS2 + " rows was affected");
+				count += count;
 			} else if (deleteEdgeRS2 != 1) {
 				System.err.println("deleteEdge Result =" + deleteEdgeRS2 + ", just bad because this should never occur");
 			}
 			System.out.println("Number of rows affected: " + deleteEdgeRS2);
-			count += count;
+
 			// deleteEdgeRS2 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
 		} catch (SQLException e) {
 			e.printStackTrace();

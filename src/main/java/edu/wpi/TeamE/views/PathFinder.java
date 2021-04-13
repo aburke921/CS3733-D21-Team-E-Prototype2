@@ -226,7 +226,7 @@ public class PathFinder {
 
         //add to Observable List
         System.out.println("Begin Adding to Dropdown List...");
-        for (Node node : nodeArrayList) { //loop through list
+        for (Node node : nodeArrayList) { //loop through list todo, remove unnecessary code once implementation is more final.
             //this iterator will return a Node object
             //which is just a container for all the node info like id, floor, building, etc
             String id = node.get("id");

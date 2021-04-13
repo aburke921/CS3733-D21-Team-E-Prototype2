@@ -3,7 +3,7 @@ package edu.wpi.TeamE.databases;
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import javafx.util.Pair;
-
+import java.io.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -935,12 +935,57 @@ public class makeConnection {
 	}
 
 
-//	public File getNewCSVFile(){
-//
-//		File newCSV = new File();
-//
-//
-//	}
+	public File getNewCSVFile(String tableName){
+		File newCSV = new File(".csv");
+
+		String sqlQuery = "select * from " + tableName;
+		try (PreparedStatement prepState = connection.prepareStatement(sqlQuery)) {
+
+			ResultSet rset = prepState.executeQuery();
+
+			while(rset.next()) {
+				if(tableName == "node"){
+					String nodeID = rset.getString("nodeID");
+					int xCoord = rset.getInt("xCoord");
+					int yCoord = rset.getInt("yCoord");
+					String floor = rset.getString("floor");
+					String nodeType = rset.getString("nodeType");
+					String longName = rset.getString("longName");
+					String shortName = rset.getString("shortName");
+
+				}
+				if(tableName == "edge"){
+					String edgeID = rset.getString("edgeID");
+					String startNode = rset.getString("startNode");
+					String endNode = rset.getString("endNode");
+
+				}
+
+				// create a file writer to write to files
+				try{
+					FileWriter docWriter = new FileWriter("analysis results.csv");
+					docWriter.write("Name,time calling others,time called by others,total\n");
+					docWriter.write(String.valueOf(fileString));
+					docWriter.close();
+				}catch()
+
+
+			}
+
+			rset.close();
+			prepState.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Could not get nodeLite Info");
+			return null;
+		}
+
+
+
+
+		return newCSV;
+	}
 
 	public static void main(String[] args) {
 		System.out.println("STARTING UP!!!");

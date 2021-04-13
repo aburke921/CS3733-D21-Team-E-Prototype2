@@ -553,7 +553,6 @@ public class makeConnection {
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 */
 	public int modifyNode(String nodeID, Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-
 		//String finalQuery = "update node set ";
 		String xCoordUpdate = "";
 		String yCoordUpdate = "";
@@ -562,17 +561,13 @@ public class makeConnection {
 		String nodeTypeUpdate = "";
 		String longNameUpdate = "";
 		String shortNameUpdate = "";
-
 		boolean added = false;
-
 		String query = "update node set ";
-
 		if (xCoord != null) {
 			query = query + " xCoord = " + xCoord;
 			//xCoordUpdate = "xCoord = " + xCoord;
 			added = true;
 		}
-
 		if(yCoord != null) {
 			if(added == true) {
 				query = query + ", ";
@@ -580,7 +575,6 @@ public class makeConnection {
 			query = query + " yCoord = " + yCoord;
 			added = true;
 		}
-
 		if(floor != null) {
 			if(added == true) {
 				query = query + ", ";
@@ -588,43 +582,40 @@ public class makeConnection {
 			query = query + " floor = '" + floor + "'";
 			added = true;
 		}
-
 		if(building != null) {
 			if(added == true) {
 				query = query + ", ";
 			}
-			query = query + " building = '" + building + "',";
+			query = query + " building = '" + building + "'";
+			added = true;
 		}
-
 		if(nodeType != null) {
 			if(added == true) {
 				query = query + ", ";
 			}
-			query = query + " nodeType = '" + nodeType + "',";
+			query = query + " nodeType = '" + nodeType + "'";
+			added = true;
 		}
-
 		if(longName != null) {
 			if(added == true) {
 				query = query + ", ";
 			}
-			query = query + " longName = '" + longName + "',";
+			query = query + " longName = '" + longName + "'";
+			added = true;
 		}
-
 		if(shortName != null) {
 			if(added == true) {
 				query = query + ", ";
 			}
 			query = query + " shortName = '" + shortName + "'";
+			added = true;
 		}
-
 		query = query + " where nodeID = '" + nodeID + "'";
-
 		try {
 			Statement stmt = this.connection.createStatement();
-
+			System.out.println(query);
 			stmt.executeUpdate(query);
 			stmt.close();
-
 			return 1;
 		}
 		catch (SQLException e) {

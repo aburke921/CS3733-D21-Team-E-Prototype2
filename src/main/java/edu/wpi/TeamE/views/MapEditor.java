@@ -68,10 +68,11 @@ public class MapEditor {
      * When the table is empty (aka no root), create the proper columns
      * Go through the array of Nodes and create a treeItem for each one,
      * add each one to the treeTable
-     * @param array
      * @param table
      */
-    public void prepareNodes(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Node> array, TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Node> table) {
+    public void prepareNodes( TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Node> table) {
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Node> array = connection.getAllNodes();
         if (table.getRoot() == null) {
             edu.wpi.TeamE.algorithms.pathfinding.Node node0 = new
                     edu.wpi.TeamE.algorithms.pathfinding.Node("ID",
@@ -138,7 +139,15 @@ public class MapEditor {
             }
         }
 
-
+    /**
+     * Runs editNode fcn when edit node button is pressed
+     * @param e
+     */
+    public void editNodeButton(ActionEvent e) {
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Node> array = connection.getAllNodes();
+        editNode(array, treeTable);
+    }
     /**
      * looks at each field that the user could input into, whichever ones are not empty
      * the information is extracted and the node that the user selected is edited using
@@ -150,35 +159,40 @@ public class MapEditor {
         TreeItem<Node> node = table.getSelectionModel().getSelectedItem();
         if (table.getSelectionModel().getSelectedItem() != null) {
             String nodeID = table.getSelectionModel().getSelectedItem().getValue().get("id");
-            //TODO add in database editNode fcn using all variables
+            Integer xVal = null;
+            Integer yVal = null;
+            String floor = null;
+            String longName = null;
+            String shortName = null;
+            String type = null;
+            String building = null;
             if(floorInput.getText() != null) {
-                String floor = floorInput.getText();
-            } else {
-                String floor = null;
+                floor = floorInput.getText();
             }
             if(longNameInput.getText() != null) {
-                String longName = longNameInput.getText();
-            } else {
-                String longName = null;
+                longName = longNameInput.getText();
             }
             if(shortNameInput.getText() != null) {
-                String shortName = shortNameInput.getText();
-            } else {
-                String shortName = null;
+               shortName = shortNameInput.getText();
             }
             if(typeInput.getText() != null) {
-                String type = typeInput.getText();
-            } else {
-                String type = null;
+                type = typeInput.getText();
             }
             if(buildingInput.getText() != null) {
-                String building = buildingInput.getText();
-            } else {
-                String building = null;
+                building = buildingInput.getText();
             }
+            if(xCordInput.getText() != null) {
+                 xVal = Integer.parseInt(xCordInput.getText());
+            }
+            if(yCordInput.getText() != null) {
+                yVal = Integer.parseInt(yCordInput.getText());
+            }
+            makeConnection connection = makeConnection.makeConnection();
+            connection.modifyNode(nodeID, xVal, yVal, floor, building, type, longName, shortName);
 
                 }
             }
+
 
 
     /**
@@ -188,27 +202,19 @@ public class MapEditor {
      */
     public int addNode() {
         int i = 0;
-        //TODO figure out what to do with array
-        ArrayList<Node> array = new ArrayList<Node>();
-        //TODO will be in init
-       //will be in init
-        File file = new File("L1Nodes.csv");
-        makeConnection connection = new makeConnection();
-        connection.deleteAllTables();
-        connection.createTables();
-        //connection.populateTable("node", file);
-
+        makeConnection connection = makeConnection.makeConnection();
+        //ArrayList<Node> array = connection.getAllNodes();
         int xVal = Integer.parseInt(xCordInput.getText());
         int yVal = Integer.parseInt(yCordInput.getText());
         i = connection.addNode(idInput.getText(), xVal, yVal, floorInput.getText(), buildingInput.getText(), typeInput.getText(), longNameInput.getText(), shortNameInput.getText());
         System.out.println(i);
-        if(i == 1) {
+        /*if(i == 1) {
             Node n = new Node(idInput.getText(), xVal, yVal, floorInput.getText(), buildingInput.getText(), typeInput.getText(), longNameInput.getText(), shortNameInput.getText());
             array.add(n);
             prepareNodes(array, treeTable);
         } else {
             System.out.println("Error");
-        }
+        }*/
         return i;
     }
 
@@ -217,25 +223,23 @@ public class MapEditor {
      * @param e
      */
     public void addNodeButton(ActionEvent e) {
-        //TODO figure out what array input to use
         addNode();
-        //prepareNodes(array, treeTable);
     }
 
     /**
      * retrieves the ID of the selected item in the table, passes that into deleteNode fcn from database
-     * @param array
      * @param table
      */
 
-    public void deleteNode(ArrayList<Node> array, TreeTableView<Node> table) {
+    public void deleteNode(TreeTableView<Node> table) {
         TreeItem<Node> node = table.getSelectionModel().getSelectedItem();
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Node> array = connection.getAllNodes();
         if (table.getSelectionModel().getSelectedItem() != null) {
             System.out.println(table.getSelectionModel().getSelectedItem().getValue().get("id"));
             for(int i = 0; i < array.size(); i++) {
                 if(array.get(i).get("id") == table.getSelectionModel().getSelectedItem().getValue().get("id")) {
-                    //TODO get connection stuff
-                    //connection.deleteNode(array.get(i).get("id"));
+                    connection.deleteNode(array.get(i).get("id"));
 
                 }
 
@@ -249,10 +253,7 @@ public class MapEditor {
      */
 
     public void deleteNodeButton(ActionEvent e) {
-        //TODO figure out what array input to use
-        ArrayList<Node> array = new ArrayList<Node>();
-        deleteNode(array, treeTable);
-        //prepareNodes(array, treeTable);
+        deleteNode(treeTable);
     }
 
     /**
@@ -273,16 +274,8 @@ public class MapEditor {
         final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node> test = new TreeItem<Node>(node0);
         test.setExpanded(true);
 
-        //will be in init later
-        File file = new File("L1Nodes.csv");
-        makeConnection connection = new makeConnection();
-        connection.deleteAllTables();
-        connection.createTables();
-        connection.populateTable("node", file);
-        //will be in init later
 
-        array = connection.getAllNodes();
-        prepareNodes(array, treeTable);
+        prepareNodes(treeTable);
     }
 
     @FXML

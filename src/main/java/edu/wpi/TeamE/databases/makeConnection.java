@@ -325,7 +325,7 @@ public class makeConnection {
 			e.printStackTrace();
 			System.err.println("cannot print out nodeInfo");
 			return null;
-		}
+    }
 		return null;
 	}
 

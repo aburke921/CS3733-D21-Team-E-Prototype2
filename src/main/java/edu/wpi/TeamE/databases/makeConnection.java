@@ -735,7 +735,7 @@ public class makeConnection {
 		String deleteEdgeS2 = "delete from hasEdge where endNode = ? and startNode = ?";
 
 		int count = 0;
-		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
+
 		try (PreparedStatement deleteEdgePS1 = connection.prepareStatement(deleteEdgeS1)) {
 			deleteEdgePS1.setString(1, nodeID1);
 			deleteEdgePS1.setString(2, nodeID2);
@@ -743,15 +743,14 @@ public class makeConnection {
 			int deleteEdgeRS1 = deleteEdgePS1.executeUpdate();
 
 			if (deleteEdgeRS1 == 0) {
-				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
-			} else if (deleteEdgeRS1 == 2) {
-				System.out.println("deleteEdge Result =" + deleteEdgeRS1 + ", it's weird cuz " + deleteEdgeRS1 + " rows was affected");
-			} else if (deleteEdgeRS1 != 1) {
-				System.err.println("deleteEdge Result =" + deleteEdgeRS1 + ", just bad because this should never occur");
+				System.out.println("deleteEdge Result = 0, no end with given startNode, endNode");
+			}
+			else if (deleteEdgeRS1 == 1) {
+				System.out.println("row deleted given startNode, endNode");
+				count = 1;
 			}
 			System.out.println("Number of rows affected: " + deleteEdgeRS1);
-			count = 1;
-			// deleteEdgeRS1 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("deleteEdge() tyr/catch error");
@@ -765,25 +764,21 @@ public class makeConnection {
 			int deleteEdgeRS2 = deleteEdgePS2.executeUpdate();
 
 			if (deleteEdgeRS2 == 0) {
-				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
-			} else if (deleteEdgeRS2 == 2) {
-				System.out.println("deleteEdge Result =" + deleteEdgeRS2 + ", it's weird cuz " + deleteEdgeRS2 + " rows was affected");
-			} else if (deleteEdgeRS2 != 1) {
-				System.err.println("deleteEdge Result =" + deleteEdgeRS2 + ", just bad because this should never occur");
+				System.out.println("deleteEdge Result = 0, no end with given endNode, startNode");
+			}
+			else if (deleteEdgeRS2 == 1) {
+				System.out.println("row deleted given endNode, startNode");
+				count = 1;
 			}
 			System.out.println("Number of rows affected: " + deleteEdgeRS2);
-			count += count;
-			// deleteEdgeRS2 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+
+			return count;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("deleteEdge() tyr/catch error");
-			if (count == 0) {
-				count = 0;
-			}
-			else
-				count = 1;
+			return count;
 		}
-		return count;
 	}
 
 
@@ -916,17 +911,18 @@ public class makeConnection {
 
 		connection.getNewCSVFile("node");
 		connection.getNewCSVFile("hasEdge");
-//		connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
-//		connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
-//		connection.addNode("test3", 3, 3,"test", "test", "test", "test", "test");
-//		connection.addNode("test4", 4, 4,"test", "test", "test", "test", "test");
-//
-//		connection.addEdge("test1_test2", "test1", "test2");
-//		connection.addEdge("test2_test3", "test2", "test3");
-//		connection.addEdge("test1_test3", "test1", "test3");
+		connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
+		connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
+		connection.addNode("test3", 3, 3,"test", "test", "test", "test", "test");
+		connection.addNode("test4", 4, 4,"test", "test", "test", "test", "test");
 
-		//int i = connection.modifyEdge("test1_test2", null, "test3");
-		//System.out.println(i);
+		connection.addEdge("test1_test2", "test1", "test2");
+		connection.addEdge("test2_test1", "test2", "test1");
+		connection.addEdge("test2_test3", "test2", "test3");
+		connection.addEdge("test1_test3", "test1", "test3");
+
+		int i = connection.deleteEdge("test14", "test2");
+		System.out.println(i);
 	}
 }
 

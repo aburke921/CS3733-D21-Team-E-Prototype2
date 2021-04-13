@@ -94,6 +94,12 @@ public class PathFinder {
         startNodeID = resolveID(dropdownSelected);
         System.out.println("node ID resolved to: " + startNodeID);
 
+        if (startLocationList.getSelectionModel().isEmpty() ||
+                endLocationList.getSelectionModel().isEmpty()) {
+            findPathButton.setDisable(true);
+        } else {
+            findPathButton.setDisable(false);
+        }
     }
 
     /**
@@ -106,6 +112,13 @@ public class PathFinder {
         System.out.println("\nselected end node name: " + dropdownSelected);
         endNodeID = resolveID(dropdownSelected);
         System.out.println("node ID resolved to: " + endNodeID);
+
+        if (startLocationList.getSelectionModel().isEmpty() ||
+                endLocationList.getSelectionModel().isEmpty()) {
+            findPathButton.setDisable(true);
+        } else {
+            findPathButton.setDisable(false);
+        }
     }
 
     /**

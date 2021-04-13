@@ -33,8 +33,8 @@ public abstract class Searcher {
             Node n0 = graph.get(edge.getNode(0));
             Node n1 = graph.get(edge.getNode(1));
 
-            n0.addNeighbor(n1, edge.length());
-            n1.addNeighbor(n0, edge.length());
+            n0.addNeighbor(n1, edge.getLength());
+            n1.addNeighbor(n0, edge.getLength());
         }
     }
 

@@ -8,7 +8,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import org.junit.jupiter.api.TestInstance;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 
 public class DatabaseTests {
 
@@ -48,6 +51,22 @@ public class DatabaseTests {
     @DisplayName("testGetNodeInfo")
     public void testGetNodeInfo(){
 
+        try {
+            connection.deleteAllTables();
+            connection.createTables();
+            System.out.println("Tables were reset");
+        } catch (Exception e) {
+            connection.createTables();
+            System.out.println("Tables were created");
+        }
+
+        connection.addNode("test123", 12, 13, "floor", "building", "nodeType", "longName", "shortName");
+
+        Node testNode1 = new Node("test123", 12, 13, "floor", "building", "nodeType", "longName", "shortName");
+
+        Node testNode2 = connection.getNodeInfo("test123");
+
+        assertTrue(testNode1.equals(testNode2));
     }
 
     @Test

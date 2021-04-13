@@ -143,7 +143,7 @@ public class PathFinder {
         //Execute A* Search
         System.out.print("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
         Searcher aStar = new AStarSearch();
-        Path foundPath = aStar.search(startNodeID, endNodeID);
+        Path foundPath = aStar.search(startNodeID, endNodeID); //todo handle a null return from aStar
 
         drawMap(foundPath);
     }

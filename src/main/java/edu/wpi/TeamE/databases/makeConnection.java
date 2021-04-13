@@ -453,6 +453,41 @@ public class makeConnection {
 	}
 
 	/**
+	 * gets all Nodes that have the given FLOOR value
+	 * @param floorName the value to check for in FLOOR
+	 * @return ArrayList of Node objects
+	 */
+	public ArrayList<Node> getAllNodesByFloor(String floorName) {
+		ArrayList<Node> nodesArray = new ArrayList<>();
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from node WHERE '" + floorName + "' = FLOOR";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String NodeID = rset.getString("nodeID");
+				int xCoord = rset.getInt("xCoord");
+				int yCoord = rset.getInt("yCoord");
+				String floor = rset.getString("floor");
+				String building = rset.getString("building");
+				String nodeType = rset.getString("nodeType");
+				String longName = rset.getString("longName");
+				String shortName = rset.getString("shortName");
+
+				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
+
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllNodes Error : " + e);
+		}
+		return nodesArray;
+	}
+
+	/**
 	 * gets all edges and each edge's attribute
 	 * @return ArrayList<Edge>
 	 */

@@ -19,6 +19,92 @@ public class DatabaseTests {
         connection = makeConnection.makeConnection();
     }
 
+
+    @Test
+    @DisplayName("testCreateTables")
+    public void testCreateTables(){
+
+    }
+
+    @Test
+    @DisplayName("testDeleteAllTables")
+    public void testDeleteAllTables(){
+
+    }
+
+    @Test
+    @DisplayName("testPopulateTable")
+    public void testPopulateTable(){
+
+    }
+
+    @Test
+    @DisplayName("testAddLength")
+    public void testAddLength(){
+
+    }
+
+    @Test
+    @DisplayName("testGetNodeInfo")
+    public void testGetNodeInfo(){
+
+    }
+
+    @Test
+    @DisplayName("testGetNodeLite")
+    public void testGetNodeLite(){
+
+    }
+
+    @Test
+    @DisplayName("testGetEdgeInfo")
+    public void testGetEdgeInfo(){
+
+    }
+
+
+    @Test
+    @DisplayName("testGetAllNodes")
+    public void testGetAllNodes(){
+
+    }
+
+    @Test
+    @DisplayName("testGetAllEdges")
+    public void testGetAllEdges(){
+
+    }
+
+    @Test
+    @DisplayName("testAddNode")
+    public void testAddNode(){
+
+    }
+
+    @Test
+    @DisplayName("testAddEdge")
+    public void testAddEdge(){
+
+    }
+
+    @Test
+    @DisplayName("testModifyNode")
+    public void testModifyNode(){
+
+    }
+
+    @Test
+    @DisplayName("testDeleteEdge")
+    public void testDeleteEdge(){
+
+    }
+
+    @Test
+    @DisplayName("testDeleteNode")
+    public void testDeleteNode(){
+
+    }
+
     @Test
     @DisplayName("testGetListofNodeIDS")
     public void testGetListofNodeIDS(){
@@ -48,6 +134,13 @@ public class DatabaseTests {
         listOfNodeIDs.add("test4");
 
         assertTrue(listOfNodeIDs.equals(connection.getListofNodeIDS()));
+    }
+
+
+    @Test
+    @DisplayName("testGetNewCSVFile")
+    public void testGetNewCSVFile(){
+
     }
 
 

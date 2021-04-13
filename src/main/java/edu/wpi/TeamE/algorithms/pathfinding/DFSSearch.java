@@ -57,7 +57,6 @@ public class DFSSearch extends Searcher {
             visited.add(current);
 
             HashMap<String, Double> neighbors = getNeighbors(current.get("id"));
-
             //for each neighbor, add to potentials if
             //it hasnt been visited and isn't already a potential
             for(String neighborId : neighbors.keySet()){

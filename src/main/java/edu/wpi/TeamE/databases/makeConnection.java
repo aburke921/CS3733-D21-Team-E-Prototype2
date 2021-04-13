@@ -35,6 +35,11 @@ public class makeConnection {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 
 			try {
+				/*
+				 * Before making this connectin make sure you're database tab in Intellij
+				 * Is not connected to the database! This will cause the DriverManager to
+				 * Throw an SQLException and goof a bunch of stuff up!
+				 */
 				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
 				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
@@ -325,7 +330,7 @@ public class makeConnection {
 			e.printStackTrace();
 			System.err.println("cannot print out nodeInfo");
 			return null;
-    }
+		}
 		return null;
 	}
 
@@ -442,8 +447,7 @@ public class makeConnection {
 			stmt.close();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getAllNodes Error");
+			System.err.println("getAllNodes Error : " + e);
 		}
 		return nodesArray;
 	}
@@ -471,7 +475,7 @@ public class makeConnection {
 			stmt.close();
 
 		} catch (SQLException e) {
-			System.err.println("getAllEdges Error");
+			System.err.println("getAllEdges Error : " + e);
 		}
 		return edgesArray;
 	}
@@ -502,7 +506,7 @@ public class makeConnection {
 			}
 			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace(); //todo Jillian commented this out for some reason, ok to uncomment?
 			return 0;
 		}
 	}
@@ -549,7 +553,6 @@ public class makeConnection {
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 */
 	public int modifyNode(String nodeID, Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-
 		//String finalQuery = "update node set ";
 		String xCoordUpdate = "";
 		String yCoordUpdate = "";
@@ -558,17 +561,13 @@ public class makeConnection {
 		String nodeTypeUpdate = "";
 		String longNameUpdate = "";
 		String shortNameUpdate = "";
-
 		boolean added = false;
-
 		String query = "update node set ";
-
 		if (xCoord != null) {
 			query = query + " xCoord = " + xCoord;
 			//xCoordUpdate = "xCoord = " + xCoord;
 			added = true;
 		}
-
 		if(yCoord != null) {
 			if(added == true) {
 				query = query + ", ";
@@ -576,7 +575,6 @@ public class makeConnection {
 			query = query + " yCoord = " + yCoord;
 			added = true;
 		}
-
 		if(floor != null) {
 			if(added == true) {
 				query = query + ", ";
@@ -584,7 +582,6 @@ public class makeConnection {
 			query = query + " floor = '" + floor + "'";
 			added = true;
 		}
-
 		if(building != null) {
 			if(added == true) {
 				query = query + ", ";
@@ -592,7 +589,6 @@ public class makeConnection {
 			query = query + " building = '" + building + "'";
 			added = true;
 		}
-
 		if(nodeType != null) {
 			if(added == true) {
 				query = query + ", ";
@@ -600,7 +596,6 @@ public class makeConnection {
 			query = query + " nodeType = '" + nodeType + "'";
 			added = true;
 		}
-
 		if(longName != null) {
 			if(added == true) {
 				query = query + ", ";
@@ -608,7 +603,6 @@ public class makeConnection {
 			query = query + " longName = '" + longName + "'";
 			added = true;
 		}
-
 		if(shortName != null) {
 			if(added == true) {
 				query = query + ", ";
@@ -616,16 +610,12 @@ public class makeConnection {
 			query = query + " shortName = '" + shortName + "'";
 			added = true;
 		}
-
 		query = query + " where nodeID = '" + nodeID + "'";
-
 		try {
 			Statement stmt = this.connection.createStatement();
 			System.out.println(query);
-
 			stmt.executeUpdate(query);
 			stmt.close();
-
 			return 1;
 		}
 		catch (SQLException e) {

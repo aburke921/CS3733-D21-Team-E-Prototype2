@@ -112,7 +112,22 @@ public class DatabaseTests {
     @Test
     @DisplayName("testAddNode")
     public void testAddNode(){
+        try {
+            connection.deleteAllTables();
+            connection.createTables();
+            System.out.println("Tables were reset");
+        } catch (Exception e) {
+            connection.createTables();
+            System.out.println("Tables were created");
+        }
 
+        // set result to 0
+        int testResult = 0;
+
+        // if this works, testResult should be 1
+        testResult = connection.addNode("testNode", 111, 222, "h1", "String", "String", "String", "String");
+
+        assertTrue(testResult == 1);
     }
 
     @Test

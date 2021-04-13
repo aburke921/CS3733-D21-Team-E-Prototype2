@@ -74,7 +74,7 @@ public class algoCSV {
      * @return an string array containing each neighbors nodeId
      */
     public static HashMap<String, Double> getNeighbors(String nodeId){
-        HashMap<String, Double> out = new HashMap<String, Double>();
+        HashMap<String, Double> out = new HashMap<>();
         for (String[] edge : dbEdges) {
             if (edge[1].equals(nodeId)) {
                 out.put(edge[2], 0.0);

@@ -1,6 +1,5 @@
 package edu.wpi.TeamE.databases;
 
-import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import javafx.util.Pair;
 
@@ -10,7 +9,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Properties;
 
 public class makeConnection {
@@ -72,6 +70,7 @@ public class makeConnection {
 			e.printStackTrace();
 			System.err.println("error with the EmbeddedDriver class.forName thing");
 		}
+
 	}
 
 	/**
@@ -392,7 +391,7 @@ public class makeConnection {
 			Statement stmt = this.connection.createStatement();
 			String query = "select endNode from hasEdge where startNode = " + nodeID;
 			ResultSet rset = stmt.executeQuery(query);
-			
+
 			while (rset.next()) {
 				float length = rset.getFloat("length");
 				String endNodeID = rset.getString("endNode");
@@ -408,13 +407,13 @@ public class makeConnection {
 
 		return pair;
 	}
-	
 
 	/**
 	 * gets all Nodes (each row in node table)
 	 * @return ArrayList of Node objects
 	 * need Node constructor from UI/UX team
 	 */
+
 	public ArrayList<Node> getAllNodes() {
 		ArrayList<Node> nodesArray = new ArrayList<>();
 
@@ -424,7 +423,7 @@ public class makeConnection {
 			ResultSet rset = stmt.executeQuery(query);
 
 			while (rset.next()) {
-				String NodeID = rset.getString("nodeID");
+				String NodeID = rset.getString("NodeID");
 				int xCoord = rset.getInt("xCoord");
 				int yCoord = rset.getInt("yCoord");
 				String floor = rset.getString("floor");
@@ -444,37 +443,6 @@ public class makeConnection {
 			System.err.println("getAllNodes Error");
 		}
 		return nodesArray;
-	}
-
-	/**
-	 * gets all Nodes (each row in node table)
-	 * @return ArrayList of Node objects
-	 * need Node constructor from UI/UX team
-	 */
-	public ArrayList<Edge> getAllEdges() {
-		ArrayList<Edge> edgesArray = new ArrayList<>();
-
-		try {
-			Statement stmt = this.connection.createStatement();
-			String query = "select * from edge";
-			ResultSet rset = stmt.executeQuery(query);
-
-			while (rset.next()) {
-				String edgeId = rset.getString("edgeID");
-				String node0Id = rset.getString("startNode");
-				String node1Id = rset.getString("endNode");
-				float length = rset.getFloat("length");
-				edgesArray.add(new Edge(edgeId, node0Id, node1Id, (double)length));
-			}
-
-			rset.close();
-			stmt.close();
-
-		} catch (SQLException e) {
-			System.err.println("getAllNodes Error");
-		}
-
-		return edgesArray;
 	}
 
 	/**

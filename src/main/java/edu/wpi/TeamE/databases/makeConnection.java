@@ -935,56 +935,64 @@ public class makeConnection {
 	}
 
 
-	public File getNewCSVFile(String tableName){
-		File newCSV = new File(".csv");
+	public void getNewCSVFile(String tableName){
 
 		String sqlQuery = "select * from " + tableName;
 		try (PreparedStatement prepState = connection.prepareStatement(sqlQuery)) {
 
-			ResultSet rset = prepState.executeQuery();
+			ResultSet rset1 = prepState.executeQuery();
 
-			while(rset.next()) {
-				if(tableName == "node"){
-					String nodeID = rset.getString("nodeID");
-					int xCoord = rset.getInt("xCoord");
-					int yCoord = rset.getInt("yCoord");
-					String floor = rset.getString("floor");
-					String nodeType = rset.getString("nodeType");
-					String longName = rset.getString("longName");
-					String shortName = rset.getString("shortName");
+				if(tableName == "node") {
 
+					StringBuilder nodeSB = new StringBuilder();
+					while (rset1.next()) {
+
+						//File nodeCSV = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+						nodeSB.append(rset1.getString("nodeID")).append(",");
+						nodeSB.append(rset1.getInt("xCoord")).append(",");
+						nodeSB.append(rset1.getInt("yCoord")).append(",");
+						nodeSB.append(rset1.getString("floor")).append(",");
+						nodeSB.append(rset1.getString("building")).append(",");
+						nodeSB.append(rset1.getString("nodeType")).append(",");
+						nodeSB.append(rset1.getString("longName")).append(",");
+						nodeSB.append(rset1.getString("shortName")).append("\n");
+
+					}
+
+					// create a file writer to write to files
+					FileWriter nodeWriter = new FileWriter("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+					nodeWriter.write("nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName\n");
+					nodeWriter.write(String.valueOf(nodeSB));
+					nodeWriter.close();
 				}
-				if(tableName == "edge"){
-					String edgeID = rset.getString("edgeID");
-					String startNode = rset.getString("startNode");
-					String endNode = rset.getString("endNode");
 
+				rset1.close();
+
+				ResultSet rset2 = prepState.executeQuery();
+
+				if(tableName == "hasEdge"){
+					StringBuilder edgeSB = new StringBuilder();
+
+					while(rset2.next()) {
+						//File edgeCSV = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+						edgeSB.append(rset2.getString("edgeID")).append(",");
+						edgeSB.append(rset2.getString("startNode")).append(",");
+						edgeSB.append(rset2.getString("endNode")).append("\n");
+					}
+
+					FileWriter edgeWriter = new FileWriter("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+					edgeWriter.write("edgeID, startNode, endNode\n");
+					edgeWriter.write(String.valueOf(edgeSB));
+					edgeWriter.close();
 				}
-
-				// create a file writer to write to files
-				try{
-					FileWriter docWriter = new FileWriter("analysis results.csv");
-					docWriter.write("Name,time calling others,time called by others,total\n");
-					docWriter.write(String.valueOf(fileString));
-					docWriter.close();
-				}catch()
-
 
 			}
-
-			rset.close();
-			prepState.close();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Could not get nodeLite Info");
-			return null;
-		}
-
-
-
-
-		return newCSV;
+			catch (SQLException throwables) {
+			throwables.printStackTrace();
+			}
+			catch (IOException ioException) {
+			ioException.printStackTrace();
+			}
 	}
 
 	public static void main(String[] args) {
@@ -998,17 +1006,19 @@ public class makeConnection {
 		connection.populateTable("node", nodes);
 		connection.populateTable("hasEdge", edges);
 
-		connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
-		connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
-		connection.addNode("test3", 3, 3,"test", "test", "test", "test", "test");
-		connection.addNode("test4", 4, 4,"test", "test", "test", "test", "test");
+		connection.getNewCSVFile("node");
+		connection.getNewCSVFile("hasEdge");
+//		connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
+//		connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
+//		connection.addNode("test3", 3, 3,"test", "test", "test", "test", "test");
+//		connection.addNode("test4", 4, 4,"test", "test", "test", "test", "test");
+//
+//		connection.addEdge("test1_test2", "test1", "test2");
+//		connection.addEdge("test2_test3", "test2", "test3");
+//		connection.addEdge("test1_test3", "test1", "test3");
 
-		connection.addEdge("test1_test2", "test1", "test2");
-		connection.addEdge("test2_test3", "test2", "test3");
-		connection.addEdge("test1_test3", "test1", "test3");
-
-		int i = connection.modifyEdge("test1_test2", null, "test3");
-		System.out.println(i);
+		//int i = connection.modifyEdge("test1_test2", null, "test3");
+		//System.out.println(i);
 	}
 }
 

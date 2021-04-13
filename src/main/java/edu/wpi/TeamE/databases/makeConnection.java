@@ -2,6 +2,7 @@ package edu.wpi.TeamE.databases;
 
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import javafx.util.Pair;
 
 import java.io.BufferedReader;
@@ -57,6 +58,37 @@ public class makeConnection {
 		}
 		return singleInstance;
 	}
+
+//	Connection connection;
+
+	//Node Node = new Node();
+
+    /*
+
+    EASY COPY AND PAST CODE----------------
+
+
+
+    try {
+        Statement stmt = this.connection.createStatement();
+
+        String sqlQuery = "";
+
+        ResultSet rset = stmt.executeQuery(sqlQuery);
+
+        while (rset.next()) {
+
+            int startX = rset.getInt("xCoord");
+            String startY = rset.getString("nodeID");
+        }
+        rset.close();
+        stmt.close();
+    }catch (SQLException e){
+        System.err.println("Error");
+    }
+
+    */
+
 
 	/**
 	 * Creates node and hasEdge tables
@@ -325,8 +357,7 @@ public class makeConnection {
 			e.printStackTrace();
 			System.err.println("cannot print out nodeInfo");
 			return null;
-		}
-		return null;
+    }
 	}
 
 	/**
@@ -355,9 +386,8 @@ public class makeConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Could not get nodeLite Info");
-		  return null;
+      return null;
 		}
-		return null;
 	}
 
 	/**
@@ -366,6 +396,7 @@ public class makeConnection {
 	 * @param nodeID
 	 * @return Pair<Integer, String> map with edge information
 	 */
+
 	public ArrayList<Pair<Float, String>> getEdgeInfo(String nodeID) {
 
 		ArrayList<Pair<Float, String>> pair = new ArrayList<Pair<Float, String>>();
@@ -418,7 +449,7 @@ public class makeConnection {
 
 	public ArrayList<Node> getAllNodes() {
 		ArrayList<Node> nodesArray = new ArrayList<>();
-//observable list -- UI
+
 		try {
 			Statement stmt = this.connection.createStatement();
 			String query = "select * from node";
@@ -446,6 +477,28 @@ public class makeConnection {
 		}
 		return nodesArray;
 	}
+	public ArrayList<Edge> getAllEdges() {
+		ArrayList<Edge> edgesArray = new ArrayList<>();
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from edge";
+			ResultSet rset = stmt.executeQuery(query);
+
+			String edgeId = rset.getString("edgeId");
+			String node0Id = rset.getString("startNode");
+			String node1Id = rset.getString("endNode");
+			Double length = (double)rset.getFloat("length");
+			edgesArray.add(new Edge(edgeId, node0Id, node1Id, length));
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllEdges Error");
+		}
+		return edgesArray;
+	}
 
 	/**
 	 * gets all edges and each edge's attribute
@@ -462,8 +515,8 @@ public class makeConnection {
 				String edgeID = rset.getString("edgeID");
 				String startNode = rset.getString("startNode");
 				String endNode = rset.getString("endNode");
-				double length = rset.getDouble("length");
-				edgesArray.add(new Edge(edgeID, startNode, endNode, length));
+
+				edgesArray.add(new Edge(edgeID, startNode, endNode));
 			}
 
 			rset.close();
@@ -530,7 +583,7 @@ public class makeConnection {
 			e.printStackTrace();
 			System.err.println("addEdge() error in the try/catch");
 			return 0;
-    	}
+    }
 	}
 
 
@@ -546,6 +599,7 @@ public class makeConnection {
 	 * @param longName
 	 * @param shortName
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+	 *
 	 */
 	public int modifyNode(String nodeID, Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
 
@@ -723,6 +777,8 @@ public class makeConnection {
 			addEdge(newEdgeID, startNode, storedEndNode);
 			return 1;
 		}
+
+
 	}
 
 
@@ -789,13 +845,14 @@ public class makeConnection {
 		}
 		return count;
 	}
-
+	*/
 
 	/**
 	 * matches the nodeID to a node and deletes it from DB
 	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
+
 	public int deleteNode(String nodeID) {
 		String deleteNodeS = "delete from node where nodeID = ?";
 		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
@@ -846,13 +903,6 @@ public class makeConnection {
 
 	}
 
-
-//	public File getNewCSVFile(){
-//
-//		File newCSV = new File();
-//
-//
-//	}
 
 	public static void main(String[] args) {
 		System.out.println("STARTING UP!!!");

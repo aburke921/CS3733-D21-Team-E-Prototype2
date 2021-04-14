@@ -46,7 +46,11 @@ public class Edge{
         return id;
     }
 
-    public Double length(){
+    public Double getLength(){
         return length;
     }
+
+    public String getStartNodeId() { return startNodeId; }
+
+    public String getEndNodeId() { return endNodeId; }
 }

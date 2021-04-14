@@ -74,6 +74,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         return yCoord;
     }
 
+
     /**
      * cost is used in pathfinding to evaluate if this node is worth being part of the path
      * should always call setCost before adding node to a PriorityQueue

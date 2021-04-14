@@ -21,14 +21,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class PathFinder {
@@ -149,6 +152,16 @@ public class PathFinder {
             System.out.println("Cannot choose the same starting and ending location. Try again");
             //Don't allow the program to call the path search function
             findPathButton.setDisable(true);
+
+            BorderPane borderPane = new BorderPane();
+            Scene scene = new Scene(borderPane, 450, 100);
+            Text text = new Text("Cannot choose the same starting and ending location. Try again.");
+            borderPane.setCenter(text);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Error");
+            stage.show();
+
         }
         else {
             //Call the path search function

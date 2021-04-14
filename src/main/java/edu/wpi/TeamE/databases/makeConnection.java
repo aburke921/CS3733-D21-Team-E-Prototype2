@@ -673,7 +673,7 @@ public class makeConnection {
 			}
 			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
-			e.printStackTrace(); //todo Jillian commented this out for some reason, ok to uncomment?
+			e.printStackTrace();
 			return 0;
 		}
 	}

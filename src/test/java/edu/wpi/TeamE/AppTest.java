@@ -6,6 +6,7 @@ import edu.wpi.TeamE.views.ServiceRequests;
 import javafx.scene.Node;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
@@ -20,8 +21,8 @@ import org.testfx.framework.junit5.ApplicationExtension;
 public class AppTest extends FxRobot {
 
   /** Setup test suite. */
-  @BeforeAll
-  public static void setup() throws Exception {
+  @BeforeEach
+  public void setup() throws Exception {
     FxToolkit.registerPrimaryStage();
     FxToolkit.setupApplication(App.class);
   }
@@ -29,15 +30,44 @@ public class AppTest extends FxRobot {
   @AfterAll
   public static void cleanup() {}
 
+
+  /**---------------------------
+        DEFAULT PAGE TESTS
+   ----------------------------*/
+
   @Test
-  public void testMovetoServiceRequestPage() throws Exception {
+  public void testFromDefaultToMapEditor() {
+    verifyThat("#mapEditorButton", Node::isVisible);
+    clickOn("#mapEditorButton");
+    verifyThat("Node Map CSV Uploads", Node::isVisible);
+
+    clickOn("Back");
+    verifyThat("Home", Node::isVisible);
+  }
+
+  @Test
+  public void testFromDefaultToPathFinder() {
+    verifyThat("#pathFInderButton", Node::isVisible);
+    clickOn("#pathFInderButton");
+    verifyThat("Find Path", Node::isVisible);
+
+    clickOn("Back");
+    verifyThat("Home", Node::isVisible);
+  }
+
+  @Test
+  public void testFromDefaultToServiceRequests() throws Exception {
     verifyThat("#serviceRequestButton", Node::isVisible);
     clickOn("#serviceRequestButton");
     verifyThat("Select a Service", Node::isVisible); //header on service page is visible
 
-    //reset
-    setup();
+    clickOn("Back");
+    verifyThat("Home", Node::isVisible);
   }
+
+  /**---------------------------
+    SERVICE REQUEST PAGE TESTS
+   ----------------------------*/
 
   public void serviceRequestAssist(String goButtonId, String pageTextSearch) throws Exception {
 
@@ -53,10 +83,6 @@ public class AppTest extends FxRobot {
     verifyThat("Select a Service", Node::isVisible); //header on service page is visible
 
     //todo confirm submit button works
-
-    //go back to default
-    setup();
-
   }
 
   @Test

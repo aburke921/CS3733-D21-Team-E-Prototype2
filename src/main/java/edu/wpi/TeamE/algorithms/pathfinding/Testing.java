@@ -44,8 +44,10 @@ public class Testing {
             DFSSearch dfs = new DFSSearch();
             Searcher aStar = new AStarSearch();
             Path path = dfs.search(startNode, endNode);
+            System.out.print("DFS: ");
             path.print("id");
-            Path optimalPath = dfs.search(startNode, endNode);
+            Path optimalPath = aStar.search(startNode, endNode);
+            System.out.print("A*: ");
             optimalPath.print("id");
 
             System.out.print("Search Another Path? [y/n]: ");

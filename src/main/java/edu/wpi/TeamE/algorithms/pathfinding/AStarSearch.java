@@ -29,8 +29,6 @@ public class AStarSearch extends Searcher {
         Node start = getNode(startId);
         Node end = getNode(endId);
 
-        System.out.printf("\nFinding path from '%s' to '%s'\n...\n", start.get("longName"), end.get("longName"));
-
         PriorityQueue<Node> potentials = new PriorityQueue<>();
         HashMap<Node, Double> prevCost = new HashMap<>();
         HashMap<Node, Node> cameFrom = new HashMap<>();
@@ -46,7 +44,7 @@ public class AStarSearch extends Searcher {
             if(current.equals(end)){
                 //success case
                 Path path = new Path();
-                path.add(start.copy());
+                path.add(start);
                 path.add(reconstructPath(cameFrom, current));
                 return path;
             }
@@ -83,6 +81,15 @@ public class AStarSearch extends Searcher {
      * @return the distance between two nodes
      */
     private double dist(Node n1, Node n2){
-        return Math.sqrt(Math.pow(n1.getX() - n2.getX(), 2) + Math.pow(n1.getY() - n2.getY(), 2));
+        double dist = 0.0;
+        if ("ELEV".equalsIgnoreCase(n1.get("type")) && "ELEV".equalsIgnoreCase(n2.get("type"))) {
+             dist = Math.sqrt(Math.pow(n1.getX() - n2.getX(), 2) + Math.pow(n1.getY() - n2.getY(), 2));
+        } else {
+            int floorChange = floor.get(n1.get("floor")) - floor.get(n2.get("floor"));
+            floorChange = Math.abs(floorChange);
+
+            dist = floorChange * 30;
+        }
+        return dist;
     }
 }

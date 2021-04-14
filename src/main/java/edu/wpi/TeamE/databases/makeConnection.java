@@ -99,7 +99,7 @@ public class makeConnection {
 							+ "    edgeID    varchar(63) primary key,"
 							+ "    startNode varchar(31) not null references node (nodeID) on delete cascade,"
 							+ "    endNode   varchar(31) not null references node (nodeID) on delete cascade, "
-							+ "    length    float, "
+							+ "    length    double, "
 							+ "    unique (startNode, endNode)"
 							+ ")");
 

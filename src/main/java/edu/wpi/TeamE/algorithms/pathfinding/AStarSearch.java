@@ -29,8 +29,6 @@ public class AStarSearch extends Searcher {
         Node start = getNode(startId);
         Node end = getNode(endId);
 
-        System.out.printf("\nFinding path from '%s' to '%s'\n...\n", start.get("longName"), end.get("longName"));
-
         PriorityQueue<Node> potentials = new PriorityQueue<>();
         HashMap<Node, Double> prevCost = new HashMap<>();
         HashMap<Node, Node> cameFrom = new HashMap<>();
@@ -46,7 +44,7 @@ public class AStarSearch extends Searcher {
             if(current.equals(end)){
                 //success case
                 Path path = new Path();
-                path.add(start.copy());
+                path.add(start);
                 path.add(reconstructPath(cameFrom, current));
                 return path;
             }

@@ -2,16 +2,14 @@ package edu.wpi.TeamE;
 
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.util.Pair;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
-import org.junit.jupiter.api.TestInstance;
 
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 
@@ -21,10 +19,9 @@ public class DatabaseTests {
 
     makeConnection connection;
 
-    @BeforeAll
+    @BeforeEach
     public void setConnection(){
         connection = makeConnection.makeConnection();
-
         try {
             connection.deleteAllTables();
             connection.createTables();
@@ -125,7 +122,7 @@ public class DatabaseTests {
     @Test
     @DisplayName("testGetAllNodes")
     public void testGetAllNodes(){
-         ArrayList<Node> nodeArray = new ArrayList<>();
+
 
         connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
         connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
@@ -144,7 +141,7 @@ public class DatabaseTests {
         testNodeArray.add(n3);
         testNodeArray.add(n4);
 
-        nodeArray = connection.getAllNodes();
+        ArrayList<Node> nodeArray = connection.getAllNodes();
 
         boolean allCorrect = true;
         boolean nodeID = false;
@@ -206,7 +203,7 @@ public class DatabaseTests {
         connection.addEdge("test1_test2", "test1", "test2");
 
         ArrayList<Edge> listofEdges = new ArrayList<>();
-        ArrayList<Edge> resultListofEdges = new ArrayList<>();
+
 
         double length1 = Math.pow((0-2),2);
         double length2 = Math.pow((0-2),2);
@@ -217,7 +214,7 @@ public class DatabaseTests {
 
         listofEdges.add(edge1);
 
-        resultListofEdges = connection.getAllEdges();
+        ArrayList<Edge> resultListofEdges = connection.getAllEdges();
 
         boolean allCorrect = true;
         boolean edgeID = false;

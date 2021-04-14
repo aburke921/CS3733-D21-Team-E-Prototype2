@@ -141,11 +141,20 @@ public class PathFinder {
         System.out.print("\nFINDING PATH...");
 
         //Execute A* Search
-        System.out.print("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
+        System.out.println("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
         Searcher aStar = new AStarSearch();
-        Path foundPath = aStar.search(startNodeID, endNodeID); //todo handle a null return from aStar
 
-        drawMap(foundPath);
+        //Check if starting and ending node are the same
+        if(startNodeID.equals(endNodeID)) {
+            System.out.println("Cannot choose the same starting and ending location. Try again");
+            //Don't allow the program to call the path search function
+            findPathButton.setDisable(true);
+        }
+        else {
+            //Call the path search function
+            Path foundPath = aStar.search(startNodeID, endNodeID);
+            drawMap(foundPath);
+        }
     }
 
     /**

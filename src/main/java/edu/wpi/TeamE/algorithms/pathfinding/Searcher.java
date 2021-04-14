@@ -91,7 +91,7 @@ public abstract class Searcher {
         Path path = new Path();
         //pop off of stack onto linked list
         while(!stack.isEmpty()){
-            path.add(stack.pop().copy());
+            path.add(stack.pop());
         }
 
         return path;

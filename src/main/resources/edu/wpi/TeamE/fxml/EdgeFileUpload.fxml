@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<FlowPane fx:id="theStage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.MapEditor">
+<FlowPane fx:id="theStage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.EdgeMapEditor">
     <children>
         <VBox alignment="CENTER" prefHeight="399.0" prefWidth="600.0">
             <children>
@@ -17,7 +17,7 @@
                     <children>
                         <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;">
                             <children>
-                                <Label prefHeight="38.0" prefWidth="486.0" text="Upload Node File" textFill="WHITE">
+                                <Label prefHeight="38.0" prefWidth="486.0" text="Upload Edge File" textFill="WHITE">
                                     <font>
                                         <Font size="20.0" />
                                     </font>
@@ -44,9 +44,8 @@
                                     </FlowPane.margin>
                                     <children>
                                         <TreeTableView fx:id="treeTable" prefHeight="200.0" prefWidth="341.0" />
-                                        <Button mnemonicParsing="false" onAction="#openFile" text="Load Current Data" />
-                              <Button mnemonicParsing="false" onAction="#fileOpener" text="Upload New Data" />
-                              <Button mnemonicParsing="false" onAction="#startTableButton" text="Refresh" />
+                                        <Button mnemonicParsing="false" onAction="#openFile" text="Load Data" />
+                                        <Button mnemonicParsing="false" onAction="#fileOpener" text="Upload Data" />
                                     </children>
                                 </VBox>
                                 <FlowPane prefHeight="41.0" prefWidth="250.0">

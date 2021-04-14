@@ -50,6 +50,8 @@ dependencies {
 //This tells your verification Tasks to use JUnit. You shouldn't need to change this
 test {
     useJUnitPlatform()
+    dependsOn cleanTest
+    testLogging.showStandardStreams = true
 }
 
 //this is where you describe your jar. It's important that the Main-Class always points to the class

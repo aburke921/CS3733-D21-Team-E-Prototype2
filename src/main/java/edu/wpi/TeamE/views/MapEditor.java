@@ -148,9 +148,9 @@ public class MapEditor {
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
             table.getColumns().add(column8);
         }
-//        if(table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
-//            table.getRoot().getChildren().remove(0, array.size()-1);
-//        }
+        if(table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
+            table.getRoot().getChildren().remove(0, array.size()-1);
+        }
             for (int i = 0; i < array.size(); i++) {
                 edu.wpi.TeamE.algorithms.pathfinding.Node s = array.get(i);
                 //int n = array.get(i).getX();
@@ -169,13 +169,6 @@ public class MapEditor {
         editNode(array, treeTable);
     }
 
-    UnaryOperator<TextFormatter.Change> integerFilter = change -> {
-        String newText = change.getControlNewText();
-        if (newText.matches("-?([1-9][0-9]*)?")) {
-            return change;
-        }
-        return null;
-    };
 
     /**
      * looks at each field that the user could input into, whichever ones are not empty
@@ -311,15 +304,33 @@ public class MapEditor {
      * uploads file to database, refreshes page
      * @param e actionevent
      */
-    public void fileOpener(final ActionEvent e) {
-
-        final FileChooser fileChooser = new FileChooser();
+    @FXML
+    public void fileOpener(ActionEvent e) {
+        FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
+        makeConnection connection = makeConnection.makeConnection();
         if (file != null) {
-            makeConnection connection = makeConnection.makeConnection();
-            connection.deleteAllTables();
+            connection.deleteNodeTable();
+            connection.createNodeTable();
             connection.populateTable("node", file);
+            System.out.println("Success");
         }
+    }
+
+    final private Desktop desktop = Desktop.getDesktop();
+
+    /**
+     *opens the file explorer on user's device, allows user to select CSV file,
+     * uploads file to database, refreshes page
+     * @param e actionevent
+     */
+    @FXML
+    private void openFile(ActionEvent e) throws IOException {
+        makeConnection connection = makeConnection.makeConnection();
+        connection.getNewCSVFile("node");
+        File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+        Desktop desktop = Desktop.getDesktop();
+        desktop.open(file);
     }
 
 }

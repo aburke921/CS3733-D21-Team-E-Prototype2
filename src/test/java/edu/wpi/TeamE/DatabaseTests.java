@@ -26,25 +26,28 @@ public class DatabaseTests {
         connection = makeConnection.makeConnection();
     }
 
-
+    //TODO: haven't done yet
     @Test
     @DisplayName("testCreateTables")
     public void testCreateTables(){
 
     }
 
+    //TODO: haven't done yet
     @Test
     @DisplayName("testDeleteAllTables")
     public void testDeleteAllTables(){
 
     }
 
+    //TODO: haven't done yet
     @Test
     @DisplayName("testPopulateTable")
     public void testPopulateTable(){
 
     }
 
+    //TODO: haven't done yet
     @Test
     @DisplayName("testAddLength")
     public void testAddLength(){
@@ -139,15 +142,99 @@ public class DatabaseTests {
     }
 
 
+    //TODO: this doesn't pass the test for some reason (both arrayLists print out the exact same thing though)
     @Test
     @DisplayName("testGetAllNodes")
     public void testGetAllNodes(){
 
+        try {
+            connection.deleteAllTables();
+            connection.createTables();
+            System.out.println("Tables were reset");
+        } catch (Exception e) {
+            connection.createTables();
+            System.out.println("Tables were created");
+        }
+
+        ArrayList<Node> nodeArray = new ArrayList<>();
+
+        connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
+        connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
+        connection.addNode("testEdge3", 122, 123, "h1", "String", "String", "String", "String");
+        connection.addNode("testEdge4", 124, 153, "h1", "String", "String", "String", "String");
+
+
+        Node n1 = new Node("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
+        Node n2 = new Node("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
+        Node n3 = new Node("testEdge3", 122, 123, "h1", "String", "String", "String", "String");
+        Node n4 = new Node("testEdge4", 124, 153, "h1", "String", "String", "String", "String");
+
+        ArrayList<Node> testNodeArray = new ArrayList<>();
+        testNodeArray.add(n1);
+        testNodeArray.add(n2);
+        testNodeArray.add(n3);
+        testNodeArray.add(n4);
+
+        nodeArray = connection.getAllNodes();
+
+        for (Node n : testNodeArray) {
+            System.out.println(n.get("id") + " " + n.getX() + " " + n.getY() + " " + n.get("floor") + " " + n.get("building") + " " + n.get("type") + " " + n.get("longName") + " " + n.get("shortName") + "\n");
+        }
+
+        System.out.println("break\n");
+
+        for (Node n : nodeArray) {
+            System.out.println(n.get("id") + " " + n.getX() + " " +   n.getY() + " " + n.get("floor") + " " + n.get("building") + " " + n.get("type") + " " + n.get("longName") + " " + n.get("shortName") + "\n");
+        }
+
+
+        assertTrue(nodeArray.equals(testNodeArray));
+
     }
 
+    //TODO: this doesn't pass the test for some reason (both arrayLists print out the exact same thing though)
     @Test
     @DisplayName("testGetAllEdges")
     public void testGetAllEdges(){
+        try {
+            connection.deleteAllTables();
+            connection.createTables();
+            System.out.println("Tables were reset");
+        } catch (Exception e) {
+            connection.createTables();
+            System.out.println("Tables were created");
+        }
+
+        connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
+        connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
+
+
+        connection.addEdge("test1_test2", "test1", "test2");
+
+        ArrayList<Edge> listofEdges = new ArrayList<>();
+        ArrayList<Edge> resultListofEdges = new ArrayList<>();
+
+        double length1 = Math.pow((0-2),2);
+        double length2 = Math.pow((0-2),2);
+
+        double length12 = Math.sqrt((length1+length2));
+
+        Edge edge1 = new Edge("test1_test2", "test1", "test2", length12);
+
+        listofEdges.add(edge1);
+
+        resultListofEdges = connection.getAllEdges();
+
+//        for (Edge e : listofEdges) {
+//            System.out.println(e.getId() + " " + e.getNode(0) + " " + e.getNode(1) + " " + e.length() + "\n");
+//        }
+//
+//        for (Edge e : resultListofEdges) {
+//            System.out.println(e.getId() + " " +  e.getNode(0)  + " " + e.getNode(1)  + " " + e.length() + "\n");
+//        }
+
+
+        assertTrue(listofEdges.equals(resultListofEdges));
 
     }
 
@@ -271,8 +358,8 @@ public class DatabaseTests {
     @DisplayName("testGetListofNodeIDS")
     public void testGetListofNodeIDS(){
 
-        File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-        File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+        //File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+        //File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
 
         try {
             connection.deleteAllTables();
@@ -298,7 +385,7 @@ public class DatabaseTests {
         assertTrue(listOfNodeIDs.equals(connection.getListofNodeIDS()));
     }
 
-
+    //TODO: haven't done yet
     @Test
     @DisplayName("testGetNewCSVFile")
     public void testGetNewCSVFile(){

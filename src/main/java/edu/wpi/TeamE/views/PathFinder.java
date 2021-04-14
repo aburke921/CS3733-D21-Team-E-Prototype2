@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
+import com.jfoenix.controls.JFXSnackbar;
+import com.jfoenix.controls.JFXSnackbarLayout;
 import edu.wpi.TeamE.algorithms.pathfinding.*;
 import edu.wpi.TeamE.databases.*;
 
@@ -135,24 +137,19 @@ public class PathFinder {
 
         System.out.println("\nFINDING PATH...");
 
-        //Execute A* Search
-        System.out.print("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
-        Searcher aStar = new AStarSearch();
-
         //Check if starting and ending node are the same
         if(startNodeID.equals(endNodeID)) {
             System.out.println("Cannot choose the same starting and ending location. Try again");
-            BorderPane borderPane = new BorderPane();
-            Scene scene = new Scene(borderPane, 450, 100);
-            Text text = new Text("Cannot choose the same starting and ending location. Try again.");
-            borderPane.setCenter(text);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("Error");
-            stage.show();
+
+            JFXSnackbar bar = new JFXSnackbar(pane);
+            bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Cannot choose the same starting and ending location.\nTry again.")));
 
         }
         else {
+            //Execute A* Search
+            System.out.print("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
+            Searcher aStar = new AStarSearch();
+
             //Call the path search function
             Path foundPath = aStar.search(startNodeID, endNodeID);
             drawMap(foundPath);

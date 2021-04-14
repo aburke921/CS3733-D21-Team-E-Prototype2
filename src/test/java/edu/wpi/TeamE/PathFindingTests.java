@@ -178,8 +178,8 @@ public class PathFindingTests {
 
         HashMap<String, Double> exp2 = new HashMap<>();
 
-        exp2.put("CREST002L1", 100.000);
-        exp2.put("WELEV00ML1", 145.000);
+        exp2.put("CREST002L1", 100.00);
+        exp2.put("WELEV00ML1", 145.00);
 
         for(String key : test2.keySet()) {
             assertEquals(exp2.get(key), test2.get(key), 0.01);

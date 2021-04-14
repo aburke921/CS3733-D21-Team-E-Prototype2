@@ -187,11 +187,7 @@ public class EdgeMapEditor {
 //    }
 
 
-    /**
-     *opens the file explorer on user's device, allows user to select CSV file,
-     * uploads file to database, refreshes page
-     * @param e actionevent
-     */
+    @FXML
     public void fileOpener(ActionEvent e) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
@@ -206,20 +202,13 @@ public class EdgeMapEditor {
 
     final private Desktop desktop = Desktop.getDesktop();
 
-    /**
-     * opens the file chosen by user
-     * @param file File
-     */
-    private void openFile(File file) {
-        try {
-            desktop.open(file);
-        } catch (IOException ex) {
-            Logger.getLogger(
-                    MapEditor.class.getName()).log(
-                    Level.SEVERE, null, ex
-            );
-
-        }
+    @FXML
+    private void openFile(ActionEvent e) throws IOException {
+        makeConnection connection = makeConnection.makeConnection();
+        connection.getNewCSVFile("hasEdge");
+        File file = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+        Desktop desktop = Desktop.getDesktop();
+        desktop.open(file);
     }
 
     @FXML

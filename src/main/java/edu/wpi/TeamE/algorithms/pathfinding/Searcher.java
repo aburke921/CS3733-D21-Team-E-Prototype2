@@ -43,8 +43,8 @@ public abstract class Searcher {
         }
 
         for(Edge edge : edges){
-            graph.get(edge.getNode(0)).addNeighbor(edge.getNode(1), edge.length());
-            graph.get(edge.getNode(1)).addNeighbor(edge.getNode(0), edge.length());
+            graph.get(edge.getNode(0)).addNeighbor(edge.getNode(1), edge.getLength());
+            graph.get(edge.getNode(1)).addNeighbor(edge.getNode(0), edge.getLength());
         }
     }
 

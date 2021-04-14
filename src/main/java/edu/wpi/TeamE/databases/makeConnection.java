@@ -2,6 +2,11 @@ package edu.wpi.TeamE.databases;
 
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.stage.FileChooser;
 import javafx.util.Pair;
 import java.io.*;
 import java.io.BufferedReader;
@@ -112,6 +117,54 @@ public class makeConnection {
 		}
 	}
 
+	public void createNodeTable() {
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			stmt.execute(
+					"create table node"
+							+ "("
+							+ "    nodeID    varchar(31) primary key,"
+							+ "    xCoord    int not null,"
+							+ "    yCoord    int not null,"
+							+ "    floor     varchar(5) not null,"
+							+ "    building  varchar(20),"
+							+ "    nodeType  varchar(10),"
+							+ "    longName  varchar(100),"
+							+ "    shortName varchar(100),"
+							+ "    unique (xCoord, yCoord, floor)"
+							+ ")");
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating node table");
+		}
+
+	}
+
+	public void createEdgeTable() {
+		try {
+
+			Statement stmt = connection.createStatement();
+			stmt.execute(
+					"create table hasEdge"
+							+ "("
+							+ "    edgeID    varchar(63) primary key,"
+							+ "    startNode varchar(31) not null references node (nodeID) on delete cascade,"
+							+ "    endNode   varchar(31) not null references node (nodeID) on delete cascade, "
+							+ "    length    float, "
+							+ "    unique (startNode, endNode)"
+							+ ")");
+
+			// Needs a way to calculate edgeID, either in Java or by a sql trigger
+			// Probably in Java since it's a PK
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating hasEdge table");
+		}
+	}
+
 
 	/**
 	 * Deletes node and hasEdges table
@@ -128,6 +181,32 @@ public class makeConnection {
 			// e.printStackTrace();
 			System.err.println("deleteAllTables() not working");
 		}
+	}
+
+	public void deleteEdgeTable() {
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			stmt.execute("drop table hasEdge");
+			stmt.close();
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("deleteEdgeTable() not working");
+		}
+
+	}
+
+	public void deleteNodeTable() {
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			stmt.execute("drop table node");
+			stmt.close();
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("deleteNodeTable() not working");
+		}
+
 	}
 
 	/**
@@ -453,6 +532,94 @@ public class makeConnection {
 	}
 
 	/**
+	 * gets all Nodes that have the given FLOOR value
+	 * @param floorName the value to check for in FLOOR column
+	 * @return ArrayList of Node objects
+	 */
+	public ArrayList<Node> getAllNodesByFloor(String floorName) {
+		ArrayList<Node> nodesArray = new ArrayList<>();
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from node WHERE '" + floorName + "' = FLOOR";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String NodeID = rset.getString("nodeID");
+				int xCoord = rset.getInt("xCoord");
+				int yCoord = rset.getInt("yCoord");
+				String floor = rset.getString("floor");
+				String building = rset.getString("building");
+				String nodeType = rset.getString("nodeType");
+				String longName = rset.getString("longName");
+				String shortName = rset.getString("shortName");
+
+				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
+
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllNodes Error : " + e);
+		}
+		return nodesArray;
+	}
+
+	/**
+	 * Gets all node long names for a specified FLOOR column value.
+	 * @param floorName the value to check for in FLOOR column
+	 * @return ObservableList of node long names.
+	 */
+	public ObservableList<String> getAllNodeLongNamesByFloor(String floorName) {
+		ObservableList<String> listOfNodeIDs =  FXCollections.observableArrayList();
+
+		String deleteNodeS = "SELECT LONGNAME FROM node WHERE '" + floorName + "' = FLOOR";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("LONGNAME");
+				listOfNodeIDs.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeIDs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println("getListofNodeIDS error try/catch");
+			return listOfNodeIDs;
+		}
+	}
+
+	public ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
+		ArrayList<String> listOfNodeIDs = new ArrayList<>();
+
+		String deleteNodeS = "SELECT nodeID FROM node WHERE '" + floorName + "' = FLOOR";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("nodeID");
+				listOfNodeIDs.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeIDs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println("getListofNodeIDS error try/catch");
+			return listOfNodeIDs;
+		}
+
+	}
+
+
+	/**
 	 * gets all edges and each edge's attribute
 	 * @return ArrayList<Edge>
 	 */
@@ -746,11 +913,12 @@ public class makeConnection {
 				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
 			} else if (deleteEdgeRS1 == 2) {
 				System.out.println("deleteEdge Result =" + deleteEdgeRS1 + ", it's weird cuz " + deleteEdgeRS1 + " rows was affected");
+				count = 1;
 			} else if (deleteEdgeRS1 != 1) {
 				System.err.println("deleteEdge Result =" + deleteEdgeRS1 + ", just bad because this should never occur");
 			}
 			System.out.println("Number of rows affected: " + deleteEdgeRS1);
-			count = 1;
+
 			// deleteEdgeRS1 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -768,11 +936,12 @@ public class makeConnection {
 				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
 			} else if (deleteEdgeRS2 == 2) {
 				System.out.println("deleteEdge Result =" + deleteEdgeRS2 + ", it's weird cuz " + deleteEdgeRS2 + " rows was affected");
+				count += count;
 			} else if (deleteEdgeRS2 != 1) {
 				System.err.println("deleteEdge Result =" + deleteEdgeRS2 + ", just bad because this should never occur");
 			}
 			System.out.println("Number of rows affected: " + deleteEdgeRS2);
-			count += count;
+
 			// deleteEdgeRS2 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
 		} catch (SQLException e) {
 			e.printStackTrace();

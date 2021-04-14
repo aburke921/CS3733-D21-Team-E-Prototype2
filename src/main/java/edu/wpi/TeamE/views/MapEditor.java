@@ -44,7 +44,9 @@ public class MapEditor {
     @FXML private JFXTextField longNameInput;
     @FXML private JFXTextField shortNameInput;
 
-
+    /**
+     * when page loaded, displays the data
+     */
     @FXML
     void initialize() {
         assert treeTable != null : "fx:id=\"treeTable\" was not injected: check your FXML file 'MapEditor.fxml'.";
@@ -59,6 +61,8 @@ public class MapEditor {
         //assert backButton != null : "fx:id=\"backButton\" was not injected: check your FXML file 'MapEditor.fxml'.";
         prepareNodes(treeTable);
     }
+
+
     /**
      * brings user to the map editor navigation page
      * @param e
@@ -238,13 +242,6 @@ public class MapEditor {
         int yVal = Integer.parseInt(yCordInput.getText());
         i = connection.addNode(idInput.getText(), xVal, yVal, floorInput.getText(), buildingInput.getText(), typeInput.getText(), longNameInput.getText(), shortNameInput.getText());
         System.out.println(i);
-        /*if(i == 1) {
-            Node n = new Node(idInput.getText(), xVal, yVal, floorInput.getText(), buildingInput.getText(), typeInput.getText(), longNameInput.getText(), shortNameInput.getText());
-            array.add(n);
-            prepareNodes(array, treeTable);
-        } else {
-            System.out.println("Error");
-        }*/
         return i;
     }
 
@@ -269,7 +266,6 @@ public class MapEditor {
         if (table.getSelectionModel().getSelectedItem() != null) {
             System.out.println(table.getSelectionModel().getSelectedItem().getValue().get("id"));
             for(int i = 0; i < array.size(); i++) {
-
                 if(array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
                     s = connection.deleteNode(array.get(i).get("id"));
                     System.out.println(s);
@@ -307,21 +303,8 @@ public class MapEditor {
         //creating root node
         final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node> test = new TreeItem<Node>(node0);
         test.setExpanded(true);
-
-
         prepareNodes(treeTable);
     }
-
-    @FXML
-    public void toFileUpload() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapFileUpload.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
 
     /**
      *opens the file explorer on user's device, allows user to select CSV file,
@@ -333,36 +316,12 @@ public class MapEditor {
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
         if (file != null) {
-            //openFile(file);
-            //file.getAbsolutePath();
-            makeConnection connection = new makeConnection();
+            makeConnection connection = makeConnection.makeConnection();
             connection.deleteAllTables();
-            // TODO: delete node table only plzzzzzzzzzzzzz
-            connection.createTables();
-            // TODO: create node table only plzzzzzzzzzzzzz
             connection.populateTable("node", file);
-            //database's fcn for file uploading goes here, param is file
-            //when submit button is pressed, update/refresh?
         }
     }
 
-    private Desktop desktop = Desktop.getDesktop();
-
-    /**
-     * opens the file chosen by user
-     * @param file File
-     */
-    private void openFile(File file) {
-        try {
-            desktop.open(file);
-        } catch (IOException ex) {
-            Logger.getLogger(
-                    MapEditor.class.getName()).log(
-                    Level.SEVERE, null, ex
-            );
-
-        }
-    }
 }
 
 

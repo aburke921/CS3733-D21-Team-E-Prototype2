@@ -12,7 +12,7 @@ plugins {
     id 'application'
     id 'java'
 }
-mainClassName = 'edu.wpi.TeamE.algorithms.pathfinding.Testing'
+mainClassName = 'edu.wpi.TeamE.Main'
 
 
 //These are the repositories where Gradle looks for dependencies.
@@ -58,7 +58,7 @@ test {
 // with the Main method you want run!
 jar {
     manifest {
-        attributes 'Main-Class': 'edu.wpi.TeamE.algorithms.pathfinding.Testing'
+        attributes 'Main-Class': 'edu.wpi.TeamE.Main'
     }
 }
 

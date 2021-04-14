@@ -148,9 +148,9 @@ public class MapEditor {
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
             table.getColumns().add(column8);
         }
-        if(table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
-            table.getRoot().getChildren().remove(0, array.size()-1);
-        }
+//        if(table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
+//            table.getRoot().getChildren().remove(0, array.size()-1);
+//        }
             for (int i = 0; i < array.size(); i++) {
                 edu.wpi.TeamE.algorithms.pathfinding.Node s = array.get(i);
                 //int n = array.get(i).getX();

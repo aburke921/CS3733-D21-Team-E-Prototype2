@@ -97,9 +97,9 @@ public class EdgeMapEditor {
 //                    new ReadOnlyDoubleWrapper(p.getValue().getValue().getLength())
 //            table.getColumns().add(column4);
         }
-        if(table.getRoot().getChildren().isEmpty() == false) {
-            table.getRoot().getChildren().remove(0, array.size());
-        }
+//        if(table.getRoot().getChildren().isEmpty() == false) {
+//            table.getRoot().getChildren().remove(0, array.size());
+//        }
         for (int i = 0; i < array.size(); i++) {
             edu.wpi.TeamE.algorithms.pathfinding.Edge s = array.get(i);
             //int n = array.get(i).getX();
@@ -108,17 +108,25 @@ public class EdgeMapEditor {
         }
     }
 
-    public void editEdge(ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Edge> array, TreeTableView<String> table) {
-        TreeItem<String> edge = table.getSelectionModel().getSelectedItem();
+    public void editEdge(TreeTableView<Edge> table) {
         if (table.getSelectionModel().getSelectedItem() != null) {
-            //function that takes in string (?) which will call to edge that wants to be edited and
-            //inputted info from user, returns void
-            /*for(int i = 0; i < array.size(); i++) {
-                if(edge.equals(array.get(i).name)) {
-
-                }
-            }*/
+            String edgeID = table.getSelectionModel().getSelectedItem().getValue().getId();
+            String startID = null;
+            String endID = null;
+            if(!startNodeIDInput.getText().isEmpty()) {
+                startID = startNodeIDInput.getText();
+            }
+            if(!endNodeIDInput.getText().isEmpty()) {
+                endID = endNodeIDInput.getText();
+            }
+            makeConnection connection = makeConnection.makeConnection();
+            connection.modifyEdge(edgeID, startID, endID);
+            connection.deleteEdge(table.getSelectionModel().getSelectedItem().getValue().getStartNodeId(), table.getSelectionModel().getSelectedItem().getValue().getEndNodeId());
         }
+    }
+
+    public void editEdgeButton(ActionEvent e) {
+        editEdge(treeTable);
     }
 
     public void addEdge(TreeTableView<Edge> table) {
@@ -126,6 +134,7 @@ public class EdgeMapEditor {
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<Edge> array = connection.getAllEdges();
         connection.addEdge(idInput.getText(), startNodeIDInput.getText(), endNodeIDInput.getText());
+        System.out.println("This happened");
     }
 
     public void addEdgeButton(ActionEvent e) {
@@ -140,9 +149,9 @@ public class EdgeMapEditor {
         ArrayList<Edge> array = connection.getAllEdges();
         if(table.getSelectionModel().getSelectedItem().getValue().getId() != null) {
             for(int i = 0; i < array.size(); i++) {
-                if(array.get(i).getId() == edge.getId()) {
+                if(array.get(i).getId().equals(edge.getId())) {
+                    System.out.println("This lies between " + edge.getStartNodeId() + " and " + edge.getEndNodeId());
                     connection.deleteEdge(edge.getStartNodeId(), edge.getEndNodeId());
-                    return;
                 }
             }
         }
@@ -167,57 +176,51 @@ public class EdgeMapEditor {
 
         prepareEdges(treeTable);
     }
+//    @FXML
+//    public void toFileUpload() {
+//        try {
+//            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/EdgeFileUpload.fxml"));
+//            App.getPrimaryStage().getScene().setRoot(root);
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
+
     @FXML
-    public void toFileUpload() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/EdgeFileUpload.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-
-    /**
-     *opens the file explorer on user's device, allows user to select CSV file,
-     * uploads file to database, refreshes page
-     * @param e actionevent
-     */
-    public void fileOpener(final ActionEvent e) {
-
-        final FileChooser fileChooser = new FileChooser();
+    public void fileOpener(ActionEvent e) {
+        FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
+        makeConnection connection = makeConnection.makeConnection();
         if (file != null) {
-            //openFile(file);
-            //file.getAbsolutePath();
-            makeConnection connection = new makeConnection();
-            connection.deleteAllTables();
-            // TODO: delete edge table only plzzzzzzzzzzzzz
-            connection.createTables();
-            // TODO: create edge table only plzzzzzzzzzzzzz
-            connection.populateTable("edge", file);
-            //database's fcn for file uploading goes here, param is file
-            //when submit button is pressed, update/refresh?
+            connection.deleteEdgeTable();
+            connection.createEdgeTable();
+            connection.populateTable("hasEdge", file);
+            System.out.println("Success");
         }
     }
 
     final private Desktop desktop = Desktop.getDesktop();
 
-    /**
-     * opens the file chosen by user
-     * @param file File
-     */
-    private void openFile(File file) {
-        try {
-            desktop.open(file);
-        } catch (IOException ex) {
-            Logger.getLogger(
-                    MapEditor.class.getName()).log(
-                    Level.SEVERE, null, ex
-            );
-
-        }
+    @FXML
+    private void openFile(ActionEvent e) throws IOException {
+        makeConnection connection = makeConnection.makeConnection();
+        connection.getNewCSVFile("hasEdge");
+        File file = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+        Desktop desktop = Desktop.getDesktop();
+        desktop.open(file);
     }
+
+    @FXML
+    void initialize() {
+        assert treeTable != null : "fx:id=\"treeTable\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
+        assert startNodeIDInput != null : "fx:id=\"xCordInput\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
+        assert endNodeIDInput != null : "fx:id=\"longNameInput\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
+        assert idInput != null : "fx:id=\"idInput\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
+        prepareEdges(treeTable);
+    }
+
+
 }
 
 

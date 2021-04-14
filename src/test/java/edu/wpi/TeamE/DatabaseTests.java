@@ -1,15 +1,19 @@
 package edu.wpi.TeamE;
 
 import edu.wpi.TeamE.databases.makeConnection;
+import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import org.junit.jupiter.api.TestInstance;
+
+import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 
@@ -93,6 +97,44 @@ public class DatabaseTests {
     @Test
     @DisplayName("testGetEdgeInfo")
     public void testGetEdgeInfo(){
+
+        try {
+            connection.deleteAllTables();
+            connection.createTables();
+            System.out.println("Tables were reset");
+        } catch (Exception e) {
+            connection.createTables();
+            System.out.println("Tables were created");
+        }
+
+        connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
+        connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
+        connection.addNode("testEdge3", 122, 123, "h1", "String", "String", "String", "String");
+        connection.addNode("testEdge4", 124, 153, "h1", "String", "String", "String", "String");
+
+        connection.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
+        connection.addEdge("testEdge3_testEdge4", "testEdge3", "testEdge4");
+        connection.addEdge("testEdge2_testEdge4", "testEdge2", "testEdge4");
+
+        ArrayList<Pair<Float, String>> listofEdgeInfo = new ArrayList<Pair<Float, String>>();
+        ArrayList<Pair<Float, String>> resultEdgeInfo = new ArrayList<Pair<Float, String>>();
+
+        double length3 = Math.pow((122-124),2);
+        double length4 = Math.pow((123-153),2);
+
+        double length34 = Math.sqrt((length3+length4));
+
+        double length1 = Math.pow((12-124),2);
+        double length2 = Math.pow((15-153),2);
+
+        double length24 = Math.sqrt((length1+length2));
+
+        listofEdgeInfo.add(new Pair<Float, String>((float)length34,"testEdge3"));
+        listofEdgeInfo.add(new Pair<Float, String>((float)length24,"testEdge2"));
+
+        resultEdgeInfo = connection.getEdgeInfo("testEdge4");
+
+        assertTrue(resultEdgeInfo.equals(listofEdgeInfo));
 
     }
 

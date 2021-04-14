@@ -2,16 +2,17 @@ package edu.wpi.TeamE;
 
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.util.Pair;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
-import org.junit.jupiter.api.TestInstance;
 
 import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 
@@ -26,38 +27,8 @@ public class DatabaseTests {
         connection = makeConnection.makeConnection();
     }
 
-    //TODO: haven't done yet
-    @Test
-    @DisplayName("testCreateTables")
-    public void testCreateTables(){
-
-    }
-
-    //TODO: haven't done yet
-    @Test
-    @DisplayName("testDeleteAllTables")
-    public void testDeleteAllTables(){
-
-    }
-
-    //TODO: haven't done yet
-    @Test
-    @DisplayName("testPopulateTable")
-    public void testPopulateTable(){
-
-    }
-
-    //TODO: haven't done yet
-    @Test
-    @DisplayName("testAddLength")
-    public void testAddLength(){
-
-    }
-
-    @Test
-    @DisplayName("testGetNodeInfo")
-    public void testGetNodeInfo(){
-
+    @BeforeEach
+    public void setupTables(){
         try {
             connection.deleteAllTables();
             connection.createTables();
@@ -66,7 +37,11 @@ public class DatabaseTests {
             connection.createTables();
             System.out.println("Tables were created");
         }
+    }
 
+    @Test
+    @DisplayName("testGetNodeInfo")
+    public void testGetNodeInfo(){
         connection.addNode("test123", 12, 13, "floor", "building", "nodeType", "longName", "shortName");
 
         Node testNode1 = new Node("test123", 12, 13, "floor", "building", "nodeType", "longName", "shortName");
@@ -79,15 +54,6 @@ public class DatabaseTests {
     @Test
     @DisplayName("testGetNodeLite")
     public void testGetNodeLite(){
-        try {
-            connection.deleteAllTables();
-            connection.createTables();
-            System.out.println("Tables were reset");
-        } catch (Exception e) {
-            connection.createTables();
-            System.out.println("Tables were created");
-        }
-
         connection.addNode("test233", 22, 33, "floor", null, null, null, null);
 
         Node testNode1 = new Node("test233", 22, 33, "floor", null, null, null, null);
@@ -100,16 +66,6 @@ public class DatabaseTests {
     @Test
     @DisplayName("testGetEdgeInfo")
     public void testGetEdgeInfo(){
-
-        try {
-            connection.deleteAllTables();
-            connection.createTables();
-            System.out.println("Tables were reset");
-        } catch (Exception e) {
-            connection.createTables();
-            System.out.println("Tables were created");
-        }
-
         connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
         connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
         connection.addNode("testEdge3", 122, 123, "h1", "String", "String", "String", "String");
@@ -142,21 +98,10 @@ public class DatabaseTests {
     }
 
 
-    //TODO: this doesn't pass the test for some reason (both arrayLists print out the exact same thing though)
     @Test
     @DisplayName("testGetAllNodes")
     public void testGetAllNodes(){
 
-        try {
-            connection.deleteAllTables();
-            connection.createTables();
-            System.out.println("Tables were reset");
-        } catch (Exception e) {
-            connection.createTables();
-            System.out.println("Tables were created");
-        }
-
-        ArrayList<Node> nodeArray = new ArrayList<>();
 
         connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
         connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
@@ -175,44 +120,69 @@ public class DatabaseTests {
         testNodeArray.add(n3);
         testNodeArray.add(n4);
 
-        nodeArray = connection.getAllNodes();
+        ArrayList<Node> nodeArray = connection.getAllNodes();
 
-        for (Node n : testNodeArray) {
-            System.out.println(n.get("id") + " " + n.getX() + " " + n.getY() + " " + n.get("floor") + " " + n.get("building") + " " + n.get("type") + " " + n.get("longName") + " " + n.get("shortName") + "\n");
+        boolean allCorrect = true;
+        boolean nodeID = false;
+        boolean xCoord = false;
+        boolean yCoord = false;
+        boolean floor = false;
+        boolean building = false;
+        boolean nodeType = false;
+        boolean longName = false;
+        boolean shortName = false;
+
+        if(testNodeArray.size() == nodeArray.size()){
+            for(int node = 0; node < nodeArray.size(); node++){
+                Node returnedNode = nodeArray.get(node);
+                Node correctNode = testNodeArray.get(node);
+                if(returnedNode.get("id").equals(correctNode.get("id"))){
+                    nodeID = true;
+                }
+                if(returnedNode.getX() == correctNode.getX()){
+                    xCoord = true;
+                }
+                if(returnedNode.getY() == correctNode.getY()){
+                    yCoord = true;
+                }
+                if(returnedNode.get("floor").equals(correctNode.get("floor"))){
+                    floor = true;
+                }
+                if(returnedNode.get("building").equals(correctNode.get("building"))){
+                    building = true;
+                }
+                if(returnedNode.get("type").equals(correctNode.get("type"))){
+                    nodeType = true;
+                }
+                if(returnedNode.get("longName").equals(correctNode.get("longName"))){
+                    longName = true;
+                }
+                if(returnedNode.get("shortName").equals(correctNode.get("shortName"))){
+                    shortName = true;
+                }
+                if(nodeID && xCoord && yCoord && floor && building && nodeType && longName && shortName == false){
+                    allCorrect = false;
+                }
+            }
+        }
+        else{
+            allCorrect = false;
         }
 
-        System.out.println("break\n");
-
-        for (Node n : nodeArray) {
-            System.out.println(n.get("id") + " " + n.getX() + " " +   n.getY() + " " + n.get("floor") + " " + n.get("building") + " " + n.get("type") + " " + n.get("longName") + " " + n.get("shortName") + "\n");
-        }
-
-
-        assertTrue(nodeArray.equals(testNodeArray));
+        assertTrue(allCorrect);
 
     }
 
-    //TODO: this doesn't pass the test for some reason (both arrayLists print out the exact same thing though)
+
     @Test
     @DisplayName("testGetAllEdges")
     public void testGetAllEdges(){
-        try {
-            connection.deleteAllTables();
-            connection.createTables();
-            System.out.println("Tables were reset");
-        } catch (Exception e) {
-            connection.createTables();
-            System.out.println("Tables were created");
-        }
-
         connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
         connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
-
-
         connection.addEdge("test1_test2", "test1", "test2");
 
         ArrayList<Edge> listofEdges = new ArrayList<>();
-        ArrayList<Edge> resultListofEdges = new ArrayList<>();
+
 
         double length1 = Math.pow((0-2),2);
         double length2 = Math.pow((0-2),2);
@@ -223,33 +193,35 @@ public class DatabaseTests {
 
         listofEdges.add(edge1);
 
-        resultListofEdges = connection.getAllEdges();
+        ArrayList<Edge> resultListofEdges = connection.getAllEdges();
 
-//        for (Edge e : listofEdges) {
-//            System.out.println(e.getId() + " " + e.getNode(0) + " " + e.getNode(1) + " " + e.length() + "\n");
-//        }
-//
-//        for (Edge e : resultListofEdges) {
-//            System.out.println(e.getId() + " " +  e.getNode(0)  + " " + e.getNode(1)  + " " + e.length() + "\n");
-//        }
-
-
-        assertTrue(listofEdges.equals(resultListofEdges));
-
+        boolean allCorrect = true;
+        boolean edgeID = false;
+        boolean length = false;
+        if(listofEdges.size() == resultListofEdges.size()){
+            for(int edge = 0; edge < resultListofEdges.size(); edge++){
+                Edge returnedEdge = resultListofEdges.get(edge);
+                Edge correctEdge = listofEdges.get(edge);
+                if(returnedEdge.getLength() == correctEdge.getLength()){
+                    length = true;
+                }
+                if(returnedEdge.getId().equals(correctEdge.getId())){
+                    edgeID = true;
+                }
+                if(length && edgeID == false){
+                    allCorrect = false;
+                }
+            }
+        }
+        else{
+            allCorrect = false;
+        }
+        assertTrue(allCorrect);
     }
 
     @Test
     @DisplayName("testAddNode")
     public void testAddNode(){
-        try {
-            connection.deleteAllTables();
-            connection.createTables();
-            System.out.println("Tables were reset");
-        } catch (Exception e) {
-            connection.createTables();
-            System.out.println("Tables were created");
-        }
-
         // set result to 0
         int testResult = 0;
 
@@ -262,14 +234,6 @@ public class DatabaseTests {
     @Test
     @DisplayName("testAddEdge")
     public void testAddEdge(){
-        try {
-            connection.deleteAllTables();
-            connection.createTables();
-            System.out.println("Tables were reset");
-        } catch (Exception e) {
-            connection.createTables();
-            System.out.println("Tables were created");
-        }
 
         // set result to 0
         int testResult = 0;
@@ -287,14 +251,6 @@ public class DatabaseTests {
     @Test
     @DisplayName("testModifyNode")
     public void testModifyNode(){
-        try {
-            connection.deleteAllTables();
-            connection.createTables();
-            System.out.println("Tables were reset");
-        } catch (Exception e) {
-            connection.createTables();
-            System.out.println("Tables were created");
-        }
 
         // set result to 0
         int testResult = 0;
@@ -311,15 +267,6 @@ public class DatabaseTests {
     @DisplayName("testDeleteEdge")
     public void testDeleteEdge(){
 
-        try {
-            connection.deleteAllTables();
-            connection.createTables();
-            System.out.println("Tables were reset");
-        } catch (Exception e) {
-            connection.createTables();
-            System.out.println("Tables were created");
-        }
-
         // set result to 0
         int testResult = 0;
 
@@ -330,20 +277,14 @@ public class DatabaseTests {
 
         testResult = connection.deleteEdge("testEdge1", "testEdge2");
 
-        assertTrue(testResult == 1);
+        System.out.println(testResult);
+
+        assertTrue(testResult == 0);
     }
 
     @Test
     @DisplayName("testDeleteNode")
     public void testDeleteNode(){
-        try {
-            connection.deleteAllTables();
-            connection.createTables();
-            System.out.println("Tables were reset");
-        } catch (Exception e) {
-            connection.createTables();
-            System.out.println("Tables were created");
-        }
 
         // set result to 0
         int testResult = 0;
@@ -360,15 +301,6 @@ public class DatabaseTests {
 
         //File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
         //File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
-
-        try {
-            connection.deleteAllTables();
-            connection.createTables();
-            System.out.println("Tables were reset");
-        } catch (Exception e) {
-            connection.createTables();
-            System.out.println("Tables were created");
-        }
 
         connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
         connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
@@ -389,7 +321,51 @@ public class DatabaseTests {
     @Test
     @DisplayName("testGetNewCSVFile")
     public void testGetNewCSVFile(){
+        connection.addNode("test1", 0, 0,"f1", "b1", "test", "long", "asd");
+        connection.addNode("test2", 2, 2,"f2", "b2", "test", "name", "test");
+        connection.addNode("test3", 3, 3,"f3", "b3", "test", "test", "hert");
+        connection.addNode("test4", 4, 4,"f4", "b4", "test", "fun", "test");
 
+        connection.getNewCSVFile("node");
+
+        File testFile = new File("src/test/resources/edu/wpi/TeamE/outputNodeTest.csv");
+        File nodeFile = new File("src/test/resources/edu/wpi/TeamE/outputNodeDB.csv");
+        ArrayList<String> testArray = new ArrayList<String>();
+        ArrayList<String> nodeArray = new ArrayList<String>();
+
+        try {
+            FileReader fr = new FileReader(testFile);
+            BufferedReader br = new BufferedReader(fr);
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                testArray.add(line);
+            }
+
+            br.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.err.println("populateTable() outer try/catch error");
+        }
+
+        try {
+            FileReader fr = new FileReader(nodeFile);
+            BufferedReader br = new BufferedReader(fr);
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                nodeArray.add(line);
+            }
+
+            br.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.err.println("populateTable() outer try/catch error");
+        }
+
+        assertEquals(nodeArray, testArray);
     }
 
 

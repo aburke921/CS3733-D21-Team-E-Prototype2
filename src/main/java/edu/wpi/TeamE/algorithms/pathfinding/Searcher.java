@@ -18,6 +18,16 @@ public abstract class Searcher {
 
     private makeConnection con;
 
+    //floor HashMap
+    protected HashMap<String, Integer> floor = new HashMap<String, Integer>(){{
+        put("L2", 0);
+        put("L1", 1);
+        put("G", 1);
+        put("1", 2);
+        put("2", 3);
+        put("3", 4);
+    }};
+
     /**
      * Super constructor, initializes cache
      */
@@ -91,7 +101,7 @@ public abstract class Searcher {
         Path path = new Path();
         //pop off of stack onto linked list
         while(!stack.isEmpty()){
-            path.add(stack.pop().copy());
+            path.add(stack.pop());
         }
 
         return path;

@@ -141,9 +141,12 @@ public class PathFinder {
         if(startNodeID.equals(endNodeID)) {
             System.out.println("Cannot choose the same starting and ending location. Try again");
 
+            //remove drawn line
+            pane.getChildren().clear();
+
+            //SnackBar popup
             JFXSnackbar bar = new JFXSnackbar(pane);
             bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Cannot choose the same starting and ending location.\nTry again.")));
-
         }
         else {
             //Execute A* Search

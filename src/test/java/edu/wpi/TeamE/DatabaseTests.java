@@ -6,7 +6,10 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
@@ -19,9 +22,13 @@ public class DatabaseTests {
 
     makeConnection connection;
 
-    @BeforeEach
+    @BeforeAll
     public void setConnection(){
         connection = makeConnection.makeConnection();
+    }
+
+    @BeforeEach
+    public void setupTables(){
         try {
             connection.deleteAllTables();
             connection.createTables();
@@ -30,34 +37,6 @@ public class DatabaseTests {
             connection.createTables();
             System.out.println("Tables were created");
         }
-    }
-
-    //TODO: haven't done yet
-    @Test
-    @DisplayName("testCreateTables")
-    public void testCreateTables(){
-
-    }
-
-    //TODO: haven't done yet
-    @Test
-    @DisplayName("testDeleteAllTables")
-    public void testDeleteAllTables(){
-
-    }
-
-    //TODO: haven't done yet
-    @Test
-    @DisplayName("testPopulateTable")
-    public void testPopulateTable(){
-
-    }
-
-    //TODO: haven't done yet
-    @Test
-    @DisplayName("testAddLength")
-    public void testAddLength(){
-
     }
 
     @Test
@@ -223,7 +202,7 @@ public class DatabaseTests {
             for(int edge = 0; edge < resultListofEdges.size(); edge++){
                 Edge returnedEdge = resultListofEdges.get(edge);
                 Edge correctEdge = listofEdges.get(edge);
-                if(returnedEdge.length() == correctEdge.length()){
+                if(returnedEdge.getLength() == correctEdge.getLength()){
                     length = true;
                 }
                 if(returnedEdge.getId().equals(correctEdge.getId())){
@@ -298,7 +277,9 @@ public class DatabaseTests {
 
         testResult = connection.deleteEdge("testEdge1", "testEdge2");
 
-        assertTrue(testResult == 1);
+        System.out.println(testResult);
+
+        assertTrue(testResult == 0);
     }
 
     @Test
@@ -314,33 +295,77 @@ public class DatabaseTests {
         assertTrue(testResult == 1);
     }
 
-//    @Test
-//    @DisplayName("testGetListofNodeIDS")
-//    public void testGetListofNodeIDS(){
-//
-//        //File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-//        //File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
-//
-//        connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
-//        connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
-//        connection.addNode("test3", 3, 3,"test", "test", "test", "test", "test");
-//        connection.addNode("test4", 4, 4,"test", "test", "test", "test", "test");
-//
-//        ArrayList<String> listOfNodeIDs = new ArrayList<>();
-//
-//        listOfNodeIDs.add("test1");
-//        listOfNodeIDs.add("test2");
-//        listOfNodeIDs.add("test3");
-//        listOfNodeIDs.add("test4");
-//
-//        assertTrue(listOfNodeIDs.equals(connection.getListofNodeIDS()));
-//    }
+    @Test
+    @DisplayName("testGetListofNodeIDS")
+    public void testGetListofNodeIDS(){
+
+        //File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+        //File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+
+        connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
+        connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
+        connection.addNode("test3", 3, 3,"test", "test", "test", "test", "test");
+        connection.addNode("test4", 4, 4,"test", "test", "test", "test", "test");
+
+        ArrayList<String> listOfNodeIDs = new ArrayList<>();
+
+        listOfNodeIDs.add("test1");
+        listOfNodeIDs.add("test2");
+        listOfNodeIDs.add("test3");
+        listOfNodeIDs.add("test4");
+
+        assertTrue(listOfNodeIDs.equals(connection.getListofNodeIDS()));
+    }
 
     //TODO: haven't done yet
     @Test
     @DisplayName("testGetNewCSVFile")
     public void testGetNewCSVFile(){
+        connection.addNode("test1", 0, 0,"f1", "b1", "test", "long", "asd");
+        connection.addNode("test2", 2, 2,"f2", "b2", "test", "name", "test");
+        connection.addNode("test3", 3, 3,"f3", "b3", "test", "test", "hert");
+        connection.addNode("test4", 4, 4,"f4", "b4", "test", "fun", "test");
 
+        connection.getNewCSVFile("node");
+
+        File testFile = new File("src/test/resources/edu/wpi/TeamE/outputNodeTest.csv");
+        File nodeFile = new File("src/test/resources/edu/wpi/TeamE/outputNodeDB.csv");
+        ArrayList<String> testArray = new ArrayList<String>();
+        ArrayList<String> nodeArray = new ArrayList<String>();
+
+        try {
+            FileReader fr = new FileReader(testFile);
+            BufferedReader br = new BufferedReader(fr);
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                testArray.add(line);
+            }
+
+            br.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.err.println("populateTable() outer try/catch error");
+        }
+
+        try {
+            FileReader fr = new FileReader(nodeFile);
+            BufferedReader br = new BufferedReader(fr);
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                nodeArray.add(line);
+            }
+
+            br.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.err.println("populateTable() outer try/catch error");
+        }
+
+        assertEquals(nodeArray, testArray);
     }
 
 

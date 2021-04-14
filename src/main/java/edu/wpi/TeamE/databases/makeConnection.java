@@ -196,6 +196,7 @@ public class makeConnection {
 
 	}
 
+
 	public void deleteNodeTable() {
 
 		try {

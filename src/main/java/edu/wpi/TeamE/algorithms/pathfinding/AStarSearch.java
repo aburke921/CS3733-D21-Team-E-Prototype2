@@ -81,15 +81,6 @@ public class AStarSearch extends Searcher {
      * @return the distance between two nodes
      */
     private double dist(Node n1, Node n2){
-        double dist;
-        if (!"ELEV".equalsIgnoreCase(n1.get("type")) || !"ELEV".equalsIgnoreCase(n2.get("type"))) {
-             dist = Math.sqrt(Math.pow(n1.getX() - n2.getX(), 2) + Math.pow(n1.getY() - n2.getY(), 2));
-        } else {
-            int floorChange = floor.get(n1.get("floor")) - floor.get(n2.get("floor"));
-            floorChange = Math.abs(floorChange);
-
-            dist = floorChange * 30;
-        }
-        return dist;
+        return Math.sqrt(Math.pow(n1.getX() - n2.getX(), 2) + Math.pow(n1.getY() - n2.getY(), 2));
     }
 }

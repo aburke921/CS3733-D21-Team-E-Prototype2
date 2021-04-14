@@ -4,6 +4,9 @@ import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.stage.FileChooser;
 import javafx.util.Pair;
 import java.io.*;
 import java.io.BufferedReader;
@@ -114,6 +117,54 @@ public class makeConnection {
 		}
 	}
 
+	public void createNodeTable() {
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			stmt.execute(
+					"create table node"
+							+ "("
+							+ "    nodeID    varchar(31) primary key,"
+							+ "    xCoord    int not null,"
+							+ "    yCoord    int not null,"
+							+ "    floor     varchar(5) not null,"
+							+ "    building  varchar(20),"
+							+ "    nodeType  varchar(10),"
+							+ "    longName  varchar(100),"
+							+ "    shortName varchar(100),"
+							+ "    unique (xCoord, yCoord, floor)"
+							+ ")");
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating node table");
+		}
+
+	}
+
+	public void createEdgeTable() {
+		try {
+
+			Statement stmt = connection.createStatement();
+			stmt.execute(
+					"create table hasEdge"
+							+ "("
+							+ "    edgeID    varchar(63) primary key,"
+							+ "    startNode varchar(31) not null references node (nodeID) on delete cascade,"
+							+ "    endNode   varchar(31) not null references node (nodeID) on delete cascade, "
+							+ "    length    float, "
+							+ "    unique (startNode, endNode)"
+							+ ")");
+
+			// Needs a way to calculate edgeID, either in Java or by a sql trigger
+			// Probably in Java since it's a PK
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating hasEdge table");
+		}
+	}
+
 
 	/**
 	 * Deletes node and hasEdges table
@@ -130,6 +181,31 @@ public class makeConnection {
 			// e.printStackTrace();
 			System.err.println("deleteAllTables() not working");
 		}
+	}
+
+	public void deleteEdgeTable() {
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			stmt.execute("drop table hasEdge");
+			stmt.close();
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("deleteEdgeTable() not working");
+		}
+
+	}
+
+	public void deleteNodeTable() {
+		try {
+			Statement stmt = this.connection.createStatement();
+			stmt.execute("drop table node");
+			stmt.close();
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("deleteNodeTable() not working");
+		}
+
 	}
 
 	/**

@@ -176,15 +176,15 @@ public class EdgeMapEditor {
 
         prepareEdges(treeTable);
     }
-    @FXML
-    public void toFileUpload() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/EdgeFileUpload.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+//    @FXML
+//    public void toFileUpload() {
+//        try {
+//            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/EdgeFileUpload.fxml"));
+//            App.getPrimaryStage().getScene().setRoot(root);
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
 
     /**
@@ -192,21 +192,15 @@ public class EdgeMapEditor {
      * uploads file to database, refreshes page
      * @param e actionevent
      */
-    public void fileOpener(final ActionEvent e) {
-
-        final FileChooser fileChooser = new FileChooser();
+    public void fileOpener(ActionEvent e) {
+        FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
+        makeConnection connection = makeConnection.makeConnection();
         if (file != null) {
-            //openFile(file);
-            //file.getAbsolutePath();
-            makeConnection connection = new makeConnection();
-            connection.deleteAllTables();
-            // TODO: delete edge table only plzzzzzzzzzzzzz
-            connection.createTables();
-            // TODO: create edge table only plzzzzzzzzzzzzz
-            connection.populateTable("edge", file);
-            //database's fcn for file uploading goes here, param is file
-            //when submit button is pressed, update/refresh?
+            connection.deleteEdgeTable();
+            connection.createEdgeTable();
+            connection.populateTable("hasEdge", file);
+            System.out.println("Success");
         }
     }
 

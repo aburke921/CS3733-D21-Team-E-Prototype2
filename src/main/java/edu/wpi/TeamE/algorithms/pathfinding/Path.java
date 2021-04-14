@@ -37,9 +37,8 @@ public class Path {
         pathEnd.setNext(n);
         //move pathEnd to
         //for(Iterator<Node> itr = n.iterator(); itr.hasNext(); pathEnd = itr.next());
-        Iterator<Node> itr = n.iterator();
-        while (itr.hasNext()){
-            pathEnd = itr.next();
+        for (Node node : pathEnd) {
+            pathEnd = node;
         }
     }
 

@@ -15,12 +15,10 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.ArrayList;
 
-public class AStarTesting {
+public class PathFindingTests {
     static Searcher search = new AStarSearch();
     static ArrayList<Path> expectedList = new ArrayList<>();
     static ArrayList<Pair<String, String>> testList = new ArrayList<>();
-    Path expected;
-    Pair<String, String> test;
     static int index;
 
     @BeforeAll
@@ -55,15 +53,15 @@ public class AStarTesting {
         Node a9 = (search.getNode("eWALK00101"));
         Node a10 = (search.getNode("ePARK00101"));
 
-        a9.setNext(a10);
-        a8.setNext(a9);
-        a7.setNext(a8);
-        a6.setNext(a7);
-        a5.setNext(a6);
-        a4.setNext(a5);
-        a3.setNext(a4);
-        a2.setNext(a3);
         a1.setNext(a2);
+        a2.setNext(a3);
+        a3.setNext(a4);
+        a4.setNext(a5);
+        a5.setNext(a6);
+        a6.setNext(a7);
+        a7.setNext(a8);
+        a8.setNext(a9);
+        a9.setNext(a10);
 
         exp1.add(a1);
 
@@ -82,13 +80,13 @@ public class AStarTesting {
         Node b7 = (search.getNode("eWALK01101"));
         Node b8 = (search.getNode("FEXIT00301"));
 
-        b7.setNext(b8);
-        b6.setNext(b7);
-        b5.setNext(b6);
-        b4.setNext(b5);
-        b3.setNext(b4);
-        b2.setNext(b3);
         b1.setNext(b2);
+        b2.setNext(b3);
+        b3.setNext(b4);
+        b4.setNext(b5);
+        b5.setNext(b6);
+        b6.setNext(b7);
+        b7.setNext(b8);
 
         exp2.add(b1);
 
@@ -103,9 +101,12 @@ public class AStarTesting {
         Node c3 = (search.getNode("eWALK01001"));
         Node c4 = (search.getNode("FEXIT00201"));
 
-        c3.setNext(c4);
-        c2.setNext(c3);
-        c1.setNext(c2);
+        System.err.println(c2.get("id") + " " + c2.get("building"));
+        System.err.println(c3.get("id") + " " + c3.get("building"));
+
+        c1.setNext(c4);
+        //c2.setNext(c3);
+        //c3.setNext(c4);
 
         exp3.add(c1);
 
@@ -116,12 +117,6 @@ public class AStarTesting {
         index = 0;
 
 
-    }
-
-    @BeforeEach
-    public void setupNextTest(){
-        expected = expectedList.get(index);
-        test = testList.get(index);
     }
 
     @Test
@@ -164,22 +159,22 @@ public class AStarTesting {
 
     @Test
     public void testLobbyToParking(){
-        Path out = search.search(test.getKey(), test.getValue());
-        assertTrue(expected.equals(out));
-        index++;
+        Path out = search.search(testList.get(0).getKey(), testList.get(0).getValue());
+        assertTrue(expectedList.get(0).equals(out));
     }
 
     @Test
     public void testParkingToER(){
-        Path out = search.search(test.getKey(), test.getValue());
-        assertTrue(expected.equals(out));
-        index++;
+        Path out = search.search(testList.get(1).getKey(), testList.get(1).getValue());
+        out.print("id");
+        expectedList.get(1).print("id");
+        assertTrue(expectedList.get(1).equals(out));
     }
 
     @Test
     public void testERToLobby(){
-        Path out = search.search(test.getKey(), test.getValue());
-        assertTrue(expected.equals(out));
+        Path out = search.search(testList.get(2).getKey(), testList.get(2).getValue());
+        assertTrue(expectedList.get(2).equals(out));
     }
 
 }

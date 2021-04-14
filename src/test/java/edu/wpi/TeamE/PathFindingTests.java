@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PathFindingTests {
     static Searcher search;
@@ -159,6 +160,30 @@ public class PathFindingTests {
         Path out = search.search(nodeId, nodeId);
 
         assertTrue(exp4.equals(out));
+    }
+
+    @Test
+    public void getNeighborsTest(){
+        HashMap<String, Double> test1 = search.getNode("ePARK00101").getNeighbors();
+
+        HashMap<String, Double> exp1 = new HashMap<>();
+
+        exp1.put("eWALK00101", 86.0232526704);
+
+        for(String key : test1.keySet()) {
+            assertEquals(exp1.get(key), test1.get(key), 0.01);
+        }
+
+        HashMap<String, Double> test2 = search.getNode("CLABS001L1").getNeighbors();
+
+        HashMap<String, Double> exp2 = new HashMap<>();
+
+        exp2.put("CREST002L1", 100.000);
+        exp2.put("WELEV00ML1", 145.000);
+
+        for(String key : test2.keySet()) {
+            assertEquals(exp2.get(key), test2.get(key), 0.01);
+        }
     }
 
 }

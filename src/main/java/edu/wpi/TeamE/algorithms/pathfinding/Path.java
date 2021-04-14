@@ -19,8 +19,19 @@ public class Path {
     public Path(){
         pathHead = new Node();
         pathEnd = pathHead;
+
     }
 
+    public Path(Node... nodes){
+        this();
+        for(Node node : nodes){
+            add(node);
+        }
+    }
+
+    public boolean isEmpty(){
+        return pathHead == pathEnd;
+    }
     /**
      * @return the first node in list
      */
@@ -29,18 +40,15 @@ public class Path {
     }
 
     /**
-     * Add node and all 'next' nodes to
-     * @param n Node to add to path
+     * Adds a copy of a singular node to end of list
+     * @param _n Node to add to path
      */
-    public void add(Node n){
+    public void add(Node _n){
+        Node n = _n.copy();
+        //System.out.println("adding "+n.get("id")+", "+n);
         //set the end of the path to point at n
         pathEnd.setNext(n);
-        //move pathEnd to
-        //for(Iterator<Node> itr = n.iterator(); itr.hasNext(); pathEnd = itr.next());
-        Iterator<Node> itr = n.iterator();
-        while (itr.hasNext()){
-            pathEnd = itr.next();
-        }
+        pathEnd = n;
     }
 
     /**
@@ -48,7 +56,10 @@ public class Path {
      * @param p Path to append, if path is empty nothing happens
      */
     public void add(Path p) {
-        add(p.peek());
+        if(!p.isEmpty()) {
+            pathEnd.setNext(p.peek());
+            pathEnd = p.pathEnd;
+        }
     }
 
     /**

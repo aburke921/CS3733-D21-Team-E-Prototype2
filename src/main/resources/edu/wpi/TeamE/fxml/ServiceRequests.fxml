@@ -96,27 +96,27 @@
                               <Insets left="20.0" />
                            </FlowPane.margin>
                            <children>
-                              <Button mnemonicParsing="false" onAction="#toFloralDelivery" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
+                              <Button fx:id="floralGoButton" mnemonicParsing="false" onAction="#toFloralDelivery" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#toExternalPatient" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
+                              <Button fx:id="externalGoButton" mnemonicParsing="false" onAction="#toExternalPatient" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
                                  <VBox.margin>
                                     <Insets top="12.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#toSanitation" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
+                              <Button fx:id="sanitationGoButton" mnemonicParsing="false" onAction="#toSanitation" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
                                  <VBox.margin>
                                     <Insets top="12.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#toMedicineDelivery" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
+                              <Button fx:id="medicineGoButton" mnemonicParsing="false" onAction="#toMedicineDelivery" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
                                  <VBox.margin>
                                     <Insets top="12.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button mnemonicParsing="false" onAction="#toSecurity" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
+                              <Button fx:id="securityGoButton" mnemonicParsing="false" onAction="#toSecurity" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
                                  <VBox.margin>
                                     <Insets top="12.0" />
                                  </VBox.margin>

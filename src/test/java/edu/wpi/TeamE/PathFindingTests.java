@@ -13,13 +13,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.ArrayList;
 
 public class PathFindingTests {
     static Searcher search;
-    static ArrayList<Path> expectedList;
-    static ArrayList<Pair<String, String>> testList;
-    static int index;
 
     @BeforeAll
     public static void setupExpected(){
@@ -52,10 +48,6 @@ public class PathFindingTests {
 
 
         search = new AStarSearch();
-        expectedList = new ArrayList<>();
-        testList = new ArrayList<>();
-
-        index = 0;
     }
 
     @Test

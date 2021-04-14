@@ -197,6 +197,7 @@ public class makeConnection {
 	}
 
 	public void deleteNodeTable() {
+
 		try {
 			Statement stmt = this.connection.createStatement();
 			stmt.execute("drop table node");

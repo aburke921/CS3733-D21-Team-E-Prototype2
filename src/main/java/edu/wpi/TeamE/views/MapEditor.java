@@ -310,9 +310,12 @@ public class MapEditor {
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
         makeConnection connection = makeConnection.makeConnection();
         if (file != null) {
-            connection.deleteNodeTable();
-            connection.createNodeTable();
+            connection.createEdgeTable();
+            File saveEdges = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+            connection.deleteAllTables();
+            connection.createTables();
             connection.populateTable("node", file);
+            connection.populateTable("hasEdge", saveEdges);
             System.out.println("Success");
         }
     }

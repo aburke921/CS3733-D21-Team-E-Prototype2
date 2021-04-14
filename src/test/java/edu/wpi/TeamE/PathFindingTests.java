@@ -16,107 +16,46 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class PathFindingTests {
-    static Searcher search = new AStarSearch();
-    static ArrayList<Path> expectedList = new ArrayList<>();
-    static ArrayList<Pair<String, String>> testList = new ArrayList<>();
+    static Searcher search;
+    static ArrayList<Path> expectedList;
+    static ArrayList<Pair<String, String>> testList;
     static int index;
 
     @BeforeAll
     public static void setupExpected(){
         System.out.println("STARTING UP!!!");
-        makeConnection connection = makeConnection.makeConnection();
-        System.out.println("Connected to the DB");
+        makeConnection con = makeConnection.makeConnection();
         File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
         File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
         try {
-            connection.deleteAllTables();
-            connection.createTables();
-            connection.populateTable("node", nodes);
-            connection.populateTable("hasEdge", edges);
+            con.deleteAllTables();
+            System.out.println("Deleted Tables");
+            throw new Exception();
+            /*
+            con.createTables();
+            System.out.println("Created Tables");
+            con.populateTable("node", nodes);
+            System.out.println("Populated nodes");
+            con.populateTable("hasEdge", edges);
+            System.out.println("Populated edges");
             System.out.println("Tables were reset");
+             */
         } catch (Exception e) {
-            connection.createTables();
-            connection.populateTable("node", nodes);
-            connection.populateTable("hasEdge", edges);
+            con.createTables();
+            System.out.println("Created Tables");
+            con.populateTable("node", nodes);
+            System.out.println("Populated nodes");
+            con.populateTable("hasEdge", edges);
+            System.out.println("Populated edges");
             System.out.println("Tables were created and populated");
         }
 
-        Path exp1 = new Path();
-        Node a1 = search.getNode("FEXIT00201");
-        Node a2 = (search.getNode("FEXIT00201"));
-        Node a3 = (search.getNode("eWALK01001"));
-        Node a4 = (search.getNode("eWALK00701"));
-        Node a5 = (search.getNode("eWALK00601"));
-        Node a6 = (search.getNode("eWALK00401"));
-        Node a7 = (search.getNode("eWALK00301"));
-        Node a8 = (search.getNode("eWALK00201"));
-        Node a9 = (search.getNode("eWALK00101"));
-        Node a10 = (search.getNode("ePARK00101"));
 
-        a1.setNext(a2);
-        a2.setNext(a3);
-        a3.setNext(a4);
-        a4.setNext(a5);
-        a5.setNext(a6);
-        a6.setNext(a7);
-        a7.setNext(a8);
-        a8.setNext(a9);
-        a9.setNext(a10);
-
-        exp1.add(a1);
-
-        expectedList.add(exp1);
-
-        testList.add(new Pair("FEXIT00201", "ePARK00101"));
-
-        Path exp2 = new Path();
-
-        Node b1 = (search.getNode("ePARK01701"));
-        Node b2 = (search.getNode("eWALK01601"));
-        Node b3 = (search.getNode("eWALK01301"));
-        Node b4 = (search.getNode("eWALK01201"));
-        Node b5 = (search.getNode("eWALK00801"));
-        Node b6 = (search.getNode("eWALK00901"));
-        Node b7 = (search.getNode("eWALK01101"));
-        Node b8 = (search.getNode("FEXIT00301"));
-
-        b1.setNext(b2);
-        b2.setNext(b3);
-        b3.setNext(b4);
-        b4.setNext(b5);
-        b5.setNext(b6);
-        b6.setNext(b7);
-        b7.setNext(b8);
-
-        exp2.add(b1);
-
-        expectedList.add(exp2);
-
-        testList.add(new Pair("ePARK01701", "FEXIT00301"));
-
-        Path exp3 = new Path();
-
-        Node c1 = (search.getNode("FEXIT00301"));
-        Node c2 = (search.getNode("eWALK01101"));
-        Node c3 = (search.getNode("eWALK01001"));
-        Node c4 = (search.getNode("FEXIT00201"));
-
-        System.err.println(c2.get("id") + " " + c2.get("building"));
-        System.err.println(c3.get("id") + " " + c3.get("building"));
-
-        c1.setNext(c4);
-        //c2.setNext(c3);
-        //c3.setNext(c4);
-
-        exp3.add(c1);
-
-        expectedList.add(exp3);
-
-        testList.add(new Pair("FEXIT00301", "FEXIT00201"));
+        search = new AStarSearch();
+        expectedList = new ArrayList<>();
+        testList = new ArrayList<>();
 
         index = 0;
-
-
     }
 
     @Test
@@ -137,6 +76,7 @@ public class PathFindingTests {
 
     @Test
     public void nodeInfoGettersTest(){
+
         Node exit = search.getNode("FEXIT00301");
         Node hall = search.getNode("GHALL008L2");
         Node elev = search.getNode("GELEV00N02");
@@ -159,22 +99,66 @@ public class PathFindingTests {
 
     @Test
     public void testLobbyToParking(){
-        Path out = search.search(testList.get(0).getKey(), testList.get(0).getValue());
-        assertTrue(expectedList.get(0).equals(out));
+        Pair<String, String> terminalNodes = new Pair<>("FEXIT00201", "ePARK00101");
+
+        Node a1 = search.getNode("FEXIT00201");
+        Node a2 = search.getNode("eWALK01001");
+        Node a3 = search.getNode("eWALK00701");
+        Node a4 = search.getNode("eWALK00601");
+        Node a5 = search.getNode("eWALK00401");
+        Node a6 = search.getNode("eWALK00301");
+        Node a7 = search.getNode("eWALK00201");
+        Node a8 = search.getNode("eWALK00101");
+        Node a9 = search.getNode("ePARK00101");
+
+        Path exp1 = new Path(a1, a2, a3, a4, a5, a6, a7, a8, a9);
+
+        Path out = search.search(terminalNodes.getKey(), terminalNodes.getValue());
+        assertTrue(exp1.equals(out));
     }
 
     @Test
     public void testParkingToER(){
-        Path out = search.search(testList.get(1).getKey(), testList.get(1).getValue());
-        out.print("id");
-        expectedList.get(1).print("id");
-        assertTrue(expectedList.get(1).equals(out));
+        Pair<String, String> terminalNodes = new Pair<>("ePARK01701", "FEXIT00301");
+
+        Node b1 = search.getNode("ePARK01701");
+        Node b2 = search.getNode("eWALK01601");
+        Node b3 = search.getNode("eWALK01301");
+        Node b4 = search.getNode("eWALK01201");
+        Node b5 = search.getNode("eWALK00801");
+        Node b6 = search.getNode("eWALK00901");
+        Node b7 = search.getNode("eWALK01101");
+        Node b8 = search.getNode("FEXIT00301");
+
+        Path exp2 = new Path(b1, b2, b3, b4, b5, b6, b7, b8);
+        Path out = search.search(terminalNodes.getKey(), terminalNodes.getValue());
+
+        assertTrue(exp2.equals(out));
     }
 
     @Test
     public void testERToLobby(){
-        Path out = search.search(testList.get(2).getKey(), testList.get(2).getValue());
-        assertTrue(expectedList.get(2).equals(out));
+        Pair<String, String> terminalNodes = new Pair<>("FEXIT00301", "FEXIT00201");
+
+        Node c1 = search.getNode("FEXIT00301");
+        Node c2 = search.getNode("eWALK01101");
+        Node c3 = search.getNode("eWALK01001");
+        Node c4 = search.getNode("FEXIT00201");
+
+        Path exp3 = new Path(c1, c2, c3, c4);
+        Path out = search.search(terminalNodes.getKey(), terminalNodes.getValue());
+
+        assertTrue(exp3.equals(out));
+    }
+
+    @Test
+    public void testStartEndSame(){
+        String nodeId = "FEXIT00301";
+        Node node = search.getNode(nodeId);
+        Path exp4 = new Path(node);
+        Path out = search.search(nodeId, nodeId);
+
+        assertTrue(exp4.equals(out));
     }
 
 }

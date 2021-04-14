@@ -77,6 +77,10 @@ public class MapEditor {
         }
     }
 
+    /**
+     * brings user to the help page
+     * @param e
+     */
     @FXML
     public void getHelpDefault(ActionEvent e) {
     }
@@ -157,6 +161,10 @@ public class MapEditor {
             }
         }
 
+    /**
+     * Runs editNode fcn when edit node button is pressed
+     * @param e
+     */
     @FXML
     public void editNodeButton(ActionEvent e) {
         editNode(treeTable);
@@ -226,6 +234,10 @@ public class MapEditor {
         return i;
     }
 
+    /**
+     * calls the addNode fcn when the add node button is pressed
+     * @param e
+     */
     @FXML
     public void addNodeButton(ActionEvent e) {
         addNode();
@@ -251,11 +263,20 @@ public class MapEditor {
         return s;
     }
 
+    /**
+     * calls the deleteNode fcn when the delete button is clicked
+     * @param e
+     */
     @FXML
     public void deleteNodeButton(ActionEvent e) {
         deleteNode(treeTable);
     }
 
+    /**
+     * when refresh button is clicked, retrieves the arrayList of Nodes,
+     * calls the function to display data using the array (prepareNodes)
+     * @param actionEvent
+     */
     @FXML
     public void startTableButton(ActionEvent actionEvent) {
         //creating the root for the array
@@ -288,6 +309,13 @@ public class MapEditor {
         }
     }
 
+
+
+    /**
+     *opens the file explorer on user's device, allows user to select CSV file,
+     * uploads file to database, refreshes page
+     * @param e actionevent
+     */
     @FXML
     private void openFile(ActionEvent e) throws IOException {
         makeConnection connection = makeConnection.makeConnection();

@@ -517,6 +517,31 @@ public class makeConnection {
 		}
 	}
 
+	public ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
+		ArrayList<String> listOfNodeIDs = new ArrayList<>();
+
+		String deleteNodeS = "SELECT nodeID FROM node WHERE '" + floorName + "' = FLOOR";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("nodeID");
+				listOfNodeIDs.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeIDs;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println("getListofNodeIDS error try/catch");
+			return listOfNodeIDs;
+		}
+
+	}
+
+
 	/**
 	 * gets all edges and each edge's attribute
 	 * @return ArrayList<Edge>

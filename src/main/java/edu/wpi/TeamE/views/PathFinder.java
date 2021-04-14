@@ -254,7 +254,7 @@ public class PathFinder {
         //Get longNames & IDs
         System.out.print("Begin Adding to Dropdown List... ");
         ObservableList<String> longNameArrayList = connection.getAllNodeLongNamesByFloor("1");
-        nodeIDArrayList = connection.getListofNodeIDS();
+        nodeIDArrayList = connection.getListOfNodeIDSByFloor("1");
         listOfId.addAll(nodeIDArrayList);
 
         //add ObservableLists to dropdowns

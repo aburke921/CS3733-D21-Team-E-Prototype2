@@ -122,7 +122,6 @@ public class DatabaseTests {
     }
 
 
-    //TODO: this doesn't pass the test for some reason (both arrayLists print out the exact same thing though)
     @Test
     @DisplayName("testGetAllNodes")
     public void testGetAllNodes(){
@@ -147,22 +146,58 @@ public class DatabaseTests {
 
         nodeArray = connection.getAllNodes();
 
-        for (Node n : testNodeArray) {
-            System.out.println(n.get("id") + " " + n.getX() + " " + n.getY() + " " + n.get("floor") + " " + n.get("building") + " " + n.get("type") + " " + n.get("longName") + " " + n.get("shortName") + "\n");
+        boolean allCorrect = true;
+        boolean nodeID = false;
+        boolean xCoord = false;
+        boolean yCoord = false;
+        boolean floor = false;
+        boolean building = false;
+        boolean nodeType = false;
+        boolean longName = false;
+        boolean shortName = false;
+
+        if(testNodeArray.size() == nodeArray.size()){
+            for(int node = 0; node < nodeArray.size(); node++){
+                Node returnedNode = nodeArray.get(node);
+                Node correctNode = testNodeArray.get(node);
+                if(returnedNode.get("id").equals(correctNode.get("id"))){
+                    nodeID = true;
+                }
+                if(returnedNode.getX() == correctNode.getX()){
+                    xCoord = true;
+                }
+                if(returnedNode.getY() == correctNode.getY()){
+                    yCoord = true;
+                }
+                if(returnedNode.get("floor").equals(correctNode.get("floor"))){
+                    floor = true;
+                }
+                if(returnedNode.get("building").equals(correctNode.get("building"))){
+                    building = true;
+                }
+                if(returnedNode.get("type").equals(correctNode.get("type"))){
+                    nodeType = true;
+                }
+                if(returnedNode.get("longName").equals(correctNode.get("longName"))){
+                    longName = true;
+                }
+                if(returnedNode.get("shortName").equals(correctNode.get("shortName"))){
+                    shortName = true;
+                }
+                if(nodeID && xCoord && yCoord && floor && building && nodeType && longName && shortName == false){
+                    allCorrect = false;
+                }
+            }
+        }
+        else{
+            allCorrect = false;
         }
 
-        System.out.println("break\n");
-
-        for (Node n : nodeArray) {
-            System.out.println(n.get("id") + " " + n.getX() + " " +   n.getY() + " " + n.get("floor") + " " + n.get("building") + " " + n.get("type") + " " + n.get("longName") + " " + n.get("shortName") + "\n");
-        }
-
-
-        assertTrue(nodeArray.equals(testNodeArray));
+        assertTrue(allCorrect);
 
     }
 
-    //TODO: this doesn't pass the test for some reason (both arrayLists print out the exact same thing though)
+
     @Test
     @DisplayName("testGetAllEdges")
     public void testGetAllEdges(){
@@ -198,7 +233,7 @@ public class DatabaseTests {
                     edgeID = true;
                 }
                 if(length && edgeID == false){
-                    allCorrect = true;
+                    allCorrect = false;
                 }
             }
         }

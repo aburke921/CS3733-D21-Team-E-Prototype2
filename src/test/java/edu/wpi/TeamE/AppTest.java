@@ -66,6 +66,59 @@ public class AppTest extends FxRobot {
   }
 
   /**---------------------------
+   MAP EDITOR NAVIGATION PAGE TESTS
+   ----------------------------*/
+
+  @Test
+  public void testFromGeneralToNodeEditor() throws Exception {
+    verifyThat("#mapEditorButton", Node::isVisible);
+    clickOn("#mapEditorButton");
+    verifyThat("Node Map CSV Uploads", Node::isVisible);
+    clickOn("#toNodeEditorButton");
+    verifyThat("Node Map Editor", Node::isVisible); //header on service page is visible
+
+    clickOn("Back");
+    verifyThat("Node Map CSV Uploads", Node::isVisible);
+  }
+
+  @Test
+  public void testFromGeneralToNodeCSV() throws Exception {
+    verifyThat("#mapEditorButton", Node::isVisible);
+    clickOn("#mapEditorButton");
+    verifyThat("Node Map CSV Uploads", Node::isVisible);
+    clickOn("#toNodeCSVUploadButton");
+    verifyThat("Upload Node File", Node::isVisible); //header on service page is visible
+
+    clickOn("Back");
+    verifyThat("Node Map CSV Uploads", Node::isVisible);
+
+  }
+
+  @Test
+  public void testFromGeneralToEdgeEditor() throws Exception {
+    verifyThat("#mapEditorButton", Node::isVisible);
+    clickOn("#mapEditorButton");
+    verifyThat("Node Map CSV Uploads", Node::isVisible);
+    clickOn("#toEdgeMapEditorButton");
+    verifyThat("Edge Map Editor", Node::isVisible); //header on service page is visible
+
+    clickOn("Back");
+    verifyThat("Node Map CSV Uploads", Node::isVisible);
+  }
+
+  @Test
+  public void testFromGeneralToEdgeCSV() throws Exception {
+    verifyThat("#mapEditorButton", Node::isVisible);
+    clickOn("#mapEditorButton");
+    verifyThat("Node Map CSV Uploads", Node::isVisible);
+    clickOn("#toEdgeCSVFileButton");
+    verifyThat("Upload Edge File", Node::isVisible); //header on service page is visible
+
+    clickOn("Back");
+    verifyThat("Node Map CSV Uploads", Node::isVisible);
+  }
+
+  /**---------------------------
     SERVICE REQUEST PAGE TESTS
    ----------------------------*/
 
@@ -109,4 +162,9 @@ public class AppTest extends FxRobot {
   public void testSecurityButtons() throws Exception {
     serviceRequestAssist("#securityGoButton","Security Service Request");
   }
+
+ /* @Test
+  public void testNodeEditorButton() throws Exception {
+
+  }*/
 }

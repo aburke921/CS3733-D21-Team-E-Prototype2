@@ -20,7 +20,7 @@ public class App extends Application {
 	}
 
 
-	@Override
+	/**@Override
 	public void init() {
 		System.out.println("STARTING UP!!!");
 		makeConnection connection = makeConnection.makeConnection();
@@ -41,7 +41,7 @@ public class App extends Application {
 			connection.populateTable("hasEdge", edges);
 			System.out.println("Tables were created and populated");
 		}
-	}
+	}**/
 
 
 	@Override

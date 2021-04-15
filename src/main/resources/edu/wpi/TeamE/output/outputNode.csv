@@ -356,7 +356,7 @@ GCONF02001,1493,2117,1,Shapiro,CONF,Shapiro Board Room MapNode 20 Floor 1,Shapir
 GDEPT01901,1566,2139,1,Shapiro,DEPT,Zinner Breakout Room MapNode 19 Floor 1,Zinner Breakout Room
 GELEV00N01,1647,1930,1,Shapiro,ELEV,Elevator N MapNode 26 Floor 1,Hall
 GELEV00Q01,1648,2161,1,Shapiro,ELEV,Elevator Q MapNode 18 Floor 1,Elevator Q Floor 1
-GEXIT00101,1751,1825,1,Shapiro,EXIT,Francis Street Exit MapNode 1 Floor 1,Francis Street Exit Floor 1
+GEXIT00101,1751,1825,1,Shapiro,EXIT,Francis Street Exit Floor 1,Francis Street Exit Floor 1
 GHALL00201,1722,1832,1,Shapiro,HALL,Hallway MapNode 2 Floor 1,Hall
 GHALL00301,1705,1831,1,Shapiro,HALL,Hallway MapNode 3 Floor 1,Hall
 GHALL00601,1707,2015,1,Shapiro,HALL,Hallway MapNode 6 Floor 1,Hall
@@ -436,7 +436,7 @@ GREST01203,1628,2052,3,Shapiro,REST,Restroom Node 12 Floor 3,Restroom Shapiro Fl
 GSERV01603,1580,1858,3,Shapiro,SERV,The Porch Node 16 Floor 3,The Porch
 GSTAI00903,1685,2052,3,Shapiro,STAI,Staircase Node 9 Floor 3,Floor 3 Stairs 
 GELEV00QL1,1637,2116,L1,Shapiro,ELEV,Elevator Q MapNode 7 Floor L1,Elevator Q L1
-GEXIT001L1,1702,2260,L1,Shapiro,EXIT,Fenwood Road Exit MapNode 1 Floor L1,Fenwood Road EntranceExit L1
+GEXIT001L1,1702,2260,L1,Shapiro,EXIT,Fenwood Road Exit Floor L1,Fenwood Road EntranceExit L1
 GHALL002L1,1702,2167,L1,Shapiro,HALL,Hallway MapNode 2 Floor L1,Hall
 GHALL003L1,1688,2167,L1,Shapiro,HALL,Hallway MapNode 3 Floor L1,Hall
 GHALL004L1,1666,2167,L1,Shapiro,HALL,Hallway MapNode 4 Floor L1,Hall
@@ -623,3 +623,4 @@ eWALK01501,3310,1483,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01601,3189,1360,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01701,3185,1292,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01801,3338,1352,1,Parking,WALK,Right Parking Lot Walkway,Walkway
+eWALK01901,1789,1757,1,Parking,WALK,Shapiro Lobby Entrance Sidewalk,Walkway

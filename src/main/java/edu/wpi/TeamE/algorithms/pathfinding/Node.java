@@ -1,14 +1,13 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Node Class, lots of specific Node implementation stuff
  * Handles node info
  */
 public class Node implements Comparable<Node>, Iterable<Node> {
-    private int xCoord, yCoord;
+    private int xCoord, yCoord, zCoord;
     //mapping of node information
     private HashMap<String, String> nodeInfo;
 
@@ -17,7 +16,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     private Node next;
 
     //an array containing the ids and distances of this node's neighbors
-    private HashMap<String, Double> neighbors;
+    private List<String> neighbors;
 
     //cost estimate for A*
     private Double costEst;
@@ -28,7 +27,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
      */
     public Node(){
         next = null;
-        neighbors = new HashMap<>();
+        neighbors = new LinkedList<>();
         costEst = Double.MAX_VALUE;
     }
 
@@ -40,8 +39,6 @@ public class Node implements Comparable<Node>, Iterable<Node> {
                 String _type, String _longName,
                 String _shortName){
         this();
-        xCoord = _x;
-        yCoord = _y;
         nodeInfo = new HashMap<>(6);
         nodeInfo.put("id", _id);
         nodeInfo.put("floor", _floor);
@@ -49,7 +46,26 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         nodeInfo.put("type", _type);
         nodeInfo.put("longName", _longName);
         nodeInfo.put("shortName", _shortName);
+
+        xCoord = _x;
+        yCoord = _y;
+        zCoord = calculateZ(_floor);
     }
+    public int calculateZ(String floor) {
+        //floor HashMap
+        HashMap<String, Integer> floorMap = new HashMap<String, Integer>(){{
+            put("L2", 0);
+            put("L1", 1);
+            put("G", 1);
+            put("1", 2);
+            put("2", 3);
+            put("3", 4);
+        }};
+
+        int magicNumber = 5;
+        return floorMap.get(floor) * magicNumber;
+    }
+
 
     /**
      * @param info String representation of what info is requested
@@ -73,6 +89,11 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     public int getY(){
         return yCoord;
     }
+
+    public int getZ(){
+        return zCoord;
+    }
+
 
 
     /**
@@ -99,12 +120,12 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         return next;
     }
 
-    public HashMap<String, Double> getNeighbors(){
+    public List<String> getNeighbors(){
         return neighbors;
     }
 
-    public void addNeighbor(String newNeighborId, Double dist){
-        neighbors.put(newNeighborId, dist);
+    public void addNeighbor(String newNeighborId){
+        neighbors.add(newNeighborId);
     }
 
     public Node copy(){

@@ -26,8 +26,8 @@ public class App extends Application {
 		makeConnection connection = makeConnection.makeConnection();
 		System.out.println("Connected to the DB");
 
-		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+		File nodes = new File("bwEnodes.csv");
+		File edges = new File("bwEedges.csv");
 
 		try {
 			connection.deleteAllTables();

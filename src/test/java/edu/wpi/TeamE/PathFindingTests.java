@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.sql.SQLException;
 
 public class PathFindingTests {
     static Searcher search;
@@ -37,7 +38,11 @@ public class PathFindingTests {
             System.out.println("Tables were reset");
              */
         } catch (Exception e) {
-            con.createTables();
+            try {
+                con.createTables();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             System.out.println("Created Tables");
             con.populateTable("node", nodes);
             System.out.println("Populated nodes");

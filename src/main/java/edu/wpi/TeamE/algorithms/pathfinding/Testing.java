@@ -5,6 +5,7 @@ import edu.wpi.TeamE.databases.makeConnection;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Testing {
@@ -22,7 +23,11 @@ public class Testing {
             connection.populateTable("hasEdge", edges);
             System.out.println("Tables were reset");
         } catch (Exception e) {
-            connection.createTables();
+            try {
+                connection.createTables();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             connection.populateTable("node", nodes);
             connection.populateTable("hasEdge", edges);
             System.out.println("Tables were created and populated");

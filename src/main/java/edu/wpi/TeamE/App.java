@@ -30,16 +30,17 @@ public class App extends Application {
 		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
 
 		try {
-			connection.deleteAllTables();
+			// connection.deleteAllTables();
 			connection.createTables();
 			connection.populateTable("node", nodes);
 			connection.populateTable("hasEdge", edges);
-			System.out.println("Tables were reset");
+			System.out.println("Tables were created");
 		} catch (Exception e) {
-			connection.createTables();
-			connection.populateTable("node", nodes);
-			connection.populateTable("hasEdge", edges);
-			System.out.println("Tables were created and populated");
+			System.out.println("Tables already there");
+//			connection.createTables();
+//			connection.populateTable("node", nodes);
+//			connection.populateTable("hasEdge", edges);
+//			System.out.println("Tables were created and populated");
 		}
 	}
 

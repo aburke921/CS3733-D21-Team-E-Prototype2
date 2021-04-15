@@ -72,11 +72,9 @@ public class makeConnection {
 	 * Creates node and hasEdge tables
 	 * try/catch phrase set up in case the tables all ready exist
 	 */
-	public void createTables() {
-
-		try {
-			Statement stmt = this.connection.createStatement();
-			stmt.execute(
+	public void createTables() throws SQLException {
+			Statement nodeStmt = this.connection.createStatement();
+			nodeStmt.execute(
 					"create table node"
 							+ "("
 							+ "    nodeID    varchar(31) primary key,"
@@ -90,15 +88,8 @@ public class makeConnection {
 							+ "    unique (xCoord, yCoord, floor)"
 							+ ")");
 
-		} catch (SQLException e) {
-			// e.printStackTrace();
-			System.err.println("error creating node table");
-		}
-
-		try {
-
-			Statement stmt = connection.createStatement();
-			stmt.execute(
+		Statement hasEdgeStmt = connection.createStatement();
+			hasEdgeStmt.execute(
 					"create table hasEdge"
 							+ "("
 							+ "    edgeID    varchar(63) primary key,"
@@ -110,11 +101,6 @@ public class makeConnection {
 
 			// Needs a way to calculate edgeID, either in Java or by a sql trigger
 			// Probably in Java since it's a PK
-
-		} catch (SQLException e) {
-			// e.printStackTrace();
-			System.err.println("error creating hasEdge table");
-		}
 	}
 
 	public void createNodeTable() {
@@ -1080,7 +1066,11 @@ public class makeConnection {
 
 		makeConnection connection = makeConnection.makeConnection();
 		connection.deleteAllTables();
-		connection.createTables();
+		try {
+			connection.createTables();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		connection.populateTable("node", nodes);
 		connection.populateTable("hasEdge", edges);
 

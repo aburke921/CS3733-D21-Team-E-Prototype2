@@ -215,30 +215,10 @@ public class PathFinder {
                 prevXCoord = xCoord;
                 prevYCoord = yCoord;
             }
-            //print info
-//            System.out.println("xCoord: " + xCoord + "\nyCoord:" + yCoord + "\n---");
         }
 
         //add all objects to the scene
         pane.getChildren().add(g);
-    }
-
-    public void TEMPORARYCreateDB() { //todo
-        makeConnection connection = makeConnection.makeConnection();
-        System.out.println("STARTING UP!!!");
-        try {
-            connection.deleteAllTables();
-            System.out.println("1.");
-            connection.createTables();
-            System.out.println("2.");
-            File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-            File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
-            connection.populateTable("node", nodes);
-            connection.populateTable("hasEdge", edges);
-        } catch (Exception e) {
-            // e.printStackTrace();
-            System.out.println("Nothing to delete");
-        }
     }
 
     /**
@@ -256,11 +236,8 @@ public class PathFinder {
         Image image = new Image("edu/wpi/TeamE/FirstFloorMap.png");
         imageView.setImage(image);
 
-//        //todo, temp db connect
-//        TEMPORARYCreateDB();
-
-        //DB connection todo set up w/ new fcn DB is making?
-        makeConnection connection = new makeConnection();
+        //DB connection
+        makeConnection connection = makeConnection.makeConnection();
 
         //Get longNames & IDs
         System.out.print("Begin Adding to Dropdown List... ");

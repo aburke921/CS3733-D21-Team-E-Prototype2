@@ -118,6 +118,21 @@ public class AppTest extends FxRobot {
     verifyThat("Node Map CSV Uploads", Node::isVisible);
   }
 
+  @Test
+  public void testAddNode() throws Exception {
+    clickOn("#mapEditorButton");
+    clickOn("#toNodeEditorButton");
+    clickOn("#longNameInput").write("test");
+    //clickOn("X-Cord").write("1");
+    clickOn("#yCordInput").write("1");
+    clickOn("#idInput").write("test");
+    clickOn("#shortNameInput").write("test");
+    clickOn("#floorInput").write("1");
+    clickOn("#typeInput").write("Room");
+    clickOn("#buildingInput").write("Main");
+    clickOn("Add Node");
+  }
+
   /**---------------------------
     SERVICE REQUEST PAGE TESTS
    ----------------------------*/
@@ -207,4 +222,5 @@ public class AppTest extends FxRobot {
   public void testNodeEditorButton() throws Exception {
 
   }*/
+
 }

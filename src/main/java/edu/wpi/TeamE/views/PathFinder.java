@@ -155,7 +155,7 @@ public class PathFinder {
 
             //Call the path search function
             Path foundPath = aStar.search(startNodeID, endNodeID);
-            drawMap(foundPath);
+            drawMap(foundPath); //todo handle null return from A*
         }
     }
 

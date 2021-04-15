@@ -155,7 +155,21 @@ public class PathFinder {
 
             //Call the path search function
             Path foundPath = aStar.search(startNodeID, endNodeID);
-            drawMap(foundPath); //todo handle null return from A*
+
+            //draw map, unless path is null
+            if (foundPath == null) { //path is null
+
+                //remove drawn line
+                pane.getChildren().clear();
+
+                //SnackBar popup
+                JFXSnackbar bar = new JFXSnackbar(pane);
+                bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Sorry, something has gone wrong. Please try again.")));
+
+            } else { //path is not null
+                //draw path on map
+                drawMap(foundPath);
+            }
         }
     }
 

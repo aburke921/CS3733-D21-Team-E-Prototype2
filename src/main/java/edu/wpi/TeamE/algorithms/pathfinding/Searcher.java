@@ -1,9 +1,9 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 import edu.wpi.TeamE.databases.makeConnection;
 
@@ -18,15 +18,6 @@ public abstract class Searcher {
 
     private makeConnection con;
 
-    //floor HashMap
-    protected HashMap<String, Integer> floor = new HashMap<String, Integer>(){{
-        put("L2", 0);
-        put("L1", 1);
-        put("G", 1);
-        put("1", 2);
-        put("2", 3);
-        put("3", 4);
-    }};
 
     /**
      * Super constructor, initializes cache
@@ -43,8 +34,8 @@ public abstract class Searcher {
         }
 
         for(Edge edge : edges){
-            graph.get(edge.getNode(0)).addNeighbor(edge.getNode(1), edge.getLength());
-            graph.get(edge.getNode(1)).addNeighbor(edge.getNode(0), edge.getLength());
+            graph.get(edge.getNode(0)).addNeighbor(edge.getNode(1));
+            graph.get(edge.getNode(1)).addNeighbor(edge.getNode(0));
         }
     }
 
@@ -60,17 +51,9 @@ public abstract class Searcher {
      * @param nodeId The Id of the node you want to get the neighbors of
      * @return the neighbors of that node
      */
-    public HashMap<String, Double> getNeighbors(String nodeId){
+    public List<String> getNeighbors(String nodeId){
         return graph.get(nodeId).getNeighbors();
     }
-
-    /**
-     * TODO:Check the database to see if the graph has been edited by user
-     */
-    private void updateGraph(){
-
-    }
-
 
     /**
      * Generic Search method for UI

@@ -62,7 +62,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
             put("3", 4);
         }};
 
-        int magicNumber = 5;
+        int magicNumber = 30;
         return floorMap.get(floor) * magicNumber;
     }
 

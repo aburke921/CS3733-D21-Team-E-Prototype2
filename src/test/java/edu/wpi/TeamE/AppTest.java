@@ -122,7 +122,23 @@ public class AppTest extends FxRobot {
     SERVICE REQUEST PAGE TESTS
    ----------------------------*/
 
-  public void serviceRequestAssist(String goButtonId, String pageTextSearch) throws Exception {
+  public void serviceRequestSubmit(String goButtonId, String pageTextSearch) throws Exception {
+
+    //go to service request overview page
+    clickOn("#serviceRequestButton");
+
+    //go to specific page, test
+    clickOn(goButtonId);
+    verifyThat(pageTextSearch, Node::isVisible);
+
+    //Test Cancel button
+    clickOn("Submit");
+    verifyThat("Home", Node::isVisible); //header on service page is visible
+
+    //todo update this once security requests go to a table in the database to verify they are there
+  }
+
+  public void serviceRequestCancel(String goButtonId, String pageTextSearch) throws Exception {
 
     //go to service request overview page
     clickOn("#serviceRequestButton");
@@ -135,32 +151,56 @@ public class AppTest extends FxRobot {
     clickOn("Cancel");
     verifyThat("Select a Service", Node::isVisible); //header on service page is visible
 
-    //todo confirm submit button works
   }
 
   @Test
-  public void testFloralButtons() throws Exception {
-    serviceRequestAssist("#floralGoButton","Floral Delivery Service");
+  public void testFloralSubmit() throws Exception {
+    serviceRequestSubmit("#floralGoButton","Floral Delivery Service");
   }
 
   @Test
-  public void testExternalPatientButtons() throws Exception {
-    serviceRequestAssist("#externalGoButton","External Patient Transportation");
+  public void testFloralCancel() throws Exception {
+    serviceRequestCancel("#floralGoButton","Floral Delivery Service");
   }
 
   @Test
-  public void testSanitationButtons() throws Exception {
-    serviceRequestAssist("#sanitationGoButton","Sanitation Services Request Form");
+  public void testExternalPatientSubmit() throws Exception {
+    serviceRequestSubmit("#externalGoButton","External Patient Transportation");
   }
 
   @Test
-  public void testMedicineButtons() throws Exception {
-    serviceRequestAssist("#medicineGoButton","Medicine Delivery Request Form");
+  public void testExternalPatientCancel() throws Exception {
+    serviceRequestCancel("#externalGoButton","External Patient Transportation");
   }
 
   @Test
-  public void testSecurityButtons() throws Exception {
-    serviceRequestAssist("#securityGoButton","Security Service Request");
+  public void testSanitationSubmit() throws Exception {
+    serviceRequestSubmit("#sanitationGoButton","Sanitation Services Request Form");
+  }
+
+  @Test
+  public void testSanitationCancel() throws Exception {
+    serviceRequestSubmit("#sanitationGoButton","Sanitation Services Request Form");
+  }
+
+  @Test
+  public void testMedicineSubmit() throws Exception {
+    serviceRequestSubmit("#medicineGoButton","Medicine Delivery Request Form");
+  }
+
+  @Test
+  public void testMedicineCancel() throws Exception {
+    serviceRequestCancel("#medicineGoButton","Medicine Delivery Request Form");
+  }
+
+  @Test
+  public void testSecuritySubmit() throws Exception {
+    serviceRequestSubmit("#securityGoButton","Security Service Request");
+  }
+
+  @Test
+  public void testSecurityCancel() throws Exception {
+    serviceRequestCancel("#securityGoButton","Security Service Request");
   }
 
  /* @Test

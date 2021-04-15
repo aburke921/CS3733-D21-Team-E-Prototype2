@@ -70,7 +70,7 @@ public class SecurityService extends ServiceRequestFormComponents {
     void handleButtonSubmit(ActionEvent event) {
         try {
             System.out.println(event); //Print the ActionEvent to console
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/ServiceRequests.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -1,6 +1,7 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.PriorityQueue;
 
 /**
@@ -51,11 +52,11 @@ public class AStarSearch extends Searcher {
 
             current = potentials.poll();
 
-            HashMap<String, Double> neighbors = getNeighbors(current.get("id"));
+            List<String> neighbors = getNeighbors(current.get("id"));
 
-            for(String neighborId : neighbors.keySet()){
+            for(String neighborId : neighbors){
                 Node neighbor = getNode(neighborId);
-                Double neighborCost = prevCost.get(current) + neighbors.get(neighborId);
+                Double neighborCost = prevCost.get(current) + dist(current, neighbor);
                 if(!prevCost.containsKey(neighbor) || neighborCost < prevCost.get(neighbor)){
                     prevCost.put(neighbor, neighborCost);
                     cameFrom.put(neighbor, current);
@@ -81,6 +82,9 @@ public class AStarSearch extends Searcher {
      * @return the distance between two nodes
      */
     private double dist(Node n1, Node n2){
-        return Math.sqrt(Math.pow(n1.getX() - n2.getX(), 2) + Math.pow(n1.getY() - n2.getY(), 2));
+        double xDist = Math.pow(n1.getX() - n2.getX(), 2);
+        double yDist = Math.pow(n1.getY() - n2.getY(), 2);
+        double zDist = Math.pow(n1.getZ() - n2.getZ(), 2);
+        return Math.sqrt(xDist + yDist + zDist);
     }
 }

@@ -12,6 +12,8 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXSnackbarLayout;
+import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.*;
 import edu.wpi.TeamE.databases.*;
 
@@ -23,18 +25,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class PathFinder {
 
@@ -151,8 +148,8 @@ public class PathFinder {
         else {
             //Execute A* Search
             System.out.print("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
-            Searcher aStar = new AStarSearch();
-
+            SearchContext aStar = new SearchContext();
+            //aStar.setType("HANDICAP");
             //Call the path search function
             Path foundPath = aStar.search(startNodeID, endNodeID);
             drawMap(foundPath);

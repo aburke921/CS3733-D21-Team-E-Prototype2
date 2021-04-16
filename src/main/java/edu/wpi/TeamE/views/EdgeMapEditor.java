@@ -1,21 +1,12 @@
 package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXTextField;
-import edu.wpi.TeamE.algorithms.pathfinding.Edge;
-import edu.wpi.TeamE.algorithms.pathfinding.Edge;
-import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.databases.makeConnection;
-import javafx.application.Application;
-import javafx.beans.property.ReadOnlyDoubleWrapper;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.File;
@@ -28,15 +19,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-
 
 
 public class EdgeMapEditor {
 
-    @FXML private TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Edge> treeTable;
+    @FXML private TreeTableView<Edge> treeTable;
     @FXML private FlowPane theStage;
     @FXML private JFXTextField idInput;
     @FXML private JFXTextField startNodeIDInput;
@@ -61,37 +48,37 @@ public class EdgeMapEditor {
      *
      * @param table this is the TreeTableView that is editing
      */
-    public void prepareEdges(TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Edge> table) {
+    public void prepareEdges(TreeTableView<Edge> table) {
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<Edge> array = connection.getAllEdges();
         if (table.getRoot() == null) {
-            edu.wpi.TeamE.algorithms.pathfinding.Edge edge0 = new
-                    edu.wpi.TeamE.algorithms.pathfinding.Edge("ID", "0", "1", 0.00);
-            final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Edge> rootEdge = new TreeItem<>(edge0);
+            Edge edge0 = new
+                    Edge("ID", "0", "1", 0.00);
+            final TreeItem<Edge> rootEdge = new TreeItem<>(edge0);
             table.setRoot(rootEdge);
             //column 1 - ID
-            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Edge, String> column1 = new TreeTableColumn<>("ID");
+            TreeTableColumn<Edge, String> column1 = new TreeTableColumn<>("ID");
             column1.setPrefWidth(320);
-            column1.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Edge, String> p) ->
+            column1.setCellValueFactory((CellDataFeatures<Edge, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().getId()));
             table.getColumns().add(column1);
             //column 2 - Start Node
-            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Edge, String> column2 = new TreeTableColumn<>("Start Node ID");
+            TreeTableColumn<Edge, String> column2 = new TreeTableColumn<>("Start Node ID");
             column2.setPrefWidth(320);
-            column2.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Edge, String> p) ->
+            column2.setCellValueFactory((CellDataFeatures<Edge, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().getStartNodeId()));
             table.getColumns().add(column2);
             //column 3 - End Node
-            TreeTableColumn<edu.wpi.TeamE.algorithms.pathfinding.Edge, String> column3 = new TreeTableColumn<>("End Node ID");
+            TreeTableColumn<Edge, String> column3 = new TreeTableColumn<>("End Node ID");
             column3.setPrefWidth(320);
-            column3.setCellValueFactory((CellDataFeatures<edu.wpi.TeamE.algorithms.pathfinding.Edge, String> p) ->
+            column3.setCellValueFactory((CellDataFeatures<Edge, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().getEndNodeId()));
             table.getColumns().add(column3);
         }
         for (int i = 0; i < array.size(); i++) {
-            edu.wpi.TeamE.algorithms.pathfinding.Edge s = array.get(i);
+            Edge s = array.get(i);
             //int n = array.get(i).getX();
-            final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Edge> edge = new TreeItem<>(s);
+            final TreeItem<Edge> edge = new TreeItem<>(s);
             table.getRoot().getChildren().add(edge);
         }
     }
@@ -161,12 +148,12 @@ public class EdgeMapEditor {
     public void startTableButton(ActionEvent actionEvent) {
 
         //creating the root for the array
-        edu.wpi.TeamE.algorithms.pathfinding.Edge edge0 = new
-                edu.wpi.TeamE.algorithms.pathfinding.Edge("ID","StartNode","EndNode",0.00);
+        Edge edge0 = new
+                Edge("ID","StartNode","EndNode",0.00);
         //creating array
-        ArrayList<edu.wpi.TeamE.algorithms.pathfinding.Edge> array = new ArrayList<>();
+        ArrayList<Edge> array = new ArrayList<>();
         //creating root node
-        final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Edge> test = new TreeItem<>(edge0);
+        final TreeItem<Edge> test = new TreeItem<>(edge0);
         test.setExpanded(true);
 
         prepareEdges(treeTable);

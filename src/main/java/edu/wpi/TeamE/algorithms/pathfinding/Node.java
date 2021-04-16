@@ -51,6 +51,30 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         nodeInfo.put("shortName", _shortName);
     }
 
+    public static String genNodeID(String type, String floor){
+        StringBuilder SB = new StringBuilder("e");
+        SB.append(type);
+
+        if (type.equalsIgnoreCase("ELEV")) {
+            //TODO: get elevator letter
+        } else {
+            //TODO: get instance number
+        }
+
+        try{
+            int num = Integer.parseInt(floor);
+            SB.append("0").append(num);
+        } catch (NumberFormatException e) {
+            if (floor.equalsIgnoreCase("G") || floor.equalsIgnoreCase("GG")){
+                SB.append("GG");
+            } else {
+                SB.append(floor);
+            }
+        }
+
+        return SB.toString();
+    }
+
     /**
      * @param info String representation of what info is requested
      *             should be 'id', 'floor', 'building', 'type', 'longName', 'shortName'

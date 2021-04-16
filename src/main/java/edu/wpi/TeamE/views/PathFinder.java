@@ -20,17 +20,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class PathFinder {
 
@@ -57,6 +53,9 @@ public class PathFinder {
 
     @FXML // fx:id="pane"
     private Pane pane;
+
+    @FXML // fx:id="floorChanger"
+    private JFXButton floorChanger; // Value injected by FXMLLoader
 
     private String startNodeID; // selected starting value's ID
 
@@ -194,7 +193,12 @@ public class PathFinder {
 
         //parse out nodes that are not on specified floor.
         LinkedList<Node> finalNodeList = getNodesOnFloorFromPath(path, floorNum);
-//        System.out.println(finalNodeList);
+
+        //if there are no nodes on this floor
+        if (finalNodeList == null) {
+            //todo snackbar to say no nodes on this floor
+            return;
+        }
 
         //make iterator out of the parsed path
         Iterator<Node> nodeIteratorThisFloorOnly = finalNodeList.iterator();
@@ -257,12 +261,20 @@ public class PathFinder {
      * @return
      */
     private LinkedList<Node> getNodesOnFloorFromPath(Path path, String floorNum) {
+
+        System.out.println("Parsing node list...");
+
+        //null check
+        if (path == null) {
+            System.out.println(".....NO NODES ON THIS FLOOR");
+            return null;
+        }
+
         //build path
         Iterator<Node> nodeIterator = path.iterator(); //create iterable list
         LinkedList<Node> finalNodeList = new LinkedList<>(); // list to be returned
 
         //for each node on path, add to finalNodeList if it is on floor floorNum
-        System.out.println("Parsing node list...");
         while (nodeIterator.hasNext()) { //loop through path
             Node node = nodeIterator.next();
             if (node.get("floor").equals(floorNum)) { //if the node IS on the current floor
@@ -276,11 +288,20 @@ public class PathFinder {
     }
 
     /**
-     * Will change the displayed map, and path.
+     * Will change the displayed map, and path. todo ...
      * @param floorNum
      */
-    public void setFloorNum(String floorNum) {
+    public void setCurrentFloor(String floorNum) {
+
+        //set image
         currentFloor = floorNum;
+        Image image = new Image("edu/wpi/TeamE/maps/" + floorNum + ".png");
+        imageView.setImage(image);
+
+        //draw path
+        drawMap(currentFoundPath,currentFloor);
+
+        System.out.println("Current floor set to " + floorNum);
     }
 
     /**
@@ -294,9 +315,8 @@ public class PathFinder {
         assert startLocationList != null : "fx:id=\"startLocationList\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert endLocationList != null : "fx:id=\"endLocationList\" was not injected: check your FXML file 'PathFinder.fxml'.";
 
-        //load image
-        Image image = new Image("edu/wpi/TeamE/FirstFloorMap.png");
-        imageView.setImage(image);
+        //set default/initial floor
+        setCurrentFloor("1");
 
         //DB connection
         makeConnection connection = makeConnection.makeConnection();
@@ -315,4 +335,16 @@ public class PathFinder {
         System.out.println("Finish PathFinder Init.");
     }
 
+    private String[] floorNames = {"L1", "L2", "G", "1", "2", "3"};
+    private int currentFloorNamesIndex = 0;
+
+    public void nextFloor(ActionEvent event) {
+        //todo change floor
+        setCurrentFloor(floorNames[currentFloorNamesIndex]);
+
+        //increment unless at max, then back to 0
+        if (currentFloorNamesIndex == 4) {
+            currentFloorNamesIndex = 0;
+        } else currentFloorNamesIndex++;
+    }
 }

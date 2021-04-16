@@ -64,6 +64,7 @@
                      <children>
                         <Pane fx:id="pane" layoutX="50.0" prefHeight="340.0" prefWidth="500.0" />
                         <Button fx:id="backButton" layoutX="14.0" layoutY="281.0" mnemonicParsing="false" onAction="#toDefault" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" />
+                        <JFXButton fx:id="floorChanger" onAction="#nextFloor" text="Chng Flr" />
                      </children>
                   </Pane>
                </children>

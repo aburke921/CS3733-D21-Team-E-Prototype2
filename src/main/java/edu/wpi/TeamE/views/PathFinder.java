@@ -145,19 +145,13 @@ public class PathFinder {
 
         //Check if starting and ending node are the same
         if(startNodeID.equals(endNodeID)) {
+            //Print error message and don't allow the program to call the path search function
             System.out.println("Cannot choose the same starting and ending location. Try again");
-            //Don't allow the program to call the path search function
+            //SnackBar popup
+            JFXSnackbar bar = new JFXSnackbar(pane);
+            bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Cannot choose the same starting and ending location. Try again")));
+
             findPathButton.setDisable(true);
-
-            BorderPane borderPane = new BorderPane();
-            Scene scene = new Scene(borderPane, 450, 100);
-            Text text = new Text("Cannot choose the same starting and ending location. Try again.");
-            borderPane.setCenter(text);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("Error");
-            stage.show();
-
         }
         else {
             //Call the path search function
@@ -188,6 +182,7 @@ public class PathFinder {
 
         System.out.print("\nCLEARING MAP...");
 
+        //clear map
         pane.getChildren().clear();
 
         //build path

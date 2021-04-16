@@ -38,14 +38,14 @@ public class Examples {
         //or like this (these lines (^v) are equivalent)
         search = new SearchContext(new Searcher(), "VANILLA");
         //safe search will avoid the emergency room
-        search = new SearchContext(new DFSSearch(), "SAFE");
+        search = new SearchContext(new DFSSearcher(), "SAFE");
         //handicap search will avoid stairs
         //also nothing is case sensitive
         search = new SearchContext(new Searcher(), "handicap");
 
         //if you don't want to instantiate a new one every time (recommended, better for memory)
         //you can specify a new algorithm or new conditions like this
-        search.setAlgo(new DFSSearch());
+        search.setAlgo(new DFSSearcher());
         search.setAlgo(new Searcher());
 
         search.setConstraint("HANDICAP");

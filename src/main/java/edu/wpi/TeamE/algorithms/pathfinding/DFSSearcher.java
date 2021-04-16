@@ -12,9 +12,9 @@ import java.util.List;
  * DF Search Implementation
  * Contains specific implementation of DFS
  */
-public class DFSSearch extends Searcher {
+public class DFSSearcher extends Searcher {
 
-    public DFSSearch(){
+    public DFSSearcher(){
         super();
     }
 

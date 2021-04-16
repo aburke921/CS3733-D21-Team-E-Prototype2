@@ -3,12 +3,9 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXSnackbarLayout;
@@ -29,7 +26,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -65,6 +61,10 @@ public class PathFinder {
     private String startNodeID; // selected starting value's ID
 
     private String endNodeID; // selected ending value's ID
+
+    private String currentFloor = "1"; //todo set this based on button presses
+
+    private Path currentFoundPath; // the last found path todo null if no path has been found yet
 
     ObservableList<String> listOfId = FXCollections.observableArrayList(); //declaration
 
@@ -127,11 +127,7 @@ public class PathFinder {
     @FXML
     public void findPath(ActionEvent event) {
 
-        System.out.print("\nFINDING PATH...");
-
-        //Execute A* Search
-        System.out.println("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
-        Searcher aStar = new AStarSearch();
+        System.out.println("\nFINDING PATH...");
 
         //get index and ID of selected item in dropdown
         int startLocationListSelectedIndex = startLocationList.getSelectionModel().getSelectedIndex();
@@ -143,8 +139,12 @@ public class PathFinder {
         endNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
         System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + endNodeID);
 
+        //Execute A* Search
+        System.out.println("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
+        Searcher aStar = new AStarSearch();
+
         //Check if starting and ending node are the same
-        if(startNodeID.equals(endNodeID)) {
+        if(startNodeID.equals(endNodeID)) { //error
             //Print error message and don't allow the program to call the path search function
             System.out.println("Cannot choose the same starting and ending location. Try again");
             //SnackBar popup
@@ -153,7 +153,7 @@ public class PathFinder {
 
             findPathButton.setDisable(true);
         }
-        else {
+        else { // run search
             //Call the path search function
             Path foundPath = aStar.search(startNodeID, endNodeID);
 
@@ -168,8 +168,14 @@ public class PathFinder {
                 bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Sorry, something has gone wrong. Please try again.")));
 
             } else { //path is not null
-                //draw path on map
-                drawMap(foundPath);
+
+                //save found path for when floors are switched
+                currentFoundPath = foundPath;
+
+                //draw the map for the current floor
+                drawMap(foundPath, currentFloor);
+
+                //todo also run getNodesOnFloorFromPath() for the other floors in advance?
             }
         }
     }
@@ -178,15 +184,20 @@ public class PathFinder {
      * Draws map path given a complete {@link Path}.
      * @param path the path to be drawn on the map.
      */
-    public void drawMap(Path path) {
+    public void drawMap(Path path, String floorNum) {
 
-        System.out.print("\nCLEARING MAP...");
 
         //clear map
+        System.out.print("\nCLEARING MAP...");
         pane.getChildren().clear();
+        System.out.println(" DONE");
 
-        //build path
-        Iterator<Node> nodeIterator = path.iterator(); //create iterable list
+        //parse out nodes that are not on specified floor.
+        LinkedList<Node> finalNodeList = getNodesOnFloorFromPath(path, floorNum);
+//        System.out.println(finalNodeList);
+
+        //make iterator out of the parsed path
+        Iterator<Node> nodeIteratorThisFloorOnly = finalNodeList.iterator();
 
         Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
@@ -194,26 +205,28 @@ public class PathFinder {
         double prevXCoord = 0;
         double prevYCoord = 0;
 
-        while(nodeIterator.hasNext()){ //loop through list
+        int firstNode = 1;
+        while(nodeIteratorThisFloorOnly.hasNext()){ //loop through list
             //this iterator will return a Node object
             //which is just a container for all the node info like its coordinates
-            Node node = nodeIterator.next();
+            Node node = nodeIteratorThisFloorOnly.next(); //todo does this get the first one in the list as well tho?
 
             //Resize the coordinates to match the resized image
             double xCoord = (double) node.getX() / 10;
             double yCoord = (double) node.getY() / 10;
 
-            if (node.get("id").equals(startNodeID)) { //if current node is the starting node
+            if (firstNode == 1) { //if current node is the starting node
+                firstNode = 0;
                 prevXCoord = xCoord;
                 prevYCoord = yCoord;
 
                 //place a red dot on the location
-                Circle circle = new Circle(xCoord, yCoord, 2, Color.RED);
+                Circle circle = new Circle(xCoord, yCoord, 2, Color.RED); //todo symbol for first node on this floor
                 g.getChildren().add(circle);
             }
-            else if (node.get("id").equals(endNodeID)) { //if current node is the ending node
+            else if (!nodeIteratorThisFloorOnly.hasNext()) { //if current node is the ending node
                 //place a red dot on the location
-                Circle circle = new Circle(xCoord, yCoord, 2, Color.RED);
+                Circle circle = new Circle(xCoord, yCoord, 2, Color.RED); //todo symbol for last node on this floor
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
                 line.setStroke(Color.RED);
@@ -238,6 +251,39 @@ public class PathFinder {
     }
 
     /**
+     * Looks through path and returns only nodes on the specified floor
+     * @param path
+     * @param floorNum
+     * @return
+     */
+    private LinkedList<Node> getNodesOnFloorFromPath(Path path, String floorNum) {
+        //build path
+        Iterator<Node> nodeIterator = path.iterator(); //create iterable list
+        LinkedList<Node> finalNodeList = new LinkedList<>(); // list to be returned
+
+        //for each node on path, add to finalNodeList if it is on floor floorNum
+        System.out.println("Parsing node list...");
+        while (nodeIterator.hasNext()) { //loop through path
+            Node node = nodeIterator.next();
+            if (node.get("floor").equals(floorNum)) { //if the node IS on the current floor
+                //add node to list
+                System.out.println(".....adding node: " + node.get("longName"));
+                finalNodeList.add(node);
+            } else System.out.println(".....NOT node: "  + node.get("longName"));
+        }
+        System.out.println("Done Parsing node list");
+        return finalNodeList;
+    }
+
+    /**
+     * Will change the displayed map, and path.
+     * @param floorNum
+     */
+    public void setFloorNum(String floorNum) {
+        currentFloor = floorNum;
+    }
+
+    /**
      * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
      * Namely, adds FloorMap PNG and fills dropdowns with DB data.
      */
@@ -257,9 +303,8 @@ public class PathFinder {
 
         //Get longNames & IDs
         System.out.print("Begin Adding to Dropdown List... ");
-        ObservableList<String> longNameArrayList = connection.getAllNodeLongNamesByFloor("1");
-        nodeIDArrayList = connection.getListOfNodeIDSByFloor("1");
-        listOfId.addAll(nodeIDArrayList);
+        ObservableList<String> longNameArrayList = connection.getAllNodeLongNames();
+        nodeIDArrayList = connection.getListofNodeIDS();
 
         //add ObservableLists to dropdowns
         startLocationList.setItems(longNameArrayList);

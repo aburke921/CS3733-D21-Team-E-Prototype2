@@ -2,20 +2,19 @@ package edu.wpi.TeamE.views.forms;
 
 import edu.wpi.TeamE.views.SecurityService;
 
-public class SecurityServiceForm {
+public class SecurityServiceForm extends ServiceRequestForm{
 
     private String location;
     private String levelOfSecurity;
     private String levelOfUrgency;
     private String assignee;
-    private boolean status;
 
     public SecurityServiceForm(String location, String levelOfSecurity, String levelOfUrgency, String assignee) {
-        this.location = location;
+        super.location = location;
         this.levelOfSecurity = levelOfSecurity;
         this.levelOfUrgency = levelOfUrgency;
         this.assignee = assignee;
-        this.status = false;
+        super.status = false;
     }
 
     public String getLocation() {

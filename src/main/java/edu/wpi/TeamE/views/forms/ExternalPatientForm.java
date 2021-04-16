@@ -1,6 +1,6 @@
 package edu.wpi.TeamE.views.forms;
 
-public class ExternalPatientForm {
+public class ExternalPatientForm extends ServiceRequestForm{
 
     private String hospital;
     private String type;
@@ -8,7 +8,6 @@ public class ExternalPatientForm {
     private String patientID;
     private String description;
     private String eta;
-    private boolean status;
 
     public ExternalPatientForm(String hospital, String type, String severity,
                                String patientID, String description, String eta) {
@@ -18,7 +17,7 @@ public class ExternalPatientForm {
         this.patientID = patientID;
         this.description = description;
         this.eta = eta;
-        this.status = false;
+        super.status = false;
     }
 
     public String getHospital() {

@@ -1,6 +1,6 @@
 package edu.wpi.TeamE.views.forms;
 
-public class MedicineDeliveryForm {
+public class MedicineDeliveryForm extends ServiceRequestForm{
 
     private String roomNumber;
     private String department;

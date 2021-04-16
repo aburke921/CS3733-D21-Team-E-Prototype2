@@ -1,4 +1,4 @@
-package edu.wpi.TeamE.algorithms.pathfinding;
+package edu.wpi.TeamE.algorithms.pathfinding.constraints;
 
 import edu.wpi.TeamE.algorithms.Node;
 

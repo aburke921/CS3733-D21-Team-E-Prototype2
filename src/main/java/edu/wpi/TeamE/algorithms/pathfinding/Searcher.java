@@ -2,9 +2,8 @@ package edu.wpi.TeamE.algorithms.pathfinding;
 
 import java.util.*;
 
-import edu.wpi.TeamE.algorithms.Edge;
-import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.algorithms.Path;
+import edu.wpi.TeamE.algorithms.*;
+import edu.wpi.TeamE.algorithms.pathfinding.constraints.SearchConstraint;
 import edu.wpi.TeamE.databases.makeConnection;
 
 /**

@@ -1,6 +1,7 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
 import edu.wpi.TeamE.algorithms.Path;
+import edu.wpi.TeamE.algorithms.pathfinding.constraints.*;
 
 public class SearchContext {
     private Searcher search;

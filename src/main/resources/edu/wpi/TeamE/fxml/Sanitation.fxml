@@ -86,7 +86,7 @@
                                                 <MenuItem mnemonicParsing="false" onAction="#selectServiceType" text="Trash Removal" />
                                             </items>
                                         </MenuButton>
-                                        <Label text="Severity of Mess">
+                                        <Label text="Assignment">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
@@ -94,7 +94,7 @@
                                                 <Insets top="20.0" />
                                             </VBox.margin>
                                         </Label>
-                                        <TextField fx:id="mess" prefHeight="45.0" prefWidth="264.0" promptText="1-5" />
+                                        <TextField fx:id="assignedIndividual" prefHeight="45.0" prefWidth="264.0" promptText="Individual assigned to service request" />
                                     </children>
                                     <FlowPane.margin>
                                         <Insets left="10.0" />
@@ -130,7 +130,7 @@
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <Button fx:id="submit" mnemonicParsing="false" onAction="#handleButtonSubmit" style="-fx-background-color: -fx--primary;" text="Submit" textFill="WHITE" GridPane.halignment="CENTER" />
+                                                <Button fx:id="submit" mnemonicParsing="false" onAction="#saveData" style="-fx-background-color: -fx--primary;" text="Submit" textFill="WHITE" GridPane.halignment="CENTER" />
                                                 <Button fx:id="cancel" mnemonicParsing="false" onAction="#handleButtonCancel" style="-fx-background-color: white; -fx-border-color: -fx--primary;" text="Cancel" textFill="#039be5" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                                             </children>
                                             <VBox.margin>

@@ -94,16 +94,8 @@ public class PathFinder {
      * @param event calling event info.
      */
     @FXML
-    void selectStartNode(ActionEvent event) { //todo is only called if a different name is chosen from dropdown, won't update for duplicate names
-        String dropdownSelected = ((JFXComboBox) event.getSource()).getValue().toString();
-        System.out.println("\nselected start node name: " + dropdownSelected);
-
-        //get index and ID of selected item in dropdown
-        int startLocationListSelectedIndex = startLocationList.getSelectionModel().getSelectedIndex();
-        startNodeID = nodeIDArrayList.get(startLocationListSelectedIndex);
-        System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + startNodeID);
-
-        // findPath button validation todo, validation check for not having same start and end location
+    void selectStartNode(ActionEvent event) {
+        // findPath button validation
         if (startLocationList.getSelectionModel().isEmpty() ||
                 endLocationList.getSelectionModel().isEmpty()) {
             findPathButton.setDisable(true);
@@ -117,16 +109,8 @@ public class PathFinder {
      * @param event calling event info.
      */
     @FXML
-    void selectEndNode(ActionEvent event) { //todo is only called if a different name is chosen from dropdown, won't update for duplicate names
-        String dropdownSelected = ((JFXComboBox) event.getSource()).getValue().toString();
-        System.out.println("\nselected end node name: " + dropdownSelected);
-
-        //get index of selected item in dropdown
-        int endLocationListSelectedIndex = endLocationList.getSelectionModel().getSelectedIndex();
-        endNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
-        System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + endNodeID);
-
-        // findPath button validation todo, validation check for not having same start and end location
+    void selectEndNode(ActionEvent event) {
+        // findPath button validation
         if (startLocationList.getSelectionModel().isEmpty() ||
                 endLocationList.getSelectionModel().isEmpty()) {
             findPathButton.setDisable(true);
@@ -149,21 +133,25 @@ public class PathFinder {
         System.out.println("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
         Searcher aStar = new AStarSearch();
 
+        //get index and ID of selected item in dropdown
+        int startLocationListSelectedIndex = startLocationList.getSelectionModel().getSelectedIndex();
+        startNodeID = nodeIDArrayList.get(startLocationListSelectedIndex);
+        System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + startNodeID);
+
+        //get index of selected item in dropdown
+        int endLocationListSelectedIndex = endLocationList.getSelectionModel().getSelectedIndex();
+        endNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
+        System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + endNodeID);
+
         //Check if starting and ending node are the same
         if(startNodeID.equals(endNodeID)) {
+            //Print error message and don't allow the program to call the path search function
             System.out.println("Cannot choose the same starting and ending location. Try again");
-            //Don't allow the program to call the path search function
+            //SnackBar popup
+            JFXSnackbar bar = new JFXSnackbar(pane);
+            bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Cannot choose the same starting and ending location. Try again")));
+
             findPathButton.setDisable(true);
-
-            BorderPane borderPane = new BorderPane();
-            Scene scene = new Scene(borderPane, 450, 100);
-            Text text = new Text("Cannot choose the same starting and ending location. Try again.");
-            borderPane.setCenter(text);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("Error");
-            stage.show();
-
         }
         else {
             //Call the path search function
@@ -194,6 +182,7 @@ public class PathFinder {
 
         System.out.print("\nCLEARING MAP...");
 
+        //clear map
         pane.getChildren().clear();
 
         //build path

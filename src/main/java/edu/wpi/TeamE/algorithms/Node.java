@@ -1,4 +1,4 @@
-package edu.wpi.TeamE.algorithms.pathfinding;
+package edu.wpi.TeamE.algorithms;
 
 import java.util.*;
 
@@ -53,7 +53,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     }
     public int calculateZ(String floor) {
         //floor HashMap
-        HashMap<String, Integer> floorMap = new HashMap<String, Integer>(){{
+        HashMap<String, Integer> floorMap = new HashMap<>(){{
             put("L2", 0);
             put("L1", 1);
             put("G", 1);
@@ -131,6 +131,14 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     public Node copy(){
         return new Node(get("id"), xCoord, yCoord, get("floor"), get("building"), get("type"),
                 get("longName"), get("shortName"));
+    }
+
+    public boolean isStair(){
+        return get("type").equalsIgnoreCase("STAI");
+    }
+
+    public boolean isEmergency(){
+        return get("longName").contains("Emergency");
     }
 
     /**

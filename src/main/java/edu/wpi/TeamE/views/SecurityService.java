@@ -19,6 +19,20 @@ import javafx.scene.control.Button;
 
 public class SecurityService extends ServiceRequestFormComponents {
 
+//    private String securityLevel;
+//    private String urgencyLevel;
+//    private String locationOfRequest;
+//    private String reason;
+//    private boolean status;
+//
+//    private SecurityService(String securityLevel, String urgencyLevel, String locationOfRequest, String reason) {
+//        this.securityLevel = securityLevel;
+//        this.urgencyLevel = urgencyLevel;
+//        this.locationOfRequest = locationOfRequest;
+//        this.reason = reason;
+//        this.status = false;
+//    }
+
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 

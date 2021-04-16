@@ -1,6 +1,8 @@
 package edu.wpi.TeamE.views;
 
 import edu.wpi.TeamE.App;
+import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.TeamE.views.forms.SanitationServicesForm;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -9,10 +11,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import java.io.IOException;
 
+
+
 public class SanitationServices extends ServiceRequestFormComponents {
-
-
-
 
   @FXML private TextField numInput;
   @FXML private TextField assignedIndividual;
@@ -69,12 +70,34 @@ public class SanitationServices extends ServiceRequestFormComponents {
    */
   @FXML
   private void saveData(ActionEvent actionEvent){
+
+    //Setting up all variables to be entered
+    String dep = departmentInput.getText();
+    String room = typeInput.getText();
+    String num = numInput.getText();
+    String serviceKind = ServiceTypeinput.getText();
+    String assignee = assignedIndividual.getText();
+    //String detailedInstructions = sdetailedInstructionsInput.getText();
+    //creating the service request
+    SanitationServicesForm request = new SanitationServicesForm(dep, room, num, serviceKind, assignee);
+
+    System.out.println(request.getAssignmentField());
+    //Adding service request to table
+    //makeConnection connection = makeConnection.makeConnection();
+    //connection.addRequest("sanitationServices", request);
+
     super.handleButtonSubmit(actionEvent);
-    assigneeName = assignedIndividual.getText();
-    number = numInput.getText();
-    System.out.println("Location: " + LocationType + " " + number + "\t" + "Assignee: " + assigneeName);
 
+  }
 
+  @FXML
+  void handleButtonSubmit(ActionEvent event) {
+    try {
+      Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+      App.getPrimaryStage().getScene().setRoot(root);
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
   }
 
 }

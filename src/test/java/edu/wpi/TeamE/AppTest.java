@@ -2,6 +2,7 @@ package edu.wpi.TeamE;
 
 import static org.testfx.api.FxAssert.verifyThat;
 
+
 import edu.wpi.TeamE.views.ServiceRequests;
 import javafx.scene.Node;
 import org.junit.jupiter.api.AfterAll;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
+
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * This is an integration test for the entire application. Rather than running a single scene
@@ -118,8 +121,11 @@ public class AppTest extends FxRobot {
     verifyThat("Node Map CSV Uploads", Node::isVisible);
   }
 
+
+
   @Test
   public void testAddNode() throws Exception {
+    sleep(1000);
     clickOn("#mapEditorButton");
     clickOn("#toNodeEditorButton");
     clickOn("#longNameInput").write("test");
@@ -130,6 +136,7 @@ public class AppTest extends FxRobot {
     clickOn("#floorInput").write("1");
     clickOn("#typeInput").write("Room");
     clickOn("#buildingInput").write("Main");
+    sleep(5000);
     clickOn("Add Node");
   }
 

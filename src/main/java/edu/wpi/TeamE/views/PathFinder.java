@@ -373,8 +373,8 @@ public class PathFinder {
         endLocationList.setItems(longNameArrayList);
         System.out.println("done");
 
-        new AutoCompleteComboBoxListener<>(startLocationList);
-        new AutoCompleteComboBoxListener<>(endLocationList);
+        new AutoCompleteComboBoxListener<>(startLocationList); //todo breaks the index lookup and ID correlation
+        new AutoCompleteComboBoxListener<>(endLocationList); //todo
 
         System.out.println("Finish PathFinder Init.");
     }

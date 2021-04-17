@@ -65,7 +65,7 @@ public class PathFinder {
 
     private String endNodeID; // selected ending value's ID
 
-    private String currentFloor = "1"; //todo set this based on button presses
+    private String currentFloor = "1"; // set based on button presses
 
     private Path currentFoundPath; // the last found path todo null if no path has been found yet
 
@@ -189,7 +189,6 @@ public class PathFinder {
      */
     public void drawMap(Path path, String floorNum) {
 
-
         //clear map
         System.out.print("\nCLEARING MAP...");
         pane.getChildren().clear();
@@ -217,7 +216,7 @@ public class PathFinder {
         while(nodeIteratorThisFloorOnly.hasNext()){ //loop through list
             //this iterator will return a Node object
             //which is just a container for all the node info like its coordinates
-            Node node = nodeIteratorThisFloorOnly.next(); //todo does this get the first one in the list as well tho?
+            Node node = nodeIteratorThisFloorOnly.next();
 
             //Resize the coordinates to match the resized image
             double xCoord = (double) node.getX() / scale;
@@ -228,13 +227,32 @@ public class PathFinder {
                 prevXCoord = xCoord;
                 prevYCoord = yCoord;
 
-                //place a red dot on the location
-                Circle circle = new Circle(xCoord, yCoord, 5, Color.RED); //todo symbol for first node on this floor
-                g.getChildren().add(circle);
-            }
-            else if (!nodeIteratorThisFloorOnly.hasNext()) { //if current node is the ending node
-                //place a red dot on the location
-                Circle circle = new Circle(xCoord, yCoord, 5, Color.RED); //todo symbol for last node on this floor
+                if (node.get("id").equals(startNodeID)) { // start node of entire path
+
+                    //place a dot on the location
+                    Circle circle = new Circle(xCoord, yCoord, 5, Color.GREEN);
+                    g.getChildren().add(circle);
+
+                } else { // start node of just this floor
+
+                    //place a red dot on the location
+                    Circle circle = new Circle(xCoord, yCoord, 5, Color.RED);
+                    g.getChildren().add(circle);
+                }
+
+
+            } else if (!nodeIteratorThisFloorOnly.hasNext()) { //if current node is the ending node for this floor
+
+                Circle circle;
+
+                if (node.get("id").equals(endNodeID)) { // end node of entire path
+                    //place a dot on the location
+                    circle = new Circle(xCoord, yCoord, 5, Color.BLACK);
+                } else { // end node of just this floor
+                    //place a dot on the location
+                    circle = new Circle(xCoord, yCoord, 5, Color.RED);
+                }
+
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
                 line.setStroke(Color.RED);

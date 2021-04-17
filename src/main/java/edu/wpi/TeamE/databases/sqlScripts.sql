@@ -105,6 +105,14 @@ select *
 from node
 where nodeID = ?;
 
+-- countNodeTypeOnFloor(String Floor, String Type)
+
+select count(*) as count
+from NODE
+where nodeID like ('SSSSS%')
+and floor = ?
+and nodeType = ?;
+
 -- NOT YET IMPLEMENTED / PLANNING STAGES:-----------------------------------------------------
 
 

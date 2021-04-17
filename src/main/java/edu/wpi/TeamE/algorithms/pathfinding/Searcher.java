@@ -1,32 +1,23 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 
+import edu.wpi.TeamE.algorithms.*;
+import edu.wpi.TeamE.algorithms.pathfinding.constraints.SearchConstraint;
 import edu.wpi.TeamE.databases.makeConnection;
 
 /**
  * Abstract Searcher Class for Pathfinding API
  * On creation can be initialized to A* or DFS (already implemented) or others that can be added later
  */
-public abstract class Searcher {
+public class Searcher {
+
+    private SearchConstraint type;
 
     //this is a local cache of nodes which have been worked with in the past
     private HashMap<String, Node> graph;
 
     private makeConnection con;
-
-    //floor HashMap
-    protected HashMap<String, Integer> floor = new HashMap<String, Integer>(){{
-        put("L2", 0);
-        put("L1", 1);
-        put("G", 1);
-        put("1", 2);
-        put("2", 3);
-        put("3", 4);
-    }};
 
     /**
      * Super constructor, initializes cache
@@ -35,6 +26,18 @@ public abstract class Searcher {
         graph = new HashMap<>();
         con = makeConnection.makeConnection();
 
+        refreshGraph();
+    }
+
+    public void setType(SearchConstraint _type){
+        type = _type;
+    }
+
+    public boolean isExcluded(Node node){
+        return type.isExcluded(node);
+    }
+
+    public void refreshGraph(){
         ArrayList<Edge> edges = con.getAllEdges();
         ArrayList<Node> nodes = con.getAllNodes();
 
@@ -43,8 +46,8 @@ public abstract class Searcher {
         }
 
         for(Edge edge : edges){
-            graph.get(edge.getNode(0)).addNeighbor(edge.getNode(1), edge.getLength());
-            graph.get(edge.getNode(1)).addNeighbor(edge.getNode(0), edge.getLength());
+            graph.get(edge.getNode(0)).addNeighbor(edge.getNode(1));
+            graph.get(edge.getNode(1)).addNeighbor(edge.getNode(0));
         }
     }
 
@@ -60,17 +63,9 @@ public abstract class Searcher {
      * @param nodeId The Id of the node you want to get the neighbors of
      * @return the neighbors of that node
      */
-    public HashMap<String, Double> getNeighbors(String nodeId){
+    public List<String> getNeighbors(String nodeId){
         return graph.get(nodeId).getNeighbors();
     }
-
-    /**
-     * TODO:Check the database to see if the graph has been edited by user
-     */
-    private void updateGraph(){
-
-    }
-
 
     /**
      * Generic Search method for UI
@@ -81,7 +76,53 @@ public abstract class Searcher {
      * @param endId   The NodeID of the end node as a string
      * @return The path from Start to End as a Path (basically a LinkedList)
      */
-    abstract public Path search(String startId, String endId);
+    public Path search(String startId, String endId){
+        //get nodes from database
+        Node start = getNode(startId);
+        Node end = getNode(endId);
+
+        PriorityQueue<Node> potentials = new PriorityQueue<>();
+        HashMap<Node, Double> prevCost = new HashMap<>();
+        HashMap<Node, Node> cameFrom = new HashMap<>();
+
+        Double zero = Double.valueOf(0);
+        prevCost.put(start, zero);
+        start.setCost(zero);
+
+        potentials.add(start);
+
+        while(!potentials.isEmpty()){
+            Node current = potentials.poll();
+            if(current.equals(end)){
+                //success case
+                Path path = new Path();
+                path.add(start);
+                path.add(reconstructPath(cameFrom, current));
+                return path;
+            } else if(isExcluded(current)){
+                continue;
+            }
+
+            List<String> neighbors = getNeighbors(current.get("id"));
+
+            for(String neighborId : neighbors){
+                Node neighbor = getNode(neighborId);
+                Double neighborCost = prevCost.get(current) + dist(current, neighbor);
+                if(!prevCost.containsKey(neighbor) || neighborCost < prevCost.get(neighbor)){
+                    prevCost.put(neighbor, neighborCost);
+                    cameFrom.put(neighbor, current);
+                    neighbor.setCost(neighborCost + dist(neighbor, end));
+
+                    //remove and re insert because value has been updated
+                    potentials.remove(neighbor);
+                    potentials.add(neighbor);
+                }
+            }
+        }
+
+        //failure case
+        return null;
+    }
 
     /**
      * Once the end node is found, this method is invoked to work back
@@ -105,5 +146,19 @@ public abstract class Searcher {
         }
 
         return path;
+    }
+
+    /**
+     * Calculate the euclidean distance between two nodes
+     * Pythagorean theorem
+     * TODO: include floor changes
+     * @param n1,n2 Nodes to calculate the distance between
+     * @return the distance between two nodes
+     */
+    protected double dist(Node n1, Node n2){
+        double xDist = Math.pow(n1.getX() - n2.getX(), 2);
+        double yDist = Math.pow(n1.getY() - n2.getY(), 2);
+        double zDist = Math.pow(n1.getZ() - n2.getZ(), 2);
+        return Math.sqrt(xDist + yDist + zDist);
     }
 }

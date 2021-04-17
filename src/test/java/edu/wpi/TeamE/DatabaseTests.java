@@ -13,9 +13,9 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import edu.wpi.TeamE.algorithms.Node;
 
-import edu.wpi.TeamE.algorithms.pathfinding.Edge;
+import edu.wpi.TeamE.algorithms.Edge;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 

@@ -1,12 +1,9 @@
 package edu.wpi.TeamE.databases;
 
-import edu.wpi.TeamE.algorithms.pathfinding.Edge;
-import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import edu.wpi.TeamE.algorithms.Edge;
+import edu.wpi.TeamE.algorithms.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.stage.FileChooser;
 import javafx.util.Pair;
 import java.io.*;
 import java.io.BufferedReader;

@@ -30,12 +30,45 @@ Create Table hasEdge
 
 Create Table userAccount
 (
-	userName  varchar(31) Primary Key,
+	userID    int Primary Key,
 	email     varchar(31) Unique,
 	password  varchar(31),
 	userType  varchar(31),
 	firstName varchar(31),
-	lastName  varchar(31)
+	lastName  varchar(31),
+	Constraint passwordLimit Check ( password Like '%[a-z]%[a-z]%' And
+	                                 password Like '%[A-Z]%[A-Z]%' And
+	                                 password Like '%[0-9]%[0-9]%' And
+	                                 password Like '%[~!@#$%^&]%[~!@#$%^&]%' And
+	                                 Length(password) >= 8 ),
+	Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin'))
+-- Let's assume admins are just doctors but better, they have every power
+);
+
+Create View visitorAccount As
+Select *
+From userAccount
+Where userType = 'visitor';
+
+Create View patientAccount As
+Select *
+From userAccount
+Where userType = 'patient';
+
+Create View doctorAccount As
+Select *
+From userAccount
+Where userType = 'doctor';
+
+Create View adminAccount As
+Select *
+From userAccount
+Where userType = 'admin';
+
+Create Table patient
+(
+	userID int Primary Key References patientAccount,
+	roomID varchar(31) References node -- nodeID for patient's room
 );
 
 Create Table serviceRequests

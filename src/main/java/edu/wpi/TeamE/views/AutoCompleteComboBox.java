@@ -1,52 +1,47 @@
+/**
+ * Referenced code from https://stackoverflow.com/questions/19924852/autocomplete-combobox-in-javafx
+ * Author: JulianG
+ * Date: 11/29/2013
+ */
+
 package edu.wpi.TeamE.views;
 
 import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
+class AutoCompleteComboBoxListener<T>{
 
     private JFXComboBox<T> comboBox;
     private ObservableList<T> data;
-    private boolean moveCaretToPos = false;
-    private int caretPos;
 
     AutoCompleteComboBoxListener(final JFXComboBox<T> comboBox) {
         this.comboBox = comboBox;
         data = comboBox.getItems();
 
+        //make ComboBox editable
         this.comboBox.setEditable(true);
-        this.comboBox.setOnKeyPressed(t -> comboBox.hide());
-        this.comboBox.setOnKeyReleased(AutoCompleteComboBoxListener.this);
+
+        //Have ComboBox call handleOnKeyReleased method when key is pressed
+        this.comboBox.setOnKeyReleased(this::handleOnKeyReleased);
     }
 
-    @Override
-    public void handle(KeyEvent event) {
+    /**
+     * Autocomplete ComboBox(drop-down lists) when typing into text field
+     * @param event
+     */
+    public void handleOnKeyReleased(KeyEvent event) {
 
-        if(event.getCode() == KeyCode.UP) {
-            caretPos = -1;
-            moveCaret(comboBox.getEditor().getText().length());
+        //Get whatever key was pressed by user
+        KeyCode keyCode = event.getCode();
+
+        //If up or down arrow is pressed, move caret to end of long name
+        if(keyCode == KeyCode.UP || keyCode == KeyCode.DOWN) {
+            comboBox.getEditor().positionCaret(comboBox.getEditor().getText().length());
             return;
-        } else if(event.getCode() == KeyCode.DOWN) {
-            if(!comboBox.isShowing()) {
-                comboBox.show();
-            }
-            caretPos = -1;
-            moveCaret(comboBox.getEditor().getText().length());
-            return;
-        } else if(event.getCode() == KeyCode.BACK_SPACE) {
-            moveCaretToPos = true;
-            caretPos = comboBox.getEditor().getCaretPosition();
-        } else if(event.getCode() == KeyCode.DELETE) {
-            moveCaretToPos = true;
-            caretPos = comboBox.getEditor().getCaretPosition();
         }
-
-        if(event.getCharacter().matches("[a-z]"))
-            comboBox.setValue((T) String.valueOf(comboBox.getValue()).toUpperCase());
 
         if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT
                 || event.isControlDown() || event.getCode() == KeyCode.HOME
@@ -54,33 +49,28 @@ class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
             return;
         }
 
+        //Create list to hold filtered items
         ObservableList<T> list = FXCollections.observableArrayList();
+        //loop through all of the data in ComboBox
         for (T aData : data) {
-            if (String.valueOf(aData).toLowerCase().startsWith(
-                    AutoCompleteComboBoxListener.this.comboBox
+            //If string in drop down list matches the key being typed, add it to the filtered list
+            if (String.valueOf(aData).toLowerCase().startsWith(this.comboBox
                             .getEditor().getText().toLowerCase())) {
                 list.add(aData);
             }
         }
-        String t = comboBox.getEditor().getText();
 
+        //Reposition caret to be where you are typing
+        String t = comboBox.getEditor().getText();
+        comboBox.getEditor().positionCaret(t.length());
+
+        //Set items in drop down list to be the filtered items
         comboBox.setItems(list);
-        comboBox.getEditor().setText(t);
-        if(!moveCaretToPos) {
-            caretPos = -1;
-        }
-        moveCaret(t.length());
+
+        //Show the drop down list for the filtered items
         if(!list.isEmpty()) {
             comboBox.show();
         }
     }
 
-    private void moveCaret(int textLength) {
-        if(caretPos == -1) {
-            comboBox.getEditor().positionCaret(textLength);
-        } else {
-            comboBox.getEditor().positionCaret(caretPos);
-        }
-        moveCaretToPos = false;
-    }
 }

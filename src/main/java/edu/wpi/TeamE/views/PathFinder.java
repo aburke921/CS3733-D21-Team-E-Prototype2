@@ -31,6 +31,9 @@ import javafx.stage.Stage;
 
 public class PathFinder {
 
+    //how much to scale the map by
+    double scale = (double) 3.45528;
+
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
@@ -217,8 +220,8 @@ public class PathFinder {
             Node node = nodeIteratorThisFloorOnly.next(); //todo does this get the first one in the list as well tho?
 
             //Resize the coordinates to match the resized image
-            double xCoord = (double) node.getX() / 10;
-            double yCoord = (double) node.getY() / 10;
+            double xCoord = (double) node.getX() / scale;
+            double yCoord = (double) node.getY() / scale;
 
             if (firstNode == 1) { //if current node is the starting node
                 firstNode = 0;
@@ -226,12 +229,12 @@ public class PathFinder {
                 prevYCoord = yCoord;
 
                 //place a red dot on the location
-                Circle circle = new Circle(xCoord, yCoord, 2, Color.RED); //todo symbol for first node on this floor
+                Circle circle = new Circle(xCoord, yCoord, 5, Color.RED); //todo symbol for first node on this floor
                 g.getChildren().add(circle);
             }
             else if (!nodeIteratorThisFloorOnly.hasNext()) { //if current node is the ending node
                 //place a red dot on the location
-                Circle circle = new Circle(xCoord, yCoord, 2, Color.RED); //todo symbol for last node on this floor
+                Circle circle = new Circle(xCoord, yCoord, 5, Color.RED); //todo symbol for last node on this floor
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
                 line.setStroke(Color.RED);
@@ -338,8 +341,8 @@ public class PathFinder {
         endLocationList.setItems(longNameArrayList);
         System.out.println("done");
 
-        new AutoCompleteComboBoxListener<>(startLocationList);
-        new AutoCompleteComboBoxListener<>(endLocationList);
+        //new AutoCompleteComboBoxListener<>(startLocationList);
+        //new AutoCompleteComboBoxListener<>(endLocationList);
 
         System.out.println("Finish PathFinder Init.");
     }

@@ -27,6 +27,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.Stage;
 
 public class PathFinder {
 
@@ -306,10 +307,16 @@ public class PathFinder {
 
     /**
      * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
-     * Namely, adds FloorMap PNG and fills dropdowns with DB data.
+     * Namely, adds FloorMap PNG and fills dropdowns with DB data, sets default floor.
      */
     @FXML
     void initialize() {
+        //todo remove when all sizes are same
+        //set Stage size
+        Stage primaryStage = App.getPrimaryStage();
+        primaryStage.setWidth(1920);
+        primaryStage.setHeight(1080);
+
         System.out.println("Begin PathFinder Init");
 
         assert startLocationList != null : "fx:id=\"startLocationList\" was not injected: check your FXML file 'PathFinder.fxml'.";
@@ -335,8 +342,8 @@ public class PathFinder {
         System.out.println("Finish PathFinder Init.");
     }
 
-    private String[] floorNames = {"L1", "L2", "G", "1", "2", "3"};
-    private int currentFloorNamesIndex = 0;
+    private String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; //list of floorNames
+    private int currentFloorNamesIndex = 4; //start # should be init floor index + 1
 
     public void nextFloor(ActionEvent event) {
         //todo change floor

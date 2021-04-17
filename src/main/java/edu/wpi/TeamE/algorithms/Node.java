@@ -53,7 +53,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     }
     public int calculateZ(String floor) {
         //floor HashMap
-        HashMap<String, Integer> floorMap = new HashMap<>(){{
+        HashMap<String, Integer> floorMap = new HashMap<String, Integer>(){{
             put("L2", 0);
             put("L1", 1);
             put("G", 1);

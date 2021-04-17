@@ -143,7 +143,7 @@ public class makeConnection {
 							+ ")");
 
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			System.err.println("error creating node table");
 		}
 
@@ -185,10 +185,62 @@ public class makeConnection {
 					"lastName  varchar(31), " +
 					"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin')))";
 			stmt.execute(sqlQuery);
+			createUserAccountTypeViews();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("error creating userAccount table");
+		}
+
+
+	}
+
+	public void createUserAccountTypeViews(){
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create View visitorAccount As " +
+					"Select * " +
+					"From userAccount " +
+					"Where userType = 'visitor'";
+			stmt.execute(sqlQuery);
 		} catch (SQLException e) {
 			// e.printStackTrace();
-			System.err.println("error creating  table");
+			System.err.println("error creating visitorAccount view");
 		}
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create View patientAccount As " +
+					"Select * " +
+					"From userAccount " +
+					"Where userType = 'patient'";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating patientAccount view");
+		}
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create View doctorAccount As " +
+					"Select * " +
+					"From userAccount " +
+					"Where userType = 'doctor'";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating doctorAccount view");
+		}
+
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create View adminAccount As " +
+					"Select * " +
+					"From userAccount " +
+					"Where userType = 'admin'";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating adminAccount view");
+		}
+
 	}
 
 
@@ -197,7 +249,7 @@ public class makeConnection {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table requests(" +
 					"requestID    int Primary Key,\n" +
-					"creatorID    int References userAccount,\n" +
+					"creatorID    int References userAccount On Delete Cascade," +
 					"creationTime timestamp,\n" +
 					"requestType  varchar(31),\n" +
 					"requestState varchar(10),\n" +
@@ -211,12 +263,12 @@ public class makeConnection {
 	}
 
 
-	public void createFloralRequests(){
+	public void createFloralRequestsTable(){
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table floralRequests( " +
-					"requestID     int Primary Key References requests, " +
-					"roomID        varchar(31) References node, " +
+					"requestID     int Primary Key References requests On Delete Cascade, " +
+					"roomID        varchar(31) References node On Delete Cascade, " +
 					"recipientName varchar(31), " +
 					"flowerType    varchar(31), " +
 					"flowerAmount  int, " +
@@ -235,19 +287,28 @@ public class makeConnection {
 
 
 
+
 	/**
-	 * Deletes node and hasEdges table
+	 * Deletes node,hasEdge, userAccount, requests, and floralRequests tables.
+	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
 	 * try/catch phrase set up in case the tables all ready do not exist
 	 */
 	public void deleteAllTables() {
 
 		try {
 			Statement stmt = this.connection.createStatement();
-			stmt.execute("Drop Table hasedge");
+			stmt.execute("Drop Table floralRequests");
+			stmt.execute("Drop Table requests");
+			stmt.execute("Drop View visitorAccount");
+			stmt.execute("Drop View patientAccount");
+			stmt.execute("Drop View doctorAccount");
+			stmt.execute("Drop View adminAccount");
+			stmt.execute("Drop Table userAccount");
+			stmt.execute("Drop Table hasEdge");
 			stmt.execute("Drop Table node");
 			stmt.close();
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			System.err.println("deleteAllTables() not working");
 		}
 	}

@@ -33,7 +33,11 @@ public class DatabaseTests {
     public void setupTables(){
         try {
             connection.deleteAllTables();
-            connection.createTables();
+	        connection.createNodeTable();
+	        connection.createEdgeTable();
+	        connection.createUserAccountTable();
+	        connection.createRequestsTable();
+	        connection.createFloralRequestsTable();
             System.out.println("Tables were reset");
         } catch (Exception e) {
             try {
@@ -610,7 +614,7 @@ public class DatabaseTests {
 	@DisplayName("testCreateUserAccountTable")
 	public void testCreateUserAccountTable(){
 
-	connection.createFloralRequests();
+
 
 	}
 

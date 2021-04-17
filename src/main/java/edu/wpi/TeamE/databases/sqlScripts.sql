@@ -74,14 +74,14 @@ Where userType = 'admin';
 
 Create Table patient
 (
-	userID int Primary Key References userAccount,
-	roomID varchar(31) References node -- nodeID for patient's room
+	userID int Primary Key References userAccount On Delete Cascade,
+	roomID varchar(31) References node On Delete Cascade-- nodeID for patient's room
 );
 
 Create Table requests
 (
 	requestID    int Primary Key,
-	creatorID    int References userAccount,
+	creatorID    int References userAccount On Delete Cascade,
 	creationTime timestamp,
 	requestType  varchar(31),
 	requestState varchar(10),
@@ -103,8 +103,8 @@ From requests;
 
 Create Table floralRequests
 (
-	requestID     int Primary Key References requests,
-	roomID        varchar(31) References node,
+	requestID     int Primary Key References requests On Delete Cascade,
+	roomID        varchar(31) References node On Delete Cascade,
 	recipientName varchar(31),
 	flowerType    varchar(31),
 	flowerAmount  int,

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.sql.SQLException;
 
 public class PathFindingTests {
     static Searcher search;
@@ -28,6 +29,17 @@ public class PathFindingTests {
             con.populateTable("hasEdge", edges);
             System.out.println("Tables were created");
         } catch (Exception e) {
+            try {
+                con.createTables();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            System.out.println("Created Tables");
+            con.populateTable("node", nodes);
+            System.out.println("Populated nodes");
+            con.populateTable("hasEdge", edges);
+            System.out.println("Populated edges");
+            System.out.println("Tables were created and populated");
             System.out.println("Tables already there");
 //			connection.createTables();
 //			connection.populateTable("node", nodes);

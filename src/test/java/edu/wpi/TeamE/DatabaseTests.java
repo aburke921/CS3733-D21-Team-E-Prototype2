@@ -10,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import edu.wpi.TeamE.algorithms.Node;
 
@@ -33,7 +35,11 @@ public class DatabaseTests {
             connection.createTables();
             System.out.println("Tables were reset");
         } catch (Exception e) {
-            connection.createTables();
+            try {
+                connection.createTables();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             System.out.println("Tables were created");
         }
     }

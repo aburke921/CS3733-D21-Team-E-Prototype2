@@ -10,11 +10,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import edu.wpi.TeamE.algorithms.Node;
 
-import edu.wpi.TeamE.algorithms.pathfinding.Edge;
+import edu.wpi.TeamE.algorithms.Edge;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 

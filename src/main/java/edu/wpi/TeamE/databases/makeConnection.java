@@ -4,15 +4,9 @@ import edu.wpi.TeamE.algorithms.pathfinding.Edge;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.stage.FileChooser;
 import javafx.util.Pair;
+
 import java.io.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -26,8 +20,7 @@ public class makeConnection {
 	public Connection connection;
 
 	// private constructor restricted to this class itself
-	public makeConnection()
-	{
+	public makeConnection() {
 		// Initialize DB
 		System.out.println("Starting connection to Apache Derby\n");
 		try {
@@ -49,7 +42,7 @@ public class makeConnection {
 				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
 				// e.printStackTrace();
-				System.err.println("error with the DriverManager");
+				System.err.println("error with the DriverManager, check if you have connected to database in IntelliJ");
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -58,14 +51,42 @@ public class makeConnection {
 	}
 
 	// static method to create instance of Singleton class
-	public static makeConnection makeConnection()
-	{
+	public static makeConnection makeConnection() {
 		// To ensure only one instance is created
-		if (singleInstance == null)
-		{
+		if (singleInstance == null) {
 			singleInstance = new makeConnection();
 		}
 		return singleInstance;
+	}
+
+	public static void main(String[] args) {/*
+		System.out.println("STARTING UP!!!");
+		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+
+		makeConnection connection = makeConnection.makeConnection();
+		connection.deleteAllTables();
+		try {
+			connection.createTables();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		connection.populateTable("node", nodes);
+		connection.populateTable("hasEdge", edges);
+
+		connection.getNewCSVFile("node");
+		connection.getNewCSVFile("hasEdge");
+		connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
+		connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
+		connection.addNode("test3", 3, 3,"test", "test", "test", "test", "test");
+		connection.addNode("test4", 4, 4,"test", "test", "test", "test", "test");
+
+		connection.addEdge("test1_test2", "test1", "test2");
+		connection.addEdge("test2_test3", "test2", "test3");
+		connection.addEdge("test1_test3", "test1", "test3");
+
+		//int i = connection.modifyEdge("test1_test2", null, "test3");
+		//System.out.println(i);*/
 	}
 
 	/**
@@ -73,34 +94,34 @@ public class makeConnection {
 	 * try/catch phrase set up in case the tables all ready exist
 	 */
 	public void createTables() throws SQLException {
-			Statement nodeStmt = this.connection.createStatement();
-			nodeStmt.execute(
-					"create table node"
-							+ "("
-							+ "    nodeID    varchar(31) primary key,"
-							+ "    xCoord    int not null,"
-							+ "    yCoord    int not null,"
-							+ "    floor     varchar(5) not null,"
-							+ "    building  varchar(20),"
-							+ "    nodeType  varchar(10),"
-							+ "    longName  varchar(100),"
-							+ "    shortName varchar(100),"
-							+ "    unique (xCoord, yCoord, floor)"
-							+ ")");
+		Statement nodeStmt = this.connection.createStatement();
+		nodeStmt.execute(
+				"create table node"
+						+ "("
+						+ "    nodeID    varchar(31) primary key,"
+						+ "    xCoord    int not null,"
+						+ "    yCoord    int not null,"
+						+ "    floor     varchar(5) not null,"
+						+ "    building  varchar(20),"
+						+ "    nodeType  varchar(10),"
+						+ "    longName  varchar(100),"
+						+ "    shortName varchar(100),"
+						+ "    unique (xCoord, yCoord, floor)"
+						+ ")");
 
 		Statement hasEdgeStmt = connection.createStatement();
-			hasEdgeStmt.execute(
-					"create table hasEdge"
-							+ "("
-							+ "    edgeID    varchar(63) primary key,"
-							+ "    startNode varchar(31) not null references node (nodeID) on delete cascade,"
-							+ "    endNode   varchar(31) not null references node (nodeID) on delete cascade, "
-							+ "    length    double, "
-							+ "    unique (startNode, endNode)"
-							+ ")");
+		hasEdgeStmt.execute(
+				"create table hasEdge"
+						+ "("
+						+ "    edgeID    varchar(63) primary key,"
+						+ "    startNode varchar(31) not null references node (nodeID) on delete cascade,"
+						+ "    endNode   varchar(31) not null references node (nodeID) on delete cascade, "
+						+ "    length    double, "
+						+ "    unique (startNode, endNode)"
+						+ ")");
 
-			// Needs a way to calculate edgeID, either in Java or by a sql trigger
-			// Probably in Java since it's a PK
+		// Needs a way to calculate edgeID, either in Java or by a sql trigger
+		// Probably in Java since it's a PK
 	}
 
 	public void createNodeTable() {
@@ -151,7 +172,6 @@ public class makeConnection {
 		}
 	}
 
-
 	/**
 	 * Deletes node and hasEdges table
 	 * try/catch phrase set up in case the tables all ready do not exist
@@ -181,7 +201,6 @@ public class makeConnection {
 		}
 
 	}
-
 
 	public void deleteNodeTable() {
 
@@ -292,7 +311,6 @@ public class makeConnection {
 		}
 	}
 
-
 	public void addLength(String startNode, String endNode) {
 
 		String sqlQuery;
@@ -364,7 +382,6 @@ public class makeConnection {
 
 	}
 
-
 	/**
 	 * gets a node's all attributes given nodeID
 	 *
@@ -378,7 +395,7 @@ public class makeConnection {
 
 			ResultSet getNodeInfoRS = getNodeInfoPS.executeQuery();
 
-			while(getNodeInfoRS.next()) {
+			while (getNodeInfoRS.next()) {
 				int xCoord = getNodeInfoRS.getInt("xCoord");
 				int yCoord = getNodeInfoRS.getInt("yCoord");
 				String floor = getNodeInfoRS.getString("floor");
@@ -409,10 +426,10 @@ public class makeConnection {
 	public Node getNodeLite(String nodeID) {
 		String getNodeLiteS = "select xCoord, yCoord, floor, nodeType from node where nodeID = ?";
 		try (PreparedStatement getNodeLitePS = connection.prepareStatement(getNodeLiteS)) {
-      getNodeLitePS.setString(1, nodeID);
+			getNodeLitePS.setString(1, nodeID);
 			ResultSet getNodeLiteRS = getNodeLitePS.executeQuery();
 
-			while(getNodeLiteRS.next()) {
+			while (getNodeLiteRS.next()) {
 				int xCoord = getNodeLiteRS.getInt("xCoord");
 				int yCoord = getNodeLiteRS.getInt("yCoord");
 				String floor = getNodeLiteRS.getString("floor");
@@ -426,7 +443,7 @@ public class makeConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Could not get nodeLite Info");
-		  return null;
+			return null;
 		}
 		return null;
 	}
@@ -483,6 +500,7 @@ public class makeConnection {
 
 	/**
 	 * gets all Nodes (each row in node table)
+	 *
 	 * @return ArrayList of Node objects
 	 * need Node constructor from UI/UX team
 	 */
@@ -520,6 +538,7 @@ public class makeConnection {
 
 	/**
 	 * gets all Nodes that have the given FLOOR value
+	 *
 	 * @param floorName the value to check for in FLOOR column
 	 * @return ArrayList of Node objects
 	 */
@@ -555,11 +574,12 @@ public class makeConnection {
 
 	/**
 	 * Gets all node long names for a specified FLOOR column value.
+	 *
 	 * @param floorName the value to check for in FLOOR column
 	 * @return ObservableList of node long names.
 	 */
 	public ObservableList<String> getAllNodeLongNamesByFloor(String floorName) {
-		ObservableList<String> listOfNodeIDs =  FXCollections.observableArrayList();
+		ObservableList<String> listOfNodeIDs = FXCollections.observableArrayList();
 
 		String deleteNodeS = "SELECT LONGNAME FROM node WHERE '" + floorName + "' = FLOOR";
 		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
@@ -574,7 +594,7 @@ public class makeConnection {
 			deleteNodePS.close();
 
 			return listOfNodeIDs;
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("getListofNodeIDS error try/catch");
 			return listOfNodeIDs;
@@ -597,7 +617,7 @@ public class makeConnection {
 			deleteNodePS.close();
 
 			return listOfNodeIDs;
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("getListofNodeIDS error try/catch");
 			return listOfNodeIDs;
@@ -605,9 +625,9 @@ public class makeConnection {
 
 	}
 
-
 	/**
 	 * gets all edges and each edge's attribute
+	 *
 	 * @return ArrayList<Edge>
 	 */
 	public ArrayList<Edge> getAllEdges() {
@@ -634,7 +654,32 @@ public class makeConnection {
 		return edgesArray;
 	}
 
-
+	/**
+	 * counts the number of nodes already in the database of the given type and on the given floor that starts with the given teamNum
+	 *
+	 * @param teamNum be a String like "E"
+	 * @param Floor is a String like "L2"
+	 * @param Type is the nodeType of the node, like "ELEV"
+	 * @return is how many nodes are already in the database given the params
+	 */
+	public int countNodeTypeOnFloor(String teamNum, String Floor, String Type) {
+		String queryS = "select count(*) as countNum from node where nodeID like ('" + teamNum + "%') and floor = ? and nodeType = ?";
+		try (PreparedStatement PrepStat = connection.prepareStatement(queryS)) {
+			PrepStat.setString(1, Floor);
+			PrepStat.setString(2, Type);
+			ResultSet rSet = PrepStat.executeQuery();
+			int countNum = -1;
+			if (rSet.next()) {
+				countNum = rSet.getInt("countNum");
+			}
+			rSet.close();
+			return countNum;
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("countNodeTypeOnFloor() error");
+		}
+		return -1;
+	}
 
 	/**
 	 * adds a node with said data to the database
@@ -689,9 +734,8 @@ public class makeConnection {
 			e.printStackTrace();
 			System.err.println("addEdge() error in the try/catch");
 			return 0;
-    	}
+		}
 	}
-
 
 	/**
 	 * modifies a node, updating the DB, returning 0 or 1 depending on whether operation was successful
@@ -722,43 +766,43 @@ public class makeConnection {
 			//xCoordUpdate = "xCoord = " + xCoord;
 			added = true;
 		}
-		if(yCoord != null) {
-			if(added == true) {
+		if (yCoord != null) {
+			if (added == true) {
 				query = query + ", ";
 			}
 			query = query + " yCoord = " + yCoord;
 			added = true;
 		}
-		if(floor != null) {
-			if(added == true) {
+		if (floor != null) {
+			if (added == true) {
 				query = query + ", ";
 			}
 			query = query + " floor = '" + floor + "'";
 			added = true;
 		}
-		if(building != null) {
-			if(added == true) {
+		if (building != null) {
+			if (added == true) {
 				query = query + ", ";
 			}
 			query = query + " building = '" + building + "'";
 			added = true;
 		}
-		if(nodeType != null) {
-			if(added == true) {
+		if (nodeType != null) {
+			if (added == true) {
 				query = query + ", ";
 			}
 			query = query + " nodeType = '" + nodeType + "'";
 			added = true;
 		}
-		if(longName != null) {
-			if(added == true) {
+		if (longName != null) {
+			if (added == true) {
 				query = query + ", ";
 			}
 			query = query + " longName = '" + longName + "'";
 			added = true;
 		}
-		if(shortName != null) {
-			if(added == true) {
+		if (shortName != null) {
+			if (added == true) {
 				query = query + ", ";
 			}
 			query = query + " shortName = '" + shortName + "'";
@@ -771,13 +815,12 @@ public class makeConnection {
 			stmt.executeUpdate(query);
 			stmt.close();
 			return 1;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();System.err.println("Error in updating node");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating node");
 			return 0;
 		}
 	}
-
 
 	/**
 	 * modifies an edge, updating the DB, returning 0 or 1 depending on whether operation was successful
@@ -806,65 +849,63 @@ public class makeConnection {
 			prepState1.setString(1, edgeID);
 			ResultSet rset1 = prepState1.executeQuery();
 
-			if(rset1.next()){
+			if (rset1.next()) {
 				correctEdgeID = true;
 			}
 
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			//e.printStackTrace();
 			return 0;
 		}
 
-		if(startNode != null){
+		if (startNode != null) {
 			String checkStartNode = "select nodeID from node where nodeID = ?";
 			try (PreparedStatement prepState2 = connection.prepareStatement(checkStartNode)) {
 				prepState2.setString(1, startNode);
 				ResultSet rset2 = prepState2.executeQuery();
 
-				if(rset2.next()) {
+				if (rset2.next()) {
 					correctStartNode = true;
 				}
 
-			}catch(SQLException e) {
+			} catch (SQLException e) {
 				System.err.println("given start node does not exist");
 				//e.printStackTrace();
 				return 0;
 			}
 		}
 
-		if(endNode != null){
+		if (endNode != null) {
 			String checkEndNode = "select nodeID from node where nodeID = ?";
 			try (PreparedStatement prepState3 = connection.prepareStatement(checkEndNode)) {
 				prepState3.setString(1, endNode);
 				ResultSet rset3 = prepState3.executeQuery();
 
-				if(rset3.next()) {
+				if (rset3.next()) {
 					correctEndNode = true;
 				}
 
 
-			}catch(SQLException e) {
+			} catch (SQLException e) {
 				//e.printStackTrace();
 				return 0;
 			}
 		}
 
 
-
-		if((correctEdgeID && correctStartNode) || (correctEdgeID && correctEndNode) || (correctEdgeID && correctStartNode && correctEndNode)){
+		if ((correctEdgeID && correctStartNode) || (correctEdgeID && correctEndNode) || (correctEdgeID && correctStartNode && correctEndNode)) {
 			String[] nodes = edgeID.split("_");
 			deleteEdge(nodes[0], nodes[1]);
-			if(startNode == null){
+			if (startNode == null) {
 				String newEdgeID = nodes[0] + "_" + endNode;
 				addEdge(newEdgeID, nodes[0], endNode);
 				return 1;
 			}
-			if(endNode == null){
+			if (endNode == null) {
 				String newEdgeID = startNode + "_" + nodes[1];
 				addEdge(newEdgeID, startNode, nodes[1]);
 				return 1;
-			}
-			else{
+			} else {
 				String newEdgeID = startNode + "_" + endNode;
 				addEdge(newEdgeID, startNode, endNode);
 				return 1;
@@ -874,7 +915,6 @@ public class makeConnection {
 		System.err.println("startNode or endNode does not exist but no SQL error");
 		return 0;
 	}
-
 
 	/**
 	 * Deletes edge(s) between the given two nodes, they can be in any order
@@ -935,13 +975,11 @@ public class makeConnection {
 			System.err.println("deleteEdge() tyr/catch error");
 			if (count == 0) {
 				count = 0;
-			}
-			else
+			} else
 				count = 1;
 		}
 		return count;
 	}
-
 
 	/**
 	 * matches the nodeID to a node and deletes it from DB
@@ -967,8 +1005,6 @@ public class makeConnection {
 		}
 	}
 
-
-
 	/**
 	 * gets list of nodeIDS
 	 *
@@ -990,7 +1026,7 @@ public class makeConnection {
 			deleteNodePS.close();
 
 			return listOfNodeIDs;
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("getListofNodeIDS error try/catch");
 			return listOfNodeIDs;
@@ -998,95 +1034,61 @@ public class makeConnection {
 
 	}
 
-
-	public void getNewCSVFile(String tableName){
+	public void getNewCSVFile(String tableName) {
 
 		String sqlQuery = "select * from " + tableName;
 		try (PreparedStatement prepState = connection.prepareStatement(sqlQuery)) {
 
 			ResultSet rset1 = prepState.executeQuery();
 
-				if(tableName == "node") {
+			if (tableName == "node") {
 
-					StringBuilder nodeSB = new StringBuilder();
-					while (rset1.next()) {
+				StringBuilder nodeSB = new StringBuilder();
+				while (rset1.next()) {
 
-						//File nodeCSV = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
-						nodeSB.append(rset1.getString("nodeID")).append(",");
-						nodeSB.append(rset1.getInt("xCoord")).append(",");
-						nodeSB.append(rset1.getInt("yCoord")).append(",");
-						nodeSB.append(rset1.getString("floor")).append(",");
-						nodeSB.append(rset1.getString("building")).append(",");
-						nodeSB.append(rset1.getString("nodeType")).append(",");
-						nodeSB.append(rset1.getString("longName")).append(",");
-						nodeSB.append(rset1.getString("shortName")).append("\n");
+					//File nodeCSV = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+					nodeSB.append(rset1.getString("nodeID")).append(",");
+					nodeSB.append(rset1.getInt("xCoord")).append(",");
+					nodeSB.append(rset1.getInt("yCoord")).append(",");
+					nodeSB.append(rset1.getString("floor")).append(",");
+					nodeSB.append(rset1.getString("building")).append(",");
+					nodeSB.append(rset1.getString("nodeType")).append(",");
+					nodeSB.append(rset1.getString("longName")).append(",");
+					nodeSB.append(rset1.getString("shortName")).append("\n");
 
-					}
-
-					// create a file writer to write to files
-					FileWriter nodeWriter = new FileWriter("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
-					nodeWriter.write("nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName\n");
-					nodeWriter.write(String.valueOf(nodeSB));
-					nodeWriter.close();
 				}
 
-				rset1.close();
-
-				ResultSet rset2 = prepState.executeQuery();
-
-				if(tableName == "hasEdge"){
-					StringBuilder edgeSB = new StringBuilder();
-
-					while(rset2.next()) {
-						//File edgeCSV = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
-						edgeSB.append(rset2.getString("edgeID")).append(",");
-						edgeSB.append(rset2.getString("startNode")).append(",");
-						edgeSB.append(rset2.getString("endNode")).append("\n");
-					}
-
-					FileWriter edgeWriter = new FileWriter("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
-					edgeWriter.write("edgeID, startNode, endNode\n");
-					edgeWriter.write(String.valueOf(edgeSB));
-					edgeWriter.close();
-				}
-
+				// create a file writer to write to files
+				FileWriter nodeWriter = new FileWriter("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+				nodeWriter.write("nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName\n");
+				nodeWriter.write(String.valueOf(nodeSB));
+				nodeWriter.close();
 			}
-			catch (SQLException throwables) {
+
+			rset1.close();
+
+			ResultSet rset2 = prepState.executeQuery();
+
+			if (tableName == "hasEdge") {
+				StringBuilder edgeSB = new StringBuilder();
+
+				while (rset2.next()) {
+					//File edgeCSV = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+					edgeSB.append(rset2.getString("edgeID")).append(",");
+					edgeSB.append(rset2.getString("startNode")).append(",");
+					edgeSB.append(rset2.getString("endNode")).append("\n");
+				}
+
+				FileWriter edgeWriter = new FileWriter("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+				edgeWriter.write("edgeID, startNode, endNode\n");
+				edgeWriter.write(String.valueOf(edgeSB));
+				edgeWriter.close();
+			}
+
+		} catch (SQLException throwables) {
 			throwables.printStackTrace();
-			}
-			catch (IOException ioException) {
+		} catch (IOException ioException) {
 			ioException.printStackTrace();
-			}
-	}
-
-	public static void main(String[] args) {
-		System.out.println("STARTING UP!!!");
-		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-		File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
-
-		makeConnection connection = makeConnection.makeConnection();
-		connection.deleteAllTables();
-		try {
-			connection.createTables();
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
-		connection.populateTable("node", nodes);
-		connection.populateTable("hasEdge", edges);
-
-		connection.getNewCSVFile("node");
-		connection.getNewCSVFile("hasEdge");
-//		connection.addNode("test1", 0, 0,"test", "test", "test", "test", "test");
-//		connection.addNode("test2", 2, 2,"test", "test", "test", "test", "test");
-//		connection.addNode("test3", 3, 3,"test", "test", "test", "test", "test");
-//		connection.addNode("test4", 4, 4,"test", "test", "test", "test", "test");
-//
-//		connection.addEdge("test1_test2", "test1", "test2");
-//		connection.addEdge("test2_test3", "test2", "test3");
-//		connection.addEdge("test1_test3", "test1", "test3");
-
-		//int i = connection.modifyEdge("test1_test2", null, "test3");
-		//System.out.println(i);
 	}
 }
-

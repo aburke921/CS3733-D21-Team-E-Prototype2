@@ -1,5 +1,7 @@
 package edu.wpi.TeamE.algorithms;
 
+import edu.wpi.TeamE.databases.makeConnection;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -69,8 +71,15 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         return floorMap.get(floor) * magicNumber;
     }
 
-
-    public static String genNodeID(String type, String floor, String longName){
+    /**
+     * Autogenerate NodeIDs
+     * Elevators need to have the format `Elevator X xxxxx`
+     * @param type The type of Node this is
+     * @param floor The floor this Node is on
+     * @param longName The longName of the node
+     * @return The NodeID of the given Node
+     */
+    public String genNodeID(String type, String floor, String longName){
         StringBuilder SB = new StringBuilder("e");
         SB.append(type);
 
@@ -79,7 +88,9 @@ public class Node implements Comparable<Node>, Iterable<Node> {
             SB.append(longName.charAt(9));
             //Elevator names need to start with 'Elevator X xxxxx"
         } else {
-            //TODO: get instance number
+            makeConnection connection = makeConnection.makeConnection();
+            int instance = connection.countNodeTypeOnFloor("e", floor, type) + 1;
+            SB.append(String.format("%03d", instance));
         }
 
         try{

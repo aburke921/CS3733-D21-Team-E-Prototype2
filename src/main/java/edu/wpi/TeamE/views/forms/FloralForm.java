@@ -1,24 +1,23 @@
 package edu.wpi.TeamE.views.forms;
 
-public class FloralForm {
+public class FloralForm extends ServiceRequestForm{
     private String patient;
-    private String room;
     private String flowerType;
     private String flowerAmount;
     private String vaseType;
     private String message;
-    private boolean status;
+
 
     public FloralForm(String patient, String room, String flowerType, String flowerAmount,
                       String vaseType, String message) {
 
         this.patient = patient;
-        this.room = room;
+        super.location = room;
         this.flowerType = flowerType;
         this.flowerAmount = flowerAmount;
         this.vaseType = vaseType;
         this.message = message;
-        this.status = false;
+        super.status = false;
 
     }
 
@@ -27,7 +26,7 @@ public class FloralForm {
     }
 
     public String getRoom() {
-        return this.room;
+        return this.location;
     }
 
     public String getFlowerType() {

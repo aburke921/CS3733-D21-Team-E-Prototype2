@@ -1,12 +1,11 @@
 package edu.wpi.TeamE.views.forms;
 
-public class SanitationServicesForm {
+public class SanitationServicesForm extends ServiceRequestForm{
 
   private String departmentField;
   private String roomField;
   private String numberField;
   private String serviceTypeField;
-  private String assignmentField;
   //private String instructions;
   private boolean status;
 
@@ -16,7 +15,7 @@ public class SanitationServicesForm {
     this.roomField = roomField;
     this.numberField = numberField;
     this.serviceTypeField = serviceTypeField;
-    this.assignmentField = assignmentField;
+    super.assignee = assignmentField;
     //this.instructions = instructions;
     this.status = false;
 
@@ -39,7 +38,7 @@ public class SanitationServicesForm {
   }
 
   public String getAssignmentField() {
-      return this.assignmentField;
+      return this.assignee;
   }
 
 //  public String getInstructions() {

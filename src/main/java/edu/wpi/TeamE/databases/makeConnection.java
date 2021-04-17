@@ -96,28 +96,28 @@ public class makeConnection {
 	public void createTables() throws SQLException {
 		Statement nodeStmt = this.connection.createStatement();
 		nodeStmt.execute(
-				"create table node"
+				"Create Table node"
 						+ "("
-						+ "    nodeID    varchar(31) primary key,"
-						+ "    xCoord    int not null,"
-						+ "    yCoord    int not null,"
-						+ "    floor     varchar(5) not null,"
+						+ "    nodeID    varchar(31) Primary Key,"
+						+ "    xCoord    int Not Null,"
+						+ "    yCoord    int Not Null,"
+						+ "    floor     varchar(5) Not Null,"
 						+ "    building  varchar(20),"
 						+ "    nodeType  varchar(10),"
 						+ "    longName  varchar(100),"
 						+ "    shortName varchar(100),"
-						+ "    unique (xCoord, yCoord, floor)"
+						+ "    Unique (xCoord, yCoord, floor)"
 						+ ")");
 
 		Statement hasEdgeStmt = connection.createStatement();
 		hasEdgeStmt.execute(
-				"create table hasEdge"
+				"Create Table hasEdge"
 						+ "("
-						+ "    edgeID    varchar(63) primary key,"
-						+ "    startNode varchar(31) not null references node (nodeID) on delete cascade,"
-						+ "    endNode   varchar(31) not null references node (nodeID) on delete cascade, "
+						+ "    edgeID    varchar(63) Primary Key,"
+						+ "    startNode varchar(31) Not Null References node (nodeid) On Delete Cascade,"
+						+ "    endNode   varchar(31) Not Null References node (nodeid) On Delete Cascade, "
 						+ "    length    double, "
-						+ "    unique (startNode, endNode)"
+						+ "    Unique (startNode, endNode)"
 						+ ")");
 
 		// Needs a way to calculate edgeID, either in Java or by a sql trigger
@@ -129,21 +129,21 @@ public class makeConnection {
 		try {
 			Statement stmt = this.connection.createStatement();
 			stmt.execute(
-					"create table node"
+					"Create Table node"
 							+ "("
-							+ "    nodeID    varchar(31) primary key,"
-							+ "    xCoord    int not null,"
-							+ "    yCoord    int not null,"
-							+ "    floor     varchar(5) not null,"
+							+ "    nodeID    varchar(31) Primary Key,"
+							+ "    xCoord    int Not Null,"
+							+ "    yCoord    int Not Null,"
+							+ "    floor     varchar(5) Not Null,"
 							+ "    building  varchar(20),"
 							+ "    nodeType  varchar(10),"
 							+ "    longName  varchar(100),"
 							+ "    shortName varchar(100),"
-							+ "    unique (xCoord, yCoord, floor)"
+							+ "    Unique (xCoord, yCoord, floor)"
 							+ ")");
 
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			System.err.println("error creating node table");
 		}
 
@@ -154,13 +154,13 @@ public class makeConnection {
 
 			Statement stmt = connection.createStatement();
 			stmt.execute(
-					"create table hasEdge"
+					"Create Table hasEdge"
 							+ "("
-							+ "    edgeID    varchar(63) primary key,"
-							+ "    startNode varchar(31) not null references node (nodeID) on delete cascade,"
-							+ "    endNode   varchar(31) not null references node (nodeID) on delete cascade, "
+							+ "    edgeID    varchar(63) Primary Key,"
+							+ "    startNode varchar(31) Not Null References node (nodeid) On Delete Cascade,"
+							+ "    endNode   varchar(31) Not Null References node (nodeid) On Delete Cascade, "
 							+ "    length    float, "
-							+ "    unique (startNode, endNode)"
+							+ "    Unique (startNode, endNode)"
 							+ ")");
 
 			// Needs a way to calculate edgeID, either in Java or by a sql trigger
@@ -172,19 +172,142 @@ public class makeConnection {
 		}
 	}
 
+
+	public void createUserAccountTable(){
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table userAccount(" +
+					"userID    int Primary Key, " +
+					"email     varchar(31) Unique, " +
+					"password  varchar(31), " +
+					"userType  varchar(31), " +
+					"firstName varchar(31), " +
+					"lastName  varchar(31), " +
+					"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin')))";
+			stmt.execute(sqlQuery);
+			createUserAccountTypeViews();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("error creating userAccount table");
+		}
+
+
+	}
+
+	public void createUserAccountTypeViews(){
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create View visitorAccount As " +
+					"Select * " +
+					"From userAccount " +
+					"Where userType = 'visitor'";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating visitorAccount view");
+		}
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create View patientAccount As " +
+					"Select * " +
+					"From userAccount " +
+					"Where userType = 'patient'";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating patientAccount view");
+		}
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create View doctorAccount As " +
+					"Select * " +
+					"From userAccount " +
+					"Where userType = 'doctor'";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating doctorAccount view");
+		}
+
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create View adminAccount As " +
+					"Select * " +
+					"From userAccount " +
+					"Where userType = 'admin'";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating adminAccount view");
+		}
+
+	}
+
+
+	public void createRequestsTable(){
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table requests(" +
+					"requestID    int Primary Key,\n" +
+					"creatorID    int References userAccount On Delete Cascade," +
+					"creationTime timestamp,\n" +
+					"requestType  varchar(31),\n" +
+					"requestState varchar(10),\n" +
+					"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
+					"Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress')))";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating requests table");
+		}
+	}
+
+
+	public void createFloralRequestsTable(){
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table floralRequests( " +
+					"requestID     int Primary Key References requests On Delete Cascade, " +
+					"roomID        varchar(31) References node On Delete Cascade, " +
+					"recipientName varchar(31), " +
+					"flowerType    varchar(31), " +
+					"flowerAmount  int, " +
+					"vaseType      varchar(31), " +
+					"message       varchar(255), " +
+					"Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')), " +
+					"Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)),\n" +
+					"Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None')))";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating floralRequests table");
+		}
+	}
+
+
+
+
 	/**
-	 * Deletes node and hasEdges table
+	 * Deletes node,hasEdge, userAccount, requests, and floralRequests tables.
+	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
 	 * try/catch phrase set up in case the tables all ready do not exist
 	 */
 	public void deleteAllTables() {
 
 		try {
 			Statement stmt = this.connection.createStatement();
-			stmt.execute("drop table hasEdge");
-			stmt.execute("drop table node");
+			stmt.execute("Drop Table floralRequests");
+			stmt.execute("Drop Table requests");
+			stmt.execute("Drop View visitorAccount");
+			stmt.execute("Drop View patientAccount");
+			stmt.execute("Drop View doctorAccount");
+			stmt.execute("Drop View adminAccount");
+			stmt.execute("Drop Table userAccount");
+			stmt.execute("Drop Table hasEdge");
+			stmt.execute("Drop Table node");
 			stmt.close();
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			System.err.println("deleteAllTables() not working");
 		}
 	}
@@ -193,7 +316,7 @@ public class makeConnection {
 
 		try {
 			Statement stmt = this.connection.createStatement();
-			stmt.execute("drop table hasEdge");
+			stmt.execute("Drop Table hasedge");
 			stmt.close();
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -206,7 +329,7 @@ public class makeConnection {
 
 		try {
 			Statement stmt = this.connection.createStatement();
-			stmt.execute("drop table node");
+			stmt.execute("Drop Table node");
 			stmt.close();
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -382,6 +505,65 @@ public class makeConnection {
 
 	}
 
+
+	public void addFloralRequest(int creatorID,String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message){
+		String insertRequest = "Insert Into requests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests) + 1, ?, current Timestamp, 'floral', 'inProgress')";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
+			prepState.setInt(1, creatorID);
+			ResultSet rset = prepState.executeQuery();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into requests inside function addFloralRequest()");
+		}
+
+
+		String insertFloralRequest = "Insert Into floralRequests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
+			prepState.setString(1, RoomNodeID);
+			prepState.setString(2, recipientName);
+			prepState.setString(3, flowerType);
+			prepState.setInt(4, flowerAmount);
+			prepState.setString(5, vaseType);
+			prepState.setString(5, message);
+
+			ResultSet rset = prepState.executeQuery();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
+		}
+
+//			Create Table requests(
+	//			requestID    int Primary Key,
+	//			creatorID    int References userAccount On Delete Cascade,
+	//			creationTime timestamp,
+	//			requestType  varchar(31),
+	//			requestState varchar(10),
+	//			Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
+	//			Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress'))
+//          );
+
+//			Create Table floralRequests(
+//				requestID     int Primary Key References requests On Delete Cascade,
+//			    roomID        varchar(31) References node On Delete Cascade,
+//				recipientName varchar(31),
+//				flowerType    varchar(31),
+//				flowerAmount  int,
+//			    vaseType      varchar(31),
+//				message       varchar(255),
+//				Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')),
+//			    Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)),
+//				Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None'))
+//          );
+	}
+
+
+
 	/**
 	 * gets a node's all attributes given nodeID
 	 *
@@ -389,7 +571,7 @@ public class makeConnection {
 	 */
 
 	public Node getNodeInfo(String nodeID) {
-		String getNodeInfoS = "select * from node where nodeID = ?";
+		String getNodeInfoS = "Select * From node Where nodeid = ?";
 		try (PreparedStatement getNodeInfoPS = connection.prepareStatement(getNodeInfoS)) {
 			getNodeInfoPS.setString(1, nodeID);
 
@@ -424,7 +606,7 @@ public class makeConnection {
 	 * @return a Node with only xCoord, yCoord, floor and nodeType not null
 	 */
 	public Node getNodeLite(String nodeID) {
-		String getNodeLiteS = "select xCoord, yCoord, floor, nodeType from node where nodeID = ?";
+		String getNodeLiteS = "Select xcoord, ycoord, floor, nodetype From node Where nodeid = ?";
 		try (PreparedStatement getNodeLitePS = connection.prepareStatement(getNodeLiteS)) {
 			getNodeLitePS.setString(1, nodeID);
 			ResultSet getNodeLiteRS = getNodeLitePS.executeQuery();
@@ -510,7 +692,7 @@ public class makeConnection {
 //observable list -- UI
 		try {
 			Statement stmt = this.connection.createStatement();
-			String query = "select * from node";
+			String query = "Select * From node";
 			ResultSet rset = stmt.executeQuery(query);
 
 			while (rset.next()) {
@@ -635,7 +817,7 @@ public class makeConnection {
 		ArrayList<Edge> edgesArray = new ArrayList<>();
 		try {
 			Statement stmt = this.connection.createStatement();
-			String query = "select * from hasEdge";
+			String query = "Select * From hasedge";
 			ResultSet rset = stmt.executeQuery(query);
 
 			while (rset.next()) {
@@ -659,8 +841,8 @@ public class makeConnection {
 	 * counts the number of nodes already in the database of the given type and on the given floor that starts with the given teamNum
 	 *
 	 * @param teamNum be a String like "E"
-	 * @param Floor is a String like "L2"
-	 * @param Type is the nodeType of the node, like "ELEV"
+	 * @param Floor   is a String like "L2"
+	 * @param Type    is the nodeType of the node, like "ELEV"
 	 * @return is how many nodes are already in the database given the params
 	 */
 	public int countNodeTypeOnFloor(String teamNum, String Floor, String Type) {
@@ -688,7 +870,7 @@ public class makeConnection {
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-		String addNodeS = "insert into node values (?, ?, ?, ?, ?, ?, ?, ?)";
+		String addNodeS = "Insert Into node Values (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
 			addNodePS.setString(1, nodeID);
 			addNodePS.setInt(2, xCoord);
@@ -718,7 +900,7 @@ public class makeConnection {
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 	public int addEdge(String edgeID, String startNode, String endNode) {
-		String addEdgeS = "insert into hasEdge (edgeID, startNode, endNode) values (?, ?, ?)";
+		String addEdgeS = "Insert Into hasedge (edgeid, startnode, endnode) Values (?, ?, ?)";
 		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
 			addEdgePS.setString(1, edgeID);
 			addEdgePS.setString(2, startNode);
@@ -845,7 +1027,7 @@ public class makeConnection {
 		//			or
 		//3. check that they gave a valid nodeID they want to change to the endNode
 
-		String checkEdgeID = "select edgeID from hasEdge where edgeID = ?";
+		String checkEdgeID = "Select edgeid From hasedge Where edgeid = ?";
 		try (PreparedStatement prepState1 = connection.prepareStatement(checkEdgeID)) {
 			prepState1.setString(1, edgeID);
 			ResultSet rset1 = prepState1.executeQuery();
@@ -860,7 +1042,7 @@ public class makeConnection {
 		}
 
 		if (startNode != null) {
-			String checkStartNode = "select nodeID from node where nodeID = ?";
+			String checkStartNode = "Select nodeid From node Where nodeid = ?";
 			try (PreparedStatement prepState2 = connection.prepareStatement(checkStartNode)) {
 				prepState2.setString(1, startNode);
 				ResultSet rset2 = prepState2.executeQuery();
@@ -877,7 +1059,7 @@ public class makeConnection {
 		}
 
 		if (endNode != null) {
-			String checkEndNode = "select nodeID from node where nodeID = ?";
+			String checkEndNode = "Select nodeid From node Where nodeid = ?";
 			try (PreparedStatement prepState3 = connection.prepareStatement(checkEndNode)) {
 				prepState3.setString(1, endNode);
 				ResultSet rset3 = prepState3.executeQuery();
@@ -926,8 +1108,8 @@ public class makeConnection {
 	 */
 	public int deleteEdge(String nodeID1, String nodeID2) {
 
-		String deleteEdgeS1 = "delete from hasEdge where startNode = ? and endNode = ?";
-		String deleteEdgeS2 = "delete from hasEdge where endNode = ? and startNode = ?";
+		String deleteEdgeS1 = "Delete From hasedge Where startnode = ? And endnode = ?";
+		String deleteEdgeS2 = "Delete From hasedge Where endnode = ? And startnode = ?";
 
 		int count = 0;
 		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
@@ -988,7 +1170,7 @@ public class makeConnection {
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 	public int deleteNode(String nodeID) {
-		String deleteNodeS = "delete from node where nodeID = ?";
+		String deleteNodeS = "Delete From node Where nodeid = ?";
 		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
 			deleteNodePS.setString(1, nodeID);
 			// We might encounter issues if on delete cascade didn't work
@@ -1014,7 +1196,7 @@ public class makeConnection {
 	public ArrayList<String> getListofNodeIDS() {
 		ArrayList<String> listOfNodeIDs = new ArrayList<>();
 
-		String deleteNodeS = "SELECT nodeID FROM node";
+		String deleteNodeS = "Select nodeid From node";
 		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
 
 			ResultSet rset = deleteNodePS.executeQuery();

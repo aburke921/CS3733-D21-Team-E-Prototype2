@@ -33,7 +33,11 @@ public class DatabaseTests {
     public void setupTables(){
         try {
             connection.deleteAllTables();
-            connection.createTables();
+	        connection.createNodeTable();
+	        connection.createEdgeTable();
+	        connection.createUserAccountTable();
+	        connection.createRequestsTable();
+	        connection.createFloralRequestsTable();
             System.out.println("Tables were reset");
         } catch (Exception e) {
             try {
@@ -604,4 +608,16 @@ public class DatabaseTests {
 		int returned2 = connection.countNodeTypeOnFloor("t", "f2", "testdweafeawfi");
 		assertEquals(0, returned2);
 	}
+
+
+	@Test
+	@DisplayName("testCreateUserAccountTable")
+	public void testCreateUserAccountTable(){
+
+
+
+	}
+
+
+
 }

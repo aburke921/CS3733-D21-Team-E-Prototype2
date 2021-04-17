@@ -1,5 +1,6 @@
 package edu.wpi.TeamE.views;
 
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

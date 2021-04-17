@@ -1,8 +1,15 @@
 package edu.wpi.TeamE.views;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.databases.makeConnection;
 import edu.wpi.TeamE.views.forms.SanitationServicesForm;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,22 +22,17 @@ import java.io.IOException;
 
 public class SanitationServices extends ServiceRequestFormComponents {
 
-  @FXML private TextField numInput;
-  @FXML private TextField assignedIndividual;
-  @FXML private TextArea sdetailedInstructionsInput;
-  @FXML private TextField signatureInput;
+  @FXML private JFXTextField numInput;
+  @FXML private JFXTextField assignedIndividual;
+  @FXML private JFXTextArea detailedInstructionsInput;
 
-  @FXML private MenuButton departmentInput;
-  @FXML private MenuButton typeInput;
-  @FXML private MenuButton ServiceTypeinput;
-  @FXML private Button submit;
-  public String assigneeName;
-  public String number;
-  public String  LocationType;
-  public String  serviceType;
-  public String department;
-  public String signature;
-  public String detailedDescription;
+
+  @FXML private JFXComboBox<String> departmentInput;
+  @FXML private JFXComboBox<String> typeInput;
+  @FXML private JFXComboBox<String> ServiceTypeinput;
+  @FXML private JFXButton cancel;
+  @FXML private JFXButton submit;
+  public SanitationServicesForm request;
 
 
 
@@ -38,32 +40,27 @@ public class SanitationServices extends ServiceRequestFormComponents {
    * Sets value of drop down list to the selected value(departments)
    * @param actionEvent
    */
-  @FXML
-  private void selectDepartment(ActionEvent actionEvent) {
-    String department = ((MenuItem) actionEvent.getSource()).getText();
-    this.department = department;
-    departmentInput.setText(department);
-  }
+  RequiredFieldValidator validator = new RequiredFieldValidator();
+
+
+
   /**
-   * Sets value of drop down list to the selected value(Service Types)
-   * @param actionEvent
+   * Detects if the user has entered all required fields
+   *
    */
-  @FXML
-  private void selectServiceType(ActionEvent actionEvent) {
-    String service = ((MenuItem) actionEvent.getSource()).getText();
-    serviceType = service;
-    ServiceTypeinput.setText(service);
+  private boolean valitadeInput(){
+    validator.setMessage("Input required");
+    numInput.getValidators().add(validator);
+    assignedIndividual.getValidators().add(validator);
+    typeInput.getValidators().add(validator);
+    departmentInput.getValidators().add(validator);
+    ServiceTypeinput.getValidators().add(validator);
+    return numInput.validate() && assignedIndividual.validate() && typeInput.validate() && departmentInput.validate() && ServiceTypeinput.validate();
+
+
   }
-  /**
-   * Sets value of drop down list to the selected value(Room/Hallway)
-   * @param actionEvent
-   */
-  @FXML
-  private void SelectType(ActionEvent actionEvent) {
-    String type = ((MenuItem) actionEvent.getSource()).getText();
-    LocationType = type;
-    typeInput.setText(type);
-  }
+
+
   /**
    * records inputs from user into a series of String variables and returns to the main page
    * @param actionEvent
@@ -71,22 +68,29 @@ public class SanitationServices extends ServiceRequestFormComponents {
   @FXML
   private void saveData(ActionEvent actionEvent){
 
-    //Setting up all variables to be entered
-    String dep = departmentInput.getText();
-    String room = typeInput.getText();
+    String dep = departmentInput.getSelectionModel().toString();
+    String room = typeInput.getSelectionModel().toString();
+
     String num = numInput.getText();
-    String serviceKind = ServiceTypeinput.getText();
+    String serviceKind = ServiceTypeinput.getSelectionModel().toString();
     String assignee = assignedIndividual.getText();
-    //String detailedInstructions = sdetailedInstructionsInput.getText();
-    //creating the service request
-    SanitationServicesForm request = new SanitationServicesForm(dep, room, num, serviceKind, assignee);
 
-    System.out.println(request.getAssignmentField());
-    //Adding service request to table
-    //makeConnection connection = makeConnection.makeConnection();
-    //connection.addRequest("sanitationServices", request);
+    if(valitadeInput()){
+      //String detailedInstructions = sdetailedInstructionsInput.getText();
+      //creating the service request
+      request = new SanitationServicesForm(dep, room, num, serviceKind, assignee);
 
-    super.handleButtonSubmit(actionEvent);
+      System.out.println(request.getAssignmentField());
+      //Adding service request to table
+      //makeConnection connection = makeConnection.makeConnection();
+      //connection.addRequest("sanitationServices", request);
+
+      super.handleButtonSubmit(actionEvent);
+      //Setting up all variables to be entered
+    }
+
+
+
 
   }
 
@@ -99,5 +103,31 @@ public class SanitationServices extends ServiceRequestFormComponents {
       ex.printStackTrace();
     }
   }
+  @FXML
+  void initialize(){
+    assert  ServiceTypeinput != null : "fx:id=\"typeInput\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
+    ObservableList<String> Type  = FXCollections.observableArrayList();
+    Type.setAll("Room","Hallway");
 
+    typeInput.setItems(Type);
+    assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
+
+    ObservableList<String> Services  = FXCollections.observableArrayList();
+    Services.setAll("Urine cleanup","Feces cleanup","Trash removal");
+
+    ServiceTypeinput.setItems(Services);
+
+    assert  ServiceTypeinput != null : "fx:id=\"departmentInput\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
+    ObservableList<String> departments  = FXCollections.observableArrayList();
+    departments.setAll("Emergency Department","Surgery", "Pediatrics");
+
+    departmentInput.setItems(departments);
+
+    assert numInput != null : "fx:id=\"numInput\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
+    assert assignedIndividual != null : "fx:id=\"assignedIndividual\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
+    assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/ExternalPatient.fxml'.";
+    assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/ExternalPatient.fxml'.";
+
+
+  }
 }

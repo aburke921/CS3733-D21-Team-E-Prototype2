@@ -1,18 +1,17 @@
 package edu.wpi.TeamE;
 
-import edu.wpi.TeamE.algorithms.pathfinding.AStarSearch;
-import edu.wpi.TeamE.algorithms.pathfinding.Node;
-import edu.wpi.TeamE.algorithms.pathfinding.Path;
+import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.Searcher;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.sql.SQLException;
 
 public class PathFindingTests {
     static Searcher search;
@@ -24,30 +23,20 @@ public class PathFindingTests {
         File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
         File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
         try {
-            con.deleteAllTables();
-            System.out.println("Deleted Tables");
-            throw new Exception();
-            /*
+            // connection.deleteAllTables();
             con.createTables();
-            System.out.println("Created Tables");
             con.populateTable("node", nodes);
-            System.out.println("Populated nodes");
             con.populateTable("hasEdge", edges);
-            System.out.println("Populated edges");
-            System.out.println("Tables were reset");
-             */
+            System.out.println("Tables were created");
         } catch (Exception e) {
-            con.createTables();
-            System.out.println("Created Tables");
-            con.populateTable("node", nodes);
-            System.out.println("Populated nodes");
-            con.populateTable("hasEdge", edges);
-            System.out.println("Populated edges");
-            System.out.println("Tables were created and populated");
+            try {
+                con.createTables();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
 
-
-        search = new AStarSearch();
+        search = new Searcher();
     }
 
     @Test

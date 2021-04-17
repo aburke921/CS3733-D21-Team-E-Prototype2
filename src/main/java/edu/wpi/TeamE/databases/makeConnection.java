@@ -1,7 +1,7 @@
 package edu.wpi.TeamE.databases;
 
-import edu.wpi.TeamE.algorithms.pathfinding.Edge;
-import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import edu.wpi.TeamE.algorithms.Edge;
+import edu.wpi.TeamE.algorithms.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;

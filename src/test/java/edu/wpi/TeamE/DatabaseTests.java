@@ -29,21 +29,21 @@ public class DatabaseTests {
 		connection = makeConnection.makeConnection();
 	}
 
-	@BeforeEach
-	public void setupTables() {
-		try {
-			connection.deleteAllTables();
-			connection.createTables();
-			System.out.println("Tables were reset");
-		} catch (Exception e) {
-			try {
-				connection.createTables();
-				System.out.println("Tables were created");
-			} catch (SQLException a) {
-				a.printStackTrace();
-			}
-		}
-	}
+    @BeforeEach
+    public void setupTables(){
+        try {
+            connection.deleteAllTables();
+            connection.createTables();
+            System.out.println("Tables were reset");
+        } catch (Exception e) {
+            try {
+                connection.createTables();
+            } catch (SQLException a) {
+                a.printStackTrace();
+            }
+            System.out.println("Tables were created");
+        }
+    }
 
 	@Test
 	@DisplayName("testGetNodeInfo")
@@ -285,7 +285,7 @@ public class DatabaseTests {
 		correctLongNames.add("longName1");
 		correctLongNames.add("longName2");
 
-		assertTrue(longNames.equals(correctLongNames));
+        assertEquals(longNames, correctLongNames);
 
 	}
 

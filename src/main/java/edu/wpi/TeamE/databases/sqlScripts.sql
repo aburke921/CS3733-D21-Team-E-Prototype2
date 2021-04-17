@@ -115,7 +115,7 @@ Create Table floralRequests
 	Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None'))
 );
 
--- addToFloral() -- run both, in order
+-- addFloralRequest() -- run both, in order
 
 Insert Into requests
 Values ((Select Count(*)

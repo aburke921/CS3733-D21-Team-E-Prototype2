@@ -287,7 +287,6 @@ public class makeConnection {
 
 
 
-
 	/**
 	 * Deletes node,hasEdge, userAccount, requests, and floralRequests tables.
 	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
@@ -505,6 +504,65 @@ public class makeConnection {
 
 
 	}
+
+
+	public void addFloralRequest(int creatorID,String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message){
+		String insertRequest = "Insert Into requests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests) + 1, ?, current Timestamp, 'floral', 'inProgress')";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
+			prepState.setInt(1, creatorID);
+			ResultSet rset = prepState.executeQuery();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into requests inside function addFloralRequest()");
+		}
+
+
+		String insertFloralRequest = "Insert Into floralRequests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
+			prepState.setString(1, RoomNodeID);
+			prepState.setString(2, recipientName);
+			prepState.setString(3, flowerType);
+			prepState.setInt(4, flowerAmount);
+			prepState.setString(5, vaseType);
+			prepState.setString(5, message);
+
+			ResultSet rset = prepState.executeQuery();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
+		}
+
+//			Create Table requests(
+	//			requestID    int Primary Key,
+	//			creatorID    int References userAccount On Delete Cascade,
+	//			creationTime timestamp,
+	//			requestType  varchar(31),
+	//			requestState varchar(10),
+	//			Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
+	//			Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress'))
+//          );
+
+//			Create Table floralRequests(
+//				requestID     int Primary Key References requests On Delete Cascade,
+//			    roomID        varchar(31) References node On Delete Cascade,
+//				recipientName varchar(31),
+//				flowerType    varchar(31),
+//				flowerAmount  int,
+//			    vaseType      varchar(31),
+//				message       varchar(255),
+//				Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')),
+//			    Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)),
+//				Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None'))
+//          );
+	}
+
+
 
 	/**
 	 * gets a node's all attributes given nodeID

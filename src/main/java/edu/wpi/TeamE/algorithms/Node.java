@@ -1,7 +1,9 @@
-package edu.wpi.TeamE.algorithms.pathfinding;
+package edu.wpi.TeamE.algorithms;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Node Class, lots of specific Node implementation stuff
@@ -68,12 +70,14 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     }
 
 
-    public static String genNodeID(String type, String floor){
+    public static String genNodeID(String type, String floor, String longName){
         StringBuilder SB = new StringBuilder("e");
         SB.append(type);
 
         if (type.equalsIgnoreCase("ELEV")) {
-            //TODO: get elevator letter
+            SB.append("00");
+            SB.append(longName.charAt(9));
+            //Elevator names need to start with 'Elevator X xxxxx"
         } else {
             //TODO: get instance number
         }

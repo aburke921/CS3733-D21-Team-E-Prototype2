@@ -34,17 +34,6 @@ public class PathFindingTests {
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-            System.out.println("Created Tables");
-            con.populateTable("node", nodes);
-            System.out.println("Populated nodes");
-            con.populateTable("hasEdge", edges);
-            System.out.println("Populated edges");
-            System.out.println("Tables were created and populated");
-            System.out.println("Tables already there");
-//			connection.createTables();
-//			connection.populateTable("node", nodes);
-//			connection.populateTable("hasEdge", edges);
-//			System.out.println("Tables were created and populated");
         }
 
         search = new Searcher();

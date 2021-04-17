@@ -36,14 +36,21 @@ Create Table userAccount
 	userType  varchar(31),
 	firstName varchar(31),
 	lastName  varchar(31),
-	Constraint passwordLimit Check ( password Like '%[a-z]%[a-z]%' And
-	                                 password Like '%[A-Z]%[A-Z]%' And
-	                                 password Like '%[0-9]%[0-9]%' And
-	                                 password Like '%[~!@#$%^&]%[~!@#$%^&]%' And
-	                                 Length(password) >= 8 ),
+	-- Constraint passwordLimit Check (
+	-- password Like '%[a-z]%[a-z]%' And
+	-- password Like '%[A-Z]%[A-Z]%' And
+	-- password Like '%[0-9]%[0-9]%' And
+	-- password Like '%[~!@#$%^&]%[~!@#$%^&]%' And
+	-- Length(password) >= 8 ),
+	-- TODO: checks don't allow normal password
 	Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin'))
 -- Let's assume admins are just doctors but better, they have every power
 );
+
+-- addUserAccount()
+
+Insert Into userAccount
+Values (2333, '2333@wpi.edu', 'password', 'patient', 'firstName', 'lastName');
 
 Create View visitorAccount As
 Select *
@@ -67,22 +74,70 @@ Where userType = 'admin';
 
 Create Table patient
 (
-	userID int Primary Key References patientAccount,
+	userID int Primary Key References userAccount,
 	roomID varchar(31) References node -- nodeID for patient's room
 );
 
-Create Table serviceRequests
+Create Table requests
 (
 	requestID    int Primary Key,
-	creator      int References userAccount,
-	creationTime timestamp
---  requestType  varchar(31)
+	creatorID    int References userAccount,
+	creationTime timestamp,
+	requestType  varchar(31),
+	requestState varchar(10),
+	Constraint requestTypeLimit Check (requestType In
+	                                   ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
+	Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress'))
 );
+
+-- getAllRequestsFrom(userID)
+
+Select *
+From requests
+Where creatorID = ?;
+
+-- getRequestCount() -- not needed in Java yet(TM)
+
+Select Count(*)
+From requests;
 
 Create Table floralRequests
 (
-	requestID Primary Key References serviceRequests
+	requestID     int Primary Key References requests,
+	roomID        varchar(31) References node,
+	recipientName varchar(31),
+	flowerType    varchar(31),
+	flowerAmount  int,
+	vaseType      varchar(31),
+	message       varchar(255),
+	Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')),
+	Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)),
+	Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None'))
 );
+
+-- addToFloral() -- run both, in order
+
+Insert Into requests
+Values ((Select Count(*)
+         From requests) + 1, 2333, current Timestamp, 'floral', 'inProgress');
+Insert Into floralRequests
+Values ((Select Count(*)
+         From requests), 'test3', 'Ash', 'Tulips', 6, 'Round', '?');
+
+Insert Into requests
+Values ((Select Count(*)
+         From requests) + 1, ?, current Timestamp, 'floral', 'inProgress');
+Insert Into floralRequests
+Values ((Select Count(*)
+         From requests), 'test3', 'Aassh', 'Roses', 1, 'Tall', 'dasddw');
+
+-- getFloralInfo() -- not needed in Java yet(TM)
+
+Select *
+From floralRequests,
+     requests
+Where floralRequests.requestID = requests.requestID
+  And requests.requestID = ?;
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1
 Select startNode, endNode, Sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) As distance

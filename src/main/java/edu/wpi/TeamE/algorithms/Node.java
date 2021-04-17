@@ -72,42 +72,6 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     }
 
     /**
-     * Autogenerate NodeIDs
-     * Elevators need to have the format `Elevator X xxxxx`
-     * @param type The type of Node this is
-     * @param floor The floor this Node is on
-     * @param longName The longName of the node
-     * @return The NodeID of the given Node
-     */
-    public String genNodeID(String type, String floor, String longName){
-        StringBuilder SB = new StringBuilder("e");
-        SB.append(type);
-
-        if (type.equalsIgnoreCase("ELEV")) {
-            SB.append("00");
-            SB.append(longName.charAt(9));
-            //Elevator names need to start with 'Elevator X xxxxx"
-        } else {
-            makeConnection connection = makeConnection.makeConnection();
-            int instance = connection.countNodeTypeOnFloor("e", floor, type) + 1;
-            SB.append(String.format("%03d", instance));
-        }
-
-        try{
-            int num = Integer.parseInt(floor);
-            SB.append("0").append(num);
-        } catch (NumberFormatException e) {
-            if (floor.equalsIgnoreCase("G") || floor.equalsIgnoreCase("GG")){
-                SB.append("GG");
-            } else {
-                SB.append(floor);
-            }
-        }
-
-        return SB.toString();
-    }
-
-    /**
      * @param info String representation of what info is requested
      *             should be 'id', 'floor', 'building', 'type', 'longName', 'shortName'
      * @return returns the requested information

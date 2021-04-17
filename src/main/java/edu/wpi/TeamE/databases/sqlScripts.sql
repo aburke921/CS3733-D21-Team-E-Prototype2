@@ -6,112 +6,135 @@
 
 -- Create Statements:
 
-CREATE TABLE node
+Create Table node
 (
-    nodeID    varchar(31) primary key,
-    xCoord    int        not null,
-    yCoord    int        not null,
-    floor     varchar(5) not null,
-    building  varchar(20),
-    nodeType  varchar(10),
-    longName  varchar(50),
-    shortName varchar(35),
-    unique (xCoord, yCoord, floor)
+	nodeID    varchar(31) Primary Key,
+	xCoord    int        Not Null,
+	yCoord    int        Not Null,
+	floor     varchar(5) Not Null,
+	building  varchar(20),
+	nodeType  varchar(10),
+	longName  varchar(50),
+	shortName varchar(35),
+	Unique (xCoord, yCoord, floor)
 );
 
-CREATE TABLE hasEdge
+Create Table hasEdge
 (
-    edgeID    varchar(63) primary key,
-    startNode varchar(31) not null references node (nodeID) on delete cascade,
-    endNode   varchar(31) not null references node (nodeID) on delete cascade,
-    length    FLOAT,
-    unique (startNode, endNode)
+	edgeID    varchar(63) Primary Key,
+	startNode varchar(31) Not Null References node (nodeID) On Delete Cascade,
+	endNode   varchar(31) Not Null References node (nodeID) On Delete Cascade,
+	length    float,
+	Unique (startNode, endNode)
+);
+
+Create Table userAccount
+(
+	userName  varchar(31) Primary Key,
+	email     varchar(31) Unique,
+	password  varchar(31),
+	userType  varchar(31),
+	firstName varchar(31),
+	lastName  varchar(31)
+);
+
+Create Table serviceRequests
+(
+	requestID    int Primary Key,
+	creator      int References userAccount,
+	creationTime timestamp
+--  requestType  varchar(31)
+);
+
+Create Table floralRequests
+(
+	requestID Primary Key References serviceRequests
 );
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1
-SELECT startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) AS distance
-FROM (SELECT startNode, endNode, node.xCoord AS startX, node.yCoord AS startY, endX, endY
-      FROM node,
-           (SELECT startNode, endNode, xCoord AS endX, yCoord AS endY
-            FROM node,
-                 (SELECT startNode, endNode
-                  FROM hasEdge
-                  WHERE startNode = '________') wantedEdges
-            WHERE nodeID = startNode) wantedEdgesStartInfo
-      WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable;
+Select startNode, endNode, Sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) As distance
+From (Select startNode, endNode, node.xCoord As startX, node.yCoord As startY, endX, endY
+      From node,
+           (Select startNode, endNode, xCoord As endX, yCoord As endY
+            From node,
+                 (Select startNode, endNode
+                  From hasEdge
+                  Where startNode = '________') wantedEdges
+            Where nodeID = startNode) wantedEdgesStartInfo
+      Where node.nodeID = wantedEdgesStartInfo.endNode) desiredTable;
 
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 2
-SELECT startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) AS distance
-FROM (SELECT startNode, endNode, node.xCoord AS startX, node.yCoord AS startY, endX, endY
-      FROM node,
-           (SELECT startNode, endNode, xCoord AS endX, yCoord AS endY
-            FROM node,
-                 (SELECT startNode, endNode
-                  FROM hasEdge
-                  WHERE endNode = '________') wantedEdges
-            WHERE nodeID = startNode) wantedEdgesStartInfo
-      WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable;
+Select startNode, endNode, Sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) As distance
+From (Select startNode, endNode, node.xCoord As startX, node.yCoord As startY, endX, endY
+      From node,
+           (Select startNode, endNode, xCoord As endX, yCoord As endY
+            From node,
+                 (Select startNode, endNode
+                  From hasEdge
+                  Where endNode = '________') wantedEdges
+            Where nodeID = startNode) wantedEdgesStartInfo
+      Where node.nodeID = wantedEdgesStartInfo.endNode) desiredTable;
 
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 3
-SELECT startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) AS distance
-FROM (SELECT startNode, endNode, node.xCoord AS startX, node.yCoord AS startY, endX, endY
-      FROM node,
-           (SELECT startNode, endNode, xCoord AS endX, yCoord AS endY
-            FROM node,
-                 (SELECT startNode, endNode
-                  FROM hasEdge) wantedEdges
-            WHERE nodeID = startNode) wantedEdgesStartInfo
-      WHERE node.nodeID = wantedEdgesStartInfo.endNode) desiredTable;
+Select startNode, endNode, Sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) As distance
+From (Select startNode, endNode, node.xCoord As startX, node.yCoord As startY, endX, endY
+      From node,
+           (Select startNode, endNode, xCoord As endX, yCoord As endY
+            From node,
+                 (Select startNode, endNode
+                  From hasEdge) wantedEdges
+            Where nodeID = startNode) wantedEdgesStartInfo
+      Where node.nodeID = wantedEdgesStartInfo.endNode) desiredTable;
 
 
 -- addNode()
 
-insert into node
-values (?, ?, ?, ?, ?, ?, ?, ?);
+Insert Into node
+Values (?, ?, ?, ?, ?, ?, ?, ?);
 
 -- addEdge()
 
-insert into hasEdge
-values (?, ?, ?, ?);
+Insert Into hasEdge
+Values (?, ?, ?, ?);
 
 -- deleteNode()
 
-delete
-from node
-where nodeID = ?;
+Delete
+From node
+Where nodeID = ?;
 
 -- deleteEdge()
 
-delete
-from hasEdge
-where startNode = ? and endNode = ?
-   or endNode = ? and startNode = ?;
+Delete
+From hasEdge
+Where startNode = ? And endNode = ?
+   Or endNode = ? And startNode = ?;
 
 -- or
 
-delete
-from hasEdge
-where startNode = ?
-  and endNode = ?;
-delete
-from hasEdge
-where endNode = ?
-  and startNode = ?;
+Delete
+From hasEdge
+Where startNode = ?
+  And endNode = ?;
+Delete
+From hasEdge
+Where endNode = ?
+  And startNode = ?;
 
 -- getNodeInfo()
-select *
-from node
-where nodeID = ?;
+Select *
+From node
+Where nodeID = ?;
 
 -- countNodeTypeOnFloor(String Floor, String Type)
 
-select count(*) as count
-from NODE
-where nodeID like ('SSSSS%')
-and floor = ?
-and nodeType = ?;
+Select Count(*) As count
+From node
+Where nodeID Like ('SSSSS%')
+  And floor = ?
+  And nodeType = ?;
 
 -- NOT YET IMPLEMENTED / PLANNING STAGES:-----------------------------------------------------
 
@@ -121,40 +144,40 @@ and nodeType = ?;
 
 -- Drop Statements:
 
-drop table hasEdge;
+Drop Table hasEdge;
 
-drop table node;
+Drop Table node;
 
 -- Insert Statements:
 
-insert into node
-values ('a', 2, 3, 'd', 'e', 'f', 'g', 'h');
+Insert Into node
+Values ('a', 2, 3, 'd', 'e', 'f', 'g', 'h');
 
-insert into hasEdge
-values (?, ?, ?, ?);
+Insert Into hasEdge
+Values (?, ?, ?, ?);
 
 -- 1 – Node Information
 
-select *
-from node;
+Select *
+From node;
 
 -- 2 – Update Node Coordinates
 
-update node
-set xCoord = 1,
+Update node
+Set xCoord = 1,
     yCoord = 2
-where nodeID = ?;
+Where nodeID = ?;
 
 -- 3 – Update Node Location Long Name
 
-update node
-set longName = 'LongName'
-where nodeID = ?;
+Update node
+Set longName = 'LongName'
+Where nodeID = ?;
 
 -- 4 – Edge Information
 
-select *
-from hasEdge;
+Select *
+From hasEdge;
 
 -- 5 – Exit Program
 
@@ -163,29 +186,29 @@ from hasEdge;
 -- Given a NodeID
 -- gives xCoord, yCoord, Floor, Type
 
-select xCoord, yCoord, floor, nodeType
-from node
-where nodeID = ?;
+Select xCoord, yCoord, floor, nodeType
+From node
+Where nodeID = ?;
 
 -- getNeighbors(nodeID)
 -- From hasEdge
 -- Given a NodeID
 -- gives nodeID of all neighbors
-select startNode as neighborID
-from hasEdge
-where endNode = ?
-union
-select endNode as neighborID
-from hasEdge
-where startNode = ?;
+Select startNode As neighborID
+From hasEdge
+Where endNode = ?
+Union
+Select endNode As neighborID
+From hasEdge
+Where startNode = ?;
 
 -- new table for hasEdge+distance
-create table edgeLength
+Create Table edgeLength
 (
-    startNode varchar(31) references node (nodeID) on delete cascade,
-    endNode   varchar(31) references node (nodeID) on delete cascade,
-    length    float,
-    primary key (startNode, endNode)
+	startNode varchar(31) References node (nodeID) On Delete Cascade,
+	endNode   varchar(31) References node (nodeID) On Delete Cascade,
+	length    float,
+	Primary Key (startNode, endNode)
 );
 
 /*CREATE TRIGGER calculateLength before INSERT ON hasEdge

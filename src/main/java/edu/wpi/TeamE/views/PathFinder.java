@@ -331,6 +331,8 @@ public class PathFinder {
         endLocationList.setItems(longNameArrayList);
         System.out.println("done");
 
+        new AutoCompleteComboBoxListener<>(startLocationList);
+        new AutoCompleteComboBoxListener<>(endLocationList);
 
         System.out.println("Finish PathFinder Init.");
     }

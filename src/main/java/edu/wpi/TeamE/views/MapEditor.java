@@ -1,10 +1,13 @@
 package edu.wpi.TeamE.views;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.TeamE.algorithms.pathfinding.Node;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -38,9 +41,9 @@ public class MapEditor {
     @FXML private JFXTextField xCordInput;
     @FXML private JFXTextField yCordInput;
     @FXML private JFXTextField idInput;
-    @FXML private JFXTextField floorInput;
-    @FXML private JFXTextField typeInput;
-    @FXML private JFXTextField buildingInput;
+    @FXML private JFXComboBox floorInput;
+    @FXML private JFXComboBox typeInput;
+    @FXML private JFXComboBox buildingInput;
     @FXML private JFXTextField longNameInput;
     @FXML private JFXTextField shortNameInput;
 
@@ -49,18 +52,48 @@ public class MapEditor {
      */
     @FXML
     void initialize() {
-        /* assert treeTable != null : "fx:id=\"treeTable\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert xCordInput != null : "fx:id=\"xCordInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert longNameInput != null : "fx:id=\"longNameInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert yCordInput != null : "fx:id=\"yCordInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert idInput != null : "fx:id=\"idInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert shortNameInput != null : "fx:id=\"shortNameInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert floorInput != null : "fx:id=\"floorInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert typeInput != null : "fx:id=\"typeInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert buildingInput != null : "fx:id=\"buildingInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        //assert backButton != null : "fx:id=\"backButton\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        */
         prepareNodes(treeTable);
+        //Creating Type dropdown
+        ArrayList<String> nodeTypeArrayList = new ArrayList<String>();
+        nodeTypeArrayList.add("HALL");
+        nodeTypeArrayList.add("CONF");
+        nodeTypeArrayList.add("DEPT");
+        nodeTypeArrayList.add("HALL");
+        nodeTypeArrayList.add("ELEV");
+        nodeTypeArrayList.add("INFO");
+        nodeTypeArrayList.add("LABS");
+        nodeTypeArrayList.add("REST");
+        nodeTypeArrayList.add("RETL");
+        nodeTypeArrayList.add("STAI");
+        nodeTypeArrayList.add("SERV");
+        nodeTypeArrayList.add("EXIT");
+        nodeTypeArrayList.add("BATH");
+        ObservableList<String> listOfType = FXCollections.observableArrayList();
+        listOfType.addAll(nodeTypeArrayList);
+
+        //Creating Floor Dropdown
+        ArrayList<String> nodeFloorArrayList = new ArrayList<String>();
+        nodeFloorArrayList.add("L1");
+        nodeFloorArrayList.add("L2");
+        nodeFloorArrayList.add("1");
+        nodeFloorArrayList.add("2");
+        nodeFloorArrayList.add("3");
+        ObservableList<String> listOfFloors = FXCollections.observableArrayList();
+        listOfFloors.addAll(nodeFloorArrayList);
+        //Creating Building Dropdown
+        ArrayList<String> nodeBuildingArrayList = new ArrayList<String>();
+        nodeBuildingArrayList.add("BTM");
+        nodeBuildingArrayList.add("45 Francis");
+        nodeBuildingArrayList.add("15 Francis");
+        nodeBuildingArrayList.add("Tower");
+        nodeBuildingArrayList.add("Shapiro");
+        ObservableList<String> listOfBuildings = FXCollections.observableArrayList();
+        listOfBuildings.addAll(nodeBuildingArrayList);
+
+        //add ObservableLists to dropdowns
+        typeInput.setItems(listOfType);
+        floorInput.setItems(listOfFloors);
+        buildingInput.setItems(listOfBuildings);
 
     }
 
@@ -189,8 +222,8 @@ public class MapEditor {
             String shortName = null;
             String type = null;
             String building = null;
-            if (!floorInput.getText().equals("")) {
-                floor = floorInput.getText();
+            if (!floorInput.getValue().toString().equals("")) {
+                floor = floorInput.getValue().toString();
             }
             if (!longNameInput.getText().equals("")) {
                 longName = longNameInput.getText();
@@ -198,11 +231,11 @@ public class MapEditor {
             if (!shortNameInput.getText().equals("")) {
                 shortName = shortNameInput.getText();
             }
-            if (!typeInput.getText().equals("")) {
-                type = typeInput.getText();
+            if (!typeInput.getSelectionModel().equals("")) {
+                type = typeInput.getValue().toString();
             }
-            if (!buildingInput.getText().equals("")) {
-                building = buildingInput.getText();
+            if (!buildingInput.getValue().toString().equals("")) {
+                building = buildingInput.getValue().toString();
             }
             if (!xCordInput.getText().equals("")) {
                 System.out.println(xCordInput.getText());
@@ -232,7 +265,7 @@ public class MapEditor {
         makeConnection connection = makeConnection.makeConnection();
         int xVal = Integer.parseInt(xCordInput.getText());
         int yVal = Integer.parseInt(yCordInput.getText());
-        i = connection.addNode(idInput.getText(), xVal, yVal, floorInput.getText(), buildingInput.getText(), typeInput.getText(), longNameInput.getText(), shortNameInput.getText());
+        i = connection.addNode(idInput.getText(), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
         return i;
     }
 
@@ -330,5 +363,6 @@ public class MapEditor {
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
     }
+
 
 }

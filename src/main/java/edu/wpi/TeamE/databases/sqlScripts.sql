@@ -139,6 +139,12 @@ From floralRequests,
 Where floralRequests.requestID = requests.requestID
   And requests.requestID = ?;
 
+
+
+
+
+
+
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1
 Select startNode, endNode, Sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) As distance
 From (Select startNode, endNode, node.xCoord As startX, node.yCoord As startY, endX, endY

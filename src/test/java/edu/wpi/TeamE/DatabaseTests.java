@@ -604,4 +604,16 @@ public class DatabaseTests {
 		int returned2 = connection.countNodeTypeOnFloor("t", "f2", "testdweafeawfi");
 		assertEquals(0, returned2);
 	}
+
+
+	@Test
+	@DisplayName("testCreateUserAccountTable")
+	public void testCreateUserAccountTable(){
+
+	connection.createFloralRequests();
+
+	}
+
+
+
 }

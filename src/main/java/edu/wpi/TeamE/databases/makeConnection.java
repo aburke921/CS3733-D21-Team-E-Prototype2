@@ -172,6 +172,69 @@ public class makeConnection {
 		}
 	}
 
+
+	public void createUserAccountTable(){
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table userAccount(" +
+					"userID    int Primary Key, " +
+					"email     varchar(31) Unique, " +
+					"password  varchar(31), " +
+					"userType  varchar(31), " +
+					"firstName varchar(31), " +
+					"lastName  varchar(31), " +
+					"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin')))";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating  table");
+		}
+	}
+
+
+	public void createRequestsTable(){
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table requests(" +
+					"requestID    int Primary Key,\n" +
+					"creatorID    int References userAccount,\n" +
+					"creationTime timestamp,\n" +
+					"requestType  varchar(31),\n" +
+					"requestState varchar(10),\n" +
+					"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
+					"Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress')))";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating requests table");
+		}
+	}
+
+
+	public void createFloralRequests(){
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table floralRequests( " +
+					"requestID     int Primary Key References requests, " +
+					"roomID        varchar(31) References node, " +
+					"recipientName varchar(31), " +
+					"flowerType    varchar(31), " +
+					"flowerAmount  int, " +
+					"vaseType      varchar(31), " +
+					"message       varchar(255), " +
+					"Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')), " +
+					"Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)),\n" +
+					"Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None')))";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating floralRequests table");
+		}
+	}
+
+
+
+
 	/**
 	 * Deletes node and hasEdges table
 	 * try/catch phrase set up in case the tables all ready do not exist

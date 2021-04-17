@@ -31,8 +31,9 @@ import javafx.stage.Stage;
 
 public class PathFinder {
 
-    //how much to scale the map by
-    double scale = (double) 3.45528;
+    /*
+     * FXML Values
+     */
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -61,6 +62,12 @@ public class PathFinder {
     @FXML // fx:id="floorChanger"
     private JFXButton floorChanger; // Value injected by FXMLLoader
 
+    /*
+     * Additional Variables
+     */
+
+    double scale = (double) 3.45528; //how much to scale the map by
+
     private String startNodeID; // selected starting value's ID
 
     private String endNodeID; // selected ending value's ID
@@ -69,9 +76,11 @@ public class PathFinder {
 
     private Path currentFoundPath; // the last found path todo null if no path has been found yet
 
-    ObservableList<String> listOfId = FXCollections.observableArrayList(); //declaration
-
     ArrayList<String> nodeIDArrayList;
+
+    private final String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; //list of floorNames
+
+    private int currentFloorNamesIndex = 4; //start # should be init floor index + 1 (variable is actually always one beyond current floor)
 
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
@@ -125,6 +134,8 @@ public class PathFinder {
     /**
      * Uses {@link Searcher}'s search() function to find the best path,
      * given the two current start and end positions ({@link #startNodeID} and {@link #endNodeID}).
+     * Then calls {@link #drawMap(Path, String)}.
+     * Sets {@link #currentFoundPath}. Returns a SnackBar when path is null.
      * @param event calling function's (Find Path Button) event info.
      */
     @FXML
@@ -185,6 +196,9 @@ public class PathFinder {
 
     /**
      * Draws map path given a complete {@link Path}.
+     * RED - Start & End for floor only.
+     * GREEN - start of entire path.
+     * BLACK - end node of entire path.
      * @param path the path to be drawn on the map.
      */
     public void drawMap(Path path, String floorNum) {
@@ -278,9 +292,9 @@ public class PathFinder {
 
     /**
      * Looks through path and returns only nodes on the specified floor
-     * @param path
-     * @param floorNum
-     * @return
+     * @param path {@link Path} to parse
+     * @param floorNum floor name to look for
+     * @return a linkedList of nodes on the floor
      */
     private LinkedList<Node> getNodesOnFloorFromPath(Path path, String floorNum) {
 
@@ -310,8 +324,8 @@ public class PathFinder {
     }
 
     /**
-     * Will change the displayed map, and path. todo ...
-     * @param floorNum
+     * Changes the displayed map, and path; sets {@link #currentFloor}.
+     * @param floorNum floor to change to
      */
     public void setCurrentFloor(String floorNum) {
 
@@ -365,11 +379,9 @@ public class PathFinder {
         System.out.println("Finish PathFinder Init.");
     }
 
-    private String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; //list of floorNames
-    private int currentFloorNamesIndex = 4; //start # should be init floor index + 1
 
     public void nextFloor(ActionEvent event) {
-        //todo change floor
+        //set current floor to one after current
         setCurrentFloor(floorNames[currentFloorNamesIndex]);
 
         //increment unless at max, then back to 0

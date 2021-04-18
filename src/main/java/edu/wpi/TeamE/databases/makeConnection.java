@@ -13,7 +13,6 @@ import java.util.Properties;
 
 public class makeConnection {
 
-
 	// static variable singleInstance of type SingleConnection
 	public static makeConnection singleInstance = null;
 
@@ -119,7 +118,6 @@ public class makeConnection {
 	 * shortName: this is the short/nickname of the node/location/room
 	 */
 	public void createNodeTable() {
-
 		try {
 			Statement stmt = this.connection.createStatement();
 			stmt.execute(
@@ -137,12 +135,10 @@ public class makeConnection {
 							+ "    Constraint buildingLimit Check (building In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')), "
 							+ "    Constraint nodeTypeLimit Check (nodeType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', 'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH'))"
 							+ ")");
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("error creating node table");
 		}
-
 	}
 
 	/**
@@ -154,7 +150,6 @@ public class makeConnection {
 	 */
 	public void createEdgeTable() {
 		try {
-
 			Statement stmt = connection.createStatement();
 			stmt.execute(
 					"Create Table hasEdge"
@@ -206,24 +201,19 @@ public class makeConnection {
 
 	}
 
-	public void addUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values (?, ?, ?, ?, ?, ?)";
-
+	public void addUserAccount(String email, String password, String userType, String firstName, String lastName) {
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 10000, ?, ?, ?, ?, ?)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
-			prepState.setInt(1, userID);
-			prepState.setString(2, email);
-			prepState.setString(3, password);
-			prepState.setString(4, userType);
-			prepState.setString(5, firstName);
-			prepState.setString(6, lastName);
-
+			prepState.setString(1, email);
+			prepState.setString(2, password);
+			prepState.setString(3, userType);
+			prepState.setString(4, firstName);
+			prepState.setString(5, lastName);
 			prepState.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
 		}
-
-
 	}
 
 	/**
@@ -426,7 +416,6 @@ public class makeConnection {
 			System.err.println("deleteAllTables() not working");
 		}
 	}
-
 
 	public void deleteEdgeTable() {
 
@@ -1135,7 +1124,7 @@ public class makeConnection {
 			return listOfNodeIDs;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("getListofNodeIDS error try/catch");
+			System.err.println("getListOfNodeIDS error try/catch");
 			return listOfNodeIDs;
 		}
 	}
@@ -1159,7 +1148,7 @@ public class makeConnection {
 			return listOfNodeIDs;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("getListofNodeIDS error try/catch");
+			System.err.println("getListOfNodeIDS error try/catch");
 			return listOfNodeIDs;
 		}
 
@@ -1550,7 +1539,7 @@ public class makeConnection {
 	 *
 	 * @return String[] of nodeIDs
 	 */
-	public ArrayList<String> getListofNodeIDS() {
+	public ArrayList<String> getListOfNodeIDS() {
 		ArrayList<String> listOfNodeIDs = new ArrayList<>();
 
 		String deleteNodeS = "Select nodeid From node";
@@ -1568,7 +1557,7 @@ public class makeConnection {
 			return listOfNodeIDs;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("getListofNodeIDS error try/catch");
+			System.err.println("getListOfNodeIDS error try/catch");
 			return listOfNodeIDs;
 		}
 

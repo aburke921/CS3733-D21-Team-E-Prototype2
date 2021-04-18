@@ -12,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,8 +106,8 @@ public class DatabaseTests {
 		connection.addEdge("testEdge3_testEdge4", "testEdge3", "testEdge4");
 		connection.addEdge("testEdge2_testEdge4", "testEdge2", "testEdge4");
 
-		ArrayList<Pair<Float, String>> listofEdgeInfo = new ArrayList<Pair<Float, String>>();
-		ArrayList<Pair<Float, String>> resultEdgeInfo = new ArrayList<Pair<Float, String>>();
+		ArrayList<Pair<Float, String>> listOfEdgeInfo = new ArrayList<>();
+		ArrayList<Pair<Float, String>> resultEdgeInfo;
 
 		double length3 = Math.pow((122 - 124), 2);
 		double length4 = Math.pow((123 - 153), 2);
@@ -120,12 +119,12 @@ public class DatabaseTests {
 
 		double length24 = Math.sqrt((length1 + length2));
 
-		listofEdgeInfo.add(new Pair<Float, String>((float) length34, "testEdge3"));
-		listofEdgeInfo.add(new Pair<Float, String>((float) length24, "testEdge2"));
+		listOfEdgeInfo.add(new Pair<>((float) length34, "testEdge3"));
+		listOfEdgeInfo.add(new Pair<>((float) length24, "testEdge2"));
 
 		resultEdgeInfo = connection.getEdgeInfo("testEdge4");
 
-		assertTrue(resultEdgeInfo.equals(listofEdgeInfo));
+		assertEquals(resultEdgeInfo, listOfEdgeInfo);
 
 	}
 
@@ -192,7 +191,7 @@ public class DatabaseTests {
 				if (returnedNode.get("shortName").equals(correctNode.get("shortName"))) {
 					shortName = true;
 				}
-				if (nodeID && xCoord && yCoord && floor && building && nodeType && longName && shortName == false) {
+				if (nodeID && xCoord && yCoord && floor && building && nodeType && longName && !shortName) {
 					allCorrect = false;
 				}
 			}
@@ -213,7 +212,7 @@ public class DatabaseTests {
 
 		ArrayList<Node> nodes = connection.getAllNodesByFloor("1");
 
-		ArrayList<Node> correctNodes = new ArrayList<Node>();
+		ArrayList<Node> correctNodes = new ArrayList<>();
 		Node node1 = new Node("nodeID1", 0, 0, "1", "Tower", "PARK", "longName1", "shortName1");
 		Node node2 = new Node("nodeID2", 1, 0, "1", "Tower", "PARK", "longName2", "shortName2");
 
@@ -258,7 +257,7 @@ public class DatabaseTests {
 				if (returnedNode.get("shortName").equals(correctNode.get("shortName"))) {
 					shortName = true;
 				}
-				if (nodeID && xCoord && yCoord && floor && building && nodeType && longName && shortName == false) {
+				if (nodeID && xCoord && yCoord && floor && building && nodeType && longName && !shortName) {
 					allCorrect = false;
 				}
 			}
@@ -278,7 +277,7 @@ public class DatabaseTests {
 
 		ArrayList<Node> nodes = connection.getAllNodesByFloor("3");
 
-		assertTrue(nodes.size() == 0);
+		assertEquals(0, nodes.size());
 	}
 
 
@@ -308,7 +307,7 @@ public class DatabaseTests {
 
 		ObservableList<String> longNames = connection.getAllNodeLongNamesByFloor("3");
 
-		assertTrue(longNames.size() == 0);
+		assertEquals(0, longNames.size());
 	}
 
 	@Test
@@ -319,12 +318,12 @@ public class DatabaseTests {
 
 		ArrayList<String> nodeIDs = connection.getListOfNodeIDSByFloor("1");
 
-		ArrayList<String> correctNodeIDs = new ArrayList<String>();
+		ArrayList<String> correctNodeIDs = new ArrayList<>();
 
 		correctNodeIDs.add("nodeID1");
 		correctNodeIDs.add("nodeID2");
 
-		assertTrue(nodeIDs.equals(correctNodeIDs));
+		assertEquals(nodeIDs, correctNodeIDs);
 	}
 
 	@Test
@@ -337,7 +336,7 @@ public class DatabaseTests {
 		ArrayList<String> nodeIDs = connection.getListOfNodeIDSByFloor("3");
 
 
-		assertTrue(nodeIDs.size() == 0);
+		assertEquals(0, nodeIDs.size());
 	}
 
 
@@ -348,34 +347,34 @@ public class DatabaseTests {
 		connection.addNode("test2", 2, 2, "1", "Tower", "ELEV", "test", "test");
 		connection.addEdge("test1_test2", "test1", "test2");
 
-		ArrayList<Edge> listofEdges = new ArrayList<>();
+		ArrayList<Edge> listOfEdges = new ArrayList<>();
 
 
-		double length1 = Math.pow((0 - 2), 2);
-		double length2 = Math.pow((0 - 2), 2);
+		double length1 = Math.pow((-2), 2);
+		double length2 = Math.pow((-2), 2);
 
 		double length12 = Math.sqrt((length1 + length2));
 
 		Edge edge1 = new Edge("test1_test2", "test1", "test2", length12);
 
-		listofEdges.add(edge1);
+		listOfEdges.add(edge1);
 
-		ArrayList<Edge> resultListofEdges = connection.getAllEdges();
+		ArrayList<Edge> resultListOfEdges = connection.getAllEdges();
 
 		boolean allCorrect = true;
 		boolean edgeID = false;
 		boolean length = false;
-		if (listofEdges.size() == resultListofEdges.size()) {
-			for (int edge = 0; edge < resultListofEdges.size(); edge++) {
-				Edge returnedEdge = resultListofEdges.get(edge);
-				Edge correctEdge = listofEdges.get(edge);
-				if (returnedEdge.getLength() == correctEdge.getLength()) {
+		if (listOfEdges.size() == resultListOfEdges.size()) {
+			for (int edge = 0; edge < resultListOfEdges.size(); edge++) {
+				Edge returnedEdge = resultListOfEdges.get(edge);
+				Edge correctEdge = listOfEdges.get(edge);
+				if (returnedEdge.getLength().equals(correctEdge.getLength())) {
 					length = true;
 				}
 				if (returnedEdge.getId().equals(correctEdge.getId())) {
 					edgeID = true;
 				}
-				if (length && edgeID == false) {
+				if (length && !edgeID) {
 					allCorrect = false;
 				}
 			}
@@ -394,19 +393,18 @@ public class DatabaseTests {
 
 		ArrayList<Edge> listOfEdges = connection.getAllEdges();
 
-		assertTrue(listOfEdges.size() == 0);
+		assertEquals(0, listOfEdges.size());
 	}
 
 	@Test
 	@DisplayName("testAddNode")
 	public void testAddNode() {
-		// set result to 0
-		int testResult = 0;
+		int testResult;
 
 		// if this works, testResult should be 1
 		testResult = connection.addNode("testNode", 111, 222, "1", "Tower", "ELEV", "String", "String");
 
-		assertTrue(testResult == 1);
+		assertEquals(1, testResult);
 	}
 
 	@Test
@@ -416,7 +414,7 @@ public class DatabaseTests {
 
 		int testResult = connection.addNode("testNode12", 121, 222, "1", "Tower", "ELEV", "String", "String");
 
-		assertTrue(testResult == 0);
+		assertEquals(0, testResult);
 	}
 
 
@@ -424,8 +422,7 @@ public class DatabaseTests {
 	@DisplayName("testAddEdge")
 	public void testAddEdge() {
 
-		// set result to 0
-		int testResult = 0;
+		int testResult;
 
 		connection.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
 		connection.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
@@ -433,7 +430,7 @@ public class DatabaseTests {
 		// if this works, testResult should be 1
 		testResult = connection.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
 
-		assertTrue(testResult == 1);
+		assertEquals(1, testResult);
 
 	}
 
@@ -447,7 +444,7 @@ public class DatabaseTests {
 
 		int testResult = connection.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
 
-		assertTrue(testResult == 0);
+		assertEquals(0, testResult);
 	}
 
 	@Test
@@ -459,7 +456,7 @@ public class DatabaseTests {
 		// if this works, testResult should be 1
 		int testResult = connection.addEdge("testEdge1_testEdge2", "testEdge3", "testEdge2");
 
-		assertTrue(testResult == 0);
+		assertEquals(0, testResult);
 	}
 
 	@Test
@@ -471,30 +468,28 @@ public class DatabaseTests {
 		// if this works, testResult should be 1
 		int testResult = connection.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge3");
 
-		assertTrue(testResult == 0);
+		assertEquals(0, testResult);
 	}
 
 	@Test
 	@DisplayName("testModifyNode")
 	public void testModifyNode() {
 
-		// set result to 0
-		int testResult = 0;
+		int testResult;
 
 		connection.addNode("originalNode", 121, 122, "1", "Tower", "ELEV", "String", "String");
 
 		testResult = connection.modifyNode("originalNode", 100, null, null, null, null, null, null);
 
 
-		assertTrue(testResult == 1);
+		assertEquals(1, testResult);
 	}
 
 	@Test
 	@DisplayName("testDeleteEdge")
 	public void testDeleteEdge() {
 
-		// set result to 0
-		int testResult = 0;
+		int testResult;
 
 		connection.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
 		connection.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
@@ -505,28 +500,24 @@ public class DatabaseTests {
 
 		System.out.println(testResult);
 
-		assertTrue(testResult == 0);
+		assertEquals(0, testResult);
 	}
 
 	@Test
 	@DisplayName("testDeleteNode")
 	public void testDeleteNode() {
 
-		// set result to 0
-		int testResult = 0;
+		int testResult;
 
 		connection.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
 		testResult = connection.deleteNode("testEdge1");
 
-		assertTrue(testResult == 1);
+		assertEquals(1, testResult);
 	}
 
 	@Test
-	@DisplayName("testGetListofNodeIDS")
-	public void testGetListofNodeIDS() {
-
-		//File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-		//File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+	@DisplayName("testGetListOfNodeIDS")
+	public void testGetListOfNodeIDS() {
 
 		connection.addNode("test1", 0, 0, "1", "Tower", "ELEV", "test", "test");
 		connection.addNode("test2", 2, 2, "1", "Tower", "ELEV", "test", "test");
@@ -540,7 +531,7 @@ public class DatabaseTests {
 		listOfNodeIDs.add("test3");
 		listOfNodeIDs.add("test4");
 
-		assertTrue(listOfNodeIDs.equals(connection.getListofNodeIDS()));
+		assertEquals(listOfNodeIDs, connection.getListOfNodeIDS());
 	}
 
 
@@ -556,8 +547,8 @@ public class DatabaseTests {
 
 		File testFile = new File("src/test/resources/edu/wpi/TeamE/outputNodeTest.csv");
 		File nodeFile = new File("src/test/resources/edu/wpi/TeamE/outputNodeDB.csv");
-		ArrayList<String> testArray = new ArrayList<String>();
-		ArrayList<String> nodeArray = new ArrayList<String>();
+		ArrayList<String> testArray = new ArrayList<>();
+		ArrayList<String> nodeArray = new ArrayList<>();
 
 		try {
 			FileReader fr = new FileReader(testFile);
@@ -626,8 +617,8 @@ public class DatabaseTests {
 	public void testAddSanitationRequest(){
 		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 
-		connection.addUserAccount(1, "test@email.com", "testPassword", "visitor", "Testing", "Queen");
-		connection.addUserAccount(2, "test@gmail.com", "testpass", "visitor", "Nupi", "Shukla");
+		connection.addUserAccount("test@email.com", "testPassword", "visitor", "Testing", "Queen");
+		connection.addUserAccount("test@gmail.com", "testPass", "visitor", "Nubia", "Shukla");
 
 		connection.addSanitationRequest(1, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
 		connection.addExternalPatientRequest(2, "BW", "severe", "123", "15 mins", "headache");

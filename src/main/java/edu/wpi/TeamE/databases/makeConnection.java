@@ -132,9 +132,9 @@ public class makeConnection {
 							+ "    longName  varchar(100),"
 							+ "    shortName varchar(100),"
 							+ "    Unique (xCoord, yCoord, floor),"
-							+ "    Constraint floorLimit Check (userType In ('1', '2', '3', 'L1', 'L2')), "
-							+ "    Constraint buildingLimit Check (userType In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')), "
-							+ "    Constraint nodeTypeLimit Check (userType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', 'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH'))"
+							+ "    Constraint floorLimit Check (floor In ('1', '2', '3', 'L1', 'L2')), "
+							+ "    Constraint buildingLimit Check (building In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')), "
+							+ "    Constraint nodeTypeLimit Check (nodeType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', 'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH'))"
 							+ ")");
 
 		} catch (SQLException e) {

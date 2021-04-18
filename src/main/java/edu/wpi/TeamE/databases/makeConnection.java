@@ -1475,6 +1475,34 @@ public class makeConnection {
 	}
 
 	/**
+	 * todo
+	 * @return
+	 */
+	public ObservableList<String> getAllNodeLongNames() {
+		ObservableList<String> listOfNodeLongNames =  FXCollections.observableArrayList();
+
+		String deleteNodeS = "SELECT LONGNAME FROM node";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("LONGNAME");
+				listOfNodeLongNames.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeLongNames;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println("getListofNodeIDS error try/catch");
+			return listOfNodeLongNames;
+		}
+
+	}
+
+	/**
 	 * gets all Nodes that have the given FLOOR value
 	 *
 	 * @param floorName the value to check for in FLOOR column

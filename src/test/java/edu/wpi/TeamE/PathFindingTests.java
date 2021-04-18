@@ -13,7 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.List;
-
+import java.sql.SQLException;
+import java.util.Iterator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -27,7 +28,6 @@ public class PathFindingTests {
         File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
         File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
         try {
-            //con.deleteAllTables();
             con.createTables();
             con.populateTable("node", nodes);
             con.populateTable("hasEdge", edges);
@@ -300,4 +300,18 @@ public class PathFindingTests {
         assertEquals("eLABS001L1", ed.genNodeID("LABS","L1", "New Labs Floor L1"));
         assertEquals("eWALK00103", ed.genNodeID("WALK","3", "New Walkway Floor 3"));
     }
+    /**
+     * Manual test - useful for UI, please do not delete w/o notice.
+     */
+//    public void foo(){
+//        Searcher aStar = new AStarSearch();
+//        Path foundPath = aStar.search("ACONF00102", "eWALK01901");
+//        Iterator<Node> nodeIteratorThisFloorOnly = foundPath.iterator();
+//        System.out.println("contents of path:");
+//        for (Iterator<Node> it = nodeIteratorThisFloorOnly; it.hasNext(); ) {
+//            Node node = it.next();
+//            System.out.println("Name: " + node.get("longName") + ", Floor: " + node.get("floor") + ", ID: " + node.get("id"));
+//        }
+//    }
+
 }

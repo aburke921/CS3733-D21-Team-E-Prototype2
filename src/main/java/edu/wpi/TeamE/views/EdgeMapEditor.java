@@ -187,11 +187,13 @@ public class EdgeMapEditor {
 
     @FXML
     void initialize() {
-        assert treeTable != null : "fx:id=\"treeTable\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
+       /* assert treeTable != null : "fx:id=\"treeTable\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
         assert startNodeIDInput != null : "fx:id=\"xCordInput\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
         assert endNodeIDInput != null : "fx:id=\"longNameInput\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
         assert idInput != null : "fx:id=\"idInput\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
+        */
         prepareEdges(treeTable);
+
     }
 
 

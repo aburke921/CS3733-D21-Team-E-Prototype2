@@ -9,9 +9,9 @@
 Create Table node
 (
 	nodeID    varchar(31) Primary Key,
-	xCoord    int        Not Null,
-	yCoord    int        Not Null,
-	floor     varchar(5) Not Null,
+	xCoord    int         Not Null,
+	yCoord    int         Not Null,
+	floor     varchar(5)  Not Null,
 	building  varchar(20) Not Null,
 	nodeType  varchar(10) Not Null,
 	longName  varchar(50) Not Null,
@@ -35,12 +35,12 @@ Create Table hasEdge
 
 Create Table userAccount
 (
-	userID    int Primary Key,
-	email     varchar(31) Unique,
-	password  varchar(31),
-	userType  varchar(31),
-	firstName varchar(31),
-	lastName  varchar(31),
+	userID    int Primary Key,             -- for security reasons
+	email     varchar(31) Unique Not Null, -- use this for login
+	password  varchar(31)        Not Null,
+	userType  varchar(31),                 -- only allow visitor permission from java program for security reasons
+	firstName varchar(31),                 -- get displayed in app
+	lastName  varchar(31),                 -- get displayed in app
 	Constraint passwordLimit Check (
 		-- password Like '%[a-z]%[a-z]%' And
 		-- password Like '%[A-Z]%[A-Z]%' And
@@ -51,6 +51,13 @@ Create Table userAccount
 	Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin'))
 -- Let's assume admins are just doctors but better, they have every power
 );
+
+-- userLogin()
+
+Select Count(*) As verification
+From userAccount
+Where email = ?
+  And password = ?;
 
 -- addUserAccount()
 
@@ -157,7 +164,7 @@ Create Table sanitation
 	Constraint sanitationTypeLimit Check (sanitationType In
 	                                      ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal')),
 	Constraint urgencyTypeLimit Check (urgency In
-	                                    ('Low', 'Medium', 'High', 'Critical'))
+	                                   ('Low', 'Medium', 'High', 'Critical'))
 
 );
 

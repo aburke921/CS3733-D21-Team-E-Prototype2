@@ -90,6 +90,18 @@ public class makeConnection {
 	}
 
 	/**
+	 * Calls all of the functions that creates each individual table
+	 */
+	public void createTables(){
+		createNodeTable();
+		createEdgeTable();
+		createUserAccountTable();
+		createRequestsTable();
+		createFloralRequestsTable();
+		createExtTransportTable();
+		createSanitationTable();
+	}
+	/**
 	 * Uses executes the SQL statements required to create the node table.
 	 * This table has the attributes:
 	 * - nodeID: this is a unique identifier for the each node. Every node must contain a nodeID.

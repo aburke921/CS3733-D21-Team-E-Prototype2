@@ -150,7 +150,7 @@ public class PathFinder {
             //Execute A* Search
             System.out.print("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
             SearchContext aStar = new SearchContext();
-            //aStar.setType("HANDICAP");
+            //aStar.setConstraint("HANDICAP");
             //Call the path search function
             Path foundPath = aStar.search(startNodeID, endNodeID);
             drawMap(foundPath);

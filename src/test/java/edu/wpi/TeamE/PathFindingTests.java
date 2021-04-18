@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.List;
+import java.sql.SQLException;
 
 public class PathFindingTests {
     static Searcher search;
@@ -29,11 +29,11 @@ public class PathFindingTests {
             con.populateTable("hasEdge", edges);
             System.out.println("Tables were created");
         } catch (Exception e) {
-            System.out.println("Tables already there");
-//			connection.createTables();
-//			connection.populateTable("node", nodes);
-//			connection.populateTable("hasEdge", edges);
-//			System.out.println("Tables were created and populated");
+            try {
+                con.createTables();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
 
         search = new Searcher();
@@ -142,158 +142,4 @@ public class PathFindingTests {
         assertTrue(exp4.equals(out));
     }
 
-    @Test
-    public void testBendLeft()
-    {   /*
-            test bend left
-        */
-        Node node1 = new Node("1001", 5, 10, "L2", "building1", "type1", "name 1", "name 1");
-        Node node2 = new Node("1002", 8, 12, "L2", "building1", "type1", "name 1", "name 1");
-        Node node3 = new Node("1003", 10, 11, "L2", "building1", "type1", "name 1", "name 1");
-
-        Path path = new Path(node1, node2, node3);
-        List<String> directions = path.makeDirections();
-
-        assertTrue(directions.size() == 1 && directions.get(0).contains("Bend left"));
-    }
-
-    @Test
-    public void testBendRight()
-    {   /*
-            test bend right
-        */
-        Node node1 = new Node("1001", 5, 10, "L2", "building1", "type1", "name 1", "name 1");
-        Node node2 = new Node("1002", 8, 12, "L2", "building1", "type1", "name 1", "name 1");
-        Node node3 = new Node("1003", 7, 15, "L2", "building1", "type1", "name 1", "name 1");
-
-        Path path = new Path(node1, node2, node3);
-        List<String> directions = path.makeDirections();
-
-        assertTrue(directions.size() == 1 && directions.get(0).contains("Bend right"));
-    }
-
-    @Test
-    public void testStraightAhead()
-    {   /*
-            test straight ahead
-        */
-        Node node1 = new Node("1001", 5, 10, "L2", "building1", "type1", "name 1", "name 1");
-        Node node2 = new Node("1002", 8, 12, "L2", "building1", "type1", "name 1", "name 1");
-        Node node3 = new Node("1003", 11, 14, "L2", "building1", "type1", "name 1", "name 1");
-
-        Path path = new Path(node1, node2, node3);
-
-        List<String> directions = path.makeDirections();
-        assertTrue(directions.size() == 1 && directions.get(0).contains("Straight ahead"));
-    }
-
-    @Test
-    public void testBendLeft90Degree()
-    {   /*
-            test bend left, 90 degrees
-        */
-        Node node1 = new Node("1001", 5, 5, "L2", "building1", "type1", "name 1", "name 1");
-        Node node2 = new Node("1002", 7, 7, "L2", "building1", "type1", "name 1", "name 1");
-        Node node3 = new Node("1003", 10, 4, "L2", "building1", "type1", "name 1", "name 1");
-
-        Path path = new Path(node1, node2, node3);
-
-        List<String> directions = path.makeDirections();
-        assertTrue(directions.size() == 1 && directions.get(0).contains("Bend left, by angle 90.0"));
-    }
-
-    @Test
-    public void testBendLeftMoreThan90Degree()
-    {   /*
-            test bend right, 90 degrees
-        */
-        Node node1 = new Node("1001", 5, 5, "L2", "building1", "type1", "name 1", "name 1");
-        Node node2 = new Node("1002", 7, 7, "L2", "building1", "type1", "name 1", "name 1");
-        Node node3 = new Node("1003", 8, 4, "L2", "building1", "type1", "name 1", "name 1");
-
-        Path path = new Path(node1, node2, node3);
-
-        List<String> directions = path.makeDirections();
-        assertTrue(directions.size() == 1 && directions.get(0).contains("Bend left, by angle"));
-
-        String[] words = directions.get(0).split(" ");
-        double angle = Double.parseDouble(words[words.length - 1]);
-        assertEquals(116.565, angle, 0.01);
-
-    }
-
-    @Test
-    public void testBendLeftLessThan90Degree()
-    {   /*
-            test bend right, 90 degrees
-        */
-        Node node1 = new Node("1001", 5, 5, "L2", "building1", "type1", "name 1", "name 1");
-        Node node2 = new Node("1002", 7, 7, "L2", "building1", "type1", "name 1", "name 1");
-        Node node3 = new Node("1003", 10, 7, "L2", "building1", "type1", "name 1", "name 1");
-
-        Path path = new Path(node1, node2, node3);
-
-        List<String> directions = path.makeDirections();
-        assertTrue(directions.size() == 1 && directions.get(0).contains("Bend left, by angle"));
-
-        String[] words = directions.get(0).split(" ");
-        double angle = Double.parseDouble(words[words.length - 1]);
-        assertEquals(45.00, angle, 0.01);
-
-    }
-
-    @Test
-    public void testBendRight90Degree()
-    {   /*
-            test bend right, 90 degrees
-        */
-        Node node1 = new Node("1001", 5, 5, "L2", "building1", "type1", "name 1", "name 1");
-        Node node2 = new Node("1002", 7, 7, "L2", "building1", "type1", "name 1", "name 1");
-        Node node3 = new Node("1003", 3, 11, "L2", "building1", "type1", "name 1", "name 1");
-
-        Path path = new Path(node1, node2, node3);
-
-        List<String> directions = path.makeDirections();
-        assertTrue(directions.size() == 1 && directions.get(0).contains("Bend right, by angle 90.0"));
-    }
-
-    @Test
-    public void testBendRightMoreThan90Degree()
-    {   /*
-            test bend right, 90 degrees
-        */
-        Node node1 = new Node("1001", 5, 5, "L2", "building1", "type1", "name 1", "name 1");
-        Node node2 = new Node("1002", 7, 7, "L2", "building1", "type1", "name 1", "name 1");
-        Node node3 = new Node("1003", 1, 10, "L2", "building1", "type1", "name 1", "name 1");
-
-        Path path = new Path(node1, node2, node3);
-
-        List<String> directions = path.makeDirections();
-        assertTrue(directions.size() == 1 && directions.get(0).contains("Bend right, by angle"));
-
-        String[] words = directions.get(0).split(" ");
-        double angle = Double.parseDouble(words[words.length - 1]);
-        assertEquals(108.435, angle, 0.01);
-
-    }
-
-    @Test
-    public void testBendRightLessThan90Degree()
-    {   /*
-            test bend right, less 90 degrees
-        */
-        Node node1 = new Node("1001", 5, 5, "L2", "building1", "type1", "name 1", "name 1");
-        Node node2 = new Node("1002", 7, 7, "L2", "building1", "type1", "name 1", "name 1");
-        Node node3 = new Node("1003", 6, 10, "L2", "building1", "type1", "name 1", "name 1");
-
-        Path path = new Path(node1, node2, node3);
-
-        List<String> directions = path.makeDirections();
-        assertTrue(directions.size() == 1 && directions.get(0).contains("Bend right, by angle"));
-
-        String[] words = directions.get(0).split(" ");
-        double angle = Double.parseDouble(words[words.length - 1]);
-        assertEquals(63.4349, angle, 0.01);
-
-    }
 }

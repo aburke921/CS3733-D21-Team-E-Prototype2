@@ -96,10 +96,10 @@ Create Table requests
 	userID       int References userAccount On Delete Cascade,
 	creationTime timestamp,
 	requestType  varchar(31),
-	requestState varchar(10),
+	requestStatus varchar(10),
 	Constraint requestTypeLimit Check (requestType In
 	                                   ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
-	Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress'))
+	Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress'))
 );
 
 -- getAllRequestsFrom(userID)
@@ -173,15 +173,18 @@ Create Table securityServ
 	requestID int Primary Key References requests On Delete Cascade,
 	roomID    varchar(31) Not Null References node On Delete Cascade,
 	level     varchar(31),
-	urgency   varchar(31) Not Null
+	urgency   varchar(31) Not Null,
+	Constraint urgencyTypeLimit Check (urgency In
+	                                    ('Low', 'Medium', 'High', 'Critical'))
 );
 
 Create Table medDelivery
 (
 	requestID           int Primary Key References requests On Delete Cascade,
 	roomID              varchar(31) Not Null References node On Delete Cascade,
-	medacineName        varchar(31) Not Null,
+	medicineName        varchar(31) Not Null,
 	quantity            int         Not Null,
+	dosage              varchar(31) Not Null,
 	specialInstructions varchar(5000),
 	signature           varchar(31) Not Null
 );
@@ -196,6 +199,17 @@ Create Table extTransport
 	ETA              varchar(100),
 	description      varchar(5000)
 );
+
+
+
+
+
+Select requests.requestStatus
+From requests, floralRequests
+Where requests.requestID = floralRequests.requestID;
+
+
+
 
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1

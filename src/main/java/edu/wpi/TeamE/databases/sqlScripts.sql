@@ -148,7 +148,7 @@ Create Table sanitation(
     description varchar(5000),
     sanitationType varchar(31),
     urgency varchar(31) NOT NULL,
-    Constraint sanitationTypeLimit Check (flowerType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))
+    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))
 );
 
 Create Table securityServ(
@@ -176,6 +176,8 @@ Create Table extTransport(
     ETA varchar(100),
     description varchar(5000)
 );
+
+
 
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1

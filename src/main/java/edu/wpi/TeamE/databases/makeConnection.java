@@ -194,6 +194,26 @@ public class makeConnection {
 
 	}
 
+	public void insertUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
+		String insertUser = "Insert into userAccount Values (?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
+			prepState.setInt(1, userID);
+			prepState.setString(2, email);
+			prepState.setString(3, password);
+			prepState.setString(4, userType);
+			prepState.setString(5, firstName);
+			prepState.setString(6, lastName);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
+		}
+
+
+	}
+
 	public void createUserAccountTypeViews(){
 		try {
 			Statement stmt = connection.createStatement();
@@ -284,8 +304,42 @@ public class makeConnection {
 		}
 	}
 
+	public void createSanitationTable(){
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table sanitationRequest(\n" +
+					"    userID int Primary Key References requests On Delete Cascade,\n" +
+					"    roomID varchar(31) not null References node On Delete Cascade,\n" +
+					"    signature varchar(31) NOT NULL,\n" +
+					"    description varchar(5000),\n" +
+					"    sanitationType varchar(31),\n" +
+					"    urgency varchar(31) NOT NULL,\n" +
+					"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))\n" +
+					")";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating sanitationRequest table");
+		}
+	}
 
-
+	public void createExtTransportTable() {
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table extTransport(\n" +
+					"    requestID int Primary Key References requests On Delete Cascade,\n" +
+					"    hospitalLocation varchar(100) NOT NULL,\n" +
+					"    severity varchar(30) NOT NULL,\n" +
+					"    patientID int NOT NULL,\n" +
+					"    ETA varchar(100),\n" +
+					"    description varchar(5000)\n" +
+					")";
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating extTransport table");
+		}
+	}
 
 	/**
 	 * Deletes node,hasEdge, userAccount, requests, and floralRequests tables.
@@ -296,6 +350,8 @@ public class makeConnection {
 
 		try {
 			Statement stmt = this.connection.createStatement();
+			stmt.execute("DROP table extTransport");
+			stmt.execute("Drop Table sanitationRequest");
 			stmt.execute("Drop Table floralRequests");
 			stmt.execute("Drop Table requests");
 			stmt.execute("Drop View visitorAccount");
@@ -307,7 +363,7 @@ public class makeConnection {
 			stmt.execute("Drop Table node");
 			stmt.close();
 		} catch (SQLException e) {
-			 e.printStackTrace();
+//			 e.printStackTrace();
 			System.err.println("deleteAllTables() not working");
 		}
 	}
@@ -505,6 +561,108 @@ public class makeConnection {
 
 	}
 
+
+	/**
+	 * This adds a sanitation services form to the table specific for it
+	 * @param //form this is the form being added to the table
+	 */
+	public void addSanitationRequest(int userID, String roomID, String sanitationType, String description, String urgency, String signature) {
+		String insertRequest = "Insert Into requests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests) + 1, ?, current Timestamp, 'floral', 'inProgress')";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
+			prepState.setInt(1, userID);
+			prepState.execute();
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error inserting into requests inside function addSanitationRequest()");
+		}
+
+		String insertSanitationRequest = "Insert Into sanitationRequest\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests), ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertSanitationRequest)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, signature);
+			prepState.setString(3, description);
+			prepState.setString(4, sanitationType);
+			prepState.setString(5, urgency);
+
+
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into sanitationRequest inside function addSanitationRequest()");
+		}
+
+	}
+
+
+	/**
+	 * This edits a Sanitation Services form that is already in the table
+	 * @param departmentField this updates the department
+	 * @param roomField this updates the room field
+	 * @param numberField this updates the number field
+	 * @param serviceTypeField this updates the service type field
+	 * @param assignee this updates who is assigned to the service request
+	 */
+	public void editSanitationRequest(String departmentField, String roomField, String numberField, String serviceTypeField, String assignee) {}
+
+
+	/**
+	 * This function needs to add a external patient form to the table for external patient forms
+	 * @param //form this is the form that we will create and send to the database
+	 */
+	public void addExternalPatientRequest(int userID, String hospitalLocation, String severity, String patientID, String ETA, String description) {
+
+		String insertRequest = "Insert Into requests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests) + 1, ?, current Timestamp, 'extTransport', 'inProgress')";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
+			prepState.setInt(1, userID);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into requests inside function addExternalPatientRequest()");
+		}
+
+		String insertExtTransport = "Insert Into extTransport\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests), ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
+			prepState.setString(1, hospitalLocation);
+			prepState.setString(2, severity);
+			prepState.setString(3, patientID);
+			prepState.setString(4, ETA);
+			prepState.setString(5, description);
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into extTransport inside function addExternalPatientRequest()");
+		}
+
+	}
+
+
+	/**
+	 *
+	 * @param hospital this is the string used to update the hospital field
+	 * @param type this is the string used to update the type
+	 * @param severity this is the string used to update the severity
+	 * @param patientID this is the string used to update patientID
+	 * @param description this is the string used to update the description
+	 * @param eta this is the string used to update the eta
+	 */
+	public void editExternalPatientRequest(String hospital, String type, String severity, String patientID, String description, String eta) {}
+
+
 	/**
 	 * This adds a floral request to the database that the user is making
 	 * @param userID this is the username that the user uses to log into the account
@@ -540,7 +698,7 @@ public class makeConnection {
 			prepState.setString(3, flowerType);
 			prepState.setInt(4, flowerAmount);
 			prepState.setString(5, vaseType);
-			prepState.setString(5, message);
+			prepState.setString(6, message);
 
 			ResultSet rset = prepState.executeQuery();
 		} catch (SQLException e) {
@@ -572,6 +730,117 @@ public class makeConnection {
 //          );
 	}
 
+
+	/**
+	 * This edits a floral request form within the table
+	 * @param patient this is the string to update patient info
+	 * @param room this is the string to update room info
+	 * @param flowerType this is the string to update the flower type
+	 * @param flowerAmount this is the string to update the flower amount
+	 * @param vaseType this is the string to update the vase type
+	 * @param message this is the string to update the message
+	 */
+	public void editFloralRequest(String patient, String room, String flowerType, String flowerAmount, String vaseType, String message) {}
+
+
+	/**
+	 * This adds a medicine request form to the table for medicine request forms
+	 * @param //form this is the form being added
+	 */
+	public void addMedicineRequest(int userID, String medicineName, String quantity, String dosage, String specialInstructions, String signature) {
+
+		String insertRequest = "Insert Into requests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests) + 1, ?, current Timestamp, 'floral', 'inProgress')";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
+			prepState.setInt(1, userID);
+			ResultSet rset = prepState.executeQuery();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into requests inside function addMedicineRequest()");
+		}
+
+
+		String insertMedRequest = "Insert Into medDelivery\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests), ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
+			prepState.setString(1, medicineName);
+			prepState.setString(2, quantity);
+			prepState.setString(3, dosage);
+			prepState.setString(4, specialInstructions);
+			prepState.setString(5, signature);
+
+			ResultSet rset = prepState.executeQuery();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
+		}
+
+	}
+
+
+	/**
+	 * This function edits a current request for medicine delivery with the information below
+	 * @param roomNumber this string updates the room number
+	 * @param department this string is used to update the department
+	 * @param medicineName this string updates the medicine name
+	 * @param quantity this string updates the quantity
+	 * @param dosage this string updates the dosage
+	 * @param specialInstructions this string updates the special instructions
+	 */
+	public void editMedicineRequest(String roomNumber, String department, String medicineName, String quantity, String dosage, String specialInstructions) {}
+
+
+	/**
+	 * This adds a security form to the table for security service form
+	 * @param //form this is the form added to the table
+	 */
+	public void addSecurityRequest(int userID, String level, String urgency, String reason, String assignee){
+
+		String insertRequest = "Insert Into requests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests) + 1, ?, current Timestamp, 'security', 'inProgress')";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
+			prepState.setInt(1, userID);
+			ResultSet rset = prepState.executeQuery();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into requests inside function addSecurityRequest()");
+		}
+
+
+		String insertSecurityRequest = "Insert Into security\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests), ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertSecurityRequest)) {
+			prepState.setString(1, level);
+			prepState.setString(2, urgency);
+			prepState.setString(3, reason);
+			prepState.setString(4, assignee);
+
+			ResultSet rset = prepState.executeQuery();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
+		}
+
+
+	}
+
+
+	/**
+	 * This edits a security form already within the table
+	 * @param location this is the info to update location
+	 * @param levelOfSecurity this is the info to update levelOfSecurity
+	 * @param levelOfUrgency this is the info to update levelOfUrgency
+	 * @param assignee this is the info used to update who is assigned
+	 */
+	public void editSecurityRequest(String location, String levelOfSecurity, String levelOfUrgency, String assignee) {}
 
 
 	/**

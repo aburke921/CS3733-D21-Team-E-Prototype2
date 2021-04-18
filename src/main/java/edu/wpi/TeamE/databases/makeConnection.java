@@ -505,14 +505,24 @@ public class makeConnection {
 
 	}
 
-
-	public void addFloralRequest(int creatorID,String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message){
+	/**
+	 * This adds a floral request to the database that the user is making
+	 * @param userID this is the username that the user uses to log into the account
+	 * @param RoomNodeID this is the nodeID/room the user is sending the request to
+	 * @param recipientName this is the name of the individual they want the flowers to be addressed to
+	 * @param flowerType this is the type of flowers that the user wants to request
+	 * @param flowerAmount this the number/quantity of flowers that the user is requesting
+	 * @param vaseType this is the type of vase the user wants the flowers to be delivered in
+	 * @param message this is a specific detailed message that the user can have delivered with the flowers or an instruction message
+	 *                for whoever is fufilling the request
+	 */
+	public void addFloralRequest(int userID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message){
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests) + 1, ?, current Timestamp, 'floral', 'inProgress')";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
-			prepState.setInt(1, creatorID);
+			prepState.setInt(1, userID);
 			ResultSet rset = prepState.executeQuery();
 		} catch (SQLException e) {
 			//e.printStackTrace();
@@ -540,7 +550,7 @@ public class makeConnection {
 
 //			Create Table requests(
 	//			requestID    int Primary Key,
-	//			creatorID    int References userAccount On Delete Cascade,
+	//			userID    int References userAccount On Delete Cascade,
 	//			creationTime timestamp,
 	//			requestType  varchar(31),
 	//			requestState varchar(10),

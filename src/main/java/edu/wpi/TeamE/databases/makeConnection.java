@@ -90,6 +90,8 @@ public class makeConnection {
 
 	/**
 	 * Calls all of the functions that creates each individual table
+	 * Tables Created: node, hasEdge, userAccount, requests, floralRequests, sanitationRequest, extTransport, medDelivery, securityServ
+	 * Views Created (which are like tables): visitorAccount, patientAccount, doctorAccount, adminAccount
 	 */
 	public void createTables() {
 		createNodeTable();

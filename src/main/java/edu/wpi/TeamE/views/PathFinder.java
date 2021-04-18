@@ -3,12 +3,19 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXSnackbarLayout;
+import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.*;
 import edu.wpi.TeamE.databases.*;
 
@@ -27,12 +34,14 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class PathFinder {
@@ -181,7 +190,8 @@ public class PathFinder {
 
         //Execute A* Search
         System.out.println("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
-        Searcher aStar = new AStarSearch();
+        SearchContext aStar = new SearchContext();
+        //aStar.setConstraint("HANDICAP");
 
         //Check if starting and ending node are the same
         if(startNodeID.equals(endNodeID)) { //error
@@ -215,7 +225,13 @@ public class PathFinder {
                 //draw the map for the current floor
                 drawMap(foundPath, currentFloor);
 
-                //todo also run getNodesOnFloorFromPath() for the other floors in advance?
+                //todo
+                System.out.println();
+                List<String> directions = foundPath.makeDirections();
+                for (String dir: directions) {
+                    System.out.println(dir);
+                }
+
             }
         }
     }

@@ -64,13 +64,15 @@ public class ServiceRequestStatus {
 
     public void prepareTable(TreeTableView serviceRequestTable) {
 
+        TreeItem<String> rootNode = new TreeItem<>("Service Requests");
 
-        //Setting up root nodes
+
+        //Setting up sub-root nodes
         TreeItem<String> inProgress = new TreeItem<>("In Progress");
         TreeItem<String> completed = new TreeItem<>("Completed");
         TreeItem<String> cancelled = new TreeItem<>("Cancelled");
 
-        //Setting up sub-root nodes
+        //Setting up children of sub-root nodes
         TreeItem<String> externalPatientCompleted = new TreeItem<>("External Patient Form");
         TreeItem<String> floralFormCompleted = new TreeItem<>("Floral Form");
         TreeItem<String> medicineDeliveryCompleted = new TreeItem<>("Medicine Delivery Form");
@@ -87,6 +89,17 @@ public class ServiceRequestStatus {
         TreeItem<String> sanitationServicesCancelled = new TreeItem<>("Sanitation Services Form");
         TreeItem<String> securityServiceCancelled = new TreeItem<>("Security Service Form");
 
+        //Adding children to sub-root nodes
+        inProgress.getChildren().setAll(externalPatientInProgress,floralFormInProgress,medicineDeliveryInProgress,sanitationServicesInProgress,securityServiceInProgress);
+        completed.getChildren().setAll(externalPatientCompleted,floralFormCompleted,medicineDeliveryCompleted,sanitationServicesCompleted,securityServiceCompleted);
+        cancelled.getChildren().setAll(externalPatientCancelled,floralFormCancelled,medicineDeliveryCancelled,sanitationServicesCancelled,securityServiceCancelled);
+
+        //Adding sub-roots to root node
+        rootNode.getChildren().setAll(inProgress,completed,cancelled);
+
+        //Adding Root
+        serviceRequestTable.setRoot(rootNode);
+
         //Establishing some columns that are consistent throughout all the service requests
         //Column 1 - Location
         TreeTableColumn<String, String> formColumn = new TreeTableColumn<>("Form");
@@ -94,7 +107,7 @@ public class ServiceRequestStatus {
         formColumn.setCellValueFactory(new Callback<CellDataFeatures<String, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(CellDataFeatures<String, String> param) {
-                return new SimpleStringProperty(param.getValue().getValue())
+                return new SimpleStringProperty(param.getValue().getValue());
             }
         });
         serviceRequestTable.getColumns().add(formColumn);

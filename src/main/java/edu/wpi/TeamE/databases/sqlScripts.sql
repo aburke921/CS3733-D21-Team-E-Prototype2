@@ -55,7 +55,7 @@ Create Table userAccount
 -- addUserAccount()
 
 Insert Into userAccount
-Values (2333, '2333@wpi.edu', 'password', 'patient', 'firstName', 'lastName');
+Values ((Select Count(*) From userAccount) + 10000, '2333@wpi.edu', 'password', 'patient', 'firstName', 'lastName');
 
 Create View visitorAccount As
 Select *

@@ -10,6 +10,7 @@ import java.lang.String;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -65,7 +66,7 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
 
     @FXML // fx:id="submit"
     private JFXButton submit; // Value injected by FXMLLoader
-
+    RequiredFieldValidator validator = new RequiredFieldValidator();
     /**
      * todo This function will cause a pop-up modal to appear with help information for this form's fields
      * @param event {@link ActionEvent} info for the help button call, passed automatically by system.
@@ -74,8 +75,54 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
     void getHelpExternalPatient(ActionEvent event) {
 
     }
+    /**
+     * Detects if the user has entered all required fields
+     *
+     */
+    private boolean validateInput(){
 
+        validator.setMessage("Input required");
+
+
+        locationInput.getValidators().add(validator);
+        requestTypeInput.getValidators().add(validator);
+        severityInput.getValidators().add(validator);
+        patientIdInput.getValidators().add(validator);
+        ETAInput.getValidators().add(validator);
+        descriptionInput.getValidators().add(validator);
+
+        return  locationInput.validate() && requestTypeInput.validate() && severityInput.validate() && patientIdInput.validate() && descriptionInput.validate() && ETAInput.validate();
+
+
+    }
+    /**
+     * records inputs from user into a series of String variables and returns to the main page
+     * @param actionEvent
+     */
+    @FXML
+    private void saveData(ActionEvent actionEvent){
+        String location = locationInput.getText();
+        String type = requestTypeInput.getSelectionModel().toString();
+        String severity = severityInput.getSelectionModel().toString();
+        String patientID = patientIdInput.getText();
+        String ETA = ETAInput.getText();
+        String details = descriptionInput.getText();
+
+        if(validateInput()){
+            //String detailedInstructions = sdetailedInstructionsInput.getText();
+            //creating the service request
+
+            //System.out.println(request.getAssignmentField());
+            //Adding service request to table
+            //makeConnection connection = makeConnection.makeConnection();
+            //connection.addRequest("sanitationServices", request);
+
+            super.handleButtonSubmit(actionEvent);
+            //Setting up all variables to be entered
+        }
+    }
     @FXML // This method is called by the FXMLLoader when initialization is complete
+
     void initialize() {
         assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert requestTypeInput != null : "fx:id=\"requestTypeInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";

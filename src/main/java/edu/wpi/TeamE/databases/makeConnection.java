@@ -1620,4 +1620,32 @@ public class makeConnection {
 			ioException.printStackTrace();
 		}
 	}
+
+	// User System Stuff
+
+	/**
+	 * Function for logging a user in with their unique email and password, currently can only check for if correct or not
+	 *
+	 * @param email is the user's entered email
+	 * @param password is the user's entered password
+	 * @return true when the credentials match with a user in the database, and false otherwise
+	 */
+	public boolean userLogin(String email, String password) {
+		String userLoginS = "Select Count(*) As verification From useraccount Where email = ? And password = ?";
+		try (PreparedStatement userLoginPS = connection.prepareStatement(userLoginS)) {
+			userLoginPS.setString(1, email);
+			userLoginPS.setString(2, password);
+			ResultSet userLoginRS = userLoginPS.executeQuery();
+			int verification = 0;
+			if (userLoginRS.next()) {
+				verification = userLoginRS.getInt("verification");
+			}
+			userLoginRS.close();
+			return verification == 1;
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("countNodeTypeOnFloor() error");
+		}
+		return false;
+	}
 }

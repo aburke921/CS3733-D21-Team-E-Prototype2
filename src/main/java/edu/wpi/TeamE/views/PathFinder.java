@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXSnackbar;
@@ -153,6 +154,13 @@ public class PathFinder {
             //Call the path search function
             Path foundPath = aStar.search(startNodeID, endNodeID);
             drawMap(foundPath);
+
+
+            System.out.println();
+            List<String> directions = foundPath.makeDirections();
+            for (String dir: directions) {
+                System.out.println(dir);
+            }
         }
     }
 

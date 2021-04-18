@@ -38,6 +38,8 @@ public class DatabaseTests {
 	        connection.createFloralRequestsTable();
 			connection.createSanitationTable();
 			connection.createExtTransportTable();
+			connection.createMedDeliveryTable();
+			connection.createSecurityServTable();
             System.out.println("Tables were reset");
         } catch (Exception e) {
 			connection.createNodeTable();
@@ -47,6 +49,8 @@ public class DatabaseTests {
 			connection.createFloralRequestsTable();
 			connection.createSanitationTable();
 			connection.createExtTransportTable();
+			connection.createMedDeliveryTable();
+			connection.createSecurityServTable();
 			System.out.println("Tables were created");
         }
     }
@@ -534,57 +538,6 @@ public class DatabaseTests {
 		assertEquals(listOfNodeIDs, connection.getListOfNodeIDS());
 	}
 
-
-	@Test
-	@DisplayName("testGetNewCSVFile")
-	public void testGetNewCSVFile() {
-		connection.addNode("test1", 0, 0, "1", "Tower", "ELEV", "long", "asd");
-		connection.addNode("test2", 2, 2, "1", "Tower", "ELEV", "name", "test");
-		connection.addNode("test3", 3, 3, "1", "Tower", "ELEV", "test", "hert");
-		connection.addNode("test4", 4, 4, "1", "Tower", "ELEV", "fun", "test");
-
-		connection.getNewCSVFile("node");
-
-		File testFile = new File("src/test/resources/edu/wpi/TeamE/outputNodeTest.csv");
-		File nodeFile = new File("src/test/resources/edu/wpi/TeamE/outputNodeDB.csv");
-		ArrayList<String> testArray = new ArrayList<>();
-		ArrayList<String> nodeArray = new ArrayList<>();
-
-		try {
-			FileReader fr = new FileReader(testFile);
-			BufferedReader br = new BufferedReader(fr);
-
-			String line;
-
-			while ((line = br.readLine()) != null) {
-				testArray.add(line);
-			}
-
-			br.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			System.err.println("populateTable() outer try/catch error");
-		}
-
-		try {
-			FileReader fr = new FileReader(nodeFile);
-			BufferedReader br = new BufferedReader(fr);
-
-			String line;
-
-			while ((line = br.readLine()) != null) {
-				nodeArray.add(line);
-			}
-
-			br.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			System.err.println("populateTable() outer try/catch error");
-		}
-
-		assertEquals(nodeArray, testArray);
-	}
-
 	@Test
 	@DisplayName("Testing countNodeTypeOnFloor()")
 	public void testCountNodeTypeOnFloor() {
@@ -616,12 +569,57 @@ public class DatabaseTests {
 	@DisplayName("testAddSanitationRequest")
 	public void testAddSanitationRequest(){
 		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 
-		connection.addUserAccount("test@email.com", "testPassword", "visitor", "Testing", "Queen");
-		connection.addUserAccount("test@gmail.com", "testPass", "visitor", "Nubia", "Shukla");
+		connection.addSanitationRequest(10000, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
+	}
 
-		connection.addSanitationRequest(1, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
-		connection.addExternalPatientRequest(2, "BW", "severe", "123", "15 mins", "headache");
+	@Test
+	@DisplayName("testAddExternalPatientRequest")
+	public void testAddExternalPatientRequest(){
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+
+		connection.addExternalPatientRequest(10000, "BW", "severe", "123", "15 mins", "headache");
+	}
+
+	@Test
+	@DisplayName("testAddMedicineRequest")
+	public void testAddMedicineRequest(){
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+
+		connection.addMedicineRequest(10000, "test", "drugs", 2, "100ml", "take once a day", "Nupur");
+	}
+
+	@Test
+	@DisplayName("testSecurityRequest")
+	public void testAddSecurityRequest(){
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+
+		connection.addSecurityRequest(10000, "test", "low", "Low");
+	}
+
+	@Test
+	@DisplayName("testAddFloralRequest")
+	public void testAddFloralRequest() {
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+
+		connection.addFloralRequest(10000, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+
+	}
+
+	@Test
+	@DisplayName("testAddSpecialUserType")
+	public void testAddSpecialUserType(){
+		connection.addSpecialUserType("test1@gmail.com", "testPassword", "patient", "patientFirstName", "patientLastName");
+		connection.addSpecialUserType("test2@gmail.com", "testPassword1", "admin", "adminFirstName", "adminLastName");
+		connection.addSpecialUserType("test3@gmail.com", "testPassword2", "doctor", "doctorFirstName", "doctorLastName");
+
 	}
 
 

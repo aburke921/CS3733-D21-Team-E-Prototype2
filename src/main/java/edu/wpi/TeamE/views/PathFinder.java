@@ -440,6 +440,8 @@ public class PathFinder {
         stackPane.scaleYProperty().bind(zoomSlider.valueProperty());
 
         rootBorderPane.setCenter(scrollPane);
+        rootBorderPane.setPrefWidth(stageWidth);
+        rootBorderPane.setPrefWidth(stageHeight);
 
         System.out.println("Finish PathFinder Init.");
     }

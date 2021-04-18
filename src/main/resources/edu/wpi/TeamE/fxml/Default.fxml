@@ -100,6 +100,7 @@
                                     <Button fx:id="serviceRequestButton" mnemonicParsing="false" onAction="#toServiceRequests" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE" />
                                     <Button fx:id="mapEditorButton" mnemonicParsing="false" onAction="#toMapEditor" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE" GridPane.rowIndex="1" />
                                     <Button fx:id="pathFInderButton" mnemonicParsing="false" onAction="#toPathFinder" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE" GridPane.rowIndex="2" />
+                                    <Button fx:id="serviceRequestStatusButton" mnemonicParsing="false" onAction="#toServiceRequestStatus" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE" GridPane.columnIndex="1" />
                                  </children>
                               </GridPane>
                            </children>

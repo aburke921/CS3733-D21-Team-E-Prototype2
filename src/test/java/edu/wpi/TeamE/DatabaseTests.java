@@ -33,17 +33,30 @@ public class DatabaseTests {
     public void setupTables(){
         try {
             connection.deleteAllTables();
-            connection.createTables();
+	        connection.createNodeTable();
+	        connection.createEdgeTable();
+	        connection.createUserAccountTable();
+	        connection.createRequestsTable();
+	        connection.createFloralRequestsTable();
+			connection.createSanitationTable();
+			connection.createExtTransportTable();
             System.out.println("Tables were reset");
         } catch (Exception e) {
-            try {
-                connection.createTables();
-            } catch (SQLException a) {
-                a.printStackTrace();
-            }
-            System.out.println("Tables were created");
+			connection.createNodeTable();
+			connection.createEdgeTable();
+			connection.createUserAccountTable();
+			connection.createRequestsTable();
+			connection.createFloralRequestsTable();
+			connection.createSanitationTable();
+			connection.createExtTransportTable();
+			System.out.println("Tables were created");
         }
     }
+
+    @Test
+	public void testing(){
+
+	}
 
 	@Test
 	@DisplayName("testGetNodeInfo")
@@ -604,4 +617,26 @@ public class DatabaseTests {
 		int returned2 = connection.countNodeTypeOnFloor("t", "f2", "testdweafeawfi");
 		assertEquals(0, returned2);
 	}
+
+
+	@Test
+	@DisplayName("testCreateUserAccountTable")
+	public void testCreateUserAccountTable(){
+
+	}
+
+	@Test
+	@DisplayName("testAddSanitationRequest")
+	public void testAddSanitationRequest(){
+		connection.addNode("test", 0, 0, "1", "building", "nodeType", "longName", "shortName");
+		//connection.addNode("test1", 1, 1, "2", "building", "nodeType", "longName", "shortName");
+
+		connection.addUserAccount(1, "test@email.com", "testPassword", "visitor", "Testing", "Queen");
+		connection.addUserAccount(2, "test@gmail.com", "testpass", "visitor", "Nupi", "Shukla");
+
+		connection.addSanitationRequest(1, "test", "Urine Cleanup", "description here", "not very urgent", "Nupur Shukla");
+		connection.addExternalPatientRequest(2, "BW", "severe", "123", "15 mins", "headache");
+	}
+
+
 }

@@ -316,11 +316,7 @@ public class MapEditor {
 
             //This is where tables are cleared and refilled
             connection.deleteAllTables();
-            try {
-                connection.createTables();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+            connection.createTables();
             connection.populateTable("node", file);
             connection.populateTable("hasEdge", saveEdges);
             System.out.println("Success");

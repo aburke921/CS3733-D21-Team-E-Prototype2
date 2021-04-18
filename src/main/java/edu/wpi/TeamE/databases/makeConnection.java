@@ -940,14 +940,14 @@ public class makeConnection {
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
-			ResultSet rset = prepState.executeQuery();
+			prepState.execute();
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addFloralRequest()");
 		}
 
 
-		String insertFloralRequest = "Insert Into floralrequests\n" +
+		String insertFloralRequest = "Insert Into floralRequests\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests), ?, ?, ?, ?, ?, ?)";
 
@@ -959,7 +959,7 @@ public class makeConnection {
 			prepState.setString(5, vaseType);
 			prepState.setString(6, message);
 
-			ResultSet rset = prepState.executeQuery();
+			prepState.execute();
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");

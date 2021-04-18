@@ -34,6 +34,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.util.Callback;
+import sun.reflect.generics.tree.Tree;
 
 import java.io.IOException;
 import java.util.function.UnaryOperator;
@@ -58,6 +59,24 @@ public class ServiceRequestStatus {
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void addToTable(String tableName, TreeItem<String> inProgress, TreeItem<String> completed, TreeItem<String> cancelled) {
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<String> idArray = new ArrayList<>();
+        ArrayList<String> statusArray = new ArrayList<>();
+        for(int i = 0; i < idArray.size(); i++) {
+            TreeItem<String> request = new TreeItem<>(idArray.get(i));
+            if(statusArray.get(i).equals("In Progress")) {
+                inProgress.getChildren().add(request);
+            }
+            if(statusArray.get(i).equals("Completed")) {
+                completed.getChildren().add(request);
+            }
+            if(statusArray.get(i).equals("Cancelled")) {
+                cancelled.getChildren().add(request);
+            }
         }
     }
 
@@ -101,7 +120,7 @@ public class ServiceRequestStatus {
         serviceRequestTable.setRoot(rootNode);
 
         //Establishing some columns that are consistent throughout all the service requests
-        //Column 1 - Location
+        //Column 1 - ID
         TreeTableColumn<String, String> formColumn = new TreeTableColumn<>("Form");
         formColumn.setPrefWidth(320);
         formColumn.setCellValueFactory(new Callback<CellDataFeatures<String, String>, ObservableValue<String>>() {
@@ -111,15 +130,16 @@ public class ServiceRequestStatus {
             }
         });
         serviceRequestTable.getColumns().add(formColumn);
-        //Column 2 - X Coordinate
+        //Column 2 - Location
         TreeTableColumn<Node, Number> locationColumn = new TreeTableColumn<>("Location");
         locationColumn.setPrefWidth(150);
         serviceRequestTable.getColumns().add(locationColumn);
-        //Column 3 - Y Coordinate
+        //Column 3 - Assignee
         TreeTableColumn<String, Number> assigneeColumn = new TreeTableColumn<>("Assignee");
         assigneeColumn.setPrefWidth(150);
         serviceRequestTable.getColumns().add(assigneeColumn);
 
+        addToTable("Security Service", securityServiceInProgress, securityServiceCompleted, sanitationServicesCancelled);
     }
 
     @FXML

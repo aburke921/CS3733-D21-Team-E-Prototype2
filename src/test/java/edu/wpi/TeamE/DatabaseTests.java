@@ -621,8 +621,8 @@ public class DatabaseTests {
 	public void testAddSanitationRequest(){
 		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 
-		connection.addUserAccount("test@email.com", "testPassword", "visitor", "Testing", "Queen");
-		connection.addUserAccount("test@gmail.com", "testPass", "visitor", "Nubia", "Shukla");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 
 		connection.addSanitationRequest(10000, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
 		connection.addExternalPatientRequest(10001, "BW", "severe", "123", "15 mins", "headache");
@@ -647,5 +647,15 @@ public class DatabaseTests {
 
 		connection.addSecurityRequest(10000, "test", "low", "Low");
 	}
+
+	@Test
+	@DisplayName("testAddSpecialUserType")
+	public void testAddSpecialUserType(){
+		connection.addSpecialUserType("test1@gmail.com", "testPassword", "patient", "patientFirstName", "patientLastName");
+		connection.addSpecialUserType("test2@gmail.com", "testPassword1", "admin", "adminFirstName", "adminLastName");
+		connection.addSpecialUserType("test3@gmail.com", "testPassword2", "doctor", "doctorFirstName", "doctorLastName");
+
+	}
+
 
 }

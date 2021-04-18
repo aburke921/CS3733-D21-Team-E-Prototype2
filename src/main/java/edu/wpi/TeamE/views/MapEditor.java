@@ -188,9 +188,9 @@ public class MapEditor {
             table.getRoot().getChildren().remove(0, array.size() - 1);
         }
         for (int i = 0; i < array.size(); i++) {
-            edu.wpi.TeamE.algorithms.pathfinding.Node s = array.get(i);
+            Node s = array.get(i);
             //int n = array.get(i).getX();
-            final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node> node = new TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node>(s);
+            final TreeItem<Node> node = new TreeItem<Node>(s);
             table.getRoot().getChildren().add(node);
         }
     }

@@ -16,6 +16,8 @@ public class Path {
     //path end is a pointer to the end of the list
     private Node pathEnd;
 
+    private double length = 0;
+
     /**
      * construct an empty list
      */
@@ -35,6 +37,7 @@ public class Path {
     public boolean isEmpty(){
         return pathHead == pathEnd;
     }
+
     /**
      * @return the first node in list
      */
@@ -50,6 +53,9 @@ public class Path {
         Node n = _n.copy();
         //System.out.println("adding "+n.get("id")+", "+n);
         //set the end of the path to point at n
+        if (!isEmpty()) { //If it's empty, then there is no distance to calculate
+            length += pathEnd.dist(n);
+        }
         pathEnd.setNext(n);
         pathEnd = n;
     }
@@ -60,6 +66,7 @@ public class Path {
      */
     public void add(Path p) {
         if(!p.isEmpty()) {
+            length += p.getPathLength() + pathEnd.dist(p.peek());
             pathEnd.setNext(p.peek());
             pathEnd = p.pathEnd;
         }
@@ -222,5 +229,13 @@ public class Path {
     private boolean equals(boolean a, boolean b){
         //double implication
         return (!a||b)&&(a||!b);
+    }
+
+    /**
+     * Gets the length of the path for Time Estimates
+     * @return The total length of the path
+     */
+    public double getPathLength(){
+        return length;
     }
 }

@@ -1,5 +1,6 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
+import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.constraints.*;
 
@@ -44,5 +45,9 @@ public class SearchContext {
 
     public void refresh(){
         search.refreshGraph();
+    }
+
+    public Node getNode(String id){
+        return search.getNode(id);
     }
 }

@@ -9,6 +9,9 @@ import edu.wpi.TeamE.databases.makeConnection;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -30,6 +33,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.function.UnaryOperator;
@@ -66,8 +70,6 @@ public class ServiceRequestStatus {
         TreeItem<String> completed = new TreeItem<>("Completed");
         TreeItem<String> cancelled = new TreeItem<>("Cancelled");
 
-        serviceRequestTable.setRoot(inProgress);
-
         //Setting up sub-root nodes
         TreeItem<String> externalPatientCompleted = new TreeItem<>("External Patient Form");
         TreeItem<String> floralFormCompleted = new TreeItem<>("Floral Form");
@@ -89,6 +91,12 @@ public class ServiceRequestStatus {
         //Column 1 - Location
         TreeTableColumn<String, String> formColumn = new TreeTableColumn<>("Form");
         formColumn.setPrefWidth(320);
+        formColumn.setCellValueFactory(new Callback<CellDataFeatures<String, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(CellDataFeatures<String, String> param) {
+                return new SimpleStringProperty(param.getValue().getValue())
+            }
+        });
         serviceRequestTable.getColumns().add(formColumn);
         //Column 2 - X Coordinate
         TreeTableColumn<Node, Number> locationColumn = new TreeTableColumn<>("Location");

@@ -273,7 +273,7 @@ public class makeConnection {
 					"flowerType    varchar(31), " +
 					"flowerAmount  int, " +
 					"vaseType      varchar(31), " +
-					"message       varchar(255), " +
+					"message       varchar(5000), " +
 					"Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')), " +
 					"Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)),\n" +
 					"Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None')))";

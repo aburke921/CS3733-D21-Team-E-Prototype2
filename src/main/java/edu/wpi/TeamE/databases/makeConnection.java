@@ -122,8 +122,7 @@ public class makeConnection {
 		try {
 			Statement stmt = this.connection.createStatement();
 			stmt.execute(
-					"Create Table node"
-							+ "("
+					"Create Table node( "
 							+ "    nodeID    varchar(31) Primary Key,"
 							+ "    xCoord    int Not Null,"
 							+ "    yCoord    int Not Null,"
@@ -132,7 +131,10 @@ public class makeConnection {
 							+ "    nodeType  varchar(10),"
 							+ "    longName  varchar(100),"
 							+ "    shortName varchar(100),"
-							+ "    Unique (xCoord, yCoord, floor)"
+							+ "    Unique (xCoord, yCoord, floor),"
+							+ "    Constraint floorLimit Check (userType In ('1', '2', '3', 'L1', 'L2')), "
+							+ "    Constraint buildingLimit Check (userType In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')), "
+							+ "    Constraint nodeTypeLimit Check (userType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', 'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH'))"
 							+ ")");
 
 		} catch (SQLException e) {
@@ -338,16 +340,28 @@ public class makeConnection {
 		}
 	}
 
+	/**
+	 * Uses executes the SQL statements required to create a sanitationRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user is sending the request to.
+	 * - signature: this the signature (name in print) of the user who is filling out the request
+	 * - description: this is any description the user who is filling out the request wants to provide for the person who will be completing the request
+	 * - sanitationType: this is the type of sanitation/cleanup the user is requesting to be delt with. The valid options are: "Urine Cleanup",
+	 *  "Feces Cleanup", "Preparation Cleanup", "Trash Removal"
+	 * - urgency: this is how urgent the request is and helpful for prioritizing. The valid options are: "Low", "Medium", "High", "Critical"
+	 */
 	public void createSanitationTable(){
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table sanitationRequest(\n" +
-					"    userID int Primary Key References requests On Delete Cascade,\n" +
+					"    requestID int Primary Key References requests On Delete Cascade,\n" +
 					"    roomID varchar(31) not null References node On Delete Cascade,\n" +
 					"    signature varchar(31) NOT NULL,\n" +
 					"    description varchar(5000),\n" +
 					"    sanitationType varchar(31),\n" +
 					"    urgency varchar(31) NOT NULL,\n" +
+					"    Constraint urgencyLimit Check (sanitationType In ('Low', 'Medium', 'High', 'Critical'))," +
 					"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))\n" +
 					")";
 			stmt.execute(sqlQuery);
@@ -357,6 +371,16 @@ public class makeConnection {
 		}
 	}
 
+	/**
+	 * Uses executes the SQL statements required to create a sanitationRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - hospitalLocation: this is the location of the hospital that the user/first responders are going to.
+	 * - severity: this is how sever the patient is who the user/first responders are transporting.
+	 * - patientID: this is the ID of the patient that is being transported.
+	 * - ETA: this is the estimated time the patient will arrive.
+	 * - description: this is a detailed description of request that generally includes what happened to the patient and their current situation.
+	 */
 	public void createExtTransportTable() {
 		try {
 			Statement stmt = connection.createStatement();
@@ -376,7 +400,7 @@ public class makeConnection {
 	}
 
 	/**
-	 * Deletes node,hasEdge, userAccount, requests, and floralRequests tables.
+	 * Deletes node,hasEdge, userAccount, requests, floralRequests, sanitationRequest and extTransport tables.
 	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
 	 * try/catch phrase set up in case the tables all ready do not exist
 	 */
@@ -401,6 +425,7 @@ public class makeConnection {
 			System.err.println("deleteAllTables() not working");
 		}
 	}
+
 
 	public void deleteEdgeTable() {
 
@@ -524,6 +549,11 @@ public class makeConnection {
 		}
 	}
 
+	/**
+	 * Acts as a trigger and calculates the length between two nodes that form an edge and add the value to the edge table
+	 * @param startNode the node ID for the starting node in the edge
+	 * @param endNode the node ID for the ending node in the edge
+	 */
 	public void addLength(String startNode, String endNode) {
 
 		String sqlQuery;

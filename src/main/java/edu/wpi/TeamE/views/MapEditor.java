@@ -108,10 +108,6 @@ public class MapEditor {
         }
     }
 
-    /**
-     * brings user to the help page
-     * @param e
-     */
     @FXML
     public void getHelpDefault(ActionEvent e) {
     }
@@ -122,7 +118,7 @@ public class MapEditor {
      * add each one to the treeTable
      * @param table this is the table being prepared with the nodes
      */
-    public void prepareNodes( TreeTableView<Node> table) {
+    public void prepareNodes(TreeTableView<Node> table) {
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<Node> array = connection.getAllNodes();
         if (table.getRoot() == null) {
@@ -181,16 +177,16 @@ public class MapEditor {
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
             table.getColumns().add(column8);
         }
-        if(table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
-            table.getRoot().getChildren().remove(0, array.size()-1);
+        if (table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
+            table.getRoot().getChildren().remove(0, array.size() - 1);
         }
-            for (int i = 0; i < array.size(); i++) {
-                Node s = array.get(i);
-                //int n = array.get(i).getX();
-                final TreeItem<Node> node = new TreeItem<Node>(s);
-                table.getRoot().getChildren().add(node);
-            }
+        for (int i = 0; i < array.size(); i++) {
+            Node s = array.get(i);
+            //int n = array.get(i).getX();
+            final TreeItem<Node> node = new TreeItem<Node>(s);
+            table.getRoot().getChildren().add(node);
         }
+    }
 
     /**
      * Runs editNode fcn when edit node button is pressed
@@ -243,13 +239,46 @@ public class MapEditor {
                 yVal = Integer.parseInt(yCordInput.getText());
                 yVal = Integer.valueOf(yVal);
             }
-                makeConnection connection = makeConnection.makeConnection();
-                connection.modifyNode(nodeID, xVal, yVal, floor, building, type, longName, shortName);
+            makeConnection connection = makeConnection.makeConnection();
+            connection.modifyNode(nodeID, xVal, yVal, floor, building, type, longName, shortName);
+        }
+    }
+
+    /**
+     * Autogenerate NodeIDs
+     * Elevators need to have the format `Elevator X xxxxx`
+     * @param type The type of Node this is
+     * @param floor The floor this Node is on
+     * @param longName The longName of the node
+     * @return The NodeID of the given Node
+     */
+    public String genNodeID(String type, String floor, String longName){
+        StringBuilder SB = new StringBuilder("e");
+        SB.append(type);
+
+        if (type.equalsIgnoreCase("ELEV")) {
+            SB.append("00");
+            SB.append(longName.charAt(9));
+            //Elevator names need to start with 'Elevator X xxxxx"
+        } else {
+            makeConnection connection = makeConnection.makeConnection();
+            int instance = connection.countNodeTypeOnFloor("e", floor, type) + 1;
+            SB.append(String.format("%03d", instance));
+        }
+
+        try{
+            int num = Integer.parseInt(floor);
+            SB.append("0").append(num);
+        } catch (NumberFormatException e) {
+            if (floor.equalsIgnoreCase("G") || floor.equalsIgnoreCase("GG")){
+                SB.append("GG");
+            } else {
+                SB.append(floor);
             }
         }
 
-
-
+        return SB.toString();
+    }
 
     /**
      * retrieves all the inputted info from the user, creates a new node and adds it to database

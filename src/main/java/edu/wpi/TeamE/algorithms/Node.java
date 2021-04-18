@@ -1,6 +1,11 @@
 package edu.wpi.TeamE.algorithms;
 
-import java.util.*;
+import edu.wpi.TeamE.databases.makeConnection;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Node Class, lots of specific Node implementation stuff
@@ -70,7 +75,6 @@ public class Node implements Comparable<Node>, Iterable<Node> {
             return floorMap.get(floor) * magicNumber;
         }
     }
-
 
     /**
      * @param info String representation of what info is requested

@@ -203,7 +203,7 @@ public class makeConnection {
 
 	}
 
-	public void insertUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
+	public void addUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
 		String insertUser = "Insert into userAccount Values (?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {

@@ -122,10 +122,9 @@ public class MapEditor {
      * When the table is empty (aka no root), create the proper columns
      * Go through the array of Nodes and create a treeItem for each one,
      * add each one to the treeTable
-     *
      * @param table this is the table being prepared with the nodes
      */
-    public void prepareNodes( TreeTableView<Node> table) {
+    public void prepareNodes(TreeTableView<Node> table) {
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<Node> array = connection.getAllNodes();
         if (table.getRoot() == null) {
@@ -197,7 +196,6 @@ public class MapEditor {
 
     /**
      * Runs editNode fcn when edit node button is pressed
-     *
      * @param e
      */
     @FXML
@@ -210,7 +208,6 @@ public class MapEditor {
      * looks at each field that the user could input into, whichever ones are not empty
      * the information is extracted and the node that the user selected is edited using
      * database's edit node fcn
-     *
      * @param table this is the table of nodes that is having a node edited
      */
     public void editNode(TreeTableView<Node> table) {
@@ -253,11 +250,45 @@ public class MapEditor {
         }
     }
 
+    /**
+     * Autogenerate NodeIDs
+     * Elevators need to have the format `Elevator X xxxxx`
+     * @param type The type of Node this is
+     * @param floor The floor this Node is on
+     * @param longName The longName of the node
+     * @return The NodeID of the given Node
+     */
+    public String genNodeID(String type, String floor, String longName){
+        StringBuilder SB = new StringBuilder("e");
+        SB.append(type);
+
+        if (type.equalsIgnoreCase("ELEV")) {
+            SB.append("00");
+            SB.append(longName.charAt(9));
+            //Elevator names need to start with 'Elevator X xxxxx"
+        } else {
+            makeConnection connection = makeConnection.makeConnection();
+            int instance = connection.countNodeTypeOnFloor("e", floor, type) + 1;
+            SB.append(String.format("%03d", instance));
+        }
+
+        try{
+            int num = Integer.parseInt(floor);
+            SB.append("0").append(num);
+        } catch (NumberFormatException e) {
+            if (floor.equalsIgnoreCase("G") || floor.equalsIgnoreCase("GG")){
+                SB.append("GG");
+            } else {
+                SB.append(floor);
+            }
+        }
+
+        return SB.toString();
+    }
 
     /**
      * retrieves all the inputted info from the user, creates a new node and adds it to database
      * using database's addNode fcn
-     *
      * @return
      */
     public int addNode() {
@@ -271,7 +302,6 @@ public class MapEditor {
 
     /**
      * calls the addNode fcn when the add node button is pressed
-     *
      * @param e
      */
     @FXML
@@ -281,7 +311,6 @@ public class MapEditor {
 
     /**
      * retrieves the ID of the selected item in the table, passes that into deleteNode fcn from database
-     *
      * @param table
      */
     public int deleteNode(TreeTableView<Node> table) {
@@ -302,7 +331,6 @@ public class MapEditor {
 
     /**
      * calls the deleteNode fcn when the delete button is clicked
-     *
      * @param e
      */
     @FXML
@@ -313,7 +341,6 @@ public class MapEditor {
     /**
      * when refresh button is clicked, retrieves the arrayList of Nodes,
      * calls the function to display data using the array (prepareNodes)
-     *
      * @param actionEvent
      */
     @FXML

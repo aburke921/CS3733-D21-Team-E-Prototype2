@@ -434,7 +434,7 @@ GHALL01103,1628,2070,3,Shapiro,HALL,Hallway Node 11 Floor 3,Hall
 GHALL01303,1580,2006,3,Shapiro,HALL,Hallway Node 13 Floor 3,Hall
 GREST01203,1628,2052,3,Shapiro,REST,Restroom Node 12 Floor 3,Restroom Shapiro Floor 3
 GSERV01603,1580,1858,3,Shapiro,SERV,The Porch Node 16 Floor 3,The Porch
-GSTAI00903,1685,2052,3,Shapiro,STAI,Staircase Node 9 Floor 3,Floor 3 Stairs
+GSTAI00903,1685,2052,3,Shapiro,STAI,Staircase Node 9 Floor 3,Floor 3 Stairs 
 GELEV00QL1,1637,2116,L1,Shapiro,ELEV,Elevator Q MapNode 7 Floor L1,Elevator Q L1
 GEXIT001L1,1702,2260,L1,Shapiro,EXIT,Fenwood Road Exit Floor L1,Fenwood Road EntranceExit L1
 GHALL002L1,1702,2167,L1,Shapiro,HALL,Hallway MapNode 2 Floor L1,Hall

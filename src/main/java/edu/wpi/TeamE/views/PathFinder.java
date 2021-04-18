@@ -3,7 +3,6 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -20,24 +19,24 @@ import edu.wpi.TeamE.algorithms.pathfinding.*;
 import edu.wpi.TeamE.databases.*;
 
 import edu.wpi.TeamE.App;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class PathFinder {
@@ -64,20 +63,21 @@ public class PathFinder {
     @FXML // fx:id="endLocationList"
     private JFXComboBox<String> endLocationList; // Value injected by FXMLLoader
 
-    @FXML // fx:id="imageView"
-    private ImageView imageView;
+    //@FXML // fx:id="imageView"
+    private ImageView imageView = new ImageView();
 
     @FXML // fx:id="pane"
-    private Pane pane;
+    private Pane pane = new Pane();;
 
-    @FXML // fx:id="floorChanger"
-    private JFXButton floorChanger; // Value injected by FXMLLoader
+    @FXML // fx:id="scrollPane"
+    private BorderPane rootBorderPane;
+
+    @FXML // fx:id="zoomSlider"
+    private Slider zoomSlider;
 
     /*
      * Additional Variables
      */
-
-    double scale = (double) 3.45528; //how much to scale the map by
 
     private String startNodeID; // selected starting value's ID
 
@@ -94,6 +94,9 @@ public class PathFinder {
     private int currentFloorNamesIndex = 4; //start # should be init floor index + 1 (variable is actually always one beyond current floor)
 
     ObservableList<String> longNameArrayList;
+
+    double radius = 20;
+    double strokeWidth = 5;
 
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
@@ -255,8 +258,8 @@ public class PathFinder {
             Node node = nodeIteratorThisFloorOnly.next();
 
             //Resize the coordinates to match the resized image
-            double xCoord = (double) node.getX() / scale;
-            double yCoord = (double) node.getY() / scale;
+            double xCoord = (double) node.getX();
+            double yCoord = (double) node.getY();
 
             if (firstNode == 1) { //if current node is the starting node
                 firstNode = 0;
@@ -266,13 +269,13 @@ public class PathFinder {
                 if (node.get("id").equals(startNodeID)) { // start node of entire path
 
                     //place a dot on the location
-                    Circle circle = new Circle(xCoord, yCoord, 5, Color.GREEN);
+                    Circle circle = new Circle(xCoord, yCoord, radius, Color.GREEN);
                     g.getChildren().add(circle);
 
                 } else { // start node of just this floor
 
                     //place a red dot on the location
-                    Circle circle = new Circle(xCoord, yCoord, 5, Color.RED);
+                    Circle circle = new Circle(xCoord, yCoord, radius, Color.RED);
                     g.getChildren().add(circle);
                 }
 
@@ -283,14 +286,15 @@ public class PathFinder {
 
                 if (node.get("id").equals(endNodeID)) { // end node of entire path
                     //place a dot on the location
-                    circle = new Circle(xCoord, yCoord, 5, Color.BLACK);
+                    circle = new Circle(xCoord, yCoord, radius, Color.BLACK);
                 } else { // end node of just this floor
                     //place a dot on the location
-                    circle = new Circle(xCoord, yCoord, 5, Color.RED);
+                    circle = new Circle(xCoord, yCoord, radius, Color.RED);
                 }
 
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                line.setStrokeWidth(strokeWidth);
                 line.setStroke(Color.RED);
 
                 g.getChildren().addAll(circle, line);
@@ -298,6 +302,7 @@ public class PathFinder {
             else {
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                line.setStrokeWidth(strokeWidth);
                 line.setStroke(Color.RED);
 
                 g.getChildren().add(line);
@@ -371,16 +376,14 @@ public class PathFinder {
         //todo remove when all sizes are same
         //set Stage size
         Stage primaryStage = App.getPrimaryStage();
-        primaryStage.setWidth(1920);
-        primaryStage.setHeight(1080);
+
+        primaryStage.setWidth(1920/2);
+        primaryStage.setHeight(1080/2);
 
         System.out.println("Begin PathFinder Init");
 
         assert startLocationList != null : "fx:id=\"startLocationList\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert endLocationList != null : "fx:id=\"endLocationList\" was not injected: check your FXML file 'PathFinder.fxml'.";
-
-        //set default/initial floor
-        setCurrentFloor("1");
 
         //DB connection
         makeConnection connection = makeConnection.makeConnection();
@@ -388,7 +391,7 @@ public class PathFinder {
         //Get longNames & IDs
         System.out.print("Begin Adding to Dropdown List... ");
         longNameArrayList = connection.getAllNodeLongNames();
-        nodeIDArrayList = connection.getListofNodeIDS();
+        nodeIDArrayList = connection.getListOfNodeIDS();
 
         //add ObservableLists to dropdowns
         startLocationList.setItems(longNameArrayList);
@@ -397,6 +400,31 @@ public class PathFinder {
 
         new AutoCompleteComboBoxListener<>(startLocationList); //todo breaks the index lookup and ID correlation
         new AutoCompleteComboBoxListener<>(endLocationList); //todo
+
+        //Set up zoomable and pannable panes
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(pane);
+        StackPane stackPane = new StackPane(imageView, borderPane);
+        ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
+
+        //make scroll pane pannable
+        scrollPane.setPannable(true);
+
+        //set default/initial floor for map
+        Image image = new Image("edu/wpi/TeamE/maps/1.png");
+        imageView.setImage(image);
+
+        //get rid of side scroll bars
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        //bind the zoom slider to the map
+        stackPane.scaleXProperty().bind(zoomSlider.valueProperty());
+        stackPane.scaleYProperty().bind(zoomSlider.valueProperty());
+
+        rootBorderPane.setCenter(scrollPane);
+        rootBorderPane.setPrefHeight(492);
+        rootBorderPane.setPrefWidth(960);
 
         System.out.println("Finish PathFinder Init.");
     }

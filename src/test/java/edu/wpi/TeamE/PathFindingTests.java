@@ -3,7 +3,10 @@ package edu.wpi.TeamE;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.Searcher;
+import static org.junit.jupiter.api.Assertions.*;
+
 import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.TeamE.views.MapEditor;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,7 +28,6 @@ public class PathFindingTests {
         File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
         File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
         try {
-            // connection.deleteAllTables();
             con.createTables();
             con.populateTable("node", nodes);
             con.populateTable("hasEdge", edges);
@@ -284,6 +286,19 @@ public class PathFindingTests {
         double angle = Double.parseDouble(words[words.length - 1]);
         assertEquals(63.4349, angle, 0.01);
 
+    }
+
+    @Test
+    public void testAutoGenIDs() {
+        MapEditor ed = new MapEditor();
+        assertEquals("eELEV00A01", ed.genNodeID("ELEV","1", "Elevator A Floor 1"));
+        assertEquals("ePARK02601", ed.genNodeID("PARK","1", "New Parking Sport Floor 1"));
+        assertEquals("eDEPT00102", ed.genNodeID("DEPT","2", "New Department Floor 2"));
+        assertEquals("eSERV001GG", ed.genNodeID("SERV","G", "New Service Floor G"));
+        assertEquals("eSERV001GG", ed.genNodeID("SERV","GG", "New Service Floor GG")); //Just in case of error on entry
+        assertEquals("eRETL001L2", ed.genNodeID("RETL","L2", "New Retail Floor L2"));
+        assertEquals("eLABS001L1", ed.genNodeID("LABS","L1", "New Labs Floor L1"));
+        assertEquals("eWALK00103", ed.genNodeID("WALK","3", "New Walkway Floor 3"));
     }
     /**
      * Manual test - useful for UI, please do not delete w/o notice.

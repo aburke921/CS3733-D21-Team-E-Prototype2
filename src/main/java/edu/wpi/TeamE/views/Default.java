@@ -5,10 +5,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 
 public class Default {
+
+    @FXML // fx:id="imageView"
+    private ImageView imageView;
 
     /**
      * Move to Service Request page
@@ -54,6 +59,11 @@ public class Default {
 
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {
+    }
+
+    public void initialize() {
+        Image image = new Image("edu/wpi/TeamE/logo.png");
+        imageView.setImage(image);
     }
 
     /**

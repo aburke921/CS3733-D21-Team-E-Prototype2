@@ -50,7 +50,7 @@
                            <children>
                               <JFXComboBox fx:id="departmentInput" prefHeight="27.0" prefWidth="295.0" promptText="Department">
                                  <VBox.margin>
-                                    <Insets bottom="10.0" top="20.0" />
+                                    <Insets bottom="10.0" left="5.0" top="20.0" />
                                  </VBox.margin>
                                  <items>
                                     <FXCollections fx:factory="observableArrayList">
@@ -62,7 +62,7 @@
                               </JFXComboBox>
                               <JFXComboBox fx:id="typeInput" prefHeight="27.0" prefWidth="291.0" promptText="Location Type">
                                  <VBox.margin>
-                                    <Insets bottom="10.0" top="20.0" />
+                                    <Insets bottom="10.0" left="5.0" top="20.0" />
                                  </VBox.margin>
                                  <items>
                                     <FXCollections fx:factory="observableArrayList">
@@ -74,18 +74,18 @@
                               </JFXComboBox>
                               <JFXTextField fx:id="numInput" prefHeight="27.0" prefWidth="289.0" promptText="Location #">
                                  <VBox.margin>
-                                    <Insets bottom="10.0" top="20.0" />
+                                    <Insets bottom="10.0" left="5.0" top="20.0" />
                                  </VBox.margin>
                               </JFXTextField>
                               <JFXComboBox fx:id="ServiceTypeinput" prefHeight="27.0" prefWidth="295.0" promptText="Service Type">
 
                                  <VBox.margin>
-                                    <Insets top="20.0" />
+                                    <Insets left="5.0" top="20.0" />
                                  </VBox.margin>
                               </JFXComboBox>
                               <JFXTextField fx:id="assignedIndividual" prefHeight="27.0" prefWidth="289.0" promptText="Personnel Name">
                                  <VBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets left="5.0" top="30.0" />
                                  </VBox.margin>
                               </JFXTextField>
                            </children>
@@ -96,7 +96,27 @@
                             <children>
                                 <VBox prefHeight="321.0" prefWidth="259.0">
                                     <children>
-                              <JFXTextArea fx:id="detailedInstructionsInput" prefHeight="141.0" prefWidth="259.0" promptText="Detailed Description" />
+                              <JFXTextArea fx:id="detailedInstructionsInput" prefHeight="141.0" prefWidth="259.0" promptText="Detailed Description">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin></JFXTextArea>
+                              <JFXComboBox fx:id="Severity" prefHeight="27.0" prefWidth="295.0" promptText="Severity">
+                                 <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                       <String fx:id="ambulance1" fx:value="Ambulance" />
+                                       <String fx:id="helicopter1" fx:value="Helicopter" />
+                                       <String fx:id="plane1" fx:value="Plane" />
+                                    </FXCollections>
+                                 </items>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </JFXComboBox>
+                              <JFXTextField fx:id="Signature" prefHeight="27.0" prefWidth="289.0" promptText="Signature">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </JFXTextField>
                               <GridPane prefHeight="33.0" prefWidth="244.0">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />
@@ -110,7 +130,7 @@
                                     <JFXButton fx:id="submit" onAction="#saveData" styleClass="submit-button" text="Submit" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
                                  </children>
                                  <VBox.margin>
-                                    <Insets top="130.0" />
+                                    <Insets top="30.0" />
                                  </VBox.margin>
                               </GridPane>
                                     </children>

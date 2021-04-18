@@ -633,7 +633,7 @@ public class DatabaseTests {
 	public void testAddMedicineRequest(){
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 
-		connection.addUserAccount("test@gmail.com", "testPass", "visitor", "Nubia", "Shukla");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 
 		connection.addMedicineRequest(10000, "test", "drugs", 2, "100ml", "take once a day", "Nupur");
 	}
@@ -643,7 +643,7 @@ public class DatabaseTests {
 	public void testAddExternalPatientRequest(){
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 
-		connection.addUserAccount("test@gmail.com", "testPass", "visitor", "Nubia", "Shukla");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 
 		connection.addSecurityRequest(10000, "test", "low", "Low");
 	}

@@ -20,7 +20,7 @@ public class App extends Application {
 	}
 
 
-	/**@Override
+	@Override
 	public void init() {
 		System.out.println("STARTING UP!!!");
 		makeConnection connection = makeConnection.makeConnection();
@@ -30,28 +30,29 @@ public class App extends Application {
 		File edges = new File("bwEedges.csv");
 
 		try {
-			connection.deleteAllTables();
+			//connection.deleteAllTables();
 			connection.createTables();
 			connection.populateTable("node", nodes);
 			connection.populateTable("hasEdge", edges);
 			System.out.println("Tables were created");
 		} catch (Exception e) {
 			System.out.println("Tables already there");
-			connection.createTables();
+			/*connection.createTables();
 			connection.populateTable("node", nodes);
-			connection.populateTable("hasEdge", edges);
+			connection.populateTable("hasEdge", edges);*/
 			System.out.println("Tables were created and populated");
 		}
-	}**/
+	}
 
 
 	@Override
 	public void start(Stage primaryStage) {
 		App.primaryStage = primaryStage;
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("fxml/Default.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("fxml/Login.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
+			primaryStage.setFullScreen(true);
 			primaryStage.show();
 		} catch (IOException e) {
 			e.printStackTrace();

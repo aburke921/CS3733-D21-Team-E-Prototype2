@@ -1,16 +1,19 @@
 package edu.wpi.TeamE.views;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
@@ -42,6 +45,8 @@ public class MapEditor {
     @FXML private JFXComboBox buildingInput;
     @FXML private JFXTextField longNameInput;
     @FXML private JFXTextField shortNameInput;
+    @FXML private StackPane stackPane;
+    @FXML private FlowPane flowPane;
 
     /**
      * when page loaded, displays the data
@@ -297,8 +302,12 @@ public class MapEditor {
         int xVal = Integer.parseInt(xCordInput.getText());
         int yVal = Integer.parseInt(yCordInput.getText());
         i = connection.addNode(idInput.getText(), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
+        if (i == 0) {
+            errorPopup("Cannot add same node twice");
+        }
         return i;
     }
+
 
     /**
      * calls the addNode fcn when the add node button is pressed
@@ -389,6 +398,24 @@ public class MapEditor {
         File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
+    }
+
+    @FXML
+    private void errorPopup(String errorMessage) {
+        JFXDialogLayout error = new JFXDialogLayout();
+        error.setHeading(new Text("Error!"));
+        error.setBody(new Text(errorMessage));
+        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Okay");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        error.setActions(okay);
+        dialog.show();
     }
 
 }

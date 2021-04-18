@@ -168,13 +168,13 @@ Create Table medDelivery(
 );
 
 
-
 Create Table extTransport(
     requestID int Primary Key References requests On Delete Cascade,
-
-    hospitalLocation varchar(100) not null,
+    hospitalLocation varchar(100) NOT NULL,
+    severity varchar(30) NOT NULL,
+    patientID int NOT NULL,
     ETA varchar(100),
-
+    description varchar(5000)
 );
 
 

@@ -2,24 +2,23 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXSlider?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.PathFinder">
+<FlowPane fx:id="flowPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.PathFinder">
     <children>
-        <VBox alignment="TOP_CENTER" prefHeight="1101.0" prefWidth="1950.0">
+        <VBox alignment="TOP_CENTER" prefHeight="540.0" prefWidth="960.0">
             <children>
-                <HBox prefHeight="38.0" prefWidth="1160.0">
+                <HBox prefHeight="38.0" prefWidth="960.0">
                     <children>
-                        <FlowPane prefHeight="38.0" prefWidth="1720.0" style="-fx-background-color: -fx--primary;">
+                        <FlowPane prefHeight="38.0" prefWidth="760.0" style="-fx-background-color: -fx--primary;">
                             <children>
                                 <Label prefHeight="38.0" prefWidth="486.0" text="Path Finder" textFill="WHITE">
                                     <font>
@@ -40,12 +39,12 @@
                 </HBox>
                 <HBox prefHeight="58.0" prefWidth="600.0">
                     <children>
-                  <JFXComboBox fx:id="startLocationList" onAction="#selectStartNode" prefHeight="25.0" prefWidth="233.0" promptText="Start Location">
+                  <JFXComboBox fx:id="startLocationComboBox" onAction="#selectStartNode" prefHeight="25.0" prefWidth="233.0" promptText="Start Location">
                      <HBox.margin>
                         <Insets left="20.0" top="10.0" />
                      </HBox.margin>
                   </JFXComboBox>
-                  <JFXComboBox fx:id="endLocationList" onAction="#selectEndNode" prefHeight="25.0" prefWidth="233.0" promptText="End Location">
+                  <JFXComboBox fx:id="endLocationComboBox" onAction="#selectEndNode" prefHeight="25.0" prefWidth="233.0" promptText="End Location">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
@@ -55,20 +54,28 @@
                         <Insets left="15.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
+                  <JFXButton fx:id="floorChanger" onAction="#nextFloor" styleClass="submit-button" text="Change Floor">
+                     <HBox.margin>
+                        <Insets left="15.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="1.0" min="0.2" value="0.2">
+                     <HBox.margin>
+                        <Insets left="40.0" top="20.0" />
+                     </HBox.margin>
+                  </JFXSlider>
+                  <JFXButton fx:id="backButton" onAction="#toDefault" styleClass="submit-button" text="Back">
+                     <HBox.margin>
+                        <Insets left="15.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
                     </children>
                 </HBox>
-            <StackPane prefHeight="984.0" prefWidth="1920.0">
-               <children>
-                  <ImageView fx:id="imageView" fitHeight="984.0" fitWidth="1447.0" pickOnBounds="true" preserveRatio="true" />
-                  <Pane prefHeight="984.0" prefWidth="1447.0">
-                     <children>
-                        <Pane fx:id="pane" layoutX="252.0" layoutY="4.0" prefHeight="984.0" prefWidth="1447.0" />
-                        <Button fx:id="backButton" layoutX="20.0" layoutY="939.0" mnemonicParsing="false" onAction="#toDefault" prefHeight="22.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" />
-                        <JFXButton fx:id="floorChanger" layoutX="20.0" onAction="#nextFloor" styleClass="submit-button" text="Change Floor" />
-                     </children>
-                  </Pane>
-               </children>
-            </StackPane>
+            <BorderPane fx:id="rootBorderPane" prefHeight="492.0" prefWidth="960.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </BorderPane>
             </children>
         </VBox>
     </children>

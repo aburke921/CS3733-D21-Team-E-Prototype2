@@ -173,15 +173,18 @@ Create Table securityServ
 	requestID int Primary Key References requests On Delete Cascade,
 	roomID    varchar(31) Not Null References node On Delete Cascade,
 	level     varchar(31),
-	urgency   varchar(31) Not Null
+	urgency   varchar(31) Not Null,
+	Constraint urgencyTypeLimit Check (urgency In
+	                                    ('Low', 'Medium', 'High', 'Critical'))
 );
 
 Create Table medDelivery
 (
 	requestID           int Primary Key References requests On Delete Cascade,
 	roomID              varchar(31) Not Null References node On Delete Cascade,
-	medacineName        varchar(31) Not Null,
+	medicineName        varchar(31) Not Null,
 	quantity            int         Not Null,
+	dosage              varchar(31) Not Null,
 	specialInstructions varchar(5000),
 	signature           varchar(31) Not Null
 );

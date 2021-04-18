@@ -99,6 +99,8 @@ public class makeConnection {
 		createFloralRequestsTable();
 		createExtTransportTable();
 		createSanitationTable();
+		createMedDeliveryTable();
+		createSecurityServTable();
 	}
 
 	/**
@@ -373,6 +375,62 @@ public class makeConnection {
 		}
 	}
 
+	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants the medecine delivered to.
+	 * - medicineName: this is the drug that the user is ordering/requesting
+	 * - quantity: the is the supply or the number of pills ordered
+	 * - dosage: this is the mg or ml quantity for a medication
+	 * - specialInstructions: this is any special details or instructions the user wants to give to who ever is processing the request.
+	 * - signature: this the signature (name in print) of the user who is filling out the request
+	 */
+	public void createMedDeliveryTable() {
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table medDelivery (\n" +
+					"requestID  int Primary Key References requests On Delete Cascade," +
+					"roomID     varchar(31) Not Null References node On Delete Cascade," +
+					"medicineName        varchar(31) Not Null," +
+					"quantity            int         Not Null," +
+					"dosage              varchar(31) Not Null," +
+					"specialInstructions varchar(5000)," +
+					"signature           varchar(31) Not Null" + ")";
+
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating extTransport table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - level: this is the security level that is needed
+	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled
+	 */
+	public void createSecurityServTable() {
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table securityServ (\n" +
+					"requestID  int Primary Key References requests On Delete Cascade," +
+					"roomID     varchar(31) Not Null References node On Delete Cascade," +
+					"level     varchar(31)," +
+					"urgency   varchar(31) Not Null," +
+					"Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical'))\n" +
+					")";
+
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			 e.printStackTrace();
+			System.err.println("error creating securityServ table");
+		}
+	}
+
 
 
 
@@ -387,6 +445,8 @@ public class makeConnection {
 
 		try {
 			Statement stmt = this.connection.createStatement();
+			stmt.execute("Drop Table securityServ");
+			stmt.execute("Drop Table medDelivery");
 			stmt.execute("Drop Table exttransport");
 			stmt.execute("Drop Table sanitationrequest");
 			stmt.execute("Drop Table floralrequests");
@@ -899,14 +959,14 @@ public class makeConnection {
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
-			ResultSet rset = prepState.executeQuery();
+			prepState.execute();
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addFloralRequest()");
 		}
 
 
-		String insertFloralRequest = "Insert Into floralrequests\n" +
+		String insertFloralRequest = "Insert Into floralRequests\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests), ?, ?, ?, ?, ?, ?)";
 
@@ -918,7 +978,7 @@ public class makeConnection {
 			prepState.setString(5, vaseType);
 			prepState.setString(6, message);
 
-			ResultSet rset = prepState.executeQuery();
+			prepState.execute();
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
@@ -953,33 +1013,35 @@ public class makeConnection {
 	 *
 	 * @param //form this is the form being added
 	 */
-	public void addMedicineRequest(int userID, String medicineName, String quantity, String dosage, String specialInstructions, String signature) {
+	public void addMedicineRequest(int userID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'floral', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'medDelivery', 'inProgress')";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
-			ResultSet rset = prepState.executeQuery();
+
+			prepState.execute();
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addMedicineRequest()");
 		}
 
 
-		String insertMedRequest = "Insert Into meddelivery\n" +
+		String insertMedRequest = "Insert Into medDelivery\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests), ?, ?, ?, ?, ?)";
+				"         From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
-			prepState.setString(1, medicineName);
-			prepState.setString(2, quantity);
-			prepState.setString(3, dosage);
-			prepState.setString(4, specialInstructions);
-			prepState.setString(5, signature);
+			prepState.setString(1, roomID);
+			prepState.setString(2, medicineName);
+			prepState.setInt(3, quantity);
+			prepState.setString(4, dosage);
+			prepState.setString(5, specialInstructions);
+			prepState.setString(6, signature);
 
-			ResultSet rset = prepState.executeQuery();
+			prepState.execute();
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
@@ -992,7 +1054,7 @@ public class makeConnection {
 	 *
 	 * @param //form this is the form added to the table
 	 */
-	public void addSecurityRequest(int userID, String level, String urgency, String reason, String assignee) {
+	public void addSecurityRequest(int userID, String roomID, String level, String urgency) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
@@ -1000,26 +1062,24 @@ public class makeConnection {
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
-			ResultSet rset = prepState.executeQuery();
+			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addSecurityRequest()");
 		}
 
-
-		String insertSecurityRequest = "Insert Into security\n" +
+		String insertSecurityRequest = "Insert Into securityServ\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests), ?, ?, ?, ?)";
+				"         From requests), ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertSecurityRequest)) {
-			prepState.setString(1, level);
-			prepState.setString(2, urgency);
-			prepState.setString(3, reason);
-			prepState.setString(4, assignee);
+			prepState.setString(1, roomID);
+			prepState.setString(2, level);
+			prepState.setString(3, urgency);
 
-			ResultSet rset = prepState.executeQuery();
+			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
 		}
 
@@ -1724,4 +1784,8 @@ public class makeConnection {
 		}
 		return false;
 	}
+
+
+
+
 }

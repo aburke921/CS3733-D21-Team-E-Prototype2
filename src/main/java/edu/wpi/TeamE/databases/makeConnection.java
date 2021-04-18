@@ -13,7 +13,6 @@ import java.util.Properties;
 
 public class makeConnection {
 
-
 	// static variable singleInstance of type SingleConnection
 	public static makeConnection singleInstance = null;
 
@@ -100,6 +99,8 @@ public class makeConnection {
 		createFloralRequestsTable();
 		createExtTransportTable();
 		createSanitationTable();
+		createMedDeliveryTable();
+		createSecurityServTable();
 	}
 
 	/**
@@ -119,7 +120,6 @@ public class makeConnection {
 	 * shortName: this is the short/nickname of the node/location/room
 	 */
 	public void createNodeTable() {
-
 		try {
 			Statement stmt = this.connection.createStatement();
 			stmt.execute(
@@ -137,12 +137,10 @@ public class makeConnection {
 							+ "    Constraint buildingLimit Check (building In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')), "
 							+ "    Constraint nodeTypeLimit Check (nodeType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', 'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH'))"
 							+ ")");
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("error creating node table");
 		}
-
 	}
 
 	/**
@@ -154,7 +152,6 @@ public class makeConnection {
 	 */
 	public void createEdgeTable() {
 		try {
-
 			Statement stmt = connection.createStatement();
 			stmt.execute(
 					"Create Table hasEdge"
@@ -201,26 +198,6 @@ public class makeConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("error creating userAccount table");
-		}
-
-
-	}
-
-	public void addUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values (?, ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
-			prepState.setInt(1, userID);
-			prepState.setString(2, email);
-			prepState.setString(3, password);
-			prepState.setString(4, userType);
-			prepState.setString(5, firstName);
-			prepState.setString(6, lastName);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
 		}
 
 
@@ -279,7 +256,6 @@ public class makeConnection {
 
 	}
 
-
 	/**
 	 * Uses executes the SQL statements required to create the requests table.
 	 * This table has the attributes:
@@ -306,7 +282,6 @@ public class makeConnection {
 			System.err.println("error creating requests table");
 		}
 	}
-
 
 	/**
 	 * Uses executes the SQL statements required to create a floralRequests table. This is a type of request and share the same requestID.
@@ -362,8 +337,8 @@ public class makeConnection {
 					"    description varchar(5000),\n" +
 					"    sanitationType varchar(31),\n" +
 					"    urgency varchar(31) Not Null,\n" +
-					"    Constraint urgencyLimit Check (sanitationType In ('Low', 'Medium', 'High', 'Critical'))," +
-					"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))\n" +
+					"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))," +
+					"    Constraint urgencyTypeLimit Check (urgency In ('Low', 'Medium', 'High', 'Critical'))\n" +
 					")";
 			stmt.execute(sqlQuery);
 		} catch (SQLException e) {
@@ -401,6 +376,67 @@ public class makeConnection {
 	}
 
 	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants the medecine delivered to.
+	 * - medicineName: this is the drug that the user is ordering/requesting
+	 * - quantity: the is the supply or the number of pills ordered
+	 * - dosage: this is the mg or ml quantity for a medication
+	 * - specialInstructions: this is any special details or instructions the user wants to give to who ever is processing the request.
+	 * - signature: this the signature (name in print) of the user who is filling out the request
+	 */
+	public void createMedDeliveryTable() {
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table medDelivery (\n" +
+					"requestID  int Primary Key References requests On Delete Cascade," +
+					"roomID     varchar(31) Not Null References node On Delete Cascade," +
+					"medicineName        varchar(31) Not Null," +
+					"quantity            int         Not Null," +
+					"dosage              varchar(31) Not Null," +
+					"specialInstructions varchar(5000)," +
+					"signature           varchar(31) Not Null" + ")";
+
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating extTransport table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - level: this is the security level that is needed
+	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled
+	 */
+	public void createSecurityServTable() {
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table securityServ (\n" +
+					"requestID  int Primary Key References requests On Delete Cascade," +
+					"roomID     varchar(31) Not Null References node On Delete Cascade," +
+					"level     varchar(31)," +
+					"urgency   varchar(31) Not Null," +
+					"Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical'))\n" +
+					")";
+
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			 e.printStackTrace();
+			System.err.println("error creating securityServ table");
+		}
+	}
+
+
+
+
+
+
+	/**
 	 * Deletes node,hasEdge, userAccount, requests, floralRequests, sanitationRequest and extTransport tables.
 	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
 	 * try/catch phrase set up in case the tables all ready do not exist
@@ -409,6 +445,8 @@ public class makeConnection {
 
 		try {
 			Statement stmt = this.connection.createStatement();
+			stmt.execute("Drop Table securityServ");
+			stmt.execute("Drop Table medDelivery");
 			stmt.execute("Drop Table exttransport");
 			stmt.execute("Drop Table sanitationrequest");
 			stmt.execute("Drop Table floralrequests");
@@ -426,7 +464,6 @@ public class makeConnection {
 			System.err.println("deleteAllTables() not working");
 		}
 	}
-
 
 	public void deleteEdgeTable() {
 
@@ -453,6 +490,99 @@ public class makeConnection {
 		}
 
 	}
+
+	/**
+	 * Deletes edge(s) between the given two nodes, they can be in any order
+	 *
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
+	 * if count == 1 || count == 2, edges have been deleted
+	 * else no edges exist with inputted nodes
+	 */
+	public int deleteEdge(String nodeID1, String nodeID2) {
+
+		String deleteEdgeS1 = "Delete From hasedge Where startnode = ? And endnode = ?";
+		String deleteEdgeS2 = "Delete From hasedge Where endnode = ? And startnode = ?";
+
+		int count = 0;
+		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
+		try (PreparedStatement deleteEdgePS1 = connection.prepareStatement(deleteEdgeS1)) {
+			deleteEdgePS1.setString(1, nodeID1);
+			deleteEdgePS1.setString(2, nodeID2);
+
+			int deleteEdgeRS1 = deleteEdgePS1.executeUpdate();
+
+			if (deleteEdgeRS1 == 0) {
+				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
+			} else if (deleteEdgeRS1 == 2) {
+				System.out.println("deleteEdge Result =" + deleteEdgeRS1 + ", it's weird cuz " + deleteEdgeRS1 + " rows was affected");
+				count = 1;
+			} else if (deleteEdgeRS1 != 1) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS1 + ", just bad because this should never occur");
+			}
+			System.out.println("Number of rows affected: " + deleteEdgeRS1);
+
+			// deleteEdgeRS1 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("deleteEdge() tyr/catch error");
+			count = 0;
+		}
+
+		try (PreparedStatement deleteEdgePS2 = connection.prepareStatement(deleteEdgeS2)) {
+			deleteEdgePS2.setString(1, nodeID1);
+			deleteEdgePS2.setString(2, nodeID2);
+
+			int deleteEdgeRS2 = deleteEdgePS2.executeUpdate();
+
+			if (deleteEdgeRS2 == 0) {
+				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
+			} else if (deleteEdgeRS2 == 2) {
+				System.out.println("deleteEdge Result =" + deleteEdgeRS2 + ", it's weird cuz " + deleteEdgeRS2 + " rows was affected");
+				count += count;
+			} else if (deleteEdgeRS2 != 1) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS2 + ", just bad because this should never occur");
+			}
+			System.out.println("Number of rows affected: " + deleteEdgeRS2);
+
+			// deleteEdgeRS2 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("deleteEdge() tyr/catch error");
+			if (count == 0) {
+				count = 0;
+			} else
+				count = 1;
+		}
+		return count;
+	}
+
+	/**
+	 * matches the nodeID to a node and deletes it from DB
+	 *
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
+	 */
+	public int deleteNode(String nodeID) {
+		String deleteNodeS = "Delete From node Where nodeid = ?";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+			deleteNodePS.setString(1, nodeID);
+			// We might encounter issues if on delete cascade didn't work
+			int deleteNodeRS = deleteNodePS.executeUpdate();
+			if (deleteNodeRS == 0) {
+				System.err.println("deleteNode Result = 0, probably bad cuz no rows was affected");
+			} else if (deleteNodeRS != 1) {
+				System.err.println("deleteNode Result =" + deleteNodeRS + ", probably bad cuz " + deleteNodeRS + " rows was affected");
+			}
+			return deleteNodeRS;
+			// deleteNode = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+
+
+
 
 	/**
 	 * Reads csv & inserts into table
@@ -629,6 +759,111 @@ public class makeConnection {
 
 
 	/**
+	 * adds a node with said data to the database
+	 *
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
+	 */
+	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+		String addNodeS = "Insert Into node Values (?, ?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
+			addNodePS.setString(1, nodeID);
+			addNodePS.setInt(2, xCoord);
+			addNodePS.setInt(3, yCoord);
+			addNodePS.setString(4, floor);
+			addNodePS.setString(5, building);
+			addNodePS.setString(6, nodeType);
+			addNodePS.setString(7, longName);
+			addNodePS.setString(8, shortName);
+			int addNodeRS = addNodePS.executeUpdate();
+			if (addNodeRS == 0) {
+				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
+			} else if (addNodeRS != 1) {
+				System.err.println("addNode Result =" + addNodeRS + ", probably bad cuz " + addNodeRS + " rows was affected");
+			}
+			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			return 0;
+		}
+	}
+
+	/**
+	 * adds an edge with said data to the database
+	 * both startNode and endNode has to already exist in node table
+	 *
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
+	 */
+	public int addEdge(String edgeID, String startNode, String endNode) {
+		String addEdgeS = "Insert Into hasedge (edgeid, startnode, endnode) Values (?, ?, ?)";
+		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
+			addEdgePS.setString(1, edgeID);
+			addEdgePS.setString(2, startNode);
+			addEdgePS.setString(3, endNode);
+			int addEdgeRS = addEdgePS.executeUpdate();
+			if (addEdgeRS == 0) {
+				System.err.println("addEdge Result = 0, probably bad cuz no rows was affected");
+			} else if (addEdgeRS != 1) {
+				System.err.println("addEdge Result =" + addEdgeRS + ", probably bad cuz " + addEdgeRS + " rows was affected");
+			}
+			addLength(startNode, endNode);
+			return addEdgeRS; // addEdgeRS = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("addEdge() error in the try/catch");
+			return 0;
+		}
+	}
+
+	/**
+	 * This is allows a visitor to create a user account giving them more access to the certain requests available
+	 * @param email this is the user's email that is connected to the account the are trying to create
+	 * @param password this is a password that the user will use to log into the account
+	 * @param firstName this is the user's first name that is associated with the account
+	 * @param lastName this is the user's last name that is associated with the account
+	 */
+	public void addUserAccount(String email, String password, String firstName, String lastName) {
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 10000, ?, ?, 'visitor', ?, ?)";
+		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
+			prepState.setString(1, email);
+			prepState.setString(2, password);
+			prepState.setString(3, firstName);
+			prepState.setString(4, lastName);
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			//showError("This email all ready has an account");
+			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
+		}
+	}
+
+	/**
+	 * This is allows an administrator or someone with access to the database to be able to create a user account
+	 * with more permissions giving them more access to the certain requests available. This is function should not
+	 * be used while the app is being run.
+	 * @param email this is the user's email that is connected to the account the are trying to create
+	 * @param password this is a password that the user will use to log into the account
+	 * @param userType this is the type of account that the individual is being assigned to
+	 * @param firstName this is the user's first name that is associated with the account
+	 * @param lastName this is the user's last name that is associated with the account
+	 */
+	public void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 10000, ?, ?, ?, ?, ?)";
+		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
+			prepState.setString(1, email);
+			prepState.setString(2, password);
+			prepState.setString(3, userType);
+			prepState.setString(4, firstName);
+			prepState.setString(5, lastName);
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			//showError("This email all ready has an account");
+			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
+		}
+	}
+
+
+	/**
 	 * This adds a sanitation services form to the table specific for it
 	 *
 	 * @param //form this is the form being added to the table
@@ -657,7 +892,6 @@ public class makeConnection {
 			prepState.setString(4, sanitationType);
 			prepState.setString(5, urgency);
 
-
 			prepState.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -665,20 +899,6 @@ public class makeConnection {
 		}
 
 	}
-
-
-	/**
-	 * This edits a Sanitation Services form that is already in the table
-	 *
-	 * @param departmentField  this updates the department
-	 * @param roomField        this updates the room field
-	 * @param numberField      this updates the number field
-	 * @param serviceTypeField this updates the service type field
-	 * @param assignee         this updates who is assigned to the service request
-	 */
-	public void editSanitationRequest(String departmentField, String roomField, String numberField, String serviceTypeField, String assignee) {
-	}
-
 
 	/**
 	 * This function needs to add a external patient form to the table for external patient forms
@@ -720,19 +940,6 @@ public class makeConnection {
 
 	}
 
-
-	/**
-	 * @param hospital    this is the string used to update the hospital field
-	 * @param type        this is the string used to update the type
-	 * @param severity    this is the string used to update the severity
-	 * @param patientID   this is the string used to update patientID
-	 * @param description this is the string used to update the description
-	 * @param eta         this is the string used to update the eta
-	 */
-	public void editExternalPatientRequest(String hospital, String type, String severity, String patientID, String description, String eta) {
-	}
-
-
 	/**
 	 * This adds a floral request to the database that the user is making
 	 *
@@ -752,14 +959,14 @@ public class makeConnection {
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
-			ResultSet rset = prepState.executeQuery();
+			prepState.execute();
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addFloralRequest()");
 		}
 
 
-		String insertFloralRequest = "Insert Into floralrequests\n" +
+		String insertFloralRequest = "Insert Into floralRequests\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests), ?, ?, ?, ?, ?, ?)";
 
@@ -771,7 +978,7 @@ public class makeConnection {
 			prepState.setString(5, vaseType);
 			prepState.setString(6, message);
 
-			ResultSet rset = prepState.executeQuery();
+			prepState.execute();
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
@@ -801,6 +1008,114 @@ public class makeConnection {
 //          );
 	}
 
+	/**
+	 * This adds a medicine request form to the table for medicine request forms
+	 *
+	 * @param //form this is the form being added
+	 */
+	public void addMedicineRequest(int userID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
+
+		String insertRequest = "Insert Into requests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests) + 1, ?, Current Timestamp, 'medDelivery', 'inProgress')";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
+			prepState.setInt(1, userID);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into requests inside function addMedicineRequest()");
+		}
+
+
+		String insertMedRequest = "Insert Into medDelivery\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, medicineName);
+			prepState.setInt(3, quantity);
+			prepState.setString(4, dosage);
+			prepState.setString(5, specialInstructions);
+			prepState.setString(6, signature);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
+		}
+
+	}
+
+	/**
+	 * This adds a security form to the table for security service form
+	 *
+	 * @param //form this is the form added to the table
+	 */
+	public void addSecurityRequest(int userID, String roomID, String level, String urgency) {
+
+		String insertRequest = "Insert Into requests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests) + 1, ?, Current Timestamp, 'security', 'inProgress')";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
+			prepState.setInt(1, userID);
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into requests inside function addSecurityRequest()");
+		}
+
+		String insertSecurityRequest = "Insert Into securityServ\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests), ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertSecurityRequest)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, level);
+			prepState.setString(3, urgency);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
+		}
+
+
+	}
+
+
+
+
+
+
+
+
+
+	/**
+	 * This edits a Sanitation Services form that is already in the table
+	 *
+	 * @param departmentField  this updates the department
+	 * @param roomField        this updates the room field
+	 * @param numberField      this updates the number field
+	 * @param serviceTypeField this updates the service type field
+	 * @param assignee         this updates who is assigned to the service request
+	 */
+	public void editSanitationRequest(String departmentField, String roomField, String numberField, String serviceTypeField, String assignee) {
+	}
+
+	/**
+	 * @param hospital    this is the string used to update the hospital field
+	 * @param type        this is the string used to update the type
+	 * @param severity    this is the string used to update the severity
+	 * @param patientID   this is the string used to update patientID
+	 * @param description this is the string used to update the description
+	 * @param eta         this is the string used to update the eta
+	 */
+	public void editExternalPatientRequest(String hospital, String type, String severity, String patientID, String description, String eta) {
+	}
 
 	/**
 	 * This edits a floral request form within the table
@@ -815,47 +1130,6 @@ public class makeConnection {
 	public void editFloralRequest(String patient, String room, String flowerType, String flowerAmount, String vaseType, String message) {
 	}
 
-
-	/**
-	 * This adds a medicine request form to the table for medicine request forms
-	 *
-	 * @param //form this is the form being added
-	 */
-	public void addMedicineRequest(int userID, String medicineName, String quantity, String dosage, String specialInstructions, String signature) {
-
-		String insertRequest = "Insert Into requests\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'floral', 'inProgress')";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
-			prepState.setInt(1, userID);
-			ResultSet rset = prepState.executeQuery();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into requests inside function addMedicineRequest()");
-		}
-
-
-		String insertMedRequest = "Insert Into meddelivery\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests), ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
-			prepState.setString(1, medicineName);
-			prepState.setString(2, quantity);
-			prepState.setString(3, dosage);
-			prepState.setString(4, specialInstructions);
-			prepState.setString(5, signature);
-
-			ResultSet rset = prepState.executeQuery();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
-		}
-
-	}
-
-
 	/**
 	 * This function edits a current request for medicine delivery with the information below
 	 *
@@ -869,47 +1143,6 @@ public class makeConnection {
 	public void editMedicineRequest(String roomNumber, String department, String medicineName, String quantity, String dosage, String specialInstructions) {
 	}
 
-
-	/**
-	 * This adds a security form to the table for security service form
-	 *
-	 * @param //form this is the form added to the table
-	 */
-	public void addSecurityRequest(int userID, String level, String urgency, String reason, String assignee) {
-
-		String insertRequest = "Insert Into requests\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'security', 'inProgress')";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
-			prepState.setInt(1, userID);
-			ResultSet rset = prepState.executeQuery();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into requests inside function addSecurityRequest()");
-		}
-
-
-		String insertSecurityRequest = "Insert Into security\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests), ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertSecurityRequest)) {
-			prepState.setString(1, level);
-			prepState.setString(2, urgency);
-			prepState.setString(3, reason);
-			prepState.setString(4, assignee);
-
-			ResultSet rset = prepState.executeQuery();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
-		}
-
-
-	}
-
-
 	/**
 	 * This edits a security form already within the table
 	 *
@@ -919,363 +1152,6 @@ public class makeConnection {
 	 * @param assignee        this is the info used to update who is assigned
 	 */
 	public void editSecurityRequest(String location, String levelOfSecurity, String levelOfUrgency, String assignee) {
-	}
-
-
-	/**
-	 * gets a node's all attributes given nodeID
-	 *
-	 * @return a Node object with the matching nodeID
-	 */
-
-	public Node getNodeInfo(String nodeID) {
-		String getNodeInfoS = "Select * From node Where nodeid = ?";
-		try (PreparedStatement getNodeInfoPS = connection.prepareStatement(getNodeInfoS)) {
-			getNodeInfoPS.setString(1, nodeID);
-
-			ResultSet getNodeInfoRS = getNodeInfoPS.executeQuery();
-
-			while (getNodeInfoRS.next()) {
-				int xCoord = getNodeInfoRS.getInt("xCoord");
-				int yCoord = getNodeInfoRS.getInt("yCoord");
-				String floor = getNodeInfoRS.getString("floor");
-				String building = getNodeInfoRS.getString("building");
-				String nodeType = getNodeInfoRS.getString("nodeType");
-				String longName = getNodeInfoRS.getString("longName");
-				String shortName = getNodeInfoRS.getString("shortName");
-				return new Node(nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName);
-			}
-
-			getNodeInfoRS.close();
-			getNodeInfoPS.close();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("cannot print out nodeInfo");
-			return null;
-		}
-		return null;
-	}
-
-	/**
-	 * Given a NodeID, gives the xCoord, yCoord, Floor and Type of that node from Nodes
-	 *
-	 * @param nodeID is the nodeID of the nodes you want info from
-	 * @return a Node with only xCoord, yCoord, floor and nodeType not null
-	 */
-	public Node getNodeLite(String nodeID) {
-		String getNodeLiteS = "Select xcoord, ycoord, floor, nodetype From node Where nodeid = ?";
-		try (PreparedStatement getNodeLitePS = connection.prepareStatement(getNodeLiteS)) {
-			getNodeLitePS.setString(1, nodeID);
-			ResultSet getNodeLiteRS = getNodeLitePS.executeQuery();
-
-			while (getNodeLiteRS.next()) {
-				int xCoord = getNodeLiteRS.getInt("xCoord");
-				int yCoord = getNodeLiteRS.getInt("yCoord");
-				String floor = getNodeLiteRS.getString("floor");
-				String nodeType = getNodeLiteRS.getString("nodeType");
-				return new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
-			}
-
-			getNodeLiteRS.close();
-			getNodeLitePS.close();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Could not get nodeLite Info");
-			return null;
-		}
-		return null;
-	}
-
-	/**
-	 * gets edge information for all edges containing given nodeID
-	 *
-	 * @param nodeID
-	 * @return Pair<Integer, String> map with edge information
-	 */
-	public ArrayList<Pair<Float, String>> getEdgeInfo(String nodeID) {
-
-		ArrayList<Pair<Float, String>> pair = new ArrayList<Pair<Float, String>>();
-
-		try {
-			Statement stmt = this.connection.createStatement();
-			String query = "select * from hasEdge where endNode = '" + nodeID + "'";
-			ResultSet rset = stmt.executeQuery(query);
-
-			while (rset.next()) {
-				float length = rset.getFloat("length");
-				String startNodeID = rset.getString("startNode");
-
-				pair.add(new Pair<>(length, startNodeID));
-			}
-
-			rset.close();
-			stmt.close();
-
-		} catch (SQLException e) {
-			System.err.println("startNode Error");
-		}
-
-		try {
-			Statement stmt = this.connection.createStatement();
-			String query = "select * from hasEdge where startNode = '" + nodeID + "'";
-			ResultSet rset = stmt.executeQuery(query);
-
-			while (rset.next()) {
-				float length = rset.getFloat("length");
-				String endNodeID = rset.getString("endNode");
-
-				pair.add(new Pair<>(length, endNodeID));
-			}
-
-			rset.close();
-			stmt.close();
-		} catch (SQLException e) {
-			System.err.println("endNode Error");
-		}
-
-		return pair;
-	}
-
-	/**
-	 * gets all Nodes (each row in node table)
-	 *
-	 * @return ArrayList of Node objects
-	 * need Node constructor from UI/UX team
-	 */
-
-	public ArrayList<Node> getAllNodes() {
-		ArrayList<Node> nodesArray = new ArrayList<>();
-//observable list -- UI
-		try {
-			Statement stmt = this.connection.createStatement();
-			String query = "Select * From node";
-			ResultSet rset = stmt.executeQuery(query);
-
-			while (rset.next()) {
-				String NodeID = rset.getString("nodeID");
-				int xCoord = rset.getInt("xCoord");
-				int yCoord = rset.getInt("yCoord");
-				String floor = rset.getString("floor");
-				String building = rset.getString("building");
-				String nodeType = rset.getString("nodeType");
-				String longName = rset.getString("longName");
-				String shortName = rset.getString("shortName");
-
-				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
-
-			}
-
-			rset.close();
-			stmt.close();
-
-		} catch (SQLException e) {
-			System.err.println("getAllNodes Error : " + e);
-		}
-		return nodesArray;
-	}
-
-	/**
-	 * gets all Nodes that have the given FLOOR value
-	 *
-	 * @param floorName the value to check for in FLOOR column
-	 * @return ArrayList of Node objects
-	 */
-	public ArrayList<Node> getAllNodesByFloor(String floorName) {
-		ArrayList<Node> nodesArray = new ArrayList<>();
-		try {
-			Statement stmt = this.connection.createStatement();
-			String query = "select * from node WHERE '" + floorName + "' = FLOOR";
-			ResultSet rset = stmt.executeQuery(query);
-
-			while (rset.next()) {
-				String NodeID = rset.getString("nodeID");
-				int xCoord = rset.getInt("xCoord");
-				int yCoord = rset.getInt("yCoord");
-				String floor = rset.getString("floor");
-				String building = rset.getString("building");
-				String nodeType = rset.getString("nodeType");
-				String longName = rset.getString("longName");
-				String shortName = rset.getString("shortName");
-
-				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
-
-			}
-
-			rset.close();
-			stmt.close();
-
-		} catch (SQLException e) {
-			System.err.println("getAllNodes Error : " + e);
-		}
-		return nodesArray;
-	}
-
-	/**
-	 * Gets all node long names for a specified FLOOR column value.
-	 *
-	 * @param floorName the value to check for in FLOOR column
-	 * @return ObservableList of node long names.
-	 */
-	public ObservableList<String> getAllNodeLongNamesByFloor(String floorName) {
-		ObservableList<String> listOfNodeIDs = FXCollections.observableArrayList();
-
-		String deleteNodeS = "SELECT LONGNAME FROM node WHERE '" + floorName + "' = FLOOR";
-		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
-
-			ResultSet rset = deleteNodePS.executeQuery();
-
-			while (rset.next()) {
-				String nodeID = rset.getString("LONGNAME");
-				listOfNodeIDs.add(nodeID);
-			}
-			rset.close();
-			deleteNodePS.close();
-
-			return listOfNodeIDs;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getListofNodeIDS error try/catch");
-			return listOfNodeIDs;
-		}
-	}
-
-
-	public ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
-		ArrayList<String> listOfNodeIDs = new ArrayList<>();
-
-		String deleteNodeS = "SELECT nodeID FROM node WHERE '" + floorName + "' = FLOOR";
-		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
-
-			ResultSet rset = deleteNodePS.executeQuery();
-
-			while (rset.next()) {
-				String nodeID = rset.getString("nodeID");
-				listOfNodeIDs.add(nodeID);
-			}
-			rset.close();
-			deleteNodePS.close();
-
-			return listOfNodeIDs;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getListofNodeIDS error try/catch");
-			return listOfNodeIDs;
-		}
-
-	}
-
-	/**
-	 * gets all edges and each edge's attribute
-	 *
-	 * @return ArrayList<Edge>
-	 */
-	public ArrayList<Edge> getAllEdges() {
-		ArrayList<Edge> edgesArray = new ArrayList<>();
-		try {
-			Statement stmt = this.connection.createStatement();
-			String query = "Select * From hasedge";
-			ResultSet rset = stmt.executeQuery(query);
-
-			while (rset.next()) {
-				String edgeID = rset.getString("edgeID");
-				String startNode = rset.getString("startNode");
-				String endNode = rset.getString("endNode");
-				double length = rset.getDouble("length");
-				edgesArray.add(new Edge(edgeID, startNode, endNode, length));
-			}
-
-			rset.close();
-			stmt.close();
-
-		} catch (SQLException e) {
-			System.err.println("getAllEdges Error : " + e);
-		}
-		return edgesArray;
-	}
-
-	/**
-	 * counts the number of nodes already in the database of the given type and on the given floor that starts with the given teamNum
-	 *
-	 * @param teamNum be a String like "E"
-	 * @param Floor   is a String like "L2"
-	 * @param Type    is the nodeType of the node, like "ELEV"
-	 * @return is how many nodes are already in the database given the params
-	 */
-	public int countNodeTypeOnFloor(String teamNum, String Floor, String Type) {
-		String queryS = "select count(*) as countNum from node where nodeID like ('" + teamNum + "%') and floor = ? and nodeType = ?";
-		try (PreparedStatement PrepStat = connection.prepareStatement(queryS)) {
-			PrepStat.setString(1, Floor);
-			PrepStat.setString(2, Type);
-			ResultSet rSet = PrepStat.executeQuery();
-			int countNum = -1;
-			if (rSet.next()) {
-				countNum = rSet.getInt("countNum");
-			}
-			rSet.close();
-			return countNum;
-		} catch (SQLException e) {
-			// e.printStackTrace();
-			System.err.println("countNodeTypeOnFloor() error");
-		}
-		return -1;
-	}
-
-	/**
-	 * adds a node with said data to the database
-	 *
-	 * @return the amount of rows affected by executing this statement, should be 1 in this case
-	 */
-	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-		String addNodeS = "Insert Into node Values (?, ?, ?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
-			addNodePS.setString(1, nodeID);
-			addNodePS.setInt(2, xCoord);
-			addNodePS.setInt(3, yCoord);
-			addNodePS.setString(4, floor);
-			addNodePS.setString(5, building);
-			addNodePS.setString(6, nodeType);
-			addNodePS.setString(7, longName);
-			addNodePS.setString(8, shortName);
-			int addNodeRS = addNodePS.executeUpdate();
-			if (addNodeRS == 0) {
-				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
-			} else if (addNodeRS != 1) {
-				System.err.println("addNode Result =" + addNodeRS + ", probably bad cuz " + addNodeRS + " rows was affected");
-			}
-			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return 0;
-		}
-	}
-
-	/**
-	 * adds an edge with said data to the database
-	 * both startNode and endNode has to already exist in node table
-	 *
-	 * @return the amount of rows affected by executing this statement, should be 1 in this case
-	 */
-	public int addEdge(String edgeID, String startNode, String endNode) {
-		String addEdgeS = "Insert Into hasedge (edgeid, startnode, endnode) Values (?, ?, ?)";
-		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
-			addEdgePS.setString(1, edgeID);
-			addEdgePS.setString(2, startNode);
-			addEdgePS.setString(3, endNode);
-			int addEdgeRS = addEdgePS.executeUpdate();
-			if (addEdgeRS == 0) {
-				System.err.println("addEdge Result = 0, probably bad cuz no rows was affected");
-			} else if (addEdgeRS != 1) {
-				System.err.println("addEdge Result =" + addEdgeRS + ", probably bad cuz " + addEdgeRS + " rows was affected");
-			}
-			addLength(startNode, endNode);
-			return addEdgeRS; // addEdgeRS = x means the statement executed affected x rows, should be 1 in this case.
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("addEdge() error in the try/catch");
-			return 0;
-		}
 	}
 
 	/**
@@ -1457,93 +1333,337 @@ public class makeConnection {
 		return 0;
 	}
 
+
+
+
+
+
+
+
 	/**
-	 * Deletes edge(s) between the given two nodes, they can be in any order
+	 * gets a node's all attributes given nodeID
 	 *
-	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
-	 * if count == 1 || count == 2, edges have been deleted
-	 * else no edges exist with inputted nodes
+	 * @return a Node object with the matching nodeID
 	 */
-	public int deleteEdge(String nodeID1, String nodeID2) {
+	public Node getNodeInfo(String nodeID) {
+		String getNodeInfoS = "Select * From node Where nodeid = ?";
+		try (PreparedStatement getNodeInfoPS = connection.prepareStatement(getNodeInfoS)) {
+			getNodeInfoPS.setString(1, nodeID);
 
-		String deleteEdgeS1 = "Delete From hasedge Where startnode = ? And endnode = ?";
-		String deleteEdgeS2 = "Delete From hasedge Where endnode = ? And startnode = ?";
+			ResultSet getNodeInfoRS = getNodeInfoPS.executeQuery();
 
-		int count = 0;
-		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
-		try (PreparedStatement deleteEdgePS1 = connection.prepareStatement(deleteEdgeS1)) {
-			deleteEdgePS1.setString(1, nodeID1);
-			deleteEdgePS1.setString(2, nodeID2);
-
-			int deleteEdgeRS1 = deleteEdgePS1.executeUpdate();
-
-			if (deleteEdgeRS1 == 0) {
-				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
-			} else if (deleteEdgeRS1 == 2) {
-				System.out.println("deleteEdge Result =" + deleteEdgeRS1 + ", it's weird cuz " + deleteEdgeRS1 + " rows was affected");
-				count = 1;
-			} else if (deleteEdgeRS1 != 1) {
-				System.err.println("deleteEdge Result =" + deleteEdgeRS1 + ", just bad because this should never occur");
+			while (getNodeInfoRS.next()) {
+				int xCoord = getNodeInfoRS.getInt("xCoord");
+				int yCoord = getNodeInfoRS.getInt("yCoord");
+				String floor = getNodeInfoRS.getString("floor");
+				String building = getNodeInfoRS.getString("building");
+				String nodeType = getNodeInfoRS.getString("nodeType");
+				String longName = getNodeInfoRS.getString("longName");
+				String shortName = getNodeInfoRS.getString("shortName");
+				return new Node(nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName);
 			}
-			System.out.println("Number of rows affected: " + deleteEdgeRS1);
 
-			// deleteEdgeRS1 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+			getNodeInfoRS.close();
+			getNodeInfoPS.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("deleteEdge() tyr/catch error");
-			count = 0;
+			System.err.println("cannot print out nodeInfo");
+			return null;
 		}
-
-		try (PreparedStatement deleteEdgePS2 = connection.prepareStatement(deleteEdgeS2)) {
-			deleteEdgePS2.setString(1, nodeID1);
-			deleteEdgePS2.setString(2, nodeID2);
-
-			int deleteEdgeRS2 = deleteEdgePS2.executeUpdate();
-
-			if (deleteEdgeRS2 == 0) {
-				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
-			} else if (deleteEdgeRS2 == 2) {
-				System.out.println("deleteEdge Result =" + deleteEdgeRS2 + ", it's weird cuz " + deleteEdgeRS2 + " rows was affected");
-				count += count;
-			} else if (deleteEdgeRS2 != 1) {
-				System.err.println("deleteEdge Result =" + deleteEdgeRS2 + ", just bad because this should never occur");
-			}
-			System.out.println("Number of rows affected: " + deleteEdgeRS2);
-
-			// deleteEdgeRS2 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("deleteEdge() tyr/catch error");
-			if (count == 0) {
-				count = 0;
-			} else
-				count = 1;
-		}
-		return count;
+		return null;
 	}
 
 	/**
-	 * matches the nodeID to a node and deletes it from DB
+	 * Given a NodeID, gives the xCoord, yCoord, Floor and Type of that node from Nodes
 	 *
-	 * @return the amount of rows affected by executing this statement, should be 1 in this case
+	 * @param nodeID is the nodeID of the nodes you want info from
+	 * @return a Node with only xCoord, yCoord, floor and nodeType not null
 	 */
-	public int deleteNode(String nodeID) {
-		String deleteNodeS = "Delete From node Where nodeid = ?";
-		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
-			deleteNodePS.setString(1, nodeID);
-			// We might encounter issues if on delete cascade didn't work
-			int deleteNodeRS = deleteNodePS.executeUpdate();
-			if (deleteNodeRS == 0) {
-				System.err.println("deleteNode Result = 0, probably bad cuz no rows was affected");
-			} else if (deleteNodeRS != 1) {
-				System.err.println("deleteNode Result =" + deleteNodeRS + ", probably bad cuz " + deleteNodeRS + " rows was affected");
+	public Node getNodeLite(String nodeID) {
+		String getNodeLiteS = "Select xcoord, ycoord, floor, nodetype From node Where nodeid = ?";
+		try (PreparedStatement getNodeLitePS = connection.prepareStatement(getNodeLiteS)) {
+			getNodeLitePS.setString(1, nodeID);
+			ResultSet getNodeLiteRS = getNodeLitePS.executeQuery();
+
+			while (getNodeLiteRS.next()) {
+				int xCoord = getNodeLiteRS.getInt("xCoord");
+				int yCoord = getNodeLiteRS.getInt("yCoord");
+				String floor = getNodeLiteRS.getString("floor");
+				String nodeType = getNodeLiteRS.getString("nodeType");
+				return new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
 			}
-			return deleteNodeRS;
-			// deleteNode = x means the statement executed affected x rows, should be 1 in this case.
+
+			getNodeLiteRS.close();
+			getNodeLitePS.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return 0;
+			System.err.println("Could not get nodeLite Info");
+			return null;
 		}
+		return null;
+	}
+
+	/**
+	 * gets edge information for all edges containing given nodeID
+	 *
+	 * @param nodeID
+	 * @return Pair<Integer, String> map with edge information
+	 */
+	public ArrayList<Pair<Float, String>> getEdgeInfo(String nodeID) {
+
+		ArrayList<Pair<Float, String>> pair = new ArrayList<Pair<Float, String>>();
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from hasEdge where endNode = '" + nodeID + "'";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				float length = rset.getFloat("length");
+				String startNodeID = rset.getString("startNode");
+
+				pair.add(new Pair<>(length, startNodeID));
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("startNode Error");
+		}
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from hasEdge where startNode = '" + nodeID + "'";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				float length = rset.getFloat("length");
+				String endNodeID = rset.getString("endNode");
+
+				pair.add(new Pair<>(length, endNodeID));
+			}
+
+			rset.close();
+			stmt.close();
+		} catch (SQLException e) {
+			System.err.println("endNode Error");
+		}
+
+		return pair;
+	}
+
+	/**
+	 * gets all Nodes (each row in node table)
+	 *
+	 * @return ArrayList of Node objects
+	 * need Node constructor from UI/UX team
+	 */
+
+	public ArrayList<Node> getAllNodes() {
+		ArrayList<Node> nodesArray = new ArrayList<>();
+//observable list -- UI
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "Select * From node";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String NodeID = rset.getString("nodeID");
+				int xCoord = rset.getInt("xCoord");
+				int yCoord = rset.getInt("yCoord");
+				String floor = rset.getString("floor");
+				String building = rset.getString("building");
+				String nodeType = rset.getString("nodeType");
+				String longName = rset.getString("longName");
+				String shortName = rset.getString("shortName");
+
+				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
+
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllNodes Error : " + e);
+		}
+		return nodesArray;
+	}
+
+	/**
+	 * todo
+	 * @return
+	 */
+	public ObservableList<String> getAllNodeLongNames() {
+		ObservableList<String> listOfNodeLongNames =  FXCollections.observableArrayList();
+
+		String deleteNodeS = "SELECT LONGNAME FROM node";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("LONGNAME");
+				listOfNodeLongNames.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeLongNames;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println("getListofNodeIDS error try/catch");
+			return listOfNodeLongNames;
+		}
+
+	}
+
+	/**
+	 * gets all Nodes that have the given FLOOR value
+	 *
+	 * @param floorName the value to check for in FLOOR column
+	 * @return ArrayList of Node objects
+	 */
+	public ArrayList<Node> getAllNodesByFloor(String floorName) {
+		ArrayList<Node> nodesArray = new ArrayList<>();
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from node WHERE '" + floorName + "' = FLOOR";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String NodeID = rset.getString("nodeID");
+				int xCoord = rset.getInt("xCoord");
+				int yCoord = rset.getInt("yCoord");
+				String floor = rset.getString("floor");
+				String building = rset.getString("building");
+				String nodeType = rset.getString("nodeType");
+				String longName = rset.getString("longName");
+				String shortName = rset.getString("shortName");
+
+				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
+
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllNodes Error : " + e);
+		}
+		return nodesArray;
+	}
+
+	/**
+	 * Gets all node long names for a specified FLOOR column value.
+	 *
+	 * @param floorName the value to check for in FLOOR column
+	 * @return ObservableList of node long names.
+	 */
+	public ObservableList<String> getAllNodeLongNamesByFloor(String floorName) {
+		ObservableList<String> listOfNodeIDs = FXCollections.observableArrayList();
+
+		String deleteNodeS = "SELECT LONGNAME FROM node WHERE '" + floorName + "' = FLOOR";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("LONGNAME");
+				listOfNodeIDs.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeIDs;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getListOfNodeIDS error try/catch");
+			return listOfNodeIDs;
+		}
+	}
+
+	public ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
+		ArrayList<String> listOfNodeIDs = new ArrayList<>();
+
+		String deleteNodeS = "SELECT nodeID FROM node WHERE '" + floorName + "' = FLOOR";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("nodeID");
+				listOfNodeIDs.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeIDs;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getListOfNodeIDS error try/catch");
+			return listOfNodeIDs;
+		}
+
+	}
+
+	/**
+	 * gets all edges and each edge's attribute
+	 *
+	 * @return ArrayList<Edge>
+	 */
+	public ArrayList<Edge> getAllEdges() {
+		ArrayList<Edge> edgesArray = new ArrayList<>();
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "Select * From hasedge";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String edgeID = rset.getString("edgeID");
+				String startNode = rset.getString("startNode");
+				String endNode = rset.getString("endNode");
+				double length = rset.getDouble("length");
+				edgesArray.add(new Edge(edgeID, startNode, endNode, length));
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllEdges Error : " + e);
+		}
+		return edgesArray;
+	}
+
+	/**
+	 * counts the number of nodes already in the database of the given type and on the given floor that starts with the given teamNum
+	 *
+	 * @param teamNum be a String like "E"
+	 * @param Floor   is a String like "L2"
+	 * @param Type    is the nodeType of the node, like "ELEV"
+	 * @return is how many nodes are already in the database given the params
+	 */
+	public int countNodeTypeOnFloor(String teamNum, String Floor, String Type) {
+		String queryS = "select count(*) as countNum from node where nodeID like ('" + teamNum + "%') and floor = ? and nodeType = ?";
+		try (PreparedStatement PrepStat = connection.prepareStatement(queryS)) {
+			PrepStat.setString(1, Floor);
+			PrepStat.setString(2, Type);
+			ResultSet rSet = PrepStat.executeQuery();
+			int countNum = -1;
+			if (rSet.next()) {
+				countNum = rSet.getInt("countNum");
+			}
+			rSet.close();
+			return countNum;
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("countNodeTypeOnFloor() error");
+		}
+		return -1;
 	}
 
 	/**
@@ -1551,7 +1671,7 @@ public class makeConnection {
 	 *
 	 * @return String[] of nodeIDs
 	 */
-	public ArrayList<String> getListofNodeIDS() {
+	public ArrayList<String> getListOfNodeIDS() {
 		ArrayList<String> listOfNodeIDs = new ArrayList<>();
 
 		String deleteNodeS = "Select nodeid From node";
@@ -1569,12 +1689,16 @@ public class makeConnection {
 			return listOfNodeIDs;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("getListofNodeIDS error try/catch");
+			System.err.println("getListOfNodeIDS error try/catch");
 			return listOfNodeIDs;
 		}
 
 	}
 
+	/**
+	 * Translates a table into a csv file which can be later returned to the user.
+	 * @param tableName this is the table/data/information that will be translated into a csv file
+	 */
 	public void getNewCSVFile(String tableName) {
 
 		String sqlQuery = "select * from " + tableName;
@@ -1632,4 +1756,36 @@ public class makeConnection {
 			ioException.printStackTrace();
 		}
 	}
+
+	// User System Stuff
+
+	/**
+	 * Function for logging a user in with their unique email and password, currently can only check for if correct or not
+	 *
+	 * @param email is the user's entered email
+	 * @param password is the user's entered password
+	 * @return true when the credentials match with a user in the database, and false otherwise
+	 */
+	public boolean userLogin(String email, String password) {
+		String userLoginS = "Select Count(*) As verification From useraccount Where email = ? And password = ?";
+		try (PreparedStatement userLoginPS = connection.prepareStatement(userLoginS)) {
+			userLoginPS.setString(1, email);
+			userLoginPS.setString(2, password);
+			ResultSet userLoginRS = userLoginPS.executeQuery();
+			int verification = 0;
+			if (userLoginRS.next()) {
+				verification = userLoginRS.getInt("verification");
+			}
+			userLoginRS.close();
+			return verification == 1;
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("countNodeTypeOnFloor() error");
+		}
+		return false;
+	}
+
+
+
+
 }

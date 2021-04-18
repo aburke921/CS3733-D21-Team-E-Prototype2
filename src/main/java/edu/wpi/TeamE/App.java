@@ -20,7 +20,7 @@ public class App extends Application {
 	}
 
 
-	@Override
+	/**@Override
 	public void init() {
 		System.out.println("STARTING UP!!!");
 		makeConnection connection = makeConnection.makeConnection();
@@ -30,19 +30,19 @@ public class App extends Application {
 		File edges = new File("bwEedges.csv");
 
 		try {
-			// connection.deleteAllTables();
+			connection.deleteAllTables();
 			connection.createTables();
 			connection.populateTable("node", nodes);
 			connection.populateTable("hasEdge", edges);
 			System.out.println("Tables were created");
 		} catch (Exception e) {
 			System.out.println("Tables already there");
-//			connection.createTables();
-//			connection.populateTable("node", nodes);
-//			connection.populateTable("hasEdge", edges);
-//			System.out.println("Tables were created and populated");
+			connection.createTables();
+			connection.populateTable("node", nodes);
+			connection.populateTable("hasEdge", edges);
+			System.out.println("Tables were created and populated");
 		}
-	}
+	}**/
 
 
 	@Override

@@ -85,22 +85,22 @@
                                         <Insets left="20.0" />
                                     </FlowPane.margin>
                                     <children>
-                              <Button mnemonicParsing="false" onAction="#toNodeMapEditor" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
+                              <Button fx:id="toNodeEditorButton" mnemonicParsing="false" onAction="#toNodeMapEditor" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </Button>
-                                        <Button mnemonicParsing="false" onAction="#toNodeFileUpload" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
+                                        <Button fx:id="toNodeCSVUploadButton" mnemonicParsing="false" onAction="#toNodeFileUpload" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
                                             <VBox.margin>
                                                 <Insets top="20.0" />
                                             </VBox.margin>
                                         </Button>
-                                        <Button mnemonicParsing="false" onAction="#toEdgeMapEditor" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
+                                        <Button fx:id="toEdgeMapEditorButton" mnemonicParsing="false" onAction="#toEdgeMapEditor" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
                                             <VBox.margin>
                                                 <Insets top="20.0" />
                                             </VBox.margin>
                                         </Button>
-                              <Button mnemonicParsing="false" onAction="#toEdgeFileUpload" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
+                              <Button fx:id="toEdgeCSVFileButton" mnemonicParsing="false" onAction="#toEdgeFileUpload" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
                                  <VBox.margin>
                                     <Insets top="20.0" />
                                  </VBox.margin>

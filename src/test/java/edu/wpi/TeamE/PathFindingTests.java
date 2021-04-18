@@ -3,9 +3,10 @@ package edu.wpi.TeamE;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.SearchContext;
-import edu.wpi.TeamE.algorithms.pathfinding.Searcher;
-import edu.wpi.TeamE.algorithms.pathfinding.constraints.SearchConstraint;
+import static org.junit.jupiter.api.Assertions.*;
+
 import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.TeamE.views.MapEditor;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,12 +14,8 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class PathFindingTests {
     static SearchContext search;
-
-    //TODO: Rewrite to work with search constraints
 
     @BeforeAll
     public static void setupExpected() {
@@ -27,7 +24,6 @@ public class PathFindingTests {
         File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
         File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
         try {
-            con.deleteAllTables();
             con.createTables();
             con.populateTable("node", nodes);
             con.populateTable("hasEdge", edges);
@@ -327,4 +323,31 @@ public class PathFindingTests {
         assertFalse(ER1.equals(noER1));
         assertFalse(ER2.equals(noER2));
     }
+
+    @Test
+    public void testAutoGenIDs() {
+        MapEditor ed = new MapEditor();
+        assertEquals("eELEV00A01", ed.genNodeID("ELEV","1", "Elevator A Floor 1"));
+        assertEquals("ePARK02601", ed.genNodeID("PARK","1", "New Parking Sport Floor 1"));
+        assertEquals("eDEPT00102", ed.genNodeID("DEPT","2", "New Department Floor 2"));
+        assertEquals("eSERV001GG", ed.genNodeID("SERV","G", "New Service Floor G"));
+        assertEquals("eSERV001GG", ed.genNodeID("SERV","GG", "New Service Floor GG")); //Just in case of error on entry
+        assertEquals("eRETL001L2", ed.genNodeID("RETL","L2", "New Retail Floor L2"));
+        assertEquals("eLABS001L1", ed.genNodeID("LABS","L1", "New Labs Floor L1"));
+        assertEquals("eWALK00103", ed.genNodeID("WALK","3", "New Walkway Floor 3"));
+    }
+    /**
+     * Manual test - useful for UI, please do not delete w/o notice.
+     */
+//    public void foo(){
+//        Searcher aStar = new AStarSearch();
+//        Path foundPath = aStar.search("ACONF00102", "eWALK01901");
+//        Iterator<Node> nodeIteratorThisFloorOnly = foundPath.iterator();
+//        System.out.println("contents of path:");
+//        for (Iterator<Node> it = nodeIteratorThisFloorOnly; it.hasNext(); ) {
+//            Node node = it.next();
+//            System.out.println("Name: " + node.get("longName") + ", Floor: " + node.get("floor") + ", ID: " + node.get("id"));
+//        }
+//    }
+
 }

@@ -13,13 +13,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.PathFinder">
+<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.PathFinder">
     <children>
-        <VBox alignment="CENTER" prefHeight="399.0" prefWidth="600.0">
+        <VBox alignment="TOP_CENTER" prefHeight="1101.0" prefWidth="1950.0">
             <children>
-                <HBox prefHeight="38.0" prefWidth="513.0">
+                <HBox prefHeight="38.0" prefWidth="1160.0">
                     <children>
-                        <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;">
+                        <FlowPane prefHeight="38.0" prefWidth="1720.0" style="-fx-background-color: -fx--primary;">
                             <children>
                                 <Label prefHeight="38.0" prefWidth="486.0" text="Path Finder" textFill="WHITE">
                                     <font>
@@ -57,13 +57,14 @@
                   </JFXButton>
                     </children>
                 </HBox>
-            <StackPane prefHeight="54.0" prefWidth="600.0">
+            <StackPane prefHeight="984.0" prefWidth="1920.0">
                <children>
-                  <ImageView fx:id="imageView" fitHeight="340.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true" />
-                  <Pane prefHeight="200.0" prefWidth="200.0">
+                  <ImageView fx:id="imageView" fitHeight="984.0" fitWidth="1447.0" pickOnBounds="true" preserveRatio="true" />
+                  <Pane prefHeight="984.0" prefWidth="1447.0">
                      <children>
-                        <Pane fx:id="pane" layoutX="50.0" prefHeight="340.0" prefWidth="500.0" />
-                        <Button fx:id="backButton" layoutX="14.0" layoutY="281.0" mnemonicParsing="false" onAction="#toDefault" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" />
+                        <Pane fx:id="pane" layoutX="252.0" layoutY="4.0" prefHeight="984.0" prefWidth="1447.0" />
+                        <Button fx:id="backButton" layoutX="20.0" layoutY="939.0" mnemonicParsing="false" onAction="#toDefault" prefHeight="22.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" />
+                        <JFXButton fx:id="floorChanger" layoutX="20.0" onAction="#nextFloor" styleClass="submit-button" text="Change Floor" />
                      </children>
                   </Pane>
                </children>

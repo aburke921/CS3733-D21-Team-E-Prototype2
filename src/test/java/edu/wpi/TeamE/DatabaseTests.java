@@ -15,8 +15,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 
@@ -61,9 +60,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetNodeInfo")
 	public void testGetNodeInfo() {
-		connection.addNode("test123", 12, 13, "floor", "building", "nodeType", "longName", "shortName");
+		connection.addNode("test123", 12, 13, "1", "45 Francis", "PARK", "longName", "shortName");
 
-		Node testNode1 = new Node("test123", 12, 13, "floor", "building", "nodeType", "longName", "shortName");
+		Node testNode1 = new Node("test123", 12, 13, "1", "45 Francis", "PARK", "longName", "shortName");
 
 		Node testNode2 = connection.getNodeInfo("test123");
 
@@ -74,9 +73,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("GetNodeInfo for a node with null values")
 	public void testGetNodeInfo2() {
-		connection.addNode("test123", 12, 13, "floor", null, null, null, null);
+		connection.addNode("test123", 12, 13, "1", "BTM", "PARK", "long", null);
 
-		Node testNode1 = new Node("test123", 12, 13, "floor", null, null, null, null);
+		Node testNode1 = new Node("test123", 12, 13, "1", "BTM", "PARK", "long", null);
 
 		Node testNode2 = connection.getNodeInfo("test123");
 
@@ -87,9 +86,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetNodeLite")
 	public void testGetNodeLite() {
-		connection.addNode("test233", 22, 33, "floor", null, null, null, null);
+		connection.addNode("test233", 22, 33, "1", "BTM", "WALK", "long", null);
 
-		Node testNode1 = new Node("test233", 22, 33, "floor", null, null, null, null);
+		Node testNode1 = new Node("test233", 22, 33, "1", "BTM", "WALK", "long", null);
 
 		Node testNode2 = connection.getNodeLite("test233");
 
@@ -99,10 +98,10 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetEdgeInfo")
 	public void testGetEdgeInfo() {
-		connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
-		connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
-		connection.addNode("testEdge3", 122, 123, "h1", "String", "String", "String", "String");
-		connection.addNode("testEdge4", 124, 153, "h1", "String", "String", "String", "String");
+		connection.addNode("testEdge1", 121, 122, "1", "BTM", "EXIT", "String", "String");
+		connection.addNode("testEdge2", 12, 15, "1", "BTM", "EXIT", "String", "String");
+		connection.addNode("testEdge3", 122, 123, "1", "BTM", "EXIT", "String", "String");
+		connection.addNode("testEdge4", 124, 153, "1", "BTM", "EXIT", "String", "String");
 
 		connection.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
 		connection.addEdge("testEdge3_testEdge4", "testEdge3", "testEdge4");
@@ -136,16 +135,16 @@ public class DatabaseTests {
 	public void testGetAllNodes() {
 
 
-		connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
-		connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
-		connection.addNode("testEdge3", 122, 123, "h1", "String", "String", "String", "String");
-		connection.addNode("testEdge4", 124, 153, "h1", "String", "String", "String", "String");
+		connection.addNode("testEdge1", 121, 122, "1", "BTM", "EXIT", "String", "String");
+		connection.addNode("testEdge2", 12, 15, "1", "BTM", "EXIT", "String", "String");
+		connection.addNode("testEdge3", 122, 123, "1", "BTM", "EXIT", "String", "String");
+		connection.addNode("testEdge4", 124, 153, "1", "BTM", "EXIT", "String", "String");
 
 
-		Node n1 = new Node("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
-		Node n2 = new Node("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
-		Node n3 = new Node("testEdge3", 122, 123, "h1", "String", "String", "String", "String");
-		Node n4 = new Node("testEdge4", 124, 153, "h1", "String", "String", "String", "String");
+		Node n1 = new Node("testEdge1", 121, 122, "1", "BTM", "EXIT", "String", "String");
+		Node n2 = new Node("testEdge2", 12, 15, "1", "BTM", "EXIT", "String", "String");
+		Node n3 = new Node("testEdge3", 122, 123, "1", "BTM", "EXIT", "String", "String");
+		Node n4 = new Node("testEdge4", 124, 153, "1", "BTM", "EXIT", "String", "String");
 
 		ArrayList<Node> testNodeArray = new ArrayList<>();
 		testNodeArray.add(n1);
@@ -209,15 +208,14 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAllNodesByFloor: 2 nodes with the given floor")
 	public void testGetAllNodesByFloor() {
-		connection.addNode("nodeID1", 0, 0, "1", "building1", "nodeType1", "longName1", "shortName1");
-		connection.addNode("nodeID2", 1, 0, "1", "building2", "nodeType2", "longName2", "shortName2");
-		connection.addNode("nodeID3", 0, 0, "2", "building3", "nodeType3", "longName3", "shortName3");
+		connection.addNode("nodeID1", 0, 0, "1", "Tower", "PARK", "longName1", "shortName1");
+		connection.addNode("nodeID2", 1, 0, "1", "Tower", "PARK", "longName2", "shortName2");
 
 		ArrayList<Node> nodes = connection.getAllNodesByFloor("1");
 
 		ArrayList<Node> correctNodes = new ArrayList<Node>();
-		Node node1 = new Node("nodeID1", 0, 0, "1", "building1", "nodeType1", "longName1", "shortName1");
-		Node node2 = new Node("nodeID2", 1, 0, "1", "building2", "nodeType2", "longName2", "shortName2");
+		Node node1 = new Node("nodeID1", 0, 0, "1", "Tower", "PARK", "longName1", "shortName1");
+		Node node2 = new Node("nodeID2", 1, 0, "1", "Tower", "PARK", "longName2", "shortName2");
 
 		correctNodes.add(node1);
 		correctNodes.add(node2);
@@ -274,9 +272,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAllNodesByFloor: no nodes with the given floor")
 	public void testGetAllNodesByFloor2() {
-		connection.addNode("nodeID1", 0, 0, "1", "building1", "nodeType1", "longName1", "shortName1");
-		connection.addNode("nodeID2", 1, 0, "1", "building2", "nodeType2", "longName2", "shortName2");
-		connection.addNode("nodeID3", 0, 0, "2", "building3", "nodeType3", "longName3", "shortName3");
+		connection.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
+		connection.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
+		connection.addNode("nodeID3", 3, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
 
 		ArrayList<Node> nodes = connection.getAllNodesByFloor("3");
 
@@ -287,9 +285,8 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAllNodeLongNamesByFloor: 2 nodes with the given floor")
 	public void testGetAllNodeLongNamesByFloor() {
-		connection.addNode("nodeID1", 0, 0, "1", "building1", "nodeType1", "longName1", "shortName1");
-		connection.addNode("nodeID2", 1, 0, "1", "building2", "nodeType2", "longName2", "shortName2");
-		connection.addNode("nodeID3", 0, 0, "2", "building3", "nodeType3", "longName3", "shortName3");
+		connection.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
+		connection.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
 
 		ObservableList<String> longNames = connection.getAllNodeLongNamesByFloor("1");
 
@@ -305,9 +302,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAllNodeLongNamesByFloor: no nodes with the given floor")
 	public void testGetAllNodeLongNamesByFloor2() {
-		connection.addNode("nodeID1", 0, 0, "1", "building1", "nodeType1", "longName1", "shortName1");
-		connection.addNode("nodeID2", 1, 0, "1", "building2", "nodeType2", "longName2", "shortName2");
-		connection.addNode("nodeID3", 0, 0, "2", "building3", "nodeType3", "longName3", "shortName3");
+		connection.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
+		connection.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
+		connection.addNode("nodeID3", 0, 0, "1", "Tower", "ELEV","longName3", "shortName3");
 
 		ObservableList<String> longNames = connection.getAllNodeLongNamesByFloor("3");
 
@@ -317,9 +314,8 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetListOfNodeIDSByFloor: 2 nodes with the given floor")
 	public void testGetListOfNodeIDSByFloor() {
-		connection.addNode("nodeID1", 0, 0, "1", "building1", "nodeType1", "longName1", "shortName1");
-		connection.addNode("nodeID2", 1, 0, "1", "building2", "nodeType2", "longName2", "shortName2");
-		connection.addNode("nodeID3", 0, 0, "2", "building3", "nodeType3", "longName3", "shortName3");
+		connection.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
+		connection.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
 
 		ArrayList<String> nodeIDs = connection.getListOfNodeIDSByFloor("1");
 
@@ -334,9 +330,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetListOfNodeIDSByFloor: no nodes with the given floor")
 	public void testGetListOfNodeIDSByFloor2() {
-		connection.addNode("nodeID1", 0, 0, "1", "building1", "nodeType1", "longName1", "shortName1");
-		connection.addNode("nodeID2", 1, 0, "1", "building2", "nodeType2", "longName2", "shortName2");
-		connection.addNode("nodeID3", 0, 0, "2", "building3", "nodeType3", "longName3", "shortName3");
+		connection.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
+		connection.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
+		connection.addNode("nodeID3", 3, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
 
 		ArrayList<String> nodeIDs = connection.getListOfNodeIDSByFloor("3");
 
@@ -348,8 +344,8 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAllEdges")
 	public void testGetAllEdges() {
-		connection.addNode("test1", 0, 0, "test", "test", "test", "test", "test");
-		connection.addNode("test2", 2, 2, "test", "test", "test", "test", "test");
+		connection.addNode("test1", 0, 0, "1", "Tower", "ELEV", "test", "test");
+		connection.addNode("test2", 2, 2, "1", "Tower", "ELEV", "test", "test");
 		connection.addEdge("test1_test2", "test1", "test2");
 
 		ArrayList<Edge> listofEdges = new ArrayList<>();
@@ -393,8 +389,8 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAllEdges: there are no edges")
 	public void testGetAllEdges2() {
-		connection.addNode("test1", 0, 0, "test", "test", "test", "test", "test");
-		connection.addNode("test2", 2, 2, "test", "test", "test", "test", "test");
+		connection.addNode("test1", 0, 0, "1", "Tower", "ELEV", "test", "test");
+		connection.addNode("test2", 2, 2, "1", "Tower", "ELEV", "test", "test");
 
 		ArrayList<Edge> listOfEdges = connection.getAllEdges();
 
@@ -408,7 +404,7 @@ public class DatabaseTests {
 		int testResult = 0;
 
 		// if this works, testResult should be 1
-		testResult = connection.addNode("testNode", 111, 222, "h1", "String", "String", "String", "String");
+		testResult = connection.addNode("testNode", 111, 222, "1", "Tower", "ELEV", "String", "String");
 
 		assertTrue(testResult == 1);
 	}
@@ -416,10 +412,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testAddNode: the node added already exists")
 	public void testAddNode2() {
-		// if this works, testResult should be 1
-		connection.addNode("testNode", 111, 222, "h1", "String", "String", "String", "String");
+		connection.addNode("testNode12", 121, 222, "1", "Tower", "ELEV", "String", "String");
 
-		int testResult = connection.addNode("testNode", 111, 222, "h1", "String", "String", "String", "String");
+		int testResult = connection.addNode("testNode12", 121, 222, "1", "Tower", "ELEV", "String", "String");
 
 		assertTrue(testResult == 0);
 	}
@@ -432,8 +427,8 @@ public class DatabaseTests {
 		// set result to 0
 		int testResult = 0;
 
-		connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
-		connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
+		connection.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
+		connection.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
 
 		// if this works, testResult should be 1
 		testResult = connection.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
@@ -443,12 +438,13 @@ public class DatabaseTests {
 	}
 
 	@Test
-	@DisplayName("testAddEdge: the edgeID allready exists")
+	@DisplayName("testAddEdge: the edgeID already exists")
 	public void testAddEdge2() {
-		connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
-		connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
+		connection.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
+		connection.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
+
 		connection.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
-		// if this works, testResult should be 1
+
 		int testResult = connection.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
 
 		assertTrue(testResult == 0);
@@ -457,8 +453,8 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testAddEdge: the startNode does not exist")
 	public void testAddEdge3() {
-		connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
-		connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
+		connection.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
+		connection.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
 
 		// if this works, testResult should be 1
 		int testResult = connection.addEdge("testEdge1_testEdge2", "testEdge3", "testEdge2");
@@ -469,8 +465,8 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testAddEdge: the endNode does not exist")
 	public void testAddEdge4() {
-		connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
-		connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
+		connection.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
+		connection.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
 
 		// if this works, testResult should be 1
 		int testResult = connection.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge3");
@@ -485,7 +481,7 @@ public class DatabaseTests {
 		// set result to 0
 		int testResult = 0;
 
-		connection.addNode("originalNode", 121, 122, "h1", "String", "String", "String", "String");
+		connection.addNode("originalNode", 121, 122, "1", "Tower", "ELEV", "String", "String");
 
 		testResult = connection.modifyNode("originalNode", 100, null, null, null, null, null, null);
 
@@ -500,8 +496,8 @@ public class DatabaseTests {
 		// set result to 0
 		int testResult = 0;
 
-		connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
-		connection.addNode("testEdge2", 12, 15, "h1", "String", "String", "String", "String");
+		connection.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
+		connection.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
 
 		connection.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
 
@@ -519,7 +515,7 @@ public class DatabaseTests {
 		// set result to 0
 		int testResult = 0;
 
-		connection.addNode("testEdge1", 121, 122, "h1", "String", "String", "String", "String");
+		connection.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
 		testResult = connection.deleteNode("testEdge1");
 
 		assertTrue(testResult == 1);
@@ -532,10 +528,10 @@ public class DatabaseTests {
 		//File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
 		//File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
 
-		connection.addNode("test1", 0, 0, "test", "test", "test", "test", "test");
-		connection.addNode("test2", 2, 2, "test", "test", "test", "test", "test");
-		connection.addNode("test3", 3, 3, "test", "test", "test", "test", "test");
-		connection.addNode("test4", 4, 4, "test", "test", "test", "test", "test");
+		connection.addNode("test1", 0, 0, "1", "Tower", "ELEV", "test", "test");
+		connection.addNode("test2", 2, 2, "1", "Tower", "ELEV", "test", "test");
+		connection.addNode("test3", 3, 3, "1", "Tower", "ELEV", "test", "test");
+		connection.addNode("test4", 4, 4, "1", "Tower", "ELEV", "test", "test");
 
 		ArrayList<String> listOfNodeIDs = new ArrayList<>();
 
@@ -551,10 +547,10 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetNewCSVFile")
 	public void testGetNewCSVFile() {
-		connection.addNode("test1", 0, 0, "f1", "b1", "test", "long", "asd");
-		connection.addNode("test2", 2, 2, "f2", "b2", "test", "name", "test");
-		connection.addNode("test3", 3, 3, "f3", "b3", "test", "test", "hert");
-		connection.addNode("test4", 4, 4, "f4", "b4", "test", "fun", "test");
+		connection.addNode("test1", 0, 0, "1", "Tower", "ELEV", "long", "asd");
+		connection.addNode("test2", 2, 2, "1", "Tower", "ELEV", "name", "test");
+		connection.addNode("test3", 3, 3, "1", "Tower", "ELEV", "test", "hert");
+		connection.addNode("test4", 4, 4, "1", "Tower", "ELEV", "fun", "test");
 
 		connection.getNewCSVFile("node");
 
@@ -601,20 +597,20 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("Testing countNodeTypeOnFloor()")
 	public void testCountNodeTypeOnFloor() {
-		connection.addNode("test1", 534, 0, "f1", "b1", "test", "long", "asd");
-		connection.addNode("Test2", 54, 2, "f1", "b2", "tester", "name", "test");
-		connection.addNode("test3", 43, 3, "f2", "b3", "test", "test", "hert");
-		connection.addNode("test4", 544, 4, "f1", "b4", "test", "fun", "test");
-		connection.addNode("Test5", 4350, 0, "f1", "b1", "test", "long", "asd");
-		connection.addNode("test6", 5342, 2, "f1", "b2", "tester", "name", "test");
-		connection.addNode("test7", 433, 3, "f2", "b3", "test", "test", "hert");
-		connection.addNode("test8", 344, 4, "f1", "b4", "test", "fun", "test");
-		connection.addNode("test9", 430, 0, "f1", "b1", "test", "long", "asd");
-		connection.addNode("test10", 432, 2, "f1", "b2", "tester", "name", "test");
+		connection.addNode("test1", 534, 0, "1", "Tower", "INFO", "long", "asd");
+		connection.addNode("Test2", 54, 2, "1", "Tower", "ELEV", "name", "test");
+		connection.addNode("test3", 43, 3, "1", "Tower", "ELEV", "test", "hert");
+		connection.addNode("test4", 544, 4, "1", "Tower", "ELEV", "fun", "test");
+		connection.addNode("Test5", 4350, 0, "1", "Tower", "ELEV", "long", "asd");
+		connection.addNode("test6", 5342, 2, "1", "Tower", "ELEV", "name", "test");
+		connection.addNode("test7", 433, 3, "1", "Tower", "ELEV", "test", "hert");
+		connection.addNode("test8", 344, 4, "1", "Tower", "ELEV", "fun", "test");
+		connection.addNode("test9", 430, 0, "1", "Tower", "ELEV", "long", "asd");
+		connection.addNode("test10", 432, 2, "1", "Tower", "ELEV", "name", "test");
 
-		int returned = connection.countNodeTypeOnFloor("t", "f1", "test");
-		assertEquals(4, returned);
-		int returned2 = connection.countNodeTypeOnFloor("t", "f2", "testdweafeawfi");
+		int returned = connection.countNodeTypeOnFloor("t", "1", "INFO");
+		assertEquals(1, returned);
+		int returned2 = connection.countNodeTypeOnFloor("t", "1", "PARK");
 		assertEquals(0, returned2);
 	}
 
@@ -628,13 +624,12 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testAddSanitationRequest")
 	public void testAddSanitationRequest(){
-		connection.addNode("test", 0, 0, "1", "building", "nodeType", "longName", "shortName");
-		//connection.addNode("test1", 1, 1, "2", "building", "nodeType", "longName", "shortName");
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 
 		connection.addUserAccount(1, "test@email.com", "testPassword", "visitor", "Testing", "Queen");
 		connection.addUserAccount(2, "test@gmail.com", "testpass", "visitor", "Nupi", "Shukla");
 
-		connection.addSanitationRequest(1, "test", "Urine Cleanup", "description here", "not very urgent", "Nupur Shukla");
+		connection.addSanitationRequest(1, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
 		connection.addExternalPatientRequest(2, "BW", "severe", "123", "15 mins", "headache");
 	}
 

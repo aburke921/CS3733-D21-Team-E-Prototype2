@@ -362,8 +362,8 @@ public class makeConnection {
 					"    description varchar(5000),\n" +
 					"    sanitationType varchar(31),\n" +
 					"    urgency varchar(31) Not Null,\n" +
-					"    Constraint urgencyLimit Check (sanitationType In ('Low', 'Medium', 'High', 'Critical'))," +
-					"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))\n" +
+					"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))," +
+					"    Constraint urgencyTypeLimit Check (urgency In ('Low', 'Medium', 'High', 'Critical'))\n" +
 					")";
 			stmt.execute(sqlQuery);
 		} catch (SQLException e) {
@@ -656,7 +656,6 @@ public class makeConnection {
 			prepState.setString(3, description);
 			prepState.setString(4, sanitationType);
 			prepState.setString(5, urgency);
-
 
 			prepState.execute();
 		} catch (SQLException e) {
@@ -1246,7 +1245,7 @@ public class makeConnection {
 			}
 			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			return 0;
 		}
 	}
@@ -1272,7 +1271,7 @@ public class makeConnection {
 			addLength(startNode, endNode);
 			return addEdgeRS; // addEdgeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("addEdge() error in the try/catch");
 			return 0;
 		}

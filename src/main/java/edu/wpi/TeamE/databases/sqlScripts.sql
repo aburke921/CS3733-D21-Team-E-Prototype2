@@ -12,9 +12,9 @@ Create Table node
 	xCoord    int        Not Null,
 	yCoord    int        Not Null,
 	floor     varchar(5) Not Null,
-	building  varchar(20),
-	nodeType  varchar(10),
-	longName  varchar(50),
+	building  varchar(20) Not Null,
+	nodeType  varchar(10) Not Null,
+	longName  varchar(50) Not Null,
 	shortName varchar(35),
 	Unique (xCoord, yCoord, floor),
 	Constraint floorLimit Check (floor In ('1', '2', '3', 'L1', 'L2')),
@@ -155,7 +155,10 @@ Create Table sanitation
 	sanitationType varchar(31),
 	urgency        varchar(31) Not Null,
 	Constraint sanitationTypeLimit Check (sanitationType In
-	                                      ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))
+	                                      ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal')),
+	Constraint urgencyTypeLimit Check (urgency In
+	                                    ('Low', 'Medium', 'High', 'Critical'))
+
 );
 
 Create Table securityServ

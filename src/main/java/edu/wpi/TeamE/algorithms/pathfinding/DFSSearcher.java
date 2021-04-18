@@ -1,5 +1,8 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
+import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.TeamE.algorithms.Path;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,9 +12,9 @@ import java.util.List;
  * DF Search Implementation
  * Contains specific implementation of DFS
  */
-public class DFSSearch extends Searcher {
+public class DFSSearcher extends Searcher {
 
-    public DFSSearch(){
+    public DFSSearcher(){
         super();
     }
 
@@ -23,6 +26,7 @@ public class DFSSearch extends Searcher {
      * @param endId the Node to end Path at
      * @return Path object representing the route from startId to endId
      */
+    @Override
     public Path search(String startId, String endId){
 
         //get node info from database
@@ -51,6 +55,8 @@ public class DFSSearch extends Searcher {
                 path.add(start);
                 path.add(reconstructPath(cameFrom, current));
                 return path;
+            } else if (isExcluded(current)){
+                continue;
             }
 
             //move to current (pop off stack and add to visited)

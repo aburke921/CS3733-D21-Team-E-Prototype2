@@ -11,10 +11,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import edu.wpi.TeamE.algorithms.pathfinding.Node;
+import edu.wpi.TeamE.algorithms.Node;
 
-import edu.wpi.TeamE.algorithms.pathfinding.Edge;
+import edu.wpi.TeamE.algorithms.Edge;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 
@@ -34,7 +35,11 @@ public class DatabaseTests {
             connection.createTables();
             System.out.println("Tables were reset");
         } catch (Exception e) {
-            connection.createTables();
+            try {
+                connection.createTables();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
             System.out.println("Tables were created");
         }
     }

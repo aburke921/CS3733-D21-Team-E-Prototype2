@@ -1,45 +1,72 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
-import java.util.Iterator;
+import edu.wpi.TeamE.algorithms.Path;
+import edu.wpi.TeamE.databases.makeConnection;
+
+import java.io.File;
 
 public class Examples {
+
     public static void main(String[] args){
-
-        //getting these are outside the scope of this program
-        String startNode = "eWALK01801";
-        String endNode = "ePARK00501";
-
-        //these are the objects you can use to search
-        DFSSearch dfs = new DFSSearch();
-        Searcher aStar = new AStarSearch();
-
-        //the search returns a Path object
-        //which is LinkedList of Nodes
-        Path path = dfs.search(startNode, endNode);
-        Path optimalPath = aStar.search(startNode, endNode);
-
-        //you can print a path
-        //you can specify which labels you want to see for each node
-        //unfortunately this does not include coordinates
-        path.print("id", "longName");
-        //or leave it blank and it will default to all of them
-        optimalPath.print();
-
-        //you can iterate through a path like this
-        Iterator<Node> nodeIter1 = path.iterator();
-        while(nodeIter1.hasNext()){
-            //this iterator will return a Node object
-            //which is just a container for all the node info like id, floor, building, etc
-            Node node = nodeIter1.next();
-            String id = node.get("id");
-            String floor = node.get("floor");
-            String building = node.get("building");
-            String type = node.get("type");
-            String longName = node.get("longName");
-            String shortName = node.get("shortName");
-            //coordinates are ints so they have to be stored separate
-            int xCoord = node.getX();
-            int yCoord = node.getY();
+        System.out.println("STARTING UP!!!");
+        makeConnection connection = makeConnection.makeConnection();
+        System.out.println("Connected to the DB");
+        File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
+        File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+        try {
+            // connection.deleteAllTables();
+            connection.createTables();
+            connection.populateTable("node", nodes);
+            connection.populateTable("hasEdge", edges);
+            System.out.println("Tables were created");
+        } catch (Exception e) {
+            System.out.println("Tables already there");
+//			connection.createTables();
+//			connection.populateTable("node", nodes);
+//			connection.populateTable("hasEdge", edges);
+//			System.out.println("Tables were created and populated");
         }
+
+
+        String startNode = "eWALK01801";
+        String endNode = "ePARK00101";
+
+        //the pathfinding API is now entirely wrapped up in the SearchContext class
+        //this will allow you to flexibly configure what kind of search you wish to execute
+        //if you want vanilla a* you can instantiate like this
+        SearchContext search = new SearchContext();
+        //or like this (these lines (^v) are equivalent)
+        search = new SearchContext(new Searcher(), "VANILLA");
+        //safe search will avoid the emergency room
+        search = new SearchContext(new DFSSearcher(), "SAFE");
+        //handicap search will avoid stairs
+        //also nothing is case sensitive
+        search = new SearchContext(new Searcher(), "handicap");
+
+        //if you don't want to instantiate a new one every time (recommended, better for memory)
+        //you can specify a new algorithm or new conditions like this
+        search.setAlgo(new DFSSearcher());
+        search.setAlgo(new Searcher());
+
+        search.setConstraint("HANDICAP");
+        search.setConstraint("HaNdICap");
+        search.setConstraint("SAFE");
+        search.setConstraint("VANILLA");
+
+        //searching for a new path is the same
+        Path p = search.search(startNode, endNode);
+
+        //however it should be mentioned that search algorithms
+        //use a local copy of the db, and this local copy does not update when the db is edited
+        //but it pulls in fresh data on every instantiation of Searcher or DFSSearch
+        //so when using these objects make sure the algorithm instantiations aren't too persistent
+        //or you have the option of saying
+        search.refresh();
+        //if you're not sure if a change has been made to the db
+        //this method pulls in the whole node table and the whole edge table
+        //so should be used only if necessary
+
+        //additionally it should be noted that using search with constraints leads
+        //to a higher likelihood of search returning null (i.e. no path being found)
     }
 }

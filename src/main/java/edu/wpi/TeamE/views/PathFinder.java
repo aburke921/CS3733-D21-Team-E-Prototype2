@@ -82,6 +82,8 @@ public class PathFinder {
 
     private int currentFloorNamesIndex = 4; //start # should be init floor index + 1 (variable is actually always one beyond current floor)
 
+    ObservableList<String> longNameArrayList;
+
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
      * @param event calling event info.
@@ -144,11 +146,13 @@ public class PathFinder {
         System.out.println("\nFINDING PATH...");
 
         //get index and ID of selected item in dropdown
+        startLocationList.setItems(longNameArrayList);
         int startLocationListSelectedIndex = startLocationList.getSelectionModel().getSelectedIndex();
         startNodeID = nodeIDArrayList.get(startLocationListSelectedIndex);
         System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + startNodeID);
 
         //get index of selected item in dropdown
+        endLocationList.setItems(longNameArrayList);
         int endLocationListSelectedIndex = endLocationList.getSelectionModel().getSelectedIndex();
         endNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
         System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + endNodeID);
@@ -365,7 +369,7 @@ public class PathFinder {
 
         //Get longNames & IDs
         System.out.print("Begin Adding to Dropdown List... ");
-        ObservableList<String> longNameArrayList = connection.getAllNodeLongNames();
+        longNameArrayList = connection.getAllNodeLongNames();
         nodeIDArrayList = connection.getListofNodeIDS();
 
         //add ObservableLists to dropdowns

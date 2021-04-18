@@ -200,4 +200,16 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         }
     }
 
+    /**
+     * Calculate the euclidean distance between two nodes
+     * Pythagorean theorem
+     * @param n Parameter Node
+     * @return the distance between two nodes
+     */
+    public double dist(Node n){
+        double xDist = Math.pow(this.getX() - n.getX(), 2);
+        double yDist = Math.pow(this.getY() - n.getY(), 2);
+        double zDist = Math.pow(this.getZ() - n.getZ(), 2);
+        return Math.sqrt(xDist + yDist + zDist);
+    }
 }

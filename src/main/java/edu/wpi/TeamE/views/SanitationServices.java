@@ -33,14 +33,14 @@ public class SanitationServices extends ServiceRequestFormComponents {
   @FXML private JFXButton cancel;
   @FXML private JFXButton submit;
   public SanitationServicesForm request;
-
+  RequiredFieldValidator validator = new RequiredFieldValidator();
 
 
   /**
    * Sets value of drop down list to the selected value(departments)
    * @param actionEvent
    */
-  RequiredFieldValidator validator = new RequiredFieldValidator();
+
 
 
 
@@ -48,14 +48,19 @@ public class SanitationServices extends ServiceRequestFormComponents {
    * Detects if the user has entered all required fields
    *
    */
-  private boolean valitadeInput(){
-    validator.setMessage("Input required");
-    numInput.getValidators().add(validator);
-    assignedIndividual.getValidators().add(validator);
-    typeInput.getValidators().add(validator);
+  private boolean validateInput(){
+
+      validator.setMessage("Input required");
+
+
     departmentInput.getValidators().add(validator);
     ServiceTypeinput.getValidators().add(validator);
-    return numInput.validate() && assignedIndividual.validate() && typeInput.validate() && departmentInput.validate() && ServiceTypeinput.validate();
+    assignedIndividual.getValidators().add(validator);
+    numInput.getValidators().add(validator);
+    typeInput.getValidators().add(validator);
+    detailedInstructionsInput.getValidators().add(validator);
+
+    return departmentInput.validate() && typeInput.validate() && numInput.validate() && ServiceTypeinput.validate() && assignedIndividual.validate() && detailedInstructionsInput.validate();
 
 
   }
@@ -70,17 +75,15 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
     String dep = departmentInput.getSelectionModel().toString();
     String room = typeInput.getSelectionModel().toString();
-
     String num = numInput.getText();
     String serviceKind = ServiceTypeinput.getSelectionModel().toString();
     String assignee = assignedIndividual.getText();
-
-    if(valitadeInput()){
+    String deatails = detailedInstructionsInput.getText();
+    if(validateInput()){
       //String detailedInstructions = sdetailedInstructionsInput.getText();
       //creating the service request
-      request = new SanitationServicesForm(dep, room, num, serviceKind, assignee);
 
-      System.out.println(request.getAssignmentField());
+      //System.out.println(request.getAssignmentField());
       //Adding service request to table
       //makeConnection connection = makeConnection.makeConnection();
       //connection.addRequest("sanitationServices", request);
@@ -94,15 +97,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
   }
 
-  @FXML
-  void handleButtonSubmit(ActionEvent event) {
-    try {
-      Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-      App.getPrimaryStage().getScene().setRoot(root);
-    } catch (IOException ex) {
-      ex.printStackTrace();
-    }
-  }
+
   @FXML
   void initialize(){
     assert  ServiceTypeinput != null : "fx:id=\"typeInput\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";

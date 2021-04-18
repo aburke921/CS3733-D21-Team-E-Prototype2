@@ -60,7 +60,7 @@
                                     </FXCollections>
                                  </items>
                               </JFXComboBox>
-                              <JFXComboBox fx:id="typeInput" prefHeight="27.0" prefWidth="291.0" promptText="Location type">
+                              <JFXComboBox fx:id="typeInput" prefHeight="27.0" prefWidth="291.0" promptText="Location Type">
                                  <VBox.margin>
                                     <Insets bottom="10.0" top="20.0" />
                                  </VBox.margin>
@@ -77,15 +77,15 @@
                                     <Insets bottom="10.0" top="20.0" />
                                  </VBox.margin>
                               </JFXTextField>
-                              <JFXComboBox fx:id="ServiceTypeinput" prefHeight="27.0" prefWidth="295.0" promptText="Service type">
+                              <JFXComboBox fx:id="ServiceTypeinput" prefHeight="27.0" prefWidth="295.0" promptText="Service Type">
 
                                  <VBox.margin>
-                                    <Insets top="10.0" />
+                                    <Insets top="20.0" />
                                  </VBox.margin>
                               </JFXComboBox>
-                              <JFXTextField fx:id="assignedIndividual" prefHeight="27.0" prefWidth="289.0" promptText="Location #">
+                              <JFXTextField fx:id="assignedIndividual" prefHeight="27.0" prefWidth="289.0" promptText="Personnel Name">
                                  <VBox.margin>
-                                    <Insets top="10.0" />
+                                    <Insets top="30.0" />
                                  </VBox.margin>
                               </JFXTextField>
                            </children>

@@ -3,12 +3,19 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXSnackbarLayout;
+import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.*;
 import edu.wpi.TeamE.databases.*;
 
@@ -20,13 +27,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class PathFinder {
@@ -81,6 +92,8 @@ public class PathFinder {
     private final String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; //list of floorNames
 
     private int currentFloorNamesIndex = 4; //start # should be init floor index + 1 (variable is actually always one beyond current floor)
+
+    ObservableList<String> longNameArrayList;
 
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
@@ -144,18 +157,21 @@ public class PathFinder {
         System.out.println("\nFINDING PATH...");
 
         //get index and ID of selected item in dropdown
+        startLocationList.setItems(longNameArrayList);
         int startLocationListSelectedIndex = startLocationList.getSelectionModel().getSelectedIndex();
         startNodeID = nodeIDArrayList.get(startLocationListSelectedIndex);
         System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + startNodeID);
 
         //get index of selected item in dropdown
+        endLocationList.setItems(longNameArrayList);
         int endLocationListSelectedIndex = endLocationList.getSelectionModel().getSelectedIndex();
         endNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
         System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + endNodeID);
 
         //Execute A* Search
         System.out.println("A* Search with startNodeID of " + startNodeID + ", and endNodeID of " + endNodeID + "\n");
-        Searcher aStar = new AStarSearch();
+        SearchContext aStar = new SearchContext();
+        //aStar.setConstraint("HANDICAP");
 
         //Check if starting and ending node are the same
         if(startNodeID.equals(endNodeID)) { //error
@@ -189,7 +205,13 @@ public class PathFinder {
                 //draw the map for the current floor
                 drawMap(foundPath, currentFloor);
 
-                //todo also run getNodesOnFloorFromPath() for the other floors in advance?
+                //todo
+                System.out.println();
+                List<String> directions = foundPath.makeDirections();
+                for (String dir: directions) {
+                    System.out.println(dir);
+                }
+
             }
         }
     }
@@ -365,7 +387,7 @@ public class PathFinder {
 
         //Get longNames & IDs
         System.out.print("Begin Adding to Dropdown List... ");
-        ObservableList<String> longNameArrayList = connection.getAllNodeLongNames();
+        longNameArrayList = connection.getAllNodeLongNames();
         nodeIDArrayList = connection.getListofNodeIDS();
 
         //add ObservableLists to dropdowns

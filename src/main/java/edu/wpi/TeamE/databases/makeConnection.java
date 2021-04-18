@@ -92,7 +92,7 @@ public class makeConnection {
 	/**
 	 * Calls all of the functions that creates each individual table
 	 */
-	public void createTables(){
+	public void createTables() {
 		createNodeTable();
 		createEdgeTable();
 		createUserAccountTable();
@@ -101,6 +101,7 @@ public class makeConnection {
 		createExtTransportTable();
 		createSanitationTable();
 	}
+
 	/**
 	 * Uses executes the SQL statements required to create the node table.
 	 * This table has the attributes:
@@ -138,7 +139,7 @@ public class makeConnection {
 							+ ")");
 
 		} catch (SQLException e) {
-			 e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("error creating node table");
 		}
 
@@ -184,7 +185,7 @@ public class makeConnection {
 	 * - firstName: the user's first name.
 	 * - lastName: the user's last name.
 	 */
-	public void createUserAccountTable(){
+	public void createUserAccountTable() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table userAccount(" +
@@ -206,7 +207,7 @@ public class makeConnection {
 	}
 
 	public void addUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
-		String insertUser = "Insert into userAccount Values (?, ?, ?, ?, ?, ?)";
+		String insertUser = "Insert Into useraccount Values (?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setInt(1, userID);
@@ -229,13 +230,13 @@ public class makeConnection {
 	 * Uses executes the SQL statements required to create views for different types of users. The views created
 	 * are: visitorAccount, patientAccount, doctorAccount, adminAccount.
 	 */
-	public void createUserAccountTypeViews(){
+	public void createUserAccountTypeViews() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create View visitorAccount As " +
 					"Select * " +
-					"From userAccount " +
-					"Where userType = 'visitor'";
+					"From useraccount " +
+					"Where usertype = 'visitor'";
 			stmt.execute(sqlQuery);
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -245,8 +246,8 @@ public class makeConnection {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create View patientAccount As " +
 					"Select * " +
-					"From userAccount " +
-					"Where userType = 'patient'";
+					"From useraccount " +
+					"Where usertype = 'patient'";
 			stmt.execute(sqlQuery);
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -256,8 +257,8 @@ public class makeConnection {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create View doctorAccount As " +
 					"Select * " +
-					"From userAccount " +
-					"Where userType = 'doctor'";
+					"From useraccount " +
+					"Where usertype = 'doctor'";
 			stmt.execute(sqlQuery);
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -268,8 +269,8 @@ public class makeConnection {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create View adminAccount As " +
 					"Select * " +
-					"From userAccount " +
-					"Where userType = 'admin'";
+					"From useraccount " +
+					"Where usertype = 'admin'";
 			stmt.execute(sqlQuery);
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -288,12 +289,12 @@ public class makeConnection {
 	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport".
 	 * - requestState: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
 	 */
-	public void createRequestsTable(){
+	public void createRequestsTable() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table requests(" +
 					"requestID    int Primary Key,\n" +
-					"creatorID    int References userAccount On Delete Cascade," +
+					"creatorID    int References useraccount On Delete Cascade," +
 					"creationTime timestamp,\n" +
 					"requestType  varchar(31),\n" +
 					"requestState varchar(10),\n" +
@@ -317,9 +318,9 @@ public class makeConnection {
 	 * - flowerAmount: this the number/quantity of flowers that the user is requesting
 	 * - vaseType: this is the type of vase the user wants the flowers to be delivered in
 	 * - message: this is a specific detailed message that the user can have delivered with the flowers or an instruction message
-	 * 	 *                for whoever is fufilling the request
+	 * *                for whoever is fufilling the request
 	 */
-	public void createFloralRequestsTable(){
+	public void createFloralRequestsTable() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table floralRequests( " +
@@ -348,19 +349,19 @@ public class makeConnection {
 	 * - signature: this the signature (name in print) of the user who is filling out the request
 	 * - description: this is any description the user who is filling out the request wants to provide for the person who will be completing the request
 	 * - sanitationType: this is the type of sanitation/cleanup the user is requesting to be delt with. The valid options are: "Urine Cleanup",
-	 *  "Feces Cleanup", "Preparation Cleanup", "Trash Removal"
+	 * "Feces Cleanup", "Preparation Cleanup", "Trash Removal"
 	 * - urgency: this is how urgent the request is and helpful for prioritizing. The valid options are: "Low", "Medium", "High", "Critical"
 	 */
-	public void createSanitationTable(){
+	public void createSanitationTable() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table sanitationRequest(\n" +
 					"    requestID int Primary Key References requests On Delete Cascade,\n" +
-					"    roomID varchar(31) not null References node On Delete Cascade,\n" +
-					"    signature varchar(31) NOT NULL,\n" +
+					"    roomID varchar(31) Not Null References node On Delete Cascade,\n" +
+					"    signature varchar(31) Not Null,\n" +
 					"    description varchar(5000),\n" +
 					"    sanitationType varchar(31),\n" +
-					"    urgency varchar(31) NOT NULL,\n" +
+					"    urgency varchar(31) Not Null,\n" +
 					"    Constraint urgencyLimit Check (sanitationType In ('Low', 'Medium', 'High', 'Critical'))," +
 					"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))\n" +
 					")";
@@ -386,9 +387,9 @@ public class makeConnection {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table extTransport(\n" +
 					"    requestID int Primary Key References requests On Delete Cascade,\n" +
-					"    hospitalLocation varchar(100) NOT NULL,\n" +
-					"    severity varchar(30) NOT NULL,\n" +
-					"    patientID int NOT NULL,\n" +
+					"    hospitalLocation varchar(100) Not Null,\n" +
+					"    severity varchar(30) Not Null,\n" +
+					"    patientID int Not Null,\n" +
 					"    ETA varchar(100),\n" +
 					"    description varchar(5000)\n" +
 					")";
@@ -408,16 +409,16 @@ public class makeConnection {
 
 		try {
 			Statement stmt = this.connection.createStatement();
-			stmt.execute("DROP table extTransport");
-			stmt.execute("Drop Table sanitationRequest");
-			stmt.execute("Drop Table floralRequests");
+			stmt.execute("Drop Table exttransport");
+			stmt.execute("Drop Table sanitationrequest");
+			stmt.execute("Drop Table floralrequests");
 			stmt.execute("Drop Table requests");
-			stmt.execute("Drop View visitorAccount");
-			stmt.execute("Drop View patientAccount");
-			stmt.execute("Drop View doctorAccount");
-			stmt.execute("Drop View adminAccount");
-			stmt.execute("Drop Table userAccount");
-			stmt.execute("Drop Table hasEdge");
+			stmt.execute("Drop View visitoraccount");
+			stmt.execute("Drop View patientaccount");
+			stmt.execute("Drop View doctoraccount");
+			stmt.execute("Drop View adminaccount");
+			stmt.execute("Drop Table useraccount");
+			stmt.execute("Drop Table hasedge");
 			stmt.execute("Drop Table node");
 			stmt.close();
 		} catch (SQLException e) {
@@ -551,8 +552,9 @@ public class makeConnection {
 
 	/**
 	 * Acts as a trigger and calculates the length between two nodes that form an edge and add the value to the edge table
+	 *
 	 * @param startNode the node ID for the starting node in the edge
-	 * @param endNode the node ID for the ending node in the edge
+	 * @param endNode   the node ID for the ending node in the edge
 	 */
 	public void addLength(String startNode, String endNode) {
 
@@ -628,12 +630,13 @@ public class makeConnection {
 
 	/**
 	 * This adds a sanitation services form to the table specific for it
+	 *
 	 * @param //form this is the form being added to the table
 	 */
 	public void addSanitationRequest(int userID, String roomID, String sanitationType, String description, String urgency, String signature) {
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, current Timestamp, 'floral', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'floral', 'inProgress')";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
@@ -643,7 +646,7 @@ public class makeConnection {
 			System.err.println("Error inserting into requests inside function addSanitationRequest()");
 		}
 
-		String insertSanitationRequest = "Insert Into sanitationRequest\n" +
+		String insertSanitationRequest = "Insert Into sanitationrequest\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests), ?, ?, ?, ?, ?)";
 
@@ -666,24 +669,27 @@ public class makeConnection {
 
 	/**
 	 * This edits a Sanitation Services form that is already in the table
-	 * @param departmentField this updates the department
-	 * @param roomField this updates the room field
-	 * @param numberField this updates the number field
+	 *
+	 * @param departmentField  this updates the department
+	 * @param roomField        this updates the room field
+	 * @param numberField      this updates the number field
 	 * @param serviceTypeField this updates the service type field
-	 * @param assignee this updates who is assigned to the service request
+	 * @param assignee         this updates who is assigned to the service request
 	 */
-	public void editSanitationRequest(String departmentField, String roomField, String numberField, String serviceTypeField, String assignee) {}
+	public void editSanitationRequest(String departmentField, String roomField, String numberField, String serviceTypeField, String assignee) {
+	}
 
 
 	/**
 	 * This function needs to add a external patient form to the table for external patient forms
+	 *
 	 * @param //form this is the form that we will create and send to the database
 	 */
 	public void addExternalPatientRequest(int userID, String hospitalLocation, String severity, String patientID, String ETA, String description) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, current Timestamp, 'extTransport', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'extTransport', 'inProgress')";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
@@ -694,7 +700,7 @@ public class makeConnection {
 			System.err.println("Error inserting into requests inside function addExternalPatientRequest()");
 		}
 
-		String insertExtTransport = "Insert Into extTransport\n" +
+		String insertExtTransport = "Insert Into exttransport\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests), ?, ?, ?, ?, ?)";
 
@@ -716,32 +722,33 @@ public class makeConnection {
 
 
 	/**
-	 *
-	 * @param hospital this is the string used to update the hospital field
-	 * @param type this is the string used to update the type
-	 * @param severity this is the string used to update the severity
-	 * @param patientID this is the string used to update patientID
+	 * @param hospital    this is the string used to update the hospital field
+	 * @param type        this is the string used to update the type
+	 * @param severity    this is the string used to update the severity
+	 * @param patientID   this is the string used to update patientID
 	 * @param description this is the string used to update the description
-	 * @param eta this is the string used to update the eta
+	 * @param eta         this is the string used to update the eta
 	 */
-	public void editExternalPatientRequest(String hospital, String type, String severity, String patientID, String description, String eta) {}
+	public void editExternalPatientRequest(String hospital, String type, String severity, String patientID, String description, String eta) {
+	}
 
 
 	/**
 	 * This adds a floral request to the database that the user is making
-	 * @param userID this is the username that the user uses to log into the account
-	 * @param RoomNodeID this is the nodeID/room the user is sending the request to
+	 *
+	 * @param userID        this is the username that the user uses to log into the account
+	 * @param RoomNodeID    this is the nodeID/room the user is sending the request to
 	 * @param recipientName this is the name of the individual they want the flowers to be addressed to
-	 * @param flowerType this is the type of flowers that the user wants to request
-	 * @param flowerAmount this the number/quantity of flowers that the user is requesting
-	 * @param vaseType this is the type of vase the user wants the flowers to be delivered in
-	 * @param message this is a specific detailed message that the user can have delivered with the flowers or an instruction message
-	 *                for whoever is fufilling the request
+	 * @param flowerType    this is the type of flowers that the user wants to request
+	 * @param flowerAmount  this the number/quantity of flowers that the user is requesting
+	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
+	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
+	 *                      for whoever is fufilling the request
 	 */
-	public void addFloralRequest(int userID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message){
+	public void addFloralRequest(int userID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, current Timestamp, 'floral', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'floral', 'inProgress')";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
@@ -752,7 +759,7 @@ public class makeConnection {
 		}
 
 
-		String insertFloralRequest = "Insert Into floralRequests\n" +
+		String insertFloralRequest = "Insert Into floralrequests\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests), ?, ?, ?, ?, ?, ?)";
 
@@ -771,13 +778,13 @@ public class makeConnection {
 		}
 
 //			Create Table requests(
-	//			requestID    int Primary Key,
-	//			userID    int References userAccount On Delete Cascade,
-	//			creationTime timestamp,
-	//			requestType  varchar(31),
-	//			requestState varchar(10),
-	//			Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
-	//			Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress'))
+		//			requestID    int Primary Key,
+		//			userID    int References userAccount On Delete Cascade,
+		//			creationTime timestamp,
+		//			requestType  varchar(31),
+		//			requestState varchar(10),
+		//			Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
+		//			Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress'))
 //          );
 
 //			Create Table floralRequests(
@@ -797,25 +804,28 @@ public class makeConnection {
 
 	/**
 	 * This edits a floral request form within the table
-	 * @param patient this is the string to update patient info
-	 * @param room this is the string to update room info
-	 * @param flowerType this is the string to update the flower type
+	 *
+	 * @param patient      this is the string to update patient info
+	 * @param room         this is the string to update room info
+	 * @param flowerType   this is the string to update the flower type
 	 * @param flowerAmount this is the string to update the flower amount
-	 * @param vaseType this is the string to update the vase type
-	 * @param message this is the string to update the message
+	 * @param vaseType     this is the string to update the vase type
+	 * @param message      this is the string to update the message
 	 */
-	public void editFloralRequest(String patient, String room, String flowerType, String flowerAmount, String vaseType, String message) {}
+	public void editFloralRequest(String patient, String room, String flowerType, String flowerAmount, String vaseType, String message) {
+	}
 
 
 	/**
 	 * This adds a medicine request form to the table for medicine request forms
+	 *
 	 * @param //form this is the form being added
 	 */
 	public void addMedicineRequest(int userID, String medicineName, String quantity, String dosage, String specialInstructions, String signature) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, current Timestamp, 'floral', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'floral', 'inProgress')";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
@@ -826,7 +836,7 @@ public class makeConnection {
 		}
 
 
-		String insertMedRequest = "Insert Into medDelivery\n" +
+		String insertMedRequest = "Insert Into meddelivery\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests), ?, ?, ?, ?, ?)";
 
@@ -848,25 +858,28 @@ public class makeConnection {
 
 	/**
 	 * This function edits a current request for medicine delivery with the information below
-	 * @param roomNumber this string updates the room number
-	 * @param department this string is used to update the department
-	 * @param medicineName this string updates the medicine name
-	 * @param quantity this string updates the quantity
-	 * @param dosage this string updates the dosage
+	 *
+	 * @param roomNumber          this string updates the room number
+	 * @param department          this string is used to update the department
+	 * @param medicineName        this string updates the medicine name
+	 * @param quantity            this string updates the quantity
+	 * @param dosage              this string updates the dosage
 	 * @param specialInstructions this string updates the special instructions
 	 */
-	public void editMedicineRequest(String roomNumber, String department, String medicineName, String quantity, String dosage, String specialInstructions) {}
+	public void editMedicineRequest(String roomNumber, String department, String medicineName, String quantity, String dosage, String specialInstructions) {
+	}
 
 
 	/**
 	 * This adds a security form to the table for security service form
+	 *
 	 * @param //form this is the form added to the table
 	 */
-	public void addSecurityRequest(int userID, String level, String urgency, String reason, String assignee){
+	public void addSecurityRequest(int userID, String level, String urgency, String reason, String assignee) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, current Timestamp, 'security', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'security', 'inProgress')";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
@@ -899,12 +912,14 @@ public class makeConnection {
 
 	/**
 	 * This edits a security form already within the table
-	 * @param location this is the info to update location
+	 *
+	 * @param location        this is the info to update location
 	 * @param levelOfSecurity this is the info to update levelOfSecurity
-	 * @param levelOfUrgency this is the info to update levelOfUrgency
-	 * @param assignee this is the info used to update who is assigned
+	 * @param levelOfUrgency  this is the info to update levelOfUrgency
+	 * @param assignee        this is the info used to update who is assigned
 	 */
-	public void editSecurityRequest(String location, String levelOfSecurity, String levelOfUrgency, String assignee) {}
+	public void editSecurityRequest(String location, String levelOfSecurity, String levelOfUrgency, String assignee) {
+	}
 
 
 	/**

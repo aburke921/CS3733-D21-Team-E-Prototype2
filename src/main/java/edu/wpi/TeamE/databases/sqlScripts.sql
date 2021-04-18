@@ -17,9 +17,11 @@ Create Table node
 	longName  varchar(50),
 	shortName varchar(35),
 	Unique (xCoord, yCoord, floor),
-    Constraint floorLimit Check (userType In ('1', '2', '3', 'L1', 'L2')),
-    Constraint buildingLimit Check (userType In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')),
-    Constraint nodeTypeLimit Check (userType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', 'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH'))
+	Constraint floorLimit Check (floor In ('1', '2', '3', 'L1', 'L2')),
+	Constraint buildingLimit Check (building In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')),
+	Constraint nodeTypeLimit Check (nodeType In
+	                                ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', 'LABS', 'REST',
+	                                 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH'))
 );
 
 Create Table hasEdge
@@ -84,7 +86,7 @@ Create Table patient
 Create Table requests
 (
 	requestID    int Primary Key,
-	userID    int References userAccount On Delete Cascade,
+	userID       int References userAccount On Delete Cascade,
 	creationTime timestamp,
 	requestType  varchar(31),
 	requestState varchar(10),
@@ -97,7 +99,7 @@ Create Table requests
 
 Select *
 From requests
-Where creatorID = ?;
+Where userID = ?;
 
 -- getRequestCount() -- not needed in Java yet(TM)
 
@@ -144,43 +146,46 @@ Where floralRequests.requestID = requests.requestID
 
 
 
-Create Table sanitation(
-    requestID int Primary Key References requests On Delete Cascade,
-    roomID varchar(31) not null References node On Delete Cascade,
-    signature varchar(31) NOT NULL,
-    description varchar(5000),
-    sanitationType varchar(31),
-    urgency varchar(31) NOT NULL,
-    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))
+Create Table sanitation
+(
+	requestID      int Primary Key References requests On Delete Cascade,
+	roomID         varchar(31) Not Null References node On Delete Cascade,
+	signature      varchar(31) Not Null,
+	description    varchar(5000),
+	sanitationType varchar(31),
+	urgency        varchar(31) Not Null,
+	Constraint sanitationTypeLimit Check (sanitationType In
+	                                      ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))
 );
 
-Create Table securityServ(
-    requestID int Primary Key References requests On Delete Cascade,
-    roomID varchar(31) not null References node On Delete Cascade,
-    level varchar(31),
-    urgency varchar(31) NOT NULL
+Create Table securityServ
+(
+	requestID int Primary Key References requests On Delete Cascade,
+	roomID    varchar(31) Not Null References node On Delete Cascade,
+	level     varchar(31),
+	urgency   varchar(31) Not Null
 );
 
-Create Table medDelivery(
-    requestID int Primary Key References requests On Delete Cascade,
-    roomID varchar(31) not null References node On Delete Cascade,
-    medacineName varchar(31) NOT NULL,
-    quantity int NOT NULL,
-    specialInstructions varchar(5000),
-    signature varchar(31) NOT NULL
-);
-
-
-Create Table extTransport(
-    requestID int Primary Key References requests On Delete Cascade,
-    hospitalLocation varchar(100) NOT NULL,
-    severity varchar(30) NOT NULL,
-    patientID int NOT NULL,
-    ETA varchar(100),
-    description varchar(5000)
+Create Table medDelivery
+(
+	requestID           int Primary Key References requests On Delete Cascade,
+	roomID              varchar(31) Not Null References node On Delete Cascade,
+	medacineName        varchar(31) Not Null,
+	quantity            int         Not Null,
+	specialInstructions varchar(5000),
+	signature           varchar(31) Not Null
 );
 
 
+Create Table extTransport
+(
+	requestID        int Primary Key References requests On Delete Cascade,
+	hospitalLocation varchar(100) Not Null,
+	severity         varchar(30)  Not Null,
+	patientID        int          Not Null,
+	ETA              varchar(100),
+	description      varchar(5000)
+);
 
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1

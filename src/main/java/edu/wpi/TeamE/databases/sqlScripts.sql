@@ -109,7 +109,7 @@ Create Table floralRequests
 	flowerType    varchar(31),
 	flowerAmount  int,
 	vaseType      varchar(31),
-	message       varchar(255),
+	message       varchar(5000),
 	Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')),
 	Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)),
 	Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None'))
@@ -141,7 +141,41 @@ Where floralRequests.requestID = requests.requestID
 
 
 
+Create Table sanitation(
+    requestID int Primary Key References requests On Delete Cascade,
+    roomID varchar(31) not null References node On Delete Cascade,
+    signature varchar(31) NOT NULL,
+    description varchar(5000),
+    sanitationType varchar(31),
+    urgency varchar(31) NOT NULL,
+    Constraint sanitationTypeLimit Check (flowerType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))
+);
 
+Create Table securityServ(
+    requestID int Primary Key References requests On Delete Cascade,
+    roomID varchar(31) not null References node On Delete Cascade,
+    level varchar(31),
+    urgency varchar(31) NOT NULL
+);
+
+Create Table medDelivery(
+    requestID int Primary Key References requests On Delete Cascade,
+    roomID varchar(31) not null References node On Delete Cascade,
+    medacineName varchar(31) NOT NULL,
+    quantity int NOT NULL,
+    specialInstructions varchar(5000),
+    signature varchar(31) NOT NULL
+);
+
+
+Create Table medDelivery(
+    requestID int Primary Key References requests On Delete Cascade,
+    roomID varchar(31) not null References node On Delete Cascade,
+    medacineName varchar(31) NOT NULL,
+    quantity int NOT NULL,
+    specialInstructions varchar(5000),
+    signature varchar(31) NOT NULL
+);
 
 
 

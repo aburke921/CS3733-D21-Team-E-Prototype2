@@ -90,40 +90,21 @@ public class makeConnection {
 	}
 
 	/**
-	 * Creates node and hasEdge tables
-	 * try/catch phrase set up in case the tables all ready exist
+	 * Uses executes the SQL statements required to create the node table.
+	 * This table has the attributes:
+	 * - nodeID: this is a unique identifier for the each node. Every node must contain a nodeID.
+	 * - xCoord: this is the X-Coordinate/pixel location of the node on the map of the hospital.
+	 * - yCoord: this is the Y-Coordinate/pixel location of the node on the map of the hospital.
+	 * - floor: this is the floor of the hospital that the node is located on. The available options are: "1", "2", "3", "L1", "L2"
+	 * - building: this is the building of the hospital that the node is located in. The available options are: "BTM", "45 Francis", "Tower",
+	 * "15 Francis", "Shapiro", "Parking".
+	 * - nodeType: this is the type room/location that the node is specifying. The available options are: "PARK" (parking), "EXIT" (exit),
+	 * "WALK" (sidewalk/out door walkway), "HALL' (indoor walkway), "CONF" (conference room), "DEPT" (department room), "ELEV" (elevator),
+	 * "INFO" (information), "LABS" (lab testing/results room), "REST" (rest areas/sitting areas), "RETL" (retail/food and shopping),
+	 * "STAI" (stairs), "SERV" (services), "BATH" (bathrooms).
+	 * longName: this is the long version/more descriptive name of the node/location/room
+	 * shortName: this is the short/nickname of the node/location/room
 	 */
-	public void createTables() throws SQLException {
-		Statement nodeStmt = this.connection.createStatement();
-		nodeStmt.execute(
-				"Create Table node"
-						+ "("
-						+ "    nodeID    varchar(31) Primary Key,"
-						+ "    xCoord    int Not Null,"
-						+ "    yCoord    int Not Null,"
-						+ "    floor     varchar(5) Not Null,"
-						+ "    building  varchar(20),"
-						+ "    nodeType  varchar(10),"
-						+ "    longName  varchar(100),"
-						+ "    shortName varchar(100),"
-						+ "    Unique (xCoord, yCoord, floor)"
-						+ ")");
-
-		Statement hasEdgeStmt = connection.createStatement();
-		hasEdgeStmt.execute(
-				"Create Table hasEdge"
-						+ "("
-						+ "    edgeID    varchar(63) Primary Key,"
-						+ "    startNode varchar(31) Not Null References node (nodeid) On Delete Cascade,"
-						+ "    endNode   varchar(31) Not Null References node (nodeid) On Delete Cascade, "
-						+ "    length    double, "
-						+ "    Unique (startNode, endNode)"
-						+ ")");
-
-		// Needs a way to calculate edgeID, either in Java or by a sql trigger
-		// Probably in Java since it's a PK
-	}
-
 	public void createNodeTable() {
 
 		try {
@@ -149,6 +130,13 @@ public class makeConnection {
 
 	}
 
+	/**
+	 * Uses executes the SQL statements required to create the hasEdge table.
+	 * This table has the attributes:
+	 * - edgeID: this is a unique identifier for the edge connection. Every edge must contain an edgeID.
+	 * - startNode: this is a nodeID in which the edge connection starts.
+	 * - endNode: this is a nodeID in which the edge connection ends.
+	 */
 	public void createEdgeTable() {
 		try {
 
@@ -172,7 +160,16 @@ public class makeConnection {
 		}
 	}
 
-
+	/**
+	 * Uses executes the SQL statements required to create the userAccount table.
+	 * This table has the attributes:
+	 * - userID: used to identify the individual. Every account must have a unique userID and account must have one.
+	 * - email: the email must be under 31 characters long and must be unique.
+	 * - password: the password must be under 31 characters long.
+	 * - userType: is the type of account the user is enrolled with. The valid options are: "visitor", "patient", "doctor", "admin".
+	 * - firstName: the user's first name.
+	 * - lastName: the user's last name.
+	 */
 	public void createUserAccountTable(){
 		try {
 			Statement stmt = connection.createStatement();
@@ -193,7 +190,10 @@ public class makeConnection {
 
 
 	}
-
+	/**
+	 * Uses executes the SQL statements required to create views for different types of users. The views created
+	 * are: visitorAccount, patientAccount, doctorAccount, adminAccount.
+	 */
 	public void createUserAccountTypeViews(){
 		try {
 			Statement stmt = connection.createStatement();
@@ -244,6 +244,15 @@ public class makeConnection {
 	}
 
 
+	/**
+	 * Uses executes the SQL statements required to create the requests table.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - creatorID: this is the username of the user who created the request.
+	 * - creationTime: this is a time stamp that is added to the request at the moment it is made.
+	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport".
+	 * - requestState: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
+	 */
 	public void createRequestsTable(){
 		try {
 			Statement stmt = connection.createStatement();
@@ -263,6 +272,18 @@ public class makeConnection {
 	}
 
 
+	/**
+	 * Uses executes the SQL statements required to create a floralRequests table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user is sending the request to.
+	 * - recipientName: this is the name of the individual they want the flowers to be addressed to
+	 * - flowerType: this is the type of flowers that the user wants to request
+	 * - flowerAmount: this the number/quantity of flowers that the user is requesting
+	 * - vaseType: this is the type of vase the user wants the flowers to be delivered in
+	 * - message: this is a specific detailed message that the user can have delivered with the flowers or an instruction message
+	 * 	 *                for whoever is fufilling the request
+	 */
 	public void createFloralRequestsTable(){
 		try {
 			Statement stmt = connection.createStatement();
@@ -283,7 +304,6 @@ public class makeConnection {
 			System.err.println("error creating floralRequests table");
 		}
 	}
-
 
 
 

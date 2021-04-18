@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Iterator;
 
 public class PathFindingTests {
     static Searcher search;
@@ -156,6 +157,20 @@ public class PathFindingTests {
         Path out = search.search(nodeId, nodeId);
 
         assertTrue(exp4.equals(out));
+    }
+
+    /**
+     * Manual test - useful for UI, please do not delete w/o notice.
+     */
+    public void foo(){
+        Searcher aStar = new AStarSearch();
+        Path foundPath = aStar.search("ACONF00102", "eWALK01901");
+        Iterator<Node> nodeIteratorThisFloorOnly = foundPath.iterator();
+        System.out.println("contents of path:");
+        for (Iterator<Node> it = nodeIteratorThisFloorOnly; it.hasNext(); ) {
+            Node node = it.next();
+            System.out.println("Name: " + node.get("longName") + ", Floor: " + node.get("floor") + ", ID: " + node.get("id"));
+        }
     }
 
 }

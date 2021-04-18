@@ -37,15 +37,24 @@ import java.util.logging.Logger;
 
 public class MapEditor {
 
-    @FXML private TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Node> treeTable;
-    @FXML private JFXTextField xCordInput;
-    @FXML private JFXTextField yCordInput;
-    @FXML private JFXTextField idInput;
-    @FXML private JFXComboBox floorInput;
-    @FXML private JFXComboBox typeInput;
-    @FXML private JFXComboBox buildingInput;
-    @FXML private JFXTextField longNameInput;
-    @FXML private JFXTextField shortNameInput;
+    @FXML
+    private TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Node> treeTable;
+    @FXML
+    private JFXTextField xCordInput;
+    @FXML
+    private JFXTextField yCordInput;
+    @FXML
+    private JFXTextField idInput;
+    @FXML
+    private JFXComboBox floorInput;
+    @FXML
+    private JFXComboBox typeInput;
+    @FXML
+    private JFXComboBox buildingInput;
+    @FXML
+    private JFXTextField longNameInput;
+    @FXML
+    private JFXTextField shortNameInput;
 
     /**
      * when page loaded, displays the data
@@ -100,6 +109,7 @@ public class MapEditor {
 
     /**
      * brings user to the map editor navigation page
+     *
      * @param e
      */
     @FXML
@@ -114,6 +124,7 @@ public class MapEditor {
 
     /**
      * brings user to the help page
+     *
      * @param e
      */
     @FXML
@@ -124,9 +135,10 @@ public class MapEditor {
      * When the table is empty (aka no root), create the proper columns
      * Go through the array of Nodes and create a treeItem for each one,
      * add each one to the treeTable
+     *
      * @param table this is the table being prepared with the nodes
      */
-    public void prepareNodes( TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Node> table) {
+    public void prepareNodes(TreeTableView<edu.wpi.TeamE.algorithms.pathfinding.Node> table) {
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<Node> array = connection.getAllNodes();
         if (table.getRoot() == null) {
@@ -185,19 +197,20 @@ public class MapEditor {
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
             table.getColumns().add(column8);
         }
-        if(table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
-            table.getRoot().getChildren().remove(0, array.size()-1);
+        if (table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
+            table.getRoot().getChildren().remove(0, array.size() - 1);
         }
-            for (int i = 0; i < array.size(); i++) {
-                edu.wpi.TeamE.algorithms.pathfinding.Node s = array.get(i);
-                //int n = array.get(i).getX();
-                final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node> node = new TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node>(s);
-                table.getRoot().getChildren().add(node);
-            }
+        for (int i = 0; i < array.size(); i++) {
+            edu.wpi.TeamE.algorithms.pathfinding.Node s = array.get(i);
+            //int n = array.get(i).getX();
+            final TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node> node = new TreeItem<edu.wpi.TeamE.algorithms.pathfinding.Node>(s);
+            table.getRoot().getChildren().add(node);
         }
+    }
 
     /**
      * Runs editNode fcn when edit node button is pressed
+     *
      * @param e
      */
     @FXML
@@ -210,6 +223,7 @@ public class MapEditor {
      * looks at each field that the user could input into, whichever ones are not empty
      * the information is extracted and the node that the user selected is edited using
      * database's edit node fcn
+     *
      * @param table this is the table of nodes that is having a node edited
      */
     public void editNode(TreeTableView<Node> table) {
@@ -247,17 +261,16 @@ public class MapEditor {
                 yVal = Integer.parseInt(yCordInput.getText());
                 yVal = Integer.valueOf(yVal);
             }
-                makeConnection connection = makeConnection.makeConnection();
-                connection.modifyNode(nodeID, xVal, yVal, floor, building, type, longName, shortName);
-            }
+            makeConnection connection = makeConnection.makeConnection();
+            connection.modifyNode(nodeID, xVal, yVal, floor, building, type, longName, shortName);
         }
-
-
+    }
 
 
     /**
      * retrieves all the inputted info from the user, creates a new node and adds it to database
      * using database's addNode fcn
+     *
      * @return
      */
     public int addNode() {
@@ -271,6 +284,7 @@ public class MapEditor {
 
     /**
      * calls the addNode fcn when the add node button is pressed
+     *
      * @param e
      */
     @FXML
@@ -280,6 +294,7 @@ public class MapEditor {
 
     /**
      * retrieves the ID of the selected item in the table, passes that into deleteNode fcn from database
+     *
      * @param table
      */
     public int deleteNode(TreeTableView<Node> table) {
@@ -289,8 +304,8 @@ public class MapEditor {
         ArrayList<Node> array = connection.getAllNodes();
         if (table.getSelectionModel().getSelectedItem() != null) {
             System.out.println(table.getSelectionModel().getSelectedItem().getValue().get("id"));
-            for(int i = 0; i < array.size(); i++) {
-                if(array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
+            for (int i = 0; i < array.size(); i++) {
+                if (array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
                     s = connection.deleteNode(array.get(i).get("id"));
                 }
             }
@@ -300,6 +315,7 @@ public class MapEditor {
 
     /**
      * calls the deleteNode fcn when the delete button is clicked
+     *
      * @param e
      */
     @FXML
@@ -310,6 +326,7 @@ public class MapEditor {
     /**
      * when refresh button is clicked, retrieves the arrayList of Nodes,
      * calls the function to display data using the array (prepareNodes)
+     *
      * @param actionEvent
      */
     @FXML
@@ -324,45 +341,5 @@ public class MapEditor {
         test.setExpanded(true);
         prepareNodes(treeTable);
     }
-
-    @FXML
-    public void fileOpener(ActionEvent e) {
-        FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(App.getPrimaryStage());
-        makeConnection connection = makeConnection.makeConnection();
-        if (file != null) {
-            //Have to save edge table so we can get it back after deleting
-            connection.getNewCSVFile("hasEdge");
-            File saveEdges = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
-
-            //This is where tables are cleared and refilled
-            connection.deleteAllTables();
-            try {
-                connection.createTables();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-            connection.populateTable("node", file);
-            connection.populateTable("hasEdge", saveEdges);
-            System.out.println("Success");
-        }
-    }
-
-
-
-    /**
-     *opens the file explorer on user's device, allows user to select CSV file,
-     * uploads file to database, refreshes page
-     * @param e actionevent
-     */
-    @FXML
-    private void openFile(ActionEvent e) throws IOException {
-        makeConnection connection = makeConnection.makeConnection();
-        connection.getNewCSVFile("node");
-        File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
-        Desktop desktop = Desktop.getDesktop();
-        desktop.open(file);
-    }
-
 
 }

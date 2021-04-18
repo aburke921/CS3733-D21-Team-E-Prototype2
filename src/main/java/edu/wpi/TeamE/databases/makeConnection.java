@@ -201,7 +201,40 @@ public class makeConnection {
 
 	}
 
-	public void addUserAccount(String email, String password, String userType, String firstName, String lastName) {
+
+	/**
+	 * This is allows a visitor to create a user account giving them more access to the certain requests available
+	 * @param email this is the user's email that is connected to the account the are trying to create
+	 * @param password this is a password that the user will use to log into the account
+	 * @param firstName this is the user's first name that is associated with the account
+	 * @param lastName this is the user's last name that is associated with the account
+	 */
+	public void addUserAccount(String email, String password, String firstName, String lastName) {
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 10000, ?, ?, 'visitor', ?, ?)";
+		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
+			prepState.setString(1, email);
+			prepState.setString(2, password);
+			prepState.setString(3, firstName);
+			prepState.setString(4, lastName);
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			//showError("This email all ready has an account");
+			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
+		}
+	}
+
+	/**
+	 * This is allows an administrator or someone with access to the database to be able to create a user account
+	 * with more permissions giving them more access to the certain requests available. This is function should not
+	 * be used while the app is being run.
+	 * @param email this is the user's email that is connected to the account the are trying to create
+	 * @param password this is a password that the user will use to log into the account
+	 * @param userType this is the type of account that the individual is being assigned to
+	 * @param firstName this is the user's first name that is associated with the account
+	 * @param lastName this is the user's last name that is associated with the account
+	 */
+	public void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
 		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 10000, ?, ?, ?, ?, ?)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
@@ -212,9 +245,15 @@ public class makeConnection {
 			prepState.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			//showError("This email all ready has an account");
 			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
 		}
 	}
+
+	public void changeUserAccountType(){
+
+	}
+
 
 	/**
 	 * Uses executes the SQL statements required to create views for different types of users. The views created

@@ -52,6 +52,7 @@ public class App extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("fxml/Default.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
+			primaryStage.setFullScreen(true);
 			primaryStage.show();
 		} catch (IOException e) {
 			e.printStackTrace();

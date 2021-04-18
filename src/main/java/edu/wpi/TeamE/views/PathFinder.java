@@ -23,8 +23,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
@@ -37,6 +39,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class PathFinder {
@@ -95,8 +98,16 @@ public class PathFinder {
 
     ObservableList<String> longNameArrayList;
 
-    double radius = 20;
-    double strokeWidth = 5;
+    private double stageWidth;
+    private double stageHeight;
+
+    private double imageWidth;
+    private double imageHeight;
+
+    private double scale;
+
+    private double radius = 6;
+    private double strokeWidth = 3;
 
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
@@ -250,6 +261,7 @@ public class PathFinder {
         //Use these variables to keep track of the coordinates of the previous node
         double prevXCoord = 0;
         double prevYCoord = 0;
+        scale = imageWidth / imageView.getFitWidth();
 
         int firstNode = 1;
         while(nodeIteratorThisFloorOnly.hasNext()){ //loop through list
@@ -258,8 +270,8 @@ public class PathFinder {
             Node node = nodeIteratorThisFloorOnly.next();
 
             //Resize the coordinates to match the resized image
-            double xCoord = (double) node.getX();
-            double yCoord = (double) node.getY();
+            double xCoord = (double) node.getX() / scale;
+            double yCoord = (double) node.getY() / scale;
 
             if (firstNode == 1) { //if current node is the starting node
                 firstNode = 0;
@@ -377,8 +389,8 @@ public class PathFinder {
         //set Stage size
         Stage primaryStage = App.getPrimaryStage();
 
-        primaryStage.setWidth(1920/2);
-        primaryStage.setHeight(1080/2);
+        stageWidth = primaryStage.getWidth();
+        stageHeight = primaryStage.getHeight();
 
         System.out.println("Begin PathFinder Init");
 
@@ -398,21 +410,27 @@ public class PathFinder {
         endLocationList.setItems(longNameArrayList);
         System.out.println("done");
 
-        new AutoCompleteComboBoxListener<>(startLocationList); //todo breaks the index lookup and ID correlation
-        new AutoCompleteComboBoxListener<>(endLocationList); //todo
+        new AutoCompleteComboBoxListener<>(startLocationList);
+        new AutoCompleteComboBoxListener<>(endLocationList);
 
         //Set up zoomable and pannable panes
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(pane);
+
+        //set default/initial floor for map
+        Image image = new Image("edu/wpi/TeamE/maps/1.png");
+        imageWidth = image.getWidth();
+        imageHeight = image.getHeight();
+        imageView.setImage(image);
+
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(primaryStage.getWidth());
+
         StackPane stackPane = new StackPane(imageView, borderPane);
         ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
 
         //make scroll pane pannable
         scrollPane.setPannable(true);
-
-        //set default/initial floor for map
-        Image image = new Image("edu/wpi/TeamE/maps/1.png");
-        imageView.setImage(image);
 
         //get rid of side scroll bars
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -423,8 +441,6 @@ public class PathFinder {
         stackPane.scaleYProperty().bind(zoomSlider.valueProperty());
 
         rootBorderPane.setCenter(scrollPane);
-        rootBorderPane.setPrefHeight(492);
-        rootBorderPane.setPrefWidth(960);
 
         System.out.println("Finish PathFinder Init.");
     }

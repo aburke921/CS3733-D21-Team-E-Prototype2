@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PathFindingTests {
     static SearchContext search;
@@ -292,7 +291,15 @@ public class PathFindingTests {
     @Test
     public void testGetPathLength() {
         Path path1 = search.search("eWALK01101", "eWALK01001");
-        path1.print("id");
-        assertEquals(325.0, path1.getPathLength(), 0.01);
+        assertEquals(325.0, path1.getPathLength(), 0.1);
+
+        Path path2 = search.search("ePARK00101", "ePARK02501");
+        assertEquals(3460.57, path2.getPathLength(), 0.1);
+
+        Path path3 = search.search("CRETL001L1", "BREST00102");
+        assertEquals(325.01, path3.getPathLength(), 0.1);
+
+        Path path4 = search.search("ARETL00101", "ADEPT00102");
+        assertEquals(575.26, path4.getPathLength(), 0.1);
     }
 }

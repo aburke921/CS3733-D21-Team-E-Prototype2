@@ -375,6 +375,17 @@ public class makeConnection {
 		}
 	}
 
+	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants the medecine delivered to.
+	 * - medicineName: this is the drug that the user is ordering/requesting
+	 * - quantity: the is the supply or the number of pills ordered
+	 * - dosage: this is the mg or ml quantity for a medication
+	 * - specialInstructions: this is any special details or instructions the user wants to give to who ever is processing the request.
+	 * - signature: this the signature (name in print) of the user who is filling out the request
+	 */
 	public void createMedDeliveryTable() {
 		try {
 			Statement stmt = connection.createStatement();
@@ -394,6 +405,14 @@ public class makeConnection {
 		}
 	}
 
+	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - level: this is the security level that is needed
+	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled
+	 */
 	public void createSecurityServTable() {
 		try {
 			Statement stmt = connection.createStatement();
@@ -1765,4 +1784,8 @@ public class makeConnection {
 		}
 		return false;
 	}
+
+
+
+
 }

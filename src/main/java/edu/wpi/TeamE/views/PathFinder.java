@@ -23,8 +23,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
@@ -36,6 +38,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class PathFinder {
@@ -437,6 +440,8 @@ public class PathFinder {
         stackPane.scaleYProperty().bind(zoomSlider.valueProperty());
 
         rootBorderPane.setCenter(scrollPane);
+        rootBorderPane.setPrefWidth(stageWidth);
+        rootBorderPane.setPrefHeight(stageHeight);
 
         System.out.println("Finish PathFinder Init.");
     }

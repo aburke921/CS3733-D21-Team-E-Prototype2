@@ -3,21 +3,21 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.ServiceRequests">
+
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.ServiceRequests">
    <children>
-      <VBox alignment="CENTER" prefHeight="399.0" prefWidth="600.0">
+      <AnchorPane>
          <children>
-            <HBox prefHeight="38.0" prefWidth="513.0">
+            <HBox layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;">
+                  <FlowPane style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
                      <children>
                         <Label prefHeight="38.0" prefWidth="486.0" text="Select a Service" textFill="WHITE">
                            <font>
@@ -29,119 +29,74 @@
                         </Label>
                      </children>
                   </FlowPane>
-                  <FlowPane alignment="CENTER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;">
+                  <FlowPane alignment="CENTER_RIGHT" columnHalignment="RIGHT" style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#getHelpDefault" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Help" textFill="WHITE" />
+                        <Button mnemonicParsing="false" onAction="#getHelpDefault" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Help" textFill="WHITE" />
                      </children>
-                  </FlowPane>
-               </children>
-            </HBox>
-            <HBox prefHeight="610.0" prefWidth="519.0">
-               <children>
-                  <FlowPane prefHeight="361.0" prefWidth="299.0">
-                     <children>
-                        <VBox prefHeight="349.0" prefWidth="231.0">
-                           <children>
-                              <Label prefHeight="23.0" prefWidth="144.0" text="Floral Delivery">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label layoutX="10.0" layoutY="10.0" prefHeight="27.0" prefWidth="247.0" text="External Patient Transport">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets top="15.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label prefHeight="27.0" prefWidth="201.0" text="Sanitation Services">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets top="15.0" />
-                                 </VBox.margin>sc
-                              </Label>
-                              <Label prefHeight="27.0" prefWidth="198.0" text="Medicine Delivery">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets top="15.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label prefHeight="27.0" prefWidth="174.0" text="Security Services">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets top="15.0" />
-                                 </VBox.margin>
-                              </Label>
-                           </children>
-                           <FlowPane.margin>
-                              <Insets left="10.0" />
-                           </FlowPane.margin>
-                        </VBox>
-                     </children>
-                  </FlowPane>
-                  <FlowPane prefHeight="361.0" prefWidth="329.0">
-                     <children>
-                        <VBox prefHeight="363.0" prefWidth="259.0">
-                           <FlowPane.margin>
-                              <Insets left="20.0" />
-                           </FlowPane.margin>
-                           <children>
-                              <Button fx:id="floralGoButton" mnemonicParsing="false" onAction="#toFloralDelivery" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button fx:id="externalGoButton" mnemonicParsing="false" onAction="#toExternalPatient" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
-                                 <VBox.margin>
-                                    <Insets top="12.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button fx:id="sanitationGoButton" mnemonicParsing="false" onAction="#toSanitation" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
-                                 <VBox.margin>
-                                    <Insets top="12.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button fx:id="medicineGoButton" mnemonicParsing="false" onAction="#toMedicineDelivery" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
-                                 <VBox.margin>
-                                    <Insets top="12.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <Button fx:id="securityGoButton" mnemonicParsing="false" onAction="#toSecurity" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Go" textFill="WHITE">
-                                 <VBox.margin>
-                                    <Insets top="12.0" />
-                                 </VBox.margin>
-                              </Button>
-                              <GridPane prefHeight="166.0" prefWidth="296.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints maxHeight="61.0" minHeight="10.0" prefHeight="61.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                                 <children>
-                                    <Button fx:id="backButton" mnemonicParsing="false" onAction="#toDefault" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                 </children>
-                              </GridPane>
-                           </children>
-                        </VBox>
-                     </children>
+                     <padding>
+                        <Insets right="30.0" />
+                     </padding>
                   </FlowPane>
                </children>
             </HBox>
          </children>
-      </VBox>
+      </AnchorPane>
+      <AnchorPane prefHeight="560.0" prefWidth="1200.0">
+         <children>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <center>
+                  <VBox alignment="TOP_CENTER" prefWidth="1200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="floralGoButton" mnemonicParsing="false" onAction="#toFloralDelivery" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Floral Delivery" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="externalGoButton" mnemonicParsing="false" onAction="#toExternalPatient" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="External Patient Transport" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="sanitationGoButton" mnemonicParsing="false" onAction="#toSanitation" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Sanitation Services" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="medicineGoButton" mnemonicParsing="false" onAction="#toMedicineDelivery" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Medicine Delivery" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="securityGoButton" mnemonicParsing="false" onAction="#toSecurity" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Security Services" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </VBox>
+               </center>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#toDefault" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
+         </children>
+      </AnchorPane>
    </children>
-</FlowPane>
+</VBox>

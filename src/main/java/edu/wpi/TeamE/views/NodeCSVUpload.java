@@ -165,7 +165,7 @@ public class NodeCSVUpload {
     private void toNavigation(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditorNavigation.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

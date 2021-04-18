@@ -47,7 +47,7 @@ public class ResponsiveTest {
 
         makeConnection connection = makeConnection.makeConnection();
         ObservableList<String> longNameArrayList = connection.getAllNodeLongNames();
-        ArrayList<String> nodeIDArrayList = connection.getListofNodeIDS();
+        ArrayList<String> nodeIDArrayList = connection.getListOfNodeIDS();
 //        listView1.setItems(longNameArrayList);
         listView1.getItems().add("Home");
         listView1.getItems().add("Service Requests");

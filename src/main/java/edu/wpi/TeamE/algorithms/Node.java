@@ -63,7 +63,12 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         }};
 
         int magicNumber = 30;
-        return floorMap.get(floor) * magicNumber;
+        Integer level = floorMap.get(floor);
+        if(level == null){
+            return 0;
+        } else {
+            return floorMap.get(floor) * magicNumber;
+        }
     }
 
 

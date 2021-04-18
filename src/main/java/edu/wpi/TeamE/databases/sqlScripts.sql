@@ -86,7 +86,7 @@ Create Table patient
 Create Table requests
 (
 	requestID    int Primary Key,
-	userID    int References userAccount On Delete Cascade,
+	userID       int References userAccount On Delete Cascade,
 	creationTime timestamp,
 	requestType  varchar(31),
 	requestState varchar(10),

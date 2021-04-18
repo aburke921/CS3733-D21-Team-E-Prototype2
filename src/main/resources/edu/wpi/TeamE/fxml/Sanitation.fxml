@@ -83,7 +83,7 @@
                                     <Insets top="20.0" />
                                  </VBox.margin>
                               </JFXComboBox>
-                              <JFXTextField fx:id="assignedIndividual" prefHeight="27.0" prefWidth="289.0" promptText="Personel Name">
+                              <JFXTextField fx:id="assignedIndividual" prefHeight="27.0" prefWidth="289.0" promptText="Personnel Name">
                                  <VBox.margin>
                                     <Insets top="30.0" />
                                  </VBox.margin>

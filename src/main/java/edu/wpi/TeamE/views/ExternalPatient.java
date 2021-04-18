@@ -55,6 +55,9 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
     @FXML // fx:id="patientIdInput"
     private JFXTextField patientIdInput; // Value injected by FXMLLoader
 
+    @FXML // fx:id="assignedPersonnel"
+    private JFXTextField assignedPersonnel; // Value injected by FXMLLoader
+
     @FXML // fx:id="descriptionInput"
     private JFXTextArea descriptionInput; // Value injected by FXMLLoader
 
@@ -90,8 +93,9 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
         patientIdInput.getValidators().add(validator);
         ETAInput.getValidators().add(validator);
         descriptionInput.getValidators().add(validator);
+        assignedPersonnel.getValidators().add(validator);
 
-        return  locationInput.validate() && requestTypeInput.validate() && severityInput.validate() && patientIdInput.validate() && descriptionInput.validate() && ETAInput.validate();
+        return  locationInput.validate() && requestTypeInput.validate() && severityInput.validate() && patientIdInput.validate() && assignedPersonnel.validate() && descriptionInput.validate() && ETAInput.validate();
 
 
     }
@@ -107,6 +111,7 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
         String patientID = patientIdInput.getText();
         String ETA = ETAInput.getText();
         String details = descriptionInput.getText();
+        String assignee = assignedPersonnel.getText();
 
         if(validateInput()){
             //String detailedInstructions = sdetailedInstructionsInput.getText();
@@ -138,6 +143,6 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
         assert ETAInput != null : "fx:id=\"ETAInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
-
+        assert assignedPersonnel != null : "fx:id=\"assignedPersonnel\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
@@ -66,9 +67,9 @@
                                     <JFXTextField fx:id="yCordInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Y-Cord" GridPane.columnIndex="2" />
                                     <JFXTextField fx:id="idInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="ID" GridPane.columnIndex="3" />
                                     <JFXTextField fx:id="shortNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Short Name" GridPane.rowIndex="1" />
-                                    <JFXTextField fx:id="floorInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Floor Input" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <JFXTextField fx:id="typeInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Type" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                    <JFXTextField fx:id="buildingInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Building" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                    <JFXComboBox fx:id="typeInput" prefHeight="27.0" prefWidth="135.0" promptText="Type" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                    <JFXComboBox fx:id="floorInput" prefHeight="27.0" prefWidth="135.0" promptText="Floor" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <JFXComboBox fx:id="buildingInput" prefHeight="27.0" prefWidth="135.0" promptText="Building" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                               <FlowPane prefHeight="41.0" prefWidth="297.0">

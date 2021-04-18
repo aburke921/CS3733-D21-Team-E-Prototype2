@@ -1,9 +1,14 @@
 package edu.wpi.TeamE.views;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.stage.FileChooser;
@@ -20,45 +25,72 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 import java.io.IOException;
+import java.util.function.UnaryOperator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 
 public class MapEditor {
 
-    @FXML
-    private TreeTableView<Node> treeTable;
-    @FXML
-    private JFXTextField xCordInput;
-    @FXML
-    private JFXTextField yCordInput;
-    @FXML
-    private JFXTextField idInput;
-    @FXML
-    private JFXTextField floorInput;
-    @FXML
-    private JFXTextField typeInput;
-    @FXML
-    private JFXTextField buildingInput;
-    @FXML
-    private JFXTextField longNameInput;
-    @FXML
-    private JFXTextField shortNameInput;
+    @FXML private TreeTableView<Node> treeTable;
+    @FXML private JFXTextField xCordInput;
+    @FXML private JFXTextField yCordInput;
+    @FXML private JFXTextField idInput;
+    @FXML private JFXComboBox floorInput;
+    @FXML private JFXComboBox typeInput;
+    @FXML private JFXComboBox buildingInput;
+    @FXML private JFXTextField longNameInput;
+    @FXML private JFXTextField shortNameInput;
 
     /**
      * when page loaded, displays the data
      */
     @FXML
     void initialize() {
-        assert treeTable != null : "fx:id=\"treeTable\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert xCordInput != null : "fx:id=\"xCordInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert longNameInput != null : "fx:id=\"longNameInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert yCordInput != null : "fx:id=\"yCordInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert idInput != null : "fx:id=\"idInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert shortNameInput != null : "fx:id=\"shortNameInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert floorInput != null : "fx:id=\"floorInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert typeInput != null : "fx:id=\"typeInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        assert buildingInput != null : "fx:id=\"buildingInput\" was not injected: check your FXML file 'MapEditor.fxml'.";
-        //assert backButton != null : "fx:id=\"backButton\" was not injected: check your FXML file 'MapEditor.fxml'.";
         prepareNodes(treeTable);
+        //Creating Type dropdown
+        ArrayList<String> nodeTypeArrayList = new ArrayList<String>();
+        nodeTypeArrayList.add("HALL");
+        nodeTypeArrayList.add("CONF");
+        nodeTypeArrayList.add("DEPT");
+        nodeTypeArrayList.add("HALL");
+        nodeTypeArrayList.add("ELEV");
+        nodeTypeArrayList.add("INFO");
+        nodeTypeArrayList.add("LABS");
+        nodeTypeArrayList.add("REST");
+        nodeTypeArrayList.add("RETL");
+        nodeTypeArrayList.add("STAI");
+        nodeTypeArrayList.add("SERV");
+        nodeTypeArrayList.add("EXIT");
+        nodeTypeArrayList.add("BATH");
+        ObservableList<String> listOfType = FXCollections.observableArrayList();
+        listOfType.addAll(nodeTypeArrayList);
+
+        //Creating Floor Dropdown
+        ArrayList<String> nodeFloorArrayList = new ArrayList<String>();
+        nodeFloorArrayList.add("L1");
+        nodeFloorArrayList.add("L2");
+        nodeFloorArrayList.add("1");
+        nodeFloorArrayList.add("2");
+        nodeFloorArrayList.add("3");
+        ObservableList<String> listOfFloors = FXCollections.observableArrayList();
+        listOfFloors.addAll(nodeFloorArrayList);
+        //Creating Building Dropdown
+        ArrayList<String> nodeBuildingArrayList = new ArrayList<String>();
+        nodeBuildingArrayList.add("BTM");
+        nodeBuildingArrayList.add("45 Francis");
+        nodeBuildingArrayList.add("15 Francis");
+        nodeBuildingArrayList.add("Tower");
+        nodeBuildingArrayList.add("Shapiro");
+        ObservableList<String> listOfBuildings = FXCollections.observableArrayList();
+        listOfBuildings.addAll(nodeBuildingArrayList);
+
+        //add ObservableLists to dropdowns
+        typeInput.setItems(listOfType);
+        floorInput.setItems(listOfFloors);
+        buildingInput.setItems(listOfBuildings);
+
     }
 
 
@@ -77,6 +109,11 @@ public class MapEditor {
         }
     }
 
+    /**
+     * brings user to the help page
+     *
+     * @param e
+     */
     @FXML
     public void getHelpDefault(ActionEvent e) {
     }
@@ -85,7 +122,6 @@ public class MapEditor {
      * When the table is empty (aka no root), create the proper columns
      * Go through the array of Nodes and create a treeItem for each one,
      * add each one to the treeTable
-     *
      * @param table this is the table being prepared with the nodes
      */
     public void prepareNodes(TreeTableView<Node> table) {
@@ -158,6 +194,10 @@ public class MapEditor {
         }
     }
 
+    /**
+     * Runs editNode fcn when edit node button is pressed
+     * @param e
+     */
     @FXML
     public void editNodeButton(ActionEvent e) {
         editNode(treeTable);
@@ -168,7 +208,6 @@ public class MapEditor {
      * looks at each field that the user could input into, whichever ones are not empty
      * the information is extracted and the node that the user selected is edited using
      * database's edit node fcn
-     *
      * @param table this is the table of nodes that is having a node edited
      */
     public void editNode(TreeTableView<Node> table) {
@@ -181,8 +220,8 @@ public class MapEditor {
             String shortName = null;
             String type = null;
             String building = null;
-            if (!floorInput.getText().equals("")) {
-                floor = floorInput.getText();
+            if (!floorInput.getValue().toString().equals("")) {
+                floor = floorInput.getValue().toString();
             }
             if (!longNameInput.getText().equals("")) {
                 longName = longNameInput.getText();
@@ -190,11 +229,11 @@ public class MapEditor {
             if (!shortNameInput.getText().equals("")) {
                 shortName = shortNameInput.getText();
             }
-            if (!typeInput.getText().equals("")) {
-                type = typeInput.getText();
+            if (!typeInput.getSelectionModel().equals("")) {
+                type = typeInput.getValue().toString();
             }
-            if (!buildingInput.getText().equals("")) {
-                building = buildingInput.getText();
+            if (!buildingInput.getValue().toString().equals("")) {
+                building = buildingInput.getValue().toString();
             }
             if (!xCordInput.getText().equals("")) {
                 System.out.println(xCordInput.getText());
@@ -257,10 +296,14 @@ public class MapEditor {
         makeConnection connection = makeConnection.makeConnection();
         int xVal = Integer.parseInt(xCordInput.getText());
         int yVal = Integer.parseInt(yCordInput.getText());
-        i = connection.addNode(idInput.getText(), xVal, yVal, floorInput.getText(), buildingInput.getText(), typeInput.getText(), longNameInput.getText(), shortNameInput.getText());
+        i = connection.addNode(idInput.getText(), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
         return i;
     }
 
+    /**
+     * calls the addNode fcn when the add node button is pressed
+     * @param e
+     */
     @FXML
     public void addNodeButton(ActionEvent e) {
         addNode();
@@ -277,8 +320,8 @@ public class MapEditor {
         ArrayList<Node> array = connection.getAllNodes();
         if (table.getSelectionModel().getSelectedItem() != null) {
             System.out.println(table.getSelectionModel().getSelectedItem().getValue().get("id"));
-            for(int i = 0; i < array.size(); i++) {
-                if(array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
+            for (int i = 0; i < array.size(); i++) {
+                if (array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
                     s = connection.deleteNode(array.get(i).get("id"));
                 }
             }
@@ -286,11 +329,20 @@ public class MapEditor {
         return s;
     }
 
+    /**
+     * calls the deleteNode fcn when the delete button is clicked
+     * @param e
+     */
     @FXML
     public void deleteNodeButton(ActionEvent e) {
         deleteNode(treeTable);
     }
 
+    /**
+     * when refresh button is clicked, retrieves the arrayList of Nodes,
+     * calls the function to display data using the array (prepareNodes)
+     * @param actionEvent
+     */
     @FXML
     public void startTableButton(ActionEvent actionEvent) {
         //creating the root for the array
@@ -323,6 +375,13 @@ public class MapEditor {
         }
     }
 
+
+
+    /**
+     *opens the file explorer on user's device, allows user to select CSV file,
+     * uploads file to database, refreshes page
+     * @param e actionevent
+     */
     @FXML
     private void openFile(ActionEvent e) throws IOException {
         makeConnection connection = makeConnection.makeConnection();

@@ -81,7 +81,7 @@ Create Table patient
 Create Table requests
 (
 	requestID    int Primary Key,
-	creatorID    int References userAccount On Delete Cascade,
+	userID    int References userAccount On Delete Cascade,
 	creationTime timestamp,
 	requestType  varchar(31),
 	requestState varchar(10),
@@ -168,15 +168,14 @@ Create Table medDelivery(
 );
 
 
-Create Table medDelivery(
-    requestID int Primary Key References requests On Delete Cascade,
-    roomID varchar(31) not null References node On Delete Cascade,
-    medacineName varchar(31) NOT NULL,
-    quantity int NOT NULL,
-    specialInstructions varchar(5000),
-    signature varchar(31) NOT NULL
-);
 
+Create Table extTransport(
+    requestID int Primary Key References requests On Delete Cascade,
+
+    hospitalLocation varchar(100) not null,
+    ETA varchar(100),
+
+);
 
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1

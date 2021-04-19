@@ -91,3 +91,33 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed {}
 .jfx-snackbar-action {
     -fx-text-fill: #ff4081;
 }
+
+/*------------------------
+    SLIDER STYLES
+--------------------------*/
+
+/* Styling the slider track */
+.jfx-slider > .track {
+    -fx-background-color: -fx--primary-light;
+}
+
+/* Styling the slider thumb */
+.jfx-slider > .thumb {
+    -fx-background-color: -fx--primary-dark;
+}
+
+/* Styling the filled track */
+.jfx-slider > .colored-track {
+    -fx-background-color: -fx--primary;
+}
+
+/* Styling the animated thumb */
+.jfx-slider > .animated-thumb {
+    -fx-background-color: -fx--primary-dark;
+}
+
+/* Styling the slider value text inside animated thumb */
+.jfx-slider .slider-value {
+    -fx-fill: white;
+    -fx-stroke: white;
+}

@@ -727,9 +727,80 @@ public class DatabaseTests {
 
 	}
 
+	@Test
+	@DisplayName("testEditSanitationRequest")
+	public void testEditSanitationRequest(){
 
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 
+		connection.addSanitationRequest(1, "bob","test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
 
+		int result = 0;
+		result = connection.editSanitationRequest(1, "test", null, null, null, "hello test");
+
+		assertTrue(result == 1);
+	}
+
+	@Test
+	@DisplayName("testEditExternalPatientRequest")
+	public void testEditExternalPatientRequest(){
+
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+
+		connection.addExternalPatientRequest(1, "bob", "BW", "Ambulance","severe", 123, "15 mins", "headache");
+
+		int result = 0;
+		result = connection.editExternalPatientRequest(1, "Tufts", null, null, null, null, "15 mins");
+
+		assertTrue(result == 1);
+	}
+
+	@Test
+	@DisplayName("testEditMedicineRequest")
+	public void testEditMedicineRequest(){
+
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+
+		connection.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+
+		int result = 0;
+		result = connection.editMedicineRequest(1,"test", "Tylenol", null, null, "Take twice everyday", null);
+
+		assertTrue(result == 1);
+	}
+
+	@Test
+	@DisplayName("testEditFloralRequest")
+	public void testEditFloralRequest(){
+
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+
+		connection.addFloralRequest(1,"bob", "test", "Nupur", "Roses", 1, "Tall", "feel better");
+
+		int result = 0;
+		result = connection.editFloralRequest(1,"test", "Ashley", "Tulips", null, null, null);
+
+		assertTrue(result == 1);
+	}
+
+	@Test
+	@DisplayName("testEditSecurityRequest")
+	public void testEditSecurityRequest(){
+
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+
+		connection.addSecurityRequest(1, "bob", "test", "low", "Low");
+
+		int result = 0;
+		result = connection.editSecurityRequest(1,null, "high", "High");
+
+		assertTrue(result == 1);
+	}
 
 	@Test
 	@DisplayName("testDataForPresentation")

@@ -893,17 +893,17 @@ public class makeConnection {
 	 *
 	 * @param //form this is the form being added to the table
 	 */
-	public void addSanitationRequest(int userID, String asignee, String roomID, String sanitationType, String description, String urgency, String signature) {
+	public void addSanitationRequest(int userID, String assignee, String roomID, String sanitationType, String description, String urgency, String signature) {
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests) + 1, ?, Current Timestamp, 'sanitation', 'inProgress', ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
-			prepState.setString(2, asignee);
+			prepState.setString(2, assignee);
 			prepState.execute();
 		} catch (SQLException e) {
-//			e.printStackTrace();
+ 			//e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addSanitationRequest()");
 		}
 
@@ -1455,19 +1455,13 @@ public class makeConnection {
 	 * @param roomID the new node/room/location the user is assigning this request to
 	 * @param sanitationType the new type of sanitation that the user is changing their request to
 	 * @param urgency the new urgency that the user is changing in their request
-	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editSanitationRequest(int requestID, String description, String roomID, String sanitationType, String urgency, String assignee) {
+	public int editSanitationRequest(int requestID, String roomID, String sanitationType, String description, String urgency, String signature) {
 
 		boolean added = false;
-		String query = "update sanitationRequest set ";
+		String query = "update sanitationRequest set";
 
-		if (description!= null) {
-			query = query + " description = '" + description + "'";
-
-			added = true;
-		}
 		if (roomID != null) {
 			if (added == true) {
 				query = query + ", ";
@@ -1482,6 +1476,11 @@ public class makeConnection {
 			query = query + " sanitationType = '" + sanitationType + "'";
 			added = true;
 		}
+		if (description!= null) {
+			query = query + " description = '" + description + "'";
+
+			added = true;
+		}
 		if (urgency != null) {
 			if (added == true) {
 				query = query + ", ";
@@ -1489,15 +1488,15 @@ public class makeConnection {
 			query = query + " urgency = '" + urgency + "'";
 			added = true;
 		}
-		if (assignee != null) {
+		if (signature != null) {
 			if (added == true) {
 				query = query + ", ";
 			}
-			query = query + " assignee = '" + assignee + "'";
+			query = query + "signature = '" + signature + "'";
 			added = true;
 		}
 
-		query = query + " where requestID = '" + requestID + "'";
+		query = query + " where requestID = " + requestID;
 		try {
 			Statement stmt = this.connection.createStatement();
 			System.out.println(query);
@@ -1517,22 +1516,21 @@ public class makeConnection {
 	/**
 	 * This edits a External Transport Services form that is already in the database
 	 * @param requestID the ID that specifies which external transfer form that is being edited
-	 * @param hospitalName this is the string used to update the hospital field
+	 * @param hospitalLocation this is the string used to update the hospital field
 	 * @param requestType this is the string used to update the type
 	 * @param severity this is the string used to update the severity
 	 * @param patientID this is the string used to update patientID
 	 * @param description this is the string used to update the description
 	 * @param ETA this is the string used to update the eta
-	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editExternalPatientRequest(int requestID, String hospitalName, String requestType, String severity, String patientID, String description, String ETA, String assignee) {
+	public int editExternalPatientRequest(int requestID, String hospitalLocation, String requestType, String severity, String patientID, String description, String ETA) {
 
 		boolean added = false;
-		String query = "update sanitationRequest set ";
+		String query = "update extTransport set ";
 
-		if (hospitalName!= null) {
-			query = query + " hospitalName = '" + hospitalName + "'";
+		if (hospitalLocation!= null) {
+			query = query + " hospitalLocation = '" + hospitalLocation + "'";
 
 			added = true;
 		}
@@ -1571,15 +1569,8 @@ public class makeConnection {
 			query = query + " ETA = '" + ETA + "'";
 			added = true;
 		}
-		if (ETA != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " assignee = '" + assignee + "'";
-			added = true;
-		}
 
-		query = query + " where requestID = '" + requestID + "'";
+		query = query + " where requestID = " + requestID;
 		try {
 			Statement stmt = this.connection.createStatement();
 			System.out.println(query);
@@ -1601,13 +1592,12 @@ public class makeConnection {
 	 * @param flowerAmount the new quantity of flowers the user wants to change their request to
 	 * @param vaseType the new vase type the user wants to change their request to
 	 * @param message the new message containing either instructions or to the recipient the user wants to change
-	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String message, String assignee) {
+	public int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String message) {
 
 		boolean added = false;
-		String query = "update sanitationRequest set ";
+		String query = "update floralRequests set ";
 
 		if (recipientName!= null) {
 			query = query + " recipientName = '" + recipientName + "'";
@@ -1649,15 +1639,8 @@ public class makeConnection {
 			query = query + " message = '" + message + "'";
 			added = true;
 		}
-		if (assignee != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " assignee = '" + assignee + "'";
-			added = true;
-		}
 
-		query = query + " where requestID = '" + requestID + "'";
+		query = query + " where requestID = " + requestID;
 
 		try {
 			Statement stmt = this.connection.createStatement();
@@ -1687,7 +1670,7 @@ public class makeConnection {
 	public int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, String assignee) {
 
 		boolean added = false;
-		String query = "update sanitationRequest set ";
+		String query = "update medDelivery set ";
 
 		if (roomID!= null) {
 			query = query + " roomID = '" + roomID + "'";
@@ -1730,7 +1713,7 @@ public class makeConnection {
 			added = true;
 		}
 
-		query = query + " where requestID = '" + requestID + "'";
+		query = query + " where requestID = " + requestID;
 
 		try {
 			Statement stmt = this.connection.createStatement();
@@ -1751,12 +1734,11 @@ public class makeConnection {
 	 * @param roomID the new node/room/location the user is assigning this request to
 	 * @param level this is the info to update levelOfSecurity
 	 * @param urgency  this is the info to update levelOfUrgency
-	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editSecurityRequest(int requestID, String roomID, String level, String urgency, String assignee) {
+	public int editSecurityRequest(int requestID, String roomID, String level, String urgency) {
 		boolean added = false;
-		String query = "update sanitationRequest set ";
+		String query = "update securityServ set ";
 
 		if (roomID!= null) {
 			query = query + " roomID = '" + roomID + "'";
@@ -1767,25 +1749,18 @@ public class makeConnection {
 			if (added == true) {
 				query = query + ", ";
 			}
-			query = query + " level = '" + level + "'";
+			query = query + "level = '" + level + "'";
 			added = true;
 		}
 		if (urgency != null) {
 			if (added == true) {
 				query = query + ", ";
 			}
-			query = query + " urgency = " + urgency;
-			added = true;
-		}
-		if (assignee != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " assignee = '" + assignee + "'";
+			query = query + "urgency = '" + urgency + "'";
 			added = true;
 		}
 
-		query = query + " where requestID = '" + requestID + "'";
+		query = query + " where requestID = " + requestID;
 
 		try {
 			Statement stmt = this.connection.createStatement();
@@ -1824,7 +1799,6 @@ public class makeConnection {
 		}
 		return 0;
 	}
-
 
 
 

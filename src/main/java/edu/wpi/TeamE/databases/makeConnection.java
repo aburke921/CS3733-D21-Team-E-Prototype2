@@ -2,6 +2,7 @@ package edu.wpi.TeamE.databases;
 
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.TeamE.views.MapEditor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
@@ -15,6 +16,7 @@ public class makeConnection {
 
 	// static variable singleInstance of type SingleConnection
 	public static makeConnection singleInstance = null;
+	private MapEditor mapEditor = new MapEditor();
 
 	public Connection connection;
 
@@ -588,7 +590,6 @@ public class makeConnection {
 
 	/**
 	 * Reads csv & inserts into table
-	 *
 	 * @param tableName name of the table that needs to be populated
 	 * @param file      file that is going to be read
 	 */
@@ -684,7 +685,6 @@ public class makeConnection {
 
 	/**
 	 * Acts as a trigger and calculates the length between two nodes that form an edge and add the value to the edge table
-	 *
 	 * @param startNode the node ID for the starting node in the edge
 	 * @param endNode   the node ID for the ending node in the edge
 	 */
@@ -760,8 +760,19 @@ public class makeConnection {
 	}
 
 	/**
-	 * adds a node with said data to the database
-	 *
+	 * Adds a node with said data to the database
+	 * @param nodeID this is a unique identifier for the each node. Every node must contain a nodeID.
+	 * @param xCoord this is the X-Coordinate/pixel location of the node on the map of the hospital.
+	 * @param yCoord this is the Y-Coordinate/pixel location of the node on the map of the hospital.
+	 * @param floor this is the floor of the hospital that the node is located on. The available options are: "1", "2", "3", "L1", "L2"
+	 * @param building this is the building of the hospital that the node is located in. The available options are: "BTM", "45 Francis", "Tower",
+	 *                   "15 Francis", "Shapiro", "Parking".
+	 * @param nodeType this is the type room/location that the node is specifying. The available options are: "PARK" (parking), "EXIT" (exit),
+	 *                    "WALK" (sidewalk/out door walkway), "HALL' (indoor walkway), "CONF" (conference room), "DEPT" (department room), "ELEV" (elevator),
+	 *                    "INFO" (information), "LABS" (lab testing/results room), "REST" (rest areas/sitting areas), "RETL" (retail/food and shopping),
+	 *                    "STAI" (stairs), "SERV" (services), "BATH" (bathrooms).
+	 * @param longName this is the long version/more descriptive name of the node/location/room
+	 * @param shortName this is the short/nickname of the node/location/room
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
@@ -777,21 +788,25 @@ public class makeConnection {
 			addNodePS.setString(8, shortName);
 			int addNodeRS = addNodePS.executeUpdate();
 			if (addNodeRS == 0) {
+				mapEditor.errorPopup("Error in updating node");
 				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
 			} else if (addNodeRS != 1) {
+				mapEditor.errorPopup("Error in updating node");
 				System.err.println("addNode Result =" + addNodeRS + ", probably bad cuz " + addNodeRS + " rows was affected");
 			}
 			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
 			//e.printStackTrace();
+			mapEditor.errorPopup("There is already a node here or this node already exists");
 			return 0;
 		}
 	}
 
 	/**
-	 * adds an edge with said data to the database
-	 * both startNode and endNode has to already exist in node table
-	 *
+	 * Adds an edge with said data to the database. Both startNode and endNode has to already exist in node table
+	 * @param edgeID this is a unique identifier for the edge connection. Every edge must contain an edgeID.
+	 * @param startNode this is a nodeID in which the edge connection starts.
+	 * @param endNode this is a nodeID in which the edge connection ends.
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 	public int addEdge(String edgeID, String startNode, String endNode) {
@@ -832,7 +847,7 @@ public class makeConnection {
 			prepState.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			//showError("This email all ready has an account");
+			mapEditor.errorPopup("This email all ready has an account");
 			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
 		}
 	}
@@ -1094,65 +1109,6 @@ public class makeConnection {
 
 
 
-	/**
-	 * This edits a Sanitation Services form that is already in the table
-	 *
-	 * @param departmentField  this updates the department
-	 * @param roomField        this updates the room field
-	 * @param numberField      this updates the number field
-	 * @param serviceTypeField this updates the service type field
-	 * @param assignee         this updates who is assigned to the service request
-	 */
-	public void editSanitationRequest(String departmentField, String roomField, String numberField, String serviceTypeField, String assignee) {
-	}
-
-	/**
-	 * @param hospital    this is the string used to update the hospital field
-	 * @param type        this is the string used to update the type
-	 * @param severity    this is the string used to update the severity
-	 * @param patientID   this is the string used to update patientID
-	 * @param description this is the string used to update the description
-	 * @param eta         this is the string used to update the eta
-	 */
-	public void editExternalPatientRequest(String hospital, String type, String severity, String patientID, String description, String eta) {
-	}
-
-	/**
-	 * This edits a floral request form within the table
-	 *
-	 * @param patient      this is the string to update patient info
-	 * @param room         this is the string to update room info
-	 * @param flowerType   this is the string to update the flower type
-	 * @param flowerAmount this is the string to update the flower amount
-	 * @param vaseType     this is the string to update the vase type
-	 * @param message      this is the string to update the message
-	 */
-	public void editFloralRequest(String patient, String room, String flowerType, String flowerAmount, String vaseType, String message) {
-	}
-
-	/**
-	 * This function edits a current request for medicine delivery with the information below
-	 *
-	 * @param roomNumber          this string updates the room number
-	 * @param department          this string is used to update the department
-	 * @param medicineName        this string updates the medicine name
-	 * @param quantity            this string updates the quantity
-	 * @param dosage              this string updates the dosage
-	 * @param specialInstructions this string updates the special instructions
-	 */
-	public void editMedicineRequest(String roomNumber, String department, String medicineName, String quantity, String dosage, String specialInstructions) {
-	}
-
-	/**
-	 * This edits a security form already within the table
-	 *
-	 * @param location        this is the info to update location
-	 * @param levelOfSecurity this is the info to update levelOfSecurity
-	 * @param levelOfUrgency  this is the info to update levelOfUrgency
-	 * @param assignee        this is the info used to update who is assigned
-	 */
-	public void editSecurityRequest(String location, String levelOfSecurity, String levelOfUrgency, String assignee) {
-	}
 
 	/**
 	 * modifies a node, updating the DB, returning 0 or 1 depending on whether operation was successful
@@ -1241,7 +1197,6 @@ public class makeConnection {
 
 	/**
 	 * modifies an edge, updating the DB, returning 0 or 1 depending on whether operation was successful
-	 *
 	 * @param edgeID
 	 * @param startNode
 	 * @param endNode
@@ -1332,6 +1287,360 @@ public class makeConnection {
 		System.err.println("startNode or endNode does not exist but no SQL error");
 		return 0;
 	}
+
+	/**
+	 * This edits a Sanitation Services form that is already in the database
+	 * @param requestID the ID that specifies which sanitation form that is being edited
+	 * @param description the new description that the user is using to update their form
+	 * @param roomID the new node/room/location the user is assigning this request to
+	 * @param sanitationType the new type of sanitation that the user is changing their request to
+	 * @param urgency the new urgency that the user is changing in their request
+	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public int editSanitationRequest(int requestID, String description, String roomID, String sanitationType, String urgency, String assignee) {
+
+		boolean added = false;
+		String query = "update sanitationRequest set ";
+
+		if (description!= null) {
+			query = query + " description = '" + description + "'";
+
+			added = true;
+		}
+		if (roomID != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (sanitationType != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " sanitationType = '" + sanitationType + "'";
+			added = true;
+		}
+		if (urgency != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " urgency = '" + urgency + "'";
+			added = true;
+		}
+		if (assignee != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " assignee = '" + assignee + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = '" + requestID + "'";
+		try {
+			Statement stmt = this.connection.createStatement();
+			System.out.println(query);
+			stmt.executeUpdate(query);
+			stmt.close();
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating sanitation request");
+			return 0;
+		}
+
+
+
+	}
+
+
+	/**
+	 * This edits a External Transport Services form that is already in the database
+	 * @param requestID the ID that specifies which external transfer form that is being edited
+	 * @param hospitalName this is the string used to update the hospital field
+	 * @param requestType this is the string used to update the type
+	 * @param severity this is the string used to update the severity
+	 * @param patientID this is the string used to update patientID
+	 * @param description this is the string used to update the description
+	 * @param ETA this is the string used to update the eta
+	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public int editExternalPatientRequest(int requestID, String hospitalName, String requestType, String severity, String patientID, String description, String ETA, String assignee) {
+
+		boolean added = false;
+		String query = "update sanitationRequest set ";
+
+		if (hospitalName!= null) {
+			query = query + " hospitalName = '" + hospitalName + "'";
+
+			added = true;
+		}
+		if (requestType != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " requestType = '" + requestType + "'";
+			added = true;
+		}
+		if (severity != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " severity = '" + severity + "'";
+			added = true;
+		}
+		if (patientID != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " patientID = '" + patientID + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " description = '" + description + "'";
+			added = true;
+		}
+		if (ETA != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " ETA = '" + ETA + "'";
+			added = true;
+		}
+		if (ETA != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " assignee = '" + assignee + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = '" + requestID + "'";
+		try {
+			Statement stmt = this.connection.createStatement();
+			System.out.println(query);
+			stmt.executeUpdate(query);
+			stmt.close();
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating external transport request");
+			return 0;
+		}
+	}
+
+	/**
+	 * This edits a floral request form that is already in the database
+	 * @param requestID the ID that specifies which external transfer form that is being edited
+	 * @param roomID the new node/room/location the user is assigning this request to
+	 * @param flowerType the type of flower the user wants to change their request to
+	 * @param flowerAmount the new quantity of flowers the user wants to change their request to
+	 * @param vaseType the new vase type the user wants to change their request to
+	 * @param message the new message containing either instructions or to the recipient the user wants to change
+	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String message, String assignee) {
+
+		boolean added = false;
+		String query = "update sanitationRequest set ";
+
+		if (recipientName!= null) {
+			query = query + " recipientName = '" + recipientName + "'";
+
+			added = true;
+		}
+		if (roomID != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (flowerType != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " flowerType = '" + flowerType + "'";
+			added = true;
+		}
+		if (flowerAmount != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " flowerAmount = " + flowerAmount;
+			added = true;
+		}
+		if (vaseType != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " vaseType = '" + vaseType + "'";
+			added = true;
+		}
+		if (message != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " message = '" + message + "'";
+			added = true;
+		}
+		if (assignee != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " assignee = '" + assignee + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = '" + requestID + "'";
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			System.out.println(query);
+			stmt.executeUpdate(query);
+			stmt.close();
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating floral request");
+			return 0;
+		}
+
+	}
+
+	/**
+	 * This function edits a current request for medicine delivery with the information below for a request already in the database
+	 * @param requestID the ID that specifies which external transfer form that is being edited
+	 * @param roomID the new node/room/location the user is assigning this request to
+	 * @param medicineName this is the name of the medicine the user is changing the request to
+	 * @param quantity this is the number of pills the user is changing the request to
+	 * @param dosage this is the dosage (ml or mg) the user is changing the request to
+	 * @param specialInstructions this is the new special instructions the user is requesting
+	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, String assignee) {
+
+		boolean added = false;
+		String query = "update sanitationRequest set ";
+
+		if (roomID!= null) {
+			query = query + " roomID = '" + roomID + "'";
+
+			added = true;
+		}
+		if (medicineName != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " medicineName = '" + medicineName + "'";
+			added = true;
+		}
+		if (quantity != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " quantity = " + quantity;
+			added = true;
+		}
+		if (dosage != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " dosage = '" + dosage + "'";
+			added = true;
+		}
+		if (specialInstructions != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " specialInstructions = '" + specialInstructions + "'";
+			added = true;
+		}
+		if (assignee != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " assignee = '" + assignee + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = '" + requestID + "'";
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			System.out.println(query);
+			stmt.executeUpdate(query);
+			stmt.close();
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating floral request");
+			return 0;
+		}
+	}
+
+	/**
+	 * This edits a security form already within the database
+	 * @param requestID the ID that specifies which external transfer form that is being edited
+	 * @param roomID the new node/room/location the user is assigning this request to
+	 * @param level this is the info to update levelOfSecurity
+	 * @param urgency  this is the info to update levelOfUrgency
+	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public int editSecurityRequest(int requestID, String roomID, String level, String urgency, String assignee) {
+		boolean added = false;
+		String query = "update sanitationRequest set ";
+
+		if (roomID!= null) {
+			query = query + " roomID = '" + roomID + "'";
+
+			added = true;
+		}
+		if (level != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " level = '" + level + "'";
+			added = true;
+		}
+		if (urgency != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " urgency = " + urgency;
+			added = true;
+		}
+		if (assignee != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " assignee = '" + assignee + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = '" + requestID + "'";
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			System.out.println(query);
+			stmt.executeUpdate(query);
+			stmt.close();
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating floral request");
+			return 0;
+		}
+	}
+
 
 
 
@@ -1461,7 +1770,6 @@ public class makeConnection {
 	 * @return ArrayList of Node objects
 	 * need Node constructor from UI/UX team
 	 */
-
 	public ArrayList<Node> getAllNodes() {
 		ArrayList<Node> nodesArray = new ArrayList<>();
 //observable list -- UI
@@ -1586,6 +1894,11 @@ public class makeConnection {
 		}
 	}
 
+	/**
+	 * Gets a list of the nodeIDs of all of the nodes that are on the given floor
+	 * @param floorName the name of the floor that the nodes will be selected on
+	 * @return
+	 */
 	public ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
 		ArrayList<String> listOfNodeIDs = new ArrayList<>();
 
@@ -1612,7 +1925,6 @@ public class makeConnection {
 
 	/**
 	 * gets all edges and each edge's attribute
-	 *
 	 * @return ArrayList<Edge>
 	 */
 	public ArrayList<Edge> getAllEdges() {
@@ -1641,7 +1953,6 @@ public class makeConnection {
 
 	/**
 	 * counts the number of nodes already in the database of the given type and on the given floor that starts with the given teamNum
-	 *
 	 * @param teamNum be a String like "E"
 	 * @param Floor   is a String like "L2"
 	 * @param Type    is the nodeType of the node, like "ELEV"
@@ -1668,7 +1979,6 @@ public class makeConnection {
 
 	/**
 	 * gets list of nodeIDS
-	 *
 	 * @return String[] of nodeIDs
 	 */
 	public ArrayList<String> getListOfNodeIDS() {
@@ -1757,6 +2067,8 @@ public class makeConnection {
 		}
 	}
 
+
+
 	// User System Stuff
 
 	/**
@@ -1777,6 +2089,9 @@ public class makeConnection {
 				verification = userLoginRS.getInt("verification");
 			}
 			userLoginRS.close();
+			if(verification == 0){
+				mapEditor.errorPopup("Invalid username or password!");
+			}
 			return verification == 1;
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -1784,12 +2099,6 @@ public class makeConnection {
 		}
 		return false;
 	}
-
-
-
-//	ArrayList<String> = {"\"requestID\"", "\"requestID\"", "\"requestID,\""};
-//	ArrayList<String> = {"\"status\"", "\"status\"", "\"status,\""};
-
 
 	/**
 	 * Gets a list of all the requestIDs from the given tableName
@@ -1819,7 +2128,6 @@ public class makeConnection {
 
 		return listOfIDs;
 	}
-
 
 	/**
 	 * Gets a list of all the statuses from the given tableName
@@ -1851,6 +2159,7 @@ public class makeConnection {
 	}
 
 
-
+// Duplicate node
+// LongName too long
 
 }

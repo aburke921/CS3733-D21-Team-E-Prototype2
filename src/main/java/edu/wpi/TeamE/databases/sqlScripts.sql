@@ -113,6 +113,13 @@ Where userID = ?;
 Select Count(*)
 From requests;
 
+-- changeRequestStatus()
+
+Update requests
+Set requestStatus = ?
+Where requestID = ?;
+
+
 Create Table floralRequests
 (
 	requestID     int Primary Key References requests On Delete Cascade,

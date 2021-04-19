@@ -788,16 +788,16 @@ public class makeConnection {
 			addNodePS.setString(8, shortName);
 			int addNodeRS = addNodePS.executeUpdate();
 			if (addNodeRS == 0) {
-				mapEditor.errorPopup("Error in updating node");
+				//mapEditor.errorPopup("Error in updating node");
 				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
 			} else if (addNodeRS != 1) {
-				mapEditor.errorPopup("Error in updating node");
+				//mapEditor.errorPopup("Error in updating node");
 				System.err.println("addNode Result =" + addNodeRS + ", probably bad cuz " + addNodeRS + " rows was affected");
 			}
 			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			mapEditor.errorPopup("There is already a node here or this node already exists");
+			//mapEditor.errorPopup("There is already a node here or this node already exists");
 			return 0;
 		}
 	}
@@ -847,7 +847,7 @@ public class makeConnection {
 			prepState.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			mapEditor.errorPopup("This email all ready has an account");
+			//mapEditor.errorPopup("This email all ready has an account");
 			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
 		}
 	}
@@ -1113,14 +1113,6 @@ public class makeConnection {
 	/**
 	 * modifies a node, updating the DB, returning 0 or 1 depending on whether operation was successful
 	 *
-	 * @param nodeID
-	 * @param xCoord
-	 * @param yCoord
-	 * @param floor
-	 * @param building
-	 * @param nodeType
-	 * @param longName
-	 * @param shortName
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 */
 	public int modifyNode(String nodeID, Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
@@ -1641,6 +1633,26 @@ public class makeConnection {
 		}
 	}
 
+	/**
+	 * change a request's status to complete, canceled or inProgress
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param status    is the status that you want to change it to
+	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
+	 */
+	public int changeRequestStatus(int requestID, String status) {
+		String changeRequestStatusS = "Update requests Set requeststatus = ? Where requestid = ?;";
+		try (PreparedStatement changeRequestStatusPS = connection.prepareStatement(changeRequestStatusS)) {
+			changeRequestStatusPS.setString(1, status);
+			changeRequestStatusPS.setInt(2, requestID);
+			return changeRequestStatusPS.executeUpdate();
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("Unable to change requests status");
+		}
+		return 0;
+	}
+
 
 
 
@@ -2090,7 +2102,7 @@ public class makeConnection {
 			}
 			userLoginRS.close();
 			if(verification == 0){
-				mapEditor.errorPopup("Invalid username or password!");
+				//mapEditor.errorPopup("Invalid username or password!");
 			}
 			return verification == 1;
 		} catch (SQLException e) {

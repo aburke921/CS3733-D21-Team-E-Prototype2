@@ -1785,11 +1785,36 @@ public class makeConnection {
 		return false;
 	}
 
+	/**
+	 * Gets a list of all the statuses from the given tableName
+	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all the statuses of the requests
+	 */
+	public ArrayList<String> getRequestStatus(String tableName){
 
 
-//	ArrayList<String> = {"\"requestID\"", "\"requestID\"", "\"requestID,\""};
-//	ArrayList<String> = {"\"status\"", "\"status\"", "\"status,\""};
+		ArrayList<String> listOfStatus = new ArrayList<String>();
 
+
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestStatus = "Select requests.requestStatus From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+
+			ResultSet rset = stmt.executeQuery(requestStatus);
+
+			while(rset.next()){
+				String status = rset.getString("requestStatus");
+				listOfStatus.add(status);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+
+		}
+
+		return listOfStatus;
+	}
 
 	/**
 	 * Gets a list of all the requestIDs from the given tableName
@@ -1820,37 +1845,85 @@ public class makeConnection {
 		return listOfIDs;
 	}
 
-
 	/**
-	 * Gets a list of all the statuses from the given tableName
+	 * Gets a list of all the assignees from the given tableName
 	 * @param tableName this is the name of the table that we are getting the requestIDs from
-	 * @return a list of all the statuses of the requests
+	 * @return a list of all assignees for all of the requests
 	 */
-	public ArrayList<String> getRequestStatus(String tableName){
+	public ArrayList<String> getRequestAssignees(String tableName){
 
-		ArrayList<String> listOfStatus = new ArrayList<String>();
+		ArrayList<String> listOfAssignees = new ArrayList<String>();
 
 		try  {
 			Statement stmt = connection.createStatement();
-			String requestStatus = "Select requests.requestStatus From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+			String requestAssignee = "Select requests.assignee From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
 
-			ResultSet rset = stmt.executeQuery(requestStatus);
+			ResultSet rset = stmt.executeQuery(requestAssignee);
 
 			while(rset.next()){
-				String status = rset.getString("requestStatus");
-				listOfStatus.add(status);
+				String status = rset.getString("assignee");
+				listOfAssignees.add(status);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("getRequestStatus() error in the try/catch");
+			System.err.println("getRequestAssignee() error in the try/catch");
 
 		}
 
-		return listOfStatus;
+		return listOfAssignees;
+
+	}
+
+	/**
+	 * Gets a list of all the longNames for the location from the given tableName
+	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all longNames for the location for all of the requests
+	 */
+	public ArrayList<String> getRequestLocations(String tableName){
+
+		ArrayList<String> listOfLongNames = new ArrayList<String>();
+
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestLongNames = "Select longName From node, " + tableName + " where node.nodeID = " + tableName + ".roomID";
+
+			ResultSet rset = stmt.executeQuery(requestLongNames);
+
+			while(rset.next()){
+				String status = rset.getString("longName");
+				listOfLongNames.add(status);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestLocations() error in the try/catch");
+
+		}
+
+		return listOfLongNames;
+	}
+
+	public int changeRequestStatus(int requestID, String status) {
+		String changeRequestStatusS = "Update requests Set requeststatus = ? Where requestid = ?";
+		try (PreparedStatement changeRequestStatusPS = connection.prepareStatement(changeRequestStatusS)) {
+			changeRequestStatusPS.setString(1, status);
+			changeRequestStatusPS.setInt(2, requestID);
+
+			int rowsChanged = changeRequestStatusPS.executeUpdate();
+
+			changeRequestStatusPS.close();
+
+			return rowsChanged;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Unable to change requests status");
+		}
+		return 0;
 	}
 
 
-
+//	ArrayList<String> = {"\"requestID\"", "\"requestID\"", "\"requestID,\""};
+//	ArrayList<String> = {"\"status\"", "\"status\"", "\"status,\""};
 
 }

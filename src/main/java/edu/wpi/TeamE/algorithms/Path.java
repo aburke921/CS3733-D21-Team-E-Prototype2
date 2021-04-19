@@ -18,6 +18,9 @@ public class Path {
 
     private double length = 0;
 
+    //Scale from pixel to foot
+    public final double scale = 0.325;
+
     /**
      * construct an empty list
      */
@@ -201,8 +204,6 @@ public class Path {
         //iterate the list
         Iterator<Node> itr = this.iterator();
 
-        //TODO: make work
-
         if(itr.hasNext()){
 
             //node 1
@@ -212,6 +213,7 @@ public class Path {
 
                 //node 2
                 Node node2 = itr.next();
+                int last = 0;
 
                 while (itr.hasNext()){
 
@@ -240,20 +242,36 @@ public class Path {
                     double p2p3Length = Math.sqrt( p2p3.getX() *  p2p3.getX() + p2p3.getY() *  p2p3.getY());
 
                     angle = Math.acos(dotProduct / (p1p2Length * p2p3Length));
-                    angle = 180 * angle / Math.PI;//convert radian to angle
+                    angle = 180 * angle / Math.PI;//convert radian to degree
 
-                    if (crossProduct < 0){
-                        directions.add("Bend right, by angle " + Math.abs(angle));
-                    }else if (crossProduct > 0){
-                        directions.add("Bend left, by angle " + Math.abs(angle));
+                    int dist = (int) (Math.round((p1p2Length * scale) / 10) * 10);
+                    last = (int) (Math.round((p2p3Length * scale) / 10) * 10);
+
+                    String turn = "";
+
+                    if (Math.abs(angle) < 30) {
+                        turn = "Bend to the";
+                    } else if (Math.abs(angle) < 60) {
+                        turn = "Take a shallow turn to the";
+                    } else if (Math.abs(angle) < 120) {
+                        turn = "Turn to the";
+                    } else {
+                        turn = "Take a sharp turn to the";
+                    }
+
+                    if (crossProduct < -2){
+                        directions.add(turn + " right in " + dist + " feet");
+                    }else if (crossProduct > 2){
+                        directions.add(turn + " left in " + dist + " feet");
                     }else{
-                        directions.add("Straight ahead");
+                        directions.add("Straight ahead for " + dist + " feet");
                     }
 
                     //continue for next node
                     node1 = node2;
                     node2 = node3;
                 }
+                directions.add("Straight ahead for " + last + " feet");
             }
         }
 
@@ -311,7 +329,11 @@ public class Path {
      * Gets the length of the path for Time Estimates
      * @return The total length of the path
      */
-    public double getPathLength(){
-        return length;
-    }
+    public double getPathLength(){ return length; }
+
+    /**
+     * Gets the length of the path in feet for Time Estimates
+     * @return The total length of the path in feet
+     */
+    public double getPathLengthFeet(){ return length * scale; }
 }

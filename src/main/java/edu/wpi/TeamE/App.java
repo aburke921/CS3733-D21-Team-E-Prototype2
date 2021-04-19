@@ -13,6 +13,8 @@ import java.io.IOException;
 
 public class App extends Application {
 
+	int userId = 0;
+
 	private static Stage primaryStage;
 
 	public static void setPrimaryStage(Stage primaryStage) {

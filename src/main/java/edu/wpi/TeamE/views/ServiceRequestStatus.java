@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTreeTableView;
 //import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.TeamE.views.forms.ServiceRequestForm;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -76,6 +77,9 @@ public class ServiceRequestStatus {
 
     ArrayList<String> testArrayID = new ArrayList<>();
     ArrayList<String> testArrayStatus = new ArrayList<>();
+    ArrayList<String> testArrayLocation = new ArrayList<>();
+    ArrayList<String> testArrayAssignee = new ArrayList<>();
+
     private void createTests() {
         testArrayID.add(0,"test1");
         testArrayID.add(1,"test2");
@@ -85,22 +89,33 @@ public class ServiceRequestStatus {
         testArrayStatus.add(1,"Completed");
         testArrayStatus.add(2,"Cancelled");
         testArrayStatus.add(3,"In Progress");
+        testArrayAssignee.add(0, "James");
+        testArrayAssignee.add(1,"Seamus");
+        testArrayAssignee.add(2,"Brendan");
+        testArrayAssignee.add(3,"Spencer");
+        testArrayLocation.add(0,"Floor 2");
+        testArrayLocation.add(1,"United States");
+        testArrayLocation.add(2,"England");
+        testArrayLocation.add(3,"Middle Earth");
+
     }
 
 
-    private void addToTable(String tableName, TreeItem<String> inProgress, TreeItem<String> completed, TreeItem<String> cancelled) {
+    private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<String> idArray = testArrayID;   //connection.getRequestIDs(tableName);
         ArrayList<String> statusArray = testArrayStatus;    //connection.getRequestStatus(tableName);
+        ArrayList<String> locationArray = testArrayLocation; //connection.getRequestLocations(tableName);
+        ArrayList<String> assigneeArray = testArrayAssignee; //connection.getRequestAssignees(tableName);
         for(int i = 0; i < idArray.size(); i++) {
-            TreeItem<String> request = new TreeItem<>(idArray.get(i));
-            if(statusArray.get(i).equals("In Progress")) {
+            TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), locationArray.get(i), assigneeArray.get(i), statusArray.get(i)));
+            if(request.getValue().getStatus().equals("In Progress")) {
                 inProgress.getChildren().add(request);
             }
-            if(statusArray.get(i).equals("Completed")) {
+            if(request.getValue().getStatus().equals("Completed")) {
                 completed.getChildren().add(request);
             }
-            if(statusArray.get(i).equals("Cancelled")) {
+            if(request.getValue().getStatus().equals("Cancelled")) {
                 cancelled.getChildren().add(request);
             }
         }
@@ -109,29 +124,29 @@ public class ServiceRequestStatus {
 
     public void prepareTable(TreeTableView serviceRequestTable) {
 
-        TreeItem<String> rootNode = new TreeItem<>("Service Requests");
+        TreeItem<ServiceRequestForm> rootNode = new TreeItem<>(new ServiceRequestForm("Service Requests"));
 
         //Setting up sub-root nodes
-        TreeItem<String> inProgress = new TreeItem<>("In Progress");
-        TreeItem<String> completed = new TreeItem<>("Completed");
-        TreeItem<String> cancelled = new TreeItem<>("Cancelled");
+        TreeItem<ServiceRequestForm> inProgress = new TreeItem<>(new ServiceRequestForm("In Progress"));
+        TreeItem<ServiceRequestForm> completed = new TreeItem<>(new ServiceRequestForm("Completed"));
+        TreeItem<ServiceRequestForm> cancelled = new TreeItem<>(new ServiceRequestForm("Cancelled"));
 
         //Setting up children of sub-root nodes
-        TreeItem<String> externalPatientCompleted = new TreeItem<>("External Patient Form");
-        TreeItem<String> floralFormCompleted = new TreeItem<>("Floral Form");
-        TreeItem<String> medicineDeliveryCompleted = new TreeItem<>("Medicine Delivery Form");
-        TreeItem<String> sanitationServicesCompleted = new TreeItem<>("Sanitation Services Form");
-        TreeItem<String> securityServiceCompleted = new TreeItem<>("Security Service Form");
-        TreeItem<String> externalPatientInProgress = new TreeItem<>("External Patient Form");
-        TreeItem<String> floralFormInProgress = new TreeItem<>("Floral Form");
-        TreeItem<String> medicineDeliveryInProgress = new TreeItem<>("Medicine Delivery Form");
-        TreeItem<String> sanitationServicesInProgress = new TreeItem<>("Sanitation Services Form");
-        TreeItem<String> securityServiceInProgress = new TreeItem<>("Security Service Form");
-        TreeItem<String> externalPatientCancelled = new TreeItem<>("External Patient Form");
-        TreeItem<String> floralFormCancelled = new TreeItem<>("Floral Form");
-        TreeItem<String> medicineDeliveryCancelled = new TreeItem<>("Medicine Delivery Form");
-        TreeItem<String> sanitationServicesCancelled = new TreeItem<>("Sanitation Services Form");
-        TreeItem<String> securityServiceCancelled = new TreeItem<>("Security Service Form");
+        TreeItem<ServiceRequestForm> externalPatientCompleted = new TreeItem<>(new ServiceRequestForm("External Patient Form"));
+        TreeItem<ServiceRequestForm> floralFormCompleted = new TreeItem<>(new ServiceRequestForm("Floral Form"));
+        TreeItem<ServiceRequestForm> medicineDeliveryCompleted = new TreeItem<>(new ServiceRequestForm("Medicine Delivery Form"));
+        TreeItem<ServiceRequestForm> sanitationServicesCompleted = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
+        TreeItem<ServiceRequestForm> securityServiceCompleted = new TreeItem<>(new ServiceRequestForm("Security Service Form"));
+        TreeItem<ServiceRequestForm> externalPatientInProgress = new TreeItem<>(new ServiceRequestForm("External Patient Form"));
+        TreeItem<ServiceRequestForm> floralFormInProgress = new TreeItem<>(new ServiceRequestForm("Floral Form"));
+        TreeItem<ServiceRequestForm> medicineDeliveryInProgress = new TreeItem<>(new ServiceRequestForm("Medicine Delivery Form"));
+        TreeItem<ServiceRequestForm> sanitationServicesInProgress = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
+        TreeItem<ServiceRequestForm> securityServiceInProgress = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
+        TreeItem<ServiceRequestForm> externalPatientCancelled = new TreeItem<>(new ServiceRequestForm("External Patient Form"));
+        TreeItem<ServiceRequestForm> floralFormCancelled = new TreeItem<>(new ServiceRequestForm("Floral Form"));
+        TreeItem<ServiceRequestForm> medicineDeliveryCancelled = new TreeItem<>(new ServiceRequestForm("Medicine Delivery Form"));
+        TreeItem<ServiceRequestForm> sanitationServicesCancelled = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
+        TreeItem<ServiceRequestForm> securityServiceCancelled = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
 
         //Adding request forms
         createTests();
@@ -154,22 +169,22 @@ public class ServiceRequestStatus {
 
         //Establishing some columns that are consistent throughout all the service requests
         //Column 1 - ID
-        TreeTableColumn<String, String> formColumn = new TreeTableColumn<>("Form");
+        TreeTableColumn<ServiceRequestForm, String> formColumn = new TreeTableColumn<>("Form");
         formColumn.setPrefWidth(320);
-        formColumn.setCellValueFactory(new Callback<CellDataFeatures<String, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(CellDataFeatures<String, String> param) {
-                return new SimpleStringProperty(param.getValue().getValue());
-            }
-        });
+        formColumn.setCellValueFactory((CellDataFeatures<ServiceRequestForm, String> p) ->
+                new ReadOnlyStringWrapper(p.getValue().getValue().getId()));
         serviceRequestTable.getColumns().add(formColumn);
         //Column 2 - Location
-        TreeTableColumn<Node, Number> locationColumn = new TreeTableColumn<>("Location");
+        TreeTableColumn<ServiceRequestForm, String> locationColumn = new TreeTableColumn<>("Location");
         locationColumn.setPrefWidth(150);
+        locationColumn.setCellValueFactory((CellDataFeatures<ServiceRequestForm, String> p) ->
+                        new ReadOnlyStringWrapper(p.getValue().getValue().getLocation()));
         serviceRequestTable.getColumns().add(locationColumn);
         //Column 3 - Assignee
-        TreeTableColumn<String, Number> assigneeColumn = new TreeTableColumn<>("Assignee");
+        TreeTableColumn<ServiceRequestForm, String> assigneeColumn = new TreeTableColumn<>("Assignee");
         assigneeColumn.setPrefWidth(150);
+        assigneeColumn.setCellValueFactory((CellDataFeatures<ServiceRequestForm, String> p) ->
+                        new ReadOnlyStringWrapper(p.getValue().getValue().getAssignee()));
         serviceRequestTable.getColumns().add(assigneeColumn);
 
     }

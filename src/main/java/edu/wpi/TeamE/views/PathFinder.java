@@ -171,11 +171,13 @@ public class PathFinder {
     @FXML
     void showDirections(ActionEvent event) {
         //get directions
+        if (currentFoundPath == null) return;
+
         List<String> directions = currentFoundPath.makeDirections();
         StringBuilder directionsStringBuilder = new StringBuilder();
         for (String dir: directions) {
             System.out.println(dir);
-            directionsStringBuilder.append(dir + ".\n"); //todo make scrollable
+            directionsStringBuilder.append(dir).append(".\n"); //todo make scrollable
         }
         //make popup
         JFXDialogLayout error = new JFXDialogLayout();

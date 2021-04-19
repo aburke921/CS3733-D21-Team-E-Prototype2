@@ -73,12 +73,12 @@
                         <Insets left="20.0" top="20.0" />
                      </HBox.margin>
                   </JFXSlider>
-                  <JFXButton fx:id="backButton" onAction="#toDefault" styleClass="submit-button" text="Back">
+                  <JFXButton fx:id="directionsButton" onAction="#showDirections" styleClass="submit-button" text="Detailed Directions">
                      <HBox.margin>
                         <Insets left="15.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="directionsButton" onAction="#showDirections" styleClass="submit-button" text="Detailed Directions">
+                  <JFXButton fx:id="backButton" onAction="#toDefault" styleClass="submit-button" text="Back">
                      <HBox.margin>
                         <Insets left="15.0" top="10.0" />
                      </HBox.margin>

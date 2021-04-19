@@ -23,7 +23,7 @@ public class Default {
     private void toServiceRequests(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/ServiceRequests.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -37,7 +37,7 @@ public class Default {
     private void toMapEditor(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditorNavigation.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -51,7 +51,7 @@ public class Default {
     private void toPathFinder(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/PathFinder.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

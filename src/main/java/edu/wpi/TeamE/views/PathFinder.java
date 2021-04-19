@@ -116,7 +116,7 @@ public class PathFinder {
     private void toDefault(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -441,7 +441,7 @@ public class PathFinder {
 
         rootBorderPane.setCenter(scrollPane);
         rootBorderPane.setPrefWidth(stageWidth);
-        rootBorderPane.setPrefWidth(stageHeight);
+        rootBorderPane.setPrefHeight(stageHeight);
 
         System.out.println("Finish PathFinder Init.");
     }

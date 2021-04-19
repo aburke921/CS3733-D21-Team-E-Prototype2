@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 
 import javax.swing.*;
@@ -22,6 +23,17 @@ public class Login {
     @FXML private JFXTextField emailInput;
     @FXML private JFXTextField passwordInput;
     @FXML private StackPane stackPane;
+
+    @FXML // fx:id="exit"
+    private Polygon exit;
+
+    public void initialize() {
+        //If exit button is clicked, exit app
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
+    }
 
     public void submitLogin() {
         boolean bool = false;
@@ -71,17 +83,6 @@ public class Login {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
-
-
-    /**
-     * Terminate application
-     * @param e
-     */
-    @FXML
-    private void shutdown(ActionEvent e) {
-        App app = new App();
-        app.stop();
     }
 
     @FXML

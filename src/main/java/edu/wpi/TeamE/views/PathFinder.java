@@ -1,9 +1,12 @@
 package edu.wpi.TeamE.views;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.*;
 
+import java.awt.geom.RoundRectangle2D;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.*;
 import java.util.ArrayList;
@@ -11,8 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.jfoenix.controls.JFXSnackbar;
-import com.jfoenix.controls.JFXSnackbarLayout;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.*;
@@ -21,23 +22,23 @@ import edu.wpi.TeamE.databases.*;
 import edu.wpi.TeamE.App;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -76,6 +77,15 @@ public class PathFinder {
 
     @FXML // fx:id="zoomSlider"
     private Slider zoomSlider;
+
+    @FXML // fx:id="directionsButton"
+    private JFXButton directionsButton; // Value injected by FXMLLoader
+
+    @FXML // fx:id="stackPane"
+    private StackPane stackPane; // Value injected by FXMLLoader
+
+    @FXML // fx:id="exit"
+    private Polygon exit;
 
     /*
      * Additional Variables
@@ -155,6 +165,39 @@ public class PathFinder {
         } else {
             findPathButton.setDisable(false);
         }
+    }
+
+    /**
+     * Get textual directions from {@link Path#makeDirections()}, and prints them out onto
+     * a popup dialog.
+     * @param event the calling event's info
+     */
+    @FXML
+    void showDirections(ActionEvent event) {
+        //get directions
+        if (currentFoundPath == null) return;
+
+        List<String> directions = currentFoundPath.makeDirections();
+        StringBuilder directionsStringBuilder = new StringBuilder();
+        for (String dir: directions) {
+            System.out.println(dir);
+            directionsStringBuilder.append(dir).append(".\n"); //todo make scrollable
+        }
+        //make popup
+        JFXDialogLayout error = new JFXDialogLayout();
+        error.setHeading(new Text("Detailed Path Directions"));
+        error.setBody(new Text(directionsStringBuilder.toString()));
+        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Done");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        error.setActions(okay);
+        dialog.show();
     }
 
     /**
@@ -305,6 +348,7 @@ public class PathFinder {
 
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                line.setStrokeLineCap(StrokeLineCap.ROUND);
                 line.setStrokeWidth(strokeWidth);
                 line.setStroke(Color.RED);
 
@@ -313,6 +357,7 @@ public class PathFinder {
             else {
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                line.setStrokeLineCap(StrokeLineCap.ROUND);
                 line.setStrokeWidth(strokeWidth);
                 line.setStroke(Color.RED);
 
@@ -387,6 +432,12 @@ public class PathFinder {
         //todo remove when all sizes are same
         //set Stage size
         Stage primaryStage = App.getPrimaryStage();
+
+        //If exit button is clicked, exit app
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
 
         stageWidth = primaryStage.getWidth();
         stageHeight = primaryStage.getHeight();

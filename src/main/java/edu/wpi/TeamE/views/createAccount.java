@@ -11,8 +11,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 
 import javax.swing.*;
@@ -29,8 +31,19 @@ public class createAccount {
     private JFXTextField email;
     @FXML
     private JFXTextField password;
-    @FXML private StackPane stackPane;
+    @FXML
+    private StackPane stackPane;
 
+    @FXML // fx:id="exit"
+    private Polygon exit;
+
+    public void initialize() {
+        //If exit button is clicked, exit app
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
+    }
 
     public void createAccountButton() {
         boolean bool = false;
@@ -147,4 +160,6 @@ public class createAccount {
             ex.printStackTrace();
         }
     }
+
+
 }

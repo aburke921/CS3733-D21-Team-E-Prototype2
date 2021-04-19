@@ -571,7 +571,7 @@ public class DatabaseTests {
 		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 
-		connection.addSanitationRequest(10000, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
+		connection.addSanitationRequest(10000, "bob","test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
 	}
 
 	@Test
@@ -580,17 +580,15 @@ public class DatabaseTests {
 		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 
-		connection.addExternalPatientRequest(10000, "BW", "severe", "123", "15 mins", "headache");
+		connection.addExternalPatientRequest(10000, "bob", "BW", "severe", "123", "15 mins", "headache");
 	}
 
 	@Test
 	@DisplayName("testAddMedicineRequest")
 	public void testAddMedicineRequest() {
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
-
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-
-		connection.addMedicineRequest(10000, "test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(10000, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
 	}
 
 	@Test
@@ -600,7 +598,7 @@ public class DatabaseTests {
 
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 
-		connection.addSecurityRequest(10000, "test", "low", "Low");
+		connection.addSecurityRequest(10000, "bob", "test", "low", "Low");
 	}
 
 	@Test
@@ -609,7 +607,7 @@ public class DatabaseTests {
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 
-		connection.addFloralRequest(10000, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+		connection.addFloralRequest(10000,"bob", "test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 	}
 
@@ -628,9 +626,9 @@ public class DatabaseTests {
 	public void testGetRequestStatus() {
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addExternalPatientRequest(10000, "BW", "severe", "123", "15 mins", "headache");
-		connection.addExternalPatientRequest(10000, "BW", "severe", "123", "15 mins", "migraine");
-		connection.addFloralRequest(10000, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+		connection.addExternalPatientRequest(10000, "bob","BW", "severe", "123", "15 mins", "headache");
+		connection.addExternalPatientRequest(10000, "bob","BW", "severe", "123", "15 mins", "migraine");
+		connection.addFloralRequest(10000, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		ArrayList<String> returnedStatus = new ArrayList<String>();
 		ArrayList<String> correctStatus = new ArrayList<String>();
@@ -649,9 +647,9 @@ public class DatabaseTests {
 	public void testGetRequestIDs() {
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addExternalPatientRequest(10000, "BW", "severe", "123", "15 mins", "headache");
-		connection.addExternalPatientRequest(10000, "BW", "severe", "123", "15 mins", "migraine");
-		connection.addFloralRequest(10000, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+		connection.addExternalPatientRequest(10000, "bob","BW", "severe", "123", "15 mins", "headache");
+		connection.addExternalPatientRequest(10000, "bob","BW", "severe", "123", "15 mins", "migraine");
+		connection.addFloralRequest(10000, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		ArrayList<String> returnedIDs = new ArrayList<String>();
 		ArrayList<String> correctIDs = new ArrayList<String>();
@@ -663,5 +661,105 @@ public class DatabaseTests {
 
 		assertTrue(correctIDs.equals(returnedIDs));
 	}
+
+	@Test
+	@DisplayName("testChangeRequestStatus")
+	public void testChangeRequestStatus(){
+
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addMedicineRequest(10000, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(10000, "bob1","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		ArrayList<String> IDS = connection.getRequestIDs("medDelivery");
+
+		int rowsChanged = connection.changeRequestStatus(1, "complete");
+
+		assertEquals(1, rowsChanged);
+	}
+
+
+	@Test
+	@DisplayName("testGetRequestAssignees")
+	public void testGetRequestAssignees(){
+
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addMedicineRequest(10000, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(10000, "kim","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		connection.addNode("test2", 0, 0, "3", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addSecurityRequest(10000, "drew", "test", "low", "Low");
+
+		ArrayList<String> returnedAssignees = connection.getRequestAssignees("medDelivery");
+		ArrayList<String> correctAssignees = new ArrayList<String>();
+
+		correctAssignees.add("bob");
+		correctAssignees.add("kim");
+
+		assertTrue(correctAssignees.equals(returnedAssignees));
+	}
+
+
+	@Test
+	@DisplayName("testGetRequestLocations")
+	public void testGetRequestLocations(){
+
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		connection.addNode("test3", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addMedicineRequest(10000, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(10000, "kim","test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		connection.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addSecurityRequest(10000, "drew", "test", "low", "Low");
+
+		ArrayList<String> returnedLocations = connection.getRequestLocations("medDelivery");
+		ArrayList<String> correctLocations = new ArrayList<String>();
+
+		correctLocations.add("long name #1");
+		correctLocations.add("long name #2");
+
+		assertTrue(correctLocations.equals(returnedLocations));
+
+	}
+
+
+
+
+	@Test
+	@DisplayName("data")
+	public void data(){
+
+		//Visitors:
+		connection.addUserAccount("bellag@gmail.com", "!!98!century!", "Bella", "Graham");
+		connection.addUserAccount("terry_reilly123@yahoo.com", "until&MORNING&", "Terry", "Reilly");
+		connection.addUserAccount("smiddle@outlook.com", "//97|member", "Sharon", "Middleton");
+		connection.addUserAccount("catherinehop12@gmail.com", "~FIND~question", "Catherine", "Hopkins");
+		connection.addUserAccount("mbernard@wpi.edu", "@@20.color", "Michelle", "Bernard");
+		connection.addUserAccount("mccoy.meghan@hotmail.com", "||22*what*", "Meghan", "Mccoy");
+		connection.addUserAccount("harry89owens@gmail.com", "plants*37||", "Harry", "Owens");
+		connection.addUserAccount("hugowh@gmail.com", "=finland=", "Hugo", "Whitehouse");
+		connection.addUserAccount("spenrodg@yahoo.com", "%object%7", "Spencer", "Rodgers");
+		connection.addUserAccount("thomasemail@gmail.com", "travel@66", "Thomas", "Mendez");
+		connection.addUserAccount("claytonmurray@gmail.com", "95+bill", "Clayton", "Murray");
+		connection.addUserAccount("lawrencekhalid@yahoo.com", "??54%com", "Khalid", "Lawrence");
+
+		//Patients:
+		connection.addSpecialUserType("adamj@gmail.com","patient1","patient","Adam", "Jenkins");
+		connection.addSpecialUserType("abbym@yahoo.com","patient2","patient","Abby", "Mohamed");
+		connection.addSpecialUserType("wesleya@gmail.com","patient3","patient","Wesley", "Armstrong");
+		connection.addSpecialUserType("travisc@yahoo.com","patient4","patient","Travis", "Cook");
+
+
+//		"visitor", "patient", "doctor", "admin".
+
+
+
+
+	}
+
 
 }

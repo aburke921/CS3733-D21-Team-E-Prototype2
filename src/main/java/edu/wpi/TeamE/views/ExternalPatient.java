@@ -12,10 +12,12 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
+import edu.wpi.TeamE.databases.makeConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.shape.Polygon;
 
 public class ExternalPatient extends ServiceRequestFormComponents  {
 
@@ -69,6 +71,11 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
 
     @FXML // fx:id="submit"
     private JFXButton submit; // Value injected by FXMLLoader
+
+    @FXML // fx:id="exit"
+    private Polygon exit;
+
+    makeConnection connection = makeConnection.makeConnection();
     RequiredFieldValidator validator = new RequiredFieldValidator();
     /**
      * todo This function will cause a pop-up modal to appear with help information for this form's fields
@@ -105,13 +112,7 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
      */
     @FXML
     private void saveData(ActionEvent actionEvent){
-        String location = locationInput.getText();
-        String type = requestTypeInput.getSelectionModel().toString();
-        String severity = severityInput.getSelectionModel().toString();
-        String patientID = patientIdInput.getText();
-        String ETA = ETAInput.getText();
-        String details = descriptionInput.getText();
-        String assignee = assignedPersonnel.getText();
+
 
         if(validateInput()){
             //String detailedInstructions = sdetailedInstructionsInput.getText();
@@ -121,7 +122,15 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
             //Adding service request to table
             //makeConnection connection = makeConnection.makeConnection();
             //connection.addRequest("sanitationServices", request);
+            String location = locationInput.getText();
+            String type = requestTypeInput.getSelectionModel().toString();
+            String severity = severityInput.getSelectionModel().toString();
+            String patientID = patientIdInput.getText();
+            String ETA = ETAInput.getText();
+            String details = descriptionInput.getText();
+            String assignee = assignedPersonnel.getText();
 
+            connection.addExternalPatientRequest(15, location,severity,patientID,ETA,details);
             super.handleButtonSubmit(actionEvent);
             //Setting up all variables to be entered
         }
@@ -144,5 +153,11 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert assignedPersonnel != null : "fx:id=\"assignedPersonnel\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
+
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
+
     }
 }

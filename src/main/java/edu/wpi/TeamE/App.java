@@ -52,7 +52,13 @@ public class App extends Application {
 	}
 
 	public static void setDraggableAndChangeScene(Parent root) {
-		ResizeHelper.addResizeListener(App.getPrimaryStage());
+//		ResizeHelper.addResizeListener(App.getPrimaryStage()); //todo this is no longer necessary, making pretty much this whole fcn unnecessary?
+//		ResizeHelper.addResizeListener(primaryStage,435,325,Double.MAX_VALUE,Double.MAX_VALUE);
+		App.getPrimaryStage().getScene().setRoot(root);
+	}
+
+	public static void setDraggableAndChangeScene(Parent root, double minWidth, double minHeight, double maxWidth, double maxHeight) {
+		ResizeHelper.addResizeListener(App.getPrimaryStage(),minWidth,minHeight,maxWidth,maxHeight);
 		App.getPrimaryStage().getScene().setRoot(root);
 	}
 
@@ -65,9 +71,11 @@ public class App extends Application {
 			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
 			Scene scene = new Scene(root); //init
 			primaryStage.setScene(scene);
-// 			primaryStage.setFullScreen(true);
+			primaryStage.setWidth(1050);
+			primaryStage.setHeight(576);
+			root.minWidth(576);
 			primaryStage.show();
-			ResizeHelper.addResizeListener(primaryStage);
+			ResizeHelper.addResizeListener(primaryStage,950,576,Double.MAX_VALUE,Double.MAX_VALUE);
 		} catch (IOException e) {
 			e.printStackTrace();
 			Platform.exit();

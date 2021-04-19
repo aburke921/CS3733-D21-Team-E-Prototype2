@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
@@ -39,6 +40,7 @@ public class MapEditor {
     @FXML private TreeTableView<Node> treeTable;
     @FXML private JFXTextField xCordInput;
     @FXML private JFXTextField yCordInput;
+    @FXML private JFXTextField idInput;
     @FXML private JFXComboBox floorInput;
     @FXML private JFXComboBox typeInput;
     @FXML private JFXComboBox buildingInput;
@@ -47,6 +49,9 @@ public class MapEditor {
     @FXML private StackPane stackPane;
     @FXML private FlowPane flowPane;
     @FXML private JFXTextField idInput;
+
+    @FXML // fx:id="exit"
+    private Polygon exit;
 
     /**
      * when page loaded, displays the data
@@ -96,6 +101,11 @@ public class MapEditor {
         floorInput.setItems(listOfFloors);
         buildingInput.setItems(listOfBuildings);
 
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
+
     }
 
 
@@ -108,7 +118,7 @@ public class MapEditor {
     private void toNavigation(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditorNavigation.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

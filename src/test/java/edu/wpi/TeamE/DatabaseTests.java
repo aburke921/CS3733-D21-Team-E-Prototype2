@@ -27,19 +27,10 @@ public class DatabaseTests {
 		connection = makeConnection.makeConnection();
 	}
 
-    @BeforeEach
-    public void setupTables(){
-        try {
-            connection.deleteAllTables();
-	        connection.createNodeTable();
-	        connection.createEdgeTable();
-	        connection.createUserAccountTable();
-	        connection.createRequestsTable();
-	        connection.createFloralRequestsTable();
-			connection.createSanitationTable();
-			connection.createExtTransportTable();
-            System.out.println("Tables were reset");
-        } catch (Exception e) {
+	@BeforeEach
+	public void setupTables() {
+		try {
+			connection.deleteAllTables();
 			connection.createNodeTable();
 			connection.createEdgeTable();
 			connection.createUserAccountTable();
@@ -47,12 +38,25 @@ public class DatabaseTests {
 			connection.createFloralRequestsTable();
 			connection.createSanitationTable();
 			connection.createExtTransportTable();
+			connection.createMedDeliveryTable();
+			connection.createSecurityServTable();
+			System.out.println("Tables were reset");
+		} catch (Exception e) {
+			connection.createNodeTable();
+			connection.createEdgeTable();
+			connection.createUserAccountTable();
+			connection.createRequestsTable();
+			connection.createFloralRequestsTable();
+			connection.createSanitationTable();
+			connection.createExtTransportTable();
+			connection.createMedDeliveryTable();
+			connection.createSecurityServTable();
 			System.out.println("Tables were created");
-        }
-    }
+		}
+	}
 
-    @Test
-	public void testing(){
+	@Test
+	public void testing() {
 
 	}
 
@@ -294,7 +298,7 @@ public class DatabaseTests {
 		correctLongNames.add("longName1");
 		correctLongNames.add("longName2");
 
-        assertEquals(longNames, correctLongNames);
+		assertEquals(longNames, correctLongNames);
 
 	}
 
@@ -303,7 +307,7 @@ public class DatabaseTests {
 	public void testGetAllNodeLongNamesByFloor2() {
 		connection.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
 		connection.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-		connection.addNode("nodeID3", 0, 0, "1", "Tower", "ELEV","longName3", "shortName3");
+		connection.addNode("nodeID3", 0, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
 
 		ObservableList<String> longNames = connection.getAllNodeLongNamesByFloor("3");
 
@@ -534,57 +538,6 @@ public class DatabaseTests {
 		assertEquals(listOfNodeIDs, connection.getListOfNodeIDS());
 	}
 
-
-	@Test
-	@DisplayName("testGetNewCSVFile")
-	public void testGetNewCSVFile() {
-		connection.addNode("test1", 0, 0, "1", "Tower", "ELEV", "long", "asd");
-		connection.addNode("test2", 2, 2, "1", "Tower", "ELEV", "name", "test");
-		connection.addNode("test3", 3, 3, "1", "Tower", "ELEV", "test", "hert");
-		connection.addNode("test4", 4, 4, "1", "Tower", "ELEV", "fun", "test");
-
-		connection.getNewCSVFile("node");
-
-		File testFile = new File("src/test/resources/edu/wpi/TeamE/outputNodeTest.csv");
-		File nodeFile = new File("src/test/resources/edu/wpi/TeamE/outputNodeDB.csv");
-		ArrayList<String> testArray = new ArrayList<>();
-		ArrayList<String> nodeArray = new ArrayList<>();
-
-		try {
-			FileReader fr = new FileReader(testFile);
-			BufferedReader br = new BufferedReader(fr);
-
-			String line;
-
-			while ((line = br.readLine()) != null) {
-				testArray.add(line);
-			}
-
-			br.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			System.err.println("populateTable() outer try/catch error");
-		}
-
-		try {
-			FileReader fr = new FileReader(nodeFile);
-			BufferedReader br = new BufferedReader(fr);
-
-			String line;
-
-			while ((line = br.readLine()) != null) {
-				nodeArray.add(line);
-			}
-
-			br.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			System.err.println("populateTable() outer try/catch error");
-		}
-
-		assertEquals(nodeArray, testArray);
-	}
-
 	@Test
 	@DisplayName("Testing countNodeTypeOnFloor()")
 	public void testCountNodeTypeOnFloor() {
@@ -608,21 +561,107 @@ public class DatabaseTests {
 
 	@Test
 	@DisplayName("testCreateUserAccountTable")
-	public void testCreateUserAccountTable(){
+	public void testCreateUserAccountTable() {
 
 	}
 
 	@Test
 	@DisplayName("testAddSanitationRequest")
-	public void testAddSanitationRequest(){
+	public void testAddSanitationRequest() {
 		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 
-		connection.addUserAccount("test@email.com", "testPassword", "visitor", "Testing", "Queen");
-		connection.addUserAccount("test@gmail.com", "testPass", "visitor", "Nubia", "Shukla");
-
-		connection.addSanitationRequest(1, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
-		connection.addExternalPatientRequest(2, "BW", "severe", "123", "15 mins", "headache");
+		connection.addSanitationRequest(10000, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
 	}
 
+	@Test
+	@DisplayName("testAddExternalPatientRequest")
+	public void testAddExternalPatientRequest() {
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+
+		connection.addExternalPatientRequest(10000, "BW", "severe", "123", "15 mins", "headache");
+	}
+
+	@Test
+	@DisplayName("testAddMedicineRequest")
+	public void testAddMedicineRequest() {
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+
+		connection.addMedicineRequest(10000, "test", "drugs", 2, "100ml", "take once a day", "Nupur");
+	}
+
+	@Test
+	@DisplayName("testSecurityRequest")
+	public void testAddSecurityRequest() {
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+
+		connection.addSecurityRequest(10000, "test", "low", "Low");
+	}
+
+	@Test
+	@DisplayName("testAddFloralRequest")
+	public void testAddFloralRequest() {
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+
+		connection.addFloralRequest(10000, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+
+	}
+
+	@Test
+	@DisplayName("testAddSpecialUserType")
+	public void testAddSpecialUserType() {
+		connection.addSpecialUserType("test1@gmail.com", "testPassword", "patient", "patientFirstName", "patientLastName");
+		connection.addSpecialUserType("test2@gmail.com", "testPassword1", "admin", "adminFirstName", "adminLastName");
+		connection.addSpecialUserType("test3@gmail.com", "testPassword2", "doctor", "doctorFirstName", "doctorLastName");
+
+	}
+
+
+	@Test
+	@DisplayName("testGetRequestStatus")
+	public void testGetRequestStatus() {
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addExternalPatientRequest(10000, "BW", "severe", "123", "15 mins", "headache");
+		connection.addExternalPatientRequest(10000, "BW", "severe", "123", "15 mins", "migraine");
+		connection.addFloralRequest(10000, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+
+		ArrayList<String> returnedStatus = new ArrayList<String>();
+		ArrayList<String> correctStatus = new ArrayList<String>();
+
+		correctStatus.add("inProgress");
+		correctStatus.add("inProgress");
+
+		returnedStatus = connection.getRequestStatus("extTransport");
+
+		assertTrue(correctStatus.equals(returnedStatus));
+	}
+
+
+	@Test
+	@DisplayName("testGetRequestIDs")
+	public void testGetRequestIDs() {
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addExternalPatientRequest(10000, "BW", "severe", "123", "15 mins", "headache");
+		connection.addExternalPatientRequest(10000, "BW", "severe", "123", "15 mins", "migraine");
+		connection.addFloralRequest(10000, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+
+		ArrayList<String> returnedIDs = new ArrayList<String>();
+		ArrayList<String> correctIDs = new ArrayList<String>();
+
+		correctIDs.add("1");
+		correctIDs.add("2");
+
+		returnedIDs = connection.getRequestIDs("extTransport");
+
+		assertTrue(correctIDs.equals(returnedIDs));
+	}
 
 }

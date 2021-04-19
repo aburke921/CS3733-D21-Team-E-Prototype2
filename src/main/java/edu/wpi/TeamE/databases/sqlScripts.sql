@@ -9,9 +9,9 @@
 Create Table node
 (
 	nodeID    varchar(31) Primary Key,
-	xCoord    int        Not Null,
-	yCoord    int        Not Null,
-	floor     varchar(5) Not Null,
+	xCoord    int         Not Null,
+	yCoord    int         Not Null,
+	floor     varchar(5)  Not Null,
 	building  varchar(20) Not Null,
 	nodeType  varchar(10) Not Null,
 	longName  varchar(50) Not Null,
@@ -35,12 +35,12 @@ Create Table hasEdge
 
 Create Table userAccount
 (
-	userID    int Primary Key,
-	email     varchar(31) Unique,
-	password  varchar(31),
-	userType  varchar(31),
-	firstName varchar(31),
-	lastName  varchar(31),
+	userID    int Primary Key,             -- for security reasons
+	email     varchar(31) Unique Not Null, -- use this for login
+	password  varchar(31)        Not Null,
+	userType  varchar(31),                 -- only allow visitor permission from java program for security reasons
+	firstName varchar(31),                 -- get displayed in app
+	lastName  varchar(31),                 -- get displayed in app
 	Constraint passwordLimit Check (
 		-- password Like '%[a-z]%[a-z]%' And
 		-- password Like '%[A-Z]%[A-Z]%' And
@@ -51,6 +51,13 @@ Create Table userAccount
 	Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin'))
 -- Let's assume admins are just doctors but better, they have every power
 );
+
+-- userLogin()
+
+Select Count(*) As verification
+From userAccount
+Where email = ?
+  And password = ?;
 
 -- addUserAccount()
 
@@ -89,10 +96,10 @@ Create Table requests
 	userID       int References userAccount On Delete Cascade,
 	creationTime timestamp,
 	requestType  varchar(31),
-	requestState varchar(10),
+	requestStatus varchar(10),
 	Constraint requestTypeLimit Check (requestType In
 	                                   ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
-	Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress'))
+	Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress'))
 );
 
 -- getAllRequestsFrom(userID)
@@ -157,7 +164,7 @@ Create Table sanitation
 	Constraint sanitationTypeLimit Check (sanitationType In
 	                                      ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal')),
 	Constraint urgencyTypeLimit Check (urgency In
-	                                    ('Low', 'Medium', 'High', 'Critical'))
+	                                   ('Low', 'Medium', 'High', 'Critical'))
 
 );
 
@@ -166,15 +173,18 @@ Create Table securityServ
 	requestID int Primary Key References requests On Delete Cascade,
 	roomID    varchar(31) Not Null References node On Delete Cascade,
 	level     varchar(31),
-	urgency   varchar(31) Not Null
+	urgency   varchar(31) Not Null,
+	Constraint urgencyTypeLimit Check (urgency In
+	                                    ('Low', 'Medium', 'High', 'Critical'))
 );
 
 Create Table medDelivery
 (
 	requestID           int Primary Key References requests On Delete Cascade,
 	roomID              varchar(31) Not Null References node On Delete Cascade,
-	medacineName        varchar(31) Not Null,
+	medicineName        varchar(31) Not Null,
 	quantity            int         Not Null,
+	dosage              varchar(31) Not Null,
 	specialInstructions varchar(5000),
 	signature           varchar(31) Not Null
 );
@@ -189,6 +199,17 @@ Create Table extTransport
 	ETA              varchar(100),
 	description      varchar(5000)
 );
+
+
+
+
+
+Select requests.requestStatus
+From requests, floralRequests
+Where requests.requestID = floralRequests.requestID;
+
+
+
 
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1

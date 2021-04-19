@@ -90,6 +90,8 @@ public class makeConnection {
 
 	/**
 	 * Calls all of the functions that creates each individual table
+	 * Tables Created: node, hasEdge, userAccount, requests, floralRequests, sanitationRequest, extTransport, medDelivery, securityServ
+	 * Views Created (which are like tables): visitorAccount, patientAccount, doctorAccount, adminAccount
 	 */
 	public void createTables() {
 		createNodeTable();
@@ -99,6 +101,8 @@ public class makeConnection {
 		createFloralRequestsTable();
 		createExtTransportTable();
 		createSanitationTable();
+		createMedDeliveryTable();
+		createSecurityServTable();
 	}
 
 	/**
@@ -201,21 +205,6 @@ public class makeConnection {
 
 	}
 
-	public void addUserAccount(String email, String password, String userType, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 10000, ?, ?, ?, ?, ?)";
-		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
-			prepState.setString(1, email);
-			prepState.setString(2, password);
-			prepState.setString(3, userType);
-			prepState.setString(4, firstName);
-			prepState.setString(5, lastName);
-			prepState.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
-		}
-	}
-
 	/**
 	 * Uses executes the SQL statements required to create views for different types of users. The views created
 	 * are: visitorAccount, patientAccount, doctorAccount, adminAccount.
@@ -269,7 +258,6 @@ public class makeConnection {
 
 	}
 
-
 	/**
 	 * Uses executes the SQL statements required to create the requests table.
 	 * This table has the attributes:
@@ -277,7 +265,7 @@ public class makeConnection {
 	 * - creatorID: this is the username of the user who created the request.
 	 * - creationTime: this is a time stamp that is added to the request at the moment it is made.
 	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport".
-	 * - requestState: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
+	 * - requestStatus: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
 	 */
 	public void createRequestsTable() {
 		try {
@@ -287,16 +275,15 @@ public class makeConnection {
 					"creatorID    int References useraccount On Delete Cascade," +
 					"creationTime timestamp,\n" +
 					"requestType  varchar(31),\n" +
-					"requestState varchar(10),\n" +
+					"requestStatus varchar(10),\n" +
 					"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
-					"Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress')))";
+					"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 			stmt.execute(sqlQuery);
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			System.err.println("error creating requests table");
 		}
 	}
-
 
 	/**
 	 * Uses executes the SQL statements required to create a floralRequests table. This is a type of request and share the same requestID.
@@ -391,6 +378,67 @@ public class makeConnection {
 	}
 
 	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants the medecine delivered to.
+	 * - medicineName: this is the drug that the user is ordering/requesting
+	 * - quantity: the is the supply or the number of pills ordered
+	 * - dosage: this is the mg or ml quantity for a medication
+	 * - specialInstructions: this is any special details or instructions the user wants to give to who ever is processing the request.
+	 * - signature: this the signature (name in print) of the user who is filling out the request
+	 */
+	public void createMedDeliveryTable() {
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table medDelivery (\n" +
+					"requestID  int Primary Key References requests On Delete Cascade," +
+					"roomID     varchar(31) Not Null References node On Delete Cascade," +
+					"medicineName        varchar(31) Not Null," +
+					"quantity            int         Not Null," +
+					"dosage              varchar(31) Not Null," +
+					"specialInstructions varchar(5000)," +
+					"signature           varchar(31) Not Null" + ")";
+
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("error creating extTransport table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - level: this is the security level that is needed
+	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled
+	 */
+	public void createSecurityServTable() {
+		try {
+			Statement stmt = connection.createStatement();
+			String sqlQuery = "Create Table securityServ (\n" +
+					"requestID  int Primary Key References requests On Delete Cascade," +
+					"roomID     varchar(31) Not Null References node On Delete Cascade," +
+					"level     varchar(31)," +
+					"urgency   varchar(31) Not Null," +
+					"Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical'))\n" +
+					")";
+
+			stmt.execute(sqlQuery);
+		} catch (SQLException e) {
+			 e.printStackTrace();
+			System.err.println("error creating securityServ table");
+		}
+	}
+
+
+
+
+
+
+	/**
 	 * Deletes node,hasEdge, userAccount, requests, floralRequests, sanitationRequest and extTransport tables.
 	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
 	 * try/catch phrase set up in case the tables all ready do not exist
@@ -399,6 +447,8 @@ public class makeConnection {
 
 		try {
 			Statement stmt = this.connection.createStatement();
+			stmt.execute("Drop Table securityServ");
+			stmt.execute("Drop Table medDelivery");
 			stmt.execute("Drop Table exttransport");
 			stmt.execute("Drop Table sanitationrequest");
 			stmt.execute("Drop Table floralrequests");
@@ -442,6 +492,99 @@ public class makeConnection {
 		}
 
 	}
+
+	/**
+	 * Deletes edge(s) between the given two nodes, they can be in any order
+	 *
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
+	 * if count == 1 || count == 2, edges have been deleted
+	 * else no edges exist with inputted nodes
+	 */
+	public int deleteEdge(String nodeID1, String nodeID2) {
+
+		String deleteEdgeS1 = "Delete From hasedge Where startnode = ? And endnode = ?";
+		String deleteEdgeS2 = "Delete From hasedge Where endnode = ? And startnode = ?";
+
+		int count = 0;
+		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
+		try (PreparedStatement deleteEdgePS1 = connection.prepareStatement(deleteEdgeS1)) {
+			deleteEdgePS1.setString(1, nodeID1);
+			deleteEdgePS1.setString(2, nodeID2);
+
+			int deleteEdgeRS1 = deleteEdgePS1.executeUpdate();
+
+			if (deleteEdgeRS1 == 0) {
+				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
+			} else if (deleteEdgeRS1 == 2) {
+				System.out.println("deleteEdge Result =" + deleteEdgeRS1 + ", it's weird cuz " + deleteEdgeRS1 + " rows was affected");
+				count = 1;
+			} else if (deleteEdgeRS1 != 1) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS1 + ", just bad because this should never occur");
+			}
+			System.out.println("Number of rows affected: " + deleteEdgeRS1);
+
+			// deleteEdgeRS1 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("deleteEdge() tyr/catch error");
+			count = 0;
+		}
+
+		try (PreparedStatement deleteEdgePS2 = connection.prepareStatement(deleteEdgeS2)) {
+			deleteEdgePS2.setString(1, nodeID1);
+			deleteEdgePS2.setString(2, nodeID2);
+
+			int deleteEdgeRS2 = deleteEdgePS2.executeUpdate();
+
+			if (deleteEdgeRS2 == 0) {
+				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
+			} else if (deleteEdgeRS2 == 2) {
+				System.out.println("deleteEdge Result =" + deleteEdgeRS2 + ", it's weird cuz " + deleteEdgeRS2 + " rows was affected");
+				count += count;
+			} else if (deleteEdgeRS2 != 1) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS2 + ", just bad because this should never occur");
+			}
+			System.out.println("Number of rows affected: " + deleteEdgeRS2);
+
+			// deleteEdgeRS2 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("deleteEdge() tyr/catch error");
+			if (count == 0) {
+				count = 0;
+			} else
+				count = 1;
+		}
+		return count;
+	}
+
+	/**
+	 * matches the nodeID to a node and deletes it from DB
+	 *
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
+	 */
+	public int deleteNode(String nodeID) {
+		String deleteNodeS = "Delete From node Where nodeid = ?";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+			deleteNodePS.setString(1, nodeID);
+			// We might encounter issues if on delete cascade didn't work
+			int deleteNodeRS = deleteNodePS.executeUpdate();
+			if (deleteNodeRS == 0) {
+				System.err.println("deleteNode Result = 0, probably bad cuz no rows was affected");
+			} else if (deleteNodeRS != 1) {
+				System.err.println("deleteNode Result =" + deleteNodeRS + ", probably bad cuz " + deleteNodeRS + " rows was affected");
+			}
+			return deleteNodeRS;
+			// deleteNode = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+
+
+
 
 	/**
 	 * Reads csv & inserts into table
@@ -616,6 +759,109 @@ public class makeConnection {
 
 	}
 
+	/**
+	 * adds a node with said data to the database
+	 *
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
+	 */
+	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+		String addNodeS = "Insert Into node Values (?, ?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
+			addNodePS.setString(1, nodeID);
+			addNodePS.setInt(2, xCoord);
+			addNodePS.setInt(3, yCoord);
+			addNodePS.setString(4, floor);
+			addNodePS.setString(5, building);
+			addNodePS.setString(6, nodeType);
+			addNodePS.setString(7, longName);
+			addNodePS.setString(8, shortName);
+			int addNodeRS = addNodePS.executeUpdate();
+			if (addNodeRS == 0) {
+				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
+			} else if (addNodeRS != 1) {
+				System.err.println("addNode Result =" + addNodeRS + ", probably bad cuz " + addNodeRS + " rows was affected");
+			}
+			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			return 0;
+		}
+	}
+
+	/**
+	 * adds an edge with said data to the database
+	 * both startNode and endNode has to already exist in node table
+	 *
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
+	 */
+	public int addEdge(String edgeID, String startNode, String endNode) {
+		String addEdgeS = "Insert Into hasedge (edgeid, startnode, endnode) Values (?, ?, ?)";
+		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
+			addEdgePS.setString(1, edgeID);
+			addEdgePS.setString(2, startNode);
+			addEdgePS.setString(3, endNode);
+			int addEdgeRS = addEdgePS.executeUpdate();
+			if (addEdgeRS == 0) {
+				System.err.println("addEdge Result = 0, probably bad cuz no rows was affected");
+			} else if (addEdgeRS != 1) {
+				System.err.println("addEdge Result =" + addEdgeRS + ", probably bad cuz " + addEdgeRS + " rows was affected");
+			}
+			addLength(startNode, endNode);
+			return addEdgeRS; // addEdgeRS = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("addEdge() error in the try/catch");
+			return 0;
+		}
+	}
+
+	/**
+	 * This is allows a visitor to create a user account giving them more access to the certain requests available
+	 * @param email this is the user's email that is connected to the account the are trying to create
+	 * @param password this is a password that the user will use to log into the account
+	 * @param firstName this is the user's first name that is associated with the account
+	 * @param lastName this is the user's last name that is associated with the account
+	 */
+	public void addUserAccount(String email, String password, String firstName, String lastName) {
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 10000, ?, ?, 'visitor', ?, ?)";
+		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
+			prepState.setString(1, email);
+			prepState.setString(2, password);
+			prepState.setString(3, firstName);
+			prepState.setString(4, lastName);
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			//showError("This email all ready has an account");
+			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
+		}
+	}
+
+	/**
+	 * This is allows an administrator or someone with access to the database to be able to create a user account
+	 * with more permissions giving them more access to the certain requests available. This is function should not
+	 * be used while the app is being run.
+	 * @param email this is the user's email that is connected to the account the are trying to create
+	 * @param password this is a password that the user will use to log into the account
+	 * @param userType this is the type of account that the individual is being assigned to
+	 * @param firstName this is the user's first name that is associated with the account
+	 * @param lastName this is the user's last name that is associated with the account
+	 */
+	public void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 10000, ?, ?, ?, ?, ?)";
+		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
+			prepState.setString(1, email);
+			prepState.setString(2, password);
+			prepState.setString(3, userType);
+			prepState.setString(4, firstName);
+			prepState.setString(5, lastName);
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			//showError("This email all ready has an account");
+			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
+		}
+	}
 
 	/**
 	 * This adds a sanitation services form to the table specific for it
@@ -625,7 +871,7 @@ public class makeConnection {
 	public void addSanitationRequest(int userID, String roomID, String sanitationType, String description, String urgency, String signature) {
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'floral', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'sanitation', 'inProgress')";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
@@ -653,20 +899,6 @@ public class makeConnection {
 		}
 
 	}
-
-
-	/**
-	 * This edits a Sanitation Services form that is already in the table
-	 *
-	 * @param departmentField  this updates the department
-	 * @param roomField        this updates the room field
-	 * @param numberField      this updates the number field
-	 * @param serviceTypeField this updates the service type field
-	 * @param assignee         this updates who is assigned to the service request
-	 */
-	public void editSanitationRequest(String departmentField, String roomField, String numberField, String serviceTypeField, String assignee) {
-	}
-
 
 	/**
 	 * This function needs to add a external patient form to the table for external patient forms
@@ -708,19 +940,6 @@ public class makeConnection {
 
 	}
 
-
-	/**
-	 * @param hospital    this is the string used to update the hospital field
-	 * @param type        this is the string used to update the type
-	 * @param severity    this is the string used to update the severity
-	 * @param patientID   this is the string used to update patientID
-	 * @param description this is the string used to update the description
-	 * @param eta         this is the string used to update the eta
-	 */
-	public void editExternalPatientRequest(String hospital, String type, String severity, String patientID, String description, String eta) {
-	}
-
-
 	/**
 	 * This adds a floral request to the database that the user is making
 	 *
@@ -740,14 +959,14 @@ public class makeConnection {
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
-			ResultSet rset = prepState.executeQuery();
+			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addFloralRequest()");
 		}
 
 
-		String insertFloralRequest = "Insert Into floralrequests\n" +
+		String insertFloralRequest = "Insert Into floralRequests\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests), ?, ?, ?, ?, ?, ?)";
 
@@ -759,9 +978,9 @@ public class makeConnection {
 			prepState.setString(5, vaseType);
 			prepState.setString(6, message);
 
-			ResultSet rset = prepState.executeQuery();
+			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
 		}
 
@@ -789,6 +1008,114 @@ public class makeConnection {
 //          );
 	}
 
+	/**
+	 * This adds a medicine request form to the table for medicine request forms
+	 *
+	 * @param //form this is the form being added
+	 */
+	public void addMedicineRequest(int userID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
+
+		String insertRequest = "Insert Into requests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests) + 1, ?, Current Timestamp, 'medDelivery', 'inProgress')";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
+			prepState.setInt(1, userID);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into requests inside function addMedicineRequest()");
+		}
+
+
+		String insertMedRequest = "Insert Into medDelivery\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, medicineName);
+			prepState.setInt(3, quantity);
+			prepState.setString(4, dosage);
+			prepState.setString(5, specialInstructions);
+			prepState.setString(6, signature);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
+		}
+
+	}
+
+	/**
+	 * This adds a security form to the table for security service form
+	 *
+	 * @param //form this is the form added to the table
+	 */
+	public void addSecurityRequest(int userID, String roomID, String level, String urgency) {
+
+		String insertRequest = "Insert Into requests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests) + 1, ?, Current Timestamp, 'security', 'inProgress')";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
+			prepState.setInt(1, userID);
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into requests inside function addSecurityRequest()");
+		}
+
+		String insertSecurityRequest = "Insert Into securityServ\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests), ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertSecurityRequest)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, level);
+			prepState.setString(3, urgency);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
+		}
+
+
+	}
+
+
+
+
+
+
+
+
+
+	/**
+	 * This edits a Sanitation Services form that is already in the table
+	 *
+	 * @param departmentField  this updates the department
+	 * @param roomField        this updates the room field
+	 * @param numberField      this updates the number field
+	 * @param serviceTypeField this updates the service type field
+	 * @param assignee         this updates who is assigned to the service request
+	 */
+	public void editSanitationRequest(String departmentField, String roomField, String numberField, String serviceTypeField, String assignee) {
+	}
+
+	/**
+	 * @param hospital    this is the string used to update the hospital field
+	 * @param type        this is the string used to update the type
+	 * @param severity    this is the string used to update the severity
+	 * @param patientID   this is the string used to update patientID
+	 * @param description this is the string used to update the description
+	 * @param eta         this is the string used to update the eta
+	 */
+	public void editExternalPatientRequest(String hospital, String type, String severity, String patientID, String description, String eta) {
+	}
 
 	/**
 	 * This edits a floral request form within the table
@@ -803,47 +1130,6 @@ public class makeConnection {
 	public void editFloralRequest(String patient, String room, String flowerType, String flowerAmount, String vaseType, String message) {
 	}
 
-
-	/**
-	 * This adds a medicine request form to the table for medicine request forms
-	 *
-	 * @param //form this is the form being added
-	 */
-	public void addMedicineRequest(int userID, String medicineName, String quantity, String dosage, String specialInstructions, String signature) {
-
-		String insertRequest = "Insert Into requests\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'floral', 'inProgress')";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
-			prepState.setInt(1, userID);
-			ResultSet rset = prepState.executeQuery();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into requests inside function addMedicineRequest()");
-		}
-
-
-		String insertMedRequest = "Insert Into meddelivery\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests), ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
-			prepState.setString(1, medicineName);
-			prepState.setString(2, quantity);
-			prepState.setString(3, dosage);
-			prepState.setString(4, specialInstructions);
-			prepState.setString(5, signature);
-
-			ResultSet rset = prepState.executeQuery();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
-		}
-
-	}
-
-
 	/**
 	 * This function edits a current request for medicine delivery with the information below
 	 *
@@ -857,47 +1143,6 @@ public class makeConnection {
 	public void editMedicineRequest(String roomNumber, String department, String medicineName, String quantity, String dosage, String specialInstructions) {
 	}
 
-
-	/**
-	 * This adds a security form to the table for security service form
-	 *
-	 * @param //form this is the form added to the table
-	 */
-	public void addSecurityRequest(int userID, String level, String urgency, String reason, String assignee) {
-
-		String insertRequest = "Insert Into requests\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'security', 'inProgress')";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
-			prepState.setInt(1, userID);
-			ResultSet rset = prepState.executeQuery();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into requests inside function addSecurityRequest()");
-		}
-
-
-		String insertSecurityRequest = "Insert Into security\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests), ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertSecurityRequest)) {
-			prepState.setString(1, level);
-			prepState.setString(2, urgency);
-			prepState.setString(3, reason);
-			prepState.setString(4, assignee);
-
-			ResultSet rset = prepState.executeQuery();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
-		}
-
-
-	}
-
-
 	/**
 	 * This edits a security form already within the table
 	 *
@@ -909,13 +1154,197 @@ public class makeConnection {
 	public void editSecurityRequest(String location, String levelOfSecurity, String levelOfUrgency, String assignee) {
 	}
 
+	/**
+	 * modifies a node, updating the DB, returning 0 or 1 depending on whether operation was successful
+	 *
+	 * @param nodeID
+	 * @param xCoord
+	 * @param yCoord
+	 * @param floor
+	 * @param building
+	 * @param nodeType
+	 * @param longName
+	 * @param shortName
+	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+	 */
+	public int modifyNode(String nodeID, Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+		//String finalQuery = "update node set ";
+		String xCoordUpdate = "";
+		String yCoordUpdate = "";
+		String floorUpdate = "";
+		String buildingUpdate = "";
+		String nodeTypeUpdate = "";
+		String longNameUpdate = "";
+		String shortNameUpdate = "";
+		boolean added = false;
+		String query = "update node set ";
+		if (xCoord != null) {
+			query = query + " xCoord = " + xCoord;
+			//xCoordUpdate = "xCoord = " + xCoord;
+			added = true;
+		}
+		if (yCoord != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " yCoord = " + yCoord;
+			added = true;
+		}
+		if (floor != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " floor = '" + floor + "'";
+			added = true;
+		}
+		if (building != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " building = '" + building + "'";
+			added = true;
+		}
+		if (nodeType != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " nodeType = '" + nodeType + "'";
+			added = true;
+		}
+		if (longName != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " longName = '" + longName + "'";
+			added = true;
+		}
+		if (shortName != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " shortName = '" + shortName + "'";
+			added = true;
+		}
+		query = query + " where nodeID = '" + nodeID + "'";
+		try {
+			Statement stmt = this.connection.createStatement();
+			System.out.println(query);
+			stmt.executeUpdate(query);
+			stmt.close();
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating node");
+			return 0;
+		}
+	}
+
+	/**
+	 * modifies an edge, updating the DB, returning 0 or 1 depending on whether operation was successful
+	 *
+	 * @param edgeID
+	 * @param startNode
+	 * @param endNode
+	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+	 * need to check that both startNode and endNode already exist in node table
+	 */
+	public int modifyEdge(String edgeID, String startNode, String endNode) {
+		boolean correctEdgeID = false;
+		boolean correctStartNode = false;
+		boolean correctEndNode = false;
+
+
+		// !!!!!! user is required to type in edgeID !!!!!! //
+
+		//1. check that they gave a valid edgeID
+		//2. check that they gave a valid nodeID they want to change to the startNode
+		//			or
+		//3. check that they gave a valid nodeID they want to change to the endNode
+
+		String checkEdgeID = "Select edgeid From hasedge Where edgeid = ?";
+		try (PreparedStatement prepState1 = connection.prepareStatement(checkEdgeID)) {
+			prepState1.setString(1, edgeID);
+			ResultSet rset1 = prepState1.executeQuery();
+
+			if (rset1.next()) {
+				correctEdgeID = true;
+			}
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			return 0;
+		}
+
+		if (startNode != null) {
+			String checkStartNode = "Select nodeid From node Where nodeid = ?";
+			try (PreparedStatement prepState2 = connection.prepareStatement(checkStartNode)) {
+				prepState2.setString(1, startNode);
+				ResultSet rset2 = prepState2.executeQuery();
+
+				if (rset2.next()) {
+					correctStartNode = true;
+				}
+
+			} catch (SQLException e) {
+				System.err.println("given start node does not exist");
+				//e.printStackTrace();
+				return 0;
+			}
+		}
+
+		if (endNode != null) {
+			String checkEndNode = "Select nodeid From node Where nodeid = ?";
+			try (PreparedStatement prepState3 = connection.prepareStatement(checkEndNode)) {
+				prepState3.setString(1, endNode);
+				ResultSet rset3 = prepState3.executeQuery();
+
+				if (rset3.next()) {
+					correctEndNode = true;
+				}
+
+
+			} catch (SQLException e) {
+				//e.printStackTrace();
+				return 0;
+			}
+		}
+
+
+		if ((correctEdgeID && correctStartNode) || (correctEdgeID && correctEndNode) || (correctEdgeID && correctStartNode && correctEndNode)) {
+			String[] nodes = edgeID.split("_");
+			deleteEdge(nodes[0], nodes[1]);
+			if (startNode == null) {
+				String newEdgeID = nodes[0] + "_" + endNode;
+				addEdge(newEdgeID, nodes[0], endNode);
+				return 1;
+			}
+			if (endNode == null) {
+				String newEdgeID = startNode + "_" + nodes[1];
+				addEdge(newEdgeID, startNode, nodes[1]);
+				return 1;
+			} else {
+				String newEdgeID = startNode + "_" + endNode;
+				addEdge(newEdgeID, startNode, endNode);
+				return 1;
+			}
+		}
+
+		System.err.println("startNode or endNode does not exist but no SQL error");
+		return 0;
+	}
+
+
+
+
+
+
+
 
 	/**
 	 * gets a node's all attributes given nodeID
 	 *
 	 * @return a Node object with the matching nodeID
 	 */
-
 	public Node getNodeInfo(String nodeID) {
 		String getNodeInfoS = "Select * From node Where nodeid = ?";
 		try (PreparedStatement getNodeInfoPS = connection.prepareStatement(getNodeInfoS)) {
@@ -1157,7 +1586,6 @@ public class makeConnection {
 		}
 	}
 
-
 	public ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
 		ArrayList<String> listOfNodeIDs = new ArrayList<>();
 
@@ -1239,330 +1667,6 @@ public class makeConnection {
 	}
 
 	/**
-	 * adds a node with said data to the database
-	 *
-	 * @return the amount of rows affected by executing this statement, should be 1 in this case
-	 */
-	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-		String addNodeS = "Insert Into node Values (?, ?, ?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
-			addNodePS.setString(1, nodeID);
-			addNodePS.setInt(2, xCoord);
-			addNodePS.setInt(3, yCoord);
-			addNodePS.setString(4, floor);
-			addNodePS.setString(5, building);
-			addNodePS.setString(6, nodeType);
-			addNodePS.setString(7, longName);
-			addNodePS.setString(8, shortName);
-			int addNodeRS = addNodePS.executeUpdate();
-			if (addNodeRS == 0) {
-				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
-			} else if (addNodeRS != 1) {
-				System.err.println("addNode Result =" + addNodeRS + ", probably bad cuz " + addNodeRS + " rows was affected");
-			}
-			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			return 0;
-		}
-	}
-
-	/**
-	 * adds an edge with said data to the database
-	 * both startNode and endNode has to already exist in node table
-	 *
-	 * @return the amount of rows affected by executing this statement, should be 1 in this case
-	 */
-	public int addEdge(String edgeID, String startNode, String endNode) {
-		String addEdgeS = "Insert Into hasedge (edgeid, startnode, endnode) Values (?, ?, ?)";
-		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
-			addEdgePS.setString(1, edgeID);
-			addEdgePS.setString(2, startNode);
-			addEdgePS.setString(3, endNode);
-			int addEdgeRS = addEdgePS.executeUpdate();
-			if (addEdgeRS == 0) {
-				System.err.println("addEdge Result = 0, probably bad cuz no rows was affected");
-			} else if (addEdgeRS != 1) {
-				System.err.println("addEdge Result =" + addEdgeRS + ", probably bad cuz " + addEdgeRS + " rows was affected");
-			}
-			addLength(startNode, endNode);
-			return addEdgeRS; // addEdgeRS = x means the statement executed affected x rows, should be 1 in this case.
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("addEdge() error in the try/catch");
-			return 0;
-		}
-	}
-
-	/**
-	 * modifies a node, updating the DB, returning 0 or 1 depending on whether operation was successful
-	 *
-	 * @param nodeID
-	 * @param xCoord
-	 * @param yCoord
-	 * @param floor
-	 * @param building
-	 * @param nodeType
-	 * @param longName
-	 * @param shortName
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
-	 */
-	public int modifyNode(String nodeID, Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-		//String finalQuery = "update node set ";
-		String xCoordUpdate = "";
-		String yCoordUpdate = "";
-		String floorUpdate = "";
-		String buildingUpdate = "";
-		String nodeTypeUpdate = "";
-		String longNameUpdate = "";
-		String shortNameUpdate = "";
-		boolean added = false;
-		String query = "update node set ";
-		if (xCoord != null) {
-			query = query + " xCoord = " + xCoord;
-			//xCoordUpdate = "xCoord = " + xCoord;
-			added = true;
-		}
-		if (yCoord != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " yCoord = " + yCoord;
-			added = true;
-		}
-		if (floor != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " floor = '" + floor + "'";
-			added = true;
-		}
-		if (building != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " building = '" + building + "'";
-			added = true;
-		}
-		if (nodeType != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " nodeType = '" + nodeType + "'";
-			added = true;
-		}
-		if (longName != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " longName = '" + longName + "'";
-			added = true;
-		}
-		if (shortName != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " shortName = '" + shortName + "'";
-			added = true;
-		}
-		query = query + " where nodeID = '" + nodeID + "'";
-		try {
-			Statement stmt = this.connection.createStatement();
-			System.out.println(query);
-			stmt.executeUpdate(query);
-			stmt.close();
-			return 1;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error in updating node");
-			return 0;
-		}
-	}
-
-	/**
-	 * modifies an edge, updating the DB, returning 0 or 1 depending on whether operation was successful
-	 *
-	 * @param edgeID
-	 * @param startNode
-	 * @param endNode
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
-	 * need to check that both startNode and endNode already exist in node table
-	 */
-	public int modifyEdge(String edgeID, String startNode, String endNode) {
-		boolean correctEdgeID = false;
-		boolean correctStartNode = false;
-		boolean correctEndNode = false;
-
-
-		// !!!!!! user is required to type in edgeID !!!!!! //
-
-		//1. check that they gave a valid edgeID
-		//2. check that they gave a valid nodeID they want to change to the startNode
-		//			or
-		//3. check that they gave a valid nodeID they want to change to the endNode
-
-		String checkEdgeID = "Select edgeid From hasedge Where edgeid = ?";
-		try (PreparedStatement prepState1 = connection.prepareStatement(checkEdgeID)) {
-			prepState1.setString(1, edgeID);
-			ResultSet rset1 = prepState1.executeQuery();
-
-			if (rset1.next()) {
-				correctEdgeID = true;
-			}
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			return 0;
-		}
-
-		if (startNode != null) {
-			String checkStartNode = "Select nodeid From node Where nodeid = ?";
-			try (PreparedStatement prepState2 = connection.prepareStatement(checkStartNode)) {
-				prepState2.setString(1, startNode);
-				ResultSet rset2 = prepState2.executeQuery();
-
-				if (rset2.next()) {
-					correctStartNode = true;
-				}
-
-			} catch (SQLException e) {
-				System.err.println("given start node does not exist");
-				//e.printStackTrace();
-				return 0;
-			}
-		}
-
-		if (endNode != null) {
-			String checkEndNode = "Select nodeid From node Where nodeid = ?";
-			try (PreparedStatement prepState3 = connection.prepareStatement(checkEndNode)) {
-				prepState3.setString(1, endNode);
-				ResultSet rset3 = prepState3.executeQuery();
-
-				if (rset3.next()) {
-					correctEndNode = true;
-				}
-
-
-			} catch (SQLException e) {
-				//e.printStackTrace();
-				return 0;
-			}
-		}
-
-
-		if ((correctEdgeID && correctStartNode) || (correctEdgeID && correctEndNode) || (correctEdgeID && correctStartNode && correctEndNode)) {
-			String[] nodes = edgeID.split("_");
-			deleteEdge(nodes[0], nodes[1]);
-			if (startNode == null) {
-				String newEdgeID = nodes[0] + "_" + endNode;
-				addEdge(newEdgeID, nodes[0], endNode);
-				return 1;
-			}
-			if (endNode == null) {
-				String newEdgeID = startNode + "_" + nodes[1];
-				addEdge(newEdgeID, startNode, nodes[1]);
-				return 1;
-			} else {
-				String newEdgeID = startNode + "_" + endNode;
-				addEdge(newEdgeID, startNode, endNode);
-				return 1;
-			}
-		}
-
-		System.err.println("startNode or endNode does not exist but no SQL error");
-		return 0;
-	}
-
-	/**
-	 * Deletes edge(s) between the given two nodes, they can be in any order
-	 *
-	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
-	 * if count == 1 || count == 2, edges have been deleted
-	 * else no edges exist with inputted nodes
-	 */
-	public int deleteEdge(String nodeID1, String nodeID2) {
-
-		String deleteEdgeS1 = "Delete From hasedge Where startnode = ? And endnode = ?";
-		String deleteEdgeS2 = "Delete From hasedge Where endnode = ? And startnode = ?";
-
-		int count = 0;
-		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
-		try (PreparedStatement deleteEdgePS1 = connection.prepareStatement(deleteEdgeS1)) {
-			deleteEdgePS1.setString(1, nodeID1);
-			deleteEdgePS1.setString(2, nodeID2);
-
-			int deleteEdgeRS1 = deleteEdgePS1.executeUpdate();
-
-			if (deleteEdgeRS1 == 0) {
-				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
-			} else if (deleteEdgeRS1 == 2) {
-				System.out.println("deleteEdge Result =" + deleteEdgeRS1 + ", it's weird cuz " + deleteEdgeRS1 + " rows was affected");
-				count = 1;
-			} else if (deleteEdgeRS1 != 1) {
-				System.err.println("deleteEdge Result =" + deleteEdgeRS1 + ", just bad because this should never occur");
-			}
-			System.out.println("Number of rows affected: " + deleteEdgeRS1);
-
-			// deleteEdgeRS1 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("deleteEdge() tyr/catch error");
-			count = 0;
-		}
-
-		try (PreparedStatement deleteEdgePS2 = connection.prepareStatement(deleteEdgeS2)) {
-			deleteEdgePS2.setString(1, nodeID1);
-			deleteEdgePS2.setString(2, nodeID2);
-
-			int deleteEdgeRS2 = deleteEdgePS2.executeUpdate();
-
-			if (deleteEdgeRS2 == 0) {
-				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
-			} else if (deleteEdgeRS2 == 2) {
-				System.out.println("deleteEdge Result =" + deleteEdgeRS2 + ", it's weird cuz " + deleteEdgeRS2 + " rows was affected");
-				count += count;
-			} else if (deleteEdgeRS2 != 1) {
-				System.err.println("deleteEdge Result =" + deleteEdgeRS2 + ", just bad because this should never occur");
-			}
-			System.out.println("Number of rows affected: " + deleteEdgeRS2);
-
-			// deleteEdgeRS2 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("deleteEdge() tyr/catch error");
-			if (count == 0) {
-				count = 0;
-			} else
-				count = 1;
-		}
-		return count;
-	}
-
-	/**
-	 * matches the nodeID to a node and deletes it from DB
-	 *
-	 * @return the amount of rows affected by executing this statement, should be 1 in this case
-	 */
-	public int deleteNode(String nodeID) {
-		String deleteNodeS = "Delete From node Where nodeid = ?";
-		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
-			deleteNodePS.setString(1, nodeID);
-			// We might encounter issues if on delete cascade didn't work
-			int deleteNodeRS = deleteNodePS.executeUpdate();
-			if (deleteNodeRS == 0) {
-				System.err.println("deleteNode Result = 0, probably bad cuz no rows was affected");
-			} else if (deleteNodeRS != 1) {
-				System.err.println("deleteNode Result =" + deleteNodeRS + ", probably bad cuz " + deleteNodeRS + " rows was affected");
-			}
-			return deleteNodeRS;
-			// deleteNode = x means the statement executed affected x rows, should be 1 in this case.
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return 0;
-		}
-	}
-
-	/**
 	 * gets list of nodeIDS
 	 *
 	 * @return String[] of nodeIDs
@@ -1591,6 +1695,10 @@ public class makeConnection {
 
 	}
 
+	/**
+	 * Translates a table into a csv file which can be later returned to the user.
+	 * @param tableName this is the table/data/information that will be translated into a csv file
+	 */
 	public void getNewCSVFile(String tableName) {
 
 		String sqlQuery = "select * from " + tableName;
@@ -1648,4 +1756,101 @@ public class makeConnection {
 			ioException.printStackTrace();
 		}
 	}
+
+	// User System Stuff
+
+	/**
+	 * Function for logging a user in with their unique email and password, currently can only check for if correct or not
+	 *
+	 * @param email is the user's entered email
+	 * @param password is the user's entered password
+	 * @return true when the credentials match with a user in the database, and false otherwise
+	 */
+	public boolean userLogin(String email, String password) {
+		String userLoginS = "Select Count(*) As verification From useraccount Where email = ? And password = ?";
+		try (PreparedStatement userLoginPS = connection.prepareStatement(userLoginS)) {
+			userLoginPS.setString(1, email);
+			userLoginPS.setString(2, password);
+			ResultSet userLoginRS = userLoginPS.executeQuery();
+			int verification = 0;
+			if (userLoginRS.next()) {
+				verification = userLoginRS.getInt("verification");
+			}
+			userLoginRS.close();
+			return verification == 1;
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("countNodeTypeOnFloor() error");
+		}
+		return false;
+	}
+
+
+
+//	ArrayList<String> = {"\"requestID\"", "\"requestID\"", "\"requestID,\""};
+//	ArrayList<String> = {"\"status\"", "\"status\"", "\"status,\""};
+
+
+	/**
+	 * Gets a list of all the requestIDs from the given tableName
+	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all the requestIDs
+	 */
+	public ArrayList<String> getRequestIDs(String tableName){
+
+		ArrayList<String> listOfIDs = new ArrayList<String>();
+
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestID = "Select requestID From " + tableName;
+
+			ResultSet rset = stmt.executeQuery(requestID);
+
+			while(rset.next()){
+				String ID = rset.getString("requestID");
+				listOfIDs.add(ID);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+
+		}
+
+		return listOfIDs;
+	}
+
+
+	/**
+	 * Gets a list of all the statuses from the given tableName
+	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all the statuses of the requests
+	 */
+	public ArrayList<String> getRequestStatus(String tableName){
+
+		ArrayList<String> listOfStatus = new ArrayList<String>();
+
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestStatus = "Select requests.requestStatus From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+
+			ResultSet rset = stmt.executeQuery(requestStatus);
+
+			while(rset.next()){
+				String status = rset.getString("requestStatus");
+				listOfStatus.add(status);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+
+		}
+
+		return listOfStatus;
+	}
+
+
+
+
 }

@@ -2194,24 +2194,29 @@ public class makeConnection {
 		return listOfStatus;
 	}
 
+	/**
+	 * Gets a list of all the assignees from the given tableName
+	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all assignees for all of the requests
+	 */
 	public ArrayList<String> getRequestAssignees(String tableName){
 
 		ArrayList<String> listOfAssignees = new ArrayList<String>();
 
 		try  {
 			Statement stmt = connection.createStatement();
-			String requestStatus = "Select requests.assignee From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+			String requestAssignee = "Select requests.assignee From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
 
-			ResultSet rset = stmt.executeQuery(requestStatus);
+			ResultSet rset = stmt.executeQuery(requestAssignee);
 
 			while(rset.next()){
-				String status = rset.getString("requestStatus");
+				String status = rset.getString("assignee");
 				listOfAssignees.add(status);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("getRequestStatus() error in the try/catch");
+			System.err.println("getRequestAssignee() error in the try/catch");
 
 		}
 
@@ -2219,24 +2224,29 @@ public class makeConnection {
 
 	}
 
-	public ArrayList<String> getRequestLocation(String tableName){
+	/**
+	 * Gets a list of all the longNames for the location from the given tableName
+	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all longNames for the location for all of the requests
+	 */
+	public ArrayList<String> getRequestLocations(String tableName){
 
 		ArrayList<String> listOfLongNames = new ArrayList<String>();
 
 		try  {
 			Statement stmt = connection.createStatement();
-			String requestStatus = "Select requests.assignee From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+			String requestLongNames = "Select longName From node, " + tableName + " where node.nodeID = " + tableName + ".roomID";
 
-			ResultSet rset = stmt.executeQuery(requestStatus);
+			ResultSet rset = stmt.executeQuery(requestLongNames);
 
 			while(rset.next()){
-				String status = rset.getString("requestStatus");
+				String status = rset.getString("longName");
 				listOfLongNames.add(status);
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("getRequestStatus() error in the try/catch");
+			System.err.println("getRequestLocations() error in the try/catch");
 
 		}
 

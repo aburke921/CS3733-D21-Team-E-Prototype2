@@ -74,6 +74,12 @@ public class ServiceRequestStatus {
         serviceRequestTable.getSelectionModel().getSelectedItem();//.setStatus("Completed")
     }
 
+    @FXML
+    private void refresh(ActionEvent e) {
+        prepareTable(serviceRequestTable);
+    }
+
+
 
     ArrayList<String> testArrayID = new ArrayList<>();
     ArrayList<String> testArrayStatus = new ArrayList<>();
@@ -121,6 +127,12 @@ public class ServiceRequestStatus {
         }
     }
 
+    public void removeChildren(TreeItem<ServiceRequestForm> treeItem) {
+        if(treeItem.getChildren().size() != 0) {
+            treeItem.getChildren().remove(0,(treeItem.getChildren().size()-1));
+        }
+    }
+
 
     public void prepareTable(TreeTableView serviceRequestTable) {
 
@@ -147,6 +159,23 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> medicineDeliveryCancelled = new TreeItem<>(new ServiceRequestForm("Medicine Delivery Form"));
         TreeItem<ServiceRequestForm> sanitationServicesCancelled = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
         TreeItem<ServiceRequestForm> securityServiceCancelled = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
+
+        //Remove all children in the case that the table is being refreshed
+        removeChildren(externalPatientCompleted);
+        removeChildren(floralFormCompleted);
+        removeChildren(medicineDeliveryCompleted);
+        removeChildren(sanitationServicesCompleted);
+        removeChildren(securityServiceCompleted);
+        removeChildren(externalPatientInProgress);
+        removeChildren(floralFormInProgress);
+        removeChildren(medicineDeliveryInProgress);
+        removeChildren(sanitationServicesInProgress);
+        removeChildren(securityServiceInProgress);
+        removeChildren(externalPatientCancelled);
+        removeChildren(floralFormCancelled);
+        removeChildren(medicineDeliveryCancelled);
+        removeChildren(sanitationServicesCancelled);
+        removeChildren(securityServiceCancelled);
 
         //Adding request forms
         createTests();
@@ -195,6 +224,4 @@ public class ServiceRequestStatus {
         prepareTable(serviceRequestTable);
 
     }
-
-
 }

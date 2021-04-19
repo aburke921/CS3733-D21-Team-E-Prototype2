@@ -96,10 +96,10 @@ Create Table requests
 	userID       int References userAccount On Delete Cascade,
 	creationTime timestamp,
 	requestType  varchar(31),
-	requestState varchar(10),
+	requestStatus varchar(10),
 	Constraint requestTypeLimit Check (requestType In
 	                                   ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
-	Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress'))
+	Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress'))
 );
 
 -- getAllRequestsFrom(userID)
@@ -199,6 +199,17 @@ Create Table extTransport
 	ETA              varchar(100),
 	description      varchar(5000)
 );
+
+
+
+
+
+Select requests.requestStatus
+From requests, floralRequests
+Where requests.requestID = floralRequests.requestID;
+
+
+
 
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1

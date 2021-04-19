@@ -90,6 +90,8 @@ public class makeConnection {
 
 	/**
 	 * Calls all of the functions that creates each individual table
+	 * Tables Created: node, hasEdge, userAccount, requests, floralRequests, sanitationRequest, extTransport, medDelivery, securityServ
+	 * Views Created (which are like tables): visitorAccount, patientAccount, doctorAccount, adminAccount
 	 */
 	public void createTables() {
 		createNodeTable();
@@ -263,7 +265,7 @@ public class makeConnection {
 	 * - creatorID: this is the username of the user who created the request.
 	 * - creationTime: this is a time stamp that is added to the request at the moment it is made.
 	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport".
-	 * - requestState: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
+	 * - requestStatus: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
 	 */
 	public void createRequestsTable() {
 		try {
@@ -273,9 +275,9 @@ public class makeConnection {
 					"creatorID    int References useraccount On Delete Cascade," +
 					"creationTime timestamp,\n" +
 					"requestType  varchar(31),\n" +
-					"requestState varchar(10),\n" +
+					"requestStatus varchar(10),\n" +
 					"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
-					"Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress')))";
+					"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 			stmt.execute(sqlQuery);
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -757,7 +759,6 @@ public class makeConnection {
 
 	}
 
-
 	/**
 	 * adds a node with said data to the database
 	 *
@@ -862,7 +863,6 @@ public class makeConnection {
 		}
 	}
 
-
 	/**
 	 * This adds a sanitation services form to the table specific for it
 	 *
@@ -871,7 +871,7 @@ public class makeConnection {
 	public void addSanitationRequest(int userID, String roomID, String sanitationType, String description, String urgency, String signature) {
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'floral', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'sanitation', 'inProgress')";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
@@ -961,7 +961,7 @@ public class makeConnection {
 			prepState.setInt(1, userID);
 			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addFloralRequest()");
 		}
 
@@ -980,7 +980,7 @@ public class makeConnection {
 
 			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
 		}
 
@@ -1921,6 +1921,71 @@ public class makeConnection {
 		}
 		return 0;
 	}
+
+
+//	ArrayList<String> = {"\"requestID\"", "\"requestID\"", "\"requestID,\""};
+//	ArrayList<String> = {"\"status\"", "\"status\"", "\"status,\""};
+
+
+	/**
+	 * Gets a list of all the requestIDs from the given tableName
+	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all the requestIDs
+	 */
+	public ArrayList<String> getRequestIDs(String tableName){
+
+		ArrayList<String> listOfIDs = new ArrayList<String>();
+
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestID = "Select requestID From " + tableName;
+
+			ResultSet rset = stmt.executeQuery(requestID);
+
+			while(rset.next()){
+				String ID = rset.getString("requestID");
+				listOfIDs.add(ID);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+
+		}
+
+		return listOfIDs;
+	}
+
+
+	/**
+	 * Gets a list of all the statuses from the given tableName
+	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all the statuses of the requests
+	 */
+	public ArrayList<String> getRequestStatus(String tableName){
+
+		ArrayList<String> listOfStatus = new ArrayList<String>();
+
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestStatus = "Select requests.requestStatus From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+
+			ResultSet rset = stmt.executeQuery(requestStatus);
+
+			while(rset.next()){
+				String status = rset.getString("requestStatus");
+				listOfStatus.add(status);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+
+		}
+
+		return listOfStatus;
+	}
+
 
 
 

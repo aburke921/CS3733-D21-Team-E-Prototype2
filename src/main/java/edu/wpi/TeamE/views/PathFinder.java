@@ -1,9 +1,12 @@
 package edu.wpi.TeamE.views;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.*;
 
+import java.awt.geom.RoundRectangle2D;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.*;
 import java.util.ArrayList;
@@ -11,8 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.jfoenix.controls.JFXSnackbar;
-import com.jfoenix.controls.JFXSnackbarLayout;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.*;
@@ -21,21 +22,24 @@ import edu.wpi.TeamE.databases.*;
 import edu.wpi.TeamE.App;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class PathFinder {
@@ -74,6 +78,15 @@ public class PathFinder {
     @FXML // fx:id="zoomSlider"
     private Slider zoomSlider;
 
+    @FXML // fx:id="directionsButton"
+    private JFXButton directionsButton; // Value injected by FXMLLoader
+
+    @FXML // fx:id="stackPane"
+    private StackPane stackPane; // Value injected by FXMLLoader
+
+    @FXML // fx:id="exit"
+    private Polygon exit;
+
     /*
      * Additional Variables
      */
@@ -94,8 +107,16 @@ public class PathFinder {
 
     ObservableList<String> longNameArrayList;
 
-    double radius = 20;
-    double strokeWidth = 5;
+    private double stageWidth;
+    private double stageHeight;
+
+    private double imageWidth;
+    private double imageHeight;
+
+    private double scale;
+
+    private double radius = 6;
+    private double strokeWidth = 3;
 
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
@@ -105,7 +126,7 @@ public class PathFinder {
     private void toDefault(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -144,6 +165,39 @@ public class PathFinder {
         } else {
             findPathButton.setDisable(false);
         }
+    }
+
+    /**
+     * Get textual directions from {@link Path#makeDirections()}, and prints them out onto
+     * a popup dialog.
+     * @param event the calling event's info
+     */
+    @FXML
+    void showDirections(ActionEvent event) {
+        //get directions
+        if (currentFoundPath == null) return;
+
+        List<String> directions = currentFoundPath.makeDirections();
+        StringBuilder directionsStringBuilder = new StringBuilder();
+        for (String dir: directions) {
+            System.out.println(dir);
+            directionsStringBuilder.append(dir).append(".\n"); //todo make scrollable
+        }
+        //make popup
+        JFXDialogLayout error = new JFXDialogLayout();
+        error.setHeading(new Text("Detailed Path Directions"));
+        error.setBody(new Text(directionsStringBuilder.toString()));
+        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Done");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        error.setActions(okay);
+        dialog.show();
     }
 
     /**
@@ -249,6 +303,7 @@ public class PathFinder {
         //Use these variables to keep track of the coordinates of the previous node
         double prevXCoord = 0;
         double prevYCoord = 0;
+        scale = imageWidth / imageView.getFitWidth();
 
         int firstNode = 1;
         while(nodeIteratorThisFloorOnly.hasNext()){ //loop through list
@@ -257,8 +312,8 @@ public class PathFinder {
             Node node = nodeIteratorThisFloorOnly.next();
 
             //Resize the coordinates to match the resized image
-            double xCoord = (double) node.getX();
-            double yCoord = (double) node.getY();
+            double xCoord = (double) node.getX() / scale;
+            double yCoord = (double) node.getY() / scale;
 
             if (firstNode == 1) { //if current node is the starting node
                 firstNode = 0;
@@ -293,6 +348,7 @@ public class PathFinder {
 
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                line.setStrokeLineCap(StrokeLineCap.ROUND);
                 line.setStrokeWidth(strokeWidth);
                 line.setStroke(Color.RED);
 
@@ -301,6 +357,7 @@ public class PathFinder {
             else {
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                line.setStrokeLineCap(StrokeLineCap.ROUND);
                 line.setStrokeWidth(strokeWidth);
                 line.setStroke(Color.RED);
 
@@ -376,8 +433,14 @@ public class PathFinder {
         //set Stage size
         Stage primaryStage = App.getPrimaryStage();
 
-        primaryStage.setWidth(1920/2);
-        primaryStage.setHeight(1080/2);
+        //If exit button is clicked, exit app
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
+
+        stageWidth = primaryStage.getWidth();
+        stageHeight = primaryStage.getHeight();
 
         System.out.println("Begin PathFinder Init");
 
@@ -403,15 +466,21 @@ public class PathFinder {
         //Set up zoomable and pannable panes
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(pane);
+
+        //set default/initial floor for map
+        Image image = new Image("edu/wpi/TeamE/maps/1.png");
+        imageWidth = image.getWidth();
+        imageHeight = image.getHeight();
+        imageView.setImage(image);
+
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(primaryStage.getWidth());
+
         StackPane stackPane = new StackPane(imageView, borderPane);
         ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
 
         //make scroll pane pannable
         scrollPane.setPannable(true);
-
-        //set default/initial floor for map
-        Image image = new Image("edu/wpi/TeamE/maps/1.png");
-        imageView.setImage(image);
 
         //get rid of side scroll bars
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -422,8 +491,8 @@ public class PathFinder {
         stackPane.scaleYProperty().bind(zoomSlider.valueProperty());
 
         rootBorderPane.setCenter(scrollPane);
-        rootBorderPane.setPrefHeight(492);
-        rootBorderPane.setPrefWidth(960);
+        rootBorderPane.setPrefWidth(stageWidth);
+        rootBorderPane.setPrefHeight(stageHeight);
 
         System.out.println("Finish PathFinder Init.");
     }

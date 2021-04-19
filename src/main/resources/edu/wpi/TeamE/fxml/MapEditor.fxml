@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDialog?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
@@ -12,10 +13,11 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.MapEditor">
+<FlowPane fx:id="flowPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.MapEditor">
     <children>
         <VBox alignment="CENTER" prefHeight="399.0" prefWidth="600.0">
             <children>
@@ -42,7 +44,7 @@
                 </HBox>
                 <HBox prefHeight="610.0" prefWidth="519.0">
                     <children>
-                        <FlowPane prefHeight="361.0" prefWidth="299.0">
+                        <FlowPane prefHeight="359.0" prefWidth="591.0">
                             <children>
                                 <VBox prefHeight="318.0" prefWidth="591.0">
                                     <FlowPane.margin>
@@ -50,43 +52,60 @@
                                     </FlowPane.margin>
                            <children>
                               <TreeTableView fx:id="treeTable" prefHeight="200.0" prefWidth="341.0" />
-                              <GridPane>
+                              <GridPane prefHeight="60.0" prefWidth="570.0">
                                 <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="138.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0" prefWidth="143.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="114.0" minWidth="1.0" prefWidth="13.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="235.0" minWidth="10.0" prefWidth="162.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="133.0" minWidth="10.0" prefWidth="131.0" />
                                 </columnConstraints>
                                 <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="34.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
                                     <JFXTextField maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="X-Cord" GridPane.columnIndex="1" fx:id="xCordInput" />
                                     <JFXTextField fx:id="longNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Long Name" />
-                                    <JFXTextField fx:id="yCordInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Y-Cord" GridPane.columnIndex="2" />
-                                    <JFXTextField fx:id="idInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="ID" GridPane.columnIndex="3" />
-                                    <JFXTextField fx:id="shortNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Short Name" GridPane.rowIndex="1" />
-                                    <JFXComboBox fx:id="typeInput" prefHeight="27.0" prefWidth="135.0" promptText="Type" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                    <JFXComboBox fx:id="floorInput" prefHeight="27.0" prefWidth="135.0" promptText="Floor" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <JFXComboBox fx:id="buildingInput" prefHeight="27.0" prefWidth="135.0" promptText="Building" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                    <JFXTextField fx:id="yCordInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Y-Cord" GridPane.columnIndex="3" />
+                                    <JFXTextField fx:id="shortNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="Short Name" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets top="10.0" />
+                                       </GridPane.margin></JFXTextField>
+                                    <JFXComboBox fx:id="typeInput" prefHeight="27.0" prefWidth="135.0" promptText="Type" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets top="10.0" />
+                                       </GridPane.margin></JFXComboBox>
+                                    <JFXComboBox fx:id="floorInput" prefHeight="27.0" prefWidth="135.0" promptText="Floor" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets top="10.0" />
+                                       </GridPane.margin></JFXComboBox>
+                                    <JFXComboBox fx:id="buildingInput" prefHeight="27.0" prefWidth="135.0" promptText="Building" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets right="10.0" />
+                                       </GridPane.margin></JFXComboBox>
+                                    <StackPane fx:id="stackPane" prefHeight="37.0" prefWidth="139.0" GridPane.columnIndex="2">
+                                       <children>
+                                          <JFXDialog />
+                                       </children>
+                                    </StackPane>
                                  </children>
                               </GridPane>
                               <FlowPane prefHeight="41.0" prefWidth="297.0">
                                  <children>
                                     <Button mnemonicParsing="false" onAction="#addNodeButton" text="Add Node">
                                        <FlowPane.margin>
-                                          <Insets right="10.0" top="10.0" />
+                                          <Insets right="10.0" top="15.0" />
                                        </FlowPane.margin>
                                     </Button>
                                     <Button mnemonicParsing="false" onAction="#editNodeButton" text="Edit Node">
                                        <FlowPane.margin>
-                                          <Insets right="10.0" top="10.0" />
+                                          <Insets right="10.0" top="15.0" />
                                        </FlowPane.margin>
                                     </Button>
                                     <Button mnemonicParsing="false" onAction="#deleteNodeButton" text="Delete Node">
                                        <FlowPane.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="15.0" />
                                        </FlowPane.margin>
                                     </Button>
                                  </children>

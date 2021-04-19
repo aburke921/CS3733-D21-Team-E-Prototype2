@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.Login">
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.createAccount">
       <children>
       <AnchorPane id="app-bar-top" prefWidth="1012.0">
          <children>
@@ -55,14 +56,14 @@
                      <children>
                         <FlowPane style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
                            <children>
-                                      <Label prefHeight="38.0" prefWidth="486.0" text="Login" textFill="WHITE">
-                                          <font>
-                                              <Font size="20.0" />
-                                          </font>
-                                          <FlowPane.margin>
-                                              <Insets left="10.0" />
-                                          </FlowPane.margin>
-                                      </Label>
+                              <Label prefHeight="38.0" prefWidth="486.0" text="Create Account" textFill="WHITE">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" />
+                                 </FlowPane.margin>
+                              </Label>
                            </children>
                            <HBox.margin>
                               <Insets left="20.0" />
@@ -79,13 +80,31 @@
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="738.0" prefWidth="1198.0">
+      <AnchorPane VBox.vgrow="ALWAYS">
          <children>
             <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <bottom>
+                  <AnchorPane prefHeight="45.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <JFXButton fx:id="back" onAction="#toLogin" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+               </bottom>
+               <right>
+                          <VBox prefWidth="0.0" BorderPane.alignment="CENTER" />
+               </right>
                <center>
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                      <children>
-                                  <Label alignment="CENTER" prefHeight="23.0" prefWidth="381.0" text="Please Enter Email and Password">
+                                  <Label alignment="CENTER" prefHeight="23.0" prefWidth="381.0" text="Please Enter Credentials">
                                       <font>
                                           <Font size="18.0" />
                                       </font>
@@ -93,38 +112,32 @@
                                           <Insets />
                                       </VBox.margin>
                                   </Label>
-                        <JFXTextField fx:id="emailInput" maxWidth="300.0" promptText="Email">
+                                    <JFXTextField fx:id="email" maxWidth="300.0" prefColumnCount="0" prefWidth="300.0" promptText="Email">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="password" maxWidth="300.0" prefHeight="27.0" prefWidth="300.0" promptText="Password">
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                                    </JFXTextField>
+                        <JFXTextField fx:id="firstName" maxWidth="300.0" prefWidth="300.0" promptText="First Name">
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
                         </JFXTextField>
-                        <JFXTextField fx:id="passwordInput" maxWidth="300.0" prefHeight="27.0" prefWidth="321.0" promptText="Password">
+                        <JFXTextField fx:id="lastName" maxWidth="300.0" prefWidth="300.0" promptText="Last Name">
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
                         </JFXTextField>
-                        <HBox alignment="CENTER" maxWidth="300.0">
-                           <children>
-                              <Button fx:id="createAccountButton" mnemonicParsing="false" onAction="#toNewAccount" prefHeight="29.0" prefWidth="150.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Create New Account" textFill="WHITE" />
-                              <Button fx:id="submitLoginButton" mnemonicParsing="false" onAction="#submitLogin" prefHeight="29.0" prefWidth="66.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Submit" textFill="WHITE">
-                                 <HBox.margin>
-                                    <Insets left="20.0" />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
+                                    <Button fx:id="submitAccountButton" mnemonicParsing="false" onAction="#createAccountButton" prefHeight="29.0" prefWidth="66.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Submit" textFill="WHITE">
                            <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <Button fx:id="guestLoginButton" mnemonicParsing="false" onAction="#guestLogin" prefHeight="29.0" prefWidth="132.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Log In As Guest" textFill="WHITE">
-                           <VBox.margin>
-                              <Insets top="20.0" />
+                              <Insets top="30.0" />
                            </VBox.margin>
                         </Button>
                      </children>
-                     <BorderPane.margin>
-                        <Insets bottom="40.0" top="40.0" />
-                     </BorderPane.margin>
                   </VBox>
                </center>
             </BorderPane>

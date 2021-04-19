@@ -678,6 +678,57 @@ public class DatabaseTests {
 		assertEquals(1, rowsChanged);
 	}
 
+
+	@Test
+	@DisplayName("testGetRequestAssignees")
+	public void testGetRequestAssignees(){
+
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addMedicineRequest(10000, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(10000, "kim","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		connection.addNode("test2", 0, 0, "3", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addSecurityRequest(10000, "drew", "test", "low", "Low");
+
+		ArrayList<String> returnedAssignees = connection.getRequestAssignees("medDelivery");
+		ArrayList<String> correctAssignees = new ArrayList<String>();
+
+		correctAssignees.add("bob");
+		correctAssignees.add("kim");
+
+		assertTrue(correctAssignees.equals(returnedAssignees));
+	}
+
+
+	@Test
+	@DisplayName("testGetRequestLocations")
+	public void testGetRequestLocations(){
+
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		connection.addNode("test3", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addMedicineRequest(10000, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(10000, "kim","test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		connection.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addSecurityRequest(10000, "drew", "test", "low", "Low");
+
+		ArrayList<String> returnedLocations = connection.getRequestLocations("medDelivery");
+		ArrayList<String> correctLocations = new ArrayList<String>();
+
+		correctLocations.add("long name #1");
+		correctLocations.add("long name #2");
+
+		assertTrue(correctLocations.equals(returnedLocations));
+
+	}
+
+
+
+
 	@Test
 	@DisplayName("data")
 	public void data(){
@@ -709,5 +760,6 @@ public class DatabaseTests {
 
 
 	}
+
 
 }

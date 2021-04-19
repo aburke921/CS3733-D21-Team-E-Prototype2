@@ -1,5 +1,6 @@
 package edu.wpi.TeamE.views.forms;
 
+
 public class ExternalPatientForm extends ServiceRequestForm{
 
     private String hospital;

@@ -1,9 +1,6 @@
 package edu.wpi.TeamE.views;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextArea;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.databases.makeConnection;
@@ -17,9 +14,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
+
 import java.io.IOException;
 import java.util.ArrayList;
-
+import com.jfoenix.controls.JFXSnackbar;
+import com.jfoenix.controls.JFXSnackbarLayout;
 
 public class SanitationServices extends ServiceRequestFormComponents {
 
@@ -38,6 +38,8 @@ public class SanitationServices extends ServiceRequestFormComponents {
   public SanitationServicesForm request;
   RequiredFieldValidator validator = new RequiredFieldValidator();
   makeConnection connection = makeConnection.makeConnection();
+  @FXML // fx:id="pane"
+  private Pane pane = new Pane();
 
 
   /**
@@ -54,19 +56,20 @@ public class SanitationServices extends ServiceRequestFormComponents {
    */
   private boolean validateInput(){
 
-      validator.setMessage("Input required");
+    validator.setMessage("Input required");
 
 
-    locationInput.getValidators().add(validator);
     ServiceTypeinput.getValidators().add(validator);
     assignedIndividual.getValidators().add(validator);
-
+    locationInput.getValidators().add(validator);
 
     detailedInstructionsInput.getValidators().add(validator);
     Signature.getValidators().add(validator);
     Severity.getValidators().add(validator);
 
-    return locationInput.validate() && ServiceTypeinput.validate() && assignedIndividual.validate() && detailedInstructionsInput.validate() && Severity.validate() && Signature.validate();
+
+
+    return  locationInput.validate() && ServiceTypeinput.validate() && assignedIndividual.validate() && detailedInstructionsInput.validate() && Severity.validate() && Signature.validate();
 
 
   }
@@ -79,14 +82,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
   @FXML
   private void saveData(ActionEvent actionEvent){
 
-    ArrayList<String> nodeIDS = connection.getListOfNodeIDS();
-    String serviceKind = ServiceTypeinput.getSelectionModel().toString();
-    String assignee = assignedIndividual.getText();
-    String details = detailedInstructionsInput.getText();
-    String severity = Severity.getSelectionModel().toString();
-    String signature = Signature.getText();
-    int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
-    String nodeID = nodeIDS.get(nodeIDIndex);
+
     if(validateInput()){
       //String detailedInstructions = sdetailedInstructionsInput.getText();
       //creating the service request
@@ -95,7 +91,14 @@ public class SanitationServices extends ServiceRequestFormComponents {
       //Adding service request to table
       //makeConnection connection = makeConnection.makeConnection();
       //connection.addRequest("sanitationServices", request);
-
+      ArrayList<String> nodeIDS = connection.getListOfNodeIDS();
+      String serviceKind = ServiceTypeinput.getSelectionModel().toString();
+      String assignee = assignedIndividual.getText();
+      String details = detailedInstructionsInput.getText();
+      String severity = Severity.getSelectionModel().toString();
+      String signature = Signature.getText();
+      int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
+      String nodeID = nodeIDS.get(nodeIDIndex);
       connection.addSanitationRequest(15,nodeID, serviceKind,details,severity,signature);
       System.out.println(nodeID);
       super.handleButtonSubmit(actionEvent);

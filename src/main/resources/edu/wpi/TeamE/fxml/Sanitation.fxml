@@ -97,7 +97,7 @@
                               </JFXComboBox>
                               <JFXTextField fx:id="Signature" prefHeight="27.0" prefWidth="289.0" promptText="Signature">
                                  <VBox.margin>
-                                    <Insets top="20.0" />
+                                    <Insets top="30.0" />
                                  </VBox.margin>
                               </JFXTextField>
                               <GridPane prefHeight="33.0" prefWidth="244.0">
@@ -113,7 +113,7 @@
                                     <JFXButton fx:id="submit" onAction="#saveData" styleClass="submit-button" text="Submit" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
                                  </children>
                                  <VBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets top="20.0" />
                                  </VBox.margin>
                               </GridPane>
                                     </children>

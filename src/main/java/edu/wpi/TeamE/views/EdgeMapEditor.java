@@ -6,6 +6,7 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.shape.Polygon;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
@@ -28,6 +29,9 @@ public class EdgeMapEditor {
     @FXML private JFXTextField idInput;
     @FXML private JFXTextField startNodeIDInput;
     @FXML private  JFXTextField endNodeIDInput;
+
+    @FXML // fx:id="exit"
+    private Polygon exit;
 
 
     @FXML
@@ -193,6 +197,11 @@ public class EdgeMapEditor {
         assert idInput != null : "fx:id=\"idInput\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
         */
         prepareEdges(treeTable);
+
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
 
     }
 

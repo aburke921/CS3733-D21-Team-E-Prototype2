@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
@@ -46,6 +47,9 @@ public class MapEditor {
     @FXML private JFXTextField shortNameInput;
     @FXML private StackPane stackPane;
     @FXML private FlowPane flowPane;
+
+    @FXML // fx:id="exit"
+    private Polygon exit;
 
     /**
      * when page loaded, displays the data
@@ -94,6 +98,11 @@ public class MapEditor {
         typeInput.setItems(listOfType);
         floorInput.setItems(listOfFloors);
         buildingInput.setItems(listOfBuildings);
+
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
 
     }
 

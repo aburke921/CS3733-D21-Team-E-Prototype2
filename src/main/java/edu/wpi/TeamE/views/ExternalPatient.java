@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.shape.Polygon;
 
 public class ExternalPatient extends ServiceRequestFormComponents  {
 
@@ -70,6 +71,10 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
 
     @FXML // fx:id="submit"
     private JFXButton submit; // Value injected by FXMLLoader
+
+    @FXML // fx:id="exit"
+    private Polygon exit;
+
     makeConnection connection = makeConnection.makeConnection();
     RequiredFieldValidator validator = new RequiredFieldValidator();
     /**
@@ -148,5 +153,11 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert assignedPersonnel != null : "fx:id=\"assignedPersonnel\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
+
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
+
     }
 }

@@ -85,17 +85,6 @@ public class Login {
         }
     }
 
-
-    /**
-     * Terminate application
-     * @param e
-     */
-    @FXML
-    private void shutdown(ActionEvent e) {
-        App app = new App();
-        app.stop();
-    }
-
     @FXML
     private void errorPopup(String errorMessage) {
         JFXDialogLayout error = new JFXDialogLayout();

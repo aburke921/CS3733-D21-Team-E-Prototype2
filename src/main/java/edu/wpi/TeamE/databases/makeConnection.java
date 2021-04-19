@@ -260,6 +260,11 @@ public class makeConnection {
 
 	}
 
+
+	//createRequestsTable --> added assignee
+
+
+
 	/**
 	 * Uses executes the SQL statements required to create the requests table.
 	 * This table has the attributes:
@@ -268,6 +273,7 @@ public class makeConnection {
 	 * - creationTime: this is a time stamp that is added to the request at the moment it is made.
 	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport".
 	 * - requestStatus: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
+	 * - assignee: this is the person who is assigned to the request
 	 */
 	public void createRequestsTable() {
 		try {
@@ -278,6 +284,7 @@ public class makeConnection {
 					"creationTime timestamp,\n" +
 					"requestType  varchar(31),\n" +
 					"requestStatus varchar(10),\n" +
+					"assignee varchar(31)," +
 					"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
 					"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 			stmt.execute(sqlQuery);
@@ -430,7 +437,7 @@ public class makeConnection {
 
 			stmt.execute(sqlQuery);
 		} catch (SQLException e) {
-			 e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("error creating securityServ table");
 		}
 	}
@@ -883,13 +890,14 @@ public class makeConnection {
 	 *
 	 * @param //form this is the form being added to the table
 	 */
-	public void addSanitationRequest(int userID, String roomID, String sanitationType, String description, String urgency, String signature) {
+	public void addSanitationRequest(int userID, String asignee, String roomID, String sanitationType, String description, String urgency, String signature) {
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'sanitation', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'sanitation', 'inProgress', ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
+			prepState.setString(2, asignee);
 			prepState.execute();
 		} catch (SQLException e) {
 //			e.printStackTrace();
@@ -920,14 +928,15 @@ public class makeConnection {
 	 *
 	 * @param //form this is the form that we will create and send to the database
 	 */
-	public void addExternalPatientRequest(int userID, String hospitalLocation, String severity, String patientID, String ETA, String description) {
+	public void addExternalPatientRequest(int userID, String asignee, String hospitalLocation, String severity, String patientID, String ETA, String description) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'extTransport', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'extTransport', 'inProgress', ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
+			prepState.setString(2, asignee);
 
 			prepState.execute();
 		} catch (SQLException e) {
@@ -967,13 +976,15 @@ public class makeConnection {
 	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
 	 *                      for whoever is fufilling the request
 	 */
-	public void addFloralRequest(int userID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
+	public void addFloralRequest(int userID, String asignee, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'floral', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'floral', 'inProgress', ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
+			prepState.setString(2, asignee);
+
 			prepState.execute();
 		} catch (SQLException e) {
 //			e.printStackTrace();
@@ -1028,14 +1039,15 @@ public class makeConnection {
 	 *
 	 * @param //form this is the form being added
 	 */
-	public void addMedicineRequest(int userID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
+	public void addMedicineRequest(int userID, String asignee, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'medDelivery', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'medDelivery', 'inProgress', ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
+			prepState.setString(2, asignee);
 
 			prepState.execute();
 		} catch (SQLException e) {
@@ -1069,14 +1081,15 @@ public class makeConnection {
 	 *
 	 * @param //form this is the form added to the table
 	 */
-	public void addSecurityRequest(int userID, String roomID, String level, String urgency) {
+	public void addSecurityRequest(int userID, String asignee, String roomID, String level, String urgency) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'security', 'inProgress')";
+				"         From requests) + 1, ?, Current Timestamp, 'security', 'inProgress', ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
+			prepState.setString(2, asignee);
 			prepState.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1113,9 +1126,17 @@ public class makeConnection {
 	/**
 	 * modifies a node, updating the DB, returning 0 or 1 depending on whether operation was successful
 	 *
+	 * @param nodeID
+	 * @param xCoord
+	 * @param yCoord
+	 * @param floor
+	 * @param building
+	 * @param nodeType
+	 * @param longName
+	 * @param shortName
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 */
-	public int modifyNode(String nodeID, Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+	public int modifyNode(String nodeID,  Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
 		//String finalQuery = "update node set ";
 		String xCoordUpdate = "";
 		String yCoordUpdate = "";
@@ -1345,7 +1366,6 @@ public class makeConnection {
 
 
 	}
-
 
 	/**
 	 * This edits a External Transport Services form that is already in the database
@@ -1652,7 +1672,6 @@ public class makeConnection {
 		}
 		return 0;
 	}
-
 
 
 
@@ -2170,6 +2189,54 @@ public class makeConnection {
 		return listOfStatus;
 	}
 
+	public ArrayList<String> getRequestAssignees(String tableName){
+
+		ArrayList<String> listOfAssignees = new ArrayList<String>();
+
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestStatus = "Select requests.assignee From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+
+			ResultSet rset = stmt.executeQuery(requestStatus);
+
+			while(rset.next()){
+				String status = rset.getString("requestStatus");
+				listOfAssignees.add(status);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+
+		}
+
+		return listOfAssignees;
+
+	}
+
+	public ArrayList<String> getRequestLocation(String tableName){
+
+		ArrayList<String> listOfLongNames = new ArrayList<String>();
+
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestStatus = "Select requests.assignee From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+
+			ResultSet rset = stmt.executeQuery(requestStatus);
+
+			while(rset.next()){
+				String status = rset.getString("requestStatus");
+				listOfLongNames.add(status);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+
+		}
+
+		return listOfLongNames;
+	}
 
 // Duplicate node
 // LongName too long

@@ -302,9 +302,6 @@ public class MapEditor {
         int xVal = Integer.parseInt(xCordInput.getText());
         int yVal = Integer.parseInt(yCordInput.getText());
         i = connection.addNode(idInput.getText(), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
-        if (i == 0) {
-            errorPopup("Cannot add same node twice");
-        }
         return i;
     }
 
@@ -401,7 +398,7 @@ public class MapEditor {
     }
 
     @FXML
-    private void errorPopup(String errorMessage) {
+    public void errorPopup(String errorMessage) {
         JFXDialogLayout error = new JFXDialogLayout();
         error.setHeading(new Text("Error!"));
         error.setBody(new Text(errorMessage));

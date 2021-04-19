@@ -7,6 +7,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
 
@@ -14,6 +20,15 @@ public class Default {
 
     @FXML // fx:id="imageView"
     private ImageView imageView;
+
+    @FXML // fx:id="imageView"
+    private Polygon exit;
+
+    @FXML // fx:id="imageView"
+    private Circle hide;
+
+    @FXML // fx:id="imageView"
+    private Rectangle fullscreen;
 
     /**
      * Move to Service Request page
@@ -64,16 +79,14 @@ public class Default {
     public void initialize() {
         Image image = new Image("edu/wpi/TeamE/logo.png");
         imageView.setImage(image);
+
+        //If exit button is clicked, exit app
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
+
     }
 
-    /**
-     * Terminate application
-     * @param e
-     */
-    @FXML
-    private void shutdown(ActionEvent e) {
-        App app = new App();
-        app.stop();
-    }
 }
 

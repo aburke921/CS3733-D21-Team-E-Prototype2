@@ -66,20 +66,34 @@ public class ServiceRequestStatus {
 
     @FXML
     private void cancelRequest(ActionEvent e) {
-        serviceRequestTable.getSelectionModel().getSelectedItem();//.setStatus("Cancelled")
+        cancel(serviceRequestTable);
+    }
+
+    private void cancel(TreeTableView<ServiceRequestForm> table) {
+        makeConnection connection = makeConnection.makeConnection();
+        if(table.getSelectionModel().getSelectedItem() != null) {
+            int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
+            connection.changeRequestStatus(id, "Cancelled");
+        }
     }
 
     @FXML
     private void completeRequest(ActionEvent e) {
-        serviceRequestTable.getSelectionModel().getSelectedItem();//.setStatus("Completed")
+        complete(serviceRequestTable);
+    }
+
+    private void complete(TreeTableView<ServiceRequestForm> table) {
+        makeConnection connection = makeConnection.makeConnection();
+        if(table.getSelectionModel().getSelectedItem() != null) {
+            int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
+            connection.changeRequestStatus(id,"Completed");
+        }
     }
 
     @FXML
     private void refresh(ActionEvent e) {
         prepareTable(serviceRequestTable);
     }
-
-
 
     ArrayList<String> testArrayID = new ArrayList<>();
     ArrayList<String> testArrayStatus = new ArrayList<>();
@@ -109,10 +123,22 @@ public class ServiceRequestStatus {
 
     private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
         makeConnection connection = makeConnection.makeConnection();
-        ArrayList<String> idArray = testArrayID;   //connection.getRequestIDs(tableName);
-        ArrayList<String> statusArray = testArrayStatus;    //connection.getRequestStatus(tableName);
-        ArrayList<String> locationArray = testArrayLocation; //connection.getRequestLocations(tableName);
-        ArrayList<String> assigneeArray = testArrayAssignee; //connection.getRequestAssignees(tableName);
+        ArrayList<String> idArray = connection.getRequestIDs(tableName);
+        ArrayList<String> statusArray = connection.getRequestStatus(tableName);
+        ArrayList<String> locationArray = connection.getRequestLocations(tableName);
+        ArrayList<String> assigneeArray = connection.getRequestAssignees(tableName);
+        if(idArray.size() > 0) {
+            System.out.println("Array size" + idArray.size());
+            if(!inProgress.getChildren().isEmpty()) {
+                removeChildren(inProgress);
+            }
+            if(!completed.getChildren().isEmpty()) {
+                removeChildren(completed);
+            }
+            if(!cancelled.getChildren().isEmpty()) {
+                removeChildren(cancelled);
+            }
+        }
         for(int i = 0; i < idArray.size(); i++) {
             TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), locationArray.get(i), assigneeArray.get(i), statusArray.get(i)));
             if(request.getValue().getStatus().equals("In Progress")) {
@@ -128,13 +154,41 @@ public class ServiceRequestStatus {
     }
 
     public void removeChildren(TreeItem<ServiceRequestForm> treeItem) {
+       int removal = treeItem.getChildren().size();
+        System.out.println(removal);
         if(treeItem.getChildren().size() != 0) {
-            treeItem.getChildren().remove(0,(treeItem.getChildren().size()-1));
+            treeItem.getChildren().remove(0,removal);
         }
+        TreeItem<ServiceRequestForm> test = treeItem;
+        System.out.println(test.getChildren().size());
     }
 
 
     public void prepareTable(TreeTableView serviceRequestTable) {
+        if(serviceRequestTable.getRoot() == null) {
+            //Establishing some columns that are consistent throughout all the service requests
+            //Column 1 - ID
+            TreeTableColumn<ServiceRequestForm, String> formColumn = new TreeTableColumn<>("Form");
+            formColumn.setPrefWidth(320);
+            formColumn.setCellValueFactory((CellDataFeatures<ServiceRequestForm, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getId()));
+            serviceRequestTable.getColumns().add(formColumn);
+            //Column 2 - Location
+            TreeTableColumn<ServiceRequestForm, String> locationColumn = new TreeTableColumn<>("Location");
+            locationColumn.setPrefWidth(150);
+            locationColumn.setCellValueFactory((CellDataFeatures<ServiceRequestForm, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getLocation()));
+            serviceRequestTable.getColumns().add(locationColumn);
+            //Column 3 - Assignee
+            TreeTableColumn<ServiceRequestForm, String> assigneeColumn = new TreeTableColumn<>("Assignee");
+            assigneeColumn.setPrefWidth(150);
+            assigneeColumn.setCellValueFactory((CellDataFeatures<ServiceRequestForm, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getAssignee()));
+            serviceRequestTable.getColumns().add(assigneeColumn);
+
+            createTests();
+
+        }
 
         TreeItem<ServiceRequestForm> rootNode = new TreeItem<>(new ServiceRequestForm("Service Requests"));
 
@@ -160,25 +214,7 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> sanitationServicesCancelled = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
         TreeItem<ServiceRequestForm> securityServiceCancelled = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
 
-        //Remove all children in the case that the table is being refreshed
-        removeChildren(externalPatientCompleted);
-        removeChildren(floralFormCompleted);
-        removeChildren(medicineDeliveryCompleted);
-        removeChildren(sanitationServicesCompleted);
-        removeChildren(securityServiceCompleted);
-        removeChildren(externalPatientInProgress);
-        removeChildren(floralFormInProgress);
-        removeChildren(medicineDeliveryInProgress);
-        removeChildren(sanitationServicesInProgress);
-        removeChildren(securityServiceInProgress);
-        removeChildren(externalPatientCancelled);
-        removeChildren(floralFormCancelled);
-        removeChildren(medicineDeliveryCancelled);
-        removeChildren(sanitationServicesCancelled);
-        removeChildren(securityServiceCancelled);
-
         //Adding request forms
-        createTests();
         addToTable("securityServ", securityServiceInProgress, securityServiceCompleted, securityServiceCancelled);
         addToTable("extTransport", externalPatientInProgress, externalPatientCompleted, externalPatientCancelled);
         addToTable("floralRequests", floralFormInProgress, floralFormCompleted, floralFormCancelled);
@@ -186,36 +222,15 @@ public class ServiceRequestStatus {
         addToTable("medDelivery", medicineDeliveryInProgress, medicineDeliveryCompleted, medicineDeliveryCancelled);
 
         //Adding children to sub-root nodes
-        inProgress.getChildren().setAll(externalPatientInProgress,floralFormInProgress,medicineDeliveryInProgress,sanitationServicesInProgress,securityServiceInProgress);
-        completed.getChildren().setAll(externalPatientCompleted,floralFormCompleted,medicineDeliveryCompleted,sanitationServicesCompleted,securityServiceCompleted);
-        cancelled.getChildren().setAll(externalPatientCancelled,floralFormCancelled,medicineDeliveryCancelled,sanitationServicesCancelled,securityServiceCancelled);
+        inProgress.getChildren().setAll(externalPatientInProgress, floralFormInProgress, medicineDeliveryInProgress, sanitationServicesInProgress, securityServiceInProgress);
+        completed.getChildren().setAll(externalPatientCompleted, floralFormCompleted, medicineDeliveryCompleted, sanitationServicesCompleted, securityServiceCompleted);
+        cancelled.getChildren().setAll(externalPatientCancelled, floralFormCancelled, medicineDeliveryCancelled, sanitationServicesCancelled, securityServiceCancelled);
 
         //Adding sub-roots to root node
-        rootNode.getChildren().setAll(inProgress,completed,cancelled);
+        rootNode.getChildren().setAll(inProgress, completed, cancelled);
 
         //Adding Root
         serviceRequestTable.setRoot(rootNode);
-
-        //Establishing some columns that are consistent throughout all the service requests
-        //Column 1 - ID
-        TreeTableColumn<ServiceRequestForm, String> formColumn = new TreeTableColumn<>("Form");
-        formColumn.setPrefWidth(320);
-        formColumn.setCellValueFactory((CellDataFeatures<ServiceRequestForm, String> p) ->
-                new ReadOnlyStringWrapper(p.getValue().getValue().getId()));
-        serviceRequestTable.getColumns().add(formColumn);
-        //Column 2 - Location
-        TreeTableColumn<ServiceRequestForm, String> locationColumn = new TreeTableColumn<>("Location");
-        locationColumn.setPrefWidth(150);
-        locationColumn.setCellValueFactory((CellDataFeatures<ServiceRequestForm, String> p) ->
-                        new ReadOnlyStringWrapper(p.getValue().getValue().getLocation()));
-        serviceRequestTable.getColumns().add(locationColumn);
-        //Column 3 - Assignee
-        TreeTableColumn<ServiceRequestForm, String> assigneeColumn = new TreeTableColumn<>("Assignee");
-        assigneeColumn.setPrefWidth(150);
-        assigneeColumn.setCellValueFactory((CellDataFeatures<ServiceRequestForm, String> p) ->
-                        new ReadOnlyStringWrapper(p.getValue().getValue().getAssignee()));
-        serviceRequestTable.getColumns().add(assigneeColumn);
-
     }
 
     @FXML

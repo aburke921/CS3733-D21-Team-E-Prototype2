@@ -1785,7 +1785,65 @@ public class makeConnection {
 		return false;
 	}
 
+	/**
+	 * Gets a list of all the statuses from the given tableName
+	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all the statuses of the requests
+	 */
+	public ArrayList<String> getRequestStatus(String tableName){
 
+
+		ArrayList<String> listOfStatus = new ArrayList<String>();
+
+
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestStatus = "Select requests.requestStatus From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+
+			ResultSet rset = stmt.executeQuery(requestStatus);
+
+			while(rset.next()){
+				String status = rset.getString("requestStatus");
+				listOfStatus.add(status);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+
+		}
+
+		return listOfStatus;
+	}
+
+	/**
+	 * Gets a list of all the requestIDs from the given tableName
+	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all the requestIDs
+	 */
+	public ArrayList<String> getRequestIDs(String tableName){
+
+		ArrayList<String> listOfIDs = new ArrayList<String>();
+
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestID = "Select requestID From " + tableName;
+
+			ResultSet rset = stmt.executeQuery(requestID);
+
+			while(rset.next()){
+				String ID = rset.getString("requestID");
+				listOfIDs.add(ID);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+
+		}
+
+		return listOfIDs;
+	}
 
 
 }

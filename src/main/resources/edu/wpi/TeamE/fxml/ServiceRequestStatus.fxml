@@ -45,7 +45,8 @@
                                     </FlowPane.margin>
                            <children>
                               <JFXTreeTableView fx:id="serviceRequestTable" prefHeight="184.0" prefWidth="591.0" />
-                              <JFXButton fx:id="completeButton" text="Mark as Complete" />
+                              <JFXButton fx:id="completeButton" onAction="#completeRequest" text="Mark as Complete" />
+                               <JFXButton fx:id="cancelButton" onAction="#cancelRequest" text="Cancel Request" />
                            </children>
                                 </VBox>
                                 <FlowPane prefHeight="41.0" prefWidth="250.0">

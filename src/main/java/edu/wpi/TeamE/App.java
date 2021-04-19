@@ -20,8 +20,8 @@ public class App extends Application {
 	}
 
 
-	/**@Override
-	public void init() {
+	@Override
+	public void init() throws Exception {
 		System.out.println("STARTING UP!!!");
 		makeConnection connection = makeConnection.makeConnection();
 		System.out.println("Connected to the DB");
@@ -42,7 +42,7 @@ public class App extends Application {
 			connection.populateTable("hasEdge", edges);
 			System.out.println("Tables were created and populated");
 		}
-	}**/
+	}
 
 
 	@Override

@@ -37,6 +37,7 @@ import javafx.util.Callback;
 import sun.reflect.generics.tree.Tree;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,10 +63,35 @@ public class ServiceRequestStatus {
         }
     }
 
+    @FXML
+    private void cancelRequest(ActionEvent e) {
+        serviceRequestTable.getSelectionModel().getSelectedItem();//.setStatus("Cancelled")
+    }
+
+    @FXML
+    private void completeRequest(ActionEvent e) {
+        serviceRequestTable.getSelectionModel().getSelectedItem();//.setStatus("Completed")
+    }
+
+
+    ArrayList<String> testArrayID = new ArrayList<>();
+    ArrayList<String> testArrayStatus = new ArrayList<>();
+    private void createTests() {
+        testArrayID.add(0,"test1");
+        testArrayID.add(1,"test2");
+        testArrayID.add(2,"test3");
+        testArrayID.add(3,"test4");
+        testArrayStatus.add(0,"In Progress");
+        testArrayStatus.add(1,"Completed");
+        testArrayStatus.add(2,"Cancelled");
+        testArrayStatus.add(3,"In Progress");
+    }
+
+
     private void addToTable(String tableName, TreeItem<String> inProgress, TreeItem<String> completed, TreeItem<String> cancelled) {
         makeConnection connection = makeConnection.makeConnection();
-        ArrayList<String> idArray = new ArrayList<>();
-        ArrayList<String> statusArray = new ArrayList<>();
+        ArrayList<String> idArray = testArrayID;   //connection.getRequestIDs(tableName);
+        ArrayList<String> statusArray = testArrayStatus;    //connection.getRequestStatus(tableName);
         for(int i = 0; i < idArray.size(); i++) {
             TreeItem<String> request = new TreeItem<>(idArray.get(i));
             if(statusArray.get(i).equals("In Progress")) {
@@ -84,7 +110,6 @@ public class ServiceRequestStatus {
     public void prepareTable(TreeTableView serviceRequestTable) {
 
         TreeItem<String> rootNode = new TreeItem<>("Service Requests");
-
 
         //Setting up sub-root nodes
         TreeItem<String> inProgress = new TreeItem<>("In Progress");
@@ -107,6 +132,14 @@ public class ServiceRequestStatus {
         TreeItem<String> medicineDeliveryCancelled = new TreeItem<>("Medicine Delivery Form");
         TreeItem<String> sanitationServicesCancelled = new TreeItem<>("Sanitation Services Form");
         TreeItem<String> securityServiceCancelled = new TreeItem<>("Security Service Form");
+
+        //Adding request forms
+        createTests();
+        addToTable("securityServ", securityServiceInProgress, securityServiceCompleted, securityServiceCancelled);
+        addToTable("extTransport", externalPatientInProgress, externalPatientCompleted, externalPatientCancelled);
+        addToTable("floralRequests", floralFormInProgress, floralFormCompleted, floralFormCancelled);
+        addToTable("sanitationRequest", sanitationServicesInProgress, sanitationServicesCompleted, sanitationServicesCancelled);
+        addToTable("medDelivery", medicineDeliveryInProgress, medicineDeliveryCompleted, medicineDeliveryCancelled);
 
         //Adding children to sub-root nodes
         inProgress.getChildren().setAll(externalPatientInProgress,floralFormInProgress,medicineDeliveryInProgress,sanitationServicesInProgress,securityServiceInProgress);
@@ -139,7 +172,6 @@ public class ServiceRequestStatus {
         assigneeColumn.setPrefWidth(150);
         serviceRequestTable.getColumns().add(assigneeColumn);
 
-        addToTable("Security Service", securityServiceInProgress, securityServiceCompleted, sanitationServicesCancelled);
     }
 
     @FXML

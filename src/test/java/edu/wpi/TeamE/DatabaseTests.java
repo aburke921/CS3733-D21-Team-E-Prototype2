@@ -734,27 +734,48 @@ public class DatabaseTests {
 	public void data(){
 
 		//Visitors:
-		connection.addUserAccount("bellag@gmail.com", "!!98!century!", "Bella", "Graham");
-		connection.addUserAccount("terry_reilly123@yahoo.com", "until&MORNING&", "Terry", "Reilly");
-		connection.addUserAccount("smiddle@outlook.com", "//97|member", "Sharon", "Middleton");
-		connection.addUserAccount("catherinehop12@gmail.com", "~FIND~question", "Catherine", "Hopkins");
-		connection.addUserAccount("mbernard@wpi.edu", "@@20.color", "Michelle", "Bernard");
-		connection.addUserAccount("mccoy.meghan@hotmail.com", "||22*what*", "Meghan", "Mccoy");
-		connection.addUserAccount("harry89owens@gmail.com", "plants*37||", "Harry", "Owens");
-		connection.addUserAccount("hugowh@gmail.com", "=finland=", "Hugo", "Whitehouse");
-		connection.addUserAccount("spenrodg@yahoo.com", "%object%7", "Spencer", "Rodgers");
-		connection.addUserAccount("thomasemail@gmail.com", "travel@66", "Thomas", "Mendez");
-		connection.addUserAccount("claytonmurray@gmail.com", "95+bill", "Clayton", "Murray");
-		connection.addUserAccount("lawrencekhalid@yahoo.com", "??54%com", "Khalid", "Lawrence");
+		connection.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		connection.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
+		connection.addUserAccount("smiddle@outlook.com", "visitor3", "Sharon", "Middleton");
+		connection.addUserAccount("catherinehop12@gmail.com", "visitor4", "Catherine", "Hopkins");
+		connection.addUserAccount("mbernard@wpi.edu", "visitor5", "Michelle", "Bernard");
+		connection.addUserAccount("mccoy.meghan@hotmail.com", "visitor6", "Meghan", "Mccoy");
+		connection.addUserAccount("harry89owens@gmail.com", "visitor7", "Harry", "Owens");
+		connection.addUserAccount("hugowh@gmail.com", "visitor8", "Hugo", "Whitehouse");
+		connection.addUserAccount("spenrodg@yahoo.com", "visitor9", "Spencer", "Rodgers");
+		connection.addUserAccount("thomasemail@gmail.com", "visitor10", "Thomas", "Mendez");
+		connection.addUserAccount("claytonmurray@gmail.com", "visitor11", "Clayton", "Murray");
+		connection.addUserAccount("lawrencekhalid@yahoo.com", "visitor12", "Khalid", "Lawrence");
 
 		//Patients:
 		connection.addSpecialUserType("adamj@gmail.com","patient1","patient","Adam", "Jenkins");
 		connection.addSpecialUserType("abbym@yahoo.com","patient2","patient","Abby", "Mohamed");
 		connection.addSpecialUserType("wesleya@gmail.com","patient3","patient","Wesley", "Armstrong");
 		connection.addSpecialUserType("travisc@yahoo.com","patient4","patient","Travis", "Cook");
+		connection.addSpecialUserType("gabriellar@gmail.com","patient5","patient","Gabriella", "Reyes");
+		connection.addSpecialUserType("troyo@yahoo.com","patient6","patient","Troy", "Olson");
+		connection.addSpecialUserType("anat@gmail.com","patient7","patient","Ana", "Turner");
 
 
-//		"visitor", "patient", "doctor", "admin".
+		//Doctors:
+		connection.addSpecialUserType("billb@gmail.com","doctor1","doctor","Bill", "Byrd");
+		connection.addSpecialUserType("ameliak@yahoo.com","doctor2","doctor","Amelia", "Knight");
+		connection.addSpecialUserType("simond@gmail.com","doctor3","doctor","Simon", "Daniel");
+		connection.addSpecialUserType("victoriae@yahoo.com","doctor4","doctor","Victoria", "Erickson");
+		connection.addSpecialUserType("taylorr@gmail.com","doctor5","doctor","Taylor", "Ramos");
+		connection.addSpecialUserType("rosas@yahoo.com","doctor6","doctor","Rosa", "Smith");
+		connection.addSpecialUserType("declanp@gmail.com","doctor7","doctor","Declan", "Patel");
+		connection.addSpecialUserType("laurenb@yahoo.com","doctor8","doctor","Lauren", "Bolton");
+
+		//Admin:
+		connection.addSpecialUserType("abbyw@gmail.com","admin1","admin","Abby", "Williams");
+		connection.addSpecialUserType("andrewg@yahoo.com","admin2","admin","Andrew", "Guerrero");
+		connection.addSpecialUserType("aleshah@gmail.com","admin3","admin","Alesha", "Harris");
+
+
+
+
+
 
 
 

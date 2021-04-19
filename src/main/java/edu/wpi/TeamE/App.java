@@ -3,17 +3,24 @@ package edu.wpi.TeamE;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class App extends Application {
 
 	private static Stage primaryStage;
+
+	private double x, y;
 
 	public static void setPrimaryStage(Stage primaryStage) {
 		App.primaryStage = primaryStage;
@@ -44,16 +51,23 @@ public class App extends Application {
 		}
 	}
 
+	public static void setDraggableAndChangeScene(Parent root) {
+		ResizeHelper.addResizeListener(App.getPrimaryStage());
+		App.getPrimaryStage().getScene().setRoot(root);
+	}
+
 
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) throws IOException {
 		App.primaryStage = primaryStage;
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("fxml/Login.fxml"));
-			Scene scene = new Scene(root);
+			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
+			Scene scene = new Scene(root); //init
 			primaryStage.setScene(scene);
-			primaryStage.setFullScreen(true);
+// 			primaryStage.setFullScreen(true);
 			primaryStage.show();
+			ResizeHelper.addResizeListener(primaryStage);
 		} catch (IOException e) {
 			e.printStackTrace();
 			Platform.exit();

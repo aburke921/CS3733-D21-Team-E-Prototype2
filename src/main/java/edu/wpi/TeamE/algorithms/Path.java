@@ -186,6 +186,82 @@ public class Path {
     }
 
     /**
+     * A method(no parameters) in our path class that returns a collection of
+     * strings(array, array list), iterate through its list and
+     * figures out how to turn the list nodes into a list of strings that describe it.
+     * Figures out current line(coordinates), next line, and then make an angle.
+     * Bend left, turn left, by angle (small or large) decide direction after.
+     *
+     * @return the list of strings as directions
+     */
+    public List<String> makeDirectionsWithDist(){
+
+        List<String> directions = new ArrayList<>();
+
+        //iterate the list
+        Iterator<Node> itr = this.iterator();
+
+        //TODO: make work
+
+        if(itr.hasNext()){
+
+            //node 1
+            Node node1 = itr.next();
+
+            if(itr.hasNext()){
+
+                //node 2
+                Node node2 = itr.next();
+
+                while (itr.hasNext()){
+
+                    //node 3
+                    Node node3 = itr.next();
+
+                    //p3 - p1
+                    Point p3_1 = new Point(node3.getX() - node1.getX(), node3.getY() - node1.getY());
+
+                    //p2 - p1
+                    Point p2_1 = new Point(node2.getX() - node1.getX(), node2.getY() - node1.getY());
+
+                    //calculate the cross product
+                    double crossProduct = p3_1.getX() * p2_1.getY() - p2_1.getX() * p3_1.getY();
+
+                    //find angle
+                    double angle = 0;
+                    //vectors
+                    Point p1p2 = new Point(node2.getX() - node1.getX(), node2.getY() - node1.getY());
+                    Point p2p3 = new Point(node3.getX() - node2.getX(), node3.getY() - node2.getY());
+                    //dot product p1p2 x p2p3
+                    double dotProduct = p1p2.getX() * p2p3.getX() + p1p2.getY() * p2p3.getY();
+                    //length of vector p1p2
+                    double p1p2Length = Math.sqrt( p1p2.getX() *  p1p2.getX() + p1p2.getY() *  p1p2.getY());
+                    //length of vector p2p3
+                    double p2p3Length = Math.sqrt( p2p3.getX() *  p2p3.getX() + p2p3.getY() *  p2p3.getY());
+
+                    angle = Math.acos(dotProduct / (p1p2Length * p2p3Length));
+                    angle = 180 * angle / Math.PI;//convert radian to angle
+
+                    if (crossProduct < 0){
+                        directions.add("Bend right, by angle " + Math.abs(angle));
+                    }else if (crossProduct > 0){
+                        directions.add("Bend left, by angle " + Math.abs(angle));
+                    }else{
+                        directions.add("Straight ahead");
+                    }
+
+                    //continue for next node
+                    node1 = node2;
+                    node2 = node3;
+                }
+            }
+        }
+
+        return directions;
+
+    }
+
+    /**
      * Prints a string rep. of the Path
      * @param labels a list of the labels you want to print, everything but xCoord and yCoord
      */

@@ -300,9 +300,9 @@ public class makeConnection {
 	 * - requestID: this is used to identify a request. Every request must have one.
 	 * - roomID: this is the nodeID/room the user is sending the request to.
 	 * - recipientName: this is the name of the individual they want the flowers to be addressed to
-	 * - flowerType: this is the type of flowers that the user wants to request
-	 * - flowerAmount: this the number/quantity of flowers that the user is requesting
-	 * - vaseType: this is the type of vase the user wants the flowers to be delivered in
+	 * - flowerType: this is the type of flowers that the user wants to request. The valid options are: 'Roses', 'Tulips', 'Carnations', 'Assortment'
+	 * - flowerAmount: this the number/quantity of flowers that the user is requesting. The valid options are: 1, 6, 12
+	 * - vaseType: this is the type of vase the user wants the flowers to be delivered in. The valid options are: 'Round', 'Square', 'Tall', 'None'
 	 * - message: this is a specific detailed message that the user can have delivered with the flowers or an instruction message
 	 * *                for whoever is fufilling the request
 	 */
@@ -359,10 +359,11 @@ public class makeConnection {
 	}
 
 	/**
-	 * Uses executes the SQL statements required to create a sanitationRequest table. This is a type of request and share the same requestID.
+	 * Uses executes the SQL statements required to create a extTransport table. This is a type of request and share the same requestID.
 	 * This table has the attributes:
 	 * - requestID: this is used to identify a request. Every request must have one.
 	 * - hospitalLocation: this is the location of the hospital that the user/first responders are going to.
+	 * - requestType: this the mode of transportation that the request is being made for. The valid options are: 'Ambulance', 'Helicopter', 'Plane'
 	 * - severity: this is how sever the patient is who the user/first responders are transporting.
 	 * - patientID: this is the ID of the patient that is being transported.
 	 * - ETA: this is the estimated time the patient will arrive.
@@ -374,14 +375,16 @@ public class makeConnection {
 			String sqlQuery = "Create Table extTransport(\n" +
 					"    requestID int Primary Key References requests On Delete Cascade,\n" +
 					"    hospitalLocation varchar(100) Not Null,\n" +
+					"    requestType varchar(100) Not Null, " +
 					"    severity varchar(30) Not Null,\n" +
 					"    patientID int Not Null,\n" +
 					"    ETA varchar(100),\n" +
-					"    description varchar(5000)\n" +
+					"    description varchar(5000)," +
+					"    Constraint requestTypeLimitExtTrans Check (requestType In ('Ambulance', 'Helicopter', 'Plane'))" +
 					")";
 			stmt.execute(sqlQuery);
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			System.err.println("error creating extTransport table");
 		}
 	}
@@ -412,7 +415,7 @@ public class makeConnection {
 			stmt.execute(sqlQuery);
 		} catch (SQLException e) {
 			// e.printStackTrace();
-			System.err.println("error creating extTransport table");
+			System.err.println("error creating medDelivery table");
 		}
 	}
 
@@ -422,7 +425,7 @@ public class makeConnection {
 	 * - requestID: this is used to identify a request. Every request must have one.
 	 * - roomID: this is the nodeID/room the user wants security assistance at
 	 * - level: this is the security level that is needed
-	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled
+	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled. The valid options are: 'Low', 'Medium', 'High', 'Critical'
 	 */
 	public void createSecurityServTable() {
 		try {
@@ -458,16 +461,16 @@ public class makeConnection {
 			Statement stmt = this.connection.createStatement();
 			stmt.execute("Drop Table securityServ");
 			stmt.execute("Drop Table medDelivery");
-			stmt.execute("Drop Table exttransport");
-			stmt.execute("Drop Table sanitationrequest");
-			stmt.execute("Drop Table floralrequests");
+			stmt.execute("Drop Table extTransport");
+			stmt.execute("Drop Table sanitationRequest");
+			stmt.execute("Drop Table floralRequests");
 			stmt.execute("Drop Table requests");
-			stmt.execute("Drop View visitoraccount");
-			stmt.execute("Drop View patientaccount");
-			stmt.execute("Drop View doctoraccount");
-			stmt.execute("Drop View adminaccount");
-			stmt.execute("Drop Table useraccount");
-			stmt.execute("Drop Table hasedge");
+			stmt.execute("Drop View visitorAccount");
+			stmt.execute("Drop View patientAccount");
+			stmt.execute("Drop View doctorAccount");
+			stmt.execute("Drop View adminAccount");
+			stmt.execute("Drop Table userAccount");
+			stmt.execute("Drop Table hasEdge");
 			stmt.execute("Drop Table node");
 			stmt.close();
 		} catch (SQLException e) {
@@ -845,7 +848,7 @@ public class makeConnection {
 	 * @param lastName this is the user's last name that is associated with the account
 	 */
 	public void addUserAccount(String email, String password, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 10000, ?, ?, 'visitor', ?, ?)";
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
 			prepState.setString(2, password);
@@ -870,7 +873,7 @@ public class makeConnection {
 	 * @param lastName this is the user's last name that is associated with the account
 	 */
 	public void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 10000, ?, ?, ?, ?, ?)";
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
 			prepState.setString(2, password);
@@ -928,7 +931,7 @@ public class makeConnection {
 	 *
 	 * @param //form this is the form that we will create and send to the database
 	 */
-	public void addExternalPatientRequest(int userID, String asignee, String hospitalLocation, String severity, String patientID, String ETA, String description) {
+	public void addExternalPatientRequest(int userID, String asignee, String hospitalLocation, String requestType, String severity, int patientID, String ETA, String description) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
@@ -940,25 +943,26 @@ public class makeConnection {
 
 			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addExternalPatientRequest()");
 		}
 
 		String insertExtTransport = "Insert Into exttransport\n" +
 				"Values ((Select Count(*)\n" +
-				"         From requests), ?, ?, ?, ?, ?)";
+				"         From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
 			prepState.setString(1, hospitalLocation);
-			prepState.setString(2, severity);
-			prepState.setString(3, patientID);
-			prepState.setString(4, ETA);
-			prepState.setString(5, description);
+			prepState.setString(2, requestType);
+			prepState.setString(3, severity);
+			prepState.setInt(4, patientID);
+			prepState.setString(5, ETA);
+			prepState.setString(6, description);
 
 			prepState.execute();
 
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error inserting into extTransport inside function addExternalPatientRequest()");
 		}
 
@@ -1110,6 +1114,149 @@ public class makeConnection {
 			e.printStackTrace();
 			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
 		}
+
+
+	}
+
+	public void addDataForPresentation(){
+		//Visitors:
+		// - have access to floral Delivery
+		addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
+		addUserAccount("smiddle@outlook.com", "visitor3", "Sharon", "Middleton");
+		addUserAccount("catherinehop12@gmail.com", "visitor4", "Catherine", "Hopkins");
+		addUserAccount("mbernard@wpi.edu", "visitor5", "Michelle", "Bernard");
+		addUserAccount("mccoy.meghan@hotmail.com", "visitor6", "Meghan", "Mccoy");
+		addUserAccount("harry89owens@gmail.com", "visitor7", "Harry", "Owens");
+		addUserAccount("hugowh@gmail.com", "visitor8", "Hugo", "Whitehouse");
+		addUserAccount("spenrodg@yahoo.com", "visitor9", "Spencer", "Rodgers");
+		addUserAccount("thomasemail@gmail.com", "visitor10", "Thomas", "Mendez");
+		addUserAccount("claytonmurray@gmail.com", "visitor11", "Clayton", "Murray");
+		addUserAccount("lawrencekhalid@yahoo.com", "visitor12", "Khalid", "Lawrence");
+
+		//Patients:
+		//13 - 19
+		addSpecialUserType("adamj@gmail.com","patient1","patient","Adam", "Jenkins");
+		addSpecialUserType("abbym@yahoo.com","patient2","patient","Abby", "Mohamed");
+		addSpecialUserType("wesleya@gmail.com","patient3","patient","Wesley", "Armstrong");
+		addSpecialUserType("travisc@yahoo.com","patient4","patient","Travis", "Cook");
+		addSpecialUserType("gabriellar@gmail.com","patient5","patient","Gabriella", "Reyes");
+		addSpecialUserType("troyo@yahoo.com","patient6","patient","Troy", "Olson");
+		addSpecialUserType("anat@gmail.com","patient7","patient","Ana", "Turner");
+
+		//Doctors:
+		//20-27
+		addSpecialUserType("billb@gmail.com","doctor1","doctor","Bill", "Byrd");
+		addSpecialUserType("ameliak@yahoo.com","doctor2","doctor","Amelia", "Knight");
+		addSpecialUserType("simond@gmail.com","doctor3","doctor","Simon", "Daniel");
+		addSpecialUserType("victoriae@yahoo.com","doctor4","doctor","Victoria", "Erickson");
+		addSpecialUserType("taylorr@gmail.com","doctor5","doctor","Taylor", "Ramos");
+		addSpecialUserType("rosas@yahoo.com","doctor6","doctor","Rosa", "Smith");
+		addSpecialUserType("declanp@gmail.com","doctor7","doctor","Declan", "Patel");
+		addSpecialUserType("laurenb@yahoo.com","doctor8","doctor","Lauren", "Bolton");
+
+		//Admin:
+		//28 - 30
+		addSpecialUserType("abbyw@gmail.com","admin1","admin","Abby", "Williams");
+		addSpecialUserType("andrewg@yahoo.com","admin2","admin","Andrew", "Guerrero");
+		addSpecialUserType("aleshah@gmail.com","admin3","admin","Alesha", "Harris");
+
+
+		//Floral Requests: //RequestID: 1-9
+		addFloralRequest(13,"Amy Castaneda", "ADEPT00101", "Adam", "Roses", 1, "None", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
+		addFloralRequest(13,"Elsa Figueroa", "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
+		addFloralRequest(14,"Caroline Sutton", "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Get well soon");
+		addFloralRequest(15,"Miles Long", "ADEPT00301", "Nikki", "Assortment", 1, "None", "");
+		addFloralRequest(15,"Hasan Perry", "ADEPT00101", "Monica", "Roses", 6, "Tall", "Love and miss you!!");
+		addFloralRequest(17,"Caroline Richardson", "DDEPT00102", "Amy", "Tulips", 12, "Square", "Enjoy the flowers");
+		addFloralRequest(17,"Miles Carroll", "ADEPT00102", "Alfred", "Carnations", 1, "Tall", "Miss you!");
+		addFloralRequest(19,"Seth Warner", "ADEPT00101", "Caroline", "Assortment", 6, "Round", "Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
+		addFloralRequest(19,"Darren Rossi", "ADEPT00301", "Carrie", "Assortment", 12, "Round", "");
+
+
+		changeRequestStatus(1, "canceled");
+		changeRequestStatus(4, "canceled");
+		changeRequestStatus(5, "complete");
+		changeRequestStatus(6, "canceled");
+		changeRequestStatus(7, "complete");
+
+
+		//Sanitation Requests: //RequestID: 10 - 18
+		addSanitationRequest(20,"Crystal Harvey", "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd");
+		addSanitationRequest(20,"Minnie Newman", "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium", "Bill Byrd");
+		addSanitationRequest(24,"Ayla Black", "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High", "Taylor Ramos");
+		addSanitationRequest(25,"Lenard Jacobs", "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium", "Rosa Smith");
+		addSanitationRequest(28,"Juan Williams", "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical", "Abby Williams");
+		addSanitationRequest(30,"May Jimenez", "IREST00203", "Trash Removal", "Trash can smells bad", "Medium", "Alesha Harris");
+		addSanitationRequest(29,"Herman Bull", "IREST00303", "Trash Removal", "Trash can full. Another one is available so don't rush.", "Low", "Andrew Guerrero");
+		addSanitationRequest(22,"Umar Rojas", "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel");
+		addSanitationRequest(23,"Reuben", "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
+
+
+
+		changeRequestStatus(11, "canceled");
+		changeRequestStatus(14, "canceled");
+		changeRequestStatus(15, "complete");
+		changeRequestStatus(16, "canceled");
+		changeRequestStatus(17, "complete");
+
+		//Medicine Delivery Request //RequestID: 19 - 30
+		addMedicineRequest(20, "Clara Bryan", "BLABS00102", "Atorvastatin", 30, "20mg", "Once a day by mouth", "Bill Byrd");
+		addMedicineRequest(20, "Jennifer Cunningham", "BLABS00202", "Lisinopril", 90, "20mg", "Once a day by mouth", "Bill Byrd");
+		addMedicineRequest(21, "Jak Bishop", "IDEPT00103", "Levothyroxine", 90, "12.5mcg", "Once a day my bouth", "Amelia Knight");
+		addMedicineRequest(24, "Ben Coles", "BLABS00102", "Metformin", 30, "850mg", "Twice a day by mouth", "Taylor Ramos");
+		addMedicineRequest(27, "Gloria Webster", "IDEPT00803", "Amlodipine", 30, "5mg", "Once a day by mouth", "Lauren Bolton");
+		addMedicineRequest(26, "Robbie Turner", "IDEPT00603", "Metoprolol", 90, "400mg", "Once a day by mouth", "Declan Patel");
+		addMedicineRequest(23, "Lucas Whittaker", "IDEPT00403", "Omeprazole", 90, "40mg", "Three times a day by mouth before a meal", "Victoria Erickson");
+		addMedicineRequest(24, "Alec Rees", "IDEPT00703", "Simvastatin", 30, "10mg", "Once a day by mouth", "Taylor Ramos");
+		addMedicineRequest(27, "Francesca Ferguson", "IDEPT00903", "Losartan", 90, "100mg", "Once daily by mouth", "Lauren Bolton");
+		addMedicineRequest(21, "Josie Pittman", "IDEPT00203", "Albuterol", 30, "0.63mg", "3 times a day via nebulizer. 4 times a day if needed.", "Amelia Knight");
+		addMedicineRequest(20, "Will Ford", "BLABS00202", "Metformin", 30, "8.5mL", "Once daily with meals.", "Bill Byrd");
+		addMedicineRequest(23, "Billy Gomez", "BLABS00102", "Metformin", 30, "5mL", "Twice a day with meals.", "Victoria Erickson");
+
+
+		changeRequestStatus(20, "canceled");
+		changeRequestStatus(24, "canceled");
+		changeRequestStatus(25, "complete");
+		changeRequestStatus(26, "canceled");
+		changeRequestStatus(27, "complete");
+
+
+		//Security Requests: //RequestID: 31 - 38
+		addSecurityRequest(20, "James O'Moore","HDEPT00203", "Low", "Low");
+		addSecurityRequest(22, "Russell Armstrong","WELEV00E01", "Medium", "Medium");
+		addSecurityRequest(30, "Lillian Peters","HDEPT00203", "Low", "Low");
+		addSecurityRequest(27, "Clara Dixon","ePARK00101", "Medium", "High");
+		addSecurityRequest(24, "Herbert Ortega","BDEPT00402", "Medium", "Medium");
+		addSecurityRequest(20, "Caleb Carr","BDEPT00302", "Low", "Low");
+		addSecurityRequest(25, "Jasper Miller","CCONF002L1", "High", "Critical");
+		addSecurityRequest(29, "Jennifer Brewer","eWALK00701", "Medium", "Medium");
+
+
+		changeRequestStatus(31, "canceled");
+		changeRequestStatus(34, "canceled");
+		changeRequestStatus(35, "complete");
+		changeRequestStatus(36, "canceled");
+		changeRequestStatus(37, "complete");
+
+
+		//RequestID: 39 - 47
+		addExternalPatientRequest(27,"Ciaran Goodwin","Brigham & Women's Hospital - Boston MA", "Ambulance", "High Severity", 12334567, "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
+		addExternalPatientRequest(30,"Lola Bond","Brigham & Women's Hospital - Boston MA", "Ambulance","Low Severity", 4093380, "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
+		addExternalPatientRequest(22,"Samantha Russell","Brigham & Women's Hospital - Boston MA", "Helicopter","High Severity", 92017693, "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
+		addExternalPatientRequest(20,"Caleb Chapman","Brigham & Women's Hospital - Boston MA", "Helicopter","High Severity", 93754789, "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
+		addExternalPatientRequest(24,"Dale Coates","Brigham & Women's Hospital - Boston MA", "Ambulance","Medium Severity", 417592, "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
+		addExternalPatientRequest(28,"Jerry Myers","Brigham & Women's Hospital - Boston MA", "Helicopter", "High Severity", 44888936, "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
+		addExternalPatientRequest(24,"Betty Warren","Brigham & Women's Hospital - Boston MA", "Ambulance","Medium Severity", 33337861, "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
+		addExternalPatientRequest(27,"Maxim Rawlings","Brigham & Women's Hospital - Boston MA", "Ambulance","Low Severity", 40003829, "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
+		addExternalPatientRequest(24,"Alan Singh","Brigham & Women's Hospital - Boston MA", "Plane","High Severity", 38739983, "12 hours", "Heart transplant organ in route");
+
+
+		changeRequestStatus(40, "complete");
+		changeRequestStatus(42, "complete");
+		changeRequestStatus(44, "complete");
+		changeRequestStatus(45, "complete");
+		changeRequestStatus(47, "complete");
 
 
 	}

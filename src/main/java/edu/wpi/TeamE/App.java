@@ -30,10 +30,11 @@ public class App extends Application {
 		File edges = new File("bwEedges.csv");
 
 		try {
-			//connection.deleteAllTables();
+//			connection.deleteAllTables();
 			connection.createTables();
 			connection.populateTable("node", nodes);
 			connection.populateTable("hasEdge", edges);
+			connection.addDataForPresentation();
 			System.out.println("Tables were created");
 		} catch (Exception e) {
 			System.out.println("Tables already there");
@@ -44,6 +45,8 @@ public class App extends Application {
 		}
 	}
 
+//login
+//create account
 
 	@Override
 	public void start(Stage primaryStage) {

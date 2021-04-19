@@ -52,16 +52,7 @@ public class App extends Application {
 	}**/
 
 	public static void setDraggableAndChangeScene(Parent root) {
-		AtomicReference<Double> x = new AtomicReference<>((double) 0);
-		AtomicReference<Double> y = new AtomicReference<>((double) 0);
-		root.setOnMousePressed(event -> { //draggable
-			x.set(event.getSceneX());
-			y.set(event.getSceneY());
-		});
-		root.setOnMouseDragged(event -> { //draggable
-			App.getPrimaryStage().setX(event.getScreenX() - x.get());
-			App.getPrimaryStage().setY(event.getScreenY() - y.get());
-		});
+		ResizeHelper.addResizeListener(App.getPrimaryStage());
 		App.getPrimaryStage().getScene().setRoot(root);
 	}
 
@@ -72,17 +63,10 @@ public class App extends Application {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("fxml/Default.fxml"));
 			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
-			root.setOnMousePressed(event -> { //draggable
-				x = event.getSceneX();
-				y = event.getSceneY();
-			});
-			root.setOnMouseDragged(event -> { //draggable
-				primaryStage.setX(event.getScreenX() - x);
-				primaryStage.setY(event.getScreenY() - y);
-			});
 			Scene scene = new Scene(root); //init
 			primaryStage.setScene(scene);
 			primaryStage.show();
+			ResizeHelper.addResizeListener(primaryStage);
 		} catch (IOException e) {
 			e.printStackTrace();
 			Platform.exit();

@@ -36,10 +36,10 @@ public class SanitationServices extends ServiceRequestFormComponents {
   @FXML private JFXButton cancel;
   @FXML private JFXButton submit;
   public SanitationServicesForm request;
-  RequiredFieldValidator validator = new RequiredFieldValidator();
+
+  @FXML private RequiredFieldValidator validator = new RequiredFieldValidator();
   makeConnection connection = makeConnection.makeConnection();
-  @FXML // fx:id="pane"
-  private Pane pane = new Pane();
+
 
 
   /**

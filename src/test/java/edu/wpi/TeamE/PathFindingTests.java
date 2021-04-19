@@ -2,7 +2,7 @@ package edu.wpi.TeamE;
 
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
-import edu.wpi.TeamE.algorithms.pathfinding.Searcher;
+import edu.wpi.TeamE.algorithms.pathfinding.SearchContext;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.TeamE.databases.makeConnection;
@@ -13,13 +13,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.List;
-import java.sql.SQLException;
-import java.util.Iterator;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PathFindingTests {
-    static Searcher search;
+    static SearchContext search;
 
     @BeforeAll
     public static void setupExpected() {
@@ -36,7 +32,7 @@ public class PathFindingTests {
             con.createTables();
         }
 
-        search = new Searcher();
+        search = new SearchContext();
     }
 
     @Test
@@ -86,13 +82,14 @@ public class PathFindingTests {
         Node a2 = search.getNode("eWALK01001");
         Node a3 = search.getNode("eWALK00701");
         Node a4 = search.getNode("eWALK00601");
-        Node a5 = search.getNode("eWALK00401");
-        Node a6 = search.getNode("eWALK00301");
-        Node a7 = search.getNode("eWALK00201");
-        Node a8 = search.getNode("eWALK00101");
-        Node a9 = search.getNode("ePARK00101");
+        Node a5 = search.getNode("eWALK00501");
+        Node a6 = search.getNode("eWALK00401");
+        Node a7 = search.getNode("eWALK00301");
+        Node a8 = search.getNode("eWALK00201");
+        Node a9 = search.getNode("eWALK00101");
+        Node a10 = search.getNode("ePARK00101");
 
-        Path exp1 = new Path(a1, a2, a3, a4, a5, a6, a7, a8, a9);
+        Path exp1 = new Path(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
 
         Path out = search.search(terminalNodes.getKey(), terminalNodes.getValue());
         assertTrue(exp1.equals(out));
@@ -286,6 +283,45 @@ public class PathFindingTests {
         double angle = Double.parseDouble(words[words.length - 1]);
         assertEquals(63.4349, angle, 0.01);
 
+    }
+
+    @Test
+    public void testGetPathLength() {
+        Path path1 = search.search("eWALK01101", "eWALK01001");
+        assertEquals(325.0, path1.getPathLength(), 0.1);
+
+        Path path2 = search.search("ePARK00101", "ePARK02501");
+        assertEquals(3460.57, path2.getPathLength(), 0.1);
+
+        Path path3 = search.search("CRETL001L1", "BREST00102");
+        assertEquals(325.01, path3.getPathLength(), 0.1);
+
+        Path path4 = search.search("ARETL00101", "ADEPT00102");
+        assertEquals(575.26, path4.getPathLength(), 0.1);
+    }
+
+    @Test
+    public void testConstraints() {
+        //Same nodes, different constraints, forcing different paths
+        Path stairs1 = search.search("ARETL00101", "ADEPT00102");
+        Path stairs2 = search.search("GHALL00803", "GHALL00601");
+        search.setConstraint("HANDICAP");
+        Path noStairs1 = search.search("ARETL00101", "ADEPT00102");
+        Path noStairs2 = search.search("GHALL00803", "GHALL00601");
+
+        assertFalse(stairs1.equals(noStairs1));
+        assertFalse(stairs2.equals(noStairs2));
+
+
+        search.setConstraint("VANILLA");
+        Path ER1 = search.search("ePARK01201", "ELABS00101");
+        Path ER2 = search.search("ePARK02501", "FHALL02701");
+        search.setConstraint("SAFE");
+        Path noER1 = search.search("ePARK01201", "ELABS00101");
+        Path noER2 = search.search("ePARK02501", "FHALL02701");
+
+        assertFalse(ER1.equals(noER1));
+        assertFalse(ER2.equals(noER2));
     }
 
     @Test

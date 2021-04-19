@@ -36,6 +36,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -82,6 +83,9 @@ public class PathFinder {
 
     @FXML // fx:id="stackPane"
     private StackPane stackPane; // Value injected by FXMLLoader
+
+    @FXML // fx:id="exit"
+    private Polygon exit;
 
     /*
      * Additional Variables
@@ -171,11 +175,13 @@ public class PathFinder {
     @FXML
     void showDirections(ActionEvent event) {
         //get directions
+        if (currentFoundPath == null) return;
+
         List<String> directions = currentFoundPath.makeDirections();
         StringBuilder directionsStringBuilder = new StringBuilder();
         for (String dir: directions) {
             System.out.println(dir);
-            directionsStringBuilder.append(dir + ".\n"); //todo make scrollable
+            directionsStringBuilder.append(dir).append(".\n"); //todo make scrollable
         }
         //make popup
         JFXDialogLayout error = new JFXDialogLayout();
@@ -426,6 +432,12 @@ public class PathFinder {
         //todo remove when all sizes are same
         //set Stage size
         Stage primaryStage = App.getPrimaryStage();
+
+        //If exit button is clicked, exit app
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
 
         stageWidth = primaryStage.getWidth();
         stageHeight = primaryStage.getHeight();

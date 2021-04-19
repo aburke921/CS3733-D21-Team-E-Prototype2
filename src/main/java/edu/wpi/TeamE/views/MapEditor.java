@@ -39,6 +39,7 @@ public class MapEditor {
     @FXML private TreeTableView<Node> treeTable;
     @FXML private JFXTextField xCordInput;
     @FXML private JFXTextField yCordInput;
+    @FXML private JFXTextField idInput;
     @FXML private JFXComboBox floorInput;
     @FXML private JFXComboBox typeInput;
     @FXML private JFXComboBox buildingInput;
@@ -107,7 +108,7 @@ public class MapEditor {
     private void toNavigation(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditorNavigation.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

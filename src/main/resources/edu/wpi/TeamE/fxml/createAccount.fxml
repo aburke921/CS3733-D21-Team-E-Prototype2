@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -40,7 +41,7 @@
                 </HBox>
                 <HBox prefHeight="610.0" prefWidth="519.0">
                     <children>
-                        <FlowPane prefHeight="363.0" prefWidth="253.0">
+                        <FlowPane prefHeight="402.0" prefWidth="587.0">
                             <children>
                                 <VBox prefHeight="320.0" prefWidth="466.0">
                                     <children>
@@ -87,6 +88,7 @@
                                           <Insets top="40.0" />
                                        </GridPane.margin>
                                     </JFXTextField>
+                                    <StackPane fx:id="stackPane" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                             </children>
                                         </GridPane>
                                     </children>
@@ -96,7 +98,7 @@
                                 </VBox>
                                 <FlowPane prefHeight="41.0" prefWidth="257.0">
                                     <children>
-                                        <JFXButton fx:id="exit" onAction="#shutdown" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Exit" textFill="WHITE" />
+                              <JFXButton fx:id="back" onAction="#toLogin" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" />
                                     </children>
                                     <FlowPane.margin>
                                         <Insets />
@@ -105,9 +107,16 @@
                                         <Insets left="20.0" />
                                     </padding>
                                 </FlowPane>
+                        <FlowPane prefHeight="41.0" prefWidth="257.0">
+                           <padding>
+                              <Insets left="20.0" />
+                           </padding>
+                           <children>
+                                        <JFXButton fx:id="exit" onAction="#shutdown" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Exit" textFill="WHITE" />
+                           </children>
+                        </FlowPane>
                             </children>
                         </FlowPane>
-                        <FlowPane prefHeight="361.0" prefWidth="329.0" />
                     </children>
                 </HBox>
             </children>

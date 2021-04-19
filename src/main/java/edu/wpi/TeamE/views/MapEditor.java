@@ -39,7 +39,6 @@ public class MapEditor {
     @FXML private TreeTableView<Node> treeTable;
     @FXML private JFXTextField xCordInput;
     @FXML private JFXTextField yCordInput;
-    @FXML private JFXTextField idInput;
     @FXML private JFXComboBox floorInput;
     @FXML private JFXComboBox typeInput;
     @FXML private JFXComboBox buildingInput;
@@ -228,8 +227,9 @@ public class MapEditor {
             if (!floorInput.getValue().toString().equals("")) {
                 floor = floorInput.getValue().toString();
             }
-            if (!longNameInput.getText().equals("")) {
-                longName = longNameInput.getText();
+            if (longNameInput.getText().equals("")) {
+                errorPopup("Must input Long Name");
+                return;
             }
             if (!shortNameInput.getText().equals("")) {
                 shortName = shortNameInput.getText();
@@ -240,16 +240,22 @@ public class MapEditor {
             if (!buildingInput.getValue().toString().equals("")) {
                 building = buildingInput.getValue().toString();
             }
-            if (!xCordInput.getText().equals("")) {
-                System.out.println(xCordInput.getText());
-                System.out.println("inside xcord");
-                xVal = Integer.parseInt(xCordInput.getText());
-                xVal = Integer.valueOf(xVal);
+            if (xCordInput.getText().equals("")) {
+                errorPopup("Must input X Coordinate");
+                return;
             }
-            if (!yCordInput.getText().equals("")) {
-                yVal = Integer.parseInt(yCordInput.getText());
-                yVal = Integer.valueOf(yVal);
+            if (yCordInput.getText().equals("")) {
+                errorPopup("Must input Y Coordinate");
+                return;
             }
+            longName = longNameInput.getText();
+
+            xVal = Integer.parseInt(xCordInput.getText());
+            xVal = Integer.valueOf(xVal);
+
+            yVal = Integer.parseInt(yCordInput.getText());
+            yVal = Integer.valueOf(yVal);
+
             makeConnection connection = makeConnection.makeConnection();
             connection.modifyNode(nodeID, xVal, yVal, floor, building, type, longName, shortName);
         }
@@ -299,12 +305,37 @@ public class MapEditor {
     public int addNode() {
         int i = -1;
         makeConnection connection = makeConnection.makeConnection();
+        if (floorInput.getValue().toString().equals("")) {
+            errorPopup("Must input Floor");
+            return i;
+        }
+        if (longNameInput.getText().equals("")) {
+            errorPopup("Must input Long Name");
+            return i;
+        }
+        if (shortNameInput.getText().equals("")) {
+            errorPopup("Must input Short Name");
+            return i;
+        }
+        if (typeInput.getSelectionModel().equals("")) {
+            errorPopup("Must input Type");
+            return i;
+        }
+        if (buildingInput.getValue().toString().equals("")) {
+            errorPopup("Must input Building");
+            return i;
+        }
+        if (xCordInput.getText().equals("")) {
+            errorPopup("Must input X Coordinate");
+            return i;
+        }
+        if (yCordInput.getText().equals("")) {
+            errorPopup("Must input Y Coordinate");
+            return i;
+        }
         int xVal = Integer.parseInt(xCordInput.getText());
         int yVal = Integer.parseInt(yCordInput.getText());
-        i = connection.addNode(idInput.getText(), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
-        if (i == 0) {
-            errorPopup("Cannot add same node twice");
-        }
+        i = connection.addNode(genNodeID(typeInput.getValue().toString(), floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
         return i;
     }
 
@@ -327,7 +358,10 @@ public class MapEditor {
         TreeItem<Node> node = table.getSelectionModel().getSelectedItem();
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<Node> array = connection.getAllNodes();
-        if (table.getSelectionModel().getSelectedItem() != null) {
+        if (table.getSelectionModel().getSelectedItem() == null) {
+            errorPopup("Must select Node to delete");
+            return s;
+        } else {
             System.out.println(table.getSelectionModel().getSelectedItem().getValue().get("id"));
             for (int i = 0; i < array.size(); i++) {
                 if (array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
@@ -337,6 +371,8 @@ public class MapEditor {
         }
         return s;
     }
+
+
 
     /**
      * calls the deleteNode fcn when the delete button is clicked

@@ -125,7 +125,7 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
             String details = descriptionInput.getText();
             String assignee = assignedPersonnel.getText();
 
-            connection.addExternalPatientRequest(15, location,severity,patientID,ETA,details);
+            //connection.addExternalPatientRequest(15, location,severity,patientID,ETA,details);
             super.handleButtonSubmit(actionEvent);
             //Setting up all variables to be entered
         }

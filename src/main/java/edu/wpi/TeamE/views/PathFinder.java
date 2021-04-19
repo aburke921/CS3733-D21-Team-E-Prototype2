@@ -3,6 +3,7 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 
+import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -38,6 +39,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -305,6 +307,7 @@ public class PathFinder {
 
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                line.setStrokeLineCap(StrokeLineCap.ROUND);
                 line.setStrokeWidth(strokeWidth);
                 line.setStroke(Color.RED);
 
@@ -313,6 +316,7 @@ public class PathFinder {
             else {
                 //create a line between this node and the previous node
                 Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                line.setStrokeLineCap(StrokeLineCap.ROUND);
                 line.setStrokeWidth(strokeWidth);
                 line.setStroke(Color.RED);
 

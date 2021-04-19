@@ -1661,13 +1661,18 @@ public class makeConnection {
 	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
 	 */
 	public int changeRequestStatus(int requestID, String status) {
-		String changeRequestStatusS = "Update requests Set requeststatus = ? Where requestid = ?;";
+		String changeRequestStatusS = "Update requests Set requeststatus = ? Where requestid = ?";
 		try (PreparedStatement changeRequestStatusPS = connection.prepareStatement(changeRequestStatusS)) {
 			changeRequestStatusPS.setString(1, status);
 			changeRequestStatusPS.setInt(2, requestID);
-			return changeRequestStatusPS.executeUpdate();
+
+			int rowsChanged = changeRequestStatusPS.executeUpdate();
+
+			changeRequestStatusPS.close();
+
+			return rowsChanged;
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Unable to change requests status");
 		}
 		return 0;

@@ -587,9 +587,7 @@ public class DatabaseTests {
 	@DisplayName("testAddMedicineRequest")
 	public void testAddMedicineRequest() {
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
-
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-
 		connection.addMedicineRequest(10000, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
 	}
 
@@ -664,6 +662,21 @@ public class DatabaseTests {
 		assertTrue(correctIDs.equals(returnedIDs));
 	}
 
+	@Test
+	@DisplayName("testChangeRequestStatus")
+	public void testChangeRequestStatus(){
+
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addMedicineRequest(10000, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(10000, "bob1","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		ArrayList<String> IDS = connection.getRequestIDs("medDelivery");
+
+		int rowsChanged = connection.changeRequestStatus(1, "complete");
+
+		assertEquals(1, rowsChanged);
+	}
 
 	@Test
 	@DisplayName("data")

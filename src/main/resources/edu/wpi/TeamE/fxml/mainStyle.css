@@ -60,6 +60,16 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed {}
     -fx-background-color: -fx--primary;
 }
 
+/*App bar buttons on hover*/
+.app-bar-button:hover {
+    -fx-fill: #63ccff;
+}
+
+/*App bar buttons default*/
+.app-bar-button {
+    -fx-fill: #039be5;
+}
+
 
 /*------------------------
     FONTS AND HEADERS

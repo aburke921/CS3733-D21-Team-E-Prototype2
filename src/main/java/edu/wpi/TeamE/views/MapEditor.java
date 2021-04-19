@@ -46,6 +46,7 @@ public class MapEditor {
     @FXML private JFXTextField shortNameInput;
     @FXML private StackPane stackPane;
     @FXML private FlowPane flowPane;
+    @FXML private JFXTextField idInput;
 
     /**
      * when page loaded, displays the data
@@ -224,37 +225,30 @@ public class MapEditor {
             String shortName = null;
             String type = null;
             String building = null;
-            if (!floorInput.getValue().toString().equals("")) {
+            if (floorInput.getValue() != null) {
                 floor = floorInput.getValue().toString();
             }
-            if (longNameInput.getText().equals("")) {
-                errorPopup("Must input Long Name");
-                return;
+            if (!longNameInput.getText().equals("")) {
+                longName = longNameInput.getText();
             }
             if (!shortNameInput.getText().equals("")) {
                 shortName = shortNameInput.getText();
             }
-            if (!typeInput.getSelectionModel().equals("")) {
+            if (typeInput.getValue() != null) {
                 type = typeInput.getValue().toString();
             }
-            if (!buildingInput.getValue().toString().equals("")) {
+            if (buildingInput.getValue() != null) {
                 building = buildingInput.getValue().toString();
             }
-            if (xCordInput.getText().equals("")) {
-                errorPopup("Must input X Coordinate");
-                return;
+            if (!xCordInput.getText().equals("")) {
+                xVal = Integer.parseInt(xCordInput.getText());
+                xVal = Integer.valueOf(xVal);
             }
-            if (yCordInput.getText().equals("")) {
-                errorPopup("Must input Y Coordinate");
-                return;
+            if (!yCordInput.getText().equals("")) {
+                yVal = Integer.parseInt(yCordInput.getText());
+                yVal = Integer.valueOf(yVal);
             }
-            longName = longNameInput.getText();
 
-            xVal = Integer.parseInt(xCordInput.getText());
-            xVal = Integer.valueOf(xVal);
-
-            yVal = Integer.parseInt(yCordInput.getText());
-            yVal = Integer.valueOf(yVal);
 
             makeConnection connection = makeConnection.makeConnection();
             connection.modifyNode(nodeID, xVal, yVal, floor, building, type, longName, shortName);
@@ -335,7 +329,8 @@ public class MapEditor {
         }
         int xVal = Integer.parseInt(xCordInput.getText());
         int yVal = Integer.parseInt(yCordInput.getText());
-        i = connection.addNode(genNodeID(typeInput.getValue().toString(), floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
+        i = connection.addNode(idInput.getText(), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
+        System.out.println(i);
         return i;
     }
 

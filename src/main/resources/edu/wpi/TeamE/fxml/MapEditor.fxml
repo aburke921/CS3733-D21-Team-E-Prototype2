@@ -89,6 +89,7 @@
                                           <JFXDialog />
                                        </children>
                                     </StackPane>
+                                    <JFXTextField fx:id="idInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="100.0" promptText="ID" GridPane.columnIndex="4" />
                                  </children>
                               </GridPane>
                               <FlowPane prefHeight="41.0" prefWidth="297.0">

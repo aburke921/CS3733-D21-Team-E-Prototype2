@@ -730,56 +730,10 @@ public class DatabaseTests {
 
 
 
+
 	@Test
-	@DisplayName("data")
-	public void data(){
-
-		//Visitors:
-		// - have access to floral Delivery
-		connection.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
-		connection.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
-		connection.addUserAccount("smiddle@outlook.com", "visitor3", "Sharon", "Middleton");
-		connection.addUserAccount("catherinehop12@gmail.com", "visitor4", "Catherine", "Hopkins");
-		connection.addUserAccount("mbernard@wpi.edu", "visitor5", "Michelle", "Bernard");
-		connection.addUserAccount("mccoy.meghan@hotmail.com", "visitor6", "Meghan", "Mccoy");
-		connection.addUserAccount("harry89owens@gmail.com", "visitor7", "Harry", "Owens");
-		connection.addUserAccount("hugowh@gmail.com", "visitor8", "Hugo", "Whitehouse");
-		connection.addUserAccount("spenrodg@yahoo.com", "visitor9", "Spencer", "Rodgers");
-		connection.addUserAccount("thomasemail@gmail.com", "visitor10", "Thomas", "Mendez");
-		connection.addUserAccount("claytonmurray@gmail.com", "visitor11", "Clayton", "Murray");
-		connection.addUserAccount("lawrencekhalid@yahoo.com", "visitor12", "Khalid", "Lawrence");
-
-		//Patients:
-		//13 - 19
-		connection.addSpecialUserType("adamj@gmail.com","patient1","patient","Adam", "Jenkins");
-		connection.addSpecialUserType("abbym@yahoo.com","patient2","patient","Abby", "Mohamed");
-		connection.addSpecialUserType("wesleya@gmail.com","patient3","patient","Wesley", "Armstrong");
-		connection.addSpecialUserType("travisc@yahoo.com","patient4","patient","Travis", "Cook");
-		connection.addSpecialUserType("gabriellar@gmail.com","patient5","patient","Gabriella", "Reyes");
-		connection.addSpecialUserType("troyo@yahoo.com","patient6","patient","Troy", "Olson");
-		connection.addSpecialUserType("anat@gmail.com","patient7","patient","Ana", "Turner");
-
-		//Doctors:
-		//20-27
-		connection.addSpecialUserType("billb@gmail.com","doctor1","doctor","Bill", "Byrd");
-		connection.addSpecialUserType("ameliak@yahoo.com","doctor2","doctor","Amelia", "Knight");
-		connection.addSpecialUserType("simond@gmail.com","doctor3","doctor","Simon", "Daniel");
-		connection.addSpecialUserType("victoriae@yahoo.com","doctor4","doctor","Victoria", "Erickson");
-		connection.addSpecialUserType("taylorr@gmail.com","doctor5","doctor","Taylor", "Ramos");
-		connection.addSpecialUserType("rosas@yahoo.com","doctor6","doctor","Rosa", "Smith");
-		connection.addSpecialUserType("declanp@gmail.com","doctor7","doctor","Declan", "Patel");
-		connection.addSpecialUserType("laurenb@yahoo.com","doctor8","doctor","Lauren", "Bolton");
-
-		//Admin:
-		//28 - 30
-		connection.addSpecialUserType("abbyw@gmail.com","admin1","admin","Abby", "Williams");
-		connection.addSpecialUserType("andrewg@yahoo.com","admin2","admin","Andrew", "Guerrero");
-		connection.addSpecialUserType("aleshah@gmail.com","admin3","admin","Alesha", "Harris");
-
-
-
-
-
+	@DisplayName("testDataForPresentation")
+	public void testDataForPresentation(){
 
 		//Floral Delivery Nodes:
 		connection.addNode("ADEPT00101",1401,2628,"1","BTM","DEPT","Neuroscience Waiting Room","Neuro Waiting Room");
@@ -788,16 +742,6 @@ public class DatabaseTests {
 		connection.addNode("ADEPT00301",986,2852,"1","BTM","DEPT","CART Waiting","CART Waiting");
 		connection.addNode("DDEPT00102",4330,700,"2","15 Francis","DEPT","Chest Diseases Floor 2","Chest Diseases");
 
-		//Floral Requests:
-		connection.addFloralRequest(13,"Amy Castaneda", "ADEPT00101", "Adam", "Roses", 1, "None", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
-		connection.addFloralRequest(13,"Elsa Figueroa", "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
-		connection.addFloralRequest(14,"Caroline Sutton", "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Get well soon");
-		connection.addFloralRequest(15,"Miles Long", "ADEPT00301", "Nikki", "Assortment", 1, "None", "");
-		connection.addFloralRequest(15,"Hasan Perry", "ADEPT00101", "Monica", "Roses", 6, "Tall", "Love and miss you!!");
-		connection.addFloralRequest(17,"Caroline Richardson", "DDEPT00102", "Amy", "Tulips", 12, "Square", "Enjoy the flowers");
-		connection.addFloralRequest(17,"Miles Carroll", "ADEPT00102", "Alfred", "Carnations", 1, "Tall", "Miss you!");
-		connection.addFloralRequest(19,"Seth Warner", "ADEPT00101", "Caroline", "Assortment", 6, "Round", "Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
-		connection.addFloralRequest(19,"Darren Rossi", "ADEPT00301", "Carrie", "Assortment", 12, "Round", "");
 
 		//Sanitation Nodes:
 		connection.addNode("AREST00101",1556,2604,"1","BTM","REST","Restroom S elevator 1st floor","Restroom");
@@ -808,17 +752,6 @@ public class DatabaseTests {
 		connection.addNode("IREST00303",2745,1147,"3","45 Francis","REST","Restroom 3","R3");
 		connection.addNode("IREST00403",2300,1018,"3","45 Francis","REST","Restroom 4 - M wheelchair","R4");
 		connection.addNode("HRETL00102",1935,860,"2","Tower","RETL","Garden Cafe","Garden Cafe");
-
-		//Sanitation Requests:
-		connection.addSanitationRequest(20,"Crystal Harvey", "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd");
-		connection.addSanitationRequest(20,"Minnie Newman", "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium", "Bill Byrd");
-		connection.addSanitationRequest(24,"Ayla Black", "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High", "Taylor Ramos");
-		connection.addSanitationRequest(25,"Lenard Jacobs", "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium", "Rosa Smith");
-		connection.addSanitationRequest(28,"Juan Williams", "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical", "Abby Williams");
-		connection.addSanitationRequest(30,"May Jimenez", "IREST00203", "Trash Removal", "Trash can smells bad", "Medium", "Alesha Harris");
-		connection.addSanitationRequest(29,"Herman Bull", "IREST00303", "Trash Removal", "Trash can full. Another one is available so don't rush.", "Low", "Andrew Guerrero");
-		connection.addSanitationRequest(22,"Umar Rojas", "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel");
-		connection.addSanitationRequest(23,"Reuben", "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
 
 
 		//med delivery Nodes:
@@ -834,19 +767,6 @@ public class DatabaseTests {
 		connection.addNode("IDEPT00803",2492,887,"3","45 Francis","DEPT","Fetal Med & Genetics","D8");
 		connection.addNode("IDEPT00903",2631,851,"3","45 Francis","DEPT","Gynecology","D9");
 
-		//Medicine Delivery Request
-		connection.addMedicineRequest(20, "Clara Bryan", "BLABS00102", "Atorvastatin", 30, "20mg", "Once a day by mouth", "Bill Byrd");
-		connection.addMedicineRequest(20, "Jennifer Cunningham", "BLABS00202", "Lisinopril", 90, "20mg", "Once a day by mouth", "Bill Byrd");
-		connection.addMedicineRequest(21, "Jak Bishop", "IDEPT00103", "Levothyroxine", 90, "12.5mcg", "Once a day my bouth", "Amelia Knight");
-		connection.addMedicineRequest(24, "Ben Coles", "BLABS00102", "Metformin", 30, "850mg", "Twice a day by mouth", "Taylor Ramos");
-		connection.addMedicineRequest(27, "Gloria Webster", "IDEPT00803", "Amlodipine", 30, "5mg", "Once a day by mouth", "Lauren Bolton");
-		connection.addMedicineRequest(26, "Robbie Turner", "IDEPT00603", "Metoprolol", 90, "400mg", "Once a day by mouth", "Declan Patel");
-		connection.addMedicineRequest(23, "Lucas Whittaker", "IDEPT00403", "Omeprazole", 90, "40mg", "Three times a day by mouth before a meal", "Victoria Erickson");
-		connection.addMedicineRequest(24, "Alec Rees", "IDEPT00703", "Simvastatin", 30, "10mg", "Once a day by mouth", "Taylor Ramos");
-		connection.addMedicineRequest(27, "Francesca Ferguson", "IDEPT00903", "Losartan", 90, "100mg", "Once daily by mouth", "Lauren Bolton");
-		connection.addMedicineRequest(21, "Josie Pittman", "IDEPT00203", "Albuterol", 30, "0.63mg", "3 times a day via nebulizer. 4 times a day if needed.", "Amelia Knight");
-		connection.addMedicineRequest(20, "Will Ford", "BLABS00202", "Metformin", 30, "8.5mL", "Once daily with meals.", "Bill Byrd");
-		connection.addMedicineRequest(23, "Billy Gomez", "BLABS00102", "Metformin", 30, "5mL", "Twice a day with meals.", "Victoria Erickson");
 
 		//Security Nodes:
 		connection.addNode("HDEPT00203",1690,830,"3","Tower","DEPT","MICU 3BC Waiting Room","MICU 3BC WR");
@@ -859,78 +779,7 @@ public class DatabaseTests {
 		connection.addNode("CCONF002L1",2665,1043,"L1","45 Francis","CONF","Medical Records Conference Room Floor L1","Conf C002L1");
 
 
-		//Security Requests:
-		connection.addSecurityRequest(20, "James O'Moore","HDEPT00203", "Low", "Low");
-		connection.addSecurityRequest(22, "Russell Armstrong","WELEV00E01", "Medium", "Medium");
-		connection.addSecurityRequest(30, "Lillian Peters","HDEPT00203", "Low", "Low");
-		connection.addSecurityRequest(27, "Clara Dixon","ePARK00101", "Medium", "High");
-		connection.addSecurityRequest(24, "Herbert Ortega","BDEPT00402", "Medium", "Medium");
-		connection.addSecurityRequest(20, "Caleb Carr","BDEPT00302", "Low", "Low");
-		connection.addSecurityRequest(25, "Jasper Miller","CCONF002L1", "High", "Critical");
-		connection.addSecurityRequest(29, "Jennifer Brewer","eWALK00701", "Medium", "Medium");
-
-//		'Ambulance', 'Helicopter', 'Plane'
-		//'High Severity', 'Medium Severity', 'Low Severity'
-		//20-30
-		connection.addExternalPatientRequest(27,"Ciaran Goodwin","Brigham & Women's Hospital - Boston MA", "Ambulance", "High Severity", 12334567, "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
-		connection.addExternalPatientRequest(30,"Lola Bond","Brigham & Women's Hospital - Boston MA", "Ambulance","Low Severity", 4093380, "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
-		connection.addExternalPatientRequest(22,"Samantha Russell","Brigham & Women's Hospital - Boston MA", "Helicopter","High Severity", 92017693, "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
-		connection.addExternalPatientRequest(20,"Caleb Chapman","Brigham & Women's Hospital - Boston MA", "Helicopter","High Severity", 93754789, "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
-		connection.addExternalPatientRequest(24,"Dale Coates","Brigham & Women's Hospital - Boston MA", "Ambulance","Medium Severity", 417592, "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
-		connection.addExternalPatientRequest(28,"Jerry Myers","Brigham & Women's Hospital - Boston MA", "Helicopter", "High Severity", 44888936, "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
-		connection.addExternalPatientRequest(24,"Betty Warren","Brigham & Women's Hospital - Boston MA", "Ambulance","Medium Severity", 33337861, "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
-		connection.addExternalPatientRequest(27,"Maxim Rawlings","Brigham & Women's Hospital - Boston MA", "Ambulance","Low Severity", 40003829, "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
-		connection.addExternalPatientRequest(24,"Alan Singh","Brigham & Women's Hospital - Boston MA", "Plane","High Severity", 38739983, "12 hours", "Heart transplant organ in route");
-
-/*
-		Floral Delivery:
-			ADEPT00101,1401,2628,1,BTM,DEPT,Neuroscience Waiting Room,Neuro Waiting Room
-			ADEPT00102,1395,2674,2,BTM,DEPT,Orthopedics and Rhemutalogy,Orthopedics and Rhemutalogy
-			ADEPT00201,1720,2847,1,BTM,DEPT,MS Waiting,MS Waiting
-			ADEPT00301,986,2852,1,BTM,DEPT,CART Waiting,CART Waiting
-			DDEPT00102,4330,700,2,15 Francis,DEPT,Chest Diseases Floor 2,Chest Diseases
-
-		Sanitation:
-			AREST00101,1556,2604,1,BTM,REST,Restroom S elevator 1st floor,Restroom
-			AREST00103,1552,2854,3,BTM,REST,Restroom BTM conference center 3rd floor,Restroom
-			ARETL00101,1619,2522,1,BTM,RETL,Cafe,Cafe
-			IREST00103,2255,1255,3,45 Francis,REST,Restroom 1 - Family,R1
-			IREST00203,2570,1257,3,45 Francis,REST,Restroom 2,R2
-			IREST00303,2745,1147,3,45 Francis,REST,Restroom 3,R3
-			IREST00403,2300,1018,3,45 Francis,REST,Restroom 4 - M wheelchair,R4
-			HRETL00102,1935,860,2,Tower,RETL,Garden Cafe,Garden Cafe
-
-		Med Delivery:
-			BLABS00102,2246,1350,2,45 Francis,LABS,Vascular Diagnostic Lab,Labs B0102
-			BLABS00202,2945,995,2,45 Francis,LABS,Outpatient Specimen Collection,Labs B0202
-			IDEPT00103,2323,1328,3,45 Francis,DEPT,Center for Infertility and Reproductive Surgery,D1
-			IDEPT00203,2448,1328,3,45 Francis,DEPT,Gynecology Oncology MIGS,D2
-			IDEPT00303,2730,1315,3,45 Francis,DEPT,General Surgical Specialties Suite A,D3
-			IDEPT00403,2738,1227,3,45 Francis,DEPT,General Surgical Specialties Suite B,D4
-			IDEPT00503,2868,1075,3,45 Francis,DEPT,Urology,D5
-			IDEPT00603,2333,764,3,45 Francis,DEPT,Maternal Fetal Practice,D6
-			IDEPT00703,2400,764,3,45 Francis,DEPT,Obstetrics,D7
-			IDEPT00803,2492,887,3,45 Francis,DEPT,Fetal Med & Genetics,D8
-			IDEPT00903,2631,851,3,45 Francis,DEPT,Gynecology,D9
-
-		Security:
-			HDEPT00203,1690,830,3,Tower,DEPT,MICU 3BC Waiting Room,MICU 3BC WR
-			WELEV00E01,3265,830,1,45 Francis,ELEV,Elevator E Floor 1,Elevator E1
-			ePARK00101,381,1725,1,Parking,PARK,Left Parking Lot Spot 001,Parking Left 001
-			ePARK00201,406,1725,1,Parking,PARK,Left Parking Lot Spot 002,Parking Left 002
-			eWALK00701,1730,1544,1,Parking,WALK,Entrance Sidewalk,Walkway
-			BDEPT00302,2385,753,2,45 Francis,DEPT,Lee Bell Breast Center,DEPT B0302
-			BDEPT00402,2439,902,2,45 Francis,DEPT,Jen Center for Primary Care,DEPT B0402
-			CCONF002L1,2665,1043,L1,45 Francis,CONF,Medical Records Conference Room Floor L1,Conf C002L1
-
-
-
-		*/
-
-
-
-
-
+		connection.addDataForPresentation();
 	}
 
 

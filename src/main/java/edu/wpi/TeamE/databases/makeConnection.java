@@ -1162,7 +1162,7 @@ public class makeConnection {
 		addSpecialUserType("aleshah@gmail.com","admin3","admin","Alesha", "Harris");
 
 
-		//Floral Requests:
+		//Floral Requests: //RequestID: 1-9
 		addFloralRequest(13,"Amy Castaneda", "ADEPT00101", "Adam", "Roses", 1, "None", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
 		addFloralRequest(13,"Elsa Figueroa", "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
 		addFloralRequest(14,"Caroline Sutton", "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Get well soon");
@@ -1173,7 +1173,15 @@ public class makeConnection {
 		addFloralRequest(19,"Seth Warner", "ADEPT00101", "Caroline", "Assortment", 6, "Round", "Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
 		addFloralRequest(19,"Darren Rossi", "ADEPT00301", "Carrie", "Assortment", 12, "Round", "");
 
-		//Sanitation Requests:
+
+		changeRequestStatus(1, "canceled");
+		changeRequestStatus(4, "canceled");
+		changeRequestStatus(5, "complete");
+		changeRequestStatus(6, "canceled");
+		changeRequestStatus(7, "complete");
+
+
+		//Sanitation Requests: //RequestID: 10 - 18
 		addSanitationRequest(20,"Crystal Harvey", "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd");
 		addSanitationRequest(20,"Minnie Newman", "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium", "Bill Byrd");
 		addSanitationRequest(24,"Ayla Black", "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High", "Taylor Ramos");
@@ -1184,7 +1192,15 @@ public class makeConnection {
 		addSanitationRequest(22,"Umar Rojas", "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel");
 		addSanitationRequest(23,"Reuben", "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
 
-		//Medicine Delivery Request
+
+
+		changeRequestStatus(11, "canceled");
+		changeRequestStatus(14, "canceled");
+		changeRequestStatus(15, "complete");
+		changeRequestStatus(16, "canceled");
+		changeRequestStatus(17, "complete");
+
+		//Medicine Delivery Request //RequestID: 19 - 30
 		addMedicineRequest(20, "Clara Bryan", "BLABS00102", "Atorvastatin", 30, "20mg", "Once a day by mouth", "Bill Byrd");
 		addMedicineRequest(20, "Jennifer Cunningham", "BLABS00202", "Lisinopril", 90, "20mg", "Once a day by mouth", "Bill Byrd");
 		addMedicineRequest(21, "Jak Bishop", "IDEPT00103", "Levothyroxine", 90, "12.5mcg", "Once a day my bouth", "Amelia Knight");
@@ -1198,7 +1214,15 @@ public class makeConnection {
 		addMedicineRequest(20, "Will Ford", "BLABS00202", "Metformin", 30, "8.5mL", "Once daily with meals.", "Bill Byrd");
 		addMedicineRequest(23, "Billy Gomez", "BLABS00102", "Metformin", 30, "5mL", "Twice a day with meals.", "Victoria Erickson");
 
-		//Security Requests:
+
+		changeRequestStatus(20, "canceled");
+		changeRequestStatus(24, "canceled");
+		changeRequestStatus(25, "complete");
+		changeRequestStatus(26, "canceled");
+		changeRequestStatus(27, "complete");
+
+
+		//Security Requests: //RequestID: 31 - 38
 		addSecurityRequest(20, "James O'Moore","HDEPT00203", "Low", "Low");
 		addSecurityRequest(22, "Russell Armstrong","WELEV00E01", "Medium", "Medium");
 		addSecurityRequest(30, "Lillian Peters","HDEPT00203", "Low", "Low");
@@ -1208,6 +1232,15 @@ public class makeConnection {
 		addSecurityRequest(25, "Jasper Miller","CCONF002L1", "High", "Critical");
 		addSecurityRequest(29, "Jennifer Brewer","eWALK00701", "Medium", "Medium");
 
+
+		changeRequestStatus(31, "canceled");
+		changeRequestStatus(34, "canceled");
+		changeRequestStatus(35, "complete");
+		changeRequestStatus(36, "canceled");
+		changeRequestStatus(37, "complete");
+
+
+		//RequestID: 39 - 47
 		addExternalPatientRequest(27,"Ciaran Goodwin","Brigham & Women's Hospital - Boston MA", "Ambulance", "High Severity", 12334567, "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
 		addExternalPatientRequest(30,"Lola Bond","Brigham & Women's Hospital - Boston MA", "Ambulance","Low Severity", 4093380, "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
 		addExternalPatientRequest(22,"Samantha Russell","Brigham & Women's Hospital - Boston MA", "Helicopter","High Severity", 92017693, "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
@@ -1218,6 +1251,12 @@ public class makeConnection {
 		addExternalPatientRequest(27,"Maxim Rawlings","Brigham & Women's Hospital - Boston MA", "Ambulance","Low Severity", 40003829, "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
 		addExternalPatientRequest(24,"Alan Singh","Brigham & Women's Hospital - Boston MA", "Plane","High Severity", 38739983, "12 hours", "Heart transplant organ in route");
 
+
+		changeRequestStatus(40, "complete");
+		changeRequestStatus(42, "complete");
+		changeRequestStatus(44, "complete");
+		changeRequestStatus(45, "complete");
+		changeRequestStatus(47, "complete");
 
 
 	}

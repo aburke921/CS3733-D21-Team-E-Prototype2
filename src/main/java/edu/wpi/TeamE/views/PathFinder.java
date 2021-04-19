@@ -36,6 +36,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -82,6 +83,9 @@ public class PathFinder {
 
     @FXML // fx:id="stackPane"
     private StackPane stackPane; // Value injected by FXMLLoader
+
+    @FXML // fx:id="exit"
+    private Polygon exit;
 
     /*
      * Additional Variables
@@ -428,6 +432,12 @@ public class PathFinder {
         //todo remove when all sizes are same
         //set Stage size
         Stage primaryStage = App.getPrimaryStage();
+
+        //If exit button is clicked, exit app
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
 
         stageWidth = primaryStage.getWidth();
         stageHeight = primaryStage.getHeight();

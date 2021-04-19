@@ -64,11 +64,11 @@
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane>
+      <AnchorPane prefHeight="733.0" prefWidth="1200.0">
          <children>
             <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <center>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                  <VBox alignment="CENTER" BorderPane.alignment="CENTER">
                      <children>
                         <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS" />
                         <Button fx:id="serviceRequestButton" mnemonicParsing="false" onAction="#toServiceRequests" prefWidth="200.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Service Requests" textFill="WHITE">
@@ -93,7 +93,7 @@
                            </font></Button>
                      </children>
                      <BorderPane.margin>
-                        <Insets bottom="40.0" top="40.0" />
+                        <Insets bottom="40.0" />
                      </BorderPane.margin>
                   </VBox>
                </center>

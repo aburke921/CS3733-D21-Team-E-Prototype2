@@ -21,7 +21,7 @@ public class Default {
     @FXML // fx:id="imageView"
     private ImageView imageView;
 
-    @FXML // fx:id="imageView"
+    @FXML // fx:id="exit"
     private Polygon exit;
 
     @FXML // fx:id="imageView"
@@ -85,7 +85,6 @@ public class Default {
             App app = new App();
             app.stop();
         });
-
     }
 
 }

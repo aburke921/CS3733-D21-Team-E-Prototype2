@@ -8,14 +8,18 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.lang.String;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
+import edu.wpi.TeamE.databases.makeConnection;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.shape.Polygon;
 
 public class ExternalPatient extends ServiceRequestFormComponents  {
 
@@ -26,7 +30,7 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
     private URL location;
 
     @FXML // fx:id="locationInput"
-    private JFXTextField locationInput; // Value injected by FXMLLoader
+    private JFXComboBox<String> locationInput; // Value injected by FXMLLoader
 
     @FXML // fx:id="requestTypeInput"
     private JFXComboBox<?> requestTypeInput; // Value injected by FXMLLoader
@@ -69,6 +73,11 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
 
     @FXML // fx:id="submit"
     private JFXButton submit; // Value injected by FXMLLoader
+
+    @FXML // fx:id="exit"
+    private Polygon exit;
+
+    makeConnection connection = makeConnection.makeConnection();
     RequiredFieldValidator validator = new RequiredFieldValidator();
     /**
      * todo This function will cause a pop-up modal to appear with help information for this form's fields
@@ -105,13 +114,7 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
      */
     @FXML
     private void saveData(ActionEvent actionEvent){
-        String location = locationInput.getText();
-        String type = requestTypeInput.getSelectionModel().toString();
-        String severity = severityInput.getSelectionModel().toString();
-        String patientID = patientIdInput.getText();
-        String ETA = ETAInput.getText();
-        String details = descriptionInput.getText();
-        String assignee = assignedPersonnel.getText();
+
 
         if(validateInput()){
             //String detailedInstructions = sdetailedInstructionsInput.getText();
@@ -121,7 +124,17 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
             //Adding service request to table
             //makeConnection connection = makeConnection.makeConnection();
             //connection.addRequest("sanitationServices", request);
-
+            ArrayList<String> nodeIDS = connection.getListOfNodeIDS();
+            String type = requestTypeInput.getSelectionModel().getSelectedItem().toString();
+            String severity = severityInput.getSelectionModel().getSelectedItem().toString();
+            String patientID = patientIdInput.getText();
+            String ETA = ETAInput.getText();
+            String details = descriptionInput.getText();
+            String assignee = assignedPersonnel.getText();
+            int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
+            String nodeID = nodeIDS.get(nodeIDIndex);
+            System.out.println(location + " " + type + " " + severity + " "+ patientID + " "  + ETA + " " + details + " " + assignee);
+            connection.addExternalPatientRequest(15, assignee,nodeID,type,severity,patientID,ETA, details);
             super.handleButtonSubmit(actionEvent);
             //Setting up all variables to be entered
         }
@@ -130,6 +143,8 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
 
     void initialize() {
         assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
+        ObservableList<String> locations  = connection.getAllNodeLongNames();
+        locationInput.setItems(locations);
         assert requestTypeInput != null : "fx:id=\"requestTypeInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert ambulance != null : "fx:id=\"ambulance\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert helicopter != null : "fx:id=\"helicopter\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
@@ -144,5 +159,11 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert assignedPersonnel != null : "fx:id=\"assignedPersonnel\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
+
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
+
     }
 }

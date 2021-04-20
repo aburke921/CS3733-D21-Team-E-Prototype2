@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.shape.Polygon;
 
 public class SecurityService extends ServiceRequestFormComponents {
 
@@ -75,6 +76,9 @@ public class SecurityService extends ServiceRequestFormComponents {
     @FXML // fx:id="submitSecurityRequest"
     private JFXButton submitSecurityRequest; // Value injected by FXMLLoader
 
+    @FXML // fx:id="exit"
+    private Polygon exit;
+
     /**
      * Returns to default page
      * todo, in future iterations this button should SUBMIT instead
@@ -115,5 +119,9 @@ public class SecurityService extends ServiceRequestFormComponents {
         assert cancelSecurityRequest != null : "fx:id=\"cancelSecurityRequest\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert submitSecurityRequest != null : "fx:id=\"submitSecurityRequest\" was not injected: check your FXML file 'SecurityService.fxml'.";
 
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
     }
 }

@@ -7,6 +7,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
 
@@ -14,6 +20,15 @@ public class Default {
 
     @FXML // fx:id="imageView"
     private ImageView imageView;
+
+    @FXML // fx:id="exit"
+    private Polygon exit;
+
+    @FXML // fx:id="imageView"
+    private Circle hide;
+
+    @FXML // fx:id="imageView"
+    private Rectangle fullscreen;
 
     /**
      * Move to Service Request page
@@ -23,7 +38,7 @@ public class Default {
     private void toServiceRequests(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/ServiceRequests.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -37,7 +52,7 @@ public class Default {
     private void toMapEditor(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditorNavigation.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -51,11 +66,22 @@ public class Default {
     private void toPathFinder(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/PathFinder.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void toServiceRequestStatus(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/ServiceRequestStatus.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
+
 
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {
@@ -64,16 +90,13 @@ public class Default {
     public void initialize() {
         Image image = new Image("edu/wpi/TeamE/logo.png");
         imageView.setImage(image);
+
+        //If exit button is clicked, exit app
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
     }
 
-    /**
-     * Terminate application
-     * @param e
-     */
-    @FXML
-    private void shutdown(ActionEvent e) {
-        App app = new App();
-        app.stop();
-    }
 }
 

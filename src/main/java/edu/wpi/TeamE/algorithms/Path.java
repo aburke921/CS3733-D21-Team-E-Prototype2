@@ -213,7 +213,7 @@ public class Path {
 
                 //node 2
                 Node node2 = itr.next();
-                int last = 0;
+                int last = (int) (Math.round((node1.dist(node2) * SCALE) / 10) * 10);
                 int floorChangeState = 0;
                 // 0 = normal
                 // 1 = elev in 2 and 3

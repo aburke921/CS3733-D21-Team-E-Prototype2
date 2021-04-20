@@ -36,7 +36,7 @@ public class Login {
     }
 
     public void submitLogin() {
-        boolean bool = false;
+        int userID = 0;
         makeConnection connection = makeConnection.makeConnection();
         if(emailInput.getText().isEmpty()) {
             errorPopup("Must input an email");
@@ -47,8 +47,8 @@ public class Login {
             return;
         }
         if(emailInput != null && passwordInput != null) {
-            bool = connection.userLogin(emailInput.getText(), passwordInput.getText());
-        } if(bool == true) {
+            userID = connection.userLogin(emailInput.getText(), passwordInput.getText());
+        } if(userID != 0) {
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
                 App.getPrimaryStage().getScene().setRoot(root);
@@ -57,8 +57,7 @@ public class Login {
             }
         } else {
             errorPopup("Incorrect Email or Password");
-            return;
-    }
+        }
 
 }
 

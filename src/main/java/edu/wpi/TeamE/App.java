@@ -18,6 +18,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class App extends Application {
 
+	public static int userID = 0;
+
 	private static Stage primaryStage;
 
 	private double x, y;

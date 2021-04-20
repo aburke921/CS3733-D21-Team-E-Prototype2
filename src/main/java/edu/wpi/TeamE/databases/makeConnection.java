@@ -1161,6 +1161,16 @@ public class makeConnection {
 		addSpecialUserType("andrewg@yahoo.com","admin2","admin","Andrew", "Guerrero");
 		addSpecialUserType("aleshah@gmail.com","admin3","admin","Alesha", "Harris");
 
+		//SuperAdmin:
+		String insertUser = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin')";
+		try {
+			Statement stmt = connection.createStatement();
+			stmt.executeUpdate(insertUser);
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 
 		//Floral Requests: //RequestID: 1-9
 		addFloralRequest(13,"Amy Castaneda", "ADEPT00101", "Adam", "Roses", 1, "None", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
@@ -2229,14 +2239,14 @@ public class makeConnection {
 	// User System Stuff
 
 	/**
-	 * Function for logging a user in with their unique email and password, currently can only check for if correct or not
-	 *
-	 * @param email is the user's entered email
+	 * Function for logging a user in with their unique email and password
+	 * @param email    is the user's entered email
 	 * @param password is the user's entered password
-	 * @return true when the credentials match with a user in the database, and false otherwise
+	 * @return 0 when the credentials does not match with any user in the database, and returns the userID otherwise
 	 */
-	public boolean userLogin(String email, String password) {
-		String userLoginS = "Select Count(*) As verification From useraccount Where email = ? And password = ?";
+	public int userLogin(String email, String password) {
+		int userID = 0;
+		String userLoginS = "Select Count(*) As verification, userid From useraccount Where email = ? And password = ?";
 		try (PreparedStatement userLoginPS = connection.prepareStatement(userLoginS)) {
 			userLoginPS.setString(1, email);
 			userLoginPS.setString(2, password);
@@ -2244,17 +2254,17 @@ public class makeConnection {
 			int verification = 0;
 			if (userLoginRS.next()) {
 				verification = userLoginRS.getInt("verification");
+				userID = userLoginRS.getInt("userID");
 			}
 			userLoginRS.close();
 			if(verification == 0){
-				//mapEditor.errorPopup("Invalid username or password!");
-			}
-			return verification == 1;
+				return 0;
+			} else return userID;
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			System.err.println("countNodeTypeOnFloor() error");
 		}
-		return false;
+		return 0;
 	}
 
 	/**
@@ -2262,13 +2272,16 @@ public class makeConnection {
 	 * @param tableName this is the name of the table that we are getting the requestIDs from
 	 * @return a list of all the requestIDs
 	 */
-	public ArrayList<String> getRequestIDs(String tableName){
+	public ArrayList<String> getRequestIDs(String tableName, int userID){
 
-		ArrayList<String> listOfIDs = new ArrayList<String>();
+		ArrayList<String> listOfIDs = new ArrayList<>();
 
 		try  {
 			Statement stmt = connection.createStatement();
 			String requestID = "Select requestID From " + tableName;
+			if (userID != -1) {
+				requestID = requestID + " where userID = " + userID;
+			}
 
 			ResultSet rset = stmt.executeQuery(requestID);
 
@@ -2291,13 +2304,16 @@ public class makeConnection {
 	 * @param tableName this is the name of the table that we are getting the requestIDs from
 	 * @return a list of all the statuses of the requests
 	 */
-	public ArrayList<String> getRequestStatus(String tableName){
+	public ArrayList<String> getRequestStatus(String tableName, int userID){
 
 		ArrayList<String> listOfStatus = new ArrayList<String>();
 
 		try  {
 			Statement stmt = connection.createStatement();
 			String requestStatus = "Select requests.requestStatus From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+			if (userID != -1) {
+				requestStatus = requestStatus + " where userID = " + userID;
+			}
 
 			ResultSet rset = stmt.executeQuery(requestStatus);
 
@@ -2320,13 +2336,16 @@ public class makeConnection {
 	 * @param tableName this is the name of the table that we are getting the requestIDs from
 	 * @return a list of all assignees for all of the requests
 	 */
-	public ArrayList<String> getRequestAssignees(String tableName){
+	public ArrayList<String> getRequestAssignees(String tableName, int userID){
 
 		ArrayList<String> listOfAssignees = new ArrayList<String>();
 
 		try  {
 			Statement stmt = connection.createStatement();
 			String requestAssignee = "Select requests.assignee From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+			if (userID != -1) {
+				requestAssignee = requestAssignee + " where userID = " + userID;
+			}
 
 			ResultSet rset = stmt.executeQuery(requestAssignee);
 
@@ -2350,13 +2369,16 @@ public class makeConnection {
 	 * @param tableName this is the name of the table that we are getting the requestIDs from
 	 * @return a list of all longNames for the location for all of the requests
 	 */
-	public ArrayList<String> getRequestLocations(String tableName){
+	public ArrayList<String> getRequestLocations(String tableName, int userID){
 
 		ArrayList<String> listOfLongNames = new ArrayList<String>();
 
 		try  {
 			Statement stmt = connection.createStatement();
 			String requestLongNames = "Select longName From node, " + tableName + " where node.nodeID = " + tableName + ".roomID";
+			if (userID != -1) {
+				requestLongNames = requestLongNames + " where userID = " + userID;
+			}
 
 			ResultSet rset = stmt.executeQuery(requestLongNames);
 

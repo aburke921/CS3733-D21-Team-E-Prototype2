@@ -115,13 +115,13 @@ public class ServiceRequestStatus {
      */
     private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
         makeConnection connection = makeConnection.makeConnection();
-        ArrayList<String> idArray = connection.getRequestIDs(tableName);
+        ArrayList<String> idArray = connection.getRequestIDs(tableName, App.userID);
         for(int j = 0; j < idArray.size(); j++) {
             System.out.println(idArray.get(j));
         }
-        ArrayList<String> statusArray = connection.getRequestStatus(tableName);
-        ArrayList<String> locationArray = connection.getRequestLocations(tableName);
-        ArrayList<String> assigneeArray = connection.getRequestAssignees(tableName);
+        ArrayList<String> statusArray = connection.getRequestStatus(tableName, App.userID);
+        ArrayList<String> locationArray = connection.getRequestLocations(tableName, App.userID);
+        ArrayList<String> assigneeArray = connection.getRequestAssignees(tableName, App.userID);
         if(idArray.size() > 0) {
             System.out.println("Array size" + idArray.size());
             if (!inProgress.getChildren().isEmpty()) {

@@ -1135,20 +1135,20 @@ public class makeConnection {
 
 		//Doctors:
 		//20-27
-		addSpecialUserType("billb@gmail.com","doctor1","doctor","Bill", "Byrd");
-		addSpecialUserType("ameliak@yahoo.com","doctor2","doctor","Amelia", "Knight");
-		addSpecialUserType("simond@gmail.com","doctor3","doctor","Simon", "Daniel");
-		addSpecialUserType("victoriae@yahoo.com","doctor4","doctor","Victoria", "Erickson");
-		addSpecialUserType("taylorr@gmail.com","doctor5","doctor","Taylor", "Ramos");
-		addSpecialUserType("rosas@yahoo.com","doctor6","doctor","Rosa", "Smith");
-		addSpecialUserType("declanp@gmail.com","doctor7","doctor","Declan", "Patel");
-		addSpecialUserType("laurenb@yahoo.com","doctor8","doctor","Lauren", "Bolton");
+		addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+		addSpecialUserType("ameliak@yahoo.com","doctor02","doctor","Amelia", "Knight");
+		addSpecialUserType("simond@gmail.com","doctor03","doctor","Simon", "Daniel");
+		addSpecialUserType("victoriae@yahoo.com","doctor04","doctor","Victoria", "Erickson");
+		addSpecialUserType("taylorr@gmail.com","doctor05","doctor","Taylor", "Ramos");
+		addSpecialUserType("rosas@yahoo.com","doctor06","doctor","Rosa", "Smith");
+		addSpecialUserType("declanp@gmail.com","doctor07","doctor","Declan", "Patel");
+		addSpecialUserType("laurenb@yahoo.com","doctor08","doctor","Lauren", "Bolton");
 
 		//Admin:
 		//28 - 30
-		addSpecialUserType("abbyw@gmail.com","admin1","admin","Abby", "Williams");
-		addSpecialUserType("andrewg@yahoo.com","admin2","admin","Andrew", "Guerrero");
-		addSpecialUserType("aleshah@gmail.com","admin3","admin","Alesha", "Harris");
+		addSpecialUserType("abbyw@gmail.com","admin001","admin","Abby", "Williams");
+		addSpecialUserType("andrewg@yahoo.com","admin002","admin","Andrew", "Guerrero");
+		addSpecialUserType("aleshah@gmail.com","admin003","admin","Alesha", "Harris");
 
 
 		//Floral Requests: //RequestID: 1-9

@@ -129,12 +129,22 @@
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#toDefault" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
-            <Button fx:id="serviceRequestStatus" layoutX="443.0" layoutY="78.0" mnemonicParsing="false" onAction="#toStatus" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Service Request Status" textFill="WHITE">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <center>
+                  <Button fx:id="serviceRequestStatus" mnemonicParsing="false" onAction="#toStatus" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Service Request Status" textFill="WHITE" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </center>
+               <bottom>
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#toDefault" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" BorderPane.alignment="BOTTOM_LEFT">
+                     <BorderPane.margin>
+                        <Insets bottom="20.0" left="20.0" />
+                     </BorderPane.margin>
+                  </Button>
+               </bottom>
+            </BorderPane>
          </children>
       </AnchorPane>
    </children>

@@ -1243,7 +1243,7 @@ public class makeConnection {
 
 
 		//SuperAdmin:
-		String insertUser = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin')";
+		String insertUser = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', Current Timestamp)";
 		try {
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(insertUser);
@@ -2382,6 +2382,28 @@ public class makeConnection {
 			System.err.println("getRequestLocations() error in the try/catch");
 		}
 		return listOfLongNames;
+	}
+
+	public boolean allTablesThere(){ //todo will probably cause a merge conflict at somepoint, accept DB version
+		ArrayList<String> tablesInDB = new ArrayList<String>();
+		String[] names = { "TABLE" };
+		ResultSet result;
+		DatabaseMetaData metadata = null;
+		try {
+			metadata = connection.getMetaData();
+			result = metadata.getTables(null, null, null, names);
+			while((result.next())) {
+				System.out.println(result.getString("TABLE_NAME"));
+				tablesInDB.add(result.getString("TABLE_NAME"));
+			}
+		} catch(java.sql.SQLException e) {
+			e.printStackTrace();
+		}
+		if (tablesInDB.size() != 0){
+			System.out.println("Tables already there");
+			return true;
+		}
+		else return false;
 	}
 
 

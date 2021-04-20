@@ -33,24 +33,23 @@ public class App extends Application {
 		System.out.println("STARTING UP!!!");
 		makeConnection connection = makeConnection.makeConnection();
 		System.out.println("Connected to the DB");
-
 		File nodes = new File("bwEnodes.csv");
 		File edges = new File("bwEedges.csv");
-
-		try {
-			/*todo, these functions now catch their own errors and so
-			   this try catch no longer works to QUICKLY catch anything*/
-			connection.createTables();
-			connection.populateTable("node", nodes);
-			connection.populateTable("hasEdge", edges);
-			connection.addDataForPresentation();
-			System.out.println("Tables were created");
-		} catch (Exception e) {
-			System.out.println("Tables already there");
-			/*connection.createTables();
-			connection.populateTable("node", nodes);
-			connection.populateTable("hasEdge", edges);*/
-			System.out.println("Tables were created and populated");
+		boolean tablesExist = connection.allTablesThere();
+		if(!tablesExist){
+			try {
+				connection.createTables();
+				connection.populateTable("node", nodes);
+				connection.populateTable("hasEdge", edges);
+				connection.addDataForPresentation();
+				System.out.println("Tables were created");
+			} catch (Exception e) {
+				System.out.println("Tables already there");
+         /*connection.createTables();
+         connection.populateTable("node", nodes);
+         connection.populateTable("hasEdge", edges);*/
+				System.out.println("Tables were created and populated");
+			}
 		}
 	}
 

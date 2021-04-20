@@ -659,6 +659,16 @@ public class DatabaseTests {
 		assertTrue(correctStatus.equals(returnedStatus));
 	}
 
+	@Test
+	@DisplayName("testGetRequestStatus3 : there is no data ")
+	public void testGetRequestStatu3() {
+
+		ArrayList<String> returnedStatus = new ArrayList<String>();
+		returnedStatus = connection.getRequestStatus("extTransport", 1);
+
+		assertTrue(returnedStatus.size() == 0);
+	}
+
 
 	@Test
 	@DisplayName("testGetRequestIDs")
@@ -680,7 +690,6 @@ public class DatabaseTests {
 
 		assertTrue(correctIDs.equals(returnedIDs));
 	}
-
 
 	@Test
 	@DisplayName("testGetRequestIDs2")
@@ -705,20 +714,15 @@ public class DatabaseTests {
 	}
 
 	@Test
-	@DisplayName("testChangeRequestStatus")
-	public void testChangeRequestStatus(){
+	@DisplayName("testGetRequestIDs3: there is no data")
+	public void testGetRequestIDs3() {
 
-		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
-		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
-		connection.addMedicineRequest(1, "bob1","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		ArrayList<String> returnedIDs = new ArrayList<String>();
+		returnedIDs = connection.getRequestIDs("extTransport", -1);
 
-		ArrayList<String> IDS = connection.getRequestIDs("medDelivery", 1);
-
-		int rowsChanged = connection.changeRequestStatus(1, "complete");
-
-		assertEquals(1, rowsChanged);
+		assertTrue(returnedIDs.size() == 0);
 	}
+
 
 
 	@Test
@@ -743,7 +747,6 @@ public class DatabaseTests {
 
 		assertTrue(correctAssignees.equals(returnedAssignees));
 	}
-
 
 	@Test
 	@DisplayName("testGetRequestAssignees2")
@@ -770,6 +773,14 @@ public class DatabaseTests {
 
 		assertTrue(correctAssignees.equals(returnedAssignees));
 	}
+
+	@Test
+	@DisplayName("testGetRequestAssignees3: no data")
+	public void testGetRequestAssignees3(){
+		ArrayList<String> returnedAssignees = connection.getRequestAssignees("medDelivery", -1);
+		assertTrue(returnedAssignees.size() == 0);
+	}
+
 
 
 	@Test
@@ -826,6 +837,16 @@ public class DatabaseTests {
 		assertTrue(correctLocations.equals(returnedLocations));
 
 	}
+
+	@Test
+	@DisplayName("testGetRequestLocations3 : no data")
+	public void testGetRequestLocations3(){
+
+		ArrayList<String> returnedLocations = connection.getRequestLocations("medDelivery", -1);
+		assertTrue(returnedLocations.size() == 0);
+
+	}
+
 
 	@Test
 	@DisplayName("testEditSanitationRequest")
@@ -900,6 +921,22 @@ public class DatabaseTests {
 		result = connection.editSecurityRequest(1,null, "high", "High");
 
 		assertTrue(result == 1);
+	}
+
+	@Test
+	@DisplayName("testChangeRequestStatus")
+	public void testChangeRequestStatus(){
+
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(1, "bob1","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		ArrayList<String> IDS = connection.getRequestIDs("medDelivery", 1);
+
+		int rowsChanged = connection.changeRequestStatus(1, "complete");
+
+		assertEquals(1, rowsChanged);
 	}
 
 	@Test

@@ -9,6 +9,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -17,13 +18,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="356.0" prefWidth="600.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.SanitationServices">
-    <children>
-        <VBox alignment="CENTER" prefHeight="399.0" prefWidth="600.0">
-            <children>
-                <HBox prefHeight="38.0" prefWidth="513.0">
+
+  <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.SanitationServices">
+      <children>
+      <AnchorPane>
+         <children>
+                <HBox prefHeight="38.0" prefWidth="513.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;">
+                        <FlowPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label prefHeight="38.0" prefWidth="486.0" text="Sanitation Services Request Form" textFill="WHITE">
                                     <font>
@@ -42,7 +44,11 @@
                         </FlowPane>
                     </children>
                 </HBox>
-                <HBox prefHeight="610.0" prefWidth="519.0">
+         </children>
+      </AnchorPane>
+      <AnchorPane>
+         <children>
+                <HBox prefHeight="610.0" prefWidth="519.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="77.0" AnchorPane.topAnchor="0.0">
                     <children>
                         <FlowPane prefHeight="361.0" prefWidth="299.0">
                      <children>
@@ -61,7 +67,7 @@
                                  </items>
                               </JFXComboBox>
                               <JFXComboBox fx:id="ServiceTypeinput" prefHeight="27.0" prefWidth="295.0" promptText="Service Type">
-
+      
                                  <VBox.margin>
                                     <Insets left="5.0" top="20.0" />
                                  </VBox.margin>
@@ -82,7 +88,8 @@
                               <JFXTextArea fx:id="detailedInstructionsInput" prefHeight="141.0" prefWidth="259.0" promptText="Detailed Description">
                                  <VBox.margin>
                                     <Insets top="20.0" />
-                                 </VBox.margin></JFXTextArea>
+                                 </VBox.margin>
+                              </JFXTextArea>
                               <JFXComboBox fx:id="Severity" prefHeight="27.0" prefWidth="295.0" promptText="Severity">
                                  <items>
                                     <FXCollections fx:factory="observableArrayList">
@@ -92,12 +99,12 @@
                                     </FXCollections>
                                  </items>
                                  <VBox.margin>
-                                    <Insets top="20.0" />
+                                    <Insets top="30.0" />
                                  </VBox.margin>
                               </JFXComboBox>
                               <JFXTextField fx:id="Signature" prefHeight="27.0" prefWidth="289.0" promptText="Signature">
                                  <VBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets top="20.0" />
                                  </VBox.margin>
                               </JFXTextField>
                               <GridPane prefHeight="33.0" prefWidth="244.0">
@@ -125,7 +132,7 @@
                         </FlowPane>
                     </children>
                 </HBox>
-            </children>
-        </VBox>
-    </children>
-</FlowPane>
+         </children>
+      </AnchorPane>
+      </children>
+  </VBox>

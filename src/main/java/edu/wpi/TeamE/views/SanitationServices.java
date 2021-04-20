@@ -4,6 +4,7 @@ import com.jfoenix.controls.*;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.databases.makeConnection;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -34,10 +35,11 @@ public class SanitationServices extends ServiceRequestFormComponents {
   @FXML private JFXComboBox<String> Severity;
   @FXML private JFXButton cancel;
   @FXML private JFXButton submit;
-  RequiredFieldValidator validator = new RequiredFieldValidator();
+
+
+  @FXML private RequiredFieldValidator validator = new RequiredFieldValidator();
   makeConnection connection = makeConnection.makeConnection();
-  @FXML // fx:id="pane"
-  private Pane pane = new Pane();
+
 
 
   /**

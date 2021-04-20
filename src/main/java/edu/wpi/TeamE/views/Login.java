@@ -77,29 +77,47 @@ public class Login {
         submitLoginButton.setDefaultButton(true);
     }
 
-    public void submitLogin() {
-        int userID = 0;
-        makeConnection connection = makeConnection.makeConnection();
-        if(emailInput.getText().isEmpty()) {
-            errorPopup("Must input an email");
-            return;
-        }
-        if(passwordInput.getText().isEmpty()) {
-            errorPopup("Must input password");
-            return;
-        }
-        if(emailInput != null && passwordInput != null) {
-            userID = connection.userLogin(emailInput.getText(), passwordInput.getText());
-        } if(userID != 0) {
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-                App.getPrimaryStage().getScene().setRoot(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        } else {
-            errorPopup("Incorrect Email or Password");
-        }
+	public void submitLogin() {
+		int userID = 0;
+		makeConnection connection = makeConnection.makeConnection();
+		if (emailInput != null && passwordInput != null) {
+			userID = connection.userLogin(emailInput.getText(), passwordInput.getText());
+			App.userID = userID; // app will be logged in as guest if userID = 0
+		}
+		if (userID != 0) {
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+				App.getPrimaryStage().getScene().setRoot(root);
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		} else {
+			System.out.println("User not in System");
+		}
+
+//    public void submitLogin() {
+//        int userID = 0;
+//        makeConnection connection = makeConnection.makeConnection();
+//        if(emailInput.getText().isEmpty()) {
+//            errorPopup("Must input an email");
+//            return;
+//        }
+//        if(passwordInput.getText().isEmpty()) {
+//            errorPopup("Must input password");
+//            return;
+//        }
+//        if(emailInput != null && passwordInput != null) {
+//            userID = connection.userLogin(emailInput.getText(), passwordInput.getText());
+//        } if(userID != 0) {
+//            try {
+//                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+//                App.getPrimaryStage().getScene().setRoot(root);
+//            } catch (IOException ex) {
+//                ex.printStackTrace();
+//            }
+//        } else {
+//            errorPopup("Incorrect Email or Password");
+//        }
 
 }
 

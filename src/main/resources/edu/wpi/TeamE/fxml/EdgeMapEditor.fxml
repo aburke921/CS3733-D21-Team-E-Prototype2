@@ -116,7 +116,7 @@
                                           </JFXComboBox>
                                           <JFXComboBox fx:id="endEdge" prefWidth="150.0" promptText="Edge End Node">
                                              <FlowPane.margin>
-                                                <Insets left="20.0" top="20.0" />
+                                                <Insets left="20.0" />
                                              </FlowPane.margin>
                                           </JFXComboBox>
                                                     </children>

@@ -172,11 +172,11 @@
                                           <Insets right="10.0" top="15.0" />
                                        </FlowPane.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#deleteNodeButton" text="Delete Node">
-                                       <FlowPane.margin>
-                                          <Insets top="15.0" />
-                                       </FlowPane.margin>
-                                    </Button>
+<!--&lt;!&ndash;                                    <Button mnemonicParsing="false" onAction="#deleteNodeButton" text="Delete Node">&ndash;&gt;-->
+<!--                                       <FlowPane.margin>-->
+<!--                                          <Insets top="15.0" />-->
+<!--                                       </FlowPane.margin>-->
+<!--                                    </Button>-->
                                  </children>
                                  <VBox.margin>
                                     <Insets top="10.0" />

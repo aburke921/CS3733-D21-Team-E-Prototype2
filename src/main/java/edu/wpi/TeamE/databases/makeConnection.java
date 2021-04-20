@@ -89,6 +89,37 @@ public class makeConnection {
 		//System.out.println(i);*/
 	}
 
+
+//	public ArrayList<String> getTablesThatExist(){
+//
+//	}
+
+	public boolean allTablesThere(){
+
+		ArrayList<String> tablesInDB = new ArrayList<String>();
+		String[] names = { "TABLE" };
+		ResultSet result;
+		DatabaseMetaData metadata = null;
+
+		try {
+			metadata = connection.getMetaData();
+			result = metadata.getTables(null, null, null, names);
+			while((result.next())) {
+				System.out.println(result.getString("TABLE_NAME"));
+				tablesInDB.add(result.getString("TABLE_NAME"));
+			}
+		} catch(java.sql.SQLException e) {
+			e.printStackTrace();
+		}
+
+
+		if (tablesInDB.size() != 0){
+			System.out.println("Tables already there");
+			return true;
+		}
+		else return false;
+	}
+
 	/**
 	 * Calls all of the functions that creates each individual table
 	 * Tables Created: node, hasEdge, userAccount, requests, floralRequests, sanitationRequest, extTransport, medDelivery, securityServ
@@ -2153,7 +2184,6 @@ public class makeConnection {
 	 * @param tableName this is the table/data/information that will be translated into a csv file
 	 */
 	public void getNewCSVFile(String tableName) {
-
 		String sqlQuery = "select * from " + tableName;
 		try (PreparedStatement prepState = connection.prepareStatement(sqlQuery)) {
 

@@ -87,6 +87,9 @@ public class PathFinder {
     @FXML // fx:id="exit"
     private Polygon exit;
 
+    @FXML // fx:id="lowerAnchorPane"
+    private AnchorPane lowerAnchorPane; // Value injected by FXMLLoader
+
     /*
      * Additional Variables
      */
@@ -234,7 +237,7 @@ public class PathFinder {
             //Print error message and don't allow the program to call the path search function
             System.out.println("Cannot choose the same starting and ending location. Try again");
             //SnackBar popup
-            JFXSnackbar bar = new JFXSnackbar(pane);
+            JFXSnackbar bar = new JFXSnackbar(lowerAnchorPane);
             bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Cannot choose the same starting and ending location. Try again")));
 
             findPathButton.setDisable(true);
@@ -429,8 +432,10 @@ public class PathFinder {
      */
     @FXML
     void initialize() {
-        //todo remove when all sizes are same
-        //set Stage size
+
+        System.out.println("Begin PathFinder Init");
+
+        //get primaryStage
         Stage primaryStage = App.getPrimaryStage();
 
         //If exit button is clicked, exit app
@@ -439,10 +444,9 @@ public class PathFinder {
             app.stop();
         });
 
+        //get dimensions of stage
         stageWidth = primaryStage.getWidth();
         stageHeight = primaryStage.getHeight();
-
-        System.out.println("Begin PathFinder Init");
 
         assert startLocationComboBox != null : "fx:id=\"startLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert endLocationComboBox != null : "fx:id=\"endLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";

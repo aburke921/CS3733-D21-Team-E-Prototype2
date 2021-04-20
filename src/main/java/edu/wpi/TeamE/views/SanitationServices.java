@@ -47,9 +47,6 @@ public class SanitationServices extends ServiceRequestFormComponents {
    * @param actionEvent
    */
 
-
-
-
   /**
    * Detects if the user has entered all required fields
    *
@@ -57,7 +54,6 @@ public class SanitationServices extends ServiceRequestFormComponents {
   private boolean validateInput(){
 
     validator.setMessage("Input required");
-
 
     ServiceTypeinput.getValidators().add(validator);
     assignedIndividual.getValidators().add(validator);
@@ -67,9 +63,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
     Signature.getValidators().add(validator);
     Severity.getValidators().add(validator);
 
-
-
-    return  locationInput.validate() && ServiceTypeinput.validate() && assignedIndividual.validate() && detailedInstructionsInput.validate() && Severity.validate() && Signature.validate();
+    return locationInput.validate() && ServiceTypeinput.validate() && assignedIndividual.validate() && detailedInstructionsInput.validate() && Severity.validate() && Signature.validate();
 
 
   }
@@ -99,7 +93,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
       String signature = Signature.getText();
       int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
       String nodeID = nodeIDS.get(nodeIDIndex);
-      connection.addSanitationRequest(15,nodeID, serviceKind,details,severity,signature);
+      //connection.addSanitationRequest(15,nodeID, serviceKind,details,severity,signature);
       System.out.println(nodeID);
       super.handleButtonSubmit(actionEvent);
       //Setting up all variables to be entered
@@ -125,21 +119,14 @@ public class SanitationServices extends ServiceRequestFormComponents {
     ObservableList<String> locations  = connection.getAllNodeLongNames();
 
     locationInput.setItems(locations);
-    assert  Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
+    assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
     ObservableList<String> rating  = FXCollections.observableArrayList();
-   rating.setAll("1","2","3","4","5");
-   Severity.setItems(rating);
-
-
-
-
-
-
+    rating.setAll("1","2","3","4","5");
+    Severity.setItems(rating);
 
     assert assignedIndividual != null : "fx:id=\"assignedIndividual\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
     assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/ExternalPatient.fxml'.";
     assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/ExternalPatient.fxml'.";
-
 
   }
 }

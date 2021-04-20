@@ -11,10 +11,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 /**
- * Adapted from https://stackoverflow.com/questions/19455059/allow-user-to-resize-an-undecorated-stage
+ * Adds EventListener to enable resizing of an StageStyle.UNDECORATED window, along with allowing for
+ * moving the window/stage by dragging when not in fullscreen.
  *
- * Util class to handle window resizing when a stage style set to StageStyle.UNDECORATED.
- * Includes dragging of the stage.
+ * Adapted from https://stackoverflow.com/questions/19455059/allow-user-to-resize-an-undecorated-stage
  * Original on 6/13/14.
  * Updated on 8/15/17.
  * Updated on 12/19/19.
@@ -22,7 +22,7 @@ import javafx.stage.Stage;
  * @author Alexander.Berg
  * @author Evgenii Kanivets
  * @author Zachary Perales
- * @author TeamE (small changes)
+ * @author TeamE CS3733-D21
  */
 
 public class ResizeHelper {
@@ -180,8 +180,11 @@ public class ResizeHelper {
             }
 
             if (MouseEvent.MOUSE_DRAGGED.equals(mouseEventType) && Cursor.DEFAULT.equals(cursorEvent) && !resizing) {
-                stage.setX(mouseEvent.getScreenX() + screenOffsetX);
-                stage.setY(mouseEvent.getScreenY() + screenOffsetY);
+                //if fullscreen, disable drag
+                if (!App.getPrimaryStage().isFullScreen()) {
+                    stage.setX(mouseEvent.getScreenX() + screenOffsetX);
+                    stage.setY(mouseEvent.getScreenY() + screenOffsetY);
+                }
             }
 
         }

@@ -1,9 +1,6 @@
 package edu.wpi.TeamE.views;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.event.ActionEvent;
@@ -11,21 +8,53 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class Login {
 
-    @FXML private JFXTextField emailInput;
-    @FXML private JFXTextField passwordInput;
-    @FXML private StackPane stackPane;
+    @FXML // ResourceBundle that was given to the FXMLLoader
+    private ResourceBundle resources;
+
+    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    private URL location;
+
+    @FXML // fx:id="fullscreen"
+    private Rectangle fullscreen; // Value injected by FXMLLoader
+
+    @FXML // fx:id="hide"
+    private Circle hide; // Value injected by FXMLLoader
 
     @FXML // fx:id="exit"
-    private Polygon exit;
+    private Polygon exit; // Value injected by FXMLLoader
+
+    @FXML // fx:id="emailInput"
+    private JFXTextField emailInput; // Value injected by FXMLLoader
+
+    @FXML // fx:id="passwordInput"
+    private JFXPasswordField passwordInput; // Value injected by FXMLLoader
+
+    @FXML // fx:id="createAccountButton"
+    private Button createAccountButton; // Value injected by FXMLLoader
+
+    @FXML // fx:id="submitLoginButton"
+//    private Button submitLoginButton; // Value injected by FXMLLoader
+    public Button submitLoginButton; //todo is this intentionally public?
+
+    @FXML // fx:id="guestLoginButton"
+    private Button guestLoginButton; // Value injected by FXMLLoader
+
+    @FXML private StackPane stackPane;
+
 
     public void initialize() {
         //If exit button is clicked, exit app
@@ -33,10 +62,23 @@ public class Login {
             App app = new App();
             app.stop();
         });
+
+        //If minimize button is clicked...
+        hide.setOnMouseClicked(event -> {
+            App.getPrimaryStage().setIconified(true);
+        });
+
+        //If not fullscreen, make it, If already fullscreen, unfullscreen.
+        fullscreen.setOnMouseClicked(event -> {
+            App.getPrimaryStage().setFullScreen(!App.getPrimaryStage().isFullScreen());
+        });
+
+        //set submit as default (will submit on an "ENTER" keypress)
+        submitLoginButton.setDefaultButton(true);
     }
 
     public void submitLogin() {
-        boolean bool = false;
+        int userID = 0;
         makeConnection connection = makeConnection.makeConnection();
         if(emailInput.getText().isEmpty()) {
             errorPopup("Must input an email");
@@ -47,8 +89,8 @@ public class Login {
             return;
         }
         if(emailInput != null && passwordInput != null) {
-            bool = connection.userLogin(emailInput.getText(), passwordInput.getText());
-        } if(bool == true) {
+            userID = connection.userLogin(emailInput.getText(), passwordInput.getText());
+        } if(userID != 0) {
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
                 App.getPrimaryStage().getScene().setRoot(root);
@@ -57,8 +99,7 @@ public class Login {
             }
         } else {
             errorPopup("Incorrect Email or Password");
-            return;
-    }
+        }
 
 }
 
@@ -85,19 +126,9 @@ public class Login {
         }
     }
 
-
-    /**
-     * Terminate application
-     * @param e
-     */
-    @FXML
-    private void shutdown(ActionEvent e) {
-        App app = new App();
-        app.stop();
-    }
-
     @FXML
     private void errorPopup(String errorMessage) {
+        System.out.println("errorMessage: " + errorMessage);
         JFXDialogLayout error = new JFXDialogLayout();
         error.setHeading(new Text("Error!"));
         error.setBody(new Text(errorMessage));

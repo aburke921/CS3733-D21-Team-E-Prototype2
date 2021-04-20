@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.shape.Polygon;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
@@ -25,7 +26,8 @@ public class NodeCSVUpload {
     @FXML
     private TreeTableView<Node> treeTable;
 
-
+    @FXML // fx:id="exit"
+    private Polygon exit;
 
     /**
      * When the table is empty (aka no root), create the proper columns
@@ -93,6 +95,7 @@ public class NodeCSVUpload {
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
             table.getColumns().add(column8);
         }
+        treeTable.setShowRoot(false);
         if (table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
             table.getRoot().getChildren().remove(0, array.size() - 1);
         }
@@ -174,6 +177,11 @@ public class NodeCSVUpload {
     @FXML
     void initialize() {
         prepareNodes(treeTable);
+
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
     }
 
 

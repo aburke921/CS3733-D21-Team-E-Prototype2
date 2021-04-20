@@ -11,7 +11,7 @@
 }
 
 /*JFX Universal Form Field Styles*/
-JFXTextField, JFXTextArea, JFXComboBox {
+JFXTextField, JFXTextArea, JFXComboBox, JFXPasswordField {
     -fx-background-color: rgba(0,0,0,.05); /*form bounding box color*/ /*todo, set to variable for the rgba colors?*/
     -jfx-unfocus-color: rgba(0,0,0,.42); /*bottom line unfocused*/
     -jfx-focus-color: -fx--primary; /*bottom line focused*/
@@ -19,13 +19,13 @@ JFXTextField, JFXTextArea, JFXComboBox {
     -fx-prompt-text-fill: #808080; /*prompt text before entry*/
 }
 
-JFXTextField:hover, JFXTextArea:hover, JFXComboBox:hover {
+JFXTextField:hover, JFXTextArea:hover, JFXComboBox:hover, JFXPasswordField:hover {
     -fx-background-color: rgba(0,0,0,.1); /*form bounding box color*/
     -jfx-unfocus-color: rgba(0,0,0,.87); /*bottom line unfocused*/
     -jfx-focus-color: -fx--primary; /*bottom line focused*/
 }
 
-JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed {}
+JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField:pressed {}
 
 .submit-button {
     -jfx-button-type: RAISED;

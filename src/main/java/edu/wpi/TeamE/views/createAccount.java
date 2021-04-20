@@ -46,7 +46,7 @@ public class createAccount {
     }
 
     public void createAccountButton() {
-        boolean bool = false;
+        int userID = 0;
         makeConnection connection = makeConnection.makeConnection();
         if(email.getText().isEmpty()) {
             errorPopup("Must input an email");
@@ -78,15 +78,15 @@ public class createAccount {
             errorPopup("Password must include a special character");
             return;
         }
-        if(checkString(password.getText()) == false) {
+        if(!checkString(password.getText())) {
             errorPopup("Password must include a capital letter and a number");
             return;
         }
         if (firstName != null && lastName != null && email != null && password != null) {
             connection.addUserAccount(email.getText(), password.getText(), firstName.getText(), lastName.getText());
-            bool = connection.userLogin(email.getText(), password.getText());
+            userID = connection.userLogin(email.getText(), password.getText());
         }
-        if (bool == true) {
+        if (userID != 0) {
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
                 App.getPrimaryStage().getScene().setRoot(root);

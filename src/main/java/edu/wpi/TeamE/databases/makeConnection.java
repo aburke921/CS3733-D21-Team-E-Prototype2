@@ -1076,6 +1076,39 @@ public class makeConnection {
 		return nodesArray;
 	}
 
+
+	public ArrayList<Node> getAllNodesByType(String type) {
+		ArrayList<Node> nodesArray = new ArrayList<>();
+//observable list -- UI
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from node WHERE '" + type + "' = NODETYPE";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String NodeID = rset.getString("nodeID");
+				int xCoord = rset.getInt("xCoord");
+				int yCoord = rset.getInt("yCoord");
+				String floor = rset.getString("floor");
+				String building = rset.getString("building");
+				String nodeType = rset.getString("nodeType");
+				String longName = rset.getString("longName");
+				String shortName = rset.getString("shortName");
+
+				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
+
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllNodes Error : " + e);
+		}
+		return nodesArray;
+	}
+
+
 	/**
 	 * gets all Nodes that have the given FLOOR value
 	 *

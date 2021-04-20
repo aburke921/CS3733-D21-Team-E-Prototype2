@@ -48,7 +48,6 @@ public class MapEditor {
     @FXML private JFXTextField shortNameInput;
     @FXML private StackPane stackPane;
     @FXML private FlowPane flowPane;
-    @FXML private JFXTextField idInput;
 
     @FXML // fx:id="exit"
     private Polygon exit;

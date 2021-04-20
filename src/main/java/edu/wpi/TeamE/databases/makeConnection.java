@@ -362,7 +362,7 @@ public class makeConnection {
 	 * Uses executes the SQL statements required to create a extTransport table. This is a type of request and share the same requestID.
 	 * This table has the attributes:
 	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - hospitalLocation: this is the location of the hospital that the user/first responders are going to.
+	 * - roomID: this is the nodeID/room the user is sending the request to.
 	 * - requestType: this the mode of transportation that the request is being made for. The valid options are: 'Ambulance', 'Helicopter', 'Plane'
 	 * - severity: this is how sever the patient is who the user/first responders are transporting.
 	 * - patientID: this is the ID of the patient that is being transported.
@@ -374,7 +374,7 @@ public class makeConnection {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table extTransport(\n" +
 					"    requestID int Primary Key References requests On Delete Cascade,\n" +
-					"    hospitalLocation varchar(100) Not Null,\n" +
+					"    roomID varchar(31) Not Null References node On Delete Cascade,\n" +
 					"    requestType varchar(100) Not Null, " +
 					"    severity varchar(30) Not Null,\n" +
 					"    patientID int Not Null,\n" +
@@ -893,17 +893,17 @@ public class makeConnection {
 	 *
 	 * @param //form this is the form being added to the table
 	 */
-	public void addSanitationRequest(int userID, String asignee, String roomID, String sanitationType, String description, String urgency, String signature) {
+	public void addSanitationRequest(int userID, String assignee, String roomID, String sanitationType, String description, String urgency, String signature) {
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests) + 1, ?, Current Timestamp, 'sanitation', 'inProgress', ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
-			prepState.setString(2, asignee);
+			prepState.setString(2, assignee);
 			prepState.execute();
 		} catch (SQLException e) {
-//			e.printStackTrace();
+ 			//e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addSanitationRequest()");
 		}
 
@@ -931,7 +931,7 @@ public class makeConnection {
 	 *
 	 * @param //form this is the form that we will create and send to the database
 	 */
-	public void addExternalPatientRequest(int userID, String asignee, String hospitalLocation, String requestType, String severity, int patientID, String ETA, String description) {
+	public void addExternalPatientRequest(int userID, String asignee, String roomID, String requestType, String severity, int patientID, String ETA, String description) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
@@ -952,7 +952,7 @@ public class makeConnection {
 				"         From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
-			prepState.setString(1, hospitalLocation);
+			prepState.setString(1, roomID);
 			prepState.setString(2, requestType);
 			prepState.setString(3, severity);
 			prepState.setInt(4, patientID);
@@ -1241,15 +1241,15 @@ public class makeConnection {
 
 
 		//RequestID: 39 - 47
-		addExternalPatientRequest(27,"Ciaran Goodwin","Brigham & Women's Hospital - Boston MA", "Ambulance", "High Severity", 12334567, "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
-		addExternalPatientRequest(30,"Lola Bond","Brigham & Women's Hospital - Boston MA", "Ambulance","Low Severity", 4093380, "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
-		addExternalPatientRequest(22,"Samantha Russell","Brigham & Women's Hospital - Boston MA", "Helicopter","High Severity", 92017693, "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
-		addExternalPatientRequest(20,"Caleb Chapman","Brigham & Women's Hospital - Boston MA", "Helicopter","High Severity", 93754789, "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
-		addExternalPatientRequest(24,"Dale Coates","Brigham & Women's Hospital - Boston MA", "Ambulance","Medium Severity", 417592, "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
-		addExternalPatientRequest(28,"Jerry Myers","Brigham & Women's Hospital - Boston MA", "Helicopter", "High Severity", 44888936, "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
-		addExternalPatientRequest(24,"Betty Warren","Brigham & Women's Hospital - Boston MA", "Ambulance","Medium Severity", 33337861, "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
-		addExternalPatientRequest(27,"Maxim Rawlings","Brigham & Women's Hospital - Boston MA", "Ambulance","Low Severity", 40003829, "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
-		addExternalPatientRequest(24,"Alan Singh","Brigham & Women's Hospital - Boston MA", "Plane","High Severity", 38739983, "12 hours", "Heart transplant organ in route");
+		addExternalPatientRequest(27,"Ciaran Goodwin","EEXIT00101", "Ambulance", "High Severity", 12334567, "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
+		addExternalPatientRequest(30,"Lola Bond","EEXIT00101", "Ambulance","Low Severity", 4093380, "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
+		addExternalPatientRequest(22,"Samantha Russell","FDEPT00501", "Helicopter","High Severity", 92017693, "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
+		addExternalPatientRequest(20,"Caleb Chapman","FDEPT00501", "Helicopter","High Severity", 93754789, "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
+		addExternalPatientRequest(24,"Dale Coates","EEXIT00101", "Ambulance","Medium Severity", 417592, "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
+		addExternalPatientRequest(28,"Jerry Myers","FDEPT00501", "Helicopter", "High Severity", 44888936, "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
+		addExternalPatientRequest(24,"Betty Warren","EEXIT00101", "Ambulance","Medium Severity", 33337861, "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
+		addExternalPatientRequest(27,"Maxim Rawlings","EEXIT00101", "Ambulance","Low Severity", 40003829, "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
+		addExternalPatientRequest(24,"Alan Singh","FDEPT00501", "Plane","High Severity", 38739983, "12 hours", "Heart transplant organ in route");
 
 
 		changeRequestStatus(40, "complete");
@@ -1455,19 +1455,13 @@ public class makeConnection {
 	 * @param roomID the new node/room/location the user is assigning this request to
 	 * @param sanitationType the new type of sanitation that the user is changing their request to
 	 * @param urgency the new urgency that the user is changing in their request
-	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editSanitationRequest(int requestID, String description, String roomID, String sanitationType, String urgency, String assignee) {
+	public int editSanitationRequest(int requestID, String roomID, String sanitationType, String description, String urgency, String signature) {
 
 		boolean added = false;
-		String query = "update sanitationRequest set ";
+		String query = "update sanitationRequest set";
 
-		if (description!= null) {
-			query = query + " description = '" + description + "'";
-
-			added = true;
-		}
 		if (roomID != null) {
 			if (added == true) {
 				query = query + ", ";
@@ -1482,6 +1476,11 @@ public class makeConnection {
 			query = query + " sanitationType = '" + sanitationType + "'";
 			added = true;
 		}
+		if (description!= null) {
+			query = query + " description = '" + description + "'";
+
+			added = true;
+		}
 		if (urgency != null) {
 			if (added == true) {
 				query = query + ", ";
@@ -1489,15 +1488,15 @@ public class makeConnection {
 			query = query + " urgency = '" + urgency + "'";
 			added = true;
 		}
-		if (assignee != null) {
+		if (signature != null) {
 			if (added == true) {
 				query = query + ", ";
 			}
-			query = query + " assignee = '" + assignee + "'";
+			query = query + "signature = '" + signature + "'";
 			added = true;
 		}
 
-		query = query + " where requestID = '" + requestID + "'";
+		query = query + " where requestID = " + requestID;
 		try {
 			Statement stmt = this.connection.createStatement();
 			System.out.println(query);
@@ -1517,22 +1516,21 @@ public class makeConnection {
 	/**
 	 * This edits a External Transport Services form that is already in the database
 	 * @param requestID the ID that specifies which external transfer form that is being edited
-	 * @param hospitalName this is the string used to update the hospital field
+	 * @param roomID this is the string used to update the hospital field
 	 * @param requestType this is the string used to update the type
 	 * @param severity this is the string used to update the severity
 	 * @param patientID this is the string used to update patientID
 	 * @param description this is the string used to update the description
 	 * @param ETA this is the string used to update the eta
-	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editExternalPatientRequest(int requestID, String hospitalName, String requestType, String severity, String patientID, String description, String ETA, String assignee) {
+	public int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String description, String ETA) {
 
 		boolean added = false;
-		String query = "update sanitationRequest set ";
+		String query = "update extTransport set ";
 
-		if (hospitalName!= null) {
-			query = query + " hospitalName = '" + hospitalName + "'";
+		if (roomID!= null) {
+			query = query + " roomID = '" + roomID + "'";
 
 			added = true;
 		}
@@ -1571,15 +1569,8 @@ public class makeConnection {
 			query = query + " ETA = '" + ETA + "'";
 			added = true;
 		}
-		if (ETA != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " assignee = '" + assignee + "'";
-			added = true;
-		}
 
-		query = query + " where requestID = '" + requestID + "'";
+		query = query + " where requestID = " + requestID;
 		try {
 			Statement stmt = this.connection.createStatement();
 			System.out.println(query);
@@ -1601,13 +1592,12 @@ public class makeConnection {
 	 * @param flowerAmount the new quantity of flowers the user wants to change their request to
 	 * @param vaseType the new vase type the user wants to change their request to
 	 * @param message the new message containing either instructions or to the recipient the user wants to change
-	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String message, String assignee) {
+	public int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String message) {
 
 		boolean added = false;
-		String query = "update sanitationRequest set ";
+		String query = "update floralRequests set ";
 
 		if (recipientName!= null) {
 			query = query + " recipientName = '" + recipientName + "'";
@@ -1649,15 +1639,8 @@ public class makeConnection {
 			query = query + " message = '" + message + "'";
 			added = true;
 		}
-		if (assignee != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " assignee = '" + assignee + "'";
-			added = true;
-		}
 
-		query = query + " where requestID = '" + requestID + "'";
+		query = query + " where requestID = " + requestID;
 
 		try {
 			Statement stmt = this.connection.createStatement();
@@ -1687,7 +1670,7 @@ public class makeConnection {
 	public int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, String assignee) {
 
 		boolean added = false;
-		String query = "update sanitationRequest set ";
+		String query = "update medDelivery set ";
 
 		if (roomID!= null) {
 			query = query + " roomID = '" + roomID + "'";
@@ -1730,7 +1713,7 @@ public class makeConnection {
 			added = true;
 		}
 
-		query = query + " where requestID = '" + requestID + "'";
+		query = query + " where requestID = " + requestID;
 
 		try {
 			Statement stmt = this.connection.createStatement();
@@ -1751,12 +1734,11 @@ public class makeConnection {
 	 * @param roomID the new node/room/location the user is assigning this request to
 	 * @param level this is the info to update levelOfSecurity
 	 * @param urgency  this is the info to update levelOfUrgency
-	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editSecurityRequest(int requestID, String roomID, String level, String urgency, String assignee) {
+	public int editSecurityRequest(int requestID, String roomID, String level, String urgency) {
 		boolean added = false;
-		String query = "update sanitationRequest set ";
+		String query = "update securityServ set ";
 
 		if (roomID!= null) {
 			query = query + " roomID = '" + roomID + "'";
@@ -1767,25 +1749,18 @@ public class makeConnection {
 			if (added == true) {
 				query = query + ", ";
 			}
-			query = query + " level = '" + level + "'";
+			query = query + "level = '" + level + "'";
 			added = true;
 		}
 		if (urgency != null) {
 			if (added == true) {
 				query = query + ", ";
 			}
-			query = query + " urgency = " + urgency;
-			added = true;
-		}
-		if (assignee != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " assignee = '" + assignee + "'";
+			query = query + "urgency = '" + urgency + "'";
 			added = true;
 		}
 
-		query = query + " where requestID = '" + requestID + "'";
+		query = query + " where requestID = " + requestID;
 
 		try {
 			Statement stmt = this.connection.createStatement();
@@ -1824,7 +1799,6 @@ public class makeConnection {
 		}
 		return 0;
 	}
-
 
 
 

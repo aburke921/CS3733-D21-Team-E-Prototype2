@@ -196,9 +196,9 @@ public class makeConnection {
 					"userType  Varchar(31)," +
 					"firstName Varchar(31)," +
 					"lastName  Varchar(31)," +
+					"creationTime Timestamp, " +
 					"Constraint userIDLimit Check ( userID != 0 )," +
 					"Constraint passwordLimit Check (Length(password) >= 8 )," +
-					"creationTime Timestamp, " +
 					"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin')))";
 			stmt.execute(sqlQuery);
 			createUserAccountTypeViews();
@@ -2212,9 +2212,12 @@ public class makeConnection {
 
 
 
+
+
+
+
+
 	// User System Stuff
-
-
 	/**
 	 * Function for logging a user in with their unique email and password
 	 * @param email    is the user's entered email
@@ -2222,43 +2225,54 @@ public class makeConnection {
 	 * @return 0 when the credentials does not match with any user in the database, and returns the userID otherwise
 	 */
 	public int userLogin(String email, String password) {
-		int userID = 0;
-		String userLoginS = "Select Count(*) As verification, userid From useraccount Where email = ? And password = ?";
-		try (PreparedStatement userLoginPS = connection.prepareStatement(userLoginS)) {
-			userLoginPS.setString(1, email);
-			userLoginPS.setString(2, password);
-			ResultSet userLoginRS = userLoginPS.executeQuery();
+		String userLoginS1 = "Select Count(*) As verification From userAccount Where email = ? And password = ?";
+		try (PreparedStatement userLoginPS1 = connection.prepareStatement(userLoginS1)) {
+			userLoginPS1.setString(1, email);
+			userLoginPS1.setString(2, password);
+			ResultSet userLoginRS1 = userLoginPS1.executeQuery();
 			int verification = 0;
-			if (userLoginRS.next()) {
-				verification = userLoginRS.getInt("verification");
-				userID = userLoginRS.getInt("userID");
+			if (userLoginRS1.next()) {
+				verification = userLoginRS1.getInt("verification");
 			}
-			userLoginRS.close();
+			userLoginRS1.close();
 			if(verification == 0){
-				return 0;
-			} else return userID;
+				return verification;
+			} else {
+				String userLoginS2 = "Select userId From userAccount Where email = ? And password = ?";
+				try (PreparedStatement userLoginPS2 = connection.prepareStatement(userLoginS2)) {
+					userLoginPS2.setString(1, email);
+					userLoginPS2.setString(2, password);
+					ResultSet userLoginRS2 = userLoginPS2.executeQuery();
+					int userID = 0;
+					if (userLoginRS2.next()) {
+						userID = userLoginRS2.getInt("userID");
+					}
+					userLoginRS2.close();
+					return userID;
+				}
+			}
 		} catch (SQLException e) {
 			// e.printStackTrace();
-			System.err.println("countNodeTypeOnFloor() error");
+			System.err.println("userLogin() error");
 		}
 		return 0;
 	}
+
 	/**
 	 * Gets a list of all the requestIDs from the given tableName
-	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @param tableType this is the name of the table that we are getting the requestIDs from
 	 * @return a list of all the requestIDs
 	 */
-	public ArrayList<String> getRequestIDs(String tableName, int userID){
+	public ArrayList<String> getRequestIDs(String tableType, int userID){
 		ArrayList<String> listOfIDs = new ArrayList<>();
 		try  {
 			Statement stmt = connection.createStatement();
-			String requestID = "Select requestID From " + tableName;
+			String requestID;
 			if (userID != -1) {
-				requestID = "Select requests.requestID From requests, " + tableName + " Where requests.requestID = " + tableName + ".requestID " +
-						"and creatorID = " + userID;
+				requestID = "Select requestID from requests where requestType = '" + tableType + "' and creatorID = " + userID;
 			}
 			else{
-				requestID = "Select requestID From " + tableName;
+				requestID = "Select requestID From requests where requestType = '" + tableType + "'";
 			}
 			ResultSet rset = stmt.executeQuery(requestID);
 			while(rset.next()){
@@ -2271,24 +2285,22 @@ public class makeConnection {
 		}
 		return listOfIDs;
 	}
+
 	/**
 	 * Gets a list of all the statuses from the given tableName
-	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @param tableType this is the name of the table that we are getting the requestIDs from
 	 * @return a list of all the statuses of the requests
 	 */
-	public ArrayList<String> getRequestStatus(String tableName, int userID){
+	public ArrayList<String> getRequestStatus(String tableType, int userID){
 		ArrayList<String> listOfStatus = new ArrayList<String>();
 		try  {
 			Statement stmt = connection.createStatement();
 			String requestStatus;
-
 			if (userID != -1) {
-
-				requestStatus = "Select requestStatus From (Select * From requests where creatorID = " + userID
-						+ ") thing, " + tableName + " where thing.requestID = " + tableName + ".requestID";
+				requestStatus = "Select requestStatus From requests Where requestType = '" + tableType +"' and creatorID = " + userID;
 			}
 			else{
-				requestStatus = "Select requests.requestStatus From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+				requestStatus = "Select requestStatus From requests Where requestType = '" + tableType + "'";
 			}
 			ResultSet rset = stmt.executeQuery(requestStatus);
 			while(rset.next()){
@@ -2301,19 +2313,22 @@ public class makeConnection {
 		}
 		return listOfStatus;
 	}
+
 	/**
 	 * Gets a list of all the assignees from the given tableName
-	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @param tableType this is the type of the table that we are getting the requestIDs from
 	 * @return a list of all assignees for all of the requests
 	 */
-	public ArrayList<String> getRequestAssignees(String tableName, int userID){
+	public ArrayList<String> getRequestAssignees(String tableType, int userID){
 		ArrayList<String> listOfAssignees = new ArrayList<String>();
 		try  {
 			Statement stmt = connection.createStatement();
-			String requestAssignee = "Select requests.assignee From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
-			if (userID != -1) {
-				requestAssignee = "Select assignee From (Select * From requests where creatorID = " + userID
-						+ ") thing, " + tableName + " where thing.requestID = " + tableName + ".requestID";
+			String requestAssignee;
+			if (userID != -1) { // if user is not SuperAdmin
+				requestAssignee = "Select assignee from requests where requestType = '" + tableType + "' and creatorID = " + userID;
+				//requestAssignee = "Select newTable.assignee From (Select * From requests, " + tableType + " Where requests.requestID = " + tableType + ".requestID ) newTable Where userID = " + userID;
+			} else { // if user is SuperAdmin
+				requestAssignee = "Select requests.assignee From requests where requestType = '" + tableType + "'";
 			}
 			ResultSet rset = stmt.executeQuery(requestAssignee);
 			while(rset.next()){
@@ -2326,26 +2341,36 @@ public class makeConnection {
 		}
 		return listOfAssignees;
 	}
+
 	/**
 	 * Gets a list of all the longNames for the location from the given tableName
-	 * @param tableName this is the name of the table that we are getting the requestIDs from
+	 * @param tableType this is the name of the table that we are getting the requestIDs from
 	 * @return a list of all longNames for the location for all of the requests
 	 */
-	public ArrayList<String> getRequestLocations(String tableName, Integer userID){
-
-
+	public ArrayList<String> getRequestLocations(String tableType, int userID){
 		ArrayList<String> listOfLongNames = new ArrayList<String>();
 		try  {
+			String tableName = "";
+			switch (tableType){
+				case "floral": tableName = "floralRequests";
+				break;
+				case "medDelivery": tableName = "medDelivery";
+				break;
+				case "sanitation": tableName = "sanitationRequest";
+				break;
+				case "security": tableName = "securityServ";
+				break;
+				case "extTransport": tableName = "extTransport";
+				break;
+			}
 			Statement stmt = connection.createStatement();
 			String requestLongNames;
 
 			if (userID != -1) {
-
-				requestLongNames = "Select longName From (Select roomID From (Select * From requests where creatorID = " + userID
-									+ ") thing, " + tableName + " where thing.requestID = " + tableName + ".requestID) that, node where that.roomID = node.nodeID";
+				requestLongNames = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
 			}
 			else{
-				requestLongNames = "Select longName From node, " + tableName + " where node.nodeID = " + tableName + ".roomID";
+				requestLongNames ="Select longName from node,(Select roomID From " + tableName + ") correctTable where node.nodeID = correctTable.roomID";
 			}
 			ResultSet rset = stmt.executeQuery(requestLongNames);
 			while(rset.next()){
@@ -2359,8 +2384,6 @@ public class makeConnection {
 		return listOfLongNames;
 	}
 
-// Duplicate node
-// LongName too long
 
 
 

@@ -759,6 +759,8 @@ public class DatabaseTests {
 		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
 		connection.addMedicineRequest(2, "dell","test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
+		//"floral", "medDelivery", "sanitation", "security", "extTransport".
+
 		ArrayList<String> returnedAssignees = connection.getRequestAssignees("medDelivery", -1);
 		ArrayList<String> correctAssignees = new ArrayList<String>();
 

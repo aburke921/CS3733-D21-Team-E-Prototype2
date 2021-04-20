@@ -571,7 +571,7 @@ public class DatabaseTests {
 		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 
-		connection.addSanitationRequest(10000, "bob","test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
+		connection.addSanitationRequest(1, "bob","test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
 	}
 
 	@Test
@@ -580,7 +580,7 @@ public class DatabaseTests {
 		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 
-		connection.addExternalPatientRequest(10000, "bob", "BW", "severe", "123", "15 mins", "headache");
+		connection.addExternalPatientRequest(1, "bob", "BW", "Ambulance","severe", 123, "15 mins", "headache");
 	}
 
 	@Test
@@ -588,7 +588,7 @@ public class DatabaseTests {
 	public void testAddMedicineRequest() {
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addMedicineRequest(10000, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
 	}
 
 	@Test
@@ -598,7 +598,7 @@ public class DatabaseTests {
 
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 
-		connection.addSecurityRequest(10000, "bob", "test", "low", "Low");
+		connection.addSecurityRequest(1, "bob", "test", "low", "Low");
 	}
 
 	@Test
@@ -607,7 +607,7 @@ public class DatabaseTests {
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 
-		connection.addFloralRequest(10000,"bob", "test", "Nupur", "Roses", 1, "Tall", "feel better");
+		connection.addFloralRequest(1,"bob", "test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 	}
 
@@ -626,9 +626,9 @@ public class DatabaseTests {
 	public void testGetRequestStatus() {
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addExternalPatientRequest(10000, "bob","BW", "severe", "123", "15 mins", "headache");
-		connection.addExternalPatientRequest(10000, "bob","BW", "severe", "123", "15 mins", "migraine");
-		connection.addFloralRequest(10000, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
+		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "headache");
+		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "migraine");
+		connection.addFloralRequest(1, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		ArrayList<String> returnedStatus = new ArrayList<String>();
 		ArrayList<String> correctStatus = new ArrayList<String>();
@@ -636,7 +636,7 @@ public class DatabaseTests {
 		correctStatus.add("inProgress");
 		correctStatus.add("inProgress");
 
-		returnedStatus = connection.getRequestStatus("extTransport");
+		returnedStatus = connection.getRequestStatus("extTransport", -1);
 
 		assertTrue(correctStatus.equals(returnedStatus));
 	}
@@ -645,11 +645,12 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetRequestIDs")
 	public void testGetRequestIDs() {
+
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addExternalPatientRequest(10000, "bob","BW", "severe", "123", "15 mins", "headache");
-		connection.addExternalPatientRequest(10000, "bob","BW", "severe", "123", "15 mins", "migraine");
-		connection.addFloralRequest(10000, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
+		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "headache");
+		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "migraine");
+		connection.addFloralRequest(1, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		ArrayList<String> returnedIDs = new ArrayList<String>();
 		ArrayList<String> correctIDs = new ArrayList<String>();
@@ -657,7 +658,7 @@ public class DatabaseTests {
 		correctIDs.add("1");
 		correctIDs.add("2");
 
-		returnedIDs = connection.getRequestIDs("extTransport");
+		returnedIDs = connection.getRequestIDs("extTransport", -1);
 
 		assertTrue(correctIDs.equals(returnedIDs));
 	}
@@ -668,10 +669,10 @@ public class DatabaseTests {
 
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addMedicineRequest(10000, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
-		connection.addMedicineRequest(10000, "bob1","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(1, "bob1","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
-		ArrayList<String> IDS = connection.getRequestIDs("medDelivery");
+		ArrayList<String> IDS = connection.getRequestIDs("medDelivery", -1);
 
 		int rowsChanged = connection.changeRequestStatus(1, "complete");
 
@@ -685,14 +686,14 @@ public class DatabaseTests {
 
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addMedicineRequest(10000, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
-		connection.addMedicineRequest(10000, "kim","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(1, "kim","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
 		connection.addNode("test2", 0, 0, "3", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addSecurityRequest(10000, "drew", "test", "low", "Low");
+		connection.addSecurityRequest(1, "drew", "test", "low", "Low");
 
-		ArrayList<String> returnedAssignees = connection.getRequestAssignees("medDelivery");
+		ArrayList<String> returnedAssignees = connection.getRequestAssignees("medDelivery", -1);
 		ArrayList<String> correctAssignees = new ArrayList<String>();
 
 		correctAssignees.add("bob");
@@ -709,14 +710,14 @@ public class DatabaseTests {
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
 		connection.addNode("test3", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addMedicineRequest(10000, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
-		connection.addMedicineRequest(10000, "kim","test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(1, "kim","test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
 		connection.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
 		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addSecurityRequest(10000, "drew", "test", "low", "Low");
+		connection.addSecurityRequest(1, "drew", "test", "low", "Low");
 
-		ArrayList<String> returnedLocations = connection.getRequestLocations("medDelivery");
+		ArrayList<String> returnedLocations = connection.getRequestLocations("medDelivery", -1);
 		ArrayList<String> correctLocations = new ArrayList<String>();
 
 		correctLocations.add("long name #1");
@@ -726,40 +727,146 @@ public class DatabaseTests {
 
 	}
 
-
-
-
 	@Test
-	@DisplayName("data")
-	public void data(){
+	@DisplayName("testEditSanitationRequest")
+	public void testEditSanitationRequest(){
 
-		//Visitors:
-		connection.addUserAccount("bellag@gmail.com", "!!98!century!", "Bella", "Graham");
-		connection.addUserAccount("terry_reilly123@yahoo.com", "until&MORNING&", "Terry", "Reilly");
-		connection.addUserAccount("smiddle@outlook.com", "//97|member", "Sharon", "Middleton");
-		connection.addUserAccount("catherinehop12@gmail.com", "~FIND~question", "Catherine", "Hopkins");
-		connection.addUserAccount("mbernard@wpi.edu", "@@20.color", "Michelle", "Bernard");
-		connection.addUserAccount("mccoy.meghan@hotmail.com", "||22*what*", "Meghan", "Mccoy");
-		connection.addUserAccount("harry89owens@gmail.com", "plants*37||", "Harry", "Owens");
-		connection.addUserAccount("hugowh@gmail.com", "=finland=", "Hugo", "Whitehouse");
-		connection.addUserAccount("spenrodg@yahoo.com", "%object%7", "Spencer", "Rodgers");
-		connection.addUserAccount("thomasemail@gmail.com", "travel@66", "Thomas", "Mendez");
-		connection.addUserAccount("claytonmurray@gmail.com", "95+bill", "Clayton", "Murray");
-		connection.addUserAccount("lawrencekhalid@yahoo.com", "??54%com", "Khalid", "Lawrence");
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 
-		//Patients:
-		connection.addSpecialUserType("adamj@gmail.com","patient1","patient","Adam", "Jenkins");
-		connection.addSpecialUserType("abbym@yahoo.com","patient2","patient","Abby", "Mohamed");
-		connection.addSpecialUserType("wesleya@gmail.com","patient3","patient","Wesley", "Armstrong");
-		connection.addSpecialUserType("travisc@yahoo.com","patient4","patient","Travis", "Cook");
+		connection.addSanitationRequest(1, "bob","test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
 
+		int result = 0;
+		result = connection.editSanitationRequest(1, "test", null, null, null, "hello test");
 
-//		"visitor", "patient", "doctor", "admin".
-
-
-
-
+		assertTrue(result == 1);
 	}
 
+	@Test
+	@DisplayName("testEditExternalPatientRequest")
+	public void testEditExternalPatientRequest(){
+
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+
+		connection.addExternalPatientRequest(1, "bob", "BW", "Ambulance","severe", 123, "15 mins", "headache");
+
+		int result = 0;
+		result = connection.editExternalPatientRequest(1, "Tufts", null, null, null, null, "15 mins");
+
+		assertTrue(result == 1);
+	}
+
+	@Test
+	@DisplayName("testEditMedicineRequest")
+	public void testEditMedicineRequest(){
+
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+
+		connection.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+
+		int result = 0;
+		result = connection.editMedicineRequest(1,"test", "Tylenol", null, null, "Take twice everyday", null);
+
+		assertTrue(result == 1);
+	}
+
+	@Test
+	@DisplayName("testEditFloralRequest")
+	public void testEditFloralRequest(){
+
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+
+		connection.addFloralRequest(1,"bob", "test", "Nupur", "Roses", 1, "Tall", "feel better");
+
+		int result = 0;
+		result = connection.editFloralRequest(1,"test", "Ashley", "Tulips", null, null, null);
+
+		assertTrue(result == 1);
+	}
+
+	@Test
+	@DisplayName("testEditSecurityRequest")
+	public void testEditSecurityRequest(){
+
+		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+
+		connection.addSecurityRequest(1, "bob", "test", "low", "Low");
+
+		int result = 0;
+		result = connection.editSecurityRequest(1,null, "high", "High");
+
+		assertTrue(result == 1);
+	}
+
+	@Test
+	@DisplayName("testDataForPresentation")
+	public void testDataForPresentation(){
+
+		//Floral Delivery Nodes:
+		connection.addNode("ADEPT00101",1401,2628,"1","BTM","DEPT","Neuroscience Waiting Room","Neuro Waiting Room");
+		connection.addNode("ADEPT00102",1395,2674,"2","BTM","DEPT","Orthopedics and Rhemutalogy","Orthopedics and Rhemutalogy");
+		connection.addNode("ADEPT00201",1720,2847,"1","BTM","DEPT","MS Waiting","MS Waiting");
+		connection.addNode("ADEPT00301",986,2852,"1","BTM","DEPT","CART Waiting","CART Waiting");
+		connection.addNode("DDEPT00102",4330,700,"2","15 Francis","DEPT","Chest Diseases Floor 2","Chest Diseases");
+
+
+		//Sanitation Nodes:
+		connection.addNode("AREST00101",1556,2604,"1","BTM","REST","Restroom S elevator 1st floor","Restroom");
+		connection.addNode("AREST00103",1552,2854,"3","BTM","REST","Restroom BTM conference center 3rd floor","Restroom");
+		connection.addNode("ARETL00101",1619,2522,"1","BTM","RETL","Cafe","Cafe");
+		connection.addNode("IREST00103",2255,1255,"3","45 Francis","REST","Restroom 1 - Family","R1");
+		connection.addNode("IREST00203",2570,1257,"3","45 Francis","REST","Restroom 2","R2");
+		connection.addNode("IREST00303",2745,1147,"3","45 Francis","REST","Restroom 3","R3");
+		connection.addNode("IREST00403",2300,1018,"3","45 Francis","REST","Restroom 4 - M wheelchair","R4");
+		connection.addNode("HRETL00102",1935,860,"2","Tower","RETL","Garden Cafe","Garden Cafe");
+
+
+		//med delivery Nodes:
+		connection.addNode("BLABS00102",2246,1350,"2","45 Francis","LABS","Vascular Diagnostic Lab","Labs B0102");
+		connection.addNode("BLABS00202",2945,995,"2","45 Francis","LABS","Outpatient Specimen Collection","Labs B0202");
+		connection.addNode("IDEPT00103",2323,1328,"3","45 Francis","DEPT","Center for Infertility and Reproductive Surgery","D1");
+		connection.addNode("IDEPT00203",2448,1328,"3","45 Francis","DEPT","Gynecology Oncology MIGS","D2");
+		connection.addNode("IDEPT00303",2730,1315,"3","45 Francis","DEPT","General Surgical Specialties Suite A","D3");
+		connection.addNode("IDEPT00403",2738,1227,"3","45 Francis","DEPT","General Surgical Specialties Suite B","D4");
+		connection.addNode("IDEPT00503",2868,1075,"3","45 Francis","DEPT","Urology","D5");
+		connection.addNode("IDEPT00603",2333,764,"3","45 Francis","DEPT","Maternal Fetal Practice","D6");
+		connection.addNode("IDEPT00703",2400,764,"3","45 Francis","DEPT","Obstetrics","D7");
+		connection.addNode("IDEPT00803",2492,887,"3","45 Francis","DEPT","Fetal Med & Genetics","D8");
+		connection.addNode("IDEPT00903",2631,851,"3","45 Francis","DEPT","Gynecology","D9");
+
+
+		//Security Nodes:
+		connection.addNode("HDEPT00203",1690,830,"3","Tower","DEPT","MICU 3BC Waiting Room","MICU 3BC WR");
+		connection.addNode("WELEV00E01",3265,830,"1","45 Francis","ELEV","Elevator E Floor 1","Elevator E1");
+		connection.addNode("ePARK00101",381,1725,"1","Parking","PARK","Left Parking Lot Spot 001","Parking Left 001");
+		connection.addNode("ePARK00201",406,1725,"1","Parking","PARK","Left Parking Lot Spot 002","Parking Left 002");
+		connection.addNode("eWALK00701",1730,1544,"1","Parking","WALK","Entrance Sidewalk","Walkway");
+		connection.addNode("BDEPT00302",2385,753,"2","45 Francis","DEPT","Lee Bell Breast Center","DEPT B0302");
+		connection.addNode("BDEPT00402",2439,902,"2","45 Francis","DEPT","Jen Center for Primary Care","DEPT B0402");
+		connection.addNode("CCONF002L1",2665,1043,"L1","45 Francis","CONF","Medical Records Conference Room Floor L1","Conf C002L1");
+
+		//External transport:
+		connection.addNode("FDEPT00501",2128,1300,"1","Tower","DEPT","Emergency Department","Emergency");
+		connection.addNode("EEXIT00101",2275,785,"1","45 Francis","EXIT","Ambulance Parking Exit Floor 1","AmbExit 1");
+
+		connection.addDataForPresentation();
+	}
+
+//	@Test
+//	public void testTables(){
+////		try {
+////			connection.deleteAllTables();
+////			connection.createNodeTable();
+////		} catch (Exception e) {
+////			connection.createNodeTable();
+////		}
+//
+//		assertTrue(connection.checkIfTablesExist());
+//
+//	}
 
 }

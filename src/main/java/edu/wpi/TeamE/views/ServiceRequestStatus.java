@@ -55,6 +55,9 @@ public class ServiceRequestStatus {
     JFXButton cancelButton;
 
     @FXML
+    JFXButton refreshButton;
+
+    @FXML
     private void toDefault(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
@@ -73,7 +76,8 @@ public class ServiceRequestStatus {
         makeConnection connection = makeConnection.makeConnection();
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            connection.changeRequestStatus(id, "Cancelled");
+            connection.changeRequestStatus(id, "canceled");
+            System.out.println("The request was cancelled");
         }
     }
 
@@ -86,69 +90,62 @@ public class ServiceRequestStatus {
         makeConnection connection = makeConnection.makeConnection();
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            connection.changeRequestStatus(id,"Completed");
+            connection.changeRequestStatus(id,"complete");
+            System.out.println("The request was completed");
         }
     }
 
+    /**
+     * This function refreshes the page so that it updates the table with any changes
+     *
+     * @param e an action
+     */
     @FXML
     private void refresh(ActionEvent e) {
         prepareTable(serviceRequestTable);
     }
 
-    ArrayList<String> testArrayID = new ArrayList<>();
-    ArrayList<String> testArrayStatus = new ArrayList<>();
-    ArrayList<String> testArrayLocation = new ArrayList<>();
-    ArrayList<String> testArrayAssignee = new ArrayList<>();
-
-    private void createTests() {
-        testArrayID.add(0,"test1");
-        testArrayID.add(1,"test2");
-        testArrayID.add(2,"test3");
-        testArrayID.add(3,"test4");
-        testArrayStatus.add(0,"In Progress");
-        testArrayStatus.add(1,"Completed");
-        testArrayStatus.add(2,"Cancelled");
-        testArrayStatus.add(3,"In Progress");
-        testArrayAssignee.add(0, "James");
-        testArrayAssignee.add(1,"Seamus");
-        testArrayAssignee.add(2,"Brendan");
-        testArrayAssignee.add(3,"Spencer");
-        testArrayLocation.add(0,"Floor 2");
-        testArrayLocation.add(1,"United States");
-        testArrayLocation.add(2,"England");
-        testArrayLocation.add(3,"Middle Earth");
-
-    }
-
-
+    /**
+     * This function populates a specific part of the table from the database
+     *
+     * @param tableName the name of the table the data is coming from
+     * @param inProgress the TreeItem for the service requests still in progress
+     * @param completed the TreeItem for the service requests that have been completed
+     * @param cancelled the TreeItem for the service requests that were cancelled
+     */
     private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
         makeConnection connection = makeConnection.makeConnection();
-        ArrayList<String> idArray = connection.getRequestIDs(tableName);
-        ArrayList<String> statusArray = connection.getRequestStatus(tableName);
-        ArrayList<String> locationArray = connection.getRequestLocations(tableName);
-        ArrayList<String> assigneeArray = connection.getRequestAssignees(tableName);
+        ArrayList<String> idArray = connection.getRequestIDs(tableName, App.userID);
+        for(int j = 0; j < idArray.size(); j++) {
+            System.out.println(idArray.get(j));
+        }
+        ArrayList<String> statusArray = connection.getRequestStatus(tableName, App.userID);
+        ArrayList<String> locationArray = connection.getRequestLocations(tableName, App.userID);
+        ArrayList<String> assigneeArray = connection.getRequestAssignees(tableName, App.userID);
         if(idArray.size() > 0) {
             System.out.println("Array size" + idArray.size());
-            if(!inProgress.getChildren().isEmpty()) {
+            if (!inProgress.getChildren().isEmpty()) {
                 removeChildren(inProgress);
             }
-            if(!completed.getChildren().isEmpty()) {
+            if (!completed.getChildren().isEmpty()) {
                 removeChildren(completed);
             }
-            if(!cancelled.getChildren().isEmpty()) {
+            if (!cancelled.getChildren().isEmpty()) {
                 removeChildren(cancelled);
             }
-        }
-        for(int i = 0; i < idArray.size(); i++) {
-            TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), locationArray.get(i), assigneeArray.get(i), statusArray.get(i)));
-            if(request.getValue().getStatus().equals("In Progress")) {
-                inProgress.getChildren().add(request);
-            }
-            if(request.getValue().getStatus().equals("Completed")) {
-                completed.getChildren().add(request);
-            }
-            if(request.getValue().getStatus().equals("Cancelled")) {
-                cancelled.getChildren().add(request);
+            for (int i = 0; i < idArray.size(); i++) {
+                TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), locationArray.get(i), assigneeArray.get(i), statusArray.get(i)));
+                System.out.println(request.getValue().getId());
+                System.out.println(request.getValue().getId());
+                if (request.getValue().getStatus().equals("inProgress")) {
+                    inProgress.getChildren().add(request);
+                }
+                if (request.getValue().getStatus().equals("complete")) {
+                    completed.getChildren().add(request);
+                }
+                if (request.getValue().getStatus().equals("canceled")) {
+                    cancelled.getChildren().add(request);
+                }
             }
         }
     }
@@ -161,6 +158,31 @@ public class ServiceRequestStatus {
         }
         TreeItem<ServiceRequestForm> test = treeItem;
         System.out.println(test.getChildren().size());
+    }
+
+    public void checkoutRequest(TreeTableView<ServiceRequestForm> table) {
+
+        String typeOfForm = table.getSelectionModel().getSelectedItem().getParent().getValue().getId();
+
+        if(typeOfForm.equals("External Patient Form")) {
+
+        }
+        if(typeOfForm.equals("Floral Form")) {
+
+        }
+        if(typeOfForm.equals("Medicine Delivery Form")) {
+
+        }
+        if(typeOfForm.equals("Sanitation Service Form")) {
+
+        }
+        if(typeOfForm.equals("Security Services Form")) {
+
+        }
+    }
+
+    public void checkRequestButton(ActionEvent e) {
+        checkoutRequest(serviceRequestTable);
     }
 
 
@@ -186,10 +208,9 @@ public class ServiceRequestStatus {
                     new ReadOnlyStringWrapper(p.getValue().getValue().getAssignee()));
             serviceRequestTable.getColumns().add(assigneeColumn);
 
-            createTests();
-
         }
 
+        //Establishing root node
         TreeItem<ServiceRequestForm> rootNode = new TreeItem<>(new ServiceRequestForm("Service Requests"));
 
         //Setting up sub-root nodes

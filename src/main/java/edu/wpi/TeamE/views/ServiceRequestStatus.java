@@ -120,9 +120,9 @@ public class ServiceRequestStatus {
     private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<String> idArray = connection.getRequestIDs(tableName, -1);
-        for(int j = 0; j < idArray.size(); j++) {
-            System.out.println(idArray.get(j));
-        }
+//        for(int j = 0; j < idArray.size(); j++) {
+//            System.out.println(idArray.get(j));
+//        }
         ArrayList<String> statusArray = connection.getRequestStatus(tableName, -1);
         ArrayList<String> locationArray = connection.getRequestLocations(tableName, -1);
         ArrayList<String> assigneeArray = connection.getRequestAssignees(tableName, -1);
@@ -138,9 +138,8 @@ public class ServiceRequestStatus {
                 removeChildren(cancelled);
             }
             for (int i = 0; i < idArray.size(); i++) {
-                System.out.println("Shit its broken");
+                System.out.println("Before");
                 TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), locationArray.get(i), assigneeArray.get(i), statusArray.get(i)));
-                System.out.println(request.getValue().getId());
                 System.out.println(request.getValue().getId());
                 if (request.getValue().getStatus().equals("inProgress")) {
                     inProgress.getChildren().add(request);
@@ -257,6 +256,7 @@ public class ServiceRequestStatus {
 
         //Adding Root
         serviceRequestTable.setRoot(rootNode);
+        serviceRequestTable.setShowRoot(false);
     }
 
     @FXML

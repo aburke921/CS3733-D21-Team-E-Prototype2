@@ -624,3 +624,5 @@ eWALK01601,3189,1360,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01701,3185,1292,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01801,3338,1352,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01901,1789,1757,1,Parking,WALK,Shapiro Lobby Entrance Sidewalk,Walkway
+test,0,0,L1,BTM,HALL,testtest,test
+eCONF001L2,0,0,L2,BTM,CONF,long,

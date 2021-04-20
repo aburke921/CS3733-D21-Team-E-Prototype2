@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
@@ -79,56 +80,60 @@
       </AnchorPane>
       <AnchorPane prefHeight="738.0" prefWidth="1198.0">
          <children>
-            <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <center>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-                     <children>
-                                  <Label alignment="CENTER" prefHeight="23.0" prefWidth="381.0" text="Please Enter Email and Password">
-                                      <font>
-                                          <Font size="18.0" />
-                                      </font>
-                                      <VBox.margin>
-                                          <Insets />
-                                      </VBox.margin>
-                                  </Label>
-                        <JFXTextField fx:id="emailInput" maxWidth="300.0" promptText="Email">
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                        </JFXTextField>
-                        <JFXPasswordField fx:id="passwordInput" maxWidth="300.0" promptText="Password">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                        </JFXPasswordField>
-                        <HBox alignment="CENTER" maxWidth="300.0">
+            <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <BorderPane>
+                     <center>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="createAccountButton" mnemonicParsing="false" onAction="#toNewAccount" prefHeight="29.0" prefWidth="150.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Create New Account" textFill="WHITE" />
-                              <Button fx:id="submitLoginButton" mnemonicParsing="false" onAction="#submitLogin" prefHeight="29.0" prefWidth="66.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Submit" textFill="WHITE">
-                                 <HBox.margin>
-                                    <Insets left="20.0" />
-                                 </HBox.margin>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="381.0" text="Please Enter Email and Password">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </Label>
+                              <JFXTextField fx:id="emailInput" maxWidth="300.0" promptText="Email">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </JFXTextField>
+                              <JFXPasswordField fx:id="passwordInput" maxWidth="300.0" promptText="Password">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </JFXPasswordField>
+                              <HBox alignment="CENTER" maxWidth="300.0">
+                                 <children>
+                                    <Button fx:id="createAccountButton" mnemonicParsing="false" onAction="#toNewAccount" prefHeight="29.0" prefWidth="150.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Create New Account" textFill="WHITE" />
+                                    <Button fx:id="submitLoginButton" mnemonicParsing="false" onAction="#submitLogin" prefHeight="29.0" prefWidth="66.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Submit" textFill="WHITE">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <Button fx:id="guestLoginButton" mnemonicParsing="false" onAction="#guestLogin" prefHeight="29.0" prefWidth="132.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Log In As Guest" textFill="WHITE">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
                               </Button>
                            </children>
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                        </HBox>
-                        <Button fx:id="guestLoginButton" mnemonicParsing="false" onAction="#guestLogin" prefHeight="29.0" prefWidth="132.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Log In As Guest" textFill="WHITE">
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                        </Button>
-                     </children>
-                     <BorderPane.margin>
-                        <Insets bottom="40.0" top="40.0" />
-                     </BorderPane.margin>
-                  </VBox>
-               </center>
-            </BorderPane>
+                           <BorderPane.margin>
+                              <Insets bottom="40.0" top="40.0" />
+                           </BorderPane.margin>
+                        </VBox>
+                     </center>
+                  </BorderPane>
+               </children>
+            </StackPane>
          </children>
       </AnchorPane>
       </children>

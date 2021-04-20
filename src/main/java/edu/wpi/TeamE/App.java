@@ -72,10 +72,10 @@ public class App extends Application {
 			Scene scene = new Scene(root); //init
 			primaryStage.setScene(scene);
 			primaryStage.setWidth(1050);
-			primaryStage.setHeight(576);
+			primaryStage.setHeight(675);
 			root.minWidth(576);
 			primaryStage.show();
-			ResizeHelper.addResizeListener(primaryStage,950,576,Double.MAX_VALUE,Double.MAX_VALUE);
+			ResizeHelper.addResizeListener(primaryStage,950,640,Double.MAX_VALUE,Double.MAX_VALUE);
 		} catch (IOException e) {
 			e.printStackTrace();
 			Platform.exit();

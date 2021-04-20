@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
@@ -17,6 +18,7 @@ import java.io.IOException;
 
 public class Login {
 
+    public Button submitLoginButton;
     @FXML private JFXTextField emailInput;
     @FXML private JFXPasswordField passwordInput;
     @FXML private StackPane stackPane;
@@ -30,6 +32,9 @@ public class Login {
             App app = new App();
             app.stop();
         });
+
+        //set submit as default (will submit on an "ENTER" keypress)
+        submitLoginButton.setDefaultButton(true);
     }
 
     public void submitLogin() {

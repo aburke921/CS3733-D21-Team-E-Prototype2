@@ -10,27 +10,67 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class Login {
 
-    public Button submitLoginButton;
-    @FXML private JFXTextField emailInput;
-    @FXML private JFXPasswordField passwordInput;
-    @FXML private StackPane stackPane;
+    @FXML // ResourceBundle that was given to the FXMLLoader
+    private ResourceBundle resources;
+
+    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    private URL location;
+
+    @FXML // fx:id="fullscreen"
+    private Rectangle fullscreen; // Value injected by FXMLLoader
+
+    @FXML // fx:id="hide"
+    private Circle hide; // Value injected by FXMLLoader
 
     @FXML // fx:id="exit"
-    private Polygon exit;
+    private Polygon exit; // Value injected by FXMLLoader
+
+    @FXML // fx:id="emailInput"
+    private JFXTextField emailInput; // Value injected by FXMLLoader
+
+    @FXML // fx:id="passwordInput"
+    private JFXPasswordField passwordInput; // Value injected by FXMLLoader
+
+    @FXML // fx:id="createAccountButton"
+    private Button createAccountButton; // Value injected by FXMLLoader
+
+    @FXML // fx:id="submitLoginButton"
+//    private Button submitLoginButton; // Value injected by FXMLLoader
+    public Button submitLoginButton; //todo is this intentionally public?
+
+    @FXML // fx:id="guestLoginButton"
+    private Button guestLoginButton; // Value injected by FXMLLoader
+
+    @FXML private StackPane stackPane; //todo this stackpane was removed at some point, so error dialogs no longer work!
+
 
     public void initialize() {
         //If exit button is clicked, exit app
         exit.setOnMouseClicked(event -> {
             App app = new App();
             app.stop();
+        });
+
+        //If minimize button is clicked...
+        hide.setOnMouseClicked(event -> {
+            App.getPrimaryStage().setIconified(true);
+        });
+
+        //If not fullscreen, make it, If already fullscreen, unfullscreen.
+        fullscreen.setOnMouseClicked(event -> {
+            App.getPrimaryStage().setFullScreen(!App.getPrimaryStage().isFullScreen());
         });
 
         //set submit as default (will submit on an "ENTER" keypress)

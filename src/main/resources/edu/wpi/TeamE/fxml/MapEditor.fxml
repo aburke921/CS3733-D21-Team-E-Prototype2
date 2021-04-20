@@ -9,12 +9,15 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
@@ -90,91 +93,105 @@
                     <VBox prefHeight="318.0" prefWidth="591.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <TreeTableView fx:id="treeTable" prefHeight="200.0" prefWidth="341.0" />
-                  <HBox>
+                  <HBox prefHeight="477.0" prefWidth="1160.0">
                      <children>
-                        <JFXTextField fx:id="shortNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Short Name">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </JFXTextField>
-                        <JFXComboBox fx:id="floorInput" prefHeight="27.0" prefWidth="150.0" promptText="Floor">
-                           <HBox.margin>
-                              <Insets left="50.0" />
-                           </HBox.margin>
-                        </JFXComboBox>
+                        <VBox prefWidth="562.0">
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <JFXTextField fx:id="shortNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Short Name">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </JFXTextField>
+                                    <JFXComboBox fx:id="floorInput" prefHeight="27.0" prefWidth="150.0" promptText="Floor">
+                                       <HBox.margin>
+                                          <Insets left="50.0" />
+                                       </HBox.margin>
+                                    </JFXComboBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <JFXComboBox fx:id="buildingInput" prefHeight="27.0" prefWidth="150.0" promptText="Building">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </JFXComboBox>
+                                    <JFXComboBox fx:id="typeInput" prefHeight="27.0" prefWidth="150.0" promptText="Type">
+                                       <HBox.margin>
+                                          <Insets left="50.0" />
+                                       </HBox.margin>
+                                    </JFXComboBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <JFXTextField maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="X-Cord" fx:id="xCordInput">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="yCordInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Y-Cord">
+                                       <HBox.margin>
+                                          <Insets left="50.0" />
+                                       </HBox.margin>
+                                    </JFXTextField>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <JFXTextField fx:id="longNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Long Name">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </JFXTextField>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <FlowPane prefHeight="41.0" prefWidth="297.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#addNodeButton" text="Add Node">
+                                       <FlowPane.margin>
+                                          <Insets right="10.0" top="15.0" />
+                                       </FlowPane.margin>
+                                    </Button>
+                                    <Button mnemonicParsing="false" onAction="#editNodeButton" text="Edit Node">
+                                       <FlowPane.margin>
+                                          <Insets right="10.0" top="15.0" />
+                                       </FlowPane.margin>
+                                    </Button>
+                                    <Button mnemonicParsing="false" onAction="#deleteNodeButton" text="Delete Node">
+                                       <FlowPane.margin>
+                                          <Insets top="15.0" />
+                                       </FlowPane.margin>
+                                    </Button>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </FlowPane>
+                           </children>
+                        </VBox>
+                        <StackPane prefHeight="469.0" prefWidth="611.0">
+                           <children>
+                              <ImageView fx:id="imageView" fitHeight="470.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
+                              <Pane fx:id="pane" prefHeight="200.0" prefWidth="200.0" />
+                           </children>
+                        </StackPane>
                      </children>
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
                   </HBox>
-                  <HBox>
-                     <children>
-                        <JFXComboBox fx:id="buildingInput" prefHeight="27.0" prefWidth="150.0" promptText="Building">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </JFXComboBox>
-                        <JFXComboBox fx:id="typeInput" prefHeight="27.0" prefWidth="150.0" promptText="Type">
-                           <HBox.margin>
-                              <Insets left="50.0" />
-                           </HBox.margin>
-                        </JFXComboBox>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox>
-                     <children>
-                        <JFXTextField maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="X-Cord" fx:id="xCordInput">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </JFXTextField>
-                        <JFXTextField fx:id="yCordInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Y-Cord">
-                           <HBox.margin>
-                              <Insets left="50.0" />
-                           </HBox.margin>
-                        </JFXTextField>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox>
-                     <children>
-                        <JFXTextField fx:id="longNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Long Name">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </JFXTextField>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <FlowPane prefHeight="41.0" prefWidth="297.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#addNodeButton" text="Add Node">
-                           <FlowPane.margin>
-                              <Insets right="10.0" top="15.0" />
-                           </FlowPane.margin>
-                        </Button>
-                        <Button mnemonicParsing="false" onAction="#editNodeButton" text="Edit Node">
-                           <FlowPane.margin>
-                              <Insets right="10.0" top="15.0" />
-                           </FlowPane.margin>
-                        </Button>
-                        <Button mnemonicParsing="false" onAction="#deleteNodeButton" text="Delete Node">
-                           <FlowPane.margin>
-                              <Insets top="15.0" />
-                           </FlowPane.margin>
-                        </Button>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </FlowPane>
                </children>
                <padding>
                   <Insets left="20.0" right="20.0" top="20.0" />

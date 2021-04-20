@@ -11,8 +11,13 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -48,6 +53,9 @@ public class MapEditor {
     @FXML private JFXTextField shortNameInput;
     @FXML private StackPane stackPane;
     @FXML private FlowPane flowPane;
+
+    @FXML private ImageView imageView;
+    @FXML private Pane pane;
 
     @FXML // fx:id="exit"
     private Polygon exit;
@@ -103,6 +111,20 @@ public class MapEditor {
         exit.setOnMouseClicked(event -> {
             App app = new App();
             app.stop();
+        });
+
+        javafx.scene.image.Image image = new Image("edu/wpi/TeamE/maps/1.png");
+        imageView.setImage(image);
+
+        treeTable.setOnMouseClicked(event -> {
+            pane.getChildren().clear();
+            Node node = treeTable.getSelectionModel().getSelectedItem().getValue();
+            double scale = image.getWidth() / imageView.getFitWidth();
+            double xCoord = (double) node.getX() / scale;
+            double yCoord = (double) node.getY() / scale;
+            Circle circle = new Circle(xCoord, yCoord, 3, Color.RED);
+            Group g = new Group(circle);
+            pane.getChildren().add(g);
         });
 
     }

@@ -117,14 +117,19 @@ public class MapEditor {
         imageView.setImage(image);
 
         treeTable.setOnMouseClicked(event -> {
-            pane.getChildren().clear();
-            Node node = treeTable.getSelectionModel().getSelectedItem().getValue();
-            double scale = image.getWidth() / imageView.getFitWidth();
-            double xCoord = (double) node.getX() / scale;
-            double yCoord = (double) node.getY() / scale;
-            Circle circle = new Circle(xCoord, yCoord, 3, Color.RED);
-            Group g = new Group(circle);
-            pane.getChildren().add(g);
+            if (treeTable.getSelectionModel().getSelectedItem() != null) {
+                Node node = treeTable.getSelectionModel().getSelectedItem().getValue();
+                if (node.getX() == 0) {
+                    return;
+                }
+                pane.getChildren().clear();
+                double scale = image.getWidth() / imageView.getFitWidth();
+                double xCoord = (double) node.getX() / scale;
+                double yCoord = (double) node.getY() / scale;
+                Circle circle = new Circle(xCoord, yCoord, 3, Color.RED);
+                Group g = new Group(circle);
+                pane.getChildren().add(g);
+            }
         });
 
     }

@@ -240,10 +240,10 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> securityServiceCancelled = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
 
         //Adding request forms
-        addToTable("securityServ", securityServiceInProgress, securityServiceCompleted, securityServiceCancelled);
+        addToTable("security", securityServiceInProgress, securityServiceCompleted, securityServiceCancelled);
         addToTable("extTransport", externalPatientInProgress, externalPatientCompleted, externalPatientCancelled);
-        addToTable("floralRequests", floralFormInProgress, floralFormCompleted, floralFormCancelled);
-        addToTable("sanitationRequest", sanitationServicesInProgress, sanitationServicesCompleted, sanitationServicesCancelled);
+        addToTable("floral", floralFormInProgress, floralFormCompleted, floralFormCancelled);
+        addToTable("sanitation", sanitationServicesInProgress, sanitationServicesCompleted, sanitationServicesCancelled);
         addToTable("medDelivery", medicineDeliveryInProgress, medicineDeliveryCompleted, medicineDeliveryCancelled);
 
         //Adding children to sub-root nodes

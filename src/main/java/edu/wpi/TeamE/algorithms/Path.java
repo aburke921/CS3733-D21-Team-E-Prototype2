@@ -3,13 +3,14 @@ package edu.wpi.TeamE.algorithms;
 import java.util.Iterator;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Path Class
  * Is effectively a LinkedList
  */
-public class Path implements Comparable<Path>{
+public class Path implements Comparable<Path>, Iterable<Node>{
     //pathHead is a sentinel node
     private final Node pathHead;
 
@@ -79,20 +80,44 @@ public class Path implements Comparable<Path>{
         }
     }
 
+
+
     /**
-     * @return an iterator to loop through the path
-     *         if it is not empty it will return will return with the iterator
-     *         pointing at the first node, so when you call next the first time
-     *         you will receive the first node in the list
-     *         otherwise the iterator will point at the sentinel node
+     * @return an iterator for looping through Paths
      */
-    public Iterator<Node> iterator(){
-        Iterator<Node> itr = pathHead.iterator();
-        if(itr.hasNext()){
-            itr.next();
-        }
-        return itr;
+    @Override
+    public Iterator<Node> iterator() {
+        return iterator("ALL");
     }
+    public Iterator<Node> iterator(String floorNum){
+        return new NodeIterator(getStart(), floorNum);
+    }
+
+    private class NodeIterator implements Iterator<Node> {
+        Node cursor;
+        String floorNum;
+        private NodeIterator(Node _cursor, String _floorNum){
+            cursor = _cursor;
+            floorNum = _floorNum;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if(floorNum.equalsIgnoreCase("ALL")){
+                return cursor != null;
+            } else {
+                return cursor != null && cursor.get("floor").equalsIgnoreCase(floorNum);
+            }
+        }
+
+        @Override
+        public Node next() {
+            Node tmp = cursor;
+            cursor = cursor.getNext();
+            return tmp;
+        }
+    }
+
 
     /**
      * A method(no parameters) in our path class that returns a collection of
@@ -244,8 +269,22 @@ public class Path implements Comparable<Path>{
         return length;
     }
 
+    /**
+     * convenience method
+     * but is an unnecessary O(n) computation
+     * when iterators are pretty easy to use
+     * @return the path as a List
+     */
+    public List<Node> toList(){
+        List<Node> nodes = new LinkedList<>();
+        for(Iterator<Node> itr = iterator(); itr.hasNext(); nodes.add(itr.next()));
+        return nodes;
+    }
+
     @Override
     public int compareTo(Path p) {
         return Double.compare(length, p.length);
     }
+
+
 }

@@ -2245,24 +2245,35 @@ public class makeConnection {
 	 * @return 0 when the credentials does not match with any user in the database, and returns the userID otherwise
 	 */
 	public int userLogin(String email, String password) {
-		int userID = 0;
-		String userLoginS = "Select Count(*) As verification, userid From useraccount Where email = ? And password = ?";
-		try (PreparedStatement userLoginPS = connection.prepareStatement(userLoginS)) {
-			userLoginPS.setString(1, email);
-			userLoginPS.setString(2, password);
-			ResultSet userLoginRS = userLoginPS.executeQuery();
+		String userLoginS1 = "Select Count(*) As verification From userAccount Where email = ? And password = ?";
+		try (PreparedStatement userLoginPS1 = connection.prepareStatement(userLoginS1)) {
+			userLoginPS1.setString(1, email);
+			userLoginPS1.setString(2, password);
+			ResultSet userLoginRS1 = userLoginPS1.executeQuery();
 			int verification = 0;
-			if (userLoginRS.next()) {
-				verification = userLoginRS.getInt("verification");
-				userID = userLoginRS.getInt("userID");
+			if (userLoginRS1.next()) {
+				verification = userLoginRS1.getInt("verification");
 			}
-			userLoginRS.close();
+			userLoginRS1.close();
 			if(verification == 0){
-				return 0;
-			} else return userID;
+				return verification;
+			} else {
+				String userLoginS2 = "Select userId From userAccount Where email = ? And password = ?";
+				try (PreparedStatement userLoginPS2 = connection.prepareStatement(userLoginS2)) {
+					userLoginPS2.setString(1, email);
+					userLoginPS2.setString(2, password);
+					ResultSet userLoginRS2 = userLoginPS2.executeQuery();
+					int userID = 0;
+					if (userLoginRS2.next()) {
+						userID = userLoginRS2.getInt("userID");
+					}
+					userLoginRS2.close();
+					return userID;
+				}
+			}
 		} catch (SQLException e) {
 			// e.printStackTrace();
-			System.err.println("countNodeTypeOnFloor() error");
+			System.err.println("userLogin() error");
 		}
 		return 0;
 	}

@@ -1,12 +1,21 @@
 package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.TeamE.algorithms.Edge;
+import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
@@ -30,9 +39,11 @@ public class EdgeMapEditor {
     @FXML private JFXTextField startNodeIDInput;
     @FXML private  JFXTextField endNodeIDInput;
 
+    @FXML private ImageView imageView;
+    @FXML private Pane pane;
+
     @FXML // fx:id="exit"
     private Polygon exit;
-
 
     @FXML
     private void toNavigation(ActionEvent e) {
@@ -201,6 +212,31 @@ public class EdgeMapEditor {
         exit.setOnMouseClicked(event -> {
             App app = new App();
             app.stop();
+        });
+
+        javafx.scene.image.Image image = new Image("edu/wpi/TeamE/maps/1.png");
+        imageView.setImage(image);
+
+        treeTable.setOnMouseClicked(event -> {
+            if (treeTable.getSelectionModel().getSelectedItem() != null) {
+                Edge edge = treeTable.getSelectionModel().getSelectedItem().getValue();
+                if (edge.getId() == null) {
+                    return;
+                }
+                pane.getChildren().clear();
+                double scale = image.getWidth() / imageView.getFitWidth();
+                makeConnection connection = makeConnection.makeConnection();
+                double xCoordStart = (double) connection.getNodeInfo(edge.getStartNodeId()).getX() / scale;
+                double yCoordStart = (double) connection.getNodeInfo(edge.getStartNodeId()).getY() / scale;
+                double xCoordEnd = (double) connection.getNodeInfo(edge.getEndNodeId()).getX() / scale;
+                double yCoordEnd = (double) connection.getNodeInfo(edge.getEndNodeId()).getY() / scale;
+                Line line = new Line(xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);
+                line.setStrokeLineCap(StrokeLineCap.ROUND);
+                line.setStrokeWidth(3);
+                line.setStroke(Color.RED);
+                Group g = new Group(line);
+                pane.getChildren().add(g);
+            }
         });
 
     }

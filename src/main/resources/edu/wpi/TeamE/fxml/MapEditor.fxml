@@ -186,7 +186,7 @@
                         </VBox>
                         <StackPane prefHeight="469.0" prefWidth="611.0">
                            <children>
-                              <ImageView fx:id="imageView" fitHeight="470.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="imageView" fitHeight="470.0" fitWidth="605.0" pickOnBounds="true" preserveRatio="true" />
                               <Pane fx:id="pane" prefHeight="200.0" prefWidth="200.0" />
                            </children>
                         </StackPane>

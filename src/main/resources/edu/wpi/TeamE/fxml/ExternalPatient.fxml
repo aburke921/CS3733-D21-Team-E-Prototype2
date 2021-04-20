@@ -90,11 +90,18 @@
                      <children>
                         <VBox prefHeight="349.0" prefWidth="264.0">
                            <children>
-                              <JFXTextField fx:id="locationInput" prefHeight="27.0" prefWidth="289.0" promptText="Hospital Name">
+                              <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
+                                 <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                       <String fx:id="ambulance1" fx:value="Ambulance" />
+                                       <String fx:id="helicopter1" fx:value="Helicopter" />
+                                       <String fx:id="plane1" fx:value="Plane" />
+                                    </FXCollections>
+                                 </items>
                                  <VBox.margin>
-                                    <Insets bottom="10.0" top="20.0" />
+                                    <Insets top="20.0" />
                                  </VBox.margin>
-                              </JFXTextField>
+                              </JFXComboBox>
                               <JFXComboBox fx:id="requestTypeInput" prefHeight="27.0" prefWidth="295.0" promptText="Request Type">
                                  <VBox.margin>
                                     <Insets bottom="10.0" top="20.0" />

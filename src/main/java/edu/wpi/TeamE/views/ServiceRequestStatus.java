@@ -138,6 +138,7 @@ public class ServiceRequestStatus {
                 removeChildren(cancelled);
             }
             for (int i = 0; i < idArray.size(); i++) {
+                System.out.println("Shit its broken");
                 TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), locationArray.get(i), assigneeArray.get(i), statusArray.get(i)));
                 System.out.println(request.getValue().getId());
                 System.out.println(request.getValue().getId());

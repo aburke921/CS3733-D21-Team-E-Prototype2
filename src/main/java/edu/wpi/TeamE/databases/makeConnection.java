@@ -375,7 +375,7 @@ public class makeConnection {
 					"    roomID varchar(31) Not Null References node On Delete Cascade,\n" +
 					"    requestType varchar(100) Not Null, " +
 					"    severity varchar(30) Not Null,\n" +
-					"    patientID int Not Null,\n" +
+					"    patientID varchar(31) Not Null,\n" +
 					"    ETA varchar(100),\n" +
 					"    description varchar(5000)," +
 					"    Constraint requestTypeLimitExtTrans Check (requestType In ('Ambulance', 'Helicopter', 'Plane'))" +
@@ -902,7 +902,7 @@ public class makeConnection {
 			System.err.println("Error inserting into requests inside function addSanitationRequest()");
 		}
 
-		String insertSanitationRequest = "Insert Into sanitationrequest\n" +
+		String insertSanitationRequest = "Insert Into sanitationRequest\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests), ?, ?, ?, ?, ?)";
 
@@ -925,7 +925,7 @@ public class makeConnection {
 	 * This function needs to add a external patient form to the table for external patient forms
 	 * @param //form this is the form that we will create and send to the database
 	 */
-	public void addExternalPatientRequest(int userID, String asignee, String roomID, String requestType, String severity, int patientID, String ETA, String description) {
+	public void addExternalPatientRequest(int userID, String asignee, String roomID, String requestType, String severity, String patientID, String ETA, String description) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
@@ -949,7 +949,7 @@ public class makeConnection {
 			prepState.setString(1, roomID);
 			prepState.setString(2, requestType);
 			prepState.setString(3, severity);
-			prepState.setInt(4, patientID);
+			prepState.setString(4, patientID);
 			prepState.setString(5, ETA);
 			prepState.setString(6, description);
 
@@ -1224,15 +1224,15 @@ public class makeConnection {
 
 
 		//RequestID: 39 - 47
-		addExternalPatientRequest(27,"Ciaran Goodwin","EEXIT00101", "Ambulance", "High Severity", 12334567, "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
-		addExternalPatientRequest(30,"Lola Bond","EEXIT00101", "Ambulance","Low Severity", 4093380, "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
-		addExternalPatientRequest(22,"Samantha Russell","FDEPT00501", "Helicopter","High Severity", 92017693, "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
-		addExternalPatientRequest(20,"Caleb Chapman","FDEPT00501", "Helicopter","High Severity", 93754789, "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
-		addExternalPatientRequest(24,"Dale Coates","EEXIT00101", "Ambulance","Medium Severity", 417592, "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
-		addExternalPatientRequest(28,"Jerry Myers","FDEPT00501", "Helicopter", "High Severity", 44888936, "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
-		addExternalPatientRequest(24,"Betty Warren","EEXIT00101", "Ambulance","Medium Severity", 33337861, "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
-		addExternalPatientRequest(27,"Maxim Rawlings","EEXIT00101", "Ambulance","Low Severity", 40003829, "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
-		addExternalPatientRequest(24,"Alan Singh","FDEPT00501", "Plane","High Severity", 38739983, "12 hours", "Heart transplant organ in route");
+		addExternalPatientRequest(27,"Ciaran Goodwin","EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
+		addExternalPatientRequest(30,"Lola Bond","EEXIT00101", "Ambulance","Low Severity", "4093380", "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
+		addExternalPatientRequest(22,"Samantha Russell","FDEPT00501", "Helicopter","High Severity", "92017693", "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
+		addExternalPatientRequest(20,"Caleb Chapman","FDEPT00501", "Helicopter","High Severity", "93754789", "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
+		addExternalPatientRequest(24,"Dale Coates","EEXIT00101", "Ambulance","Medium Severity", "417592", "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
+		addExternalPatientRequest(28,"Jerry Myers","FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
+		addExternalPatientRequest(24,"Betty Warren","EEXIT00101", "Ambulance","Medium Severity", "33337861", "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
+		addExternalPatientRequest(27,"Maxim Rawlings","EEXIT00101", "Ambulance","Low Severity", "40003829", "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
+		addExternalPatientRequest(24,"Alan Singh","FDEPT00501", "Plane","High Severity", "38739983", "12 hours", "Heart transplant organ in route");
 
 
 		changeRequestStatus(40, "complete");
@@ -1243,7 +1243,7 @@ public class makeConnection {
 
 
 		//SuperAdmin:
-		String insertUser = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin')";
+		String insertUser = "Insert Into userAccount Values (0, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin')";
 		try {
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(insertUser);

@@ -44,6 +44,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServiceRequestStatus {
+    int userID = App.userID;
 
     @FXML
     JFXTreeTableView serviceRequestTable;
@@ -115,13 +116,13 @@ public class ServiceRequestStatus {
      */
     private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
         makeConnection connection = makeConnection.makeConnection();
-        ArrayList<String> idArray = connection.getRequestIDs(tableName, App.userID);
+        ArrayList<String> idArray = connection.getRequestIDs(tableName, -1);
         for(int j = 0; j < idArray.size(); j++) {
             System.out.println(idArray.get(j));
         }
-        ArrayList<String> statusArray = connection.getRequestStatus(tableName, App.userID);
-        ArrayList<String> locationArray = connection.getRequestLocations(tableName, App.userID);
-        ArrayList<String> assigneeArray = connection.getRequestAssignees(tableName, App.userID);
+        ArrayList<String> statusArray = connection.getRequestStatus(tableName, -1);
+        ArrayList<String> locationArray = connection.getRequestLocations(tableName, -1);
+        ArrayList<String> assigneeArray = connection.getRequestAssignees(tableName, -1);
         if(idArray.size() > 0) {
             System.out.println("Array size" + idArray.size());
             if (!inProgress.getChildren().isEmpty()) {

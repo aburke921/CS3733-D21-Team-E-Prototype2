@@ -21,8 +21,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-
-  <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.MapEditor">
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.MapEditor">
       <children>
       <AnchorPane id="app-bar-top">
          <children>
@@ -93,14 +92,43 @@
                   <TreeTableView fx:id="treeTable" prefHeight="200.0" prefWidth="341.0" />
                   <HBox>
                      <children>
-                        <JFXTextField fx:id="longNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Long Name">
+                        <JFXTextField fx:id="shortNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Short Name">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
                         </JFXTextField>
-                        <JFXTextField maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="X-Cord" fx:id="xCordInput">
+                        <JFXComboBox fx:id="floorInput" prefHeight="27.0" prefWidth="150.0" promptText="Floor">
                            <HBox.margin>
                               <Insets left="50.0" />
+                           </HBox.margin>
+                        </JFXComboBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <JFXComboBox fx:id="buildingInput" prefHeight="27.0" prefWidth="150.0" promptText="Building">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </JFXComboBox>
+                        <JFXComboBox fx:id="typeInput" prefHeight="27.0" prefWidth="150.0" promptText="Type">
+                           <HBox.margin>
+                              <Insets left="50.0" />
+                           </HBox.margin>
+                        </JFXComboBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <JFXTextField maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="X-Cord" fx:id="xCordInput">
+                           <HBox.margin>
+                              <Insets />
                            </HBox.margin>
                         </JFXTextField>
                         <JFXTextField fx:id="yCordInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Y-Cord">
@@ -115,26 +143,11 @@
                   </HBox>
                   <HBox>
                      <children>
-                        <JFXTextField fx:id="shortNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Short Name">
+                        <JFXTextField fx:id="longNameInput" maxWidth="-Infinity" prefHeight="27.0" prefWidth="150.0" promptText="Long Name">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
                         </JFXTextField>
-                        <JFXComboBox fx:id="floorInput" prefHeight="27.0" prefWidth="150.0" promptText="Floor">
-                           <HBox.margin>
-                              <Insets left="50.0" />
-                           </HBox.margin>
-                        </JFXComboBox>
-                        <JFXComboBox fx:id="typeInput" prefHeight="27.0" prefWidth="150.0" promptText="Type">
-                           <HBox.margin>
-                              <Insets left="50.0" />
-                           </HBox.margin>
-                        </JFXComboBox>
-                        <JFXComboBox fx:id="buildingInput" prefHeight="27.0" prefWidth="150.0" promptText="Building">
-                           <HBox.margin>
-                              <Insets left="50.0" />
-                           </HBox.margin>
-                        </JFXComboBox>
                      </children>
                      <VBox.margin>
                         <Insets top="20.0" />

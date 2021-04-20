@@ -41,6 +41,7 @@ Create Table userAccount
 	userType  varchar(31),                 -- only allow visitor permission from java program for security reasons
 	firstName varchar(31),                 -- get displayed in app
 	lastName  varchar(31),                 -- get displayed in app
+	Constraint userIDLimit Check ( userID != 0 ),
 	Constraint passwordLimit Check (
 		-- password Like '%[a-z]%[a-z]%' And
 		-- password Like '%[A-Z]%[A-Z]%' And
@@ -54,7 +55,7 @@ Create Table userAccount
 
 -- userLogin()
 
-Select Count(*) As verification
+Select Count(*) As verification, userID
 From userAccount
 Where email = ?
   And password = ?;
@@ -92,10 +93,10 @@ Create Table patient
 
 Create Table requests
 (
-	requestID    int Primary Key,
-	userID       int References userAccount On Delete Cascade,
-	creationTime timestamp,
-	requestType  varchar(31),
+	requestID     int Primary Key,
+	userID        int References userAccount On Delete Cascade,
+	creationTime  timestamp,
+	requestType   varchar(31),
 	requestStatus varchar(10),
 	Constraint requestTypeLimit Check (requestType In
 	                                   ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
@@ -182,7 +183,7 @@ Create Table securityServ
 	level     varchar(31),
 	urgency   varchar(31) Not Null,
 	Constraint urgencyTypeLimit Check (urgency In
-	                                    ('Low', 'Medium', 'High', 'Critical'))
+	                                   ('Low', 'Medium', 'High', 'Critical'))
 );
 
 Create Table medDelivery
@@ -209,14 +210,10 @@ Create Table extTransport
 
 
 
-
-
 Select requests.requestStatus
-From requests, floralRequests
+From requests,
+     floralRequests
 Where requests.requestID = floralRequests.requestID;
-
-
-
 
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1

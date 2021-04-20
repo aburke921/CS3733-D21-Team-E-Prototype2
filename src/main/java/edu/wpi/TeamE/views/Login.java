@@ -15,21 +15,23 @@ public class Login {
     @FXML private JFXTextField emailInput;
     @FXML private JFXTextField passwordInput;
 
-    public void submitLogin() {
-        boolean bool = false;
-        makeConnection connection = makeConnection.makeConnection();
-        if(emailInput != null && passwordInput != null) {
-            bool = connection.userLogin(emailInput.getText(), passwordInput.getText());
-        } if(bool == true) {
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-                App.getPrimaryStage().getScene().setRoot(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        } else {
-            System.out.println("User not in System");
-    }
+	public void submitLogin() {
+		int userID = 0;
+		makeConnection connection = makeConnection.makeConnection();
+		if (emailInput != null && passwordInput != null) {
+			userID = connection.userLogin(emailInput.getText(), passwordInput.getText());
+			App.userID = userID; // app will be logged in as guest if userID = 0
+		}
+		if (userID != 0) {
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+				App.getPrimaryStage().getScene().setRoot(root);
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		} else {
+			System.out.println("User not in System");
+		}
 
 }
 

@@ -16,9 +16,8 @@ public class makeConnection {
 
 	// static variable singleInstance of type SingleConnection
 	public static makeConnection singleInstance = null;
-	private MapEditor mapEditor = new MapEditor();
-
 	public Connection connection;
+	//private MapEditor mapEditor = new MapEditor();
 
 	// private constructor restricted to this class itself
 	public makeConnection() {
@@ -190,14 +189,16 @@ public class makeConnection {
 	public void createUserAccountTable() {
 		try {
 			Statement stmt = connection.createStatement();
-			String sqlQuery = "Create Table userAccount(" +
-					"userID    int Primary Key, " +
-					"email     varchar(31) Unique, " +
-					"password  varchar(31), " +
-					"userType  varchar(31), " +
-					"firstName varchar(31), " +
-					"lastName  varchar(31), " +
-					"creationTime timestamp, " +
+			String sqlQuery = "Create Table userAccount (" +
+					"userID    Int Primary Key," +
+					"email     Varchar(31) Unique Not Null," +
+					"password  Varchar(31)        Not Null," +
+					"userType  Varchar(31)," +
+					"firstName Varchar(31)," +
+					"lastName  Varchar(31)," +
+					"Constraint userIDLimit Check ( userID != 0 )," +
+					"Constraint passwordLimit Check (Length(password) >= 8 )," +
+					"creationTime Timestamp, " +
 					"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin')))";
 			stmt.execute(sqlQuery);
 			createUserAccountTypeViews();
@@ -771,17 +772,17 @@ public class makeConnection {
 
 	/**
 	 * Adds a node with said data to the database
-	 * @param nodeID this is a unique identifier for the each node. Every node must contain a nodeID.
-	 * @param xCoord this is the X-Coordinate/pixel location of the node on the map of the hospital.
-	 * @param yCoord this is the Y-Coordinate/pixel location of the node on the map of the hospital.
-	 * @param floor this is the floor of the hospital that the node is located on. The available options are: "1", "2", "3", "L1", "L2"
-	 * @param building this is the building of the hospital that the node is located in. The available options are: "BTM", "45 Francis", "Tower",
-	 *                   "15 Francis", "Shapiro", "Parking".
-	 * @param nodeType this is the type room/location that the node is specifying. The available options are: "PARK" (parking), "EXIT" (exit),
-	 *                    "WALK" (sidewalk/out door walkway), "HALL' (indoor walkway), "CONF" (conference room), "DEPT" (department room), "ELEV" (elevator),
-	 *                    "INFO" (information), "LABS" (lab testing/results room), "REST" (rest areas/sitting areas), "RETL" (retail/food and shopping),
-	 *                    "STAI" (stairs), "SERV" (services), "BATH" (bathrooms).
-	 * @param longName this is the long version/more descriptive name of the node/location/room
+	 * @param nodeID    this is a unique identifier for the each node. Every node must contain a nodeID.
+	 * @param xCoord    this is the X-Coordinate/pixel location of the node on the map of the hospital.
+	 * @param yCoord    this is the Y-Coordinate/pixel location of the node on the map of the hospital.
+	 * @param floor     this is the floor of the hospital that the node is located on. The available options are: "1", "2", "3", "L1", "L2"
+	 * @param building  this is the building of the hospital that the node is located in. The available options are: "BTM", "45 Francis", "Tower",
+	 *                  "15 Francis", "Shapiro", "Parking".
+	 * @param nodeType  this is the type room/location that the node is specifying. The available options are: "PARK" (parking), "EXIT" (exit),
+	 *                  "WALK" (sidewalk/out door walkway), "HALL' (indoor walkway), "CONF" (conference room), "DEPT" (department room), "ELEV" (elevator),
+	 *                  "INFO" (information), "LABS" (lab testing/results room), "REST" (rest areas/sitting areas), "RETL" (retail/food and shopping),
+	 *                  "STAI" (stairs), "SERV" (services), "BATH" (bathrooms).
+	 * @param longName  this is the long version/more descriptive name of the node/location/room
 	 * @param shortName this is the short/nickname of the node/location/room
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
@@ -814,9 +815,9 @@ public class makeConnection {
 
 	/**
 	 * Adds an edge with said data to the database. Both startNode and endNode has to already exist in node table
-	 * @param edgeID this is a unique identifier for the edge connection. Every edge must contain an edgeID.
+	 * @param edgeID    this is a unique identifier for the edge connection. Every edge must contain an edgeID.
 	 * @param startNode this is a nodeID in which the edge connection starts.
-	 * @param endNode this is a nodeID in which the edge connection ends.
+	 * @param endNode   this is a nodeID in which the edge connection ends.
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 	public int addEdge(String edgeID, String startNode, String endNode) {
@@ -842,10 +843,10 @@ public class makeConnection {
 
 	/**
 	 * This is allows a visitor to create a user account giving them more access to the certain requests available
-	 * @param email this is the user's email that is connected to the account the are trying to create
-	 * @param password this is a password that the user will use to log into the account
+	 * @param email     this is the user's email that is connected to the account the are trying to create
+	 * @param password  this is a password that the user will use to log into the account
 	 * @param firstName this is the user's first name that is associated with the account
-	 * @param lastName this is the user's last name that is associated with the account
+	 * @param lastName  this is the user's last name that is associated with the account
 	 */
 	public void addUserAccount(String email, String password, String firstName, String lastName) {
 		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp)";
@@ -866,11 +867,11 @@ public class makeConnection {
 	 * This is allows an administrator or someone with access to the database to be able to create a user account
 	 * with more permissions giving them more access to the certain requests available. This is function should not
 	 * be used while the app is being run.
-	 * @param email this is the user's email that is connected to the account the are trying to create
-	 * @param password this is a password that the user will use to log into the account
-	 * @param userType this is the type of account that the individual is being assigned to
+	 * @param email     this is the user's email that is connected to the account the are trying to create
+	 * @param password  this is a password that the user will use to log into the account
+	 * @param userType  this is the type of account that the individual is being assigned to
 	 * @param firstName this is the user's first name that is associated with the account
-	 * @param lastName this is the user's last name that is associated with the account
+	 * @param lastName  this is the user's last name that is associated with the account
 	 */
 	public void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
 		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp)";
@@ -890,7 +891,6 @@ public class makeConnection {
 
 	/**
 	 * This adds a sanitation services form to the table specific for it
-	 *
 	 * @param //form this is the form being added to the table
 	 */
 	public void addSanitationRequest(int userID, String assignee, String roomID, String sanitationType, String description, String urgency, String signature) {
@@ -928,7 +928,6 @@ public class makeConnection {
 
 	/**
 	 * This function needs to add a external patient form to the table for external patient forms
-	 *
 	 * @param //form this is the form that we will create and send to the database
 	 */
 	public void addExternalPatientRequest(int userID, String asignee, String roomID, String requestType, String severity, int patientID, String ETA, String description) {
@@ -970,7 +969,6 @@ public class makeConnection {
 
 	/**
 	 * This adds a floral request to the database that the user is making
-	 *
 	 * @param userID        this is the username that the user uses to log into the account
 	 * @param RoomNodeID    this is the nodeID/room the user is sending the request to
 	 * @param recipientName this is the name of the individual they want the flowers to be addressed to
@@ -996,9 +994,7 @@ public class makeConnection {
 		}
 
 
-		String insertFloralRequest = "Insert Into floralRequests\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests), ?, ?, ?, ?, ?, ?)";
+		String insertFloralRequest = "Insert Into floralRequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
 			prepState.setString(1, RoomNodeID);
@@ -1040,14 +1036,11 @@ public class makeConnection {
 
 	/**
 	 * This adds a medicine request form to the table for medicine request forms
-	 *
 	 * @param //form this is the form being added
 	 */
 	public void addMedicineRequest(int userID, String asignee, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
 
-		String insertRequest = "Insert Into requests\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'medDelivery', 'inProgress', ?)";
+		String insertRequest = "Insert Into requests Values ((Select Count(*) From requests) + 1, ?, Current Timestamp, 'medDelivery', 'inProgress', ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
@@ -1060,9 +1053,7 @@ public class makeConnection {
 		}
 
 
-		String insertMedRequest = "Insert Into medDelivery\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests), ?, ?, ?, ?, ?, ?)";
+		String insertMedRequest = "Insert Into meddelivery Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
 			prepState.setString(1, roomID);
@@ -1082,7 +1073,6 @@ public class makeConnection {
 
 	/**
 	 * This adds a security form to the table for security service form
-	 *
 	 * @param //form this is the form added to the table
 	 */
 	public void addSecurityRequest(int userID, String asignee, String roomID, String level, String urgency) {
@@ -1100,9 +1090,7 @@ public class makeConnection {
 			System.err.println("Error inserting into requests inside function addSecurityRequest()");
 		}
 
-		String insertSecurityRequest = "Insert Into securityServ\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests), ?, ?, ?)";
+		String insertSecurityRequest = "Insert Into securityserv Values ((Select Count(*) From requests), ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertSecurityRequest)) {
 			prepState.setString(1, roomID);
@@ -1192,7 +1180,6 @@ public class makeConnection {
 		addSanitationRequest(29,"Herman Bull", "IREST00303", "Trash Removal", "Trash can full. Another one is available so don't rush.", "Low", "Andrew Guerrero");
 		addSanitationRequest(22,"Umar Rojas", "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel");
 		addSanitationRequest(23,"Reuben", "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
-
 
 
 		changeRequestStatus(11, "canceled");
@@ -1778,7 +1765,6 @@ public class makeConnection {
 
 	/**
 	 * change a request's status to complete, canceled or inProgress
-	 *
 	 * @param requestID is the generated ID of the request
 	 * @param status    is the status that you want to change it to
 	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
@@ -1809,7 +1795,6 @@ public class makeConnection {
 
 	/**
 	 * gets a node's all attributes given nodeID
-	 *
 	 * @return a Node object with the matching nodeID
 	 */
 	public Node getNodeInfo(String nodeID) {
@@ -1843,7 +1828,6 @@ public class makeConnection {
 
 	/**
 	 * Given a NodeID, gives the xCoord, yCoord, Floor and Type of that node from Nodes
-	 *
 	 * @param nodeID is the nodeID of the nodes you want info from
 	 * @return a Node with only xCoord, yCoord, floor and nodeType not null
 	 */
@@ -1874,7 +1858,6 @@ public class makeConnection {
 
 	/**
 	 * gets edge information for all edges containing given nodeID
-	 *
 	 * @param nodeID
 	 * @return Pair<Integer, String> map with edge information
 	 */
@@ -1924,7 +1907,6 @@ public class makeConnection {
 
 	/**
 	 * gets all Nodes (each row in node table)
-	 *
 	 * @return ArrayList of Node objects
 	 * need Node constructor from UI/UX team
 	 */
@@ -1966,7 +1948,7 @@ public class makeConnection {
 	public ObservableList<String> getAllNodeLongNames() {
 		ObservableList<String> listOfNodeLongNames =  FXCollections.observableArrayList();
 
-		String deleteNodeS = "SELECT LONGNAME FROM node";
+		String deleteNodeS = "Select longname From node";
 		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
 
 			ResultSet rset = deleteNodePS.executeQuery();
@@ -1989,7 +1971,6 @@ public class makeConnection {
 
 	/**
 	 * gets all Nodes that have the given FLOOR value
-	 *
 	 * @param floorName the value to check for in FLOOR column
 	 * @return ArrayList of Node objects
 	 */
@@ -2025,7 +2006,6 @@ public class makeConnection {
 
 	/**
 	 * Gets all node long names for a specified FLOOR column value.
-	 *
 	 * @param floorName the value to check for in FLOOR column
 	 * @return ObservableList of node long names.
 	 */
@@ -2230,14 +2210,14 @@ public class makeConnection {
 	// User System Stuff
 
 	/**
-	 * Function for logging a user in with their unique email and password, currently can only check for if correct or not
-	 *
-	 * @param email is the user's entered email
+	 * Function for logging a user in with their unique email and password
+	 * @param email    is the user's entered email
 	 * @param password is the user's entered password
-	 * @return true when the credentials match with a user in the database, and false otherwise
+	 * @return 0 when the credentials does not match with any user in the database, and returns the userID otherwise
 	 */
-	public boolean userLogin(String email, String password) {
-		String userLoginS = "Select Count(*) As verification From useraccount Where email = ? And password = ?";
+	public int userLogin(String email, String password) {
+		int userID = 0;
+		String userLoginS = "Select Count(*) As verification, userid From useraccount Where email = ? And password = ?";
 		try (PreparedStatement userLoginPS = connection.prepareStatement(userLoginS)) {
 			userLoginPS.setString(1, email);
 			userLoginPS.setString(2, password);
@@ -2245,17 +2225,18 @@ public class makeConnection {
 			int verification = 0;
 			if (userLoginRS.next()) {
 				verification = userLoginRS.getInt("verification");
+				userID = userLoginRS.getInt("userID");
 			}
 			userLoginRS.close();
 			if(verification == 0){
 				//mapEditor.errorPopup("Invalid username or password!");
-			}
-			return verification == 1;
+				return 0;
+			} else return userID;
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			System.err.println("countNodeTypeOnFloor() error");
 		}
-		return false;
+		return 0;
 	}
 
 	/**

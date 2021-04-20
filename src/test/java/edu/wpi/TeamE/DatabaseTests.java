@@ -626,8 +626,8 @@ public class DatabaseTests {
 	public void testGetRequestStatus() {
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addExternalPatientRequest(1, "bob","BW", "Ambulance", "severe", 123, "15 mins", "headache");
-		connection.addExternalPatientRequest(1, "bob","BW", "Ambulance", "severe", 123, "15 mins", "migraine");
+		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "headache");
+		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "migraine");
 		connection.addFloralRequest(1, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		ArrayList<String> returnedStatus = new ArrayList<String>();
@@ -648,8 +648,8 @@ public class DatabaseTests {
 
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addExternalPatientRequest(1, "bob","BW", "Ambulance", "severe", 123, "15 mins", "headache");
-		connection.addExternalPatientRequest(1, "bob","BW", "Ambulance", "severe", 123, "15 mins", "migraine");
+		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "headache");
+		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "migraine");
 		connection.addFloralRequest(1, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		ArrayList<String> returnedIDs = new ArrayList<String>();
@@ -849,9 +849,24 @@ public class DatabaseTests {
 		connection.addNode("BDEPT00402",2439,902,"2","45 Francis","DEPT","Jen Center for Primary Care","DEPT B0402");
 		connection.addNode("CCONF002L1",2665,1043,"L1","45 Francis","CONF","Medical Records Conference Room Floor L1","Conf C002L1");
 
+		//External transport:
+		connection.addNode("FDEPT00501",2128,1300,"1","Tower","DEPT","Emergency Department","Emergency");
+		connection.addNode("EEXIT00101",2275,785,"1","45 Francis","EXIT","Ambulance Parking Exit Floor 1","AmbExit 1");
 
 		connection.addDataForPresentation();
 	}
 
+//	@Test
+//	public void testTables(){
+////		try {
+////			connection.deleteAllTables();
+////			connection.createNodeTable();
+////		} catch (Exception e) {
+////			connection.createNodeTable();
+////		}
+//
+//		assertTrue(connection.checkIfTablesExist());
+//
+//	}
 
 }

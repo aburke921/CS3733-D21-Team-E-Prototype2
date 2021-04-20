@@ -214,26 +214,38 @@ public class EdgeMapEditor {
             app.stop();
         });
 
+        //set image to map
         javafx.scene.image.Image image = new Image("edu/wpi/TeamE/maps/1.png");
         imageView.setImage(image);
 
+        //when tree table is clicked
         treeTable.setOnMouseClicked(event -> {
+            //make sure that a edge is actually selected
             if (treeTable.getSelectionModel().getSelectedItem() != null) {
                 Edge edge = treeTable.getSelectionModel().getSelectedItem().getValue();
                 if (edge.getId() == null) {
                     return;
                 }
+                //clear the map
                 pane.getChildren().clear();
+                //calculate scaling based on image and imageView size
                 double scale = image.getWidth() / imageView.getFitWidth();
+                //connect to database
                 makeConnection connection = makeConnection.makeConnection();
+
+                //Retrieve the x and y coordinates of the nodes connected to the edge
                 double xCoordStart = (double) connection.getNodeInfo(edge.getStartNodeId()).getX() / scale;
                 double yCoordStart = (double) connection.getNodeInfo(edge.getStartNodeId()).getY() / scale;
                 double xCoordEnd = (double) connection.getNodeInfo(edge.getEndNodeId()).getX() / scale;
                 double yCoordEnd = (double) connection.getNodeInfo(edge.getEndNodeId()).getY() / scale;
+
+                //Create a line using those coordinates
                 Line line = new Line(xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);
                 line.setStrokeLineCap(StrokeLineCap.ROUND);
                 line.setStrokeWidth(3);
                 line.setStroke(Color.RED);
+
+                //display the line on the map
                 Group g = new Group(line);
                 pane.getChildren().add(g);
             }

@@ -113,20 +113,28 @@ public class MapEditor {
             app.stop();
         });
 
+        //set image to map
         javafx.scene.image.Image image = new Image("edu/wpi/TeamE/maps/1.png");
         imageView.setImage(image);
 
+        //when tree table is clicked
         treeTable.setOnMouseClicked(event -> {
+            //make sure that a node is actually selected
             if (treeTable.getSelectionModel().getSelectedItem() != null) {
                 Node node = treeTable.getSelectionModel().getSelectedItem().getValue();
                 if (node.getX() == 0) {
                     return;
                 }
+                //clear the map
                 pane.getChildren().clear();
+                //calculate scaling based on image and imageView size
                 double scale = image.getWidth() / imageView.getFitWidth();
+                //Get the x and y coordinates of the node
                 double xCoord = (double) node.getX() / scale;
                 double yCoord = (double) node.getY() / scale;
+                //Create a circle using those coordinates
                 Circle circle = new Circle(xCoord, yCoord, 3, Color.RED);
+                //display the circle on the map
                 Group g = new Group(circle);
                 pane.getChildren().add(g);
             }

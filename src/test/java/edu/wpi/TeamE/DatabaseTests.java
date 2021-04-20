@@ -626,8 +626,10 @@ public class DatabaseTests {
 	public void testGetRequestStatus() {
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
 		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "headache");
 		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "migraine");
+		connection.addExternalPatientRequest(2, "bob","test", "Ambulance", "severe", 123, "15 mins", "migraine");
 		connection.addFloralRequest(1, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		ArrayList<String> returnedStatus = new ArrayList<String>();
@@ -637,6 +639,29 @@ public class DatabaseTests {
 		correctStatus.add("inProgress");
 
 		returnedStatus = connection.getRequestStatus("extTransport", 1);
+
+		assertTrue(correctStatus.equals(returnedStatus));
+	}
+
+	@Test
+	@DisplayName("testGetRequestStatus2")
+	public void testGetRequestStatus2() {
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "headache");
+		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "migraine");
+		connection.addExternalPatientRequest(2, "bob","test", "Ambulance", "severe", 123, "15 mins", "migraine");
+		connection.addFloralRequest(1, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
+
+		ArrayList<String> returnedStatus = new ArrayList<String>();
+		ArrayList<String> correctStatus = new ArrayList<String>();
+
+		correctStatus.add("inProgress");
+		correctStatus.add("inProgress");
+		correctStatus.add("inProgress");
+
+		returnedStatus = connection.getRequestStatus("extTransport", -1);
 
 		assertTrue(correctStatus.equals(returnedStatus));
 	}

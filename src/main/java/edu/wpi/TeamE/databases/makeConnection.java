@@ -2277,14 +2277,14 @@ public class makeConnection {
 		try  {
 			Statement stmt = connection.createStatement();
 			String requestStatus;
-			requestStatus = "Select requests.requestStatus From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+
 			if (userID != -1) {
 
-				requestStatus = "Select longName From (Select roomID From (Select * From requests where creatorID = " + userID
-						+ ") thing, " + tableName + " where thing.requestID = " + tableName + ".requestID) that, node where that.roomID = node.nodeID";
+				requestStatus = "Select requestStatus From (Select * From requests where creatorID = " + userID
+						+ ") thing, " + tableName + " where thing.requestID = " + tableName + ".requestID";
 			}
 			else{
-				requestStatus = "Select longName From node, " + tableName + " where node.nodeID = " + tableName + ".roomID";
+				requestStatus = "Select requests.requestStatus From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
 			}
 			ResultSet rset = stmt.executeQuery(requestStatus);
 			while(rset.next()){

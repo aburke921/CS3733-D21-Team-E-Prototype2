@@ -34,10 +34,9 @@ public class SanitationServices extends ServiceRequestFormComponents {
   @FXML private JFXComboBox<String> Severity;
   @FXML private JFXButton cancel;
   @FXML private JFXButton submit;
+  public SanitationServicesForm request;
   RequiredFieldValidator validator = new RequiredFieldValidator();
   makeConnection connection = makeConnection.makeConnection();
-  @FXML // fx:id="pane"
-  private Pane pane = new Pane();
 
 
   /**
@@ -93,6 +92,8 @@ public class SanitationServices extends ServiceRequestFormComponents {
       String nodeID = nodeIDS.get(nodeIDIndex);
       //connection.addSanitationRequest(15,nodeID, serviceKind,details,severity,signature);
       System.out.println(nodeID);
+
+      connection.addSanitationRequest(15,"bob", room+num, serviceKind,details,"",signature);
       super.handleButtonSubmit(actionEvent);
       //Setting up all variables to be entered
     }

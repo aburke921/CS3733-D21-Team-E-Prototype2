@@ -160,6 +160,31 @@ public class ServiceRequestStatus {
         System.out.println(test.getChildren().size());
     }
 
+    public void checkoutRequest(TreeTableView<ServiceRequestForm> table) {
+
+        String typeOfForm = table.getSelectionModel().getSelectedItem().getParent().getValue().getId();
+
+        if(typeOfForm.equals("External Patient Form")) {
+
+        }
+        if(typeOfForm.equals("Floral Form")) {
+
+        }
+        if(typeOfForm.equals("Medicine Delivery Form")) {
+
+        }
+        if(typeOfForm.equals("Sanitation Service Form")) {
+
+        }
+        if(typeOfForm.equals("Security Services Form")) {
+
+        }
+    }
+
+    public void checkRequestButton(ActionEvent e) {
+        checkoutRequest(serviceRequestTable);
+    }
+
 
     public void prepareTable(TreeTableView serviceRequestTable) {
         if(serviceRequestTable.getRoot() == null) {

@@ -49,6 +49,7 @@ public class MapEditor {
     @FXML private JFXComboBox floorInput;
     @FXML private JFXComboBox typeInput;
     @FXML private JFXComboBox buildingInput;
+    @FXML private JFXComboBox idDropDown;
     @FXML private JFXTextField longNameInput;
     @FXML private JFXTextField shortNameInput;
     @FXML private StackPane stackPane;
@@ -65,6 +66,7 @@ public class MapEditor {
      */
     @FXML
     void initialize() {
+        makeConnection connection = makeConnection.makeConnection();
         prepareNodes(treeTable);
         //Creating Type dropdown
         ArrayList<String> nodeTypeArrayList = new ArrayList<String>();
@@ -102,11 +104,17 @@ public class MapEditor {
         nodeBuildingArrayList.add("Shapiro");
         ObservableList<String> listOfBuildings = FXCollections.observableArrayList();
         listOfBuildings.addAll(nodeBuildingArrayList);
-
+        //Creating ID Dropdown
+        ArrayList<String> nodeIDArrayList = new ArrayList<String>();
+        nodeIDArrayList = connection.getListOfNodeIDS();
+        ObservableList<String> listOfIDS = FXCollections.observableArrayList();
+        listOfIDS.addAll(nodeIDArrayList);
         //add ObservableLists to dropdowns
         typeInput.setItems(listOfType);
         floorInput.setItems(listOfFloors);
         buildingInput.setItems(listOfBuildings);
+        idDropDown.setItems(listOfIDS);
+
 
         exit.setOnMouseClicked(event -> {
             App app = new App();
@@ -232,6 +240,7 @@ public class MapEditor {
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
             table.getColumns().add(column8);
         }
+        treeTable.setShowRoot(false);
         if (table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
             table.getRoot().getChildren().remove(0, array.size() - 1);
         }
@@ -260,43 +269,48 @@ public class MapEditor {
      * @param table this is the table of nodes that is having a node edited
      */
     public void editNode(TreeTableView<Node> table) {
-        if (table.getSelectionModel().getSelectedItem() != null) {
-            String nodeID = table.getSelectionModel().getSelectedItem().getValue().get("id");
-            Integer xVal = null;
-            Integer yVal = null;
-            String floor = null;
-            String longName = null;
-            String shortName = null;
-            String type = null;
-            String building = null;
-            if (floorInput.getValue() != null) {
-                floor = floorInput.getValue().toString();
-            }
-            if (!longNameInput.getText().equals("")) {
-                longName = longNameInput.getText();
-            }
-            if (!shortNameInput.getText().equals("")) {
-                shortName = shortNameInput.getText();
-            }
-            if (typeInput.getValue() != null) {
-                type = typeInput.getValue().toString();
-            }
-            if (buildingInput.getValue() != null) {
-                building = buildingInput.getValue().toString();
-            }
-            if (!xCordInput.getText().equals("")) {
-                xVal = Integer.parseInt(xCordInput.getText());
-                xVal = Integer.valueOf(xVal);
-            }
-            if (!yCordInput.getText().equals("")) {
-                yVal = Integer.parseInt(yCordInput.getText());
-                yVal = Integer.valueOf(yVal);
-            }
-
-
-            makeConnection connection = makeConnection.makeConnection();
-            connection.modifyNode(nodeID, xVal, yVal, floor, building, type, longName, shortName);
+        String nodeID = null;
+        Integer xVal = null;
+        Integer yVal = null;
+        String floor = null;
+        String longName = null;
+        String shortName = null;
+        String type = null;
+        String building = null;
+        if(idDropDown.getValue() == null) {
+            errorPopup("Must input node ID");
+            return;
         }
+        else if (idDropDown.getValue() != null) {
+            nodeID = idDropDown.getValue().toString();
+        }
+        if (floorInput.getValue() != null) {
+            floor = floorInput.getValue().toString();
+        }
+        if (!longNameInput.getText().equals("")) {
+            longName = longNameInput.getText();
+        }
+        if (!shortNameInput.getText().equals("")) {
+            shortName = shortNameInput.getText();
+        }
+        if (typeInput.getValue() != null) {
+            type = typeInput.getValue().toString();
+        }
+        if (buildingInput.getValue() != null) {
+            building = buildingInput.getValue().toString();
+        }
+        if (!xCordInput.getText().equals("")) {
+            xVal = Integer.parseInt(xCordInput.getText());
+            xVal = Integer.valueOf(xVal);
+        }
+        if (!yCordInput.getText().equals("")) {
+            yVal = Integer.parseInt(yCordInput.getText());
+            yVal = Integer.valueOf(yVal);
+        }
+
+
+        makeConnection connection = makeConnection.makeConnection();
+        connection.modifyNode(nodeID, xVal, yVal, floor, building, type, longName, shortName);
     }
 
     /**
@@ -373,7 +387,7 @@ public class MapEditor {
         }
         int xVal = Integer.parseInt(xCordInput.getText());
         int yVal = Integer.parseInt(yCordInput.getText());
-        i = connection.addNode(idInput.getText(), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
+        i = connection.addNode(genNodeID(typeInput.getValue().toString(),floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
         System.out.println(i);
         return i;
     }
@@ -394,16 +408,15 @@ public class MapEditor {
      */
     public int deleteNode(TreeTableView<Node> table) {
         int s = -1;
-        TreeItem<Node> node = table.getSelectionModel().getSelectedItem();
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<Node> array = connection.getAllNodes();
-        if (table.getSelectionModel().getSelectedItem() == null) {
-            errorPopup("Must select Node to delete");
+        if (idDropDown.getValue() == null) {
+            errorPopup("Must select Node ID to delete");
             return s;
         } else {
-            System.out.println(table.getSelectionModel().getSelectedItem().getValue().get("id"));
+            System.out.println(idDropDown.getValue().toString());
             for (int i = 0; i < array.size(); i++) {
-                if (array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
+                if (array.get(i).get("id").equals(idDropDown.getValue().toString())) {
                     s = connection.deleteNode(array.get(i).get("id"));
                 }
             }

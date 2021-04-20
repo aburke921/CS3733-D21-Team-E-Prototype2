@@ -44,6 +44,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServiceRequestStatus {
+    int userID = App.userID;
 
     @FXML
     JFXTreeTableView serviceRequestTable;
@@ -70,6 +71,7 @@ public class ServiceRequestStatus {
     @FXML
     private void cancelRequest(ActionEvent e) {
         cancel(serviceRequestTable);
+        prepareTable(serviceRequestTable);
     }
 
     private void cancel(TreeTableView<ServiceRequestForm> table) {
@@ -84,6 +86,7 @@ public class ServiceRequestStatus {
     @FXML
     private void completeRequest(ActionEvent e) {
         complete(serviceRequestTable);
+        prepareTable(serviceRequestTable);
     }
 
     private void complete(TreeTableView<ServiceRequestForm> table) {
@@ -93,6 +96,7 @@ public class ServiceRequestStatus {
             connection.changeRequestStatus(id,"complete");
             System.out.println("The request was completed");
         }
+
     }
 
     /**

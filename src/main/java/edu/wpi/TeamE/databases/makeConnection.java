@@ -2254,7 +2254,11 @@ public class makeConnection {
 			Statement stmt = connection.createStatement();
 			String requestID = "Select requestID From " + tableName;
 			if (userID != -1) {
-				requestID = requestID + " where userID = " + userID;
+				requestID = "Select requests.requestID From requests, " + tableName + " Where requests.requestID = " + tableName + ".requestID " +
+						"and creatorID = " + userID;
+			}
+			else{
+				requestID = "Select requestID From " + tableName;
 			}
 			ResultSet rset = stmt.executeQuery(requestID);
 			while(rset.next()){
@@ -2308,7 +2312,8 @@ public class makeConnection {
 			Statement stmt = connection.createStatement();
 			String requestAssignee = "Select requests.assignee From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
 			if (userID != -1) {
-				requestAssignee = requestAssignee + " where userID = " + userID;
+				requestAssignee = "Select assignee From (Select * From requests where creatorID = " + userID
+						+ ") thing, " + tableName + " where thing.requestID = " + tableName + ".requestID";
 			}
 			ResultSet rset = stmt.executeQuery(requestAssignee);
 			while(rset.next()){

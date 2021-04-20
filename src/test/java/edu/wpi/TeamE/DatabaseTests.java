@@ -29,30 +29,23 @@ public class DatabaseTests {
 
 	@BeforeEach
 	public void setupTables() {
+
 		try {
 			connection.deleteAllTables(/*connection.getTablesToThatExist()*/);
-			connection.createNodeTable();
-			connection.createEdgeTable();
-			connection.createUserAccountTable();
-			connection.createRequestsTable();
-			connection.createFloralRequestsTable();
-			connection.createSanitationTable();
-			connection.createExtTransportTable();
-			connection.createMedDeliveryTable();
-			connection.createSecurityServTable();
 			System.out.println("Tables were reset");
 		} catch (Exception e) {
-			connection.createNodeTable();
-			connection.createEdgeTable();
-			connection.createUserAccountTable();
-			connection.createRequestsTable();
-			connection.createFloralRequestsTable();
-			connection.createSanitationTable();
-			connection.createExtTransportTable();
-			connection.createMedDeliveryTable();
-			connection.createSecurityServTable();
-			System.out.println("Tables were created");
+			//e.printStackTrace();
 		}
+		connection.createNodeTable();
+		connection.createEdgeTable();
+		connection.createUserAccountTable();
+		connection.createRequestsTable();
+		connection.createFloralRequestsTable();
+		connection.createSanitationTable();
+		connection.createExtTransportTable();
+		connection.createMedDeliveryTable();
+		connection.createSecurityServTable();
+		System.out.println("Tables were created");
 	}
 
 	@Test
@@ -673,8 +666,31 @@ public class DatabaseTests {
 
 		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
 		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "headache");
-		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "migraine");
+		connection.addExternalPatientRequest(2, "bob","test", "Ambulance", "severe", 123, "15 mins", "migraine");
+		connection.addFloralRequest(1, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
+
+		ArrayList<String> returnedIDs = new ArrayList<String>();
+		ArrayList<String> correctIDs = new ArrayList<String>();
+
+		correctIDs.add("1");
+
+		returnedIDs = connection.getRequestIDs("extTransport", 1);
+
+		assertTrue(correctIDs.equals(returnedIDs));
+	}
+
+
+	@Test
+	@DisplayName("testGetRequestIDs2")
+	public void testGetRequestIDs2() {
+
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", 123, "15 mins", "headache");
+		connection.addExternalPatientRequest(2, "bob","test", "Ambulance", "severe", 123, "15 mins", "migraine");
 		connection.addFloralRequest(1, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		ArrayList<String> returnedIDs = new ArrayList<String>();
@@ -683,7 +699,7 @@ public class DatabaseTests {
 		correctIDs.add("1");
 		correctIDs.add("2");
 
-		returnedIDs = connection.getRequestIDs("extTransport", 1);
+		returnedIDs = connection.getRequestIDs("extTransport", -1);
 
 		assertTrue(correctIDs.equals(returnedIDs));
 	}
@@ -709,20 +725,46 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestAssignees")
 	public void testGetRequestAssignees(){
 
-		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		connection.addNode("test3", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		connection.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
-		connection.addMedicineRequest(1, "kim","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(1, "kim","test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
-		connection.addNode("test2", 0, 0, "3", "Tower", "INFO", "longName", "shortName");
+		connection.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
 		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addSecurityRequest(1, "drew", "test", "low", "Low");
+		connection.addMedicineRequest(2, "dell","test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
 		ArrayList<String> returnedAssignees = connection.getRequestAssignees("medDelivery", 1);
 		ArrayList<String> correctAssignees = new ArrayList<String>();
 
 		correctAssignees.add("bob");
 		correctAssignees.add("kim");
+
+		assertTrue(correctAssignees.equals(returnedAssignees));
+	}
+
+
+	@Test
+	@DisplayName("testGetRequestAssignees2")
+	public void testGetRequestAssignees2(){
+
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		connection.addNode("test3", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(1, "kim","test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		connection.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addMedicineRequest(2, "dell","test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		ArrayList<String> returnedAssignees = connection.getRequestAssignees("medDelivery", -1);
+		ArrayList<String> correctAssignees = new ArrayList<String>();
+
+		correctAssignees.add("bob");
+		correctAssignees.add("kim");
+		correctAssignees.add("dell");
 
 		assertTrue(correctAssignees.equals(returnedAssignees));
 	}

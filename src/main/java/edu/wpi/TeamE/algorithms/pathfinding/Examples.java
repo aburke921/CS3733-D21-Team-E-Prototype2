@@ -28,8 +28,8 @@ public class Examples {
         }
 
 
-        String startNode = "eWALK01801";
-        String endNode = "ePARK00101";
+        String startNode = "ePARK00101";
+        String endNode = "FEXIT00201";
 
         //the pathfinding API is now entirely wrapped up in the SearchContext class
         //this will allow you to flexibly configure what kind of search you wish to execute
@@ -55,6 +55,27 @@ public class Examples {
 
         //searching for a new path is the same
         Path p = search.search(startNode, endNode);
+        p.print("id");
+        for (String dir : p.makeDirectionsWithDist()) {
+            System.out.println(dir);
+        }
+        System.out.println();
+
+        // Directions Testing
+        p = search.search("ARETL00101", "ADEPT00102");
+        p.print("id");
+        for (String dir : p.makeDirectionsWithDist()) {
+            System.out.println(dir);
+        }
+        System.out.println();
+
+        search.setConstraint("HANDICAP");
+        p = search.search("ARETL00101", "ADEPT00102");
+        p.print("id");
+        for (String dir : p.makeDirectionsWithDist()) {
+            System.out.println(dir);
+        }
+
 
         //however it should be mentioned that search algorithms
         //use a local copy of the db, and this local copy does not update when the db is edited

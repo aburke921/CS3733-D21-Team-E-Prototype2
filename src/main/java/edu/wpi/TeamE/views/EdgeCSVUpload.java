@@ -96,4 +96,11 @@ public class EdgeCSVUpload {
         desktop.open(file);
         prepareEdges(treeTable);
     }
+
+    @FXML
+    void initialize() {
+
+        prepareEdges(treeTable);
+
+    }
 }

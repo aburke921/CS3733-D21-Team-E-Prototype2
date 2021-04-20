@@ -95,6 +95,7 @@ public class NodeCSVUpload {
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
             table.getColumns().add(column8);
         }
+        treeTable.setShowRoot(false);
         if (table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
             table.getRoot().getChildren().remove(0, array.size() - 1);
         }

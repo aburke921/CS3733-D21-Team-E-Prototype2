@@ -13,6 +13,7 @@ import java.io.IOException;
 
 public class App extends Application {
 
+	public static int userID = 0;
 	private static Stage primaryStage;
 
 	public static void setPrimaryStage(Stage primaryStage) {
@@ -30,7 +31,7 @@ public class App extends Application {
 		File edges = new File("bwEedges.csv");
 
 		try {
-//			connection.deleteAllTables();
+			//connection.deleteAllTables();
 			connection.createTables();
 			connection.populateTable("node", nodes);
 			connection.populateTable("hasEdge", edges);

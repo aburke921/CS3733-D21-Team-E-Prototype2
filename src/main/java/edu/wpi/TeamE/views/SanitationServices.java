@@ -95,7 +95,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
       //makeConnection connection = makeConnection.makeConnection();
       //connection.addRequest("sanitationServices", request);
 
-      connection.addSanitationRequest(15,room+num, serviceKind,details,"",signature);
+      connection.addSanitationRequest(15,"bob", room+num, serviceKind,details,"",signature);
       super.handleButtonSubmit(actionEvent);
       //Setting up all variables to be entered
     }

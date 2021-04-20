@@ -580,7 +580,7 @@ public class DatabaseTests {
 		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 
-		connection.addExternalPatientRequest(1, "bob", "BW", "Ambulance","severe", 123, "15 mins", "headache");
+		connection.addExternalPatientRequest(1, "bob", "test", "Ambulance","severe", 123, "15 mins", "headache");
 	}
 
 	@Test

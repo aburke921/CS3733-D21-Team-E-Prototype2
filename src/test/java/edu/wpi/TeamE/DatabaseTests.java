@@ -749,10 +749,10 @@ public class DatabaseTests {
 		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 
-		connection.addExternalPatientRequest(1, "bob", "BW", "Ambulance","severe", 123, "15 mins", "headache");
+		connection.addExternalPatientRequest(1, "bob", "test", "Ambulance","severe", 123, "15 mins", "headache");
 
 		int result = 0;
-		result = connection.editExternalPatientRequest(1, "Tufts", null, null, null, null, "15 mins");
+		result = connection.editExternalPatientRequest(1, "test", null, null, null, null, "15 mins");
 
 		assertTrue(result == 1);
 	}

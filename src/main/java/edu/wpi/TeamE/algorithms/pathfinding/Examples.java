@@ -1,9 +1,12 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
+import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.databases.makeConnection;
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.List;
 
 public class Examples {
 
@@ -55,6 +58,19 @@ public class Examples {
 
         //searching for a new path is the same
         Path p = search.search(startNode, endNode);
+        Node start = p.getStart();
+        Node end = p.getEnd();
+        double length = p.getPathLength();
+
+        Iterator<Node> l1Nodes = p.iterator("L1");
+        Iterator<Node> allNodes = p.iterator();
+
+        List<Node> nodeList = p.toList();
+
+        for(Node node : p){
+            //you can also iterate through all like this
+        }
+
 
         //however it should be mentioned that search algorithms
         //use a local copy of the db, and this local copy does not update when the db is edited

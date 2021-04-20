@@ -214,64 +214,120 @@ public class Path {
                 //node 2
                 Node node2 = itr.next();
                 int last = 0;
+                int floorChangeState = 0;
+                // 0 = normal
+                // 1 = elev in 2 and 3
+                // 2 = elev in 1 and 2
+                // 3 = stairs in 2 and 3
+                // 4 = stairs in 1 and 2
 
                 while (itr.hasNext()){
-
+                    floorChangeState = 0;
                     //node 3
                     Node node3 = itr.next();
+                    double len;
+                    int dist;
 
-                    //p3 - p1
-                    Point p3_1 = new Point(node3.getX() - node1.getX(), node3.getY() - node1.getY());
-
-                    //p2 - p1
-                    Point p2_1 = new Point(node2.getX() - node1.getX(), node2.getY() - node1.getY());
-
-                    //calculate the cross product
-                    double crossProduct = p3_1.getX() * p2_1.getY() - p2_1.getX() * p3_1.getY();
-
-                    //find angle
-                    double angle = 0;
-                    //vectors
-                    Point p1p2 = new Point(node2.getX() - node1.getX(), node2.getY() - node1.getY());
-                    Point p2p3 = new Point(node3.getX() - node2.getX(), node3.getY() - node2.getY());
-                    //dot product p1p2 x p2p3
-                    double dotProduct = p1p2.getX() * p2p3.getX() + p1p2.getY() * p2p3.getY();
-                    //length of vector p1p2
-                    double p1p2Length = Math.sqrt( p1p2.getX() *  p1p2.getX() + p1p2.getY() *  p1p2.getY());
-                    //length of vector p2p3
-                    double p2p3Length = Math.sqrt( p2p3.getX() *  p2p3.getX() + p2p3.getY() *  p2p3.getY());
-
-                    angle = Math.acos(dotProduct / (p1p2Length * p2p3Length));
-                    angle = 180 * angle / Math.PI;//convert radian to degree
-
-                    int dist = (int) (Math.round((p1p2Length * scale) / 10) * 10);
-                    last = (int) (Math.round((p2p3Length * scale) / 10) * 10);
-
-                    String turn = "";
-
-                    if (Math.abs(angle) < 30) {
-                        turn = "Bend to the";
-                    } else if (Math.abs(angle) < 60) {
-                        turn = "Take a shallow turn to the";
-                    } else if (Math.abs(angle) < 120) {
-                        turn = "Turn to the";
-                    } else {
-                        turn = "Take a sharp turn to the";
+                    if(node2.get("type").equalsIgnoreCase("ELEV")) {
+                        if (node3.get("type").equalsIgnoreCase("ELEV")) {
+                            floorChangeState = 1;
+                        } else if (node1.get("type").equalsIgnoreCase("ELEV")) {
+                            floorChangeState = 2;
+                        }
+                    } else if (node2.get("type").equalsIgnoreCase("STAI")) {
+                        if (node3.get("type").equalsIgnoreCase("STAI")) {
+                            floorChangeState = 3;
+                        } else if (node1.get("type").equalsIgnoreCase("STAI")) {
+                            floorChangeState = 4;
+                        }
                     }
 
-                    if (crossProduct < -2){
-                        directions.add(turn + " right in " + dist + " feet");
-                    }else if (crossProduct > 2){
-                        directions.add(turn + " left in " + dist + " feet");
-                    }else{
-                        directions.add("Straight ahead for " + dist + " feet");
+                    switch (floorChangeState){
+                        case 1:
+                            len = node1.dist(node2);
+                            dist = (int) (Math.round((len * scale) / 10) * 10);
+                            directions.add("Enter Elevator " + node2.get("longName").charAt(9) + " in " + dist + " feet");
+                            break;
+                        case 2:
+                            directions.add("Take Elevator " + node1.get("longName").charAt(9) + " to Floor " + node2.get("floor"));
+                            len = node3.dist(node2);
+                            dist = (int) (Math.round((len * scale) / 10) * 10);
+                            directions.add("Exit Elevator " + node1.get("longName").charAt(9) + " and go straight ahead for " + dist + " feet");
+                            break;
+                        case 3:
+                            len = node1.dist(node2);
+                            dist = (int) (Math.round((len * scale) / 10) * 10);
+                            if (Node.calculateZ(node2.get("floor")) > Node.calculateZ(node3.get("floor"))) {
+                                directions.add("Take the Stairs down one floor in " + dist + " feet");
+                            } else {
+                                directions.add("Take the Stairs up one floor in " + dist + " feet");
+                            }
+                            break;
+                        case 4:
+                            len = node3.dist(node2);
+                            dist = (int) (Math.round((len * scale) / 10) * 10);
+                            directions.add("Exit the staircase and go straight ahead for " + dist + " feet");
+                            break;
+                        default:
+                            //p3 - p1
+                            Point p3_1 = new Point(node3.getX() - node1.getX(), node3.getY() - node1.getY());
+
+                            //p2 - p1
+                            Point p2_1 = new Point(node2.getX() - node1.getX(), node2.getY() - node1.getY());
+
+                            //calculate the cross product
+                            double crossProduct = p3_1.getX() * p2_1.getY() - p2_1.getX() * p3_1.getY();
+
+                            //find angle
+                            double angle = 0;
+                            //vectors
+                            Point p1p2 = new Point(node2.getX() - node1.getX(), node2.getY() - node1.getY());
+                            Point p2p3 = new Point(node3.getX() - node2.getX(), node3.getY() - node2.getY());
+                            //dot product p1p2 x p2p3
+                            double dotProduct = p1p2.getX() * p2p3.getX() + p1p2.getY() * p2p3.getY();
+                            //length of vector p1p2
+                            double p1p2Length = Math.sqrt( p1p2.getX() *  p1p2.getX() + p1p2.getY() *  p1p2.getY());
+                            //length of vector p2p3
+                            double p2p3Length = Math.sqrt( p2p3.getX() *  p2p3.getX() + p2p3.getY() *  p2p3.getY());
+
+                            angle = Math.acos(dotProduct / (p1p2Length * p2p3Length));
+                            angle = 180 * angle / Math.PI;//convert radian to degree
+
+                            dist = (int) (Math.round((p1p2Length * scale) / 10) * 10);
+                            last = (int) (Math.round((p2p3Length * scale) / 10) * 10);
+
+                            String turn = "";
+
+                            if (Math.abs(angle) < 30) {
+                                turn = "Bend to the";
+                            } else if (Math.abs(angle) < 60) {
+                                turn = "Take a shallow turn to the";
+                            } else if (Math.abs(angle) < 120) {
+                                turn = "Turn to the";
+                            } else {
+                                turn = "Take a sharp turn to the";
+                            }
+
+                            // straight "tolerance"
+                            if (crossProduct < -0.4){
+                                directions.add(turn + " right in " + dist + " feet");
+                            }else if (crossProduct > 0.4){
+                                directions.add(turn + " left in " + dist + " feet");
+                            }else{
+                                directions.add("Straight ahead for " + dist + " feet");
+                            }
+                            break;
                     }
+
+
 
                     //continue for next node
                     node1 = node2;
                     node2 = node3;
                 }
-                directions.add("Straight ahead for " + last + " feet");
+                if (floorChangeState == 0) {
+                    directions.add("Straight ahead for " + last + " feet");
+                }
             }
         }
 

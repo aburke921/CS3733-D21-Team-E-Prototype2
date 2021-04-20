@@ -50,6 +50,7 @@ public class EdgeCSVUpload {
                     new ReadOnlyStringWrapper(p.getValue().getValue().getEndNodeId()));
             table.getColumns().add(column3);
         }
+        treeTable.setShowRoot(false);
         for (int i = 0; i < array.size(); i++) {
             Edge s = array.get(i);
             //int n = array.get(i).getX();

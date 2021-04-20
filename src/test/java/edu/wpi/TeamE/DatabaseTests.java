@@ -30,7 +30,7 @@ public class DatabaseTests {
 	@BeforeEach
 	public void setupTables() {
 		try {
-			connection.deleteAllTables();
+			connection.deleteAllTables(/*connection.getTablesToThatExist()*/);
 			connection.createNodeTable();
 			connection.createEdgeTable();
 			connection.createUserAccountTable();
@@ -580,7 +580,7 @@ public class DatabaseTests {
 		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 
-		connection.addExternalPatientRequest(1, "bob", "BW", "Ambulance","severe", 123, "15 mins", "headache");
+		connection.addExternalPatientRequest(1, "bob", "test", "Ambulance","severe", 123, "15 mins", "headache");
 	}
 
 	@Test
@@ -749,10 +749,10 @@ public class DatabaseTests {
 		connection.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		connection.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 
-		connection.addExternalPatientRequest(1, "bob", "BW", "Ambulance","severe", 123, "15 mins", "headache");
+		connection.addExternalPatientRequest(1, "bob", "test", "Ambulance","severe", 123, "15 mins", "headache");
 
 		int result = 0;
-		result = connection.editExternalPatientRequest(1, "Tufts", null, null, null, null, "15 mins");
+		result = connection.editExternalPatientRequest(1, "test", null, null, null, null, "15 mins");
 
 		assertTrue(result == 1);
 	}
@@ -856,17 +856,22 @@ public class DatabaseTests {
 		connection.addDataForPresentation();
 	}
 
-//	@Test
-//	public void testTables(){
-////		try {
-////			connection.deleteAllTables();
-////			connection.createNodeTable();
-////		} catch (Exception e) {
-////			connection.createNodeTable();
-////		}
-//
-//		assertTrue(connection.checkIfTablesExist());
-//
-//	}
+	@Test
+	@DisplayName("testGetTablesToThatExist")
+	public void testGetTablesToThatExist(){
+//		try {
+//			connection.deleteAllTables();
+//			connection.createNodeTable();
+//		} catch (Exception e) {
+//			connection.createNodeTable();
+//		}
+		ArrayList<String> names = connection.getTablesToThatExist();
+
+		for(String name : names){
+			System.out.println(name);
+		}
+		assertTrue(true);
+
+	}
 
 }

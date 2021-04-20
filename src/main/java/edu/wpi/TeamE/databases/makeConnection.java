@@ -185,6 +185,7 @@ public class makeConnection {
 	 * - userType: is the type of account the user is enrolled with. The valid options are: "visitor", "patient", "doctor", "admin".
 	 * - firstName: the user's first name.
 	 * - lastName: the user's last name.
+	 * - creationTime: a time stamp that is added to the table when an account is created
 	 */
 	public void createUserAccountTable() {
 		try {
@@ -196,6 +197,7 @@ public class makeConnection {
 					"userType  varchar(31), " +
 					"firstName varchar(31), " +
 					"lastName  varchar(31), " +
+					"creationTime timestamp, " +
 					"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin')))";
 			stmt.execute(sqlQuery);
 			createUserAccountTypeViews();
@@ -261,7 +263,7 @@ public class makeConnection {
 	}
 
 
-	//createRequestsTable --> added assignee
+
 
 
 
@@ -507,7 +509,6 @@ public class makeConnection {
 
 	/**
 	 * Deletes edge(s) between the given two nodes, they can be in any order
-	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
 	 * if count == 1 || count == 2, edges have been deleted
 	 * else no edges exist with inputted nodes
@@ -572,7 +573,6 @@ public class makeConnection {
 
 	/**
 	 * matches the nodeID to a node and deletes it from DB
-	 *
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 	public int deleteNode(String nodeID) {
@@ -848,7 +848,7 @@ public class makeConnection {
 	 * @param lastName this is the user's last name that is associated with the account
 	 */
 	public void addUserAccount(String email, String password, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?)";
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
 			prepState.setString(2, password);
@@ -873,7 +873,7 @@ public class makeConnection {
 	 * @param lastName this is the user's last name that is associated with the account
 	 */
 	public void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?)";
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
 			prepState.setString(2, password);
@@ -1117,6 +1117,7 @@ public class makeConnection {
 
 
 	}
+
 
 	public void addDataForPresentation(){
 		//Visitors:

@@ -53,7 +53,7 @@ public class Login {
     @FXML // fx:id="guestLoginButton"
     private Button guestLoginButton; // Value injected by FXMLLoader
 
-    @FXML private StackPane stackPane; //todo this stackpane was removed at some point, so error dialogs no longer work!
+    @FXML private StackPane stackPane;
 
 
     public void initialize() {
@@ -128,6 +128,7 @@ public class Login {
 
     @FXML
     private void errorPopup(String errorMessage) {
+        System.out.println("errorMessage: " + errorMessage);
         JFXDialogLayout error = new JFXDialogLayout();
         error.setHeading(new Text("Error!"));
         error.setBody(new Text(errorMessage));

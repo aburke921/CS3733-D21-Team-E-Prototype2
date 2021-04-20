@@ -1,9 +1,6 @@
 package edu.wpi.TeamE.views;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.event.ActionEvent;
@@ -21,7 +18,7 @@ import java.io.IOException;
 public class Login {
 
     @FXML private JFXTextField emailInput;
-    @FXML private JFXTextField passwordInput;
+    @FXML private JFXPasswordField passwordInput;
     @FXML private StackPane stackPane;
 
     @FXML // fx:id="exit"

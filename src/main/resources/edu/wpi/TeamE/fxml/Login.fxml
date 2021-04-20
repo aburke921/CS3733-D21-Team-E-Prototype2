@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
@@ -95,11 +96,14 @@
                               <Insets top="20.0" />
                            </VBox.margin>
                         </JFXTextField>
-                        <JFXTextField fx:id="passwordInput" maxWidth="300.0" prefHeight="27.0" prefWidth="321.0" promptText="Password">
+                        <JFXPasswordField fx:id="passwordInput" maxWidth="300.0" promptText="Password">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
-                        </JFXTextField>
+                        </JFXPasswordField>
                         <HBox alignment="CENTER" maxWidth="300.0">
                            <children>
                               <Button fx:id="createAccountButton" mnemonicParsing="false" onAction="#toNewAccount" prefHeight="29.0" prefWidth="150.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Create New Account" textFill="WHITE" />

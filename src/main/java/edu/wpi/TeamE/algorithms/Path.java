@@ -9,7 +9,7 @@ import java.util.List;
  * Path Class
  * Is effectively a LinkedList
  */
-public class Path {
+public class Path implements Comparable<Path>{
     //pathHead is a sentinel node
     private final Node pathHead;
 
@@ -41,9 +41,10 @@ public class Path {
     /**
      * @return the first node in list
      */
-    public Node peek(){
+    public Node getStart(){
         return pathHead.getNext();
     }
+    public Node getEnd(){ return pathEnd;}
 
     /**
      * Adds a copy of a singular node to end of list
@@ -51,13 +52,19 @@ public class Path {
      */
     public void add(Node _n){
         Node n = _n.copy();
-        //System.out.println("adding "+n.get("id")+", "+n);
-        //set the end of the path to point at n
+
         if (!isEmpty()) { //If it's empty, then there is no distance to calculate
             length += pathEnd.dist(n);
         }
         pathEnd.setNext(n);
         pathEnd = n;
+    }
+
+    public Node pop(){
+        Node first = getStart();
+        pathHead.setNext(first.getNext());
+        first.setNext(null);
+        return first;
     }
 
     /**
@@ -66,8 +73,8 @@ public class Path {
      */
     public void add(Path p) {
         if(!p.isEmpty()) {
-            length += p.getPathLength() + pathEnd.dist(p.peek());
-            pathEnd.setNext(p.peek());
+            length += p.getPathLength() + pathEnd.dist(p.getStart());
+            pathEnd.setNext(p.getStart());
             pathEnd = p.pathEnd;
         }
     }
@@ -101,10 +108,8 @@ public class Path {
         List<String> directions = new ArrayList<>();
 
         //iterate the list
-        Iterator<Node> itr = pathHead.iterator();
+        Iterator<Node> itr = iterator();
 
-        //ignore dummy head
-        itr.next();
 
         /*
         node 1
@@ -237,5 +242,10 @@ public class Path {
      */
     public double getPathLength(){
         return length;
+    }
+
+    @Override
+    public int compareTo(Path p) {
+        return Double.compare(length, p.length);
     }
 }

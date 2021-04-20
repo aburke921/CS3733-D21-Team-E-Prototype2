@@ -500,7 +500,7 @@ public class MapEditor {
      * @param table this is the table of nodes that is having a node edited
      */
     public void editNode(TreeTableView<Node> table) {
-        String nodeID = null;
+        String id = null;
         Integer xVal = null;
         Integer yVal = null;
         String floor = null;
@@ -515,6 +515,9 @@ public class MapEditor {
 //        else if (idDropDown.getValue() != null) {
 //            nodeID = idDropDown.getValue().toString();
 //        }
+        if(table.getSelectionModel().getSelectedItem().getValue() != null) {
+            id = table.getSelectionModel().getSelectedItem().getValue().get("id");
+        }
         if (floorInput.getValue() != null) {
             floor = floorInput.getValue().toString();
         }
@@ -541,7 +544,7 @@ public class MapEditor {
 
 
         makeConnection connection = makeConnection.makeConnection();
-        connection.modifyNode(nodeID, xVal, yVal, floor, building, type, longName, shortName);
+        connection.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
     }
 
     /**
@@ -637,23 +640,23 @@ public class MapEditor {
      * retrieves the ID of the selected item in the table, passes that into deleteNode fcn from database
      * @param table
      */
-//    public int deleteNode(TreeTableView<Node> table) {
-//        int s = -1;
-//        makeConnection connection = makeConnection.makeConnection();
-//        ArrayList<Node> array = connection.getAllNodes();
-//        if (idDropDown.getValue() == null) {
-//            errorPopup("Must select Node ID to delete");
-//            return s;
-//        } else {
-//            System.out.println(idDropDown.getValue().toString());
-//            for (int i = 0; i < array.size(); i++) {
-//                if (array.get(i).get("id").equals(idDropDown.getValue().toString())) {
-//                    s = connection.deleteNode(array.get(i).get("id"));
-//                }
-//            }
-//        }
-//        return s;
-//    }
+    public int deleteNode(TreeTableView<Node> table) {
+        int s = -1;
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Node> array = connection.getAllNodes();
+        if(table.getSelectionModel().getSelectedItem().getValue() == null) {
+            errorPopup("Must select Node ID to delete");
+            return s;
+        } else {
+            //System.out.println(idDropDown.getValue().toString());
+            for (int i = 0; i < array.size(); i++) {
+                if (array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
+                    s = connection.deleteNode(array.get(i).get("id"));
+                }
+            }
+       }
+        return s;
+    }
 
 
 
@@ -661,10 +664,10 @@ public class MapEditor {
      * calls the deleteNode fcn when the delete button is clicked
      * @param e
      */
-//    @FXML
-//    public void deleteNodeButton(ActionEvent e) {
-//        deleteNode(treeTable);
-//    }
+    @FXML
+    public void deleteNodeButton(ActionEvent e) {
+        deleteNode(treeTable);
+    }
 
     /**
      * when refresh button is clicked, retrieves the arrayList of Nodes,

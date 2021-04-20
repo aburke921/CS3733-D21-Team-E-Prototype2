@@ -56,7 +56,22 @@ public class Examples {
         //searching for a new path is the same
         Path p = search.search(startNode, endNode);
         p.print("id");
+        for (String dir : p.makeDirectionsWithDist()) {
+            System.out.println(dir);
+        }
+        System.out.println();
 
+        // Directions Testing
+        p = search.search("ARETL00101", "ADEPT00102");
+        p.print("id");
+        for (String dir : p.makeDirectionsWithDist()) {
+            System.out.println(dir);
+        }
+        System.out.println();
+
+        search.setConstraint("HANDICAP");
+        p = search.search("ARETL00101", "ADEPT00102");
+        p.print("id");
         for (String dir : p.makeDirectionsWithDist()) {
             System.out.println(dir);
         }

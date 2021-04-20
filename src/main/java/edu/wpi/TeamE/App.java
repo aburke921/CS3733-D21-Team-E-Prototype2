@@ -39,7 +39,8 @@ public class App extends Application {
 		File edges = new File("bwEedges.csv");
 
 		try {
-			connection.deleteAllTables();
+			/*todo, these functions now catch their own errors and so
+			   this try catch no longer works to QUICKLY catch anything*/
 			connection.createTables();
 			connection.populateTable("node", nodes);
 			connection.populateTable("hasEdge", edges);

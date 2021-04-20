@@ -19,7 +19,7 @@ public class Path {
     private double length = 0;
 
     //Scale from pixel to foot
-    public final double scale = 0.325;
+    public final double SCALE = 0.325;
 
     /**
      * construct an empty list
@@ -245,18 +245,18 @@ public class Path {
                     switch (floorChangeState){
                         case 1:
                             len = node1.dist(node2);
-                            dist = (int) (Math.round((len * scale) / 10) * 10);
+                            dist = (int) (Math.round((len * SCALE) / 10) * 10);
                             directions.add("Enter Elevator " + node2.get("longName").charAt(9) + " in " + dist + " feet");
                             break;
                         case 2:
                             directions.add("Take Elevator " + node1.get("longName").charAt(9) + " to Floor " + node2.get("floor"));
                             len = node3.dist(node2);
-                            dist = (int) (Math.round((len * scale) / 10) * 10);
+                            dist = (int) (Math.round((len * SCALE) / 10) * 10);
                             directions.add("Exit Elevator " + node1.get("longName").charAt(9) + " and go straight ahead for " + dist + " feet");
                             break;
                         case 3:
                             len = node1.dist(node2);
-                            dist = (int) (Math.round((len * scale) / 10) * 10);
+                            dist = (int) (Math.round((len * SCALE) / 10) * 10);
                             if (Node.calculateZ(node2.get("floor")) > Node.calculateZ(node3.get("floor"))) {
                                 directions.add("Take the Stairs down one floor in " + dist + " feet");
                             } else {
@@ -265,7 +265,7 @@ public class Path {
                             break;
                         case 4:
                             len = node3.dist(node2);
-                            dist = (int) (Math.round((len * scale) / 10) * 10);
+                            dist = (int) (Math.round((len * SCALE) / 10) * 10);
                             directions.add("Exit the staircase and go straight ahead for " + dist + " feet");
                             break;
                         default:
@@ -293,8 +293,8 @@ public class Path {
                             angle = Math.acos(dotProduct / (p1p2Length * p2p3Length));
                             angle = 180 * angle / Math.PI;//convert radian to degree
 
-                            dist = (int) (Math.round((p1p2Length * scale) / 10) * 10);
-                            last = (int) (Math.round((p2p3Length * scale) / 10) * 10);
+                            dist = (int) (Math.round((p1p2Length * SCALE) / 10) * 10);
+                            last = (int) (Math.round((p2p3Length * SCALE) / 10) * 10);
 
                             String turn = "";
 
@@ -391,5 +391,5 @@ public class Path {
      * Gets the length of the path in feet for Time Estimates
      * @return The total length of the path in feet
      */
-    public double getPathLengthFeet(){ return length * scale; }
+    public double getPathLengthFeet(){ return length * SCALE; }
 }

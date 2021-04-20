@@ -45,7 +45,9 @@ public class Path implements Comparable<Path>, Iterable<Node>{
     public Node getStart(){
         return pathHead.getNext();
     }
-    public Node getEnd(){ return pathEnd;}
+    public Node getEnd(){
+        return pathEnd;
+    }
 
     /**
      * Adds a copy of a singular node to end of list

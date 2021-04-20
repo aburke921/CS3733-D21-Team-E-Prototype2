@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
@@ -79,57 +80,61 @@
       </AnchorPane>
       <AnchorPane VBox.vgrow="ALWAYS">
          <children>
-            <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <bottom>
-                  <AnchorPane prefHeight="45.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
-                     <children>
-                        <JFXButton fx:id="back" layoutX="20.0" onAction="#toLogin" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
-                     </children>
-                  </AnchorPane>
-               </bottom>
-               <right>
-                          <VBox prefWidth="0.0" BorderPane.alignment="CENTER" />
-               </right>
-               <center>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-                     <children>
-                                  <Label alignment="CENTER" prefHeight="23.0" prefWidth="381.0" text="Please Enter Credentials">
-                                      <font>
-                                          <Font size="18.0" />
-                                      </font>
-                                      <VBox.margin>
-                                          <Insets />
-                                      </VBox.margin>
-                                  </Label>
-                                    <JFXTextField fx:id="email" maxWidth="300.0" prefColumnCount="0" prefWidth="300.0" promptText="Email">
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                                    </JFXTextField>
-                                    <JFXTextField fx:id="password" maxWidth="300.0" prefHeight="27.0" prefWidth="300.0" promptText="Password">
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                                    </JFXTextField>
-                        <JFXTextField fx:id="firstName" maxWidth="300.0" prefWidth="300.0" promptText="First Name">
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                        </JFXTextField>
-                        <JFXTextField fx:id="lastName" maxWidth="300.0" prefWidth="300.0" promptText="Last Name">
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                        </JFXTextField>
-                                    <Button fx:id="submitAccountButton" mnemonicParsing="false" onAction="#createAccountButton" prefHeight="29.0" prefWidth="66.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Submit" textFill="WHITE">
-                           <VBox.margin>
-                              <Insets top="30.0" />
-                           </VBox.margin>
-                        </Button>
-                     </children>
-                  </VBox>
-               </center>
-            </BorderPane>
+            <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <BorderPane>
+                     <bottom>
+                        <AnchorPane prefHeight="45.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <JFXButton fx:id="back" layoutX="20.0" onAction="#toLogin" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
+                           </children>
+                        </AnchorPane>
+                     </bottom>
+                     <right>
+                                <VBox prefWidth="0.0" BorderPane.alignment="CENTER" />
+                     </right>
+                     <center>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                           <children>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="381.0" text="Please Enter Credentials">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                            <VBox.margin>
+                                                <Insets />
+                                            </VBox.margin>
+                                        </Label>
+                                          <JFXTextField fx:id="email" maxWidth="300.0" prefColumnCount="0" prefWidth="300.0" promptText="Email">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="password" maxWidth="300.0" prefHeight="27.0" prefWidth="300.0" promptText="Password">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                                          </JFXTextField>
+                              <JFXTextField fx:id="firstName" maxWidth="300.0" prefWidth="300.0" promptText="First Name">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </JFXTextField>
+                              <JFXTextField fx:id="lastName" maxWidth="300.0" prefWidth="300.0" promptText="Last Name">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </JFXTextField>
+                                          <Button fx:id="submitAccountButton" mnemonicParsing="false" onAction="#createAccountButton" prefHeight="29.0" prefWidth="66.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Submit" textFill="WHITE">
+                                 <VBox.margin>
+                                    <Insets top="30.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </center>
+                  </BorderPane>
+               </children>
+            </StackPane>
          </children>
       </AnchorPane>
       </children>

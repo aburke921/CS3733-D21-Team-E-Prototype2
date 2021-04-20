@@ -3,9 +3,10 @@ package edu.wpi.TeamE;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.SearchContext;
-import edu.wpi.TeamE.algorithms.pathfinding.Searcher;
-import edu.wpi.TeamE.algorithms.pathfinding.constraints.SearchConstraint;
+import static org.junit.jupiter.api.Assertions.*;
+
 import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.TeamE.views.MapEditor;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,13 +14,8 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 public class PathFindingTests {
     static SearchContext search;
-
-    //TODO: Rewrite to work with search constraints
 
     @BeforeAll
     public static void setupExpected() {
@@ -28,7 +24,6 @@ public class PathFindingTests {
         File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
         File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
         try {
-            con.deleteAllTables();
             con.createTables();
             con.populateTable("node", nodes);
             con.populateTable("hasEdge", edges);
@@ -87,13 +82,14 @@ public class PathFindingTests {
         Node a2 = search.getNode("eWALK01001");
         Node a3 = search.getNode("eWALK00701");
         Node a4 = search.getNode("eWALK00601");
-        Node a5 = search.getNode("eWALK00401");
-        Node a6 = search.getNode("eWALK00301");
-        Node a7 = search.getNode("eWALK00201");
-        Node a8 = search.getNode("eWALK00101");
-        Node a9 = search.getNode("ePARK00101");
+        Node a5 = search.getNode("eWALK00501");
+        Node a6 = search.getNode("eWALK00401");
+        Node a7 = search.getNode("eWALK00301");
+        Node a8 = search.getNode("eWALK00201");
+        Node a9 = search.getNode("eWALK00101");
+        Node a10 = search.getNode("ePARK00101");
 
-        Path exp1 = new Path(a1, a2, a3, a4, a5, a6, a7, a8, a9);
+        Path exp1 = new Path(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
 
         Path out = search.search(terminalNodes.getKey(), terminalNodes.getValue());
         assertTrue(exp1.equals(out));
@@ -292,7 +288,66 @@ public class PathFindingTests {
     @Test
     public void testGetPathLength() {
         Path path1 = search.search("eWALK01101", "eWALK01001");
-        path1.print("id");
-        assertEquals(325.0, path1.getPathLength(), 0.01);
+        assertEquals(325.0, path1.getPathLength(), 0.1);
+
+        Path path2 = search.search("ePARK00101", "ePARK02501");
+        assertEquals(3460.57, path2.getPathLength(), 0.1);
+
+        Path path3 = search.search("CRETL001L1", "BREST00102");
+        assertEquals(325.01, path3.getPathLength(), 0.1);
+
+        Path path4 = search.search("ARETL00101", "ADEPT00102");
+        assertEquals(575.26, path4.getPathLength(), 0.1);
     }
+
+    @Test
+    public void testConstraints() {
+        //Same nodes, different constraints, forcing different paths
+        Path stairs1 = search.search("ARETL00101", "ADEPT00102");
+        Path stairs2 = search.search("GHALL00803", "GHALL00601");
+        search.setConstraint("HANDICAP");
+        Path noStairs1 = search.search("ARETL00101", "ADEPT00102");
+        Path noStairs2 = search.search("GHALL00803", "GHALL00601");
+
+        assertFalse(stairs1.equals(noStairs1));
+        assertFalse(stairs2.equals(noStairs2));
+
+
+        search.setConstraint("VANILLA");
+        Path ER1 = search.search("ePARK01201", "ELABS00101");
+        Path ER2 = search.search("ePARK02501", "FHALL02701");
+        search.setConstraint("SAFE");
+        Path noER1 = search.search("ePARK01201", "ELABS00101");
+        Path noER2 = search.search("ePARK02501", "FHALL02701");
+
+        assertFalse(ER1.equals(noER1));
+        assertFalse(ER2.equals(noER2));
+    }
+
+    @Test
+    public void testAutoGenIDs() {
+        MapEditor ed = new MapEditor();
+        assertEquals("eELEV00A01", ed.genNodeID("ELEV","1", "Elevator A Floor 1"));
+        assertEquals("ePARK02601", ed.genNodeID("PARK","1", "New Parking Sport Floor 1"));
+        assertEquals("eDEPT00102", ed.genNodeID("DEPT","2", "New Department Floor 2"));
+        assertEquals("eSERV001GG", ed.genNodeID("SERV","G", "New Service Floor G"));
+        assertEquals("eSERV001GG", ed.genNodeID("SERV","GG", "New Service Floor GG")); //Just in case of error on entry
+        assertEquals("eRETL001L2", ed.genNodeID("RETL","L2", "New Retail Floor L2"));
+        assertEquals("eLABS001L1", ed.genNodeID("LABS","L1", "New Labs Floor L1"));
+        assertEquals("eWALK00103", ed.genNodeID("WALK","3", "New Walkway Floor 3"));
+    }
+    /**
+     * Manual test - useful for UI, please do not delete w/o notice.
+     */
+//    public void foo(){
+//        Searcher aStar = new AStarSearch();
+//        Path foundPath = aStar.search("ACONF00102", "eWALK01901");
+//        Iterator<Node> nodeIteratorThisFloorOnly = foundPath.iterator();
+//        System.out.println("contents of path:");
+//        for (Iterator<Node> it = nodeIteratorThisFloorOnly; it.hasNext(); ) {
+//            Node node = it.next();
+//            System.out.println("Name: " + node.get("longName") + ", Floor: " + node.get("floor") + ", ID: " + node.get("id"));
+//        }
+//    }
+
 }

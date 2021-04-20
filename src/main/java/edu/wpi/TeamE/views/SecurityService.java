@@ -19,6 +19,20 @@ import javafx.scene.control.Button;
 
 public class SecurityService extends ServiceRequestFormComponents {
 
+//    private String securityLevel;
+//    private String urgencyLevel;
+//    private String locationOfRequest;
+//    private String reason;
+//    private boolean status;
+//
+//    private SecurityService(String securityLevel, String urgencyLevel, String locationOfRequest, String reason) {
+//        this.securityLevel = securityLevel;
+//        this.urgencyLevel = urgencyLevel;
+//        this.locationOfRequest = locationOfRequest;
+//        this.reason = reason;
+//        this.status = false;
+//    }
+
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
@@ -70,7 +84,7 @@ public class SecurityService extends ServiceRequestFormComponents {
     void handleButtonSubmit(ActionEvent event) {
         try {
             System.out.println(event); //Print the ActionEvent to console
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/ServiceRequests.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
             ex.printStackTrace();

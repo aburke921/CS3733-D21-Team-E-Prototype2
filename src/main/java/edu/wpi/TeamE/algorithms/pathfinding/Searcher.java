@@ -124,6 +124,28 @@ public class Searcher {
         return null;
     }
 
+
+    public Path searchAlongPath(Path route, String stopType){
+        List<Node> stops = con.getAllNodesByType(stopType);
+        Node start = route.getStart();
+        Node end = route.getEnd();
+
+        PriorityQueue<Path> paths = new PriorityQueue<>();
+
+        for(Node stop : stops){
+            Path leg1 = search(start.get("id"), stop.get("id"));
+            Path leg2 = search(stop.get("id"), end.get("id"));
+            leg2.pop();
+            leg1.add(leg2);
+
+            paths.add(leg1);
+        }
+
+        return paths.poll();
+    }
+
+
+
     /**
      * Once the end node is found, this method is invoked to work back
      * and find the path we took to get there

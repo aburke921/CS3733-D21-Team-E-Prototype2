@@ -263,11 +263,6 @@ public class makeConnection {
 
 	}
 
-
-
-
-
-
 	/**
 	 * Uses executes the SQL statements required to create the requests table.
 	 * This table has the attributes:
@@ -1247,6 +1242,16 @@ public class makeConnection {
 		changeRequestStatus(47, "complete");
 
 
+		//SuperAdmin:
+		String insertUser = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin')";
+		try {
+			Statement stmt = connection.createStatement();
+			stmt.executeUpdate(insertUser);
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 
@@ -2209,6 +2214,7 @@ public class makeConnection {
 
 	// User System Stuff
 
+
 	/**
 	 * Function for logging a user in with their unique email and password
 	 * @param email    is the user's entered email
@@ -2229,7 +2235,6 @@ public class makeConnection {
 			}
 			userLoginRS.close();
 			if(verification == 0){
-				//mapEditor.errorPopup("Invalid username or password!");
 				return 0;
 			} else return userID;
 		} catch (SQLException e) {
@@ -2238,125 +2243,121 @@ public class makeConnection {
 		}
 		return 0;
 	}
-
 	/**
 	 * Gets a list of all the requestIDs from the given tableName
 	 * @param tableName this is the name of the table that we are getting the requestIDs from
 	 * @return a list of all the requestIDs
 	 */
-	public ArrayList<String> getRequestIDs(String tableName){
-
-		ArrayList<String> listOfIDs = new ArrayList<String>();
-
+	public ArrayList<String> getRequestIDs(String tableName, int userID){
+		ArrayList<String> listOfIDs = new ArrayList<>();
 		try  {
 			Statement stmt = connection.createStatement();
 			String requestID = "Select requestID From " + tableName;
-
+			if (userID != -1) {
+				requestID = requestID + " where userID = " + userID;
+			}
 			ResultSet rset = stmt.executeQuery(requestID);
-
 			while(rset.next()){
 				String ID = rset.getString("requestID");
 				listOfIDs.add(ID);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("getRequestStatus() error in the try/catch");
-
 		}
-
 		return listOfIDs;
 	}
-
 	/**
 	 * Gets a list of all the statuses from the given tableName
 	 * @param tableName this is the name of the table that we are getting the requestIDs from
 	 * @return a list of all the statuses of the requests
 	 */
-	public ArrayList<String> getRequestStatus(String tableName){
-
+	public ArrayList<String> getRequestStatus(String tableName, int userID){
 		ArrayList<String> listOfStatus = new ArrayList<String>();
-
 		try  {
 			Statement stmt = connection.createStatement();
-			String requestStatus = "Select requests.requestStatus From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+			String requestStatus;
+			requestStatus = "Select requests.requestStatus From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
+			if (userID != -1) {
 
+				requestStatus = "Select longName From (Select roomID From (Select * From requests where creatorID = " + userID
+						+ ") thing, " + tableName + " where thing.requestID = " + tableName + ".requestID) that, node where that.roomID = node.nodeID";
+			}
+			else{
+				requestStatus = "Select longName From node, " + tableName + " where node.nodeID = " + tableName + ".roomID";
+			}
 			ResultSet rset = stmt.executeQuery(requestStatus);
-
 			while(rset.next()){
 				String status = rset.getString("requestStatus");
 				listOfStatus.add(status);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("getRequestStatus() error in the try/catch");
-
 		}
-
 		return listOfStatus;
 	}
-
 	/**
 	 * Gets a list of all the assignees from the given tableName
 	 * @param tableName this is the name of the table that we are getting the requestIDs from
 	 * @return a list of all assignees for all of the requests
 	 */
-	public ArrayList<String> getRequestAssignees(String tableName){
-
+	public ArrayList<String> getRequestAssignees(String tableName, int userID){
 		ArrayList<String> listOfAssignees = new ArrayList<String>();
-
 		try  {
 			Statement stmt = connection.createStatement();
 			String requestAssignee = "Select requests.assignee From requests, " + tableName + " Where requests.requestID = " + tableName +".requestID";
-
+			if (userID != -1) {
+				requestAssignee = requestAssignee + " where userID = " + userID;
+			}
 			ResultSet rset = stmt.executeQuery(requestAssignee);
-
 			while(rset.next()){
 				String status = rset.getString("assignee");
 				listOfAssignees.add(status);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("getRequestAssignee() error in the try/catch");
-
 		}
-
 		return listOfAssignees;
-
 	}
-
 	/**
 	 * Gets a list of all the longNames for the location from the given tableName
 	 * @param tableName this is the name of the table that we are getting the requestIDs from
 	 * @return a list of all longNames for the location for all of the requests
 	 */
-	public ArrayList<String> getRequestLocations(String tableName){
+	public ArrayList<String> getRequestLocations(String tableName, Integer userID){
+
 
 		ArrayList<String> listOfLongNames = new ArrayList<String>();
-
 		try  {
 			Statement stmt = connection.createStatement();
-			String requestLongNames = "Select longName From node, " + tableName + " where node.nodeID = " + tableName + ".roomID";
+			String requestLongNames;
 
+			if (userID != -1) {
+
+				requestLongNames = "Select longName From (Select roomID From (Select * From requests where creatorID = " + userID
+									+ ") thing, " + tableName + " where thing.requestID = " + tableName + ".requestID) that, node where that.roomID = node.nodeID";
+			}
+			else{
+				requestLongNames = "Select longName From node, " + tableName + " where node.nodeID = " + tableName + ".roomID";
+			}
 			ResultSet rset = stmt.executeQuery(requestLongNames);
-
 			while(rset.next()){
 				String status = rset.getString("longName");
 				listOfLongNames.add(status);
 			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("getRequestLocations() error in the try/catch");
-
 		}
-
 		return listOfLongNames;
 	}
 
 // Duplicate node
 // LongName too long
+
+
+
 
 }

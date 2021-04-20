@@ -135,6 +135,13 @@ Create Table floralRequests
 	Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None'))
 );
 
+Select longName From (Select roomID
+                    From (Select *
+                            From requests
+                            where userID = 098908) thing, floralRequests
+                            where thing.requestID = floralRequests.requestID) that, node;
+
+
 -- addFloralRequest() -- run both, in order
 
 Insert Into requests
@@ -387,3 +394,6 @@ FROM (SELECT min (xCoord) as miniX, max (xCoord) as maxiX, min (yCoord) as miniY
     WHERE nodeID = : new.startNode OR nodeID = : new.endNode));
 END;
 */
+
+
+

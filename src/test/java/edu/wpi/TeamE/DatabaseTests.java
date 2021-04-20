@@ -636,7 +636,7 @@ public class DatabaseTests {
 		correctStatus.add("inProgress");
 		correctStatus.add("inProgress");
 
-		returnedStatus = connection.getRequestStatus("extTransport");
+		returnedStatus = connection.getRequestStatus("extTransport", 1);
 
 		assertTrue(correctStatus.equals(returnedStatus));
 	}
@@ -658,7 +658,7 @@ public class DatabaseTests {
 		correctIDs.add("1");
 		correctIDs.add("2");
 
-		returnedIDs = connection.getRequestIDs("extTransport");
+		returnedIDs = connection.getRequestIDs("extTransport", 1);
 
 		assertTrue(correctIDs.equals(returnedIDs));
 	}
@@ -672,7 +672,7 @@ public class DatabaseTests {
 		connection.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
 		connection.addMedicineRequest(1, "bob1","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
-		ArrayList<String> IDS = connection.getRequestIDs("medDelivery");
+		ArrayList<String> IDS = connection.getRequestIDs("medDelivery", 1);
 
 		int rowsChanged = connection.changeRequestStatus(1, "complete");
 
@@ -693,7 +693,7 @@ public class DatabaseTests {
 		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
 		connection.addSecurityRequest(1, "drew", "test", "low", "Low");
 
-		ArrayList<String> returnedAssignees = connection.getRequestAssignees("medDelivery");
+		ArrayList<String> returnedAssignees = connection.getRequestAssignees("medDelivery", 1);
 		ArrayList<String> correctAssignees = new ArrayList<String>();
 
 		correctAssignees.add("bob");
@@ -715,13 +715,44 @@ public class DatabaseTests {
 
 		connection.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
 		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
-		connection.addSecurityRequest(1, "drew", "test", "low", "Low");
+		connection.addMedicineRequest(2, "kim","test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
-		ArrayList<String> returnedLocations = connection.getRequestLocations("medDelivery");
+		ArrayList<String> returnedLocations = connection.getRequestLocations("medDelivery", 1);
 		ArrayList<String> correctLocations = new ArrayList<String>();
 
 		correctLocations.add("long name #1");
 		correctLocations.add("long name #2");
+
+		for(String e: returnedLocations)
+			System.out.println(e);
+
+		assertTrue(correctLocations.equals(returnedLocations));
+
+	}
+
+	@Test
+	@DisplayName("testGetRequestLocations2")
+	public void testGetRequestLocations2(){
+
+		connection.addNode("test", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		connection.addNode("test3", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		connection.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		connection.addMedicineRequest(1, "kim","test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		connection.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+		connection.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		connection.addMedicineRequest(2, "kim","test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		ArrayList<String> returnedLocations = connection.getRequestLocations("medDelivery", -1);
+		ArrayList<String> correctLocations = new ArrayList<String>();
+
+		correctLocations.add("long name #1");
+		correctLocations.add("long name #2");
+		correctLocations.add("long name #3");
+
+		for(String e: returnedLocations)
+			System.out.println(e);
 
 		assertTrue(correctLocations.equals(returnedLocations));
 

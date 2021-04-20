@@ -76,7 +76,7 @@ public class ServiceRequestStatus {
         makeConnection connection = makeConnection.makeConnection();
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            connection.changeRequestStatus(id, "Cancelled");
+            connection.changeRequestStatus(id, "canceled");
             System.out.println("The request was cancelled");
         }
     }
@@ -90,7 +90,7 @@ public class ServiceRequestStatus {
         makeConnection connection = makeConnection.makeConnection();
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            connection.changeRequestStatus(id,"Completed");
+            connection.changeRequestStatus(id,"complete");
             System.out.println("The request was completed");
         }
     }
@@ -116,6 +116,9 @@ public class ServiceRequestStatus {
     private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<String> idArray = connection.getRequestIDs(tableName);
+        for(int j = 0; j < idArray.size(); j++) {
+            System.out.println(idArray.get(j));
+        }
         ArrayList<String> statusArray = connection.getRequestStatus(tableName);
         ArrayList<String> locationArray = connection.getRequestLocations(tableName);
         ArrayList<String> assigneeArray = connection.getRequestAssignees(tableName);
@@ -132,13 +135,15 @@ public class ServiceRequestStatus {
             }
             for (int i = 0; i < idArray.size(); i++) {
                 TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), locationArray.get(i), assigneeArray.get(i), statusArray.get(i)));
-                if (request.getValue().getStatus().equals("In Progress")) {
+                System.out.println(request.getValue().getId());
+                System.out.println(request.getValue().getId());
+                if (request.getValue().getStatus().equals("inProgress")) {
                     inProgress.getChildren().add(request);
                 }
-                if (request.getValue().getStatus().equals("Completed")) {
+                if (request.getValue().getStatus().equals("complete")) {
                     completed.getChildren().add(request);
                 }
-                if (request.getValue().getStatus().equals("Cancelled")) {
+                if (request.getValue().getStatus().equals("canceled")) {
                     cancelled.getChildren().add(request);
                 }
             }

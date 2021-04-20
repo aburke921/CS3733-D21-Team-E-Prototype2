@@ -1243,7 +1243,7 @@ public class makeConnection {
 
 
 		//SuperAdmin:
-		String insertUser = "Insert Into userAccount Values (0, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP )";
+		String insertUser = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP )";
 		try {
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(insertUser);

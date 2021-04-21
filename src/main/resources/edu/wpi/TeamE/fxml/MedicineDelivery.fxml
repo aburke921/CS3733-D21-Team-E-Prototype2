@@ -51,12 +51,7 @@
                                                 <Font size="18.0" />
                                             </font>
                                         </Label>
-                                        <JFXTextField fx:id="roomNumInput" promptText="Room Number">
-                                            <VBox.margin>
-                                                <Insets bottom="10.0" />
-                                            </VBox.margin>
-                                        </JFXTextField>
-                                        <JFXComboBox prefHeight="27.0" prefWidth="265.0" promptText="Department" />
+                                        <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="265.0" promptText="Location" />
                                         <Label text="Medicine">
                                             <font>
                                                 <Font size="18.0" />
@@ -80,6 +75,7 @@
                                             </VBox.margin>
                                         </JFXTextField>
                                         <JFXTextField fx:id="doseMeasureInput" promptText="g/mL" />
+                              <JFXTextField fx:id="assignee" promptText="Assign Person" />
                                     </children>
                                     <FlowPane.margin>
                                         <Insets left="10.0" />

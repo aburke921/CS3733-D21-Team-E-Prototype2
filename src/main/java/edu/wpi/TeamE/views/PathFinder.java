@@ -126,7 +126,7 @@ public class PathFinder {
     private double radius = 6;
     private double strokeWidth = 3;
 
-    private boolean handi;
+
 
 
     /**
@@ -240,10 +240,10 @@ public class PathFinder {
         SearchContext aStar = new SearchContext();
         if(handicap.isSelected()) {
             System.out.println("Yay Handicap");
-            aStar.setConstraint("HANDICAP");
+            aStar.addConstraint("HANDICAP");
         } if(safe.isSelected()){
             System.out.println("Yay Safe =)");
-            aStar.setConstraint("SAFE");
+            aStar.addConstraint("SAFE");
         }
 
         //Check if starting and ending node are the same

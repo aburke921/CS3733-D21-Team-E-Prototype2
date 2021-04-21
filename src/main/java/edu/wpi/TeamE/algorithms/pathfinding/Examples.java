@@ -39,17 +39,17 @@ public class Examples {
         //if you want vanilla a* you can instantiate like this
         SearchContext search = new SearchContext();
         //or like this (these lines (^v) are equivalent)
-        search = new SearchContext(new Searcher(), "VANILLA");
+        search = new SearchContext("VANILLA");
         //safe search will avoid the emergency room
-        search = new SearchContext(new DFSSearcher(), "SAFE");
+        search = new SearchContext("SAFE");
         //handicap search will avoid stairs
         //also nothing is case sensitive
-        search = new SearchContext(new Searcher(), "handicap");
+        search = new SearchContext("A*", "handicap");
 
         //if you don't want to instantiate a new one every time (recommended, better for memory)
         //you can specify a new algorithm or new conditions like this
-        search.setAlgo(new DFSSearcher());
-        search.setAlgo(new Searcher());
+        search.setAlgo("DFS");
+        search.setAlgo("A*");
 
         search.setConstraint("HANDICAP");
         search.setConstraint("HaNdICap");

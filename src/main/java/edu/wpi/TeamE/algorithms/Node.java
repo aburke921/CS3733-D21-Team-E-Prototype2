@@ -153,7 +153,16 @@ public class Node implements Comparable<Node> {
      * @return true if the two nodes 'id's  are equal
      */
     public boolean equals(Node n){
-        return get("id").equalsIgnoreCase(n.get("id"));
+        if(nodeInfo == null && n.nodeInfo == null){
+            //two pathHeads, equal
+            return true;
+        } else if(nodeInfo == null || n.nodeInfo == null){
+            //one pathHead but not two, not equal
+            return false;
+        } else {
+            //no pathHeads, equal if ids are equal
+            return get("id").equalsIgnoreCase(n.get("id"));
+        }
     }
 
     /**

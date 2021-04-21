@@ -303,17 +303,19 @@ public class PathFinder {
         pane.getChildren().clear();
         System.out.println(" DONE");
 
-        //parse out nodes that are not on specified floor.
-        LinkedList<Node> finalNodeList = getNodesOnFloorFromPath(path, floorNum);
 
+        /* Stuff Shane Wrote */
+        //make iterator out of the parsed path
+        Iterator<Node> nodeIteratorThisFloorOnly = path.iterator(floorNum);
         //if there are no nodes on this floor
-        if (finalNodeList == null) {
+        if (!nodeIteratorThisFloorOnly.hasNext()) {
             //todo snackbar to say no nodes on this floor?
             return;
         }
+        //there is also a path.getStart() and path.getEnd()
+        //if that would be useful for coloring
+        /* End of Stuff Shane Wrote */
 
-        //make iterator out of the parsed path
-        Iterator<Node> nodeIteratorThisFloorOnly = finalNodeList.iterator();
 
         Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 

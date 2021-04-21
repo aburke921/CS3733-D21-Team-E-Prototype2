@@ -31,6 +31,11 @@ public class SearchContext {
         return search.search(startNode, endNode);
     }
 
+    public Path searchAlongPath(Path route, String stopType){
+        return search.searchAlongPath(route, stopType);
+    }
+
+
     private SearchConstraint translate(String type){
         if(type.equalsIgnoreCase("SAFE")){
             return new SafeSearch();

@@ -103,7 +103,6 @@ public class SecurityService extends ServiceRequestFormComponents {
 
         return  locationInput.validate() && levelOfSecurity.validate() && levelOfUrgency.validate() && assignedPersonnel.validate() && assignedPersonnel.validate() && reasonForRequest.validate();
 
-
     }
 
     @FXML

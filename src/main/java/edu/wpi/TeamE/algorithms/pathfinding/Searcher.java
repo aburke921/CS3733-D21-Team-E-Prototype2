@@ -124,6 +124,26 @@ public class Searcher {
         return null;
     }
 
+    public Path search(Collection<String> stopIds){
+        Path fullPath = new Path();
+        Iterator<String> itr = stopIds.iterator();
+
+        if(itr.hasNext()){
+            String prev = itr.next();
+            while(itr.hasNext()){
+                String current = itr.next();
+                Path leg = search(prev, current);
+                if(fullPath.getEnd().equals(leg.getStart())){
+                    leg.pop();
+                }
+                fullPath.add(leg);
+                prev = current;
+            }
+            return fullPath;
+        } else {
+            return null;
+        }
+    }
 
     public Path searchAlongPath(Path route, String stopType){
         List<Node> stops = con.getAllNodesByType(stopType);

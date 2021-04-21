@@ -61,6 +61,13 @@ public class Examples {
         }
         System.out.println();
 
+        p = search.search("ePARK00101", "eWALK00101");
+        p.print("id");
+        for (String dir : p.makeDirectionsWithDist()) {
+            System.out.println(dir);
+        }
+        System.out.println();
+
         // Directions Testing
         p = search.search("ARETL00101", "ADEPT00102");
         p.print("id");

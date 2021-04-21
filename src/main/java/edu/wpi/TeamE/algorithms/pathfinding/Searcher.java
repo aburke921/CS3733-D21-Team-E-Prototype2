@@ -161,7 +161,10 @@ public class Searcher {
             paths.add(leg1);
         }
 
-        return paths.poll();
+        Path shortestDetour = paths.poll();
+        System.out.printf("Added %f length\n", shortestDetour.getPathLength() - route.getPathLength());
+
+        return shortestDetour;
     }
 
 

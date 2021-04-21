@@ -62,8 +62,25 @@ public class Examples {
         Node end = p.getEnd();
         double length = p.getPathLength();
 
+
         Iterator<Node> l1Nodes = p.iterator("L1");
         Iterator<Node> allNodes = p.iterator();
+
+        p = search.search("ePARK00101", "eWALK00101");
+        p.print("id");
+        for (String dir : p.makeDirectionsWithDist()) {
+            System.out.println(dir);
+        }
+        System.out.println();
+
+        // Directions Testing
+        p = search.search("ARETL00101", "ADEPT00102");
+        p.print("id");
+        for (String dir : p.makeDirectionsWithDist()) {
+            System.out.println(dir);
+        }
+        System.out.println();
+
 
         List<Node> nodeList = p.toList();
 

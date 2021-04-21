@@ -92,7 +92,7 @@ public class EdgeCSVUpload {
 
         makeConnection connection = makeConnection.makeConnection();
         connection.getNewCSVFile("hasEdge");
-        File file = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+        File file = new File("CSVs/outputEdge.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
         prepareEdges(treeTable);

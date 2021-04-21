@@ -188,7 +188,7 @@ public class PathFinder {
         //get directions
         if (currentFoundPath == null) return;
 
-        List<String> directions = currentFoundPath.makeDirections();
+        List<String> directions = currentFoundPath.makeDirectionsWithDist();
         StringBuilder directionsStringBuilder = new StringBuilder();
         for (String dir: directions) {
             System.out.println(dir);

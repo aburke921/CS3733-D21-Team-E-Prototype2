@@ -65,6 +65,11 @@ public class PathFinder {
 
     @FXML // fx:id="endLocationList"
     private JFXComboBox<String> endLocationComboBox; // Value injected by FXMLLoader
+    @FXML
+    private JFXToggleButton handicap;
+
+    @FXML
+    private JFXToggleButton safe;
 
     //@FXML // fx:id="imageView"
     private ImageView imageView = new ImageView();
@@ -120,6 +125,9 @@ public class PathFinder {
 
     private double radius = 6;
     private double strokeWidth = 3;
+
+    private boolean handi;
+
 
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
@@ -230,7 +238,13 @@ public class PathFinder {
         //Execute A* Search
         System.out.println("A* Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
         SearchContext aStar = new SearchContext();
-        //aStar.setConstraint("HANDICAP");
+        if(handicap.isSelected()) {
+            System.out.println("Yay Handicap");
+            aStar.setConstraint("HANDICAP");
+        } if(safe.isSelected()){
+            System.out.println("Yay Safe =)");
+            aStar.setConstraint("SAFE");
+        }
 
         //Check if starting and ending node are the same
         if(selectedStartNodeID.equals(selectedEndNodeID)) { //error

@@ -108,6 +108,12 @@ public class Path implements Comparable<Path>, Iterable<Node>{
         private NodeIterator(Node _cursor, String _floorNum){
             cursor = _cursor;
             floorNum = _floorNum;
+            if(!_floorNum.equalsIgnoreCase("ALL")){
+                while(cursor != null && !cursor.get("floor").equalsIgnoreCase(_floorNum)){
+                    //move cursor to the first instance of floor if it exists
+                    cursor = cursor.getNext();
+                }
+            }
         }
 
         @Override

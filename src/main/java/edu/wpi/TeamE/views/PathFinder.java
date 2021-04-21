@@ -304,6 +304,8 @@ public class PathFinder {
         pane.getChildren().clear();
         System.out.println(" DONE");
 
+        System.out.println("drawMap() is Finding path for floor " + floorNum);
+
 
         //if path is null
         if (path == null) {
@@ -315,10 +317,10 @@ public class PathFinder {
         Iterator<Node> nodeIteratorThisFloorOnly = path.iterator(floorNum);
         //if there are no nodes on this floor
         if (!nodeIteratorThisFloorOnly.hasNext()) {
-            System.out.println("there are no nodes on this floor");
+            System.out.println("drawMap() has found that there are no nodes on this floor");
             //todo snackbar to say no nodes on this floor?
             return;
-        }
+        } else System.out.println("drawMap() has found nodes on this floor, drawing them now...");
         //there is also a path.getStart() and path.getEnd()
         //if that would be useful for coloring
         /* End of Stuff Shane Wrote */
@@ -442,7 +444,7 @@ public class PathFinder {
         Image image = new Image("edu/wpi/TeamE/maps/" + floorNum + ".png");
         imageView.setImage(image);
 
-        //draw path
+        //draw path for new floor
         drawMap(currentFoundPath,currentFloor);
 
         System.out.println("Current floor set to " + floorNum);
@@ -527,7 +529,6 @@ public class PathFinder {
     public void nextFloor(ActionEvent event) {
         //set current floor to one after current
         setCurrentFloor(floorNames[currentFloorNamesIndex]);
-        System.out.println(currentFloor);
 
         //increment unless at max, then back to 0
         if (currentFloorNamesIndex == 5) {

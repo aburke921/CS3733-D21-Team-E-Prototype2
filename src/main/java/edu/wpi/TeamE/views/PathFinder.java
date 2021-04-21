@@ -235,9 +235,11 @@ public class PathFinder {
         selectedEndNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
         System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + selectedEndNodeID);
 
-        //Execute A* Search
+        //Define A* Search
         System.out.println("A* Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
         SearchContext aStar = new SearchContext();
+
+        //set constrains
         if(handicap.isSelected()) {
             System.out.println("Yay Handicap");
             aStar.addConstraint("HANDICAP");
@@ -278,7 +280,6 @@ public class PathFinder {
                 //draw the map for the current floor
                 drawMap(foundPath, currentFloor);
 
-                //todo Display algo's directions
                 System.out.println();
                 List<String> directions = foundPath.makeDirections();
                 for (String dir: directions) {
@@ -304,11 +305,17 @@ public class PathFinder {
         System.out.println(" DONE");
 
 
-        /* Stuff Shane Wrote */
+        //if path is null
+        if (path == null) {
+            //todo snackbar to say no path set
+            return;
+        }
+
         //make iterator out of the parsed path
         Iterator<Node> nodeIteratorThisFloorOnly = path.iterator(floorNum);
         //if there are no nodes on this floor
         if (!nodeIteratorThisFloorOnly.hasNext()) {
+            System.out.println("there are no nodes on this floor");
             //todo snackbar to say no nodes on this floor?
             return;
         }
@@ -350,9 +357,8 @@ public class PathFinder {
                     //place a red dot on the location
                     Circle circle = new Circle(xCoord, yCoord, radius, Color.RED);
                     g.getChildren().add(circle);
+
                 }
-
-
             } else if (!nodeIteratorThisFloorOnly.hasNext()) { //if current node is the ending node for this floor
 
                 Circle circle;
@@ -521,9 +527,10 @@ public class PathFinder {
     public void nextFloor(ActionEvent event) {
         //set current floor to one after current
         setCurrentFloor(floorNames[currentFloorNamesIndex]);
+        System.out.println(currentFloor);
 
         //increment unless at max, then back to 0
-        if (currentFloorNamesIndex == 4) {
+        if (currentFloorNamesIndex == 5) {
             currentFloorNamesIndex = 0;
         } else currentFloorNamesIndex++;
     }

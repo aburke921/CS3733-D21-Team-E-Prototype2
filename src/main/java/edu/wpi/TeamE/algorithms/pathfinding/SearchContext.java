@@ -64,7 +64,7 @@ public class SearchContext {
             return new SafeSearch();
         } else if(type.equalsIgnoreCase("HANDICAP")){
             return new HandicapSearch();
-        } else if(type.equalsIgnoreCase("VANILLA")) {
+        } else if(type.equalsIgnoreCase("VANILLA") || type.equalsIgnoreCase("")) {
             return new VanillaSearch();
         } else {
             return null;

@@ -1,4 +1,4 @@
-nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName
+nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName
 ACONF00102,1580,2538,2,BTM,HALL,Hall,Hall
 ACONF00103,1648,2968,3,BTM,CONF,BTM Conference Center,BTM Conference
 ADEPT00101,1401,2628,1,BTM,DEPT,Neuroscience Waiting Room,Neuro Waiting Room
@@ -624,5 +624,3 @@ eWALK01601,3189,1360,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01701,3185,1292,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01801,3338,1352,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01901,1789,1757,1,Parking,WALK,Shapiro Lobby Entrance Sidewalk,Walkway
-test,0,0,L1,BTM,HALL,testtest,test
-eCONF001L2,0,0,L2,BTM,CONF,long,

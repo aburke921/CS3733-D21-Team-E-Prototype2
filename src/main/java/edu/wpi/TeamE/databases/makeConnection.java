@@ -2191,13 +2191,13 @@ public class makeConnection {
 				StringBuilder edgeSB = new StringBuilder();
 
 				while (rset2.next()) {
-					//File edgeCSV = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+					//File edgeCSV = new File("CSVs/outputEdge.csv");
 					edgeSB.append(rset2.getString("edgeID")).append(",");
 					edgeSB.append(rset2.getString("startNode")).append(",");
 					edgeSB.append(rset2.getString("endNode")).append("\n");
 				}
 
-				FileWriter edgeWriter = new FileWriter("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+				FileWriter edgeWriter = new FileWriter("CSVs/outputEdge.csv");
 				edgeWriter.write("edgeID, startNode, endNode\n");
 				edgeWriter.write(String.valueOf(edgeSB));
 				edgeWriter.close();

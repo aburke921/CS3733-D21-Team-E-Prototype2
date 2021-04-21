@@ -695,7 +695,7 @@ public class MapEditor {
         if (file != null) {
             //Have to save edge table so we can get it back after deleting
             connection.getNewCSVFile("hasEdge");
-            File saveEdges = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+            File saveEdges = new File("CSVs/outputEdge.csv");
 
             //This is where tables are cleared and refilled
             connection.deleteAllTables();

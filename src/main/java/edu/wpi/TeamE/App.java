@@ -33,8 +33,8 @@ public class App extends Application {
 		System.out.println("STARTING UP!!!");
 		makeConnection connection = makeConnection.makeConnection();
 		System.out.println("Connected to the DB");
-		File nodes = new File("Maps and CSVs/MapEAllnodes.csv");
-		File edges = new File("Maps and CSVs/MapEAlledges.csv");
+		File nodes = new File("CSVs/MapEAllnodes.csv");
+		File edges = new File("CSVs/MapEAlledges.csv");
     boolean tablesExist = connection.allTablesThere();
 		if(!tablesExist){
 			try {

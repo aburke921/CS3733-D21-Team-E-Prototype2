@@ -115,13 +115,14 @@ public class NodeCSVUpload {
         if (file != null) {
             //Have to save edge table so we can get it back after deleting
             connection.getNewCSVFile("hasEdge");
-            File saveEdges = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+            File saveEdges = new File("CSVs/outputEdge.csv");
 
             //This is where tables are cleared and refilled
             connection.deleteAllTables();
             connection.createTables();
             connection.populateTable("node", file);
             connection.populateTable("hasEdge", saveEdges);
+            System.out.println("Some edges might be removed because their nodes are no longer here");
             System.out.println("Success");
         }
     }

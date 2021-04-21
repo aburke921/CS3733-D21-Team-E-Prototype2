@@ -21,8 +21,8 @@ public class PathFindingTests {
     public static void setupExpected() {
         System.out.println("STARTING UP!!!");
         makeConnection con = makeConnection.makeConnection();
-        File nodes = new File("Maps and CSVs/MapEAllnodes.csv");
-        File edges = new File("Maps and CSVs/MapEAlledges.csv");
+        File nodes = new File("CSVs/MapEAllnodes.csv");
+        File edges = new File("CSVs/MapEAlledges.csv");
         try {
             con.createTables();
             con.populateTable("node", nodes);

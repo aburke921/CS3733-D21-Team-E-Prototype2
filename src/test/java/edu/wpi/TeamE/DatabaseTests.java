@@ -993,22 +993,26 @@ public class DatabaseTests {
 		connection.addDataForPresentation();
 	}
 
-//	@Test
-//	@DisplayName("testGetTablesToThatExist")
-//	public void testGetTablesToThatExist(){
-////		try {
-////			connection.deleteAllTables();
-////			connection.createNodeTable();
-////		} catch (Exception e) {
-////			connection.createNodeTable();
-////		}
-//		ArrayList<String> names = connection.getTablesToThatExist();
-//
-//		for(String name : names){
-//			System.out.println(name);
-//		}
-//		assertTrue(true);
-//
-//	}
+	@Test
+	@DisplayName("testAllTablesThere")
+	public void testAllTablesThere(){
+
+		boolean names = connection.allTablesThere();
+
+
+		assertTrue(names);
+
+	}
+
+	@Test
+	@DisplayName("testAllTablesThere2")
+	public void testAllTablesThere2(){
+
+		connection.deleteAllTables();
+		boolean names = connection.allTablesThere();
+
+		assertFalse(names);
+
+	}
 
 }

@@ -30,20 +30,24 @@ public class App extends Application {
 		File nodes = new File("bwEnodes.csv");
 		File edges = new File("bwEedges.csv");
 
-		try {
-			//connection.deleteAllTables();
-			connection.createTables();
-			connection.populateTable("node", nodes);
-			connection.populateTable("hasEdge", edges);
-			connection.addDataForPresentation();
-			System.out.println("Tables were created");
-		} catch (Exception e) {
-			System.out.println("Tables already there");
-			/*connection.createTables();
-			connection.populateTable("node", nodes);
-			connection.populateTable("hasEdge", edges);*/
-			System.out.println("Tables were created and populated");
+
+		boolean tablesExist = connection.allTablesThere();
+		if(!tablesExist){
+			try {
+				connection.createTables();
+				connection.populateTable("node", nodes);
+				connection.populateTable("hasEdge", edges);
+				connection.addDataForPresentation();
+				System.out.println("Tables were created");
+			} catch (Exception e) {
+				System.out.println("Tables already there");
+				/*connection.createTables();
+				connection.populateTable("node", nodes);
+				connection.populateTable("hasEdge", edges);*/
+				System.out.println("Tables were created and populated");
+			}
 		}
+
 	}
 
 //login

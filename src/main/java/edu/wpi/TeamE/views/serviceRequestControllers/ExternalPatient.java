@@ -1,11 +1,10 @@
-package edu.wpi.TeamE.views;
+package edu.wpi.TeamE.views.serviceRequestControllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 
-import java.io.IOException;
 import java.lang.String;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,14 +13,13 @@ import java.util.ResourceBundle;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.TeamE.views.serviceRequestControllers.ServiceRequestFormComponents;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.shape.Polygon;
 
-public class ExternalPatient extends ServiceRequestFormComponents  {
+public class ExternalPatient extends ServiceRequestFormComponents {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;

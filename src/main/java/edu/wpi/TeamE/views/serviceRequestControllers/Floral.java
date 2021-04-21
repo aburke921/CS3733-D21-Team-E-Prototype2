@@ -1,12 +1,8 @@
-package edu.wpi.TeamE.views;
+package edu.wpi.TeamE.views.serviceRequestControllers;
 
-import edu.wpi.TeamE.App;
+import edu.wpi.TeamE.views.serviceRequestControllers.ServiceRequestFormComponents;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-
-import java.io.IOException;
 
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;

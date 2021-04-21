@@ -1,4 +1,4 @@
-package edu.wpi.TeamE.views;
+package edu.wpi.TeamE.views.mapEditorControllers;
 
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.algorithms.Node;

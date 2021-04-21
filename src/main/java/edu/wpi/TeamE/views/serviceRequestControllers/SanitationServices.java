@@ -1,25 +1,15 @@
-package edu.wpi.TeamE.views;
+package edu.wpi.TeamE.views.serviceRequestControllers;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.validation.RequiredFieldValidator;
-import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.databases.makeConnection;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import edu.wpi.TeamE.databases.*;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import com.jfoenix.controls.JFXSnackbar;
-import com.jfoenix.controls.JFXSnackbarLayout;
 
 public class SanitationServices extends ServiceRequestFormComponents {
 

@@ -2,7 +2,6 @@ package edu.wpi.TeamE.databases;
 
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.views.MapEditor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;

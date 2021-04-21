@@ -90,11 +90,11 @@
                             <children>
                                 <VBox prefHeight="155.0" prefWidth="264.0">
                                     <children>
-                                        <JFXTextField fx:id="locationOfDelivery" promptText="Location">
-                                            <VBox.margin>
-                                                <Insets bottom="10.0" top="20.0" />
-                                            </VBox.margin>
-                                        </JFXTextField>
+                              <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
+                                 <items>
+
+                                 </items>
+                              </JFXComboBox>
                                         <JFXComboBox fx:id="levelOfSecurity" prefHeight="27.0" prefWidth="268.0" promptText="Level of Security Required">
                                             <VBox.margin>
                                                 <Insets bottom="10.0" top="20.0" />
@@ -118,6 +118,7 @@
                                                 </FXCollections>
                                             </items>
                                         </JFXComboBox>
+                              <JFXTextField fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel" />
                                     </children>
                                     <FlowPane.margin>
                                         <Insets left="10.0" />

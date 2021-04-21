@@ -1,9 +1,12 @@
 package edu.wpi.TeamE.algorithms.pathfinding;
 
+import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.databases.makeConnection;
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.List;
 
 public class Examples {
 
@@ -28,8 +31,8 @@ public class Examples {
         }
 
 
-        String startNode = "ePARK00101";
-        String endNode = "FEXIT00201";
+        String startNode = "eWALK01801";
+        String endNode = "ePARK00101";
 
         //the pathfinding API is now entirely wrapped up in the SearchContext class
         //this will allow you to flexibly configure what kind of search you wish to execute
@@ -55,11 +58,13 @@ public class Examples {
 
         //searching for a new path is the same
         Path p = search.search(startNode, endNode);
-        p.print("id");
-        for (String dir : p.makeDirectionsWithDist()) {
-            System.out.println(dir);
-        }
-        System.out.println();
+        Node start = p.getStart();
+        Node end = p.getEnd();
+        double length = p.getPathLength();
+
+
+        Iterator<Node> l1Nodes = p.iterator("L1");
+        Iterator<Node> allNodes = p.iterator();
 
         p = search.search("ePARK00101", "eWALK00101");
         p.print("id");
@@ -76,11 +81,11 @@ public class Examples {
         }
         System.out.println();
 
-        search.setConstraint("HANDICAP");
-        p = search.search("ARETL00101", "ADEPT00102");
-        p.print("id");
-        for (String dir : p.makeDirectionsWithDist()) {
-            System.out.println(dir);
+
+        List<Node> nodeList = p.toList();
+
+        for(Node node : p){
+            //you can also iterate through all like this
         }
 
 

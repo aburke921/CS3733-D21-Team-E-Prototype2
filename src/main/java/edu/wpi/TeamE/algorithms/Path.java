@@ -3,13 +3,14 @@ package edu.wpi.TeamE.algorithms;
 import java.util.Iterator;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Path Class
  * Is effectively a LinkedList
  */
-public class Path {
+public class Path implements Comparable<Path>, Iterable<Node>{
     //pathHead is a sentinel node
     private final Node pathHead;
 
@@ -44,8 +45,11 @@ public class Path {
     /**
      * @return the first node in list
      */
-    public Node peek(){
+    public Node getStart(){
         return pathHead.getNext();
+    }
+    public Node getEnd(){
+        return pathEnd;
     }
 
     /**
@@ -54,13 +58,19 @@ public class Path {
      */
     public void add(Node _n){
         Node n = _n.copy();
-        //System.out.println("adding "+n.get("id")+", "+n);
-        //set the end of the path to point at n
+
         if (!isEmpty()) { //If it's empty, then there is no distance to calculate
             length += pathEnd.dist(n);
         }
         pathEnd.setNext(n);
         pathEnd = n;
+    }
+
+    public Node pop(){
+        Node first = getStart();
+        pathHead.setNext(first.getNext());
+        first.setNext(null);
+        return first;
     }
 
     /**
@@ -69,11 +79,13 @@ public class Path {
      */
     public void add(Path p) {
         if(!p.isEmpty()) {
-            length += p.getPathLength() + pathEnd.dist(p.peek());
-            pathEnd.setNext(p.peek());
+            length += p.getPathLength() + pathEnd.dist(p.getStart());
+            pathEnd.setNext(p.getStart());
             pathEnd = p.pathEnd;
         }
     }
+
+
 
     /**
      * @return an iterator to loop through the path
@@ -82,12 +94,37 @@ public class Path {
      *         you will receive the first node in the list
      *         otherwise the iterator will point at the sentinel node
      */
-    public Iterator<Node> iterator(){
-        Iterator<Node> itr = pathHead.iterator();
-        if(itr.hasNext()){
-            itr.next();
+    @Override
+    public Iterator<Node> iterator() {
+        return iterator("ALL");
+    }
+    public Iterator<Node> iterator(String floorNum){
+        return new NodeIterator(getStart(), floorNum);
+    }
+
+    private class NodeIterator implements Iterator<Node> {
+        Node cursor;
+        String floorNum;
+        private NodeIterator(Node _cursor, String _floorNum){
+            cursor = _cursor;
+            floorNum = _floorNum;
         }
-        return itr;
+
+        @Override
+        public boolean hasNext() {
+            if(floorNum.equalsIgnoreCase("ALL")){
+                return cursor != null;
+            } else {
+                return cursor != null && cursor.get("floor").equalsIgnoreCase(floorNum);
+            }
+        }
+
+        @Override
+        public Node next() {
+            Node tmp = cursor;
+            cursor = cursor.getNext();
+            return tmp;
+        }
     }
 
     /**
@@ -104,10 +141,8 @@ public class Path {
         List<String> directions = new ArrayList<>();
 
         //iterate the list
-        Iterator<Node> itr = pathHead.iterator();
+        Iterator<Node> itr = iterator();
 
-        //ignore dummy head
-        itr.next();
 
         /*
         node 1
@@ -189,6 +224,7 @@ public class Path {
     }
 
     /**
+
      * A method(no parameters) in our path class that returns a collection of
      * strings(array, array list), iterate through its list and
      * figures out how to turn the list nodes into a list of strings that describe it.
@@ -385,11 +421,26 @@ public class Path {
      * Gets the length of the path for Time Estimates
      * @return The total length of the path
      */
-    public double getPathLength(){ return length; }
+    public double getPathLength(){
+        return length;
+    }
 
     /**
-     * Gets the length of the path in feet for Time Estimates
-     * @return The total length of the path in feet
+     * convenience method
+     * but is an unnecessary O(n) computation
+     * when iterators are pretty easy to use
+     * @return the path as a List
      */
-    public double getPathLengthFeet(){ return length * SCALE; }
+    public List<Node> toList(){
+        List<Node> nodes = new LinkedList<>();
+        for(Iterator<Node> itr = iterator(); itr.hasNext(); nodes.add(itr.next()));
+        return nodes;
+    }
+
+    @Override
+    public int compareTo(Path p) {
+        return Double.compare(length, p.length);
+    }
+
+
 }

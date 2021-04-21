@@ -11,7 +11,7 @@ import java.util.List;
  * Node Class, lots of specific Node implementation stuff
  * Handles node info
  */
-public class Node implements Comparable<Node>, Iterable<Node> {
+public class Node implements Comparable<Node> {
     private int xCoord, yCoord, zCoord;
     //mapping of node information
     private HashMap<String, String> nodeInfo;
@@ -103,8 +103,6 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         return zCoord;
     }
 
-
-
     /**
      * cost is used in pathfinding to evaluate if this node is worth being part of the path
      * should always call setCost before adding node to a PriorityQueue
@@ -177,32 +175,6 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         return get("id").hashCode();
     }
 
-    /**
-     * @return an iterator for iterating through Paths
-     */
-    @Override
-    public Iterator<Node> iterator() {
-        return new NodeIterator(this);
-    }
-
-    private class NodeIterator implements Iterator<Node> {
-        Node cursor;
-        private NodeIterator(Node _cursor){
-            cursor = _cursor;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return cursor != null;
-        }
-
-        @Override
-        public Node next() {
-            Node tmp = cursor;
-            cursor = cursor.getNext();
-            return tmp;
-        }
-    }
 
     /**
      * Calculate the euclidean distance between two nodes

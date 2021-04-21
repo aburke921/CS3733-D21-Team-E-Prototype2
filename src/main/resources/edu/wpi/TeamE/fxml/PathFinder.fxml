@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXSlider?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -85,12 +86,12 @@
          <children>
                 <HBox layoutY="1.0" prefHeight="58.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
                     <children>
-                  <JFXComboBox fx:id="startLocationComboBox" onAction="#selectStartNode" prefHeight="25.0" prefWidth="233.0" promptText="Start Location">
+                  <JFXComboBox fx:id="startLocationComboBox" onAction="#selectStartNode" prefHeight="25.0" prefWidth="150.0" promptText="Start Location">
                      <HBox.margin>
                         <Insets left="20.0" top="10.0" />
                      </HBox.margin>
                   </JFXComboBox>
-                  <JFXComboBox fx:id="endLocationComboBox" onAction="#selectEndNode" prefHeight="25.0" prefWidth="233.0" promptText="End Location">
+                  <JFXComboBox fx:id="endLocationComboBox" onAction="#selectEndNode" prefHeight="25.0" prefWidth="150.0" promptText="End Location">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
@@ -134,6 +135,8 @@
       <AnchorPane fx:id="lowerAnchorPane" prefHeight="150.0" prefWidth="1200.0">
          <children>
             <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" onAction="#toDefault" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
+            <JFXToggleButton fx:id="handicap" layoutX="96.0" text="Handicap" />
+            <JFXToggleButton fx:id="safe" layoutX="250.0" text="Safe Path" />
          </children>
       </AnchorPane>
    </children>

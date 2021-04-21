@@ -65,6 +65,11 @@ public class PathFinder {
 
     @FXML // fx:id="endLocationList"
     private JFXComboBox<String> endLocationComboBox; // Value injected by FXMLLoader
+    @FXML
+    private JFXToggleButton handicap;
+
+    @FXML
+    private JFXToggleButton safe;
 
     //@FXML // fx:id="imageView"
     private ImageView imageView = new ImageView();
@@ -120,6 +125,9 @@ public class PathFinder {
 
     private double radius = 6;
     private double strokeWidth = 3;
+
+
+
 
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
@@ -227,10 +235,18 @@ public class PathFinder {
         selectedEndNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
         System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + selectedEndNodeID);
 
-        //Execute A* Search
+        //Define A* Search
         System.out.println("A* Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
         SearchContext aStar = new SearchContext();
-        //aStar.setConstraint("HANDICAP");
+
+        //set constrains
+        if(handicap.isSelected()) {
+            System.out.println("Yay Handicap");
+            aStar.addConstraint("HANDICAP");
+        } if(safe.isSelected()){
+            System.out.println("Yay Safe =)");
+            aStar.addConstraint("SAFE");
+        }
 
         //Check if starting and ending node are the same
         if(selectedStartNodeID.equals(selectedEndNodeID)) { //error
@@ -264,7 +280,6 @@ public class PathFinder {
                 //draw the map for the current floor
                 drawMap(foundPath, currentFloor);
 
-                //todo Display algo's directions
                 System.out.println();
                 List<String> directions = foundPath.makeDirections();
                 for (String dir: directions) {
@@ -289,17 +304,25 @@ public class PathFinder {
         pane.getChildren().clear();
         System.out.println(" DONE");
 
-        //parse out nodes that are not on specified floor.
-        LinkedList<Node> finalNodeList = getNodesOnFloorFromPath(path, floorNum);
 
-        //if there are no nodes on this floor
-        if (finalNodeList == null) {
-            //todo snackbar to say no nodes on this floor?
+        //if path is null
+        if (path == null) {
+            //todo snackbar to say no path set
             return;
         }
 
         //make iterator out of the parsed path
-        Iterator<Node> nodeIteratorThisFloorOnly = finalNodeList.iterator();
+        Iterator<Node> nodeIteratorThisFloorOnly = path.iterator(floorNum);
+        //if there are no nodes on this floor
+        if (!nodeIteratorThisFloorOnly.hasNext()) {
+            System.out.println("there are no nodes on this floor");
+            //todo snackbar to say no nodes on this floor?
+            return;
+        }
+        //there is also a path.getStart() and path.getEnd()
+        //if that would be useful for coloring
+        /* End of Stuff Shane Wrote */
+
 
         Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
@@ -334,9 +357,8 @@ public class PathFinder {
                     //place a red dot on the location
                     Circle circle = new Circle(xCoord, yCoord, radius, Color.RED);
                     g.getChildren().add(circle);
+
                 }
-
-
             } else if (!nodeIteratorThisFloorOnly.hasNext()) { //if current node is the ending node for this floor
 
                 Circle circle;
@@ -505,9 +527,10 @@ public class PathFinder {
     public void nextFloor(ActionEvent event) {
         //set current floor to one after current
         setCurrentFloor(floorNames[currentFloorNamesIndex]);
+        System.out.println(currentFloor);
 
         //increment unless at max, then back to 0
-        if (currentFloorNamesIndex == 4) {
+        if (currentFloorNamesIndex == 5) {
             currentFloorNamesIndex = 0;
         } else currentFloorNamesIndex++;
     }

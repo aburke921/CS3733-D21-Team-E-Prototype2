@@ -78,7 +78,7 @@ public class ServiceRequestStatus {
         makeConnection connection = makeConnection.makeConnection();
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            RequestsDB.changeRequestStatus(id, "canceled");
+            RequestsDB.editRequests(id, null, "canceled");
             System.out.println("The request was cancelled");
         }
     }
@@ -93,7 +93,7 @@ public class ServiceRequestStatus {
         makeConnection connection = makeConnection.makeConnection();
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            RequestsDB.changeRequestStatus(id,"complete");
+            RequestsDB.editRequests(id,null, "complete");
             System.out.println("The request was completed");
         }
 

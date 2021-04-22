@@ -185,11 +185,11 @@ public class makeConnection {
 		RequestsDB.addFloralRequest(19,"Darren Rossi", "ADEPT00301", "Carrie", "Assortment", 12, "Round", "");
 
 
-		RequestsDB.changeRequestStatus(1, "canceled");
-		RequestsDB.changeRequestStatus(4, "canceled");
-		RequestsDB.changeRequestStatus(5, "complete");
-		RequestsDB.changeRequestStatus(6, "canceled");
-		RequestsDB.changeRequestStatus(7, "complete");
+		RequestsDB.editRequests(1, null,  "canceled");
+		RequestsDB.editRequests(4, null, "canceled");
+		RequestsDB.editRequests(5, null, "complete");
+		RequestsDB.editRequests(6, null, "canceled");
+		RequestsDB.editRequests(7, null, "complete");
 
 
 		//Sanitation Requests: //RequestID: 10 - 18
@@ -204,11 +204,11 @@ public class makeConnection {
 		RequestsDB.addSanitationRequest(23,"Reuben", "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
 
 
-		RequestsDB.changeRequestStatus(11, "canceled");
-		RequestsDB.changeRequestStatus(14, "canceled");
-		RequestsDB.changeRequestStatus(15, "complete");
-		RequestsDB.changeRequestStatus(16, "canceled");
-		RequestsDB.changeRequestStatus(17, "complete");
+		RequestsDB.editRequests(11, null, "canceled");
+		RequestsDB.editRequests(14, null, "canceled");
+		RequestsDB.editRequests(15, null, "complete");
+		RequestsDB.editRequests(16, null, "canceled");
+		RequestsDB.editRequests(17, null, "complete");
 
 		//Medicine Delivery Request //RequestID: 19 - 30
 		RequestsDB.addMedicineRequest(20, "Clara Bryan", "BLABS00102", "Atorvastatin", 30, "20mg", "Once a day by mouth", "Bill Byrd");
@@ -225,11 +225,11 @@ public class makeConnection {
 		RequestsDB.addMedicineRequest(23, "Billy Gomez", "BLABS00102", "Metformin", 30, "5mL", "Twice a day with meals.", "Victoria Erickson");
 
 
-		RequestsDB.changeRequestStatus(20, "canceled");
-		RequestsDB.changeRequestStatus(24, "canceled");
-		RequestsDB.changeRequestStatus(25, "complete");
-		RequestsDB.changeRequestStatus(26, "canceled");
-		RequestsDB.changeRequestStatus(27, "complete");
+		RequestsDB.editRequests(20, null, "canceled");
+		RequestsDB.editRequests(24, null, "canceled");
+		RequestsDB.editRequests(25, null, "complete");
+		RequestsDB.editRequests(26, null, "canceled");
+		RequestsDB.editRequests(27, null, "complete");
 
 
 		//Security Requests: //RequestID: 31 - 38
@@ -243,11 +243,11 @@ public class makeConnection {
 		RequestsDB.addSecurityRequest(29, "Jennifer Brewer","eWALK00701", "Medium", "Medium");
 
 
-		RequestsDB.changeRequestStatus(31, "canceled");
-		RequestsDB.changeRequestStatus(34, "canceled");
-		RequestsDB.changeRequestStatus(35, "complete");
-		RequestsDB.changeRequestStatus(36, "canceled");
-		RequestsDB.changeRequestStatus(37, "complete");
+		RequestsDB.editRequests(31, null, "canceled");
+		RequestsDB.editRequests(34, null, "canceled");
+		RequestsDB.editRequests(35, null, "complete");
+		RequestsDB.editRequests(36, null, "canceled");
+		RequestsDB.editRequests(37, null, "complete");
 
 
 		//RequestID: 39 - 47
@@ -262,11 +262,11 @@ public class makeConnection {
 		RequestsDB.addExternalPatientRequest(24,"Alan Singh","FDEPT00501", "Plane","High Severity", "38739983", "12 hours", "Heart transplant organ in route");
 
 
-		RequestsDB.changeRequestStatus(40, "complete");
-		RequestsDB.changeRequestStatus(42, "complete");
-		RequestsDB.changeRequestStatus(44, "complete");
-		RequestsDB.changeRequestStatus(45, "complete");
-		RequestsDB.changeRequestStatus(47, "complete");
+		RequestsDB.editRequests(40, null, "complete");
+		RequestsDB.editRequests(42, null, "complete");
+		RequestsDB.editRequests(44, null, "complete");
+		RequestsDB.editRequests(45, null, "complete");
+		RequestsDB.editRequests(47, null, "complete");
 
 
 		//SuperAdmin:

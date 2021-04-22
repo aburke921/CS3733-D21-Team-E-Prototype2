@@ -187,23 +187,33 @@ public class RequestsDB {
 		}
 	}
 
+
+
+
+
+	public static void addRequest(int userID, String assignee, String requestType){
+		String insertRequest = "Insert Into requests\n" +
+				"Values ((Select Count(*)\n" +
+				"         From requests) + 1, ?, Current Timestamp, ?, 'inProgress', ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
+			prepState.setInt(1, userID);
+			prepState.setString(2, requestType);
+			prepState.setString(3, assignee);
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into requests inside function addRequest()");
+		}
+
+	}
+
 	/**
 	 * This adds a sanitation services form to the table specific for it
 	 * @param //form this is the form being added to the table
 	 */
 	public static void addSanitationRequest(int userID, String assignee, String roomID, String sanitationType, String description, String urgency, String signature) {
-		String insertRequest = "Insert Into requests\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'sanitation', 'inProgress', ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
-			prepState.setInt(1, userID);
-			prepState.setString(2, assignee);
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into requests inside function addSanitationRequest()");
-		}
+		addRequest(userID, assignee, "sanitation");
 
 		String insertSanitationRequest = "Insert Into sanitationRequest\n" +
 				"Values ((Select Count(*)\n" +
@@ -228,21 +238,9 @@ public class RequestsDB {
 	 * This function needs to add a external patient form to the table for external patient forms
 	 * @param //form this is the form that we will create and send to the database
 	 */
-	public static void addExternalPatientRequest(int userID, String asignee, String roomID, String requestType, String severity, String patientID, String ETA, String description) {
+	public static void addExternalPatientRequest(int userID, String assignee, String roomID, String requestType, String severity, String patientID, String ETA, String description) {
 
-		String insertRequest = "Insert Into requests\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'extTransport', 'inProgress', ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
-			prepState.setInt(1, userID);
-			prepState.setString(2, asignee);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error inserting into requests inside function addExternalPatientRequest()");
-		}
+		addRequest(userID, assignee, "extTransport");
 
 		String insertExtTransport = "Insert Into exttransport\n" +
 				"Values ((Select Count(*)\n" +
@@ -276,21 +274,8 @@ public class RequestsDB {
 	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
 	 *                      for whoever is fufilling the request
 	 */
-	public static void addFloralRequest(int userID, String asignee, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
-		String insertRequest = "Insert Into requests\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'floral', 'inProgress', ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
-			prepState.setInt(1, userID);
-			prepState.setString(2, asignee);
-
-			prepState.execute();
-		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("Error inserting into requests inside function addFloralRequest()");
-		}
-
+	public static void addFloralRequest(int userID, String assignee, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
+		addRequest(userID, assignee, "floral");
 
 		String insertFloralRequest = "Insert Into floralRequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
 
@@ -336,20 +321,8 @@ public class RequestsDB {
 	 * This adds a medicine request form to the table for medicine request forms
 	 * @param //form this is the form being added
 	 */
-	public static void addMedicineRequest(int userID, String asignee, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
-
-		String insertRequest = "Insert Into requests Values ((Select Count(*) From requests) + 1, ?, Current Timestamp, 'medDelivery', 'inProgress', ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
-			prepState.setInt(1, userID);
-			prepState.setString(2, asignee);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into requests inside function addMedicineRequest()");
-		}
-
+	public static void addMedicineRequest(int userID, String assignee, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
+		addRequest(userID, assignee, "medDelivery");
 
 		String insertMedRequest = "Insert Into meddelivery Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
 
@@ -373,20 +346,8 @@ public class RequestsDB {
 	 * This adds a security form to the table for security service form
 	 * @param //form this is the form added to the table
 	 */
-	public static void addSecurityRequest(int userID, String asignee, String roomID, String level, String urgency) {
-
-		String insertRequest = "Insert Into requests\n" +
-				"Values ((Select Count(*)\n" +
-				"         From requests) + 1, ?, Current Timestamp, 'security', 'inProgress', ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
-			prepState.setInt(1, userID);
-			prepState.setString(2, asignee);
-			prepState.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error inserting into requests inside function addSecurityRequest()");
-		}
+	public static void addSecurityRequest(int userID, String assignee, String roomID, String level, String urgency) {
+		addRequest(userID, assignee, "security");
 
 		String insertSecurityRequest = "Insert Into securityserv Values ((Select Count(*) From requests), ?, ?, ?)";
 
@@ -403,6 +364,9 @@ public class RequestsDB {
 
 
 	}
+
+
+
 
 	/**
 	 * This edits a Sanitation Services form that is already in the database
@@ -732,28 +696,47 @@ public class RequestsDB {
 	}
 
 	/**
-	 * change a request's status to complete, canceled or inProgress
+	 * Can change the assignee or the request status to any request
 	 * @param requestID is the generated ID of the request
-	 * @param status    is the status that you want to change it to
+	 * @param assignee is the assignee that you want to change it to
+	 * @param requestStatus is the status that you want to change it to
 	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
 	 */
-	public static int changeRequestStatus(int requestID, String status) {
-		String changeRequestStatusS = "Update requests Set requeststatus = ? Where requestid = ?";
-		try (PreparedStatement changeRequestStatusPS = connection.prepareStatement(changeRequestStatusS)) {
-			changeRequestStatusPS.setString(1, status);
-			changeRequestStatusPS.setInt(2, requestID);
+	public static int editRequests(int requestID, String assignee, String requestStatus){
 
-			int rowsChanged = changeRequestStatusPS.executeUpdate();
+		boolean added = false;
+		String query = "Update requests ";
 
-			changeRequestStatusPS.close();
+		if (assignee!= null) {
+			query = query + "Set assignee = '" + assignee + "'";
 
-			return rowsChanged;
+			added = true;
+		}
+		if (requestStatus != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + "Set requestStatus = '" + requestStatus + "'";
+
+		}
+
+		query = query + " where requestID = " + requestID;
+
+		try {
+			Statement stmt = connection.createStatement();
+			System.out.println(query);
+			stmt.executeUpdate(query);
+			stmt.close();
+			return 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("Unable to change requests status");
+			System.err.println("Error in updating request table");
+			return 0;
 		}
-		return 0;
+
 	}
+
+
 
 	/**
 	 * Gets a list of all the requestIDs from the given tableName

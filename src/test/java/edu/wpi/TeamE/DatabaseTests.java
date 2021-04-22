@@ -935,7 +935,7 @@ public class DatabaseTests {
 
 		ArrayList<String> IDS = RequestsDB.getRequestIDs("medDelivery", 1);
 
-		int rowsChanged = RequestsDB.changeRequestStatus(1, "complete");
+		int rowsChanged = RequestsDB.editRequests(1, null, "complete");
 
 		assertEquals(1, rowsChanged);
 	}

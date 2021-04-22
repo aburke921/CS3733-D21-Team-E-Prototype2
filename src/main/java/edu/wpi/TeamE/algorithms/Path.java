@@ -288,7 +288,7 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                             directions.add("Take Elevator " + node1.get("longName").charAt(9) + " to Floor " + node2.get("floor"));
                             len = node3.dist(node2);
                             dist = (int) (Math.round((len * SCALE) / 10) * 10);
-                            directions.add("Exit Elevator " + node1.get("longName").charAt(9) + " and go straight ahead for " + dist + " feet");
+                            directions.add("Exit Elevator " + node1.get("longName").charAt(9) + " and go straight for " + dist + " feet");
                             break;
                         case 3:
                             len = node1.dist(node2);
@@ -302,7 +302,7 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                         case 4:
                             len = node3.dist(node2);
                             dist = (int) (Math.round((len * SCALE) / 10) * 10);
-                            directions.add("Exit the staircase and go straight ahead for " + dist + " feet");
+                            directions.add("Exit the staircase and go straight for " + dist + " feet");
                             break;
                         default:
 

@@ -85,6 +85,24 @@ public class Path implements Comparable<Path>, Iterable<Node>{
         }
     }
 
+    public List<Path> splitByFloor(){
+        List<Path> paths = new LinkedList<>();
+        Iterator<Node> itr = iterator();
+        Path leg = new Path();
+        String prevFloor = getStart().get("floor");
+        while(itr.hasNext()){
+            Node node = itr.next();
+            if(node.get("floor").equals(prevFloor)){
+                leg.add(node);
+            } else {
+                prevFloor = node.get("floor");
+                paths.add(leg);
+                leg = new Path(node);
+            }
+        }
+        paths.add(leg);
+        return paths;
+    }
 
 
     /**
@@ -96,33 +114,18 @@ public class Path implements Comparable<Path>, Iterable<Node>{
      */
     @Override
     public Iterator<Node> iterator() {
-        return iterator("ALL");
-    }
-    public Iterator<Node> iterator(String floorNum){
-        return new NodeIterator(getStart(), floorNum);
+        return new NodeIterator(getStart());
     }
 
     private class NodeIterator implements Iterator<Node> {
         Node cursor;
-        String floorNum;
-        private NodeIterator(Node _cursor, String _floorNum){
+        private NodeIterator(Node _cursor){
             cursor = _cursor;
-            floorNum = _floorNum;
-            if(!_floorNum.equalsIgnoreCase("ALL")){
-                while(cursor != null && !cursor.get("floor").equalsIgnoreCase(_floorNum)){
-                    //move cursor to the first instance of floor if it exists
-                    cursor = cursor.getNext();
-                }
-            }
         }
 
         @Override
         public boolean hasNext() {
-            if(floorNum.equalsIgnoreCase("ALL")){
-                return cursor != null;
-            } else {
-                return cursor != null && cursor.get("floor").equalsIgnoreCase(floorNum);
-            }
+            return cursor != null;
         }
 
         @Override

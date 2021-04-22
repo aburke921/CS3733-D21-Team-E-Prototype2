@@ -14,42 +14,44 @@ public class Examples {
         System.out.println("STARTING UP!!!");
         makeConnection connection = makeConnection.makeConnection();
         System.out.println("Connected to the DB");
-        File nodes = new File("CSVs/bwEnodes.csv");
-        File edges = new File("CSVs/bwEedges.csv");
-        try {
-            // connection.deleteAllTables();
-            connection.createTables();
-            connection.populateTable("node", nodes);
-            connection.populateTable("hasEdge", edges);
-            System.out.println("Tables were created");
-        } catch (Exception e) {
-            System.out.println("Tables already there");
-//			connection.createTables();
-//			connection.populateTable("node", nodes);
-//			connection.populateTable("hasEdge", edges);
-//			System.out.println("Tables were created and populated");
+
+        File nodes = new File("CSVs/MapEAllnodes.csv");
+        File edges = new File("CSVs/MapEAlledges.csv");
+        boolean tablesExist = connection.allTablesThere();
+        if(!tablesExist){
+            try {
+                connection.createTables();
+                connection.populateTable("node", nodes);
+                connection.populateTable("hasEdge", edges);
+                connection.addDataForPresentation();
+                System.out.println("Tables were created");
+            } catch (Exception e) {
+                System.out.println("Tables already there");
+
+                System.out.println("Tables were created and populated");
+            }
         }
 
 
-        String startNode = "eWALK01801";
-        String endNode = "ePARK00101";
+        String startNode = "ADEPT00201";
+        String endNode = "BHALL03802";
 
         //the pathfinding API is now entirely wrapped up in the SearchContext class
         //this will allow you to flexibly configure what kind of search you wish to execute
         //if you want vanilla a* you can instantiate like this
         SearchContext search = new SearchContext();
         //or like this (these lines (^v) are equivalent)
-        search = new SearchContext(new Searcher(), "VANILLA");
+        search = new SearchContext("VANILLA");
         //safe search will avoid the emergency room
-        search = new SearchContext(new DFSSearcher(), "SAFE");
+        search = new SearchContext("SAFE");
         //handicap search will avoid stairs
         //also nothing is case sensitive
-        search = new SearchContext(new Searcher(), "handicap");
+        search = new SearchContext("A*", "handicap");
 
         //if you don't want to instantiate a new one every time (recommended, better for memory)
         //you can specify a new algorithm or new conditions like this
-        search.setAlgo(new DFSSearcher());
-        search.setAlgo(new Searcher());
+        search.setAlgo("DFS");
+        search.setAlgo("A*");
 
         search.setConstraint("HANDICAP");
         search.setConstraint("HaNdICap");
@@ -62,23 +64,12 @@ public class Examples {
         Node end = p.getEnd();
         double length = p.getPathLength();
 
+        p.print("id", "floor");
 
-        Iterator<Node> l1Nodes = p.iterator("L1");
-        Iterator<Node> allNodes = p.iterator();
-
-        p = search.search("ePARK00101", "eWALK00101");
-        p.print("id");
-        for (String dir : p.makeDirectionsWithDist()) {
-            System.out.println(dir);
+        for(Path leg : p.splitByFloor()){
+            leg.print("id", "floor");
         }
-        System.out.println();
-
-        // Directions Testing
-        p = search.search("ARETL00101", "ADEPT00102");
-        p.print("id");
-        for (String dir : p.makeDirectionsWithDist()) {
-            System.out.println(dir);
-        }
+        
         System.out.println();
 
         Node node1 = new Node("1001", 5, 5, "L2", "building1", "type1", "name 1", "name 1");
@@ -89,6 +80,7 @@ public class Examples {
             System.out.println(dir);
         }
         System.out.println();
+
 
         List<Node> nodeList = p.toList();
 
@@ -102,7 +94,7 @@ public class Examples {
         //but it pulls in fresh data on every instantiation of Searcher or DFSSearch
         //so when using these objects make sure the algorithm instantiations aren't too persistent
         //or you have the option of saying
-        search.refresh();
+        //search.refresh();
         //if you're not sure if a change has been made to the db
         //this method pulls in the whole node table and the whole edge table
         //so should be used only if necessary

@@ -4,32 +4,39 @@ import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.constraints.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+
 public class SearchContext {
     private Searcher search;
-    private CompositeConstraint constraints;
+    private final CompositeConstraint constraints;
+    private List<Path> searchHistory;
 
-    public SearchContext(Searcher _search, String _type){
-        search = _search;
+    public SearchContext(String _search, String _type){
         constraints = new CompositeConstraint();
-        setConstraint(_type);
+        searchHistory = new ArrayList<>();
+        setAlgo(_search);
+        addConstraint(_type);
+    }
+
+    public SearchContext(String _type){
+        this("A*", _type);
     }
 
     public SearchContext(){
         this("VANILLA");
     }
 
-    public SearchContext(String _type){
-        this(new Searcher(), _type);
-    }
-
-    public void setAlgo(Searcher newSearch){
-        search = newSearch;
+    public void setAlgo(String _algo){
+        search = translateAlgo(_algo);
         search.setType(constraints);
     }
 
     public void setConstraint(String _type){
-        SearchConstraint constraint = translateConstraint(_type);
-        search.setType(constraint);
+        constraints.clear();
+        addConstraint(_type);
     }
 
     public void addConstraint(String _type){
@@ -45,11 +52,15 @@ public class SearchContext {
     }
 
     public Path search(String startNode, String endNode){
-        return search.search(startNode, endNode);
+        return save(search.search(startNode, endNode));
+    }
+
+    public Path search(Collection<String> stopIds){
+        return save(search.search(stopIds));
     }
 
     public Path searchAlongPath(Path route, String stopType){
-        return search.searchAlongPath(route, stopType);
+        return save(search.searchAlongPath(route, stopType));
     }
 
     private SearchConstraint translateConstraint(String type){
@@ -57,7 +68,7 @@ public class SearchContext {
             return new SafeSearch();
         } else if(type.equalsIgnoreCase("HANDICAP")){
             return new HandicapSearch();
-        } else if(type.equalsIgnoreCase("VANILLA")) {
+        } else if(type.equalsIgnoreCase("VANILLA") || type.equalsIgnoreCase("")) {
             return new VanillaSearch();
         } else {
             return null;
@@ -74,6 +85,14 @@ public class SearchContext {
         }
     }
 
+    private Path save(Path route){
+        searchHistory.add(route);
+        return route;
+    }
+
+    public List<Path> getSearchHistory(){
+        return searchHistory;
+    }
 
     public void refresh(){
         search.refreshGraph();

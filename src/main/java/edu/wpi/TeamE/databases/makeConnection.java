@@ -59,6 +59,15 @@ public class makeConnection {
 		return singleInstance;
 	}
 
+
+
+
+
+
+
+
+
+	//DELETE FUNCTIONS PILE:
 	public static void main(String[] args) {/*
 		System.out.println("STARTING UP!!!");
 		File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
@@ -105,6 +114,43 @@ public class makeConnection {
 		createMedDeliveryTable();
 		createSecurityServTable();
 	}
+
+	/**
+	 * Deletes node,hasEdge, userAccount, requests, floralRequests, sanitationRequest and extTransport tables.
+	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
+	 * try/catch phrase set up in case the tables all ready do not exist
+	 */
+	public void deleteAllTables() {
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			stmt.execute("Drop Table securityServ");
+			stmt.execute("Drop Table medDelivery");
+			stmt.execute("Drop Table extTransport");
+			stmt.execute("Drop Table sanitationRequest");
+			stmt.execute("Drop Table floralRequests");
+			stmt.execute("Drop Table requests");
+			stmt.execute("Drop View visitorAccount");
+			stmt.execute("Drop View patientAccount");
+			stmt.execute("Drop View doctorAccount");
+			stmt.execute("Drop View adminAccount");
+			stmt.execute("Drop Table userAccount");
+			stmt.execute("Drop Table hasEdge");
+			stmt.execute("Drop Table node");
+			stmt.close();
+		} catch (SQLException e) {
+//			 e.printStackTrace();
+			System.err.println("deleteAllTables() not working");
+		}
+	}
+
+
+
+
+
+
+
+	//NODES / EDGES
 
 	/**
 	 * Uses executes the SQL statements required to create the node table.
@@ -174,6 +220,550 @@ public class makeConnection {
 			System.err.println("error creating hasEdge table");
 		}
 	}
+
+	public void deleteEdgeTable() {
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			stmt.execute("Drop Table hasedge");
+			stmt.close();
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("deleteEdgeTable() not working");
+		}
+
+	}
+
+	public void deleteNodeTable() {
+
+		try {
+			Statement stmt = this.connection.createStatement();
+			stmt.execute("Drop Table node");
+			stmt.close();
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("deleteNodeTable() not working");
+		}
+
+	}
+
+	/**
+	 * Deletes edge(s) between the given two nodes, they can be in any order
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
+	 * if count == 1 || count == 2, edges have been deleted
+	 * else no edges exist with inputted nodes
+	 */
+	public int deleteEdge(String nodeID1, String nodeID2) {
+
+		String deleteEdgeS1 = "Delete From hasedge Where startnode = ? And endnode = ?";
+		String deleteEdgeS2 = "Delete From hasedge Where endnode = ? And startnode = ?";
+
+		int count = 0;
+		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
+		try (PreparedStatement deleteEdgePS1 = connection.prepareStatement(deleteEdgeS1)) {
+			deleteEdgePS1.setString(1, nodeID1);
+			deleteEdgePS1.setString(2, nodeID2);
+
+			int deleteEdgeRS1 = deleteEdgePS1.executeUpdate();
+
+			if (deleteEdgeRS1 == 0) {
+				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
+			} else if (deleteEdgeRS1 == 2) {
+				System.out.println("deleteEdge Result =" + deleteEdgeRS1 + ", it's weird cuz " + deleteEdgeRS1 + " rows was affected");
+				count = 1;
+			} else if (deleteEdgeRS1 != 1) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS1 + ", just bad because this should never occur");
+			}
+			System.out.println("Number of rows affected: " + deleteEdgeRS1);
+
+			// deleteEdgeRS1 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("deleteEdge() tyr/catch error");
+			count = 0;
+		}
+
+		try (PreparedStatement deleteEdgePS2 = connection.prepareStatement(deleteEdgeS2)) {
+			deleteEdgePS2.setString(1, nodeID1);
+			deleteEdgePS2.setString(2, nodeID2);
+
+			int deleteEdgeRS2 = deleteEdgePS2.executeUpdate();
+
+			if (deleteEdgeRS2 == 0) {
+				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
+			} else if (deleteEdgeRS2 == 2) {
+				System.out.println("deleteEdge Result =" + deleteEdgeRS2 + ", it's weird cuz " + deleteEdgeRS2 + " rows was affected");
+				count += count;
+			} else if (deleteEdgeRS2 != 1) {
+				System.err.println("deleteEdge Result =" + deleteEdgeRS2 + ", just bad because this should never occur");
+			}
+			System.out.println("Number of rows affected: " + deleteEdgeRS2);
+
+			// deleteEdgeRS2 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("deleteEdge() tyr/catch error");
+			if (count == 0) {
+				count = 0;
+			} else
+				count = 1;
+		}
+		return count;
+	}
+
+	/**
+	 * matches the nodeID to a node and deletes it from DB
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
+	 */
+	public int deleteNode(String nodeID) {
+		String deleteNodeS = "Delete From node Where nodeid = ?";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+			deleteNodePS.setString(1, nodeID);
+			// We might encounter issues if on delete cascade didn't work
+			int deleteNodeRS = deleteNodePS.executeUpdate();
+			if (deleteNodeRS == 0) {
+				System.err.println("deleteNode Result = 0, probably bad cuz no rows was affected");
+			} else if (deleteNodeRS != 1) {
+				System.err.println("deleteNode Result =" + deleteNodeRS + ", probably bad cuz " + deleteNodeRS + " rows was affected");
+			}
+			return deleteNodeRS;
+			// deleteNode = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	/**
+	 * Acts as a trigger and calculates the length between two nodes that form an edge and add the value to the edge table
+	 * @param startNode the node ID for the starting node in the edge
+	 * @param endNode   the node ID for the ending node in the edge
+	 */
+	public void addLength(String startNode, String endNode) {
+
+		String sqlQuery;
+		int startX = 0;
+		int startY = 0;
+		int endX = 0;
+		int endY = 0;
+
+		ResultSet rset;
+		Statement stmt;
+
+		try {
+			stmt = this.connection.createStatement();
+			sqlQuery = "SELECT xCoord, yCoord FROM node WHERE nodeID = '" + startNode + "'";
+			rset = stmt.executeQuery(sqlQuery);
+
+			while (rset.next()) {
+				startX = rset.getInt("xCoord");
+				startY = rset.getInt("yCoord");
+			}
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("WHERE nodeID = startNode try/catch failed");
+		}
+
+		try {
+			stmt = this.connection.createStatement();
+			sqlQuery = "SELECT xCoord, yCoord FROM node WHERE nodeID = '" + endNode + "'";
+			//executes the SQL insert statement (inserts the data into the table)
+			rset = stmt.executeQuery(sqlQuery);
+
+			while (rset.next()) {
+				endX = rset.getInt("xCoord");
+				endY = rset.getInt("yCoord");
+			}
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("WHERE nodeID = endNode try/catch failed");
+		}
+
+
+		try {
+			double length;
+			double xLength = Math.pow((startX - endX), 2);
+			double yLength = Math.pow((startY - endY), 2);
+
+			length = Math.sqrt(xLength + yLength);
+
+
+			stmt = this.connection.createStatement();
+
+			sqlQuery = "UPDATE hasEdge SET length = " + length + " WHERE startNode = '" + startNode + "' AND endNode = '" + endNode + "'";
+
+			//executes the SQL insert statement (inserts the data into the table)
+			stmt.executeUpdate(sqlQuery);
+
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("UPDATE try/catch failed");
+		}
+
+
+	}
+
+	/**
+	 * Adds a node with said data to the database
+	 * @param nodeID    this is a unique identifier for the each node. Every node must contain a nodeID.
+	 * @param xCoord    this is the X-Coordinate/pixel location of the node on the map of the hospital.
+	 * @param yCoord    this is the Y-Coordinate/pixel location of the node on the map of the hospital.
+	 * @param floor     this is the floor of the hospital that the node is located on. The available options are: "1", "2", "3", "L1", "L2"
+	 * @param building  this is the building of the hospital that the node is located in. The available options are: "BTM", "45 Francis", "Tower",
+	 *                  "15 Francis", "Shapiro", "Parking".
+	 * @param nodeType  this is the type room/location that the node is specifying. The available options are: "PARK" (parking), "EXIT" (exit),
+	 *                  "WALK" (sidewalk/out door walkway), "HALL' (indoor walkway), "CONF" (conference room), "DEPT" (department room), "ELEV" (elevator),
+	 *                  "INFO" (information), "LABS" (lab testing/results room), "REST" (rest areas/sitting areas), "RETL" (retail/food and shopping),
+	 *                  "STAI" (stairs), "SERV" (services), "BATH" (bathrooms).
+	 * @param longName  this is the long version/more descriptive name of the node/location/room
+	 * @param shortName this is the short/nickname of the node/location/room
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
+	 */
+	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+		String addNodeS = "Insert Into node Values (?, ?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
+			addNodePS.setString(1, nodeID);
+			addNodePS.setInt(2, xCoord);
+			addNodePS.setInt(3, yCoord);
+			addNodePS.setString(4, floor);
+			addNodePS.setString(5, building);
+			addNodePS.setString(6, nodeType);
+			addNodePS.setString(7, longName);
+			addNodePS.setString(8, shortName);
+			int addNodeRS = addNodePS.executeUpdate();
+			if (addNodeRS == 0) {
+				//mapEditor.errorPopup("Error in updating node");
+				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
+			} else if (addNodeRS != 1) {
+				//mapEditor.errorPopup("Error in updating node");
+				System.err.println("addNode Result =" + addNodeRS + ", probably bad cuz " + addNodeRS + " rows was affected");
+			}
+			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			//mapEditor.errorPopup("There is already a node here or this node already exists");
+			return 0;
+		}
+	}
+
+	/**
+	 * Adds an edge with said data to the database. Both startNode and endNode has to already exist in node table
+	 * @param edgeID    this is a unique identifier for the edge connection. Every edge must contain an edgeID.
+	 * @param startNode this is a nodeID in which the edge connection starts.
+	 * @param endNode   this is a nodeID in which the edge connection ends.
+	 * @return the amount of rows affected by executing this statement, should be 1 in this case
+	 */
+	public int addEdge(String edgeID, String startNode, String endNode) {
+		String addEdgeS = "Insert Into hasedge (edgeid, startnode, endnode) Values (?, ?, ?)";
+		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
+			addEdgePS.setString(1, edgeID);
+			addEdgePS.setString(2, startNode);
+			addEdgePS.setString(3, endNode);
+			int addEdgeRS = addEdgePS.executeUpdate();
+			if (addEdgeRS == 0) {
+				System.err.println("addEdge Result = 0, probably bad cuz no rows was affected");
+			} else if (addEdgeRS != 1) {
+				System.err.println("addEdge Result =" + addEdgeRS + ", probably bad cuz " + addEdgeRS + " rows was affected");
+			}
+			addLength(startNode, endNode);
+			return addEdgeRS; // addEdgeRS = x means the statement executed affected x rows, should be 1 in this case.
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("addEdge() error in the try/catch");
+			return 0;
+		}
+	}
+
+	/**
+	 * modifies a node, updating the DB, returning 0 or 1 depending on whether operation was successful
+	 *
+	 * @param nodeID
+	 * @param xCoord
+	 * @param yCoord
+	 * @param floor
+	 * @param building
+	 * @param nodeType
+	 * @param longName
+	 * @param shortName
+	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+	 */
+	public int modifyNode(String nodeID,  Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+		//String finalQuery = "update node set ";
+		String xCoordUpdate = "";
+		String yCoordUpdate = "";
+		String floorUpdate = "";
+		String buildingUpdate = "";
+		String nodeTypeUpdate = "";
+		String longNameUpdate = "";
+		String shortNameUpdate = "";
+		boolean added = false;
+		String query = "update node set ";
+		if (xCoord != null) {
+			query = query + " xCoord = " + xCoord;
+			//xCoordUpdate = "xCoord = " + xCoord;
+			added = true;
+		}
+		if (yCoord != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " yCoord = " + yCoord;
+			added = true;
+		}
+		if (floor != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " floor = '" + floor + "'";
+			added = true;
+		}
+		if (building != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " building = '" + building + "'";
+			added = true;
+		}
+		if (nodeType != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " nodeType = '" + nodeType + "'";
+			added = true;
+		}
+		if (longName != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " longName = '" + longName + "'";
+			added = true;
+		}
+		if (shortName != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " shortName = '" + shortName + "'";
+			added = true;
+		}
+		query = query + " where nodeID = '" + nodeID + "'";
+		try {
+			Statement stmt = this.connection.createStatement();
+			System.out.println(query);
+			stmt.executeUpdate(query);
+			stmt.close();
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating node");
+			return 0;
+		}
+	}
+
+	/**
+	 * modifies an edge, updating the DB, returning 0 or 1 depending on whether operation was successful
+	 * @param edgeID
+	 * @param startNode
+	 * @param endNode
+	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
+	 * need to check that both startNode and endNode already exist in node table
+	 */
+	public int modifyEdge(String edgeID, String startNode, String endNode) {
+		boolean correctEdgeID = false;
+		boolean correctStartNode = false;
+		boolean correctEndNode = false;
+
+
+		// !!!!!! user is required to type in edgeID !!!!!! //
+
+		//1. check that they gave a valid edgeID
+		//2. check that they gave a valid nodeID they want to change to the startNode
+		//			or
+		//3. check that they gave a valid nodeID they want to change to the endNode
+
+		String checkEdgeID = "Select edgeid From hasedge Where edgeid = ?";
+		try (PreparedStatement prepState1 = connection.prepareStatement(checkEdgeID)) {
+			prepState1.setString(1, edgeID);
+			ResultSet rset1 = prepState1.executeQuery();
+
+			if (rset1.next()) {
+				correctEdgeID = true;
+			}
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			return 0;
+		}
+
+		if (startNode != null) {
+			String checkStartNode = "Select nodeid From node Where nodeid = ?";
+			try (PreparedStatement prepState2 = connection.prepareStatement(checkStartNode)) {
+				prepState2.setString(1, startNode);
+				ResultSet rset2 = prepState2.executeQuery();
+
+				if (rset2.next()) {
+					correctStartNode = true;
+				}
+
+			} catch (SQLException e) {
+				System.err.println("given start node does not exist");
+				//e.printStackTrace();
+				return 0;
+			}
+		}
+
+		if (endNode != null) {
+			String checkEndNode = "Select nodeid From node Where nodeid = ?";
+			try (PreparedStatement prepState3 = connection.prepareStatement(checkEndNode)) {
+				prepState3.setString(1, endNode);
+				ResultSet rset3 = prepState3.executeQuery();
+
+				if (rset3.next()) {
+					correctEndNode = true;
+				}
+
+
+			} catch (SQLException e) {
+				//e.printStackTrace();
+				return 0;
+			}
+		}
+
+
+		if ((correctEdgeID && correctStartNode) || (correctEdgeID && correctEndNode) || (correctEdgeID && correctStartNode && correctEndNode)) {
+			String[] nodes = edgeID.split("_");
+			deleteEdge(nodes[0], nodes[1]);
+			if (startNode == null) {
+				String newEdgeID = nodes[0] + "_" + endNode;
+				addEdge(newEdgeID, nodes[0], endNode);
+				return 1;
+			}
+			if (endNode == null) {
+				String newEdgeID = startNode + "_" + nodes[1];
+				addEdge(newEdgeID, startNode, nodes[1]);
+				return 1;
+			} else {
+				String newEdgeID = startNode + "_" + endNode;
+				addEdge(newEdgeID, startNode, endNode);
+				return 1;
+			}
+		}
+
+		System.err.println("startNode or endNode does not exist but no SQL error");
+		return 0;
+	}
+
+	public ArrayList<Node> getAllNodesByType(String type) {
+		ArrayList<Node> nodesArray = new ArrayList<>();
+//observable list -- UI
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "select * from node WHERE '" + type + "' = NODETYPE";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String NodeID = rset.getString("nodeID");
+				int xCoord = rset.getInt("xCoord");
+				int yCoord = rset.getInt("yCoord");
+				String floor = rset.getString("floor");
+				String building = rset.getString("building");
+				String nodeType = rset.getString("nodeType");
+				String longName = rset.getString("longName");
+				String shortName = rset.getString("shortName");
+
+				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
+
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllNodes Error : " + e);
+		}
+		return nodesArray;
+	}
+
+	/**
+	 * gets all Nodes (each row in node table)
+	 * @return ArrayList of Node objects
+	 * need Node constructor from UI/UX team
+	 */
+	public ArrayList<Node> getAllNodes() {
+		ArrayList<Node> nodesArray = new ArrayList<>();
+//observable list -- UI
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "Select * From node";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String NodeID = rset.getString("nodeID");
+				int xCoord = rset.getInt("xCoord");
+				int yCoord = rset.getInt("yCoord");
+				String floor = rset.getString("floor");
+				String building = rset.getString("building");
+				String nodeType = rset.getString("nodeType");
+				String longName = rset.getString("longName");
+				String shortName = rset.getString("shortName");
+
+				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
+
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllNodes Error : " + e);
+		}
+		return nodesArray;
+	}
+
+	/**
+	 * gets all edges and each edge's attribute
+	 * @return ArrayList<Edge>
+	 */
+	public ArrayList<Edge> getAllEdges() {
+		ArrayList<Edge> edgesArray = new ArrayList<>();
+		try {
+			Statement stmt = this.connection.createStatement();
+			String query = "Select * From hasedge";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String edgeID = rset.getString("edgeID");
+				String startNode = rset.getString("startNode");
+				String endNode = rset.getString("endNode");
+				double length = rset.getDouble("length");
+				edgesArray.add(new Edge(edgeID, startNode, endNode, length));
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllEdges Error : " + e);
+		}
+		return edgesArray;
+	}
+
+
+
+
+
+
+
+
+
+
+	//USER ACCOUNTS:
 
 	/**
 	 * Uses executes the SQL statements required to create the userAccount table.
@@ -262,6 +852,237 @@ public class makeConnection {
 		}
 
 	}
+
+	/**
+	 * This is allows a visitor to create a user account giving them more access to the certain requests available
+	 * @param email     this is the user's email that is connected to the account the are trying to create
+	 * @param password  this is a password that the user will use to log into the account
+	 * @param firstName this is the user's first name that is associated with the account
+	 * @param lastName  this is the user's last name that is associated with the account
+	 */
+	public void addUserAccount(String email, String password, String firstName, String lastName) {
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp)";
+		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
+			prepState.setString(1, email);
+			prepState.setString(2, password);
+			prepState.setString(3, firstName);
+			prepState.setString(4, lastName);
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			//mapEditor.errorPopup("This email all ready has an account");
+			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
+		}
+	}
+
+	/**
+	 * This is allows an administrator or someone with access to the database to be able to create a user account
+	 * with more permissions giving them more access to the certain requests available. This is function should not
+	 * be used while the app is being run.
+	 * @param email     this is the user's email that is connected to the account the are trying to create
+	 * @param password  this is a password that the user will use to log into the account
+	 * @param userType  this is the type of account that the individual is being assigned to
+	 * @param firstName this is the user's first name that is associated with the account
+	 * @param lastName  this is the user's last name that is associated with the account
+	 */
+	public void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp)";
+		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
+			prepState.setString(1, email);
+			prepState.setString(2, password);
+			prepState.setString(3, userType);
+			prepState.setString(4, firstName);
+			prepState.setString(5, lastName);
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			//showError("This email all ready has an account");
+			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
+		}
+	}
+
+
+	// User System Stuff
+	/**
+	 * Function for logging a user in with their unique email and password
+	 * @param email    is the user's entered email
+	 * @param password is the user's entered password
+	 * @return 0 when the credentials does not match with any user in the database, and returns the userID otherwise
+	 */
+	public int userLogin(String email, String password) {
+		String userLoginS1 = "Select Count(*) As verification From userAccount Where email = ? And password = ?";
+		try (PreparedStatement userLoginPS1 = connection.prepareStatement(userLoginS1)) {
+			userLoginPS1.setString(1, email);
+			userLoginPS1.setString(2, password);
+			ResultSet userLoginRS1 = userLoginPS1.executeQuery();
+			int verification = 0;
+			if (userLoginRS1.next()) {
+				verification = userLoginRS1.getInt("verification");
+			}
+			userLoginRS1.close();
+			if(verification == 0){
+				return verification;
+			} else {
+				String userLoginS2 = "Select userId From userAccount Where email = ? And password = ?";
+				try (PreparedStatement userLoginPS2 = connection.prepareStatement(userLoginS2)) {
+					userLoginPS2.setString(1, email);
+					userLoginPS2.setString(2, password);
+					ResultSet userLoginRS2 = userLoginPS2.executeQuery();
+					int userID = 0;
+					if (userLoginRS2.next()) {
+						userID = userLoginRS2.getInt("userID");
+					}
+					userLoginRS2.close();
+					return userID;
+				}
+			}
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("userLogin() error");
+		}
+		return 0;
+	}
+
+	/**
+	 * Gets a list of all the requestIDs from the given tableName
+	 * @param tableType this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all the requestIDs
+	 */
+	public ArrayList<String> getRequestIDs(String tableType, int userID){
+		ArrayList<String> listOfIDs = new ArrayList<>();
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestID;
+			if (userID != -1) {
+				requestID = "Select requestID from requests where requestType = '" + tableType + "' and creatorID = " + userID;
+			}
+			else{
+				requestID = "Select requestID From requests where requestType = '" + tableType + "'";
+			}
+			ResultSet rset = stmt.executeQuery(requestID);
+			while(rset.next()){
+				String ID = rset.getString("requestID");
+				listOfIDs.add(ID);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+		}
+		return listOfIDs;
+	}
+
+	/**
+	 * Gets a list of all the statuses from the given tableName
+	 * @param tableType this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all the statuses of the requests
+	 */
+	public ArrayList<String> getRequestStatus(String tableType, int userID){
+		ArrayList<String> listOfStatus = new ArrayList<String>();
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestStatus;
+			if (userID != -1) {
+				requestStatus = "Select requestStatus From requests Where requestType = '" + tableType +"' and creatorID = " + userID;
+			}
+			else{
+				requestStatus = "Select requestStatus From requests Where requestType = '" + tableType + "'";
+			}
+			ResultSet rset = stmt.executeQuery(requestStatus);
+			while(rset.next()){
+				String status = rset.getString("requestStatus");
+				listOfStatus.add(status);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+		}
+		return listOfStatus;
+	}
+
+	/**
+	 * Gets a list of all the assignees from the given tableName
+	 * @param tableType this is the type of the table that we are getting the requestIDs from
+	 * @return a list of all assignees for all of the requests
+	 */
+	public ArrayList<String> getRequestAssignees(String tableType, int userID){
+		ArrayList<String> listOfAssignees = new ArrayList<String>();
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestAssignee;
+			if (userID != -1) { // if user is not SuperAdmin
+				requestAssignee = "Select assignee from requests where requestType = '" + tableType + "' and creatorID = " + userID;
+				//requestAssignee = "Select newTable.assignee From (Select * From requests, " + tableType + " Where requests.requestID = " + tableType + ".requestID ) newTable Where userID = " + userID;
+			} else { // if user is SuperAdmin
+				requestAssignee = "Select requests.assignee From requests where requestType = '" + tableType + "'";
+			}
+			ResultSet rset = stmt.executeQuery(requestAssignee);
+			while(rset.next()){
+				String status = rset.getString("assignee");
+				listOfAssignees.add(status);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestAssignee() error in the try/catch");
+		}
+		return listOfAssignees;
+	}
+
+	/**
+	 * Gets a list of all the longNames for the location from the given tableName
+	 * @param tableType this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all longNames for the location for all of the requests
+	 */
+	public ArrayList<String> getRequestLocations(String tableType, int userID){
+		ArrayList<String> listOfLongNames = new ArrayList<String>();
+		try  {
+			String tableName = "";
+			switch (tableType){
+				case "floral": tableName = "floralRequests";
+					break;
+				case "medDelivery": tableName = "medDelivery";
+					break;
+				case "sanitation": tableName = "sanitationRequest";
+					break;
+				case "security": tableName = "securityServ";
+					break;
+				case "extTransport": tableName = "extTransport";
+					break;
+			}
+			Statement stmt = connection.createStatement();
+			String requestLongNames;
+
+			if (userID != -1) {
+				requestLongNames = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
+			}
+			else{
+				requestLongNames ="Select longName from node,(Select roomID From " + tableName + ") correctTable where node.nodeID = correctTable.roomID";
+			}
+			ResultSet rset = stmt.executeQuery(requestLongNames);
+			while(rset.next()){
+				String status = rset.getString("longName");
+				listOfLongNames.add(status);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestLocations() error in the try/catch");
+		}
+		return listOfLongNames;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//REQUESTS:
 
 	/**
 	 * Uses executes the SQL statements required to create the requests table.
@@ -443,447 +1264,6 @@ public class makeConnection {
 		}
 	}
 
-
-
-
-
-
-	/**
-	 * Deletes node,hasEdge, userAccount, requests, floralRequests, sanitationRequest and extTransport tables.
-	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
-	 * try/catch phrase set up in case the tables all ready do not exist
-	 */
-	public void deleteAllTables() {
-
-		try {
-			Statement stmt = this.connection.createStatement();
-			stmt.execute("Drop Table securityServ");
-			stmt.execute("Drop Table medDelivery");
-			stmt.execute("Drop Table extTransport");
-			stmt.execute("Drop Table sanitationRequest");
-			stmt.execute("Drop Table floralRequests");
-			stmt.execute("Drop Table requests");
-			stmt.execute("Drop View visitorAccount");
-			stmt.execute("Drop View patientAccount");
-			stmt.execute("Drop View doctorAccount");
-			stmt.execute("Drop View adminAccount");
-			stmt.execute("Drop Table userAccount");
-			stmt.execute("Drop Table hasEdge");
-			stmt.execute("Drop Table node");
-			stmt.close();
-		} catch (SQLException e) {
-//			 e.printStackTrace();
-			System.err.println("deleteAllTables() not working");
-		}
-	}
-
-	public void deleteEdgeTable() {
-
-		try {
-			Statement stmt = this.connection.createStatement();
-			stmt.execute("Drop Table hasedge");
-			stmt.close();
-		} catch (SQLException e) {
-			// e.printStackTrace();
-			System.err.println("deleteEdgeTable() not working");
-		}
-
-	}
-
-	public void deleteNodeTable() {
-
-		try {
-			Statement stmt = this.connection.createStatement();
-			stmt.execute("Drop Table node");
-			stmt.close();
-		} catch (SQLException e) {
-			// e.printStackTrace();
-			System.err.println("deleteNodeTable() not working");
-		}
-
-	}
-
-	/**
-	 * Deletes edge(s) between the given two nodes, they can be in any order
-	 * @return the amount of rows affected by executing this statement, should be 1 in this case, if there are two edges it returns 2
-	 * if count == 1 || count == 2, edges have been deleted
-	 * else no edges exist with inputted nodes
-	 */
-	public int deleteEdge(String nodeID1, String nodeID2) {
-
-		String deleteEdgeS1 = "Delete From hasedge Where startnode = ? And endnode = ?";
-		String deleteEdgeS2 = "Delete From hasedge Where endnode = ? And startnode = ?";
-
-		int count = 0;
-		// We might want https://stackoverflow.com/questions/10797794/multiple-queries-executed-in-java-in-single-statement
-		try (PreparedStatement deleteEdgePS1 = connection.prepareStatement(deleteEdgeS1)) {
-			deleteEdgePS1.setString(1, nodeID1);
-			deleteEdgePS1.setString(2, nodeID2);
-
-			int deleteEdgeRS1 = deleteEdgePS1.executeUpdate();
-
-			if (deleteEdgeRS1 == 0) {
-				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
-			} else if (deleteEdgeRS1 == 2) {
-				System.out.println("deleteEdge Result =" + deleteEdgeRS1 + ", it's weird cuz " + deleteEdgeRS1 + " rows was affected");
-				count = 1;
-			} else if (deleteEdgeRS1 != 1) {
-				System.err.println("deleteEdge Result =" + deleteEdgeRS1 + ", just bad because this should never occur");
-			}
-			System.out.println("Number of rows affected: " + deleteEdgeRS1);
-
-			// deleteEdgeRS1 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("deleteEdge() tyr/catch error");
-			count = 0;
-		}
-
-		try (PreparedStatement deleteEdgePS2 = connection.prepareStatement(deleteEdgeS2)) {
-			deleteEdgePS2.setString(1, nodeID1);
-			deleteEdgePS2.setString(2, nodeID2);
-
-			int deleteEdgeRS2 = deleteEdgePS2.executeUpdate();
-
-			if (deleteEdgeRS2 == 0) {
-				System.err.println("deleteEdge Result = 0, inputted nodes in this order do not share an edge");
-			} else if (deleteEdgeRS2 == 2) {
-				System.out.println("deleteEdge Result =" + deleteEdgeRS2 + ", it's weird cuz " + deleteEdgeRS2 + " rows was affected");
-				count += count;
-			} else if (deleteEdgeRS2 != 1) {
-				System.err.println("deleteEdge Result =" + deleteEdgeRS2 + ", just bad because this should never occur");
-			}
-			System.out.println("Number of rows affected: " + deleteEdgeRS2);
-
-			// deleteEdgeRS2 = x means the statement executed affected x rows, should be 1 in this case, if there are two edges it returns 2.
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("deleteEdge() tyr/catch error");
-			if (count == 0) {
-				count = 0;
-			} else
-				count = 1;
-		}
-		return count;
-	}
-
-	/**
-	 * matches the nodeID to a node and deletes it from DB
-	 * @return the amount of rows affected by executing this statement, should be 1 in this case
-	 */
-	public int deleteNode(String nodeID) {
-		String deleteNodeS = "Delete From node Where nodeid = ?";
-		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
-			deleteNodePS.setString(1, nodeID);
-			// We might encounter issues if on delete cascade didn't work
-			int deleteNodeRS = deleteNodePS.executeUpdate();
-			if (deleteNodeRS == 0) {
-				System.err.println("deleteNode Result = 0, probably bad cuz no rows was affected");
-			} else if (deleteNodeRS != 1) {
-				System.err.println("deleteNode Result =" + deleteNodeRS + ", probably bad cuz " + deleteNodeRS + " rows was affected");
-			}
-			return deleteNodeRS;
-			// deleteNode = x means the statement executed affected x rows, should be 1 in this case.
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return 0;
-		}
-	}
-
-
-
-
-
-	/**
-	 * Reads csv & inserts into table
-	 * @param tableName name of the table that needs to be populated
-	 * @param file      file that is going to be read
-	 */
-	public void populateTable(String tableName, File file) {
-
-		try {
-			// creates a file with the file name we are looking to read
-			// File file = new File(csvFileName);
-			// used to read data from a file
-			FileReader fr = new FileReader(file);
-
-			// used to read the text from a character-based input stream.
-			BufferedReader br = new BufferedReader(fr);
-
-			String line;
-			String[] tempArr;
-
-			// reads first line (this is the header of each file and we don't need it)
-			br.readLine();
-
-			// if there is something in the file (after line 1)
-			while ((line = br.readLine()) != null) {
-
-				// adds arguments into the array separated by the commas ("," is when it knows the next
-				// index)
-				tempArr = line.split(",");
-
-				String sqlQuery = "";
-				if (tableName.equals("node")) {
-					sqlQuery =
-							"INSERT INTO node VALUES ("
-									+ "'"
-									+ tempArr[0]
-									+ "',"
-									+ Integer.valueOf(tempArr[1])
-									+ ","
-									+ Integer.valueOf(tempArr[2])
-									+ ",'"
-									+ tempArr[3]
-									+ "',"
-									+ " '"
-									+ tempArr[4]
-									+ "',"
-									+ " '"
-									+ tempArr[5]
-									+ "',"
-									+ " '"
-									+ tempArr[6]
-									+ "',"
-									+ " '"
-									+ tempArr[7]
-									+ "')";
-				}
-				if (tableName.equals("hasEdge")) {
-					sqlQuery =
-							"INSERT INTO hasEdge VALUES ('"
-									+ tempArr[0]
-									+ "', '"
-									+ tempArr[1]
-									+ "', '"
-									+ tempArr[2]
-									+ "', NULL"
-									+ ")";
-				}
-
-
-				try {
-					Statement stmt = this.connection.createStatement();
-
-					stmt.execute(sqlQuery);
-
-					if (tableName.equals("hasEdge")) {
-						//System.out.println("Calling addLength");
-						addLength(tempArr[1], tempArr[2]);
-						//System.out.println("after calling addLength");
-					}
-
-					stmt.close();
-
-				} catch (SQLException e) {
-					e.printStackTrace();
-					System.err.println("populateTable() inner try/catch error");
-				}
-			}
-
-			// closes the BufferedReader
-			br.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			System.err.println("populateTable() outer try/catch error");
-		}
-	}
-
-	/**
-	 * Acts as a trigger and calculates the length between two nodes that form an edge and add the value to the edge table
-	 * @param startNode the node ID for the starting node in the edge
-	 * @param endNode   the node ID for the ending node in the edge
-	 */
-	public void addLength(String startNode, String endNode) {
-
-		String sqlQuery;
-		int startX = 0;
-		int startY = 0;
-		int endX = 0;
-		int endY = 0;
-
-		ResultSet rset;
-		Statement stmt;
-
-		try {
-			stmt = this.connection.createStatement();
-			sqlQuery = "SELECT xCoord, yCoord FROM node WHERE nodeID = '" + startNode + "'";
-			rset = stmt.executeQuery(sqlQuery);
-
-			while (rset.next()) {
-				startX = rset.getInt("xCoord");
-				startY = rset.getInt("yCoord");
-			}
-			rset.close();
-			stmt.close();
-
-		} catch (SQLException e) {
-			// e.printStackTrace();
-			System.err.println("WHERE nodeID = startNode try/catch failed");
-		}
-
-		try {
-			stmt = this.connection.createStatement();
-			sqlQuery = "SELECT xCoord, yCoord FROM node WHERE nodeID = '" + endNode + "'";
-			//executes the SQL insert statement (inserts the data into the table)
-			rset = stmt.executeQuery(sqlQuery);
-
-			while (rset.next()) {
-				endX = rset.getInt("xCoord");
-				endY = rset.getInt("yCoord");
-			}
-			rset.close();
-			stmt.close();
-
-		} catch (SQLException e) {
-			// e.printStackTrace();
-			System.err.println("WHERE nodeID = endNode try/catch failed");
-		}
-
-
-		try {
-			double length;
-			double xLength = Math.pow((startX - endX), 2);
-			double yLength = Math.pow((startY - endY), 2);
-
-			length = Math.sqrt(xLength + yLength);
-
-
-			stmt = this.connection.createStatement();
-
-			sqlQuery = "UPDATE hasEdge SET length = " + length + " WHERE startNode = '" + startNode + "' AND endNode = '" + endNode + "'";
-
-			//executes the SQL insert statement (inserts the data into the table)
-			stmt.executeUpdate(sqlQuery);
-
-			stmt.close();
-
-		} catch (SQLException e) {
-			System.err.println("UPDATE try/catch failed");
-		}
-
-
-	}
-
-	/**
-	 * Adds a node with said data to the database
-	 * @param nodeID    this is a unique identifier for the each node. Every node must contain a nodeID.
-	 * @param xCoord    this is the X-Coordinate/pixel location of the node on the map of the hospital.
-	 * @param yCoord    this is the Y-Coordinate/pixel location of the node on the map of the hospital.
-	 * @param floor     this is the floor of the hospital that the node is located on. The available options are: "1", "2", "3", "L1", "L2"
-	 * @param building  this is the building of the hospital that the node is located in. The available options are: "BTM", "45 Francis", "Tower",
-	 *                  "15 Francis", "Shapiro", "Parking".
-	 * @param nodeType  this is the type room/location that the node is specifying. The available options are: "PARK" (parking), "EXIT" (exit),
-	 *                  "WALK" (sidewalk/out door walkway), "HALL' (indoor walkway), "CONF" (conference room), "DEPT" (department room), "ELEV" (elevator),
-	 *                  "INFO" (information), "LABS" (lab testing/results room), "REST" (rest areas/sitting areas), "RETL" (retail/food and shopping),
-	 *                  "STAI" (stairs), "SERV" (services), "BATH" (bathrooms).
-	 * @param longName  this is the long version/more descriptive name of the node/location/room
-	 * @param shortName this is the short/nickname of the node/location/room
-	 * @return the amount of rows affected by executing this statement, should be 1 in this case
-	 */
-	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-		String addNodeS = "Insert Into node Values (?, ?, ?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
-			addNodePS.setString(1, nodeID);
-			addNodePS.setInt(2, xCoord);
-			addNodePS.setInt(3, yCoord);
-			addNodePS.setString(4, floor);
-			addNodePS.setString(5, building);
-			addNodePS.setString(6, nodeType);
-			addNodePS.setString(7, longName);
-			addNodePS.setString(8, shortName);
-			int addNodeRS = addNodePS.executeUpdate();
-			if (addNodeRS == 0) {
-				//mapEditor.errorPopup("Error in updating node");
-				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
-			} else if (addNodeRS != 1) {
-				//mapEditor.errorPopup("Error in updating node");
-				System.err.println("addNode Result =" + addNodeRS + ", probably bad cuz " + addNodeRS + " rows was affected");
-			}
-			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			//mapEditor.errorPopup("There is already a node here or this node already exists");
-			return 0;
-		}
-	}
-
-	/**
-	 * Adds an edge with said data to the database. Both startNode and endNode has to already exist in node table
-	 * @param edgeID    this is a unique identifier for the edge connection. Every edge must contain an edgeID.
-	 * @param startNode this is a nodeID in which the edge connection starts.
-	 * @param endNode   this is a nodeID in which the edge connection ends.
-	 * @return the amount of rows affected by executing this statement, should be 1 in this case
-	 */
-	public int addEdge(String edgeID, String startNode, String endNode) {
-		String addEdgeS = "Insert Into hasedge (edgeid, startnode, endnode) Values (?, ?, ?)";
-		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
-			addEdgePS.setString(1, edgeID);
-			addEdgePS.setString(2, startNode);
-			addEdgePS.setString(3, endNode);
-			int addEdgeRS = addEdgePS.executeUpdate();
-			if (addEdgeRS == 0) {
-				System.err.println("addEdge Result = 0, probably bad cuz no rows was affected");
-			} else if (addEdgeRS != 1) {
-				System.err.println("addEdge Result =" + addEdgeRS + ", probably bad cuz " + addEdgeRS + " rows was affected");
-			}
-			addLength(startNode, endNode);
-			return addEdgeRS; // addEdgeRS = x means the statement executed affected x rows, should be 1 in this case.
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("addEdge() error in the try/catch");
-			return 0;
-		}
-	}
-
-	/**
-	 * This is allows a visitor to create a user account giving them more access to the certain requests available
-	 * @param email     this is the user's email that is connected to the account the are trying to create
-	 * @param password  this is a password that the user will use to log into the account
-	 * @param firstName this is the user's first name that is associated with the account
-	 * @param lastName  this is the user's last name that is associated with the account
-	 */
-	public void addUserAccount(String email, String password, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp)";
-		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
-			prepState.setString(1, email);
-			prepState.setString(2, password);
-			prepState.setString(3, firstName);
-			prepState.setString(4, lastName);
-			prepState.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			//mapEditor.errorPopup("This email all ready has an account");
-			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
-		}
-	}
-
-	/**
-	 * This is allows an administrator or someone with access to the database to be able to create a user account
-	 * with more permissions giving them more access to the certain requests available. This is function should not
-	 * be used while the app is being run.
-	 * @param email     this is the user's email that is connected to the account the are trying to create
-	 * @param password  this is a password that the user will use to log into the account
-	 * @param userType  this is the type of account that the individual is being assigned to
-	 * @param firstName this is the user's first name that is associated with the account
-	 * @param lastName  this is the user's last name that is associated with the account
-	 */
-	public void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp)";
-		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
-			prepState.setString(1, email);
-			prepState.setString(2, password);
-			prepState.setString(3, userType);
-			prepState.setString(4, firstName);
-			prepState.setString(5, lastName);
-			prepState.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			//showError("This email all ready has an account");
-			System.err.println("Error inserting into userAccount inside function insertUserAccount()");
-		}
-	}
-
 	/**
 	 * This adds a sanitation services form to the table specific for it
 	 * @param //form this is the form being added to the table
@@ -898,7 +1278,7 @@ public class makeConnection {
 			prepState.setString(2, assignee);
 			prepState.execute();
 		} catch (SQLException e) {
- 			//e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addSanitationRequest()");
 		}
 
@@ -1100,379 +1480,6 @@ public class makeConnection {
 
 
 	}
-
-
-	public void addDataForPresentation(){
-		//Visitors:
-		// - have access to floral Delivery
-		addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
-		addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
-		addUserAccount("smiddle@outlook.com", "visitor3", "Sharon", "Middleton");
-		addUserAccount("catherinehop12@gmail.com", "visitor4", "Catherine", "Hopkins");
-		addUserAccount("mbernard@wpi.edu", "visitor5", "Michelle", "Bernard");
-		addUserAccount("mccoy.meghan@hotmail.com", "visitor6", "Meghan", "Mccoy");
-		addUserAccount("harry89owens@gmail.com", "visitor7", "Harry", "Owens");
-		addUserAccount("hugowh@gmail.com", "visitor8", "Hugo", "Whitehouse");
-		addUserAccount("spenrodg@yahoo.com", "visitor9", "Spencer", "Rodgers");
-		addUserAccount("thomasemail@gmail.com", "visitor10", "Thomas", "Mendez");
-		addUserAccount("claytonmurray@gmail.com", "visitor11", "Clayton", "Murray");
-		addUserAccount("lawrencekhalid@yahoo.com", "visitor12", "Khalid", "Lawrence");
-
-		//Patients:
-		//13 - 19
-		addSpecialUserType("adamj@gmail.com","patient1","patient","Adam", "Jenkins");
-		addSpecialUserType("abbym@yahoo.com","patient2","patient","Abby", "Mohamed");
-		addSpecialUserType("wesleya@gmail.com","patient3","patient","Wesley", "Armstrong");
-		addSpecialUserType("travisc@yahoo.com","patient4","patient","Travis", "Cook");
-		addSpecialUserType("gabriellar@gmail.com","patient5","patient","Gabriella", "Reyes");
-		addSpecialUserType("troyo@yahoo.com","patient6","patient","Troy", "Olson");
-		addSpecialUserType("anat@gmail.com","patient7","patient","Ana", "Turner");
-
-		//Doctors:
-		//20-27
-		addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
-		addSpecialUserType("ameliak@yahoo.com","doctor02","doctor","Amelia", "Knight");
-		addSpecialUserType("simond@gmail.com","doctor03","doctor","Simon", "Daniel");
-		addSpecialUserType("victoriae@yahoo.com","doctor04","doctor","Victoria", "Erickson");
-		addSpecialUserType("taylorr@gmail.com","doctor05","doctor","Taylor", "Ramos");
-		addSpecialUserType("rosas@yahoo.com","doctor06","doctor","Rosa", "Smith");
-		addSpecialUserType("declanp@gmail.com","doctor07","doctor","Declan", "Patel");
-		addSpecialUserType("laurenb@yahoo.com","doctor08","doctor","Lauren", "Bolton");
-
-		//Admin:
-		//28 - 30
-		addSpecialUserType("abbyw@gmail.com","admin001","admin","Abby", "Williams");
-		addSpecialUserType("andrewg@yahoo.com","admin002","admin","Andrew", "Guerrero");
-		addSpecialUserType("aleshah@gmail.com","admin003","admin","Alesha", "Harris");
-
-
-		//Floral Requests: //RequestID: 1-9
-		addFloralRequest(13,"Amy Castaneda", "ADEPT00101", "Adam", "Roses", 1, "None", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
-		addFloralRequest(13,"Elsa Figueroa", "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
-		addFloralRequest(14,"Caroline Sutton", "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Get well soon");
-		addFloralRequest(15,"Miles Long", "ADEPT00301", "Nikki", "Assortment", 1, "None", "");
-		addFloralRequest(15,"Hasan Perry", "ADEPT00101", "Monica", "Roses", 6, "Tall", "Love and miss you!!");
-		addFloralRequest(17,"Caroline Richardson", "DDEPT00102", "Amy", "Tulips", 12, "Square", "Enjoy the flowers");
-		addFloralRequest(17,"Miles Carroll", "ADEPT00102", "Alfred", "Carnations", 1, "Tall", "Miss you!");
-		addFloralRequest(19,"Seth Warner", "ADEPT00101", "Caroline", "Assortment", 6, "Round", "Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
-		addFloralRequest(19,"Darren Rossi", "ADEPT00301", "Carrie", "Assortment", 12, "Round", "");
-
-
-		changeRequestStatus(1, "canceled");
-		changeRequestStatus(4, "canceled");
-		changeRequestStatus(5, "complete");
-		changeRequestStatus(6, "canceled");
-		changeRequestStatus(7, "complete");
-
-
-		//Sanitation Requests: //RequestID: 10 - 18
-		addSanitationRequest(20,"Crystal Harvey", "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd");
-		addSanitationRequest(20,"Minnie Newman", "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium", "Bill Byrd");
-		addSanitationRequest(24,"Ayla Black", "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High", "Taylor Ramos");
-		addSanitationRequest(25,"Lenard Jacobs", "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium", "Rosa Smith");
-		addSanitationRequest(28,"Juan Williams", "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical", "Abby Williams");
-		addSanitationRequest(30,"May Jimenez", "IREST00203", "Trash Removal", "Trash can smells bad", "Medium", "Alesha Harris");
-		addSanitationRequest(29,"Herman Bull", "IREST00303", "Trash Removal", "Trash can full. Another one is available so don't rush.", "Low", "Andrew Guerrero");
-		addSanitationRequest(22,"Umar Rojas", "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel");
-		addSanitationRequest(23,"Reuben", "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
-
-
-		changeRequestStatus(11, "canceled");
-		changeRequestStatus(14, "canceled");
-		changeRequestStatus(15, "complete");
-		changeRequestStatus(16, "canceled");
-		changeRequestStatus(17, "complete");
-
-		//Medicine Delivery Request //RequestID: 19 - 30
-		addMedicineRequest(20, "Clara Bryan", "BLABS00102", "Atorvastatin", 30, "20mg", "Once a day by mouth", "Bill Byrd");
-		addMedicineRequest(20, "Jennifer Cunningham", "BLABS00202", "Lisinopril", 90, "20mg", "Once a day by mouth", "Bill Byrd");
-		addMedicineRequest(21, "Jak Bishop", "IDEPT00103", "Levothyroxine", 90, "12.5mcg", "Once a day my bouth", "Amelia Knight");
-		addMedicineRequest(24, "Ben Coles", "BLABS00102", "Metformin", 30, "850mg", "Twice a day by mouth", "Taylor Ramos");
-		addMedicineRequest(27, "Gloria Webster", "IDEPT00803", "Amlodipine", 30, "5mg", "Once a day by mouth", "Lauren Bolton");
-		addMedicineRequest(26, "Robbie Turner", "IDEPT00603", "Metoprolol", 90, "400mg", "Once a day by mouth", "Declan Patel");
-		addMedicineRequest(23, "Lucas Whittaker", "IDEPT00403", "Omeprazole", 90, "40mg", "Three times a day by mouth before a meal", "Victoria Erickson");
-		addMedicineRequest(24, "Alec Rees", "IDEPT00703", "Simvastatin", 30, "10mg", "Once a day by mouth", "Taylor Ramos");
-		addMedicineRequest(27, "Francesca Ferguson", "IDEPT00903", "Losartan", 90, "100mg", "Once daily by mouth", "Lauren Bolton");
-		addMedicineRequest(21, "Josie Pittman", "IDEPT00203", "Albuterol", 30, "0.63mg", "3 times a day via nebulizer. 4 times a day if needed.", "Amelia Knight");
-		addMedicineRequest(20, "Will Ford", "BLABS00202", "Metformin", 30, "8.5mL", "Once daily with meals.", "Bill Byrd");
-		addMedicineRequest(23, "Billy Gomez", "BLABS00102", "Metformin", 30, "5mL", "Twice a day with meals.", "Victoria Erickson");
-
-
-		changeRequestStatus(20, "canceled");
-		changeRequestStatus(24, "canceled");
-		changeRequestStatus(25, "complete");
-		changeRequestStatus(26, "canceled");
-		changeRequestStatus(27, "complete");
-
-
-		//Security Requests: //RequestID: 31 - 38
-		addSecurityRequest(20, "James O'Moore","HDEPT00203", "Low", "Low");
-		addSecurityRequest(22, "Russell Armstrong","WELEV00E01", "Medium", "Medium");
-		addSecurityRequest(30, "Lillian Peters","HDEPT00203", "Low", "Low");
-		addSecurityRequest(27, "Clara Dixon","ePARK00101", "Medium", "High");
-		addSecurityRequest(24, "Herbert Ortega","BDEPT00402", "Medium", "Medium");
-		addSecurityRequest(20, "Caleb Carr","BDEPT00302", "Low", "Low");
-		addSecurityRequest(25, "Jasper Miller","CCONF002L1", "High", "Critical");
-		addSecurityRequest(29, "Jennifer Brewer","eWALK00701", "Medium", "Medium");
-
-
-		changeRequestStatus(31, "canceled");
-		changeRequestStatus(34, "canceled");
-		changeRequestStatus(35, "complete");
-		changeRequestStatus(36, "canceled");
-		changeRequestStatus(37, "complete");
-
-
-		//RequestID: 39 - 47
-		addExternalPatientRequest(27,"Ciaran Goodwin","EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
-		addExternalPatientRequest(30,"Lola Bond","EEXIT00101", "Ambulance","Low Severity", "4093380", "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
-		addExternalPatientRequest(22,"Samantha Russell","FDEPT00501", "Helicopter","High Severity", "92017693", "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
-		addExternalPatientRequest(20,"Caleb Chapman","FDEPT00501", "Helicopter","High Severity", "93754789", "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
-		addExternalPatientRequest(24,"Dale Coates","EEXIT00101", "Ambulance","Medium Severity", "417592", "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
-		addExternalPatientRequest(28,"Jerry Myers","FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
-		addExternalPatientRequest(24,"Betty Warren","EEXIT00101", "Ambulance","Medium Severity", "33337861", "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
-		addExternalPatientRequest(27,"Maxim Rawlings","EEXIT00101", "Ambulance","Low Severity", "40003829", "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
-		addExternalPatientRequest(24,"Alan Singh","FDEPT00501", "Plane","High Severity", "38739983", "12 hours", "Heart transplant organ in route");
-
-
-		changeRequestStatus(40, "complete");
-		changeRequestStatus(42, "complete");
-		changeRequestStatus(44, "complete");
-		changeRequestStatus(45, "complete");
-		changeRequestStatus(47, "complete");
-
-
-		//SuperAdmin:
-		String insertUser = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP )";
-		try {
-			Statement stmt = connection.createStatement();
-			stmt.executeUpdate(insertUser);
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-
-
-
-
-
-
-
-
-
-	/**
-	 * modifies a node, updating the DB, returning 0 or 1 depending on whether operation was successful
-	 *
-	 * @param nodeID
-	 * @param xCoord
-	 * @param yCoord
-	 * @param floor
-	 * @param building
-	 * @param nodeType
-	 * @param longName
-	 * @param shortName
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
-	 */
-	public int modifyNode(String nodeID,  Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-		//String finalQuery = "update node set ";
-		String xCoordUpdate = "";
-		String yCoordUpdate = "";
-		String floorUpdate = "";
-		String buildingUpdate = "";
-		String nodeTypeUpdate = "";
-		String longNameUpdate = "";
-		String shortNameUpdate = "";
-		boolean added = false;
-		String query = "update node set ";
-		if (xCoord != null) {
-			query = query + " xCoord = " + xCoord;
-			//xCoordUpdate = "xCoord = " + xCoord;
-			added = true;
-		}
-		if (yCoord != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " yCoord = " + yCoord;
-			added = true;
-		}
-		if (floor != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " floor = '" + floor + "'";
-			added = true;
-		}
-		if (building != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " building = '" + building + "'";
-			added = true;
-		}
-		if (nodeType != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " nodeType = '" + nodeType + "'";
-			added = true;
-		}
-		if (longName != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " longName = '" + longName + "'";
-			added = true;
-		}
-		if (shortName != null) {
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + " shortName = '" + shortName + "'";
-			added = true;
-		}
-		query = query + " where nodeID = '" + nodeID + "'";
-		try {
-			Statement stmt = this.connection.createStatement();
-			System.out.println(query);
-			stmt.executeUpdate(query);
-			stmt.close();
-			return 1;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error in updating node");
-			return 0;
-		}
-	}
-
-	/**
-	 * modifies an edge, updating the DB, returning 0 or 1 depending on whether operation was successful
-	 * @param edgeID
-	 * @param startNode
-	 * @param endNode
-	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
-	 * need to check that both startNode and endNode already exist in node table
-	 */
-	public int modifyEdge(String edgeID, String startNode, String endNode) {
-		boolean correctEdgeID = false;
-		boolean correctStartNode = false;
-		boolean correctEndNode = false;
-
-
-		// !!!!!! user is required to type in edgeID !!!!!! //
-
-		//1. check that they gave a valid edgeID
-		//2. check that they gave a valid nodeID they want to change to the startNode
-		//			or
-		//3. check that they gave a valid nodeID they want to change to the endNode
-
-		String checkEdgeID = "Select edgeid From hasedge Where edgeid = ?";
-		try (PreparedStatement prepState1 = connection.prepareStatement(checkEdgeID)) {
-			prepState1.setString(1, edgeID);
-			ResultSet rset1 = prepState1.executeQuery();
-
-			if (rset1.next()) {
-				correctEdgeID = true;
-			}
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			return 0;
-		}
-
-		if (startNode != null) {
-			String checkStartNode = "Select nodeid From node Where nodeid = ?";
-			try (PreparedStatement prepState2 = connection.prepareStatement(checkStartNode)) {
-				prepState2.setString(1, startNode);
-				ResultSet rset2 = prepState2.executeQuery();
-
-				if (rset2.next()) {
-					correctStartNode = true;
-				}
-
-			} catch (SQLException e) {
-				System.err.println("given start node does not exist");
-				//e.printStackTrace();
-				return 0;
-			}
-		}
-
-		if (endNode != null) {
-			String checkEndNode = "Select nodeid From node Where nodeid = ?";
-			try (PreparedStatement prepState3 = connection.prepareStatement(checkEndNode)) {
-				prepState3.setString(1, endNode);
-				ResultSet rset3 = prepState3.executeQuery();
-
-				if (rset3.next()) {
-					correctEndNode = true;
-				}
-
-
-			} catch (SQLException e) {
-				//e.printStackTrace();
-				return 0;
-			}
-		}
-
-
-		if ((correctEdgeID && correctStartNode) || (correctEdgeID && correctEndNode) || (correctEdgeID && correctStartNode && correctEndNode)) {
-			String[] nodes = edgeID.split("_");
-			deleteEdge(nodes[0], nodes[1]);
-			if (startNode == null) {
-				String newEdgeID = nodes[0] + "_" + endNode;
-				addEdge(newEdgeID, nodes[0], endNode);
-				return 1;
-			}
-			if (endNode == null) {
-				String newEdgeID = startNode + "_" + nodes[1];
-				addEdge(newEdgeID, startNode, nodes[1]);
-				return 1;
-			} else {
-				String newEdgeID = startNode + "_" + endNode;
-				addEdge(newEdgeID, startNode, endNode);
-				return 1;
-			}
-		}
-
-		System.err.println("startNode or endNode does not exist but no SQL error");
-		return 0;
-	}
-
-
-	public ArrayList<Node> getAllNodesByType(String type) {
-		ArrayList<Node> nodesArray = new ArrayList<>();
-//observable list -- UI
-		try {
-			Statement stmt = this.connection.createStatement();
-			String query = "select * from node WHERE '" + type + "' = NODETYPE";
-			ResultSet rset = stmt.executeQuery(query);
-
-			while (rset.next()) {
-				String NodeID = rset.getString("nodeID");
-				int xCoord = rset.getInt("xCoord");
-				int yCoord = rset.getInt("yCoord");
-				String floor = rset.getString("floor");
-				String building = rset.getString("building");
-				String nodeType = rset.getString("nodeType");
-				String longName = rset.getString("longName");
-				String shortName = rset.getString("shortName");
-
-				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
-
-			}
-
-			rset.close();
-			stmt.close();
-
-		} catch (SQLException e) {
-			System.err.println("getAllNodes Error : " + e);
-		}
-		return nodesArray;
-	}
-
 
 	/**
 	 * This edits a Sanitation Services form that is already in the database
@@ -1831,6 +1838,350 @@ public class makeConnection {
 
 
 
+
+
+	//CSV STUFF:
+	/**
+	 * Reads csv & inserts into table
+	 * @param tableName name of the table that needs to be populated
+	 * @param file      file that is going to be read
+	 */
+	public void populateTable(String tableName, File file) {
+
+		try {
+			// creates a file with the file name we are looking to read
+			// File file = new File(csvFileName);
+			// used to read data from a file
+			FileReader fr = new FileReader(file);
+
+			// used to read the text from a character-based input stream.
+			BufferedReader br = new BufferedReader(fr);
+
+			String line;
+			String[] tempArr;
+
+			// reads first line (this is the header of each file and we don't need it)
+			br.readLine();
+
+			// if there is something in the file (after line 1)
+			while ((line = br.readLine()) != null) {
+
+				// adds arguments into the array separated by the commas ("," is when it knows the next
+				// index)
+				tempArr = line.split(",");
+
+				String sqlQuery = "";
+				if (tableName.equals("node")) {
+					sqlQuery =
+							"INSERT INTO node VALUES ("
+									+ "'"
+									+ tempArr[0]
+									+ "',"
+									+ Integer.valueOf(tempArr[1])
+									+ ","
+									+ Integer.valueOf(tempArr[2])
+									+ ",'"
+									+ tempArr[3]
+									+ "',"
+									+ " '"
+									+ tempArr[4]
+									+ "',"
+									+ " '"
+									+ tempArr[5]
+									+ "',"
+									+ " '"
+									+ tempArr[6]
+									+ "',"
+									+ " '"
+									+ tempArr[7]
+									+ "')";
+				}
+				if (tableName.equals("hasEdge")) {
+					sqlQuery =
+							"INSERT INTO hasEdge VALUES ('"
+									+ tempArr[0]
+									+ "', '"
+									+ tempArr[1]
+									+ "', '"
+									+ tempArr[2]
+									+ "', NULL"
+									+ ")";
+				}
+
+
+				try {
+					Statement stmt = this.connection.createStatement();
+
+					stmt.execute(sqlQuery);
+
+					if (tableName.equals("hasEdge")) {
+						//System.out.println("Calling addLength");
+						addLength(tempArr[1], tempArr[2]);
+						//System.out.println("after calling addLength");
+					}
+
+					stmt.close();
+
+				} catch (SQLException e) {
+					e.printStackTrace();
+					System.err.println("populateTable() inner try/catch error");
+				}
+			}
+
+			// closes the BufferedReader
+			br.close();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			System.err.println("populateTable() outer try/catch error");
+		}
+	}
+
+	/**
+	 * Translates a table into a csv file which can be later returned to the user.
+	 * @param tableName this is the table/data/information that will be translated into a csv file
+	 */
+	public void getNewCSVFile(String tableName) {
+
+		String sqlQuery = "select * from " + tableName;
+		try (PreparedStatement prepState = connection.prepareStatement(sqlQuery)) {
+
+			ResultSet rset1 = prepState.executeQuery();
+
+			if (tableName == "node") {
+
+				StringBuilder nodeSB = new StringBuilder();
+				while (rset1.next()) {
+
+					//File nodeCSV = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+					nodeSB.append(rset1.getString("nodeID")).append(",");
+					nodeSB.append(rset1.getInt("xCoord")).append(",");
+					nodeSB.append(rset1.getInt("yCoord")).append(",");
+					nodeSB.append(rset1.getString("floor")).append(",");
+					nodeSB.append(rset1.getString("building")).append(",");
+					nodeSB.append(rset1.getString("nodeType")).append(",");
+					nodeSB.append(rset1.getString("longName")).append(",");
+					nodeSB.append(rset1.getString("shortName")).append("\n");
+
+				}
+
+				// create a file writer to write to files
+				FileWriter nodeWriter = new FileWriter("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+				nodeWriter.write("nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName\n");
+				nodeWriter.write(String.valueOf(nodeSB));
+				nodeWriter.close();
+			}
+
+			rset1.close();
+
+			ResultSet rset2 = prepState.executeQuery();
+
+			if (tableName == "hasEdge") {
+				StringBuilder edgeSB = new StringBuilder();
+
+				while (rset2.next()) {
+					//File edgeCSV = new File("CSVs/outputEdge.csv");
+					edgeSB.append(rset2.getString("edgeID")).append(",");
+					edgeSB.append(rset2.getString("startNode")).append(",");
+					edgeSB.append(rset2.getString("endNode")).append("\n");
+				}
+
+				FileWriter edgeWriter = new FileWriter("CSVs/outputEdge.csv");
+				edgeWriter.write("edgeID, startNode, endNode\n");
+				edgeWriter.write(String.valueOf(edgeSB));
+				edgeWriter.close();
+			}
+
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} catch (IOException ioException) {
+			ioException.printStackTrace();
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void addDataForPresentation(){
+		//Visitors:
+		// - have access to floral Delivery
+		addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
+		addUserAccount("smiddle@outlook.com", "visitor3", "Sharon", "Middleton");
+		addUserAccount("catherinehop12@gmail.com", "visitor4", "Catherine", "Hopkins");
+		addUserAccount("mbernard@wpi.edu", "visitor5", "Michelle", "Bernard");
+		addUserAccount("mccoy.meghan@hotmail.com", "visitor6", "Meghan", "Mccoy");
+		addUserAccount("harry89owens@gmail.com", "visitor7", "Harry", "Owens");
+		addUserAccount("hugowh@gmail.com", "visitor8", "Hugo", "Whitehouse");
+		addUserAccount("spenrodg@yahoo.com", "visitor9", "Spencer", "Rodgers");
+		addUserAccount("thomasemail@gmail.com", "visitor10", "Thomas", "Mendez");
+		addUserAccount("claytonmurray@gmail.com", "visitor11", "Clayton", "Murray");
+		addUserAccount("lawrencekhalid@yahoo.com", "visitor12", "Khalid", "Lawrence");
+
+		//Patients:
+		//13 - 19
+		addSpecialUserType("adamj@gmail.com","patient1","patient","Adam", "Jenkins");
+		addSpecialUserType("abbym@yahoo.com","patient2","patient","Abby", "Mohamed");
+		addSpecialUserType("wesleya@gmail.com","patient3","patient","Wesley", "Armstrong");
+		addSpecialUserType("travisc@yahoo.com","patient4","patient","Travis", "Cook");
+		addSpecialUserType("gabriellar@gmail.com","patient5","patient","Gabriella", "Reyes");
+		addSpecialUserType("troyo@yahoo.com","patient6","patient","Troy", "Olson");
+		addSpecialUserType("anat@gmail.com","patient7","patient","Ana", "Turner");
+
+		//Doctors:
+		//20-27
+		addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+		addSpecialUserType("ameliak@yahoo.com","doctor02","doctor","Amelia", "Knight");
+		addSpecialUserType("simond@gmail.com","doctor03","doctor","Simon", "Daniel");
+		addSpecialUserType("victoriae@yahoo.com","doctor04","doctor","Victoria", "Erickson");
+		addSpecialUserType("taylorr@gmail.com","doctor05","doctor","Taylor", "Ramos");
+		addSpecialUserType("rosas@yahoo.com","doctor06","doctor","Rosa", "Smith");
+		addSpecialUserType("declanp@gmail.com","doctor07","doctor","Declan", "Patel");
+		addSpecialUserType("laurenb@yahoo.com","doctor08","doctor","Lauren", "Bolton");
+
+		//Admin:
+		//28 - 30
+		addSpecialUserType("abbyw@gmail.com","admin001","admin","Abby", "Williams");
+		addSpecialUserType("andrewg@yahoo.com","admin002","admin","Andrew", "Guerrero");
+		addSpecialUserType("aleshah@gmail.com","admin003","admin","Alesha", "Harris");
+
+
+		//Floral Requests: //RequestID: 1-9
+		addFloralRequest(13,"Amy Castaneda", "ADEPT00101", "Adam", "Roses", 1, "None", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
+		addFloralRequest(13,"Elsa Figueroa", "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
+		addFloralRequest(14,"Caroline Sutton", "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Get well soon");
+		addFloralRequest(15,"Miles Long", "ADEPT00301", "Nikki", "Assortment", 1, "None", "");
+		addFloralRequest(15,"Hasan Perry", "ADEPT00101", "Monica", "Roses", 6, "Tall", "Love and miss you!!");
+		addFloralRequest(17,"Caroline Richardson", "DDEPT00102", "Amy", "Tulips", 12, "Square", "Enjoy the flowers");
+		addFloralRequest(17,"Miles Carroll", "ADEPT00102", "Alfred", "Carnations", 1, "Tall", "Miss you!");
+		addFloralRequest(19,"Seth Warner", "ADEPT00101", "Caroline", "Assortment", 6, "Round", "Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
+		addFloralRequest(19,"Darren Rossi", "ADEPT00301", "Carrie", "Assortment", 12, "Round", "");
+
+
+		changeRequestStatus(1, "canceled");
+		changeRequestStatus(4, "canceled");
+		changeRequestStatus(5, "complete");
+		changeRequestStatus(6, "canceled");
+		changeRequestStatus(7, "complete");
+
+
+		//Sanitation Requests: //RequestID: 10 - 18
+		addSanitationRequest(20,"Crystal Harvey", "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd");
+		addSanitationRequest(20,"Minnie Newman", "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium", "Bill Byrd");
+		addSanitationRequest(24,"Ayla Black", "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High", "Taylor Ramos");
+		addSanitationRequest(25,"Lenard Jacobs", "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium", "Rosa Smith");
+		addSanitationRequest(28,"Juan Williams", "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical", "Abby Williams");
+		addSanitationRequest(30,"May Jimenez", "IREST00203", "Trash Removal", "Trash can smells bad", "Medium", "Alesha Harris");
+		addSanitationRequest(29,"Herman Bull", "IREST00303", "Trash Removal", "Trash can full. Another one is available so don't rush.", "Low", "Andrew Guerrero");
+		addSanitationRequest(22,"Umar Rojas", "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel");
+		addSanitationRequest(23,"Reuben", "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
+
+
+		changeRequestStatus(11, "canceled");
+		changeRequestStatus(14, "canceled");
+		changeRequestStatus(15, "complete");
+		changeRequestStatus(16, "canceled");
+		changeRequestStatus(17, "complete");
+
+		//Medicine Delivery Request //RequestID: 19 - 30
+		addMedicineRequest(20, "Clara Bryan", "BLABS00102", "Atorvastatin", 30, "20mg", "Once a day by mouth", "Bill Byrd");
+		addMedicineRequest(20, "Jennifer Cunningham", "BLABS00202", "Lisinopril", 90, "20mg", "Once a day by mouth", "Bill Byrd");
+		addMedicineRequest(21, "Jak Bishop", "IDEPT00103", "Levothyroxine", 90, "12.5mcg", "Once a day my bouth", "Amelia Knight");
+		addMedicineRequest(24, "Ben Coles", "BLABS00102", "Metformin", 30, "850mg", "Twice a day by mouth", "Taylor Ramos");
+		addMedicineRequest(27, "Gloria Webster", "IDEPT00803", "Amlodipine", 30, "5mg", "Once a day by mouth", "Lauren Bolton");
+		addMedicineRequest(26, "Robbie Turner", "IDEPT00603", "Metoprolol", 90, "400mg", "Once a day by mouth", "Declan Patel");
+		addMedicineRequest(23, "Lucas Whittaker", "IDEPT00403", "Omeprazole", 90, "40mg", "Three times a day by mouth before a meal", "Victoria Erickson");
+		addMedicineRequest(24, "Alec Rees", "IDEPT00703", "Simvastatin", 30, "10mg", "Once a day by mouth", "Taylor Ramos");
+		addMedicineRequest(27, "Francesca Ferguson", "IDEPT00903", "Losartan", 90, "100mg", "Once daily by mouth", "Lauren Bolton");
+		addMedicineRequest(21, "Josie Pittman", "IDEPT00203", "Albuterol", 30, "0.63mg", "3 times a day via nebulizer. 4 times a day if needed.", "Amelia Knight");
+		addMedicineRequest(20, "Will Ford", "BLABS00202", "Metformin", 30, "8.5mL", "Once daily with meals.", "Bill Byrd");
+		addMedicineRequest(23, "Billy Gomez", "BLABS00102", "Metformin", 30, "5mL", "Twice a day with meals.", "Victoria Erickson");
+
+
+		changeRequestStatus(20, "canceled");
+		changeRequestStatus(24, "canceled");
+		changeRequestStatus(25, "complete");
+		changeRequestStatus(26, "canceled");
+		changeRequestStatus(27, "complete");
+
+
+		//Security Requests: //RequestID: 31 - 38
+		addSecurityRequest(20, "James O'Moore","HDEPT00203", "Low", "Low");
+		addSecurityRequest(22, "Russell Armstrong","WELEV00E01", "Medium", "Medium");
+		addSecurityRequest(30, "Lillian Peters","HDEPT00203", "Low", "Low");
+		addSecurityRequest(27, "Clara Dixon","ePARK00101", "Medium", "High");
+		addSecurityRequest(24, "Herbert Ortega","BDEPT00402", "Medium", "Medium");
+		addSecurityRequest(20, "Caleb Carr","BDEPT00302", "Low", "Low");
+		addSecurityRequest(25, "Jasper Miller","CCONF002L1", "High", "Critical");
+		addSecurityRequest(29, "Jennifer Brewer","eWALK00701", "Medium", "Medium");
+
+
+		changeRequestStatus(31, "canceled");
+		changeRequestStatus(34, "canceled");
+		changeRequestStatus(35, "complete");
+		changeRequestStatus(36, "canceled");
+		changeRequestStatus(37, "complete");
+
+
+		//RequestID: 39 - 47
+		addExternalPatientRequest(27,"Ciaran Goodwin","EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
+		addExternalPatientRequest(30,"Lola Bond","EEXIT00101", "Ambulance","Low Severity", "4093380", "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
+		addExternalPatientRequest(22,"Samantha Russell","FDEPT00501", "Helicopter","High Severity", "92017693", "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
+		addExternalPatientRequest(20,"Caleb Chapman","FDEPT00501", "Helicopter","High Severity", "93754789", "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
+		addExternalPatientRequest(24,"Dale Coates","EEXIT00101", "Ambulance","Medium Severity", "417592", "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
+		addExternalPatientRequest(28,"Jerry Myers","FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
+		addExternalPatientRequest(24,"Betty Warren","EEXIT00101", "Ambulance","Medium Severity", "33337861", "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
+		addExternalPatientRequest(27,"Maxim Rawlings","EEXIT00101", "Ambulance","Low Severity", "40003829", "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
+		addExternalPatientRequest(24,"Alan Singh","FDEPT00501", "Plane","High Severity", "38739983", "12 hours", "Heart transplant organ in route");
+
+
+		changeRequestStatus(40, "complete");
+		changeRequestStatus(42, "complete");
+		changeRequestStatus(44, "complete");
+		changeRequestStatus(45, "complete");
+		changeRequestStatus(47, "complete");
+
+
+		//SuperAdmin:
+		String insertUser = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP )";
+		try {
+			Statement stmt = connection.createStatement();
+			stmt.executeUpdate(insertUser);
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/**
 	 * gets a node's all attributes given nodeID
 	 * @return a Node object with the matching nodeID
@@ -1943,41 +2294,7 @@ public class makeConnection {
 		return pair;
 	}
 
-	/**
-	 * gets all Nodes (each row in node table)
-	 * @return ArrayList of Node objects
-	 * need Node constructor from UI/UX team
-	 */
-	public ArrayList<Node> getAllNodes() {
-		ArrayList<Node> nodesArray = new ArrayList<>();
-//observable list -- UI
-		try {
-			Statement stmt = this.connection.createStatement();
-			String query = "Select * From node";
-			ResultSet rset = stmt.executeQuery(query);
 
-			while (rset.next()) {
-				String NodeID = rset.getString("nodeID");
-				int xCoord = rset.getInt("xCoord");
-				int yCoord = rset.getInt("yCoord");
-				String floor = rset.getString("floor");
-				String building = rset.getString("building");
-				String nodeType = rset.getString("nodeType");
-				String longName = rset.getString("longName");
-				String shortName = rset.getString("shortName");
-
-				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
-
-			}
-
-			rset.close();
-			stmt.close();
-
-		} catch (SQLException e) {
-			System.err.println("getAllNodes Error : " + e);
-		}
-		return nodesArray;
-	}
 
 	/**
 	 * todo
@@ -2099,33 +2416,6 @@ public class makeConnection {
 
 	}
 
-	/**
-	 * gets all edges and each edge's attribute
-	 * @return ArrayList<Edge>
-	 */
-	public ArrayList<Edge> getAllEdges() {
-		ArrayList<Edge> edgesArray = new ArrayList<>();
-		try {
-			Statement stmt = this.connection.createStatement();
-			String query = "Select * From hasedge";
-			ResultSet rset = stmt.executeQuery(query);
-
-			while (rset.next()) {
-				String edgeID = rset.getString("edgeID");
-				String startNode = rset.getString("startNode");
-				String endNode = rset.getString("endNode");
-				double length = rset.getDouble("length");
-				edgesArray.add(new Edge(edgeID, startNode, endNode, length));
-			}
-
-			rset.close();
-			stmt.close();
-
-		} catch (SQLException e) {
-			System.err.println("getAllEdges Error : " + e);
-		}
-		return edgesArray;
-	}
 
 	/**
 	 * counts the number of nodes already in the database of the given type and on the given floor that starts with the given teamNum
@@ -2181,67 +2471,6 @@ public class makeConnection {
 
 	}
 
-	/**
-	 * Translates a table into a csv file which can be later returned to the user.
-	 * @param tableName this is the table/data/information that will be translated into a csv file
-	 */
-	public void getNewCSVFile(String tableName) {
-
-		String sqlQuery = "select * from " + tableName;
-		try (PreparedStatement prepState = connection.prepareStatement(sqlQuery)) {
-
-			ResultSet rset1 = prepState.executeQuery();
-
-			if (tableName == "node") {
-
-				StringBuilder nodeSB = new StringBuilder();
-				while (rset1.next()) {
-
-					//File nodeCSV = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
-					nodeSB.append(rset1.getString("nodeID")).append(",");
-					nodeSB.append(rset1.getInt("xCoord")).append(",");
-					nodeSB.append(rset1.getInt("yCoord")).append(",");
-					nodeSB.append(rset1.getString("floor")).append(",");
-					nodeSB.append(rset1.getString("building")).append(",");
-					nodeSB.append(rset1.getString("nodeType")).append(",");
-					nodeSB.append(rset1.getString("longName")).append(",");
-					nodeSB.append(rset1.getString("shortName")).append("\n");
-
-				}
-
-				// create a file writer to write to files
-				FileWriter nodeWriter = new FileWriter("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
-				nodeWriter.write("nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName\n");
-				nodeWriter.write(String.valueOf(nodeSB));
-				nodeWriter.close();
-			}
-
-			rset1.close();
-
-			ResultSet rset2 = prepState.executeQuery();
-
-			if (tableName == "hasEdge") {
-				StringBuilder edgeSB = new StringBuilder();
-
-				while (rset2.next()) {
-					//File edgeCSV = new File("CSVs/outputEdge.csv");
-					edgeSB.append(rset2.getString("edgeID")).append(",");
-					edgeSB.append(rset2.getString("startNode")).append(",");
-					edgeSB.append(rset2.getString("endNode")).append("\n");
-				}
-
-				FileWriter edgeWriter = new FileWriter("CSVs/outputEdge.csv");
-				edgeWriter.write("edgeID, startNode, endNode\n");
-				edgeWriter.write(String.valueOf(edgeSB));
-				edgeWriter.close();
-			}
-
-		} catch (SQLException throwables) {
-			throwables.printStackTrace();
-		} catch (IOException ioException) {
-			ioException.printStackTrace();
-		}
-	}
 
 
 
@@ -2250,172 +2479,8 @@ public class makeConnection {
 
 
 
-	// User System Stuff
-	/**
-	 * Function for logging a user in with their unique email and password
-	 * @param email    is the user's entered email
-	 * @param password is the user's entered password
-	 * @return 0 when the credentials does not match with any user in the database, and returns the userID otherwise
-	 */
-	public int userLogin(String email, String password) {
-		String userLoginS1 = "Select Count(*) As verification From userAccount Where email = ? And password = ?";
-		try (PreparedStatement userLoginPS1 = connection.prepareStatement(userLoginS1)) {
-			userLoginPS1.setString(1, email);
-			userLoginPS1.setString(2, password);
-			ResultSet userLoginRS1 = userLoginPS1.executeQuery();
-			int verification = 0;
-			if (userLoginRS1.next()) {
-				verification = userLoginRS1.getInt("verification");
-			}
-			userLoginRS1.close();
-			if(verification == 0){
-				return verification;
-			} else {
-				String userLoginS2 = "Select userId From userAccount Where email = ? And password = ?";
-				try (PreparedStatement userLoginPS2 = connection.prepareStatement(userLoginS2)) {
-					userLoginPS2.setString(1, email);
-					userLoginPS2.setString(2, password);
-					ResultSet userLoginRS2 = userLoginPS2.executeQuery();
-					int userID = 0;
-					if (userLoginRS2.next()) {
-						userID = userLoginRS2.getInt("userID");
-					}
-					userLoginRS2.close();
-					return userID;
-				}
-			}
-		} catch (SQLException e) {
-			// e.printStackTrace();
-			System.err.println("userLogin() error");
-		}
-		return 0;
-	}
 
-	/**
-	 * Gets a list of all the requestIDs from the given tableName
-	 * @param tableType this is the name of the table that we are getting the requestIDs from
-	 * @return a list of all the requestIDs
-	 */
-	public ArrayList<String> getRequestIDs(String tableType, int userID){
-		ArrayList<String> listOfIDs = new ArrayList<>();
-		try  {
-			Statement stmt = connection.createStatement();
-			String requestID;
-			if (userID != -1) {
-				requestID = "Select requestID from requests where requestType = '" + tableType + "' and creatorID = " + userID;
-			}
-			else{
-				requestID = "Select requestID From requests where requestType = '" + tableType + "'";
-			}
-			ResultSet rset = stmt.executeQuery(requestID);
-			while(rset.next()){
-				String ID = rset.getString("requestID");
-				listOfIDs.add(ID);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getRequestStatus() error in the try/catch");
-		}
-		return listOfIDs;
-	}
 
-	/**
-	 * Gets a list of all the statuses from the given tableName
-	 * @param tableType this is the name of the table that we are getting the requestIDs from
-	 * @return a list of all the statuses of the requests
-	 */
-	public ArrayList<String> getRequestStatus(String tableType, int userID){
-		ArrayList<String> listOfStatus = new ArrayList<String>();
-		try  {
-			Statement stmt = connection.createStatement();
-			String requestStatus;
-			if (userID != -1) {
-				requestStatus = "Select requestStatus From requests Where requestType = '" + tableType +"' and creatorID = " + userID;
-			}
-			else{
-				requestStatus = "Select requestStatus From requests Where requestType = '" + tableType + "'";
-			}
-			ResultSet rset = stmt.executeQuery(requestStatus);
-			while(rset.next()){
-				String status = rset.getString("requestStatus");
-				listOfStatus.add(status);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getRequestStatus() error in the try/catch");
-		}
-		return listOfStatus;
-	}
-
-	/**
-	 * Gets a list of all the assignees from the given tableName
-	 * @param tableType this is the type of the table that we are getting the requestIDs from
-	 * @return a list of all assignees for all of the requests
-	 */
-	public ArrayList<String> getRequestAssignees(String tableType, int userID){
-		ArrayList<String> listOfAssignees = new ArrayList<String>();
-		try  {
-			Statement stmt = connection.createStatement();
-			String requestAssignee;
-			if (userID != -1) { // if user is not SuperAdmin
-				requestAssignee = "Select assignee from requests where requestType = '" + tableType + "' and creatorID = " + userID;
-				//requestAssignee = "Select newTable.assignee From (Select * From requests, " + tableType + " Where requests.requestID = " + tableType + ".requestID ) newTable Where userID = " + userID;
-			} else { // if user is SuperAdmin
-				requestAssignee = "Select requests.assignee From requests where requestType = '" + tableType + "'";
-			}
-			ResultSet rset = stmt.executeQuery(requestAssignee);
-			while(rset.next()){
-				String status = rset.getString("assignee");
-				listOfAssignees.add(status);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getRequestAssignee() error in the try/catch");
-		}
-		return listOfAssignees;
-	}
-
-	/**
-	 * Gets a list of all the longNames for the location from the given tableName
-	 * @param tableType this is the name of the table that we are getting the requestIDs from
-	 * @return a list of all longNames for the location for all of the requests
-	 */
-	public ArrayList<String> getRequestLocations(String tableType, int userID){
-		ArrayList<String> listOfLongNames = new ArrayList<String>();
-		try  {
-			String tableName = "";
-			switch (tableType){
-				case "floral": tableName = "floralRequests";
-				break;
-				case "medDelivery": tableName = "medDelivery";
-				break;
-				case "sanitation": tableName = "sanitationRequest";
-				break;
-				case "security": tableName = "securityServ";
-				break;
-				case "extTransport": tableName = "extTransport";
-				break;
-			}
-			Statement stmt = connection.createStatement();
-			String requestLongNames;
-
-			if (userID != -1) {
-				requestLongNames = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
-			}
-			else{
-				requestLongNames ="Select longName from node,(Select roomID From " + tableName + ") correctTable where node.nodeID = correctTable.roomID";
-			}
-			ResultSet rset = stmt.executeQuery(requestLongNames);
-			while(rset.next()){
-				String status = rset.getString("longName");
-				listOfLongNames.add(status);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getRequestLocations() error in the try/catch");
-		}
-		return listOfLongNames;
-	}
 
 	public boolean allTablesThere(){ //todo will probably cause a merge conflict at somepoint, accept DB version
 		ArrayList<String> tablesInDB = new ArrayList<String>();

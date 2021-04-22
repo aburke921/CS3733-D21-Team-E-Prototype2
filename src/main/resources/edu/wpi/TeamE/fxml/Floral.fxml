@@ -78,10 +78,10 @@
                               <JFXComboBox fx:id="vaseType" prefHeight="27.0" prefWidth="295.0" promptText="Vase Type">
                                  <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                       <String fx:id="roundBox" fx:value="Round Box" />
-                                       <String fx:id="squareBox" fx:value="Square Box" />
-                                       <String fx:id="tallBox" fx:value="Tall Box" />
-                                       <String fx:id="noBox" fx:value="No Box" />
+                                       <String fx:id="roundBox" fx:value="Round" />
+                                       <String fx:id="squareBox" fx:value="Square" />
+                                       <String fx:id="tallBox" fx:value="Tall" />
+                                       <String fx:id="noBox" fx:value="None" />
                                     </FXCollections>
                                  </items>
                               </JFXComboBox>

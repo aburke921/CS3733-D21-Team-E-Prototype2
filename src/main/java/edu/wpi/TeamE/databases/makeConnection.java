@@ -1253,15 +1253,6 @@ public class makeConnection {
 
 	}
 
-
-
-
-
-
-
-
-
-
 	/**
 	 * modifies a node, updating the DB, returning 0 or 1 depending on whether operation was successful
 	 *

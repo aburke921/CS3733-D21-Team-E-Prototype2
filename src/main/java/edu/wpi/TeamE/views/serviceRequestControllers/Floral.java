@@ -78,7 +78,7 @@ public class Floral extends ServiceRequestFormComponents {
             String nodeInfo = nodeID.get(index);
             String type = flowerType.getSelectionModel().getSelectedItem();
             String count = flowerCount.getSelectionModel().getSelectedItem();
-            String vase = vaseType.getSelectionModel().getSelectedItem();
+            String vase = vaseType.getSelectionModel().getSelectedItem().toString();
             String assigned = assignee.getText();
             String reciever = recipient.getText();
             String mess = message.getText();

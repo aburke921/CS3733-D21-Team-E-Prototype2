@@ -113,8 +113,10 @@
                                             </VBox.margin>
                                             <items>
                                                 <FXCollections fx:factory="observableArrayList">
-                                                    <String fx:id="urgent" fx:value="Urgent" />
-                                                    <String fx:id="nonurgent" fx:value="Non-Urgent" />
+                                                    <String fx:id="lowUrgency" fx:value="Low" />
+                                                    <String fx:id="mediumUrgency" fx:value="Medium" />
+                                                    <String fx:id="highUrgency" fx:value="High" />
+                                                    <String fx:id="criticalUrgency" fx:value="Critical" />
                                                 </FXCollections>
                                             </items>
                                         </JFXComboBox>

@@ -1,19 +1,20 @@
 package edu.wpi.TeamE.databases;
 
 import java.io.*;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import edu.wpi.TeamE.databases.EdgeDB;
+
 
 public class csvDB {
+
+	static Connection connection = makeConnection.makeConnection().getConnection();
 
 	/**
 	 * Reads csv & inserts into table
 	 * @param tableName name of the table that needs to be populated
 	 * @param file      file that is going to be read
 	 */
-	public void populateTable(String tableName, File file) {
+	public static void populateTable(String tableName, File file) {
 
 		try {
 			// creates a file with the file name we are looking to read
@@ -77,13 +78,13 @@ public class csvDB {
 
 
 				try {
-					Statement stmt = this.connection.createStatement();
+					Statement stmt = connection.createStatement();
 
 					stmt.execute(sqlQuery);
 
 					if (tableName.equals("hasEdge")) {
 						//System.out.println("Calling addLength");
-						addLength(tempArr[1], tempArr[2]);
+						EdgeDB.addLength(tempArr[1], tempArr[2]);
 						//System.out.println("after calling addLength");
 					}
 
@@ -107,7 +108,7 @@ public class csvDB {
 	 * Translates a table into a csv file which can be later returned to the user.
 	 * @param tableName this is the table/data/information that will be translated into a csv file
 	 */
-	public void getNewCSVFile(String tableName) {
+	public static void getNewCSVFile(String tableName) {
 
 		String sqlQuery = "select * from " + tableName;
 		try (PreparedStatement prepState = connection.prepareStatement(sqlQuery)) {

@@ -1,10 +1,11 @@
 package edu.wpi.TeamE.databases;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class RequestsDB {
+
+	static Connection connection = makeConnection.makeConnection().getConnection();
 
 	/**
 	 * Uses executes the SQL statements required to create the requests table.
@@ -16,7 +17,7 @@ public class RequestsDB {
 	 * - requestStatus: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
 	 * - assignee: this is the person who is assigned to the request
 	 */
-	public void createRequestsTable() {
+	public static void createRequestsTable() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table requests(" +
@@ -47,7 +48,7 @@ public class RequestsDB {
 	 * - message: this is a specific detailed message that the user can have delivered with the flowers or an instruction message
 	 * *                for whoever is fufilling the request
 	 */
-	public void createFloralRequestsTable() {
+	public static void createFloralRequestsTable() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table floralRequests( " +
@@ -79,7 +80,7 @@ public class RequestsDB {
 	 * "Feces Cleanup", "Preparation Cleanup", "Trash Removal"
 	 * - urgency: this is how urgent the request is and helpful for prioritizing. The valid options are: "Low", "Medium", "High", "Critical"
 	 */
-	public void createSanitationTable() {
+	public static void createSanitationTable() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table sanitationRequest(\n" +
@@ -110,7 +111,7 @@ public class RequestsDB {
 	 * - ETA: this is the estimated time the patient will arrive.
 	 * - description: this is a detailed description of request that generally includes what happened to the patient and their current situation.
 	 */
-	public void createExtTransportTable() {
+	public static void createExtTransportTable() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table extTransport(\n" +
@@ -141,7 +142,7 @@ public class RequestsDB {
 	 * - specialInstructions: this is any special details or instructions the user wants to give to who ever is processing the request.
 	 * - signature: this the signature (name in print) of the user who is filling out the request
 	 */
-	public void createMedDeliveryTable() {
+	public static void createMedDeliveryTable() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table medDelivery (\n" +
@@ -168,7 +169,7 @@ public class RequestsDB {
 	 * - level: this is the security level that is needed
 	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled. The valid options are: 'Low', 'Medium', 'High', 'Critical'
 	 */
-	public void createSecurityServTable() {
+	public static void createSecurityServTable() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table securityServ (\n" +
@@ -190,7 +191,7 @@ public class RequestsDB {
 	 * This adds a sanitation services form to the table specific for it
 	 * @param //form this is the form being added to the table
 	 */
-	public void addSanitationRequest(int userID, String assignee, String roomID, String sanitationType, String description, String urgency, String signature) {
+	public static void addSanitationRequest(int userID, String assignee, String roomID, String sanitationType, String description, String urgency, String signature) {
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests) + 1, ?, Current Timestamp, 'sanitation', 'inProgress', ?)";
@@ -227,7 +228,7 @@ public class RequestsDB {
 	 * This function needs to add a external patient form to the table for external patient forms
 	 * @param //form this is the form that we will create and send to the database
 	 */
-	public void addExternalPatientRequest(int userID, String asignee, String roomID, String requestType, String severity, String patientID, String ETA, String description) {
+	public static void addExternalPatientRequest(int userID, String asignee, String roomID, String requestType, String severity, String patientID, String ETA, String description) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
@@ -275,7 +276,7 @@ public class RequestsDB {
 	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
 	 *                      for whoever is fufilling the request
 	 */
-	public void addFloralRequest(int userID, String asignee, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
+	public static void addFloralRequest(int userID, String asignee, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests) + 1, ?, Current Timestamp, 'floral', 'inProgress', ?)";
@@ -335,7 +336,7 @@ public class RequestsDB {
 	 * This adds a medicine request form to the table for medicine request forms
 	 * @param //form this is the form being added
 	 */
-	public void addMedicineRequest(int userID, String asignee, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
+	public static void addMedicineRequest(int userID, String asignee, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
 
 		String insertRequest = "Insert Into requests Values ((Select Count(*) From requests) + 1, ?, Current Timestamp, 'medDelivery', 'inProgress', ?)";
 
@@ -372,7 +373,7 @@ public class RequestsDB {
 	 * This adds a security form to the table for security service form
 	 * @param //form this is the form added to the table
 	 */
-	public void addSecurityRequest(int userID, String asignee, String roomID, String level, String urgency) {
+	public static void addSecurityRequest(int userID, String asignee, String roomID, String level, String urgency) {
 
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
@@ -412,7 +413,7 @@ public class RequestsDB {
 	 * @param urgency the new urgency that the user is changing in their request
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editSanitationRequest(int requestID, String roomID, String sanitationType, String description, String urgency, String signature) {
+	public static int editSanitationRequest(int requestID, String roomID, String sanitationType, String description, String urgency, String signature) {
 
 		boolean added = false;
 		String query = "update sanitationRequest set";
@@ -453,7 +454,7 @@ public class RequestsDB {
 
 		query = query + " where requestID = " + requestID;
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			System.out.println(query);
 			stmt.executeUpdate(query);
 			stmt.close();
@@ -479,7 +480,7 @@ public class RequestsDB {
 	 * @param ETA this is the string used to update the eta
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String description, String ETA) {
+	public static int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String description, String ETA) {
 
 		boolean added = false;
 		String query = "update extTransport set ";
@@ -527,7 +528,7 @@ public class RequestsDB {
 
 		query = query + " where requestID = " + requestID;
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			System.out.println(query);
 			stmt.executeUpdate(query);
 			stmt.close();
@@ -549,7 +550,7 @@ public class RequestsDB {
 	 * @param message the new message containing either instructions or to the recipient the user wants to change
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String message) {
+	public static int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String message) {
 
 		boolean added = false;
 		String query = "update floralRequests set ";
@@ -598,7 +599,7 @@ public class RequestsDB {
 		query = query + " where requestID = " + requestID;
 
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			System.out.println(query);
 			stmt.executeUpdate(query);
 			stmt.close();
@@ -622,7 +623,7 @@ public class RequestsDB {
 	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, String assignee) {
+	public static int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, String assignee) {
 
 		boolean added = false;
 		String query = "update medDelivery set ";
@@ -671,7 +672,7 @@ public class RequestsDB {
 		query = query + " where requestID = " + requestID;
 
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			System.out.println(query);
 			stmt.executeUpdate(query);
 			stmt.close();
@@ -691,7 +692,7 @@ public class RequestsDB {
 	 * @param urgency  this is the info to update levelOfUrgency
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public int editSecurityRequest(int requestID, String roomID, String level, String urgency) {
+	public static int editSecurityRequest(int requestID, String roomID, String level, String urgency) {
 		boolean added = false;
 		String query = "update securityServ set ";
 
@@ -718,7 +719,7 @@ public class RequestsDB {
 		query = query + " where requestID = " + requestID;
 
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			System.out.println(query);
 			stmt.executeUpdate(query);
 			stmt.close();
@@ -736,7 +737,7 @@ public class RequestsDB {
 	 * @param status    is the status that you want to change it to
 	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
 	 */
-	public int changeRequestStatus(int requestID, String status) {
+	public static int changeRequestStatus(int requestID, String status) {
 		String changeRequestStatusS = "Update requests Set requeststatus = ? Where requestid = ?";
 		try (PreparedStatement changeRequestStatusPS = connection.prepareStatement(changeRequestStatusS)) {
 			changeRequestStatusPS.setString(1, status);
@@ -754,6 +755,131 @@ public class RequestsDB {
 		return 0;
 	}
 
+	/**
+	 * Gets a list of all the requestIDs from the given tableName
+	 * @param tableType this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all the requestIDs
+	 */
+	public static ArrayList<String> getRequestIDs(String tableType, int userID){
+		ArrayList<String> listOfIDs = new ArrayList<>();
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestID;
+			if (userID != -1) {
+				requestID = "Select requestID from requests where requestType = '" + tableType + "' and creatorID = " + userID;
+			}
+			else{
+				requestID = "Select requestID From requests where requestType = '" + tableType + "'";
+			}
+			ResultSet rset = stmt.executeQuery(requestID);
+			while(rset.next()){
+				String ID = rset.getString("requestID");
+				listOfIDs.add(ID);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+		}
+		return listOfIDs;
+	}
+
+	/**
+	 * Gets a list of all the statuses from the given tableName
+	 * @param tableType this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all the statuses of the requests
+	 */
+	public static ArrayList<String> getRequestStatus(String tableType, int userID){
+		ArrayList<String> listOfStatus = new ArrayList<String>();
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestStatus;
+			if (userID != -1) {
+				requestStatus = "Select requestStatus From requests Where requestType = '" + tableType +"' and creatorID = " + userID;
+			}
+			else{
+				requestStatus = "Select requestStatus From requests Where requestType = '" + tableType + "'";
+			}
+			ResultSet rset = stmt.executeQuery(requestStatus);
+			while(rset.next()){
+				String status = rset.getString("requestStatus");
+				listOfStatus.add(status);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestStatus() error in the try/catch");
+		}
+		return listOfStatus;
+	}
+
+	/**
+	 * Gets a list of all the assignees from the given tableName
+	 * @param tableType this is the type of the table that we are getting the requestIDs from
+	 * @return a list of all assignees for all of the requests
+	 */
+	public static ArrayList<String> getRequestAssignees(String tableType, int userID){
+		ArrayList<String> listOfAssignees = new ArrayList<String>();
+		try  {
+			Statement stmt = connection.createStatement();
+			String requestAssignee;
+			if (userID != -1) { // if user is not SuperAdmin
+				requestAssignee = "Select assignee from requests where requestType = '" + tableType + "' and creatorID = " + userID;
+				//requestAssignee = "Select newTable.assignee From (Select * From requests, " + tableType + " Where requests.requestID = " + tableType + ".requestID ) newTable Where userID = " + userID;
+			} else { // if user is SuperAdmin
+				requestAssignee = "Select requests.assignee From requests where requestType = '" + tableType + "'";
+			}
+			ResultSet rset = stmt.executeQuery(requestAssignee);
+			while(rset.next()){
+				String status = rset.getString("assignee");
+				listOfAssignees.add(status);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestAssignee() error in the try/catch");
+		}
+		return listOfAssignees;
+	}
+
+	/**
+	 * Gets a list of all the longNames for the location from the given tableName
+	 * @param tableType this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all longNames for the location for all of the requests
+	 */
+	public static ArrayList<String> getRequestLocations(String tableType, int userID){
+		ArrayList<String> listOfLongNames = new ArrayList<String>();
+		try  {
+			String tableName = "";
+			switch (tableType){
+				case "floral": tableName = "floralRequests";
+					break;
+				case "medDelivery": tableName = "medDelivery";
+					break;
+				case "sanitation": tableName = "sanitationRequest";
+					break;
+				case "security": tableName = "securityServ";
+					break;
+				case "extTransport": tableName = "extTransport";
+					break;
+			}
+			Statement stmt = connection.createStatement();
+			String requestLongNames;
+
+			if (userID != -1) {
+				requestLongNames = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
+			}
+			else{
+				requestLongNames ="Select longName from node,(Select roomID From " + tableName + ") correctTable where node.nodeID = correctTable.roomID";
+			}
+			ResultSet rset = stmt.executeQuery(requestLongNames);
+			while(rset.next()){
+				String status = rset.getString("longName");
+				listOfLongNames.add(status);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getRequestLocations() error in the try/catch");
+		}
+		return listOfLongNames;
+	}
 
 
 

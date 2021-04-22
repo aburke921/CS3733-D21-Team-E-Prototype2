@@ -5,7 +5,7 @@ import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.SearchContext;
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.TeamE.databases.*;
 import edu.wpi.TeamE.views.MapEditor;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,12 +24,28 @@ public class PathFindingTests {
         File nodes = new File("CSVs/MapEAllnodes.csv");
         File edges = new File("CSVs/MapEAlledges.csv");
         try {
-            con.createTables();
-            con.populateTable("node", nodes);
-            con.populateTable("hasEdge", edges);
+            NodeDB.createNodeTable();
+            EdgeDB.createEdgeTable();
+            UserAccountDB.createUserAccountTable();
+            RequestsDB.createRequestsTable();
+            RequestsDB.createFloralRequestsTable();
+            RequestsDB.createSanitationTable();
+            RequestsDB.createExtTransportTable();
+            RequestsDB.createMedDeliveryTable();
+            RequestsDB.createSecurityServTable();
+            csvDB.populateTable("node", nodes);
+            csvDB.populateTable("hasEdge", edges);
             System.out.println("Tables were created");
         } catch (Exception e) {
-            con.createTables();
+            NodeDB.createNodeTable();
+            EdgeDB.createEdgeTable();
+            UserAccountDB.createUserAccountTable();
+            RequestsDB.createRequestsTable();
+            RequestsDB.createFloralRequestsTable();
+            RequestsDB.createSanitationTable();
+            RequestsDB.createExtTransportTable();
+            RequestsDB.createMedDeliveryTable();
+            RequestsDB.createSecurityServTable();
         }
 
         search = new SearchContext();

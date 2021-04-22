@@ -3,13 +3,12 @@ package edu.wpi.TeamE.databases;
 import edu.wpi.TeamE.algorithms.Edge;
 import javafx.util.Pair;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class EdgeDB {
+
+	static Connection connection = makeConnection.makeConnection().getConnection();
 
 	/**
 	 * Uses executes the SQL statements required to create the hasEdge table.
@@ -18,7 +17,7 @@ public class EdgeDB {
 	 * - startNode: this is a nodeID in which the edge connection starts.
 	 * - endNode: this is a nodeID in which the edge connection ends.
 	 */
-	public void createEdgeTable() {
+	public static void createEdgeTable() {
 		try {
 			Statement stmt = connection.createStatement();
 			stmt.execute(
@@ -40,10 +39,10 @@ public class EdgeDB {
 		}
 	}
 
-	public void deleteEdgeTable() {
+	public static void deleteEdgeTable() {
 
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			stmt.execute("Drop Table hasedge");
 			stmt.close();
 		} catch (SQLException e) {
@@ -60,7 +59,7 @@ public class EdgeDB {
 	 * if count == 1 || count == 2, edges have been deleted
 	 * else no edges exist with inputted nodes
 	 */
-	public int deleteEdge(String nodeID1, String nodeID2) {
+	public static int deleteEdge(String nodeID1, String nodeID2) {
 
 		String deleteEdgeS1 = "Delete From hasedge Where startnode = ? And endnode = ?";
 		String deleteEdgeS2 = "Delete From hasedge Where endnode = ? And startnode = ?";
@@ -123,7 +122,7 @@ public class EdgeDB {
 	 * @param startNode the node ID for the starting node in the edge
 	 * @param endNode   the node ID for the ending node in the edge
 	 */
-	public void addLength(String startNode, String endNode) {
+	public static void addLength(String startNode, String endNode) {
 
 		String sqlQuery;
 		int startX = 0;
@@ -135,7 +134,7 @@ public class EdgeDB {
 		Statement stmt;
 
 		try {
-			stmt = this.connection.createStatement();
+			stmt = connection.createStatement();
 			sqlQuery = "SELECT xCoord, yCoord FROM node WHERE nodeID = '" + startNode + "'";
 			rset = stmt.executeQuery(sqlQuery);
 
@@ -152,7 +151,7 @@ public class EdgeDB {
 		}
 
 		try {
-			stmt = this.connection.createStatement();
+			stmt = connection.createStatement();
 			sqlQuery = "SELECT xCoord, yCoord FROM node WHERE nodeID = '" + endNode + "'";
 			//executes the SQL insert statement (inserts the data into the table)
 			rset = stmt.executeQuery(sqlQuery);
@@ -178,7 +177,7 @@ public class EdgeDB {
 			length = Math.sqrt(xLength + yLength);
 
 
-			stmt = this.connection.createStatement();
+			stmt = connection.createStatement();
 
 			sqlQuery = "UPDATE hasEdge SET length = " + length + " WHERE startNode = '" + startNode + "' AND endNode = '" + endNode + "'";
 
@@ -203,7 +202,7 @@ public class EdgeDB {
 	 * @param endNode   this is a nodeID in which the edge connection ends.
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
-	public int addEdge(String edgeID, String startNode, String endNode) {
+	public static int addEdge(String edgeID, String startNode, String endNode) {
 		String addEdgeS = "Insert Into hasedge (edgeid, startnode, endnode) Values (?, ?, ?)";
 		try (PreparedStatement addEdgePS = connection.prepareStatement(addEdgeS)) {
 			addEdgePS.setString(1, edgeID);
@@ -233,7 +232,7 @@ public class EdgeDB {
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 * need to check that both startNode and endNode already exist in node table
 	 */
-	public int modifyEdge(String edgeID, String startNode, String endNode) {
+	public static int modifyEdge(String edgeID, String startNode, String endNode) {
 		boolean correctEdgeID = false;
 		boolean correctStartNode = false;
 		boolean correctEndNode = false;
@@ -323,10 +322,10 @@ public class EdgeDB {
 	 * gets all edges and each edge's attribute
 	 * @return ArrayList<Edge>
 	 */
-	public ArrayList<Edge> getAllEdges() {
+	public static ArrayList<Edge> getAllEdges() {
 		ArrayList<Edge> edgesArray = new ArrayList<>();
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			String query = "Select * From hasedge";
 			ResultSet rset = stmt.executeQuery(query);
 
@@ -352,12 +351,12 @@ public class EdgeDB {
 	 * @param nodeID
 	 * @return Pair<Integer, String> map with edge information
 	 */
-	public ArrayList<Pair<Float, String>> getEdgeInfo(String nodeID) {
+	public static ArrayList<Pair<Float, String>> getEdgeInfo(String nodeID) {
 
 		ArrayList<Pair<Float, String>> pair = new ArrayList<Pair<Float, String>>();
 
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			String query = "select * from hasEdge where endNode = '" + nodeID + "'";
 			ResultSet rset = stmt.executeQuery(query);
 
@@ -376,7 +375,7 @@ public class EdgeDB {
 		}
 
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			String query = "select * from hasEdge where startNode = '" + nodeID + "'";
 			ResultSet rset = stmt.executeQuery(query);
 

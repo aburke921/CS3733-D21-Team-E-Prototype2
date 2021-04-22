@@ -2,7 +2,7 @@ package edu.wpi.TeamE.algorithms.pathfinding;
 
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
-import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.TeamE.databases.*;
 
 import java.io.File;
 import java.util.Iterator;
@@ -19,10 +19,18 @@ public class Examples {
         boolean tablesExist = connection.allTablesThere();
         if(!tablesExist){
             try {
-                connection.createTables();
-                connection.populateTable("node", nodes);
-                connection.populateTable("hasEdge", edges);
-                connection.addDataForPresentation();
+                NodeDB.createNodeTable();
+                EdgeDB.createEdgeTable();
+                UserAccountDB.createUserAccountTable();
+                RequestsDB.createRequestsTable();
+                RequestsDB.createFloralRequestsTable();
+                RequestsDB.createSanitationTable();
+                RequestsDB.createExtTransportTable();
+                RequestsDB.createMedDeliveryTable();
+                RequestsDB.createSecurityServTable();
+                csvDB.populateTable("node", nodes);
+                csvDB.populateTable("hasEdge", edges);
+//                csvDB.addDataForPresentation();
                 System.out.println("Tables were created");
             } catch (Exception e) {
                 System.out.println("Tables already there");

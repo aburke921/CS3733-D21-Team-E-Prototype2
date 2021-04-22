@@ -4,6 +4,8 @@ import java.util.*;
 
 import edu.wpi.TeamE.algorithms.*;
 import edu.wpi.TeamE.algorithms.pathfinding.constraints.SearchConstraint;
+import edu.wpi.TeamE.databases.EdgeDB;
+import edu.wpi.TeamE.databases.NodeDB;
 import edu.wpi.TeamE.databases.makeConnection;
 
 /**
@@ -38,8 +40,8 @@ public class Searcher {
     }
 
     public void refreshGraph(){
-        ArrayList<Edge> edges = con.getAllEdges();
-        ArrayList<Node> nodes = con.getAllNodes();
+        ArrayList<Edge> edges = EdgeDB.getAllEdges();
+        ArrayList<Node> nodes = NodeDB.getAllNodes();
 
         for(Node node : nodes){
             graph.put(node.get("id"), node);
@@ -146,7 +148,7 @@ public class Searcher {
     }
 
     public Path searchAlongPath(Path route, String stopType){
-        List<Node> stops = con.getAllNodesByType(stopType);
+        List<Node> stops = NodeDB.getAllNodesByType(stopType);
         Node start = route.getStart();
         Node end = route.getEnd();
 

@@ -1,14 +1,11 @@
 package edu.wpi.TeamE.databases;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class UserAccountDB {
 
-
+	static Connection connection = makeConnection.makeConnection().getConnection();
 
 	/**
 	 * Uses executes the SQL statements required to create the userAccount table.
@@ -21,7 +18,7 @@ public class UserAccountDB {
 	 * - lastName: the user's last name.
 	 * - creationTime: a time stamp that is added to the table when an account is created
 	 */
-	public void createUserAccountTable() {
+	public static void createUserAccountTable() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create Table userAccount (" +
@@ -49,7 +46,7 @@ public class UserAccountDB {
 	 * Uses executes the SQL statements required to create views for different types of users. The views created
 	 * are: visitorAccount, patientAccount, doctorAccount, adminAccount.
 	 */
-	public void createUserAccountTypeViews() {
+	public static void createUserAccountTypeViews() {
 		try {
 			Statement stmt = connection.createStatement();
 			String sqlQuery = "Create View visitorAccount As " +
@@ -105,7 +102,7 @@ public class UserAccountDB {
 	 * @param firstName this is the user's first name that is associated with the account
 	 * @param lastName  this is the user's last name that is associated with the account
 	 */
-	public void addUserAccount(String email, String password, String firstName, String lastName) {
+	public static void addUserAccount(String email, String password, String firstName, String lastName) {
 		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
@@ -130,7 +127,7 @@ public class UserAccountDB {
 	 * @param firstName this is the user's first name that is associated with the account
 	 * @param lastName  this is the user's last name that is associated with the account
 	 */
-	public void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
+	public static void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
 		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
@@ -153,7 +150,7 @@ public class UserAccountDB {
 	 * @param password is the user's entered password
 	 * @return 0 when the credentials does not match with any user in the database, and returns the userID otherwise
 	 */
-	public int userLogin(String email, String password) {
+	public static int userLogin(String email, String password) {
 		String userLoginS1 = "Select Count(*) As verification From userAccount Where email = ? And password = ?";
 		try (PreparedStatement userLoginPS1 = connection.prepareStatement(userLoginS1)) {
 			userLoginPS1.setString(1, email);
@@ -187,131 +184,7 @@ public class UserAccountDB {
 		return 0;
 	}
 
-	/**
-	 * Gets a list of all the requestIDs from the given tableName
-	 * @param tableType this is the name of the table that we are getting the requestIDs from
-	 * @return a list of all the requestIDs
-	 */
-	public ArrayList<String> getRequestIDs(String tableType, int userID){
-		ArrayList<String> listOfIDs = new ArrayList<>();
-		try  {
-			Statement stmt = connection.createStatement();
-			String requestID;
-			if (userID != -1) {
-				requestID = "Select requestID from requests where requestType = '" + tableType + "' and creatorID = " + userID;
-			}
-			else{
-				requestID = "Select requestID From requests where requestType = '" + tableType + "'";
-			}
-			ResultSet rset = stmt.executeQuery(requestID);
-			while(rset.next()){
-				String ID = rset.getString("requestID");
-				listOfIDs.add(ID);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getRequestStatus() error in the try/catch");
-		}
-		return listOfIDs;
-	}
 
-	/**
-	 * Gets a list of all the statuses from the given tableName
-	 * @param tableType this is the name of the table that we are getting the requestIDs from
-	 * @return a list of all the statuses of the requests
-	 */
-	public ArrayList<String> getRequestStatus(String tableType, int userID){
-		ArrayList<String> listOfStatus = new ArrayList<String>();
-		try  {
-			Statement stmt = connection.createStatement();
-			String requestStatus;
-			if (userID != -1) {
-				requestStatus = "Select requestStatus From requests Where requestType = '" + tableType +"' and creatorID = " + userID;
-			}
-			else{
-				requestStatus = "Select requestStatus From requests Where requestType = '" + tableType + "'";
-			}
-			ResultSet rset = stmt.executeQuery(requestStatus);
-			while(rset.next()){
-				String status = rset.getString("requestStatus");
-				listOfStatus.add(status);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getRequestStatus() error in the try/catch");
-		}
-		return listOfStatus;
-	}
-
-	/**
-	 * Gets a list of all the assignees from the given tableName
-	 * @param tableType this is the type of the table that we are getting the requestIDs from
-	 * @return a list of all assignees for all of the requests
-	 */
-	public ArrayList<String> getRequestAssignees(String tableType, int userID){
-		ArrayList<String> listOfAssignees = new ArrayList<String>();
-		try  {
-			Statement stmt = connection.createStatement();
-			String requestAssignee;
-			if (userID != -1) { // if user is not SuperAdmin
-				requestAssignee = "Select assignee from requests where requestType = '" + tableType + "' and creatorID = " + userID;
-				//requestAssignee = "Select newTable.assignee From (Select * From requests, " + tableType + " Where requests.requestID = " + tableType + ".requestID ) newTable Where userID = " + userID;
-			} else { // if user is SuperAdmin
-				requestAssignee = "Select requests.assignee From requests where requestType = '" + tableType + "'";
-			}
-			ResultSet rset = stmt.executeQuery(requestAssignee);
-			while(rset.next()){
-				String status = rset.getString("assignee");
-				listOfAssignees.add(status);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getRequestAssignee() error in the try/catch");
-		}
-		return listOfAssignees;
-	}
-
-	/**
-	 * Gets a list of all the longNames for the location from the given tableName
-	 * @param tableType this is the name of the table that we are getting the requestIDs from
-	 * @return a list of all longNames for the location for all of the requests
-	 */
-	public ArrayList<String> getRequestLocations(String tableType, int userID){
-		ArrayList<String> listOfLongNames = new ArrayList<String>();
-		try  {
-			String tableName = "";
-			switch (tableType){
-				case "floral": tableName = "floralRequests";
-					break;
-				case "medDelivery": tableName = "medDelivery";
-					break;
-				case "sanitation": tableName = "sanitationRequest";
-					break;
-				case "security": tableName = "securityServ";
-					break;
-				case "extTransport": tableName = "extTransport";
-					break;
-			}
-			Statement stmt = connection.createStatement();
-			String requestLongNames;
-
-			if (userID != -1) {
-				requestLongNames = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
-			}
-			else{
-				requestLongNames ="Select longName from node,(Select roomID From " + tableName + ") correctTable where node.nodeID = correctTable.roomID";
-			}
-			ResultSet rset = stmt.executeQuery(requestLongNames);
-			while(rset.next()){
-				String status = rset.getString("longName");
-				listOfLongNames.add(status);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getRequestLocations() error in the try/catch");
-		}
-		return listOfLongNames;
-	}
 
 
 

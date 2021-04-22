@@ -4,13 +4,15 @@ import edu.wpi.TeamE.algorithms.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
-public class NodeDB {
+
+public class NodeDB{
+
+	static Connection connection = makeConnection.makeConnection().getConnection();
+
+
 
 	/**
 	 * Uses executes the SQL statements required to create the node table.
@@ -28,9 +30,10 @@ public class NodeDB {
 	 * longName: this is the long version/more descriptive name of the node/location/room
 	 * shortName: this is the short/nickname of the node/location/room
 	 */
-	public void createNodeTable() {
+
+	public static void createNodeTable() {
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			stmt.execute(
 					"Create Table node( "
 							+ "    nodeID    varchar(31) Primary Key,"
@@ -52,10 +55,12 @@ public class NodeDB {
 		}
 	}
 
-	public void deleteNodeTable() {
+
+
+	public static void deleteNodeTable() {
 
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			stmt.execute("Drop Table node");
 			stmt.close();
 		} catch (SQLException e) {
@@ -69,7 +74,7 @@ public class NodeDB {
 	 * matches the nodeID to a node and deletes it from DB
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
-	public int deleteNode(String nodeID) {
+	public static int deleteNode(String nodeID) {
 		String deleteNodeS = "Delete From node Where nodeid = ?";
 		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
 			deleteNodePS.setString(1, nodeID);
@@ -104,7 +109,7 @@ public class NodeDB {
 	 * @param shortName this is the short/nickname of the node/location/room
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
-	public int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+	public static int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
 		String addNodeS = "Insert Into node Values (?, ?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
 			addNodePS.setString(1, nodeID);
@@ -144,7 +149,7 @@ public class NodeDB {
 	 * @param shortName
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 */
-	public int modifyNode(String nodeID,  Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+	public static int modifyNode(String nodeID,  Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
 		//String finalQuery = "update node set ";
 		String xCoordUpdate = "";
 		String yCoordUpdate = "";
@@ -204,7 +209,7 @@ public class NodeDB {
 		}
 		query = query + " where nodeID = '" + nodeID + "'";
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			System.out.println(query);
 			stmt.executeUpdate(query);
 			stmt.close();
@@ -217,11 +222,11 @@ public class NodeDB {
 	}
 
 
-	public ArrayList<Node> getAllNodesByType(String type) {
+	public static ArrayList<Node> getAllNodesByType(String type) {
 		ArrayList<Node> nodesArray = new ArrayList<>();
 //observable list -- UI
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			String query = "select * from node WHERE '" + type + "' = NODETYPE";
 			ResultSet rset = stmt.executeQuery(query);
 
@@ -253,11 +258,11 @@ public class NodeDB {
 	 * @return ArrayList of Node objects
 	 * need Node constructor from UI/UX team
 	 */
-	public ArrayList<Node> getAllNodes() {
+	public static ArrayList<Node> getAllNodes() {
 		ArrayList<Node> nodesArray = new ArrayList<>();
 //observable list -- UI
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			String query = "Select * From node";
 			ResultSet rset = stmt.executeQuery(query);
 
@@ -289,7 +294,7 @@ public class NodeDB {
 	 * gets a node's all attributes given nodeID
 	 * @return a Node object with the matching nodeID
 	 */
-	public Node getNodeInfo(String nodeID) {
+	public static Node getNodeInfo(String nodeID) {
 		String getNodeInfoS = "Select * From node Where nodeid = ?";
 		try (PreparedStatement getNodeInfoPS = connection.prepareStatement(getNodeInfoS)) {
 			getNodeInfoPS.setString(1, nodeID);
@@ -323,7 +328,7 @@ public class NodeDB {
 	 * @param nodeID is the nodeID of the nodes you want info from
 	 * @return a Node with only xCoord, yCoord, floor and nodeType not null
 	 */
-	public Node getNodeLite(String nodeID) {
+	public static Node getNodeLite(String nodeID) {
 		String getNodeLiteS = "Select xcoord, ycoord, floor, nodetype From node Where nodeid = ?";
 		try (PreparedStatement getNodeLitePS = connection.prepareStatement(getNodeLiteS)) {
 			getNodeLitePS.setString(1, nodeID);
@@ -352,7 +357,7 @@ public class NodeDB {
 	 * todo
 	 * @return
 	 */
-	public ObservableList<String> getAllNodeLongNames() {
+	public static ObservableList<String> getAllNodeLongNames() {
 		ObservableList<String> listOfNodeLongNames =  FXCollections.observableArrayList();
 
 		String deleteNodeS = "Select longname From node";
@@ -382,10 +387,10 @@ public class NodeDB {
 	 * @param floorName the value to check for in FLOOR column
 	 * @return ArrayList of Node objects
 	 */
-	public ArrayList<Node> getAllNodesByFloor(String floorName) {
+	public static ArrayList<Node> getAllNodesByFloor(String floorName) {
 		ArrayList<Node> nodesArray = new ArrayList<>();
 		try {
-			Statement stmt = this.connection.createStatement();
+			Statement stmt = connection.createStatement();
 			String query = "select * from node WHERE '" + floorName + "' = FLOOR";
 			ResultSet rset = stmt.executeQuery(query);
 
@@ -417,7 +422,7 @@ public class NodeDB {
 	 * @param floorName the value to check for in FLOOR column
 	 * @return ObservableList of node long names.
 	 */
-	public ObservableList<String> getAllNodeLongNamesByFloor(String floorName) {
+	public static ObservableList<String> getAllNodeLongNamesByFloor(String floorName) {
 		ObservableList<String> listOfNodeIDs = FXCollections.observableArrayList();
 
 		String deleteNodeS = "SELECT LONGNAME FROM node WHERE '" + floorName + "' = FLOOR";
@@ -445,7 +450,7 @@ public class NodeDB {
 	 * @param floorName the name of the floor that the nodes will be selected on
 	 * @return
 	 */
-	public ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
+	public static ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
 		ArrayList<String> listOfNodeIDs = new ArrayList<>();
 
 		String deleteNodeS = "SELECT nodeID FROM node WHERE '" + floorName + "' = FLOOR";
@@ -477,7 +482,7 @@ public class NodeDB {
 	 * @param Type    is the nodeType of the node, like "ELEV"
 	 * @return is how many nodes are already in the database given the params
 	 */
-	public int countNodeTypeOnFloor(String teamNum, String Floor, String Type) {
+	public static int countNodeTypeOnFloor(String teamNum, String Floor, String Type) {
 		String queryS = "select count(*) as countNum from node where nodeID like ('" + teamNum + "%') and floor = ? and nodeType = ?";
 		try (PreparedStatement PrepStat = connection.prepareStatement(queryS)) {
 			PrepStat.setString(1, Floor);
@@ -500,7 +505,7 @@ public class NodeDB {
 	 * gets list of nodeIDS
 	 * @return String[] of nodeIDs
 	 */
-	public ArrayList<String> getListOfNodeIDS() {
+	public static ArrayList<String> getListOfNodeIDS() {
 		ArrayList<String> listOfNodeIDs = new ArrayList<>();
 
 		String deleteNodeS = "Select nodeid From node";

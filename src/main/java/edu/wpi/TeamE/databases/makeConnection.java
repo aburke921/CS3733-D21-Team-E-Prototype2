@@ -59,26 +59,14 @@ public class makeConnection {
 		return singleInstance;
 	}
 
-
-
-
-
-	/**
-	 * Calls all of the functions that creates each individual table
-	 * Tables Created: node, hasEdge, userAccount, requests, floralRequests, sanitationRequest, extTransport, medDelivery, securityServ
-	 * Views Created (which are like tables): visitorAccount, patientAccount, doctorAccount, adminAccount
-	 */
-	public void createTables() {
-		createNodeTable();
-		createEdgeTable();
-		createUserAccountTable();
-		createRequestsTable();
-		createFloralRequestsTable();
-		createExtTransportTable();
-		createSanitationTable();
-		createMedDeliveryTable();
-		createSecurityServTable();
+	public Connection getConnection(){
+		return this.connection;
 	}
+
+
+
+
+
 
 	/**
 	 * Deletes node,hasEdge, userAccount, requests, floralRequests, sanitationRequest and extTransport tables.
@@ -108,6 +96,39 @@ public class makeConnection {
 			System.err.println("deleteAllTables() not working");
 		}
 	}
+
+
+
+	public boolean allTablesThere(){ //todo will probably cause a merge conflict at somepoint, accept DB version
+		ArrayList<String> tablesInDB = new ArrayList<String>();
+		String[] names = { "TABLE" };
+		ResultSet result;
+		DatabaseMetaData metadata = null;
+		try {
+			metadata = connection.getMetaData();
+			result = metadata.getTables(null, null, null, names);
+			while((result.next())) {
+				System.out.println(result.getString("TABLE_NAME"));
+				tablesInDB.add(result.getString("TABLE_NAME"));
+			}
+		} catch(java.sql.SQLException e) {
+			e.printStackTrace();
+		}
+		if (tablesInDB.size() != 0){
+			System.out.println("Tables already there");
+			return true;
+		}
+		else return false;
+	}
+
+
+	/**
+	 * Calls all of the functions that creates each individual table
+	 * Tables Created: node, hasEdge, userAccount, requests, floralRequests, sanitationRequest, extTransport, medDelivery, securityServ
+	 * Views Created (which are like tables): visitorAccount, patientAccount, doctorAccount, adminAccount
+	 */
+	/*
+
 
 	public void addDataForPresentation(){
 		//Visitors:
@@ -261,28 +282,5 @@ public class makeConnection {
 
 	}
 
-	public boolean allTablesThere(){ //todo will probably cause a merge conflict at somepoint, accept DB version
-		ArrayList<String> tablesInDB = new ArrayList<String>();
-		String[] names = { "TABLE" };
-		ResultSet result;
-		DatabaseMetaData metadata = null;
-		try {
-			metadata = connection.getMetaData();
-			result = metadata.getTables(null, null, null, names);
-			while((result.next())) {
-				System.out.println(result.getString("TABLE_NAME"));
-				tablesInDB.add(result.getString("TABLE_NAME"));
-			}
-		} catch(java.sql.SQLException e) {
-			e.printStackTrace();
-		}
-		if (tablesInDB.size() != 0){
-			System.out.println("Tables already there");
-			return true;
-		}
-		else return false;
-	}
-
-
-
+	 */
 }

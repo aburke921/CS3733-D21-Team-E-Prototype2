@@ -4,15 +4,19 @@ import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.constraints.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 public class SearchContext {
     private Searcher search;
     private final CompositeConstraint constraints;
+    private List<Path> searchHistory;
 
     public SearchContext(String _search, String _type){
         constraints = new CompositeConstraint();
+        searchHistory = new ArrayList<>();
         setAlgo(_search);
         addConstraint(_type);
     }
@@ -48,15 +52,15 @@ public class SearchContext {
     }
 
     public Path search(String startNode, String endNode){
-        return search.search(startNode, endNode);
+        return save(search.search(startNode, endNode));
     }
 
     public Path search(Collection<String> stopIds){
-        return search.search(stopIds);
+        return save(search.search(stopIds));
     }
 
     public Path searchAlongPath(Path route, String stopType){
-        return search.searchAlongPath(route, stopType);
+        return save(search.searchAlongPath(route, stopType));
     }
 
     private SearchConstraint translateConstraint(String type){
@@ -81,6 +85,14 @@ public class SearchContext {
         }
     }
 
+    private Path save(Path route){
+        searchHistory.add(route);
+        return route;
+    }
+
+    public List<Path> getSearchHistory(){
+        return searchHistory;
+    }
 
     public void refresh(){
         search.refreshGraph();

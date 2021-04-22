@@ -27,11 +27,11 @@ public class Time {
 
     /**
      * To String Override
-     * @return Time formatted as XX:XX
+     * @return Time formatted as X:XX or XX:XX (no leading 0 for minutes)
      */
     @Override
     public String toString() {
-        String mins = String.format("%02d", min);
+        String mins = Integer.toString(min);
         String secs = String.format("%02d", sec);
 
         return (mins + ":" + secs);

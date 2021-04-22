@@ -983,7 +983,7 @@ public class makeConnection {
 
 			prepState.execute();
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addFloralRequest()");
 		}
 

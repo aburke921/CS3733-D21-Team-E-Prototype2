@@ -991,7 +991,7 @@ public class DatabaseTests {
 		NodeDB.addNode("FDEPT00501",2128,1300,"1","Tower","DEPT","Emergency Department","Emergency");
 		NodeDB.addNode("EEXIT00101",2275,785,"1","45 Francis","EXIT","Ambulance Parking Exit Floor 1","AmbExit 1");
 
-//		connection.addDataForPresentation();
+		connection.addDataForPresentation();
 	}
 
 //	@Test

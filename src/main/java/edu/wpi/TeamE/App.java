@@ -49,7 +49,7 @@ public class App extends Application {
 				RequestsDB.createSecurityServTable();
 				csvDB.populateTable("node", nodes);
 				csvDB.populateTable("hasEdge", edges);
-//				connection.addDataForPresentation();
+				connection.addDataForPresentation();
 				System.out.println("Tables were created");
 			} catch (Exception e) {
 				System.out.println("Tables already there");

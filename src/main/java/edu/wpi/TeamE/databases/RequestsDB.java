@@ -7,6 +7,9 @@ public class RequestsDB {
 
 	static Connection connection = makeConnection.makeConnection().getConnection();
 
+
+	//CREATING TABLES:::
+
 	/**
 	 * Uses executes the SQL statements required to create the requests table.
 	 * This table has the attributes:
@@ -191,6 +194,11 @@ public class RequestsDB {
 
 
 
+
+
+
+	//ADDING TO TABLES::::
+
 	public static void addRequest(int userID, String assignee, String requestType){
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
@@ -367,6 +375,10 @@ public class RequestsDB {
 
 
 
+
+
+
+	//EDITING TABLES::::
 
 	/**
 	 * This edits a Sanitation Services form that is already in the database
@@ -737,12 +749,19 @@ public class RequestsDB {
 	}
 
 
+
+
+
+
+
+	//QUERYING TABLES::::
+
 	/**
 	 * Gets a list of all the "assignees", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID
 	 * @param tableType this is the name of the table that we are getting the info from
 	 * @param userID this is the ID of the user who made the request
 	 * @param infoType this is the type of information that is being retrieved
-	 * @return
+	 * @return an ArrayList<String> with the desired info
 	 */
 	public static ArrayList<String> getRequestInfo(String tableType, int userID, String infoType){
 
@@ -767,11 +786,6 @@ public class RequestsDB {
 		}
 		return listOfInfo;
 	}
-
-
-
-
-
 
 	/**
 	 * Gets a list of all the longNames for the location from the given tableName

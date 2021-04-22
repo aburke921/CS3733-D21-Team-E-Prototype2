@@ -222,6 +222,9 @@ public class NodeDB{
 	}
 
 
+
+	//POTENTIALLY COMBINED:
+
 	public static ArrayList<Node> getAllNodesByType(String type) {
 		ArrayList<Node> nodesArray = new ArrayList<>();
 //observable list -- UI
@@ -291,6 +294,48 @@ public class NodeDB{
 
 
 	/**
+	 * gets all Nodes that have the given FLOOR value
+	 * @param floorName the value to check for in FLOOR column
+	 * @return ArrayList of Node objects
+	 */
+	public static ArrayList<Node> getAllNodesByFloor(String floorName) {
+		ArrayList<Node> nodesArray = new ArrayList<>();
+		try {
+			Statement stmt = connection.createStatement();
+			String query = "select * from node WHERE '" + floorName + "' = FLOOR";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String NodeID = rset.getString("nodeID");
+				int xCoord = rset.getInt("xCoord");
+				int yCoord = rset.getInt("yCoord");
+				String floor = rset.getString("floor");
+				String building = rset.getString("building");
+				String nodeType = rset.getString("nodeType");
+				String longName = rset.getString("longName");
+				String shortName = rset.getString("shortName");
+
+				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
+
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllNodes Error : " + e);
+		}
+		return nodesArray;
+	}
+
+
+
+
+
+
+
+	//POTENTIALLY COMBINED:
+	/**
 	 * gets a node's all attributes given nodeID
 	 * @return a Node object with the matching nodeID
 	 */
@@ -353,6 +398,9 @@ public class NodeDB{
 		return null;
 	}
 
+
+
+	//POTENTIALLY COMBINED:
 	/**
 	 * todo
 	 * @return
@@ -379,42 +427,6 @@ public class NodeDB{
 			return listOfNodeLongNames;
 		}
 
-	}
-
-
-	/**
-	 * gets all Nodes that have the given FLOOR value
-	 * @param floorName the value to check for in FLOOR column
-	 * @return ArrayList of Node objects
-	 */
-	public static ArrayList<Node> getAllNodesByFloor(String floorName) {
-		ArrayList<Node> nodesArray = new ArrayList<>();
-		try {
-			Statement stmt = connection.createStatement();
-			String query = "select * from node WHERE '" + floorName + "' = FLOOR";
-			ResultSet rset = stmt.executeQuery(query);
-
-			while (rset.next()) {
-				String NodeID = rset.getString("nodeID");
-				int xCoord = rset.getInt("xCoord");
-				int yCoord = rset.getInt("yCoord");
-				String floor = rset.getString("floor");
-				String building = rset.getString("building");
-				String nodeType = rset.getString("nodeType");
-				String longName = rset.getString("longName");
-				String shortName = rset.getString("shortName");
-
-				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
-
-			}
-
-			rset.close();
-			stmt.close();
-
-		} catch (SQLException e) {
-			System.err.println("getAllNodes Error : " + e);
-		}
-		return nodesArray;
 	}
 
 	/**
@@ -445,34 +457,11 @@ public class NodeDB{
 		}
 	}
 
-	/**
-	 * Gets a list of the nodeIDs of all of the nodes that are on the given floor
-	 * @param floorName the name of the floor that the nodes will be selected on
-	 * @return
-	 */
-	public static ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
-		ArrayList<String> listOfNodeIDs = new ArrayList<>();
 
-		String deleteNodeS = "SELECT nodeID FROM node WHERE '" + floorName + "' = FLOOR";
-		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
 
-			ResultSet rset = deleteNodePS.executeQuery();
 
-			while (rset.next()) {
-				String nodeID = rset.getString("nodeID");
-				listOfNodeIDs.add(nodeID);
-			}
-			rset.close();
-			deleteNodePS.close();
 
-			return listOfNodeIDs;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getListOfNodeIDS error try/catch");
-			return listOfNodeIDs;
-		}
 
-	}
 
 
 	/**
@@ -501,6 +490,9 @@ public class NodeDB{
 		return -1;
 	}
 
+
+	//POTENTIALLY COMBINED:
+
 	/**
 	 * gets list of nodeIDS
 	 * @return String[] of nodeIDs
@@ -509,6 +501,35 @@ public class NodeDB{
 		ArrayList<String> listOfNodeIDs = new ArrayList<>();
 
 		String deleteNodeS = "Select nodeid From node";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("nodeID");
+				listOfNodeIDs.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeIDs;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getListOfNodeIDS error try/catch");
+			return listOfNodeIDs;
+		}
+
+	}
+
+	/**
+	 * Gets a list of the nodeIDs of all of the nodes that are on the given floor
+	 * @param floorName the name of the floor that the nodes will be selected on
+	 * @return
+	 */
+	public static ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
+		ArrayList<String> listOfNodeIDs = new ArrayList<>();
+
+		String deleteNodeS = "SELECT nodeID FROM node WHERE '" + floorName + "' = FLOOR";
 		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
 
 			ResultSet rset = deleteNodePS.executeQuery();

@@ -14,8 +14,8 @@ public class Examples {
         System.out.println("STARTING UP!!!");
         makeConnection connection = makeConnection.makeConnection();
         System.out.println("Connected to the DB");
-        File nodes = new File("src/main/resources/edu/wpi/TeamE/csv/bwEnodes.csv");
-        File edges = new File("src/main/resources/edu/wpi/TeamE/csv/bwEedges.csv");
+        File nodes = new File("CSVs/bwEnodes.csv");
+        File edges = new File("CSVs/bwEedges.csv");
         try {
             // connection.deleteAllTables();
             connection.createTables();
@@ -81,6 +81,14 @@ public class Examples {
         }
         System.out.println();
 
+        Node node1 = new Node("1001", 5, 5, "L2", "building1", "type1", "name 1", "name 1");
+        Node node2 = new Node("1002", 7, 7, "L2", "building1", "type1", "name 1", "name 1");
+
+        Path path = new Path(node1, node2);
+        for (String dir : path.makeDirectionsWithDist()) {
+            System.out.println(dir);
+        }
+        System.out.println();
 
         List<Node> nodeList = p.toList();
 

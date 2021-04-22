@@ -263,7 +263,12 @@ public class PathFinder {
         }
         else { // run search
             //Call the path search function
-            Path foundPath = aStar.search(selectedStartNodeID, selectedEndNodeID);
+            //String stop = "FEXIT00201";
+            List<String> stops = new ArrayList<>();
+            stops.add(selectedStartNodeID);
+            //stops.add(stop);
+            stops.add(selectedEndNodeID);
+            Path foundPath = aStar.search(stops);
 
             //draw map, unless path is null
             if (foundPath == null) { //path is null

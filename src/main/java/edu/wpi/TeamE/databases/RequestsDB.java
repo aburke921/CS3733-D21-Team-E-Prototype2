@@ -737,90 +737,41 @@ public class RequestsDB {
 	}
 
 
-
 	/**
-	 * Gets a list of all the requestIDs from the given tableName
-	 * @param tableType this is the name of the table that we are getting the requestIDs from
-	 * @return a list of all the requestIDs
+	 * Gets a list of all the "assignees", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID
+	 * @param tableType this is the name of the table that we are getting the info from
+	 * @param userID this is the ID of the user who made the request
+	 * @param infoType this is the type of information that is being retrieved
+	 * @return
 	 */
-	public static ArrayList<String> getRequestIDs(String tableType, int userID){
-		ArrayList<String> listOfIDs = new ArrayList<>();
+	public static ArrayList<String> getRequestInfo(String tableType, int userID, String infoType){
+
+		ArrayList<String> listOfInfo = new ArrayList<>();
 		try  {
 			Statement stmt = connection.createStatement();
 			String requestID;
 			if (userID != -1) {
-				requestID = "Select requestID from requests where requestType = '" + tableType + "' and creatorID = " + userID;
+				requestID = "Select " + infoType + " from requests where requestType = '" + tableType + "' and creatorID = " + userID;
 			}
 			else{
-				requestID = "Select requestID From requests where requestType = '" + tableType + "'";
+				requestID = "Select " + infoType + " From requests where requestType = '" + tableType + "'";
 			}
 			ResultSet rset = stmt.executeQuery(requestID);
 			while(rset.next()){
-				String ID = rset.getString("requestID");
-				listOfIDs.add(ID);
+				String ID = rset.getString(infoType); //potential issue
+				listOfInfo.add(ID);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("getRequestStatus() error in the try/catch");
+			System.err.println("getRequestInfo() error in the try/catch");
 		}
-		return listOfIDs;
+		return listOfInfo;
 	}
 
-	/**
-	 * Gets a list of all the statuses from the given tableName
-	 * @param tableType this is the name of the table that we are getting the requestIDs from
-	 * @return a list of all the statuses of the requests
-	 */
-	public static ArrayList<String> getRequestStatus(String tableType, int userID){
-		ArrayList<String> listOfStatus = new ArrayList<String>();
-		try  {
-			Statement stmt = connection.createStatement();
-			String requestStatus;
-			if (userID != -1) {
-				requestStatus = "Select requestStatus From requests Where requestType = '" + tableType +"' and creatorID = " + userID;
-			}
-			else{
-				requestStatus = "Select requestStatus From requests Where requestType = '" + tableType + "'";
-			}
-			ResultSet rset = stmt.executeQuery(requestStatus);
-			while(rset.next()){
-				String status = rset.getString("requestStatus");
-				listOfStatus.add(status);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getRequestStatus() error in the try/catch");
-		}
-		return listOfStatus;
-	}
 
-	/**
-	 * Gets a list of all the assignees from the given tableName
-	 * @param tableType this is the type of the table that we are getting the requestIDs from
-	 * @return a list of all assignees for all of the requests
-	 */
-	public static ArrayList<String> getRequestAssignees(String tableType, int userID){
-		ArrayList<String> listOfAssignees = new ArrayList<String>();
-		try  {
-			Statement stmt = connection.createStatement();
-			String requestAssignee;
-			if (userID != -1) { // if user is not SuperAdmin
-				requestAssignee = "Select assignee from requests where requestType = '" + tableType + "' and creatorID = " + userID;
-				//requestAssignee = "Select newTable.assignee From (Select * From requests, " + tableType + " Where requests.requestID = " + tableType + ".requestID ) newTable Where userID = " + userID;
-			} else { // if user is SuperAdmin
-				requestAssignee = "Select requests.assignee From requests where requestType = '" + tableType + "'";
-			}
-			ResultSet rset = stmt.executeQuery(requestAssignee);
-			while(rset.next()){
-				String status = rset.getString("assignee");
-				listOfAssignees.add(status);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getRequestAssignee() error in the try/catch");
-		}
-		return listOfAssignees;
-	}
+
+
+
 
 	/**
 	 * Gets a list of all the longNames for the location from the given tableName

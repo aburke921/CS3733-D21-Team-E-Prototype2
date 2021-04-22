@@ -632,7 +632,7 @@ public class DatabaseTests {
 		correctStatus.add("inProgress");
 		correctStatus.add("inProgress");
 
-		returnedStatus = RequestsDB.getRequestStatus("extTransport", 1);
+		returnedStatus = RequestsDB.getRequestInfo("extTransport", 1, "requestStatus");
 
 		assertTrue(correctStatus.equals(returnedStatus));
 	}
@@ -655,17 +655,17 @@ public class DatabaseTests {
 		correctStatus.add("inProgress");
 		correctStatus.add("inProgress");
 
-		returnedStatus = RequestsDB.getRequestStatus("extTransport", -1);
+		returnedStatus = RequestsDB.getRequestInfo("extTransport", -1, "requestStatus");
 
 		assertTrue(correctStatus.equals(returnedStatus));
 	}
 
 	@Test
 	@DisplayName("testGetRequestStatus3 : there is no data ")
-	public void testGetRequestStatu3() {
+	public void testGetRequestStatus3() {
 
 		ArrayList<String> returnedStatus = new ArrayList<String>();
-		returnedStatus = RequestsDB.getRequestStatus("extTransport", 1);
+		returnedStatus = RequestsDB.getRequestInfo("extTransport", 1, "requestStatus");
 
 		assertTrue(returnedStatus.size() == 0);
 	}
@@ -687,7 +687,7 @@ public class DatabaseTests {
 
 		correctIDs.add("1");
 
-		returnedIDs = RequestsDB.getRequestIDs("extTransport", 1);
+		returnedIDs = RequestsDB.getRequestInfo("extTransport", 1, "requestID");
 
 		assertTrue(correctIDs.equals(returnedIDs));
 	}
@@ -709,7 +709,7 @@ public class DatabaseTests {
 		correctIDs.add("1");
 		correctIDs.add("2");
 
-		returnedIDs = RequestsDB.getRequestIDs("extTransport", -1);
+		returnedIDs = RequestsDB.getRequestInfo("extTransport", -1, "requestID");
 
 		assertTrue(correctIDs.equals(returnedIDs));
 	}
@@ -719,7 +719,7 @@ public class DatabaseTests {
 	public void testGetRequestIDs3() {
 
 		ArrayList<String> returnedIDs = new ArrayList<String>();
-		returnedIDs = RequestsDB.getRequestIDs("extTransport", -1);
+		returnedIDs = RequestsDB.getRequestInfo("extTransport", -1, "requestID");
 
 		assertTrue(returnedIDs.size() == 0);
 	}
@@ -740,7 +740,7 @@ public class DatabaseTests {
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
 		RequestsDB.addMedicineRequest(2, "dell","test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
-		ArrayList<String> returnedAssignees = RequestsDB.getRequestAssignees("medDelivery", 1);
+		ArrayList<String> returnedAssignees = RequestsDB.getRequestInfo("medDelivery", 1, "assignee");
 		ArrayList<String> correctAssignees = new ArrayList<String>();
 
 		correctAssignees.add("bob");
@@ -765,7 +765,7 @@ public class DatabaseTests {
 
 		//"floral", "medDelivery", "sanitation", "security", "extTransport".
 
-		ArrayList<String> returnedAssignees = RequestsDB.getRequestAssignees("medDelivery", -1);
+		ArrayList<String> returnedAssignees = RequestsDB.getRequestInfo("medDelivery", -1, "assignee");
 		ArrayList<String> correctAssignees = new ArrayList<String>();
 
 		correctAssignees.add("bob");
@@ -778,7 +778,7 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetRequestAssignees3: no data")
 	public void testGetRequestAssignees3(){
-		ArrayList<String> returnedAssignees = RequestsDB.getRequestAssignees("medDelivery", -1);
+		ArrayList<String> returnedAssignees = RequestsDB.getRequestInfo("medDelivery", -1, "assignee");
 		assertTrue(returnedAssignees.size() == 0);
 	}
 
@@ -933,7 +933,7 @@ public class DatabaseTests {
 		RequestsDB.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
 		RequestsDB.addMedicineRequest(1, "bob1","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
-		ArrayList<String> IDS = RequestsDB.getRequestIDs("medDelivery", 1);
+		ArrayList<String> IDS = RequestsDB.getRequestInfo("medDelivery", 1, "requestID");
 
 		int rowsChanged = RequestsDB.editRequests(1, null, "complete");
 

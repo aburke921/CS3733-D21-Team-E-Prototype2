@@ -277,6 +277,11 @@ public class PathFinder {
 
             } else { //path is not null
 
+                currentFoundPath = null;
+                // Set map image to starting floor
+                String startFloor = foundPath.peek().get("floor");
+                setCurrentFloor(startFloor);
+
                 //save found path for when floors are switched
                 currentFoundPath = foundPath;
 
@@ -315,6 +320,8 @@ public class PathFinder {
         }
 
         List<Path> paths = fullPath.splitByFloor();
+
+
         for(Path path : paths){
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
 
@@ -354,7 +361,6 @@ public class PathFinder {
 
                         }
                     } else if (!legItr.hasNext()) { //if current node is the ending node for this floor
-
                         Circle circle;
 
                         if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path

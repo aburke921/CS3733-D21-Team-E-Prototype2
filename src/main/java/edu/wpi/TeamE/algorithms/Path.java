@@ -75,6 +75,10 @@ public class Path implements Comparable<Path>, Iterable<Node>{
         return first;
     }
 
+    public Node peek(){
+        return getStart();
+    }
+
     /**
      * Appends a Path onto the end of this
      * @param p Path to append, if path is empty nothing happens

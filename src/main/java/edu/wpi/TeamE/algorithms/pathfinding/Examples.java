@@ -2,7 +2,7 @@ package edu.wpi.TeamE.algorithms.pathfinding;
 
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
-import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.TeamE.databases.*;
 
 import java.io.File;
 import java.util.Iterator;
@@ -14,15 +14,24 @@ public class Examples {
         System.out.println("STARTING UP!!!");
         makeConnection connection = makeConnection.makeConnection();
         System.out.println("Connected to the DB");
+
         File nodes = new File("CSVs/MapEAllnodes.csv");
         File edges = new File("CSVs/MapEAlledges.csv");
         boolean tablesExist = connection.allTablesThere();
         if(!tablesExist){
             try {
-                connection.createTables();
-                connection.populateTable("node", nodes);
-                connection.populateTable("hasEdge", edges);
-                connection.addDataForPresentation();
+                NodeDB.createNodeTable();
+                EdgeDB.createEdgeTable();
+                UserAccountDB.createUserAccountTable();
+                RequestsDB.createRequestsTable();
+                RequestsDB.createFloralRequestsTable();
+                RequestsDB.createSanitationTable();
+                RequestsDB.createExtTransportTable();
+                RequestsDB.createMedDeliveryTable();
+                RequestsDB.createSecurityServTable();
+                csvDB.populateTable("node", nodes);
+                csvDB.populateTable("hasEdge", edges);
+//                csvDB.addDataForPresentation();
                 System.out.println("Tables were created");
             } catch (Exception e) {
                 System.out.println("Tables already there");
@@ -68,6 +77,18 @@ public class Examples {
         for(Path leg : p.splitByFloor()){
             leg.print("id", "floor");
         }
+        
+        System.out.println();
+
+        Node node1 = new Node("1001", 5, 5, "L2", "building1", "type1", "name 1", "name 1");
+        Node node2 = new Node("1002", 7, 7, "L2", "building1", "type1", "name 1", "name 1");
+
+        Path path = new Path(node1, node2);
+        for (String dir : path.makeDirectionsWithDist()) {
+            System.out.println(dir);
+        }
+        System.out.println();
+
 
         List<Node> nodeList = p.toList();
 

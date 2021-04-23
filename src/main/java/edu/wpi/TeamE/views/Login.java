@@ -2,6 +2,7 @@ package edu.wpi.TeamE.views;
 
 import com.jfoenix.controls.*;
 import edu.wpi.TeamE.App;
+import edu.wpi.TeamE.databases.UserAccountDB;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -81,7 +82,7 @@ public class Login {
 		int userID = 0;
 		makeConnection connection = makeConnection.makeConnection();
 		if (emailInput != null && passwordInput != null) {
-			userID = connection.userLogin(emailInput.getText(), passwordInput.getText());
+			userID = UserAccountDB.userLogin(emailInput.getText(), passwordInput.getText());
 			App.userID = userID; // app will be logged in as guest if userID = 0
 		}
 		if (userID != 0) {

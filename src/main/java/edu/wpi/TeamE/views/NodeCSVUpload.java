@@ -37,7 +37,7 @@ public class NodeCSVUpload {
      * @param table this is the table being prepared with the nodes
      */
     public void prepareNodes(TreeTableView<Node> table) {
-        makeConnection connection = makeConnection.makeConnection();
+
         ArrayList<Node> array = NodeDB.getAllNodes();
         if (table.getRoot() == null) {
             Node node0 = new
@@ -144,7 +144,6 @@ public class NodeCSVUpload {
      */
     @FXML
     private void openFile(ActionEvent e) throws IOException {
-        makeConnection connection = makeConnection.makeConnection();
         csvDB.getNewCSVFile("node");
         File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
         Desktop desktop = Desktop.getDesktop();

@@ -48,7 +48,7 @@ public class createAccount {
 
     public void createAccountButton() {
         int userID = 0;
-        makeConnection connection = makeConnection.makeConnection();
+
         if(email.getText().isEmpty()) {
             errorPopup("Must input an email");
             return;

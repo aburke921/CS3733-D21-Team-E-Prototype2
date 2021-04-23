@@ -38,7 +38,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
 
   @FXML private RequiredFieldValidator validator = new RequiredFieldValidator();
-  makeConnection connection = makeConnection.makeConnection();
+
 
 
 

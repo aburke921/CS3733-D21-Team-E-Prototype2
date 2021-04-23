@@ -75,7 +75,7 @@ public class ServiceRequestStatus {
     }
 
     private void cancel(TreeTableView<ServiceRequestForm> table) {
-        makeConnection connection = makeConnection.makeConnection();
+
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
             RequestsDB.editRequests(id, null, "canceled");
@@ -90,7 +90,6 @@ public class ServiceRequestStatus {
     }
 
     private void complete(TreeTableView<ServiceRequestForm> table) {
-        makeConnection connection = makeConnection.makeConnection();
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
             RequestsDB.editRequests(id,null, "complete");
@@ -118,7 +117,7 @@ public class ServiceRequestStatus {
      * @param cancelled the TreeItem for the service requests that were cancelled
      */
     private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
-        makeConnection connection = makeConnection.makeConnection();
+
         ArrayList<String> idArray = RequestsDB.getRequestInfo(tableName, App.userID, "requestID");
 //        for(int j = 0; j < idArray.size(); j++) {
 //            System.out.println(idArray.get(j));

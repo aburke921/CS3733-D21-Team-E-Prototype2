@@ -472,7 +472,7 @@ public class PathFinder {
         assert endLocationComboBox != null : "fx:id=\"endLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";
 
         //DB connection
-        makeConnection connection = makeConnection.makeConnection();
+
 
         //Get longNames & IDs
         System.out.print("Begin Adding to Dropdown List... ");

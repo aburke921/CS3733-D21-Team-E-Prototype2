@@ -1,8 +1,11 @@
 package edu.wpi.TeamE.algorithms.scheduler;
 
-import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.TeamE.algorithms.Time;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
 
 public class DailySchedule implements Iterable<Event>{
 
@@ -69,35 +72,13 @@ public class DailySchedule implements Iterable<Event>{
         return agenda;
     }
 
-    public Event nextEvent(int currentTime){
-        for(int i = 0; i < agenda.size() - 1; i++){
-            Event event = agenda.get(i);
-            if(event.getArrivalTime() < currentTime && event.getEndTime() < currentTime){
-                return agenda.get(i + 1);
-            }
-        }
-        return null;
-    }
-
-    public Event getEvent(int currentTime){
-        for(int i = 0; i < agenda.size() - 1; i++){
-            Event event = agenda.get(i);
-            if(event.getArrivalTime() < currentTime && event.getEndTime() < currentTime){
-                return agenda.get(i);
-            }
-        }
-        return null;
-    }
-
     public int size(){
         return agenda.size();
     }
 
     @Override
     public Iterator<Event> iterator() {
-        int midnight1 = 0;
-        int midnight2 = 86400;
-        return iterator(midnight1, midnight2);
+        return iterator(Time.DAY_START, Time.DAY_END);
     }
 
     public Iterator<Event> iterator(int startTime, int endTime){
@@ -110,15 +91,12 @@ public class DailySchedule implements Iterable<Event>{
         private int startTime;
         private int endTime;
 
-
         EventIterator(List<Event> _eventList, int _startTime, int _endTime){
             eventList = _eventList;
             index = 0;
             startTime = _startTime;
             endTime = _endTime;
         }
-
-
 
         @Override
         public boolean hasNext() {

@@ -67,19 +67,22 @@ public class Searcher {
         return graph.get(nodeId).getNeighbors();
     }
 
+    public Path search(String startId, String endId){
+        Node start = getNode(startId);
+        Node end = getNode(endId);
+        return search(start, end);
+    }
+
     /**
      * Generic Search method for UI
      * Searches between Start and End Nodes for path
      * Searching algorithm can be A* or DFS (more can be added in the future)
      *
-     * @param startId The NodeID of the start node as a string
-     * @param endId   The NodeID of the end node as a string
+     * @param start The NodeID of the start node as a string
+     * @param end   The NodeID of the end node as a string
      * @return The path from Start to End as a Path (basically a LinkedList)
      */
-    public Path search(String startId, String endId){
-        //get nodes from database
-        Node start = getNode(startId);
-        Node end = getNode(endId);
+    public Path search(Node start, Node end){
 
         PriorityQueue<Node> potentials = new PriorityQueue<>();
         HashMap<Node, Double> prevCost = new HashMap<>();
@@ -124,14 +127,24 @@ public class Searcher {
         return null;
     }
 
-    public Path search(Collection<String> stopIds){
+    public Path search(Object start, Object end){
+        if(start instanceof String && end instanceof String){
+            return search((String)start, (String)end);
+        } else if(start instanceof Node && end instanceof Node){
+            return search((Node)start, (Node)end);
+        } else {
+            return null;
+        }
+    }
+
+    public Path search(List stops){
         Path fullPath = new Path();
-        Iterator<String> itr = stopIds.iterator();
+        Iterator itr = stops.iterator();
 
         if(itr.hasNext()){
-            String prev = itr.next();
+            Object prev = itr.next();
             while(itr.hasNext()){
-                String current = itr.next();
+                Object current = itr.next();
                 Path leg = search(prev, current);
                 if(fullPath.getEnd().equals(leg.getStart())){
                     leg.pop();
@@ -177,7 +190,7 @@ public class Searcher {
      * @return Path of nodes following start
      * start is not included because it didn't 'comeFrom' any node so it's value in map is null
      */
-    protected Path reconstructPath(HashMap<Node, Node> cameFrom, Node end) {
+    Path reconstructPath(HashMap<Node, Node> cameFrom, Node end) {
         LinkedList<Node> stack = new LinkedList<>();
         //push onto stack
         for(Node current = end; cameFrom.containsKey(current); current = cameFrom.get(current)){

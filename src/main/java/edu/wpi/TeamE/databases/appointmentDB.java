@@ -10,12 +10,13 @@ public class appointmentDB {
 
 	public static void createAppointmentTable() {
 
-		String query = "Create Table appointment( " +
-				"patientID Int References userAccount (userID), " +
-				"startTime timeStamp, " +
-				"endTime timestamp, " +
-				"surveyLink varchar(300), " +
-				"Constraint appointmentPK Primary Key(patientID, startTime, endTime))";
+		String query = "Create Table appointment(\n" +
+				"    appointmentID Int Primary Key,\n" +
+				"    patientID Int References userAccount (userID) on delete cascade,\n" +
+				"    startTime timeStamp,\n" +
+				"    endTime timestamp,\n" +
+				"    Constraint appointmentUnique Unique(patientID, startTime, endTime)\n" +
+				")";
 
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -33,12 +34,10 @@ public class appointmentDB {
 	public static void createDoctorExaminesAdmissionTable() {
 
 		String query = "Create Table doctorExaminesAdmission(\n" +
-				"    patientID Int ,\n" +
-				"    doctorID Int References userAccount(userID),\n" +
-				"    startTime timestamp,\n" +
-				"    endTime timestamp,\n" +
-				"    constraint startEndPK Primary Key(patientID, doctorID,startTime, endTime),\n" +
-				"    foreign key (patientID, startTime,endTime) References appointment(patientID,startTime,endTime))";
+				"    appointmentID Int References appointment(appointmentID) on delete cascade,\n" +
+				"    doctorID Int References userAccount(userID) on delete cascade,\n" +
+				"    constraint examinesPK Primary Key(appointmentID,doctorID)\n" +
+				")";
 
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {

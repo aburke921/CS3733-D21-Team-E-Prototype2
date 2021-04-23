@@ -146,6 +146,23 @@ Create Table securityServ (
 );
 
 
+drop table doctorExaminesAdmission;
+drop table appointment;
+
+Create Table appointment(
+    appointmentID Int Primary Key,
+    patientID Int References userAccount (userID) on delete cascade,
+    startTime timeStamp,
+    endTime timestamp,
+    Constraint appointmentUnique Unique(patientID, startTime, endTime)
+);
+
+Create Table doctorExaminesAdmission(
+    appointmentID Int References appointment(appointmentID) on delete cascade,
+    doctorID Int References userAccount(userID) on delete cascade,
+    constraint examinesPK Primary Key(appointmentID,doctorID)
+);
+
 
 
 

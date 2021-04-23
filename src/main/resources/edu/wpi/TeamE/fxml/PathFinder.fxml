@@ -120,23 +120,31 @@
             <Insets top="10.0" />
          </VBox.margin>
          <children>
-            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="TOP_RIGHT" prefHeight="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <StackPane fx:id="stackPane" HBox.hgrow="ALWAYS">
                      <children>
                         <BorderPane fx:id="rootBorderPane" />
                      </children>
                   </StackPane>
-                  <VBox fx:id="sideBar" alignment="TOP_CENTER" maxWidth="150.0" minWidth="0.0" prefWidth="150.0" HBox.hgrow="NEVER">
+                  <VBox fx:id="sideBar" alignment="TOP_CENTER" maxWidth="200.0" minWidth="0.0" prefWidth="200.0" HBox.hgrow="NEVER">
                      <children>
                         <JFXButton fx:id="directionsButton" onAction="#showDirections" styleClass="submit-button" text="Detailed Directions">
                            <VBox.margin>
                               <Insets top="15.0" />
                            </VBox.margin>
                         </JFXButton>
+                        <Label text="Estimated Time of Arrival" textFill="#295ac3" underline="true">
+                           <VBox.margin>
+                              <Insets top="25.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                         <HBox fx:id="ETA" alignment="CENTER" prefHeight="27.0" prefWidth="150.0">
                            <VBox.margin>
-                              <Insets top="15.0" />
+                              <Insets top="5.0" />
                            </VBox.margin>
                            <children>
                               <Label fx:id="minETA" alignment="CENTER_RIGHT" maxWidth="18.0" minWidth="18.0" prefWidth="18.0" />
@@ -144,16 +152,21 @@
                               <Label fx:id="secETA" alignment="CENTER_LEFT" maxWidth="18.0" minWidth="18.0" prefWidth="18.0" />
                            </children>
                         </HBox>
+                        <Label alignment="CENTER" text="Distance" textFill="#295ac3" underline="true">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="25.0" />
+                           </VBox.margin>
+                        </Label>
                         <Label fx:id="dist" alignment="CENTER">
                            <VBox.margin>
                               <Insets top="15.0" />
                            </VBox.margin>
                         </Label>
-                        <AnchorPane maxHeight="1.7976931348623157E308" prefWidth="150.0" VBox.vgrow="ALWAYS">
-                           <children>
-                              <JFXButton fx:id="clearPath" alignment="CENTER" contentDisplay="CENTER" layoutX="31.0" layoutY="44.0" maxHeight="1.7976931348623157E308" onAction="#pathClear" prefWidth="78.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Clear Path" AnchorPane.bottomAnchor="20.0" />
-                           </children>
-                        </AnchorPane>
+                        <AnchorPane maxHeight="1.7976931348623157E308" prefWidth="150.0" VBox.vgrow="ALWAYS" />
+                        <JFXButton fx:id="clearPath" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="100.0" onAction="#pathClear" prefWidth="100.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Clear Path" />
                      </children>
                      <HBox.margin>
                         <Insets />

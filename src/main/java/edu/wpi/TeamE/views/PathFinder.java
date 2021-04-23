@@ -20,6 +20,8 @@ import edu.wpi.TeamE.algorithms.pathfinding.*;
 import edu.wpi.TeamE.databases.*;
 
 import edu.wpi.TeamE.App;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -77,7 +79,7 @@ public class PathFinder {
     @FXML
     private JFXToggleButton safe;
 
-    //@FXML // fx:id="imageView"
+    @FXML // fx:id="imageView"
     private ImageView imageView = new ImageView();
 
     @FXML // fx:id="pane"
@@ -240,14 +242,13 @@ public class PathFinder {
      */
     @FXML
     void pathClear(ActionEvent event) {
-        imageView.setFitWidth(App.getPrimaryStage().getWidth());
-        stackPane.setPrefWidth(imageView.getFitWidth());
 
         directionsButton.setOpacity(0);
         ETA.setOpacity(0);
         dist.setOpacity(0);
         clearPath.setOpacity(0);
-        sideBar.setPrefWidth(0);
+        sideBar.setMinWidth(0);
+        sideBar.setMaxWidth(0);
 
         //clear map
         System.out.print("\nCLEARING MAP...");
@@ -323,15 +324,12 @@ public class PathFinder {
                 String startFloor = foundPath.peek().get("floor");
                 setCurrentFloor(startFloor);
 
-                //Sidebar stuff
-                imageView.setFitWidth(App.getPrimaryStage().getWidth() - 150);
-                stackPane.setPrefWidth(imageView.getFitWidth());
-
                 directionsButton.setOpacity(1);
                 ETA.setOpacity(1);
                 dist.setOpacity(1);
                 clearPath.setOpacity(1);
-                sideBar.setPrefWidth(150);
+                sideBar.setMinWidth(200);
+                sideBar.setMaxWidth(200);
 
                 minETA.setText(Integer.toString(foundPath.getETA().getMin()));
                 secETA.setText(String.format("%02d",(foundPath.getETA().getSec())));
@@ -548,6 +546,7 @@ public class PathFinder {
             longNameArrayList.add(nodeArrayList.get(i).get("longName"));
             nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
         }
+
 //        longNameArrayList = connection.getAllNodeLongNames();
 //        nodeIDArrayList = connection.getListOfNodeIDS();
 
@@ -570,16 +569,17 @@ public class PathFinder {
         imageView.setImage(image);
 
         imageView.setPreserveRatio(true);
-        imageView.setFitWidth(primaryStage.getWidth());
+        imageView.fitWidthProperty().bind(primaryStage.widthProperty());
 
         //Sidebar stuff
         directionsButton.setOpacity(0);
         ETA.setOpacity(0);
         dist.setOpacity(0);
-        sideBar.setPrefWidth(0);
+        sideBar.setMaxWidth(0);
         clearPath.setOpacity(0);
 
         StackPane stackPane = new StackPane(imageView, borderPane);
+
         ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
 
         //make scroll pane pannable

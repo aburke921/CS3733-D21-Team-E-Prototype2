@@ -12,6 +12,8 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
+import edu.wpi.TeamE.databases.NodeDB;
+import edu.wpi.TeamE.databases.RequestsDB;
 import edu.wpi.TeamE.databases.makeConnection;
 import edu.wpi.TeamE.views.serviceRequestControllers.ServiceRequestFormComponents;
 import javafx.collections.ObservableList;
@@ -122,7 +124,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
             //Adding service request to table
             //makeConnection connection = makeConnection.makeConnection();
             //connection.addRequest("sanitationServices", request);
-            ArrayList<String> nodeIDS = connection.getListOfNodeIDS();
+            ArrayList<String> nodeIDS = NodeDB.getListOfNodeIDS();
             String type = requestTypeInput.getSelectionModel().getSelectedItem().toString();
             String severity = severityInput.getSelectionModel().getSelectedItem().toString();
             String patientID = patientIdInput.getText();
@@ -132,7 +134,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
             int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
             String nodeID = nodeIDS.get(nodeIDIndex);
             System.out.println(location + " " + type + " " + severity + " "+ patientID + " "  + ETA + " " + details + " " + assignee);
-            connection.addExternalPatientRequest(15, assignee,nodeID,type,severity,patientID,ETA, details);
+            RequestsDB.addExternalPatientRequest(15, assignee,nodeID,type,severity,patientID,ETA, details);
             super.handleButtonSubmit(actionEvent);
             //Setting up all variables to be entered
         }
@@ -141,7 +143,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 
     void initialize() {
         assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
-        ObservableList<String> locations  = connection.getAllNodeLongNames();
+        ObservableList<String> locations  = NodeDB.getAllNodeLongNames();
         locationInput.setItems(locations);
         assert requestTypeInput != null : "fx:id=\"requestTypeInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert ambulance != null : "fx:id=\"ambulance\" was not injected: check your FXML file 'ExternalPatient.fxml'.";

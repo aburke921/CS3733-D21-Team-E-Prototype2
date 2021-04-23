@@ -4,6 +4,8 @@ import java.util.*;
 
 import edu.wpi.TeamE.algorithms.*;
 import edu.wpi.TeamE.algorithms.pathfinding.constraints.SearchConstraint;
+import edu.wpi.TeamE.databases.EdgeDB;
+import edu.wpi.TeamE.databases.NodeDB;
 import edu.wpi.TeamE.databases.makeConnection;
 
 /**
@@ -38,8 +40,8 @@ public class Searcher {
     }
 
     public void refreshGraph(){
-        ArrayList<Edge> edges = con.getAllEdges();
-        ArrayList<Node> nodes = con.getAllNodes();
+        ArrayList<Edge> edges = EdgeDB.getAllEdges();
+        ArrayList<Node> nodes = NodeDB.getAllNodes();
 
         for(Node node : nodes){
             graph.put(node.get("id"), node);
@@ -123,6 +125,51 @@ public class Searcher {
         //failure case
         return null;
     }
+
+    public Path search(Collection<String> stopIds){
+        Path fullPath = new Path();
+        Iterator<String> itr = stopIds.iterator();
+
+        if(itr.hasNext()){
+            String prev = itr.next();
+            while(itr.hasNext()){
+                String current = itr.next();
+                Path leg = search(prev, current);
+                if(fullPath.getEnd().equals(leg.getStart())){
+                    leg.pop();
+                }
+                fullPath.add(leg);
+                prev = current;
+            }
+            return fullPath;
+        } else {
+            return null;
+        }
+    }
+
+    public Path searchAlongPath(Path route, String stopType){
+        List<Node> stops = NodeDB.getAllNodesByType(stopType);
+        Node start = route.getStart();
+        Node end = route.getEnd();
+
+        PriorityQueue<Path> paths = new PriorityQueue<>();
+
+        for(Node stop : stops){
+            Path leg1 = search(start.get("id"), stop.get("id"));
+            Path leg2 = search(stop.get("id"), end.get("id"));
+            leg2.pop();
+            leg1.add(leg2);
+
+            paths.add(leg1);
+        }
+
+        Path shortestDetour = paths.poll();
+        System.out.printf("Added %f length\n", shortestDetour.getPathLength() - route.getPathLength());
+
+        return shortestDetour;
+    }
+
+
 
     /**
      * Once the end node is found, this method is invoked to work back

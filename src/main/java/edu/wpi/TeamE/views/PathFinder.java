@@ -272,7 +272,7 @@ public class PathFinder {
                 pane.getChildren().clear();
 
                 //SnackBar popup
-                JFXSnackbar bar = new JFXSnackbar(pane);
+                JFXSnackbar bar = new JFXSnackbar(lowerAnchorPane);
                 bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Sorry, something has gone wrong. Please try again.")));
 
             } else { //path is not null

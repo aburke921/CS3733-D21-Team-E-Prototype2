@@ -35,7 +35,7 @@ public class MapEditorNavigation {
     @FXML
     private void toNodeMapEditor(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditor.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/newMapEditor.fxml"));
             App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();

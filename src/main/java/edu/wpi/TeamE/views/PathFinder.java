@@ -20,6 +20,7 @@ import edu.wpi.TeamE.algorithms.pathfinding.*;
 import edu.wpi.TeamE.databases.*;
 
 import edu.wpi.TeamE.App;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -108,6 +109,8 @@ public class PathFinder {
     private Path currentFoundPath; // the last found path todo null if no path has been found yet
 
     ArrayList<String> nodeIDArrayList;
+
+    ArrayList<Node> nodeArrayList;
 
     private final String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; //list of floorNames
 
@@ -269,7 +272,7 @@ public class PathFinder {
                 pane.getChildren().clear();
 
                 //SnackBar popup
-                JFXSnackbar bar = new JFXSnackbar(pane);
+                JFXSnackbar bar = new JFXSnackbar(lowerAnchorPane);
                 bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Sorry, something has gone wrong. Please try again.")));
 
             } else { //path is not null
@@ -304,6 +307,8 @@ public class PathFinder {
         pane.getChildren().clear();
         System.out.println(" DONE");
 
+        System.out.println("drawMap() is Finding path for floor " + floorNum);
+
 
         //if path is null
         if (path == null) {
@@ -315,10 +320,10 @@ public class PathFinder {
         Iterator<Node> nodeIteratorThisFloorOnly = path.iterator(floorNum);
         //if there are no nodes on this floor
         if (!nodeIteratorThisFloorOnly.hasNext()) {
-            System.out.println("there are no nodes on this floor");
+            System.out.println("drawMap() has found that there are no nodes on this floor");
             //todo snackbar to say no nodes on this floor?
             return;
-        }
+        } else System.out.println("drawMap() has found nodes on this floor, drawing them now...");
         //there is also a path.getStart() and path.getEnd()
         //if that would be useful for coloring
         /* End of Stuff Shane Wrote */
@@ -442,7 +447,7 @@ public class PathFinder {
         Image image = new Image("edu/wpi/TeamE/maps/" + floorNum + ".png");
         imageView.setImage(image);
 
-        //draw path
+        //draw path for new floor
         drawMap(currentFoundPath,currentFloor);
 
         System.out.println("Current floor set to " + floorNum);
@@ -478,8 +483,18 @@ public class PathFinder {
 
         //Get longNames & IDs
         System.out.print("Begin Adding to Dropdown List... ");
-        longNameArrayList = connection.getAllNodeLongNames();
-        nodeIDArrayList = connection.getListOfNodeIDS();
+        //todo here
+
+        longNameArrayList = FXCollections.observableArrayList();
+        nodeIDArrayList = new ArrayList<String>();
+
+        nodeArrayList = connection.getAllNodes();
+        for (int i = 0; i < nodeArrayList.size(); i++) {
+            longNameArrayList.add(nodeArrayList.get(i).get("longName"));
+            nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
+        }
+//        longNameArrayList = connection.getAllNodeLongNames();
+//        nodeIDArrayList = connection.getListOfNodeIDS();
 
         //add ObservableLists to dropdowns
         startLocationComboBox.setItems(longNameArrayList);
@@ -527,7 +542,6 @@ public class PathFinder {
     public void nextFloor(ActionEvent event) {
         //set current floor to one after current
         setCurrentFloor(floorNames[currentFloorNamesIndex]);
-        System.out.println(currentFloor);
 
         //increment unless at max, then back to 0
         if (currentFloorNamesIndex == 5) {

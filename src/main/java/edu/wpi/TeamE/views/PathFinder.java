@@ -46,9 +46,9 @@ import javafx.stage.Stage;
 public class PathFinder {
 
     // TODO: Floor Change Count
-    // TODO: Clear Path Button
     // TODO: Clean up UI
     // TODO: Make page fully dynamic
+    // TODO: Directions are sad
 
     /*
      * FXML Values
@@ -113,6 +113,8 @@ public class PathFinder {
     private VBox sideBar;
     @FXML // fx:id="ETA"
     private HBox ETA;
+    @FXML // fx:id="clearPath"
+    private Button clearPath;
 
     /*
      * Additional Variables
@@ -233,6 +235,27 @@ public class PathFinder {
     }
 
     /**
+     * Clears the path and closes the sidebar
+     * @param event the calling event's info
+     */
+    @FXML
+    void pathClear(ActionEvent event) {
+        imageView.setFitWidth(App.getPrimaryStage().getWidth());
+        stackPane.setPrefWidth(imageView.getFitWidth());
+
+        directionsButton.setOpacity(0);
+        ETA.setOpacity(0);
+        dist.setOpacity(0);
+        clearPath.setOpacity(0);
+        sideBar.setPrefWidth(0);
+
+        //clear map
+        System.out.print("\nCLEARING MAP...");
+        pane.getChildren().clear();
+        System.out.println(" DONE");
+    }
+
+    /**
      * Uses {@link Searcher}'s search() function to find the best path,
      * given the two current start and end positions ({@link #selectedStartNodeID} and {@link #selectedEndNodeID}).
      * Then calls {@link #drawMap(Path, String)}.
@@ -307,6 +330,7 @@ public class PathFinder {
                 directionsButton.setOpacity(1);
                 ETA.setOpacity(1);
                 dist.setOpacity(1);
+                clearPath.setOpacity(1);
                 sideBar.setPrefWidth(150);
 
                 minETA.setText(Integer.toString(foundPath.getETA().getMin()));
@@ -553,6 +577,7 @@ public class PathFinder {
         ETA.setOpacity(0);
         dist.setOpacity(0);
         sideBar.setPrefWidth(0);
+        clearPath.setOpacity(0);
 
         StackPane stackPane = new StackPane(imageView, borderPane);
         ScrollPane scrollPane = new ScrollPane(new Group(stackPane));

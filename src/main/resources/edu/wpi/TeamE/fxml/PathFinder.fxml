@@ -140,7 +140,7 @@
                            </VBox.margin>
                            <children>
                               <Label fx:id="minETA" alignment="CENTER_RIGHT" maxWidth="18.0" minWidth="18.0" prefWidth="18.0" />
-                              <Label contentDisplay="CENTER" maxWidth="6.0" minWidth="6.0" prefWidth="6.0" text=" : " />
+                              <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="6.0" minWidth="6.0" prefWidth="6.0" text=" : " HBox.hgrow="NEVER" />
                               <Label fx:id="secETA" alignment="CENTER_LEFT" maxWidth="18.0" minWidth="18.0" prefWidth="18.0" />
                            </children>
                         </HBox>
@@ -149,6 +149,11 @@
                               <Insets top="15.0" />
                            </VBox.margin>
                         </Label>
+                        <AnchorPane maxHeight="1.7976931348623157E308" prefWidth="150.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <JFXButton fx:id="clearPath" alignment="CENTER" contentDisplay="CENTER" layoutX="31.0" layoutY="44.0" maxHeight="1.7976931348623157E308" onAction="#pathClear" prefWidth="78.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Clear Path" AnchorPane.bottomAnchor="20.0" />
+                           </children>
+                        </AnchorPane>
                      </children>
                      <HBox.margin>
                         <Insets />

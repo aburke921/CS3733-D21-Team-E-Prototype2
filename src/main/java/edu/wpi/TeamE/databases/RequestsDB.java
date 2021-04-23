@@ -815,7 +815,7 @@ public class RequestsDB {
 				requestLongNames = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
 			}
 			else{
-				requestLongNames ="Select longName from node,(Select roomID From " + tableName + ") correctTable where node.nodeID = correctTable.roomID";
+				requestLongNames ="Select requestID, longName from node,(Select requestID, roomID From " + tableName + ") correctTable where node.nodeID = correctTable.roomID order by requestID";
 			}
 			ResultSet rset = stmt.executeQuery(requestLongNames);
 			while(rset.next()){

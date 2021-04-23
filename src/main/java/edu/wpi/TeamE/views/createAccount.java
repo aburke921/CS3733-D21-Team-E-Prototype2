@@ -11,8 +11,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 
 import javax.swing.*;
@@ -29,11 +31,22 @@ public class createAccount {
     private JFXTextField email;
     @FXML
     private JFXTextField password;
-    @FXML private StackPane stackPane;
+    @FXML
+    private StackPane stackPane;
 
+    @FXML // fx:id="exit"
+    private Polygon exit;
+
+    public void initialize() {
+        //If exit button is clicked, exit app
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
+    }
 
     public void createAccountButton() {
-        boolean bool = false;
+        int userID = 0;
         makeConnection connection = makeConnection.makeConnection();
         if(email.getText().isEmpty()) {
             errorPopup("Must input an email");
@@ -65,15 +78,15 @@ public class createAccount {
             errorPopup("Password must include a special character");
             return;
         }
-        if(checkString(password.getText()) == false) {
+        if(!checkString(password.getText())) {
             errorPopup("Password must include a capital letter and a number");
             return;
         }
         if (firstName != null && lastName != null && email != null && password != null) {
             connection.addUserAccount(email.getText(), password.getText(), firstName.getText(), lastName.getText());
-            bool = connection.userLogin(email.getText(), password.getText());
+            userID = connection.userLogin(email.getText(), password.getText());
         }
-        if (bool == true) {
+        if (userID != 0) {
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
                 App.getPrimaryStage().getScene().setRoot(root);
@@ -147,4 +160,6 @@ public class createAccount {
             ex.printStackTrace();
         }
     }
+
+
 }

@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class App extends Application {
 
+	public static int userID = 0;
 	private static Stage primaryStage;
 
 	private double x, y;
@@ -32,22 +33,23 @@ public class App extends Application {
 		System.out.println("STARTING UP!!!");
 		makeConnection connection = makeConnection.makeConnection();
 		System.out.println("Connected to the DB");
-
-		File nodes = new File("bwEnodes.csv");
-		File edges = new File("bwEedges.csv");
-
-		try {
-			//connection.deleteAllTables();
-			connection.createTables();
-			connection.populateTable("node", nodes);
-			connection.populateTable("hasEdge", edges);
-			System.out.println("Tables were created");
-		} catch (Exception e) {
-			System.out.println("Tables already there");
-			/*connection.createTables();
-			connection.populateTable("node", nodes);
-			connection.populateTable("hasEdge", edges);*/
-			System.out.println("Tables were created and populated");
+		File nodes = new File("CSVs/MapEAllnodes.csv");
+		File edges = new File("CSVs/MapEAlledges.csv");
+    boolean tablesExist = connection.allTablesThere();
+		if(!tablesExist){
+			try {
+				connection.createTables();
+				connection.populateTable("node", nodes);
+				connection.populateTable("hasEdge", edges);
+				connection.addDataForPresentation();
+				System.out.println("Tables were created");
+			} catch (Exception e) {
+				System.out.println("Tables already there");
+         /*connection.createTables();
+         connection.populateTable("node", nodes);
+         connection.populateTable("hasEdge", edges);*/
+				System.out.println("Tables were created and populated");
+			}
 		}
 	}
 
@@ -72,10 +74,10 @@ public class App extends Application {
 			Scene scene = new Scene(root); //init
 			primaryStage.setScene(scene);
 			primaryStage.setWidth(1050);
-			primaryStage.setHeight(576);
+			primaryStage.setHeight(675);
 			root.minWidth(576);
 			primaryStage.show();
-			ResizeHelper.addResizeListener(primaryStage,950,576,Double.MAX_VALUE,Double.MAX_VALUE);
+			ResizeHelper.addResizeListener(primaryStage,950,640,Double.MAX_VALUE,Double.MAX_VALUE);
 		} catch (IOException e) {
 			e.printStackTrace();
 			Platform.exit();

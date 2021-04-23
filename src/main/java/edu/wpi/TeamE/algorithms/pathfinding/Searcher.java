@@ -107,11 +107,11 @@ public class Searcher {
 
             for(String neighborId : neighbors){
                 Node neighbor = getNode(neighborId);
-                Double neighborCost = prevCost.get(current) + dist(current, neighbor);
+                Double neighborCost = prevCost.get(current) + current.dist(neighbor);
                 if(!prevCost.containsKey(neighbor) || neighborCost < prevCost.get(neighbor)){
                     prevCost.put(neighbor, neighborCost);
                     cameFrom.put(neighbor, current);
-                    neighbor.setCost(neighborCost + dist(neighbor, end));
+                    neighbor.setCost(neighborCost + neighbor.dist(end));
 
                     //remove and re insert because value has been updated
                     potentials.remove(neighbor);
@@ -123,6 +123,28 @@ public class Searcher {
         //failure case
         return null;
     }
+
+
+    public Path searchAlongPath(Path route, String stopType){
+        List<Node> stops = con.getAllNodesByType(stopType);
+        Node start = route.getStart();
+        Node end = route.getEnd();
+
+        PriorityQueue<Path> paths = new PriorityQueue<>();
+
+        for(Node stop : stops){
+            Path leg1 = search(start.get("id"), stop.get("id"));
+            Path leg2 = search(stop.get("id"), end.get("id"));
+            leg2.pop();
+            leg1.add(leg2);
+
+            paths.add(leg1);
+        }
+
+        return paths.poll();
+    }
+
+
 
     /**
      * Once the end node is found, this method is invoked to work back
@@ -146,19 +168,5 @@ public class Searcher {
         }
 
         return path;
-    }
-
-    /**
-     * Calculate the euclidean distance between two nodes
-     * Pythagorean theorem
-     * TODO: include floor changes
-     * @param n1,n2 Nodes to calculate the distance between
-     * @return the distance between two nodes
-     */
-    protected double dist(Node n1, Node n2){
-        double xDist = Math.pow(n1.getX() - n2.getX(), 2);
-        double yDist = Math.pow(n1.getY() - n2.getY(), 2);
-        double zDist = Math.pow(n1.getZ() - n2.getZ(), 2);
-        return Math.sqrt(xDist + yDist + zDist);
     }
 }

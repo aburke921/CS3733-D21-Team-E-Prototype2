@@ -4,7 +4,7 @@ import com.jfoenix.controls.*;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.databases.makeConnection;
-import edu.wpi.TeamE.views.forms.SanitationServicesForm;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -35,20 +35,17 @@ public class SanitationServices extends ServiceRequestFormComponents {
   @FXML private JFXComboBox<String> Severity;
   @FXML private JFXButton cancel;
   @FXML private JFXButton submit;
-  public SanitationServicesForm request;
-  RequiredFieldValidator validator = new RequiredFieldValidator();
+
+
+  @FXML private RequiredFieldValidator validator = new RequiredFieldValidator();
   makeConnection connection = makeConnection.makeConnection();
-  @FXML // fx:id="pane"
-  private Pane pane = new Pane();
+
 
 
   /**
    * Sets value of drop down list to the selected value(departments)
    * @param actionEvent
    */
-
-
-
 
   /**
    * Detects if the user has entered all required fields
@@ -58,7 +55,6 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
     validator.setMessage("Input required");
 
-
     ServiceTypeinput.getValidators().add(validator);
     assignedIndividual.getValidators().add(validator);
     locationInput.getValidators().add(validator);
@@ -67,9 +63,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
     Signature.getValidators().add(validator);
     Severity.getValidators().add(validator);
 
-
-
-    return  locationInput.validate() && ServiceTypeinput.validate() && assignedIndividual.validate() && detailedInstructionsInput.validate() && Severity.validate() && Signature.validate();
+    return locationInput.validate() && ServiceTypeinput.validate() && assignedIndividual.validate() && detailedInstructionsInput.validate() && Severity.validate() && Signature.validate();
 
 
   }
@@ -92,15 +86,16 @@ public class SanitationServices extends ServiceRequestFormComponents {
       //makeConnection connection = makeConnection.makeConnection();
       //connection.addRequest("sanitationServices", request);
       ArrayList<String> nodeIDS = connection.getListOfNodeIDS();
-      String serviceKind = ServiceTypeinput.getSelectionModel().toString();
+      String serviceKind = ServiceTypeinput.getValue();
       String assignee = assignedIndividual.getText();
       String details = detailedInstructionsInput.getText();
-      String severity = Severity.getSelectionModel().toString();
+      String severity = Severity.getValue();
       String signature = Signature.getText();
       int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
       String nodeID = nodeIDS.get(nodeIDIndex);
-      connection.addSanitationRequest(15,nodeID, serviceKind,details,severity,signature);
-      System.out.println(nodeID);
+      connection.addSanitationRequest(15,assignee,nodeID, serviceKind,details,severity,signature);
+      System.out.println(serviceKind);
+
       super.handleButtonSubmit(actionEvent);
       //Setting up all variables to be entered
     }
@@ -117,7 +112,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
     assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
 
     ObservableList<String> Services  = FXCollections.observableArrayList();
-    Services.setAll("Urine cleanup","Feces cleanup","Trash removal");
+    Services.setAll("Urine Cleanup","Feces Cleanup","Trash Removal");
 
     ServiceTypeinput.setItems(Services);
 
@@ -125,21 +120,14 @@ public class SanitationServices extends ServiceRequestFormComponents {
     ObservableList<String> locations  = connection.getAllNodeLongNames();
 
     locationInput.setItems(locations);
-    assert  Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
+    assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
     ObservableList<String> rating  = FXCollections.observableArrayList();
-   rating.setAll("1","2","3","4","5");
-   Severity.setItems(rating);
-
-
-
-
-
-
+    rating.setAll("Low","Medium","High","Critical");
+    Severity.setItems(rating);
 
     assert assignedIndividual != null : "fx:id=\"assignedIndividual\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
     assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/ExternalPatient.fxml'.";
     assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/ExternalPatient.fxml'.";
-
 
   }
 }

@@ -20,6 +20,7 @@ import edu.wpi.TeamE.algorithms.pathfinding.*;
 import edu.wpi.TeamE.databases.*;
 
 import edu.wpi.TeamE.App;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -36,6 +37,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -64,6 +66,11 @@ public class PathFinder {
 
     @FXML // fx:id="endLocationList"
     private JFXComboBox<String> endLocationComboBox; // Value injected by FXMLLoader
+    @FXML
+    private JFXToggleButton handicap;
+
+    @FXML
+    private JFXToggleButton safe;
 
     //@FXML // fx:id="imageView"
     private ImageView imageView = new ImageView();
@@ -83,6 +90,12 @@ public class PathFinder {
     @FXML // fx:id="stackPane"
     private StackPane stackPane; // Value injected by FXMLLoader
 
+    @FXML // fx:id="exit"
+    private Polygon exit;
+
+    @FXML // fx:id="lowerAnchorPane"
+    private AnchorPane lowerAnchorPane; // Value injected by FXMLLoader
+
     /*
      * Additional Variables
      */
@@ -96,6 +109,8 @@ public class PathFinder {
     private Path currentFoundPath; // the last found path todo null if no path has been found yet
 
     ArrayList<String> nodeIDArrayList;
+
+    ArrayList<Node> nodeArrayList;
 
     private final String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; //list of floorNames
 
@@ -113,6 +128,9 @@ public class PathFinder {
 
     private double radius = 6;
     private double strokeWidth = 3;
+
+
+
 
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
@@ -173,7 +191,7 @@ public class PathFinder {
         //get directions
         if (currentFoundPath == null) return;
 
-        List<String> directions = currentFoundPath.makeDirections();
+        List<String> directions = currentFoundPath.makeDirectionsWithDist();
         StringBuilder directionsStringBuilder = new StringBuilder();
         for (String dir: directions) {
             System.out.println(dir);
@@ -220,17 +238,25 @@ public class PathFinder {
         selectedEndNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
         System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + selectedEndNodeID);
 
-        //Execute A* Search
+        //Define A* Search
         System.out.println("A* Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
         SearchContext aStar = new SearchContext();
-        //aStar.setConstraint("HANDICAP");
+
+        //set constrains
+        if(handicap.isSelected()) {
+            System.out.println("Yay Handicap");
+            aStar.addConstraint("HANDICAP");
+        } if(safe.isSelected()){
+            System.out.println("Yay Safe =)");
+            aStar.addConstraint("SAFE");
+        }
 
         //Check if starting and ending node are the same
         if(selectedStartNodeID.equals(selectedEndNodeID)) { //error
             //Print error message and don't allow the program to call the path search function
             System.out.println("Cannot choose the same starting and ending location. Try again");
             //SnackBar popup
-            JFXSnackbar bar = new JFXSnackbar(pane);
+            JFXSnackbar bar = new JFXSnackbar(lowerAnchorPane);
             bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Cannot choose the same starting and ending location. Try again")));
 
             findPathButton.setDisable(true);
@@ -246,7 +272,7 @@ public class PathFinder {
                 pane.getChildren().clear();
 
                 //SnackBar popup
-                JFXSnackbar bar = new JFXSnackbar(pane);
+                JFXSnackbar bar = new JFXSnackbar(lowerAnchorPane);
                 bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Sorry, something has gone wrong. Please try again.")));
 
             } else { //path is not null
@@ -257,7 +283,6 @@ public class PathFinder {
                 //draw the map for the current floor
                 drawMap(foundPath, currentFloor);
 
-                //todo Display algo's directions
                 System.out.println();
                 List<String> directions = foundPath.makeDirections();
                 for (String dir: directions) {
@@ -282,17 +307,27 @@ public class PathFinder {
         pane.getChildren().clear();
         System.out.println(" DONE");
 
-        //parse out nodes that are not on specified floor.
-        LinkedList<Node> finalNodeList = getNodesOnFloorFromPath(path, floorNum);
+        System.out.println("drawMap() is Finding path for floor " + floorNum);
 
-        //if there are no nodes on this floor
-        if (finalNodeList == null) {
-            //todo snackbar to say no nodes on this floor?
+
+        //if path is null
+        if (path == null) {
+            //todo snackbar to say no path set
             return;
         }
 
         //make iterator out of the parsed path
-        Iterator<Node> nodeIteratorThisFloorOnly = finalNodeList.iterator();
+        Iterator<Node> nodeIteratorThisFloorOnly = path.iterator(floorNum);
+        //if there are no nodes on this floor
+        if (!nodeIteratorThisFloorOnly.hasNext()) {
+            System.out.println("drawMap() has found that there are no nodes on this floor");
+            //todo snackbar to say no nodes on this floor?
+            return;
+        } else System.out.println("drawMap() has found nodes on this floor, drawing them now...");
+        //there is also a path.getStart() and path.getEnd()
+        //if that would be useful for coloring
+        /* End of Stuff Shane Wrote */
+
 
         Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
@@ -327,9 +362,8 @@ public class PathFinder {
                     //place a red dot on the location
                     Circle circle = new Circle(xCoord, yCoord, radius, Color.RED);
                     g.getChildren().add(circle);
+
                 }
-
-
             } else if (!nodeIteratorThisFloorOnly.hasNext()) { //if current node is the ending node for this floor
 
                 Circle circle;
@@ -413,7 +447,7 @@ public class PathFinder {
         Image image = new Image("edu/wpi/TeamE/maps/" + floorNum + ".png");
         imageView.setImage(image);
 
-        //draw path
+        //draw path for new floor
         drawMap(currentFoundPath,currentFloor);
 
         System.out.println("Current floor set to " + floorNum);
@@ -425,14 +459,21 @@ public class PathFinder {
      */
     @FXML
     void initialize() {
-        //todo remove when all sizes are same
-        //set Stage size
-        Stage primaryStage = App.getPrimaryStage();
-
-        stageWidth = primaryStage.getWidth();
-        stageHeight = primaryStage.getHeight();
 
         System.out.println("Begin PathFinder Init");
+
+        //get primaryStage
+        Stage primaryStage = App.getPrimaryStage();
+
+        //If exit button is clicked, exit app
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
+
+        //get dimensions of stage
+        stageWidth = primaryStage.getWidth();
+        stageHeight = primaryStage.getHeight();
 
         assert startLocationComboBox != null : "fx:id=\"startLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert endLocationComboBox != null : "fx:id=\"endLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";
@@ -442,8 +483,18 @@ public class PathFinder {
 
         //Get longNames & IDs
         System.out.print("Begin Adding to Dropdown List... ");
-        longNameArrayList = connection.getAllNodeLongNames();
-        nodeIDArrayList = connection.getListOfNodeIDS();
+        //todo here
+
+        longNameArrayList = FXCollections.observableArrayList();
+        nodeIDArrayList = new ArrayList<String>();
+
+        nodeArrayList = connection.getAllNodes();
+        for (int i = 0; i < nodeArrayList.size(); i++) {
+            longNameArrayList.add(nodeArrayList.get(i).get("longName"));
+            nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
+        }
+//        longNameArrayList = connection.getAllNodeLongNames();
+//        nodeIDArrayList = connection.getListOfNodeIDS();
 
         //add ObservableLists to dropdowns
         startLocationComboBox.setItems(longNameArrayList);
@@ -493,7 +544,7 @@ public class PathFinder {
         setCurrentFloor(floorNames[currentFloorNamesIndex]);
 
         //increment unless at max, then back to 0
-        if (currentFloorNamesIndex == 4) {
+        if (currentFloorNamesIndex == 5) {
             currentFloorNamesIndex = 0;
         } else currentFloorNamesIndex++;
     }

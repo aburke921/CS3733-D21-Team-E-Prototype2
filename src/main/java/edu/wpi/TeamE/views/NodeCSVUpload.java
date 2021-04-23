@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.shape.Polygon;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
@@ -25,7 +26,8 @@ public class NodeCSVUpload {
     @FXML
     private TreeTableView<Node> treeTable;
 
-
+    @FXML // fx:id="exit"
+    private Polygon exit;
 
     /**
      * When the table is empty (aka no root), create the proper columns
@@ -93,6 +95,7 @@ public class NodeCSVUpload {
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
             table.getColumns().add(column8);
         }
+        treeTable.setShowRoot(false);
         if (table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
             table.getRoot().getChildren().remove(0, array.size() - 1);
         }
@@ -112,13 +115,14 @@ public class NodeCSVUpload {
         if (file != null) {
             //Have to save edge table so we can get it back after deleting
             connection.getNewCSVFile("hasEdge");
-            File saveEdges = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+            File saveEdges = new File("CSVs/outputEdge.csv");
 
             //This is where tables are cleared and refilled
             connection.deleteAllTables();
             connection.createTables();
             connection.populateTable("node", file);
             connection.populateTable("hasEdge", saveEdges);
+            System.out.println("Some edges might be removed because their nodes are no longer here");
             System.out.println("Success");
         }
     }
@@ -174,6 +178,11 @@ public class NodeCSVUpload {
     @FXML
     void initialize() {
         prepareNodes(treeTable);
+
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
     }
 
 

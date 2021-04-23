@@ -1,187 +1,276 @@
 package edu.wpi.TeamE.views;
+
 import com.jfoenix.controls.*;
+
+import java.awt.geom.RoundRectangle2D;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URL;
+import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.TeamE.algorithms.Path;
+import edu.wpi.TeamE.algorithms.pathfinding.*;
+import edu.wpi.TeamE.databases.*;
+
+import edu.wpi.TeamE.App;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.TreeTableColumn.CellDataFeatures;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-
-import java.awt.*;
-import java.io.File;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
-import edu.wpi.TeamE.App;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Parent;
-import sun.reflect.generics.tree.Tree;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Text;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.function.UnaryOperator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+public class newMapEditor {
+
+    /*
+     * FXML Values
+     */
 
 
+    @FXML // fx:id="zoomSlider"
+    private Slider zoomSlider;
 
-public class MapEditor {
 
-    @FXML private TreeTableView<Node> treeTable;
-    @FXML private JFXTextField xCordInput;
-    @FXML private JFXTextField yCordInput;
-    @FXML private JFXTextField idInput;
-    @FXML private JFXComboBox floorInput;
-    @FXML private JFXComboBox typeInput;
-    @FXML private JFXComboBox buildingInput;
-//    @FXML private JFXComboBox idDropDown;
-    @FXML private JFXTextField longNameInput;
-    @FXML private JFXTextField shortNameInput;
-    @FXML private StackPane stackPane;
-    @FXML private FlowPane flowPane;
+    @FXML // ResourceBundle that was given to the FXMLLoader
+    private ResourceBundle resources;
 
-    @FXML private ImageView imageView;
-    @FXML private Pane pane;
+    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    private URL location;
+
+    @FXML // fix:id="findPathButton"
+    public JFXButton findPathButton; // Value injected by FXMLLoader
+
+    @FXML // fix:id="backButton"
+    public Button backButton; // Value injected by FXMLLoader
+
+
+    @FXML // fx:id="startLocationList"
+    private JFXComboBox<String> startLocationComboBox; // Value injected by FXMLLoader
+
+    @FXML // fx:id="endLocationList"
+    private JFXComboBox<String> endLocationComboBox; // Value injected by FXMLLoader
+
+    //@FXML // fx:id="imageView"
+    private ImageView imageView = new ImageView();
+
+    @FXML // fx:id="pane"
+    private Pane pane = new Pane();
+
+    @FXML // fx:id="scrollPane"
+    private BorderPane rootBorderPane;
+
+    @FXML // fx:id="directionsButton"
+    private JFXButton directionsButton; // Value injected by FXMLLoader
+
+    @FXML // fx:id="stackPane"
+    private StackPane stackPane; // Value injected by FXMLLoader
 
     @FXML // fx:id="exit"
     private Polygon exit;
 
-    /**
-     * when page loaded, displays the data
-     */
+    @FXML // fx:id="lowerAnchorPane"
+    private AnchorPane lowerAnchorPane; // Value injected by FXMLLoader
+
     @FXML
-    void initialize() {
-        makeConnection connection = makeConnection.makeConnection();
-        prepareNodes(treeTable);
-        //Creating Type dropdown
-        ArrayList<String> nodeTypeArrayList = new ArrayList<String>();
-        nodeTypeArrayList.add("HALL");
-        nodeTypeArrayList.add("CONF");
-        nodeTypeArrayList.add("DEPT");
-        nodeTypeArrayList.add("HALL");
-        nodeTypeArrayList.add("ELEV");
-        nodeTypeArrayList.add("INFO");
-        nodeTypeArrayList.add("LABS");
-        nodeTypeArrayList.add("REST");
-        nodeTypeArrayList.add("RETL");
-        nodeTypeArrayList.add("STAI");
-        nodeTypeArrayList.add("SERV");
-        nodeTypeArrayList.add("EXIT");
-        nodeTypeArrayList.add("BATH");
-        ObservableList<String> listOfType = FXCollections.observableArrayList();
-        listOfType.addAll(nodeTypeArrayList);
+    private TreeTableView<Node> nodeTreeTable;
+    @FXML
+    private TreeTableView<Edge> edgeTreeTable;
+    @FXML
+    private JFXTextField xCordInput;
+    @FXML
+    private JFXTextField yCordInput;
+    @FXML
+    private JFXTextField idInput;
+    @FXML
+    private JFXComboBox floorInput;
+    @FXML
+    private JFXComboBox typeInput;
+    @FXML
+    private JFXComboBox buildingInput;
+    //    @FXML private JFXComboBox idDropDown;
+    @FXML
+    private JFXTextField longNameInput;
+    @FXML
+    private JFXTextField shortNameInput;
 
-        //Creating Floor Dropdown
-        ArrayList<String> nodeFloorArrayList = new ArrayList<String>();
-        nodeFloorArrayList.add("L1");
-        nodeFloorArrayList.add("L2");
-        nodeFloorArrayList.add("1");
-        nodeFloorArrayList.add("2");
-        nodeFloorArrayList.add("3");
-        ObservableList<String> listOfFloors = FXCollections.observableArrayList();
-        listOfFloors.addAll(nodeFloorArrayList);
-        //Creating Building Dropdown
-        ArrayList<String> nodeBuildingArrayList = new ArrayList<String>();
-        nodeBuildingArrayList.add("BTM");
-        nodeBuildingArrayList.add("45 Francis");
-        nodeBuildingArrayList.add("15 Francis");
-        nodeBuildingArrayList.add("Tower");
-        nodeBuildingArrayList.add("Shapiro");
-        ObservableList<String> listOfBuildings = FXCollections.observableArrayList();
-        listOfBuildings.addAll(nodeBuildingArrayList);
-        //Creating ID Dropdown
-        ArrayList<String> nodeIDArrayList = new ArrayList<String>();
-        nodeIDArrayList = connection.getListOfNodeIDS();
-        ObservableList<String> listOfIDS = FXCollections.observableArrayList();
-        listOfIDS.addAll(nodeIDArrayList);
-        //add ObservableLists to dropdowns
-        typeInput.setItems(listOfType);
-        floorInput.setItems(listOfFloors);
-        buildingInput.setItems(listOfBuildings);
-        //idDropDown.setItems(listOfIDS);
+    /*
+     * Additional Variables
+     */
 
+    private String selectedStartNodeID; // selected starting value's ID
 
-        exit.setOnMouseClicked(event -> {
-            App app = new App();
-            app.stop();
-        });
+    private String selectedEndNodeID; // selected ending value's ID
 
-        //set image to map
-        javafx.scene.image.Image image = new Image("edu/wpi/TeamE/maps/1.png");
-        imageView.setImage(image);
+    private String currentFloor = "1"; // set based on button presses
 
-        //when tree table is clicked
-        treeTable.setOnMouseClicked(event -> {
-            //make sure that a node is actually selected
-            if (treeTable.getSelectionModel().getSelectedItem() != null) {
-                Node node = treeTable.getSelectionModel().getSelectedItem().getValue();
-                if (node.getX() == 0) {
-                    return;
-                }
-                //clear the map
-                pane.getChildren().clear();
-                //calculate scaling based on image and imageView size
-                double scale = image.getWidth() / imageView.getFitWidth();
-                //Get the x and y coordinates of the node
-                double xCoord = (double) node.getX() / scale;
-                double yCoord = (double) node.getY() / scale;
-                //Create a circle using those coordinates
-                Circle circle = new Circle(xCoord, yCoord, 3, Color.RED);
-                //display the circle on the map
-                Group g = new Group(circle);
-                pane.getChildren().add(g);
-            }
-        });
+    private Path currentFoundPath; // the last found path todo null if no path has been found yet
 
-    }
+    ArrayList<String> nodeIDArrayList;
+
+    ArrayList<Node> nodeArrayList;
+
+    private final String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; //list of floorNames
+
+    private int currentFloorNamesIndex = 4; //start # should be init floor index + 1 (variable is actually always one beyond current floor)
+
+    ObservableList<String> longNameArrayList;
+
+    private double stageWidth;
+    private double stageHeight;
+
+    private double imageWidth;
+    private double imageHeight;
+
+    private double scale;
+
+    private double radius = 6;
+    private double strokeWidth = 3;
 
 
     /**
-     * brings user to the map editor navigation page
+     * Returns to {@link edu.wpi.TeamE.views.Default} page.
      *
-     * @param e
+     * @param event calling event info.
      */
     @FXML
-    private void toNavigation(ActionEvent e) {
+    private void toDefault(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditorNavigation.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+            App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    /**
-     * brings user to the help page
-     *
-     * @param e
-     */
     @FXML
-    public void getHelpDefault(ActionEvent e) {
+    void getHelpDefault(ActionEvent event) {
+        //todo, create help modal (refactor name, this was taken from Default page, hence the name)
     }
 
     /**
-     * When the table is empty (aka no root), create the proper columns
-     * Go through the array of Nodes and create a treeItem for each one,
-     * add each one to the treeTable
-     * @param table this is the table being prepared with the nodes
+     * Gets the currently selected item from {@link #startLocationComboBox} dropdown.
+     *
+     * @param event calling event info.
      */
+    @FXML
+    void selectStartNode(ActionEvent event) {
+        // findPath button validation
+        if (startLocationComboBox.getSelectionModel().isEmpty() ||
+                endLocationComboBox.getSelectionModel().isEmpty()) {
+            findPathButton.setDisable(true);
+        } else {
+            findPathButton.setDisable(false);
+        }
+    }
+
+    /**
+     * Gets the currently selected item from {@link #endLocationComboBox} dropdown.
+     *
+     * @param event calling event info.
+     */
+    @FXML
+    void selectEndNode(ActionEvent event) {
+        // findPath button validation
+        if (startLocationComboBox.getSelectionModel().isEmpty() ||
+                endLocationComboBox.getSelectionModel().isEmpty()) {
+            findPathButton.setDisable(true);
+        } else {
+            findPathButton.setDisable(false);
+        }
+    }
+
+
+    public void drawMap(String floorNum) {
+        makeConnection connection = makeConnection.makeConnection();
+
+        //clear map
+        System.out.print("\nCLEARING MAP...");
+        pane.getChildren().clear();
+        System.out.println(" DONE");
+
+        System.out.println("drawMap() is Finding path for floor " + floorNum);
+
+
+        //if path is null
+        if (connection.getAllNodes() == null) {
+            //todo snackbar to say error
+            return;
+        }
+        Group g = new Group(); //create group to contain all the shapes before we add them to the scene
+
+        ArrayList<Node> nodeArray = new ArrayList<Node>();
+        nodeArray = connection.getAllNodesByFloor(floorNum);
+        ArrayList<Edge> edgeArray = new ArrayList<Edge>();
+        edgeArray = connection.getAllEdges();
+
+        //display all nodes
+        scale = imageWidth / imageView.getFitWidth();
+        for (int i = 0; i < nodeArray.size(); i++) {
+            double xCoord = nodeArray.get(i).getX() / scale;
+            double yCoord = nodeArray.get(i).getY() / scale;
+            Circle circle = new Circle(xCoord, yCoord, 2, Color.GREEN);
+            g.getChildren().add(circle);
+
+        }
+        for(int i = 0; i < edgeArray.size(); i++) {
+            double startX = -1;
+            double startY = -1;
+            double endX = -1;
+            double endY = -1;
+            String start = edgeArray.get(i).getStartNodeId();
+            String end = edgeArray.get(i).getEndNodeId();
+            for (int j = 0; j < nodeArray.size() - 1; j++) {
+                if (nodeArray.get(j).get("floor").equals(floorNum)) {
+                    if (nodeArray.get(j).get("id").equals(start)) {
+                        startX = nodeArray.get(j).getX() / scale;
+                        startY = nodeArray.get(j).getY() / scale;
+                    }
+                    if (nodeArray.get(j).get("id").equals(end)) {
+                        endX = nodeArray.get(j).getX() / scale;
+                        endY = nodeArray.get(j).getY() / scale;
+                    }
+                }
+                if (startX != -1 && startY != -1 && endX != -1 && endY != -1) {
+                    Line line = new Line(startX, startY, endX, endY);
+                    line.setStrokeLineCap(StrokeLineCap.ROUND);
+                    line.setStrokeWidth(1);
+                    line.setStroke(Color.RED);
+
+                    g.getChildren().add(line);
+                }
+            }
+        }
+        pane.getChildren().add(g);
+    }
+
     public void prepareNodes(TreeTableView<Node> table) {
         makeConnection connection = makeConnection.makeConnection();
         ArrayList<Node> array = connection.getAllNodes();
@@ -189,53 +278,53 @@ public class MapEditor {
             //Column 1 - Location
             TreeTableColumn<Node, String> column = new TreeTableColumn<>("Location");
             column.setPrefWidth(320);
-            column.setCellValueFactory((CellDataFeatures<Node, String> p) ->
+            column.setCellValueFactory((TreeTableColumn.CellDataFeatures<Node, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("longName")));
             table.getColumns().add(column);
             //Column 2 - X Coordinate
             TreeTableColumn<Node, Number> column2 = new TreeTableColumn<>("X-Cord");
             column2.setPrefWidth(150);
-            column2.setCellValueFactory((CellDataFeatures<Node, Number> p) ->
+            column2.setCellValueFactory((TreeTableColumn.CellDataFeatures<Node, Number> p) ->
                     new ReadOnlyIntegerWrapper(p.getValue().getValue().getX()));
             table.getColumns().add(column2);
             //Column 3 - Y Coordinate
             TreeTableColumn<Node, Number> column3 = new TreeTableColumn<>("Y-Cord");
             column3.setPrefWidth(150);
-            column3.setCellValueFactory((CellDataFeatures<Node, Number> p) ->
+            column3.setCellValueFactory((TreeTableColumn.CellDataFeatures<Node, Number> p) ->
                     new ReadOnlyIntegerWrapper(p.getValue().getValue().getY()));
             table.getColumns().add(column3);
             //Column 4 - Node ID
             TreeTableColumn<Node, String> column4 = new TreeTableColumn<>("ID");
             column4.setPrefWidth(150);
-            column4.setCellValueFactory((CellDataFeatures<Node, String> p) ->
+            column4.setCellValueFactory((TreeTableColumn.CellDataFeatures<Node, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("id")));
             table.getColumns().add(column4);
             //Column 5 - Floor
             TreeTableColumn<Node, String> column5 = new TreeTableColumn<>("Floor");
             column5.setPrefWidth(150);
-            column5.setCellValueFactory((CellDataFeatures<Node, String> p) ->
+            column5.setCellValueFactory((TreeTableColumn.CellDataFeatures<Node, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("floor")));
             table.getColumns().add(column5);
             //Column 6 - Building
             TreeTableColumn<Node, String> column6 = new TreeTableColumn<>("Building");
             column6.setPrefWidth(150);
-            column6.setCellValueFactory((CellDataFeatures<Node, String> p) ->
+            column6.setCellValueFactory((TreeTableColumn.CellDataFeatures<Node, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("building")));
             table.getColumns().add(column6);
             //Column 7 - Short Name
             TreeTableColumn<Node, String> column7 = new TreeTableColumn<>("Short Name");
             column7.setPrefWidth(150);
-            column7.setCellValueFactory((CellDataFeatures<Node, String> p) ->
+            column7.setCellValueFactory((TreeTableColumn.CellDataFeatures<Node, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("shortName")));
             table.getColumns().add(column7);
             //Column 8 - Type of Node
             TreeTableColumn<Node, String> column8 = new TreeTableColumn<>("Type");
             column8.setPrefWidth(150);
-            column8.setCellValueFactory((CellDataFeatures<Node, String> p) ->
+            column8.setCellValueFactory((TreeTableColumn.CellDataFeatures<Node, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
             table.getColumns().add(column8);
         }
-        treeTable.setShowRoot(false);
+        table.setShowRoot(false);
 
         //Setting up root node
         Node node0 = new
@@ -483,261 +572,171 @@ public class MapEditor {
         }
     }
 
-    /**
-     * Runs editNode fcn when edit node button is pressed
-     * @param e
-     */
-    @FXML
-    public void editNodeButton(ActionEvent e) {
-        editNode(treeTable);
-    }
-
-
-    /**
-     * looks at each field that the user could input into, whichever ones are not empty
-     * the information is extracted and the node that the user selected is edited using
-     * database's edit node fcn
-     * @param table this is the table of nodes that is having a node edited
-     */
-    public void editNode(TreeTableView<Node> table) {
-        String id = null;
-        Integer xVal = null;
-        Integer yVal = null;
-        String floor = null;
-        String longName = null;
-        String shortName = null;
-        String type = null;
-        String building = null;
-//        if(idDropDown.getValue() == null) {
-//            errorPopup("Must input node ID");
-//            return;
-//        }
-//        else if (idDropDown.getValue() != null) {
-//            nodeID = idDropDown.getValue().toString();
-//        }
-        if(table.getSelectionModel().getSelectedItem().getValue() != null) {
-            id = table.getSelectionModel().getSelectedItem().getValue().get("id");
-        }
-        if (floorInput.getValue() != null) {
-            floor = floorInput.getValue().toString();
-        }
-        if (!longNameInput.getText().equals("")) {
-            longName = longNameInput.getText();
-        }
-        if (!shortNameInput.getText().equals("")) {
-            shortName = shortNameInput.getText();
-        }
-        if (typeInput.getValue() != null) {
-            type = typeInput.getValue().toString();
-        }
-        if (buildingInput.getValue() != null) {
-            building = buildingInput.getValue().toString();
-        }
-        if (!xCordInput.getText().equals("")) {
-            xVal = Integer.parseInt(xCordInput.getText());
-            xVal = Integer.valueOf(xVal);
-        }
-        if (!yCordInput.getText().equals("")) {
-            yVal = Integer.parseInt(yCordInput.getText());
-            yVal = Integer.valueOf(yVal);
-        }
-
-
+    public void prepareEdges(TreeTableView<Edge> table) {
         makeConnection connection = makeConnection.makeConnection();
-        connection.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
+        ArrayList<Edge> array = connection.getAllEdges();
+        if (table.getRoot() == null) {
+            Edge edge0 = new
+                    Edge("ID", "0", "1", 0.00);
+            final TreeItem<Edge> rootEdge = new TreeItem<>(edge0);
+            table.setRoot(rootEdge);
+            //column 1 - ID
+            TreeTableColumn<Edge, String> column1 = new TreeTableColumn<>("ID");
+            column1.setPrefWidth(320);
+            column1.setCellValueFactory((TreeTableColumn.CellDataFeatures<Edge, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getId()));
+            table.getColumns().add(column1);
+            //column 2 - Start Node
+            TreeTableColumn<Edge, String> column2 = new TreeTableColumn<>("Start Node ID");
+            column2.setPrefWidth(320);
+            column2.setCellValueFactory((TreeTableColumn.CellDataFeatures<Edge, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getStartNodeId()));
+            table.getColumns().add(column2);
+            //column 3 - End Node
+            TreeTableColumn<Edge, String> column3 = new TreeTableColumn<>("End Node ID");
+            column3.setPrefWidth(320);
+            column3.setCellValueFactory((TreeTableColumn.CellDataFeatures<Edge, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getEndNodeId()));
+            table.getColumns().add(column3);
+        }
+        table.setShowRoot(false);
+        for (int i = 0; i < array.size(); i++) {
+            Edge s = array.get(i);
+            //int n = array.get(i).getX();
+            final TreeItem<Edge> edge = new TreeItem<>(s);
+            table.getRoot().getChildren().add(edge);
+        }
+    }
+
+    public void setCurrentFloor(String floorNum) {
+
+        //set image
+        currentFloor = floorNum;
+        Image image = new Image("edu/wpi/TeamE/maps/" + floorNum + ".png");
+        imageView.setImage(image);
+
+        //draw path for new floor
+        drawMap(currentFloor);
+
+        System.out.println("Current floor set to " + floorNum);
+    }
+
+    public void toNodeTable(ActionEvent e) {
+        nodeTreeTable.toFront();
+
+
+    }
+
+    public void toEdgeTable(ActionEvent e) {
+        edgeTreeTable.toFront();
+
+    }
+
+    public void toMap(ActionEvent e) {
+        rootBorderPane.toFront();
+
+
     }
 
     /**
-     * Autogenerate NodeIDs
-     * Elevators need to have the format `Elevator X xxxxx`
-     * @param type The type of Node this is
-     * @param floor The floor this Node is on
-     * @param longName The longName of the node
-     * @return The NodeID of the given Node
-     */
-    public String genNodeID(String type, String floor, String longName){
-        StringBuilder SB = new StringBuilder("e");
-        SB.append(type);
-
-        if (type.equalsIgnoreCase("ELEV")) {
-            SB.append("00");
-            SB.append(longName.charAt(9));
-            //Elevator names need to start with 'Elevator X xxxxx"
-        } else {
-            makeConnection connection = makeConnection.makeConnection();
-            int instance = connection.countNodeTypeOnFloor("e", floor, type) + 1;
-            SB.append(String.format("%03d", instance));
-        }
-
-        try{
-            int num = Integer.parseInt(floor);
-            SB.append("0").append(num);
-        } catch (NumberFormatException e) {
-            if (floor.equalsIgnoreCase("G") || floor.equalsIgnoreCase("GG")){
-                SB.append("GG");
-            } else {
-                SB.append(floor);
-            }
-        }
-
-        return SB.toString();
-    }
-
-    /**
-     * retrieves all the inputted info from the user, creates a new node and adds it to database
-     * using database's addNode fcn
-     * @return
-     */
-    public int addNode() {
-        int i = -1;
-        makeConnection connection = makeConnection.makeConnection();
-        if (floorInput.getValue().toString().equals("")) {
-            errorPopup("Must input Floor");
-            return i;
-        }
-        if (longNameInput.getText().equals("")) {
-            errorPopup("Must input Long Name");
-            return i;
-        }
-        if (shortNameInput.getText().equals("")) {
-            errorPopup("Must input Short Name");
-            return i;
-        }
-        if (typeInput.getSelectionModel().equals("")) {
-            errorPopup("Must input Type");
-            return i;
-        }
-        if (buildingInput.getValue().toString().equals("")) {
-            errorPopup("Must input Building");
-            return i;
-        }
-        if (xCordInput.getText().equals("")) {
-            errorPopup("Must input X Coordinate");
-            return i;
-        }
-        if (yCordInput.getText().equals("")) {
-            errorPopup("Must input Y Coordinate");
-            return i;
-        }
-        int xVal = Integer.parseInt(xCordInput.getText());
-        int yVal = Integer.parseInt(yCordInput.getText());
-        i = connection.addNode(genNodeID(typeInput.getValue().toString(),floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
-        System.out.println(i);
-        return i;
-    }
-
-
-    /**
-     * calls the addNode fcn when the add node button is pressed
-     * @param e
+     * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
+     * Namely, adds FloorMap PNG and fills dropdowns with DB data, sets default floor.
      */
     @FXML
-    public void addNodeButton(ActionEvent e) {
-        addNode();
-    }
+    void initialize() {
 
-    /**
-     * retrieves the ID of the selected item in the table, passes that into deleteNode fcn from database
-     * @param table
-     */
-    public int deleteNode(TreeTableView<Node> table) {
-        int s = -1;
-        makeConnection connection = makeConnection.makeConnection();
-        ArrayList<Node> array = connection.getAllNodes();
-        if(table.getSelectionModel().getSelectedItem().getValue() == null) {
-            errorPopup("Must select Node ID to delete");
-            return s;
-        } else {
-            //System.out.println(idDropDown.getValue().toString());
-            for (int i = 0; i < array.size(); i++) {
-                if (array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
-                    s = connection.deleteNode(array.get(i).get("id"));
-                }
-            }
-       }
-        return s;
-    }
+        System.out.println("Begin PathFinder Init");
 
+        //get primaryStage
+        Stage primaryStage = App.getPrimaryStage();
 
-
-    /**
-     * calls the deleteNode fcn when the delete button is clicked
-     * @param e
-     */
-    @FXML
-    public void deleteNodeButton(ActionEvent e) {
-        deleteNode(treeTable);
-    }
-
-    /**
-     * when refresh button is clicked, retrieves the arrayList of Nodes,
-     * calls the function to display data using the array (prepareNodes)
-     * @param actionEvent
-     */
-    @FXML
-    public void startTableButton(ActionEvent actionEvent) {
-        //creating the root for the array
-        Node node0 = new
-                Node("ID",
-                0, 0, "Floor", "Building",
-                "Node Type", "Long Name", "Short Name");
-        //creating root node
-        final TreeItem<Node> test = new TreeItem<Node>(node0);
-        test.setExpanded(true);
-        prepareNodes(treeTable);
-    }
-
-    @FXML
-    public void fileOpener(ActionEvent e) {
-        FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(App.getPrimaryStage());
-        makeConnection connection = makeConnection.makeConnection();
-        if (file != null) {
-            //Have to save edge table so we can get it back after deleting
-            connection.getNewCSVFile("hasEdge");
-            File saveEdges = new File("CSVs/outputEdge.csv");
-
-            //This is where tables are cleared and refilled
-            connection.deleteAllTables();
-            connection.createTables();
-            connection.populateTable("node", file);
-            connection.populateTable("hasEdge", saveEdges);
-            System.out.println("Success");
-        }
-    }
-
-
-
-    /**
-     *opens the file explorer on user's device, allows user to select CSV file,
-     * uploads file to database, refreshes page
-     * @param e actionevent
-     */
-    @FXML
-    private void openFile(ActionEvent e) throws IOException {
-        makeConnection connection = makeConnection.makeConnection();
-        connection.getNewCSVFile("node");
-        File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
-        Desktop desktop = Desktop.getDesktop();
-        desktop.open(file);
-    }
-
-    @FXML
-    private void errorPopup(String errorMessage) {
-        JFXDialogLayout error = new JFXDialogLayout();
-        error.setHeading(new Text("Error!"));
-        error.setBody(new Text(errorMessage));
-        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
-        JFXButton okay = new JFXButton("Okay");
-        okay.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
-
-            }
+        //If exit button is clicked, exit app
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
         });
-        error.setActions(okay);
-        dialog.show();
+
+        //get dimensions of stage
+        stageWidth = primaryStage.getWidth();
+        stageHeight = primaryStage.getHeight();
+
+        assert startLocationComboBox != null : "fx:id=\"startLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";
+        assert endLocationComboBox != null : "fx:id=\"endLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";
+
+        //DB connection
+        makeConnection connection = makeConnection.makeConnection();
+
+        //Get longNames & IDs
+        System.out.print("Begin Adding to Dropdown List... ");
+        //todo here
+
+        longNameArrayList = FXCollections.observableArrayList();
+        nodeIDArrayList = new ArrayList<String>();
+
+        nodeArrayList = connection.getAllNodes();
+        for (int i = 0; i < nodeArrayList.size(); i++) {
+            longNameArrayList.add(nodeArrayList.get(i).get("longName"));
+            nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
+        }
+//        longNameArrayList = connection.getAllNodeLongNames();
+//        nodeIDArrayList = connection.getListOfNodeIDS();
+
+        //add ObservableLists to dropdowns
+        startLocationComboBox.setItems(longNameArrayList);
+        endLocationComboBox.setItems(longNameArrayList);
+        System.out.println("done");
+
+        new AutoCompleteComboBoxListener<>(startLocationComboBox);
+        new AutoCompleteComboBoxListener<>(endLocationComboBox);
+
+        //Set up zoomable and pannable panes
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(pane);
+
+        //set default/initial floor for map
+        Image image = new Image("edu/wpi/TeamE/maps/1.png");
+        imageWidth = image.getWidth();
+        imageHeight = image.getHeight();
+        imageView.setImage(image);
+
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(primaryStage.getWidth());
+
+        StackPane stackPane = new StackPane(imageView, borderPane);
+        ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
+
+        //make scroll pane pannable
+        scrollPane.setPannable(true);
+
+        //get rid of side scroll bars
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        //bind the zoom slider to the map
+        stackPane.scaleXProperty().bind(zoomSlider.valueProperty());
+        stackPane.scaleYProperty().bind(zoomSlider.valueProperty());
+
+        rootBorderPane.setCenter(scrollPane);
+        rootBorderPane.setPrefWidth(stageWidth);
+        rootBorderPane.setPrefHeight(stageHeight);
+
+        System.out.println("Finish PathFinder Init.");
+
+        drawMap(currentFloor);
+        prepareNodes(nodeTreeTable);
+        prepareEdges(edgeTreeTable);
     }
 
+
+    public void nextFloor(ActionEvent event) {
+        //set current floor to one after current
+        setCurrentFloor(floorNames[currentFloorNamesIndex]);
+
+        //increment unless at max, then back to 0
+        if (currentFloorNamesIndex == 5) {
+            currentFloorNamesIndex = 0;
+        } else currentFloorNamesIndex++;
+    }
 }
+
+

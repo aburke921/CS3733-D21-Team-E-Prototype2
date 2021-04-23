@@ -6,15 +6,37 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.shape.Polygon;
 
 import java.io.IOException;
 
 public class ServiceRequests {
 
+    @FXML // fx:id="exit"
+    private Polygon exit;
+
+    public void initialize() {
+        //If exit button is clicked, exit app
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
+    }
+
     @FXML
     private void toDefault(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void toStatus(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/ServiceRequestStatus.fxml"));
             App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();

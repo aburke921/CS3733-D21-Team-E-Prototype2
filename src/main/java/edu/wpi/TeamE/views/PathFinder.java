@@ -111,6 +111,9 @@ public class PathFinder {
     @FXML // fx:id="dist"
     private Label dist;
 
+    @FXML // fx:id="currFloor"
+    private Label currFloor;
+
     @FXML // fx:id="sideBar"
     private VBox sideBar;
     @FXML // fx:id="ETA"
@@ -499,6 +502,7 @@ public class PathFinder {
         currentFloor = floorNum;
         Image image = new Image("edu/wpi/TeamE/maps/" + floorNum + ".png");
         imageView.setImage(image);
+        currFloor.setText(currentFloor);
 
         //draw path
         drawMap(currentFoundPath,currentFloor);
@@ -547,9 +551,6 @@ public class PathFinder {
             nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
         }
 
-//        longNameArrayList = connection.getAllNodeLongNames();
-//        nodeIDArrayList = connection.getListOfNodeIDS();
-
         //add ObservableLists to dropdowns
         startLocationComboBox.setItems(longNameArrayList);
         endLocationComboBox.setItems(longNameArrayList);
@@ -564,6 +565,7 @@ public class PathFinder {
 
         //set default/initial floor for map
         Image image = new Image("edu/wpi/TeamE/maps/1.png");
+        currFloor.setText(currentFloor);
         imageWidth = image.getWidth();
         imageHeight = image.getHeight();
         imageView.setImage(image);
@@ -610,5 +612,6 @@ public class PathFinder {
         if (currentFloorNamesIndex == 5) {
             currentFloorNamesIndex = 0;
         } else currentFloorNamesIndex++;
+        currFloor.setText(currentFloor);
     }
 }

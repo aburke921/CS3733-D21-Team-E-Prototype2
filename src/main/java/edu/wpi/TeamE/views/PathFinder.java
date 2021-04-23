@@ -45,6 +45,11 @@ import javafx.stage.Stage;
 
 public class PathFinder {
 
+    // TODO: Floor Change Count
+    // TODO: Clear Path Button
+    // TODO: Clean up UI
+    // TODO: Make page fully dynamic
+
     /*
      * FXML Values
      */
@@ -100,6 +105,14 @@ public class PathFinder {
     private Label minETA;
     @FXML // fx:id="secETA"
     private Label secETA;
+
+    @FXML // fx:id="dist"
+    private Label dist;
+
+    @FXML // fx:id="sideBar"
+    private VBox sideBar;
+    @FXML // fx:id="ETA"
+    private HBox ETA;
 
     /*
      * Additional Variables
@@ -287,8 +300,19 @@ public class PathFinder {
                 String startFloor = foundPath.peek().get("floor");
                 setCurrentFloor(startFloor);
 
+                //Sidebar stuff
+                imageView.setFitWidth(App.getPrimaryStage().getWidth() - 150);
+                stackPane.setPrefWidth(imageView.getFitWidth());
+
+                directionsButton.setOpacity(1);
+                ETA.setOpacity(1);
+                dist.setOpacity(1);
+                sideBar.setPrefWidth(150);
+
                 minETA.setText(Integer.toString(foundPath.getETA().getMin()));
-                secETA.setText(Integer.toString(foundPath.getETA().getSec()));
+                secETA.setText(String.format("%02d",(foundPath.getETA().getSec())));
+                int len =(int) Math.round(foundPath.getPathLengthFeet());
+                dist.setText(Integer.toString(len) + " Feet");
 
                 //save found path for when floors are switched
                 currentFoundPath = foundPath;
@@ -522,8 +546,13 @@ public class PathFinder {
         imageView.setImage(image);
 
         imageView.setPreserveRatio(true);
-        imageView.setFitWidth(primaryStage.getWidth() - 150);
-        //TODO: fix this, make map dynamic
+        imageView.setFitWidth(primaryStage.getWidth());
+
+        //Sidebar stuff
+        directionsButton.setOpacity(0);
+        ETA.setOpacity(0);
+        dist.setOpacity(0);
+        sideBar.setPrefWidth(0);
 
         StackPane stackPane = new StackPane(imageView, borderPane);
         ScrollPane scrollPane = new ScrollPane(new Group(stackPane));

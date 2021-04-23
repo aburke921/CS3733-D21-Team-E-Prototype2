@@ -127,23 +127,28 @@
                         <BorderPane fx:id="rootBorderPane" />
                      </children>
                   </StackPane>
-                  <VBox alignment="TOP_CENTER" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" HBox.hgrow="NEVER">
+                  <VBox fx:id="sideBar" alignment="TOP_CENTER" maxWidth="150.0" minWidth="0.0" prefWidth="150.0" HBox.hgrow="NEVER">
                      <children>
                         <JFXButton fx:id="directionsButton" onAction="#showDirections" styleClass="submit-button" text="Detailed Directions">
                            <VBox.margin>
                               <Insets top="15.0" />
                            </VBox.margin>
                         </JFXButton>
-                        <HBox alignment="CENTER" prefHeight="27.0" prefWidth="150.0">
+                        <HBox fx:id="ETA" alignment="CENTER" prefHeight="27.0" prefWidth="150.0">
                            <VBox.margin>
                               <Insets top="15.0" />
                            </VBox.margin>
                            <children>
                               <Label fx:id="minETA" alignment="CENTER_RIGHT" maxWidth="18.0" minWidth="18.0" prefWidth="18.0" />
                               <Label contentDisplay="CENTER" maxWidth="6.0" minWidth="6.0" prefWidth="6.0" text=" : " />
-                              <Label fx:id="secETA" maxWidth="18.0" minWidth="18.0" prefWidth="18.0" />
+                              <Label fx:id="secETA" alignment="CENTER_LEFT" maxWidth="18.0" minWidth="18.0" prefWidth="18.0" />
                            </children>
                         </HBox>
+                        <Label fx:id="dist" alignment="CENTER">
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </Label>
                      </children>
                      <HBox.margin>
                         <Insets />

@@ -21,20 +21,23 @@ public class RequestsDB {
 	 * - assignee: this is the person who is assigned to the request
 	 */
 	public static void createRequestsTable() {
-		try {
-			Statement stmt = connection.createStatement();
-			String sqlQuery = "Create Table requests(" +
-					"requestID    int Primary Key,\n" +
-					"creatorID    int References useraccount On Delete Cascade," +
-					"creationTime timestamp,\n" +
-					"requestType  varchar(31),\n" +
-					"requestStatus varchar(10),\n" +
-					"assignee varchar(31)," +
-					"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
-					"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
-			stmt.execute(sqlQuery);
+
+		String query = "Create Table requests(" +
+				"requestID    int Primary Key,\n" +
+				"creatorID    int References useraccount On Delete Cascade," +
+				"creationTime timestamp,\n" +
+				"requestType  varchar(31),\n" +
+				"requestStatus varchar(10),\n" +
+				"assignee varchar(31)," +
+				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
+				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
 		} catch (SQLException e) {
-			// e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("error creating requests table");
 		}
 	}
@@ -52,22 +55,25 @@ public class RequestsDB {
 	 * *                for whoever is fufilling the request
 	 */
 	public static void createFloralRequestsTable() {
-		try {
-			Statement stmt = connection.createStatement();
-			String sqlQuery = "Create Table floralRequests( " +
-					"requestID     int Primary Key References requests On Delete Cascade, " +
-					"roomID        varchar(31) References node On Delete Cascade, " +
-					"recipientName varchar(31), " +
-					"flowerType    varchar(31), " +
-					"flowerAmount  int, " +
-					"vaseType      varchar(31), " +
-					"message       varchar(5000), " +
-					"Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')), " +
-					"Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)),\n" +
-					"Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None')))";
-			stmt.execute(sqlQuery);
+
+		String query = "Create Table floralRequests( " +
+				"requestID     int Primary Key References requests On Delete Cascade, " +
+				"roomID        varchar(31) References node On Delete Cascade, " +
+				"recipientName varchar(31), " +
+				"flowerType    varchar(31), " +
+				"flowerAmount  int, " +
+				"vaseType      varchar(31), " +
+				"message       varchar(5000), " +
+				"Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')), " +
+				"Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)),\n" +
+				"Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None')))";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
 		} catch (SQLException e) {
-			// e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("error creating floralRequests table");
 		}
 	}
@@ -84,21 +90,24 @@ public class RequestsDB {
 	 * - urgency: this is how urgent the request is and helpful for prioritizing. The valid options are: "Low", "Medium", "High", "Critical"
 	 */
 	public static void createSanitationTable() {
-		try {
-			Statement stmt = connection.createStatement();
-			String sqlQuery = "Create Table sanitationRequest(\n" +
-					"    requestID int Primary Key References requests On Delete Cascade,\n" +
-					"    roomID varchar(31) Not Null References node On Delete Cascade,\n" +
-					"    signature varchar(31) Not Null,\n" +
-					"    description varchar(5000),\n" +
-					"    sanitationType varchar(31),\n" +
-					"    urgency varchar(31) Not Null,\n" +
-					"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))," +
-					"    Constraint urgencyTypeLimit Check (urgency In ('Low', 'Medium', 'High', 'Critical'))\n" +
-					")";
-			stmt.execute(sqlQuery);
+
+		String query = "Create Table sanitationRequest(\n" +
+				"    requestID int Primary Key References requests On Delete Cascade,\n" +
+				"    roomID varchar(31) Not Null References node On Delete Cascade,\n" +
+				"    signature varchar(31) Not Null,\n" +
+				"    description varchar(5000),\n" +
+				"    sanitationType varchar(31),\n" +
+				"    urgency varchar(31) Not Null,\n" +
+				"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))," +
+				"    Constraint urgencyTypeLimit Check (urgency In ('Low', 'Medium', 'High', 'Critical'))\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
 		} catch (SQLException e) {
-			// e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("error creating sanitationRequest table");
 		}
 	}
@@ -115,21 +124,24 @@ public class RequestsDB {
 	 * - description: this is a detailed description of request that generally includes what happened to the patient and their current situation.
 	 */
 	public static void createExtTransportTable() {
-		try {
-			Statement stmt = connection.createStatement();
-			String sqlQuery = "Create Table extTransport(\n" +
-					"    requestID int Primary Key References requests On Delete Cascade,\n" +
-					"    roomID varchar(31) Not Null References node On Delete Cascade,\n" +
-					"    requestType varchar(100) Not Null, " +
-					"    severity varchar(30) Not Null,\n" +
-					"    patientID varchar(31) Not Null,\n" +
-					"    ETA varchar(100),\n" +
-					"    description varchar(5000)," +
-					"    Constraint requestTypeLimitExtTrans Check (requestType In ('Ambulance', 'Helicopter', 'Plane'))" +
-					")";
-			stmt.execute(sqlQuery);
+
+		String query = "Create Table extTransport(\n" +
+				"    requestID int Primary Key References requests On Delete Cascade,\n" +
+				"    roomID varchar(31) Not Null References node On Delete Cascade,\n" +
+				"    requestType varchar(100) Not Null, " +
+				"    severity varchar(30) Not Null,\n" +
+				"    patientID varchar(31) Not Null,\n" +
+				"    ETA varchar(100),\n" +
+				"    description varchar(5000)," +
+				"    Constraint requestTypeLimitExtTrans Check (requestType In ('Ambulance', 'Helicopter', 'Plane'))" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("error creating extTransport table");
 		}
 	}
@@ -146,20 +158,22 @@ public class RequestsDB {
 	 * - signature: this the signature (name in print) of the user who is filling out the request
 	 */
 	public static void createMedDeliveryTable() {
-		try {
-			Statement stmt = connection.createStatement();
-			String sqlQuery = "Create Table medDelivery (\n" +
-					"requestID  int Primary Key References requests On Delete Cascade," +
-					"roomID     varchar(31) Not Null References node On Delete Cascade," +
-					"medicineName        varchar(31) Not Null," +
-					"quantity            int         Not Null," +
-					"dosage              varchar(31) Not Null," +
-					"specialInstructions varchar(5000)," +
-					"signature           varchar(31) Not Null" + ")";
 
-			stmt.execute(sqlQuery);
+		String query = "Create Table medDelivery (\n" +
+				"requestID  int Primary Key References requests On Delete Cascade," +
+				"roomID     varchar(31) Not Null References node On Delete Cascade," +
+				"medicineName        varchar(31) Not Null," +
+				"quantity            int         Not Null," +
+				"dosage              varchar(31) Not Null," +
+				"specialInstructions varchar(5000)," +
+				"signature           varchar(31) Not Null" + ")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
 		} catch (SQLException e) {
-			// e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("error creating medDelivery table");
 		}
 	}
@@ -173,19 +187,22 @@ public class RequestsDB {
 	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled. The valid options are: 'Low', 'Medium', 'High', 'Critical'
 	 */
 	public static void createSecurityServTable() {
-		try {
-			Statement stmt = connection.createStatement();
-			String sqlQuery = "Create Table securityServ (\n" +
-					"requestID  int Primary Key References requests On Delete Cascade," +
-					"roomID     varchar(31) Not Null References node On Delete Cascade," +
-					"level     varchar(31)," +
-					"urgency   varchar(31) Not Null," +
-					"Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical'))\n" +
-					")";
 
-			stmt.execute(sqlQuery);
+		String query = "Create Table securityServ (\n" +
+				"requestID  int Primary Key References requests On Delete Cascade," +
+				"roomID     varchar(31) Not Null References node On Delete Cascade," +
+				"level     varchar(31)," +
+				"urgency   varchar(31) Not Null," +
+				"Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical'))\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("error creating securityServ table");
 		}
 	}
@@ -428,18 +445,20 @@ public class RequestsDB {
 			added = true;
 		}
 
+
+
 		query = query + " where requestID = " + requestID;
-		try {
-			Statement stmt = connection.createStatement();
-			System.out.println(query);
-			stmt.executeUpdate(query);
-			stmt.close();
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error in updating sanitation request");
 			return 0;
 		}
+
 
 
 
@@ -503,14 +522,13 @@ public class RequestsDB {
 		}
 
 		query = query + " where requestID = " + requestID;
-		try {
-			Statement stmt = connection.createStatement();
-			System.out.println(query);
-			stmt.executeUpdate(query);
-			stmt.close();
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error in updating external transport request");
 			return 0;
 		}
@@ -573,19 +591,15 @@ public class RequestsDB {
 		}
 
 		query = query + " where requestID = " + requestID;
-
-		try {
-			Statement stmt = connection.createStatement();
-			System.out.println(query);
-			stmt.executeUpdate(query);
-			stmt.close();
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error in updating floral request");
 			return 0;
 		}
-
 	}
 
 	/**
@@ -647,15 +661,13 @@ public class RequestsDB {
 
 		query = query + " where requestID = " + requestID;
 
-		try {
-			Statement stmt = connection.createStatement();
-			System.out.println(query);
-			stmt.executeUpdate(query);
-			stmt.close();
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error in updating floral request");
+//			e.printStackTrace();
+			System.err.println("Error in updating medicine request");
 			return 0;
 		}
 	}
@@ -693,16 +705,13 @@ public class RequestsDB {
 		}
 
 		query = query + " where requestID = " + requestID;
-
-		try {
-			Statement stmt = connection.createStatement();
-			System.out.println(query);
-			stmt.executeUpdate(query);
-			stmt.close();
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error in updating floral request");
+//			e.printStackTrace();
+			System.err.println("Error in updating security request");
 			return 0;
 		}
 	}
@@ -733,19 +742,15 @@ public class RequestsDB {
 		}
 
 		query = query + " where requestID = " + requestID;
-
-		try {
-			Statement stmt = connection.createStatement();
-			System.out.println(query);
-			stmt.executeUpdate(query);
-			stmt.close();
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error in updating request table");
 			return 0;
 		}
-
 	}
 
 
@@ -766,24 +771,29 @@ public class RequestsDB {
 	public static ArrayList<String> getRequestInfo(String tableType, int userID, String infoType){
 
 		ArrayList<String> listOfInfo = new ArrayList<>();
-		try  {
-			Statement stmt = connection.createStatement();
-			String requestID;
-			if (userID != -1) {
-				requestID = "Select " + infoType + " from requests where requestType = '" + tableType + "' and creatorID = " + userID;
-			}
-			else{
-				requestID = "Select " + infoType + " From requests where requestType = '" + tableType + "'";
-			}
-			ResultSet rset = stmt.executeQuery(requestID);
+
+		String query;
+		if (userID != -1) {
+			query = "Select " + infoType + " from requests where requestType = '" + tableType + "' and creatorID = " + userID;
+		}
+		else{
+			query = "Select " + infoType + " From requests where requestType = '" + tableType + "'";
+		}
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
 			while(rset.next()){
 				String ID = rset.getString(infoType); //potential issue
 				listOfInfo.add(ID);
 			}
+			rset.close();
+
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("getRequestInfo() error in the try/catch");
 		}
+
 		return listOfInfo;
 	}
 
@@ -794,45 +804,41 @@ public class RequestsDB {
 	 */
 	public static ArrayList<String> getRequestLocations(String tableType, int userID){
 		ArrayList<String> listOfLongNames = new ArrayList<String>();
-		try  {
-			String tableName = "";
-			switch (tableType){
-				case "floral": tableName = "floralRequests";
-					break;
-				case "medDelivery": tableName = "medDelivery";
-					break;
-				case "sanitation": tableName = "sanitationRequest";
-					break;
-				case "security": tableName = "securityServ";
-					break;
-				case "extTransport": tableName = "extTransport";
-					break;
-			}
-			Statement stmt = connection.createStatement();
-			String requestLongNames;
 
-			if (userID != -1) {
-				requestLongNames = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
-			}
-			else{
-				requestLongNames ="Select longName from node,(Select roomID From " + tableName + ") correctTable where node.nodeID = correctTable.roomID";
-			}
-			ResultSet rset = stmt.executeQuery(requestLongNames);
+		String tableName = "";
+		switch (tableType){
+			case "floral": tableName = "floralRequests";
+				break;
+			case "medDelivery": tableName = "medDelivery";
+				break;
+			case "sanitation": tableName = "sanitationRequest";
+				break;
+			case "security": tableName = "securityServ";
+				break;
+			case "extTransport": tableName = "extTransport";
+				break;
+		}
+
+		String query;
+
+		if (userID != -1) {
+			query = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
+		}
+		else{
+			query ="Select longName from node,(Select roomID From " + tableName + ") correctTable where node.nodeID = correctTable.roomID";
+		}
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
 			while(rset.next()){
 				String status = rset.getString("longName");
 				listOfLongNames.add(status);
 			}
+
+			rset.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("getRequestLocations() error in the try/catch");
 		}
 		return listOfLongNames;
 	}
-
-
-
-
-
-
-
 }

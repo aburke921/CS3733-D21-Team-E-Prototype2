@@ -19,27 +19,29 @@ public class UserAccountDB {
 	 * - creationTime: a time stamp that is added to the table when an account is created
 	 */
 	public static void createUserAccountTable() {
-		try {
-			Statement stmt = connection.createStatement();
-			String sqlQuery = "Create Table userAccount (" +
-					"userID    Int Primary Key," +
-					"email     Varchar(31) Unique Not Null," +
-					"password  Varchar(31)        Not Null," +
-					"userType  Varchar(31)," +
-					"firstName Varchar(31)," +
-					"lastName  Varchar(31)," +
-					"creationTime Timestamp, " +
-					"Constraint userIDLimit Check ( userID != 0 )," +
-					"Constraint passwordLimit Check (Length(password) >= 8 )," +
-					"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin')))";
-			stmt.execute(sqlQuery);
+
+		String query = "Create Table userAccount (" +
+				"userID    Int Primary Key," +
+				"email     Varchar(31) Unique Not Null," +
+				"password  Varchar(31)        Not Null," +
+				"userType  Varchar(31)," +
+				"firstName Varchar(31)," +
+				"lastName  Varchar(31)," +
+				"creationTime Timestamp, " +
+				"Constraint userIDLimit Check ( userID != 0 )," +
+				"Constraint passwordLimit Check (Length(password) >= 8 )," +
+				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin')))";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
 			createUserAccountTypeViews();
+
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("error creating userAccount table");
 		}
-
-
 	}
 
 	/**
@@ -54,6 +56,7 @@ public class UserAccountDB {
 					"From useraccount " +
 					"Where usertype = 'visitor'";
 			stmt.execute(sqlQuery);
+
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			System.err.println("error creating visitorAccount view");
@@ -155,12 +158,12 @@ public class UserAccountDB {
 		try (PreparedStatement userLoginPS1 = connection.prepareStatement(userLoginS1)) {
 			userLoginPS1.setString(1, email);
 			userLoginPS1.setString(2, password);
-			ResultSet userLoginRS1 = userLoginPS1.executeQuery();
+			ResultSet rset = userLoginPS1.executeQuery();
 			int verification = 0;
-			if (userLoginRS1.next()) {
-				verification = userLoginRS1.getInt("verification");
+			if (rset.next()) {
+				verification = rset.getInt("verification");
 			}
-			userLoginRS1.close();
+			rset.close();
 			if(verification == 0){
 				return verification;
 			} else {
@@ -168,12 +171,13 @@ public class UserAccountDB {
 				try (PreparedStatement userLoginPS2 = connection.prepareStatement(userLoginS2)) {
 					userLoginPS2.setString(1, email);
 					userLoginPS2.setString(2, password);
-					ResultSet userLoginRS2 = userLoginPS2.executeQuery();
+					rset = userLoginPS2.executeQuery();
+
 					int userID = 0;
-					if (userLoginRS2.next()) {
-						userID = userLoginRS2.getInt("userID");
+					if (rset.next()) {
+						userID = rset.getInt("userID");
 					}
-					userLoginRS2.close();
+					rset.close();
 					return userID;
 				}
 			}

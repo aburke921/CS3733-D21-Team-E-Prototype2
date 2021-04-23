@@ -30,28 +30,29 @@ public class NodeDB{
 	 * longName: this is the long version/more descriptive name of the node/location/room
 	 * shortName: this is the short/nickname of the node/location/room
 	 */
-
 	public static void createNodeTable() {
-		try {
-			Statement stmt = connection.createStatement();
-			stmt.execute(
-					"Create Table node( "
-							+ "    nodeID    varchar(31) Primary Key,"
-							+ "    xCoord    int Not Null,"
-							+ "    yCoord    int Not Null,"
-							+ "    floor     varchar(5) Not Null,"
-							+ "    building  varchar(20),"
-							+ "    nodeType  varchar(10),"
-							+ "    longName  varchar(100),"
-							+ "    shortName varchar(100),"
-							+ "    Unique (xCoord, yCoord, floor),"
-							+ "    Constraint floorLimit Check (floor In ('1', '2', '3', 'L1', 'L2')), "
-							+ "    Constraint buildingLimit Check (building In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')), "
-							+ "    Constraint nodeTypeLimit Check (nodeType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', 'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH'))"
-							+ ")");
+		String query = "Create Table node( "
+				+ "    nodeID    varchar(31) Primary Key,"
+				+ "    xCoord    int Not Null,"
+				+ "    yCoord    int Not Null,"
+				+ "    floor     varchar(5) Not Null,"
+				+ "    building  varchar(20),"
+				+ "    nodeType  varchar(10),"
+				+ "    longName  varchar(100),"
+				+ "    shortName varchar(100),"
+				+ "    Unique (xCoord, yCoord, floor),"
+				+ "    Constraint floorLimit Check (floor In ('1', '2', '3', 'L1', 'L2')), "
+				+ "    Constraint buildingLimit Check (building In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')), "
+				+ "    Constraint nodeTypeLimit Check (nodeType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', 'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH'))"
+				+ ")";
+
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+
+			prepStat.execute();
+
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("error creating node table");
+//			e.printStackTrace();
+			System.err.println("error creating hasEdge table");
 		}
 	}
 
@@ -64,17 +65,17 @@ public class NodeDB{
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 	public static int deleteNode(String nodeID) {
-		String deleteNodeS = "Delete From node Where nodeid = ?";
-		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
-			deleteNodePS.setString(1, nodeID);
+		String query = "Delete From node Where nodeid = ?";
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+			prepStat.setString(1, nodeID);
 			// We might encounter issues if on delete cascade didn't work
-			int deleteNodeRS = deleteNodePS.executeUpdate();
-			if (deleteNodeRS == 0) {
+			int numOfDeletedRows = prepStat.executeUpdate();
+			if (numOfDeletedRows == 0) {
 				System.err.println("deleteNode Result = 0, probably bad cuz no rows was affected");
-			} else if (deleteNodeRS != 1) {
-				System.err.println("deleteNode Result =" + deleteNodeRS + ", probably bad cuz " + deleteNodeRS + " rows was affected");
+			} else if (numOfDeletedRows != 1) {
+				System.err.println("deleteNode Result =" + numOfDeletedRows + ", probably bad cuz " + numOfDeletedRows + " rows was affected");
 			}
-			return deleteNodeRS;
+			return numOfDeletedRows;
 			// deleteNode = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -99,8 +100,8 @@ public class NodeDB{
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 	public static int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-		String addNodeS = "Insert Into node Values (?, ?, ?, ?, ?, ?, ?, ?)";
-		try (PreparedStatement addNodePS = connection.prepareStatement(addNodeS)) {
+		String query = "Insert Into node Values (?, ?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement addNodePS = connection.prepareStatement(query)) {
 			addNodePS.setString(1, nodeID);
 			addNodePS.setInt(2, xCoord);
 			addNodePS.setInt(3, yCoord);
@@ -109,15 +110,16 @@ public class NodeDB{
 			addNodePS.setString(6, nodeType);
 			addNodePS.setString(7, longName);
 			addNodePS.setString(8, shortName);
-			int addNodeRS = addNodePS.executeUpdate();
-			if (addNodeRS == 0) {
+			int numberOfRowsAdded = addNodePS.executeUpdate();
+			if (numberOfRowsAdded == 0) {
 				//mapEditor.errorPopup("Error in updating node");
 				System.err.println("addNode Result = 0, probably bad cuz no rows was affected");
-			} else if (addNodeRS != 1) {
+			} else if (numberOfRowsAdded != 1) {
 				//mapEditor.errorPopup("Error in updating node");
-				System.err.println("addNode Result =" + addNodeRS + ", probably bad cuz " + addNodeRS + " rows was affected");
+				System.err.println("addNode Result =" + numberOfRowsAdded + ", probably bad cuz " + numberOfRowsAdded + " rows was affected");
 			}
-			return addNodeRS; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
+			addNodePS.close();
+			return numberOfRowsAdded; // addNodeRS = x means the statement executed affected x rows, should be 1 in this case.
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			//mapEditor.errorPopup("There is already a node here or this node already exists");
@@ -139,14 +141,7 @@ public class NodeDB{
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 */
 	public static int modifyNode(String nodeID,  Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-		//String finalQuery = "update node set ";
-		String xCoordUpdate = "";
-		String yCoordUpdate = "";
-		String floorUpdate = "";
-		String buildingUpdate = "";
-		String nodeTypeUpdate = "";
-		String longNameUpdate = "";
-		String shortNameUpdate = "";
+
 		boolean added = false;
 		String query = "update node set ";
 		if (xCoord != null) {
@@ -197,14 +192,13 @@ public class NodeDB{
 			added = true;
 		}
 		query = query + " where nodeID = '" + nodeID + "'";
-		try {
-			Statement stmt = connection.createStatement();
-			System.out.println(query);
-			stmt.executeUpdate(query);
-			stmt.close();
+
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+
+			prepStat.executeUpdate();
 			return 1;
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error in updating node");
 			return 0;
 		}
@@ -216,11 +210,12 @@ public class NodeDB{
 
 	public static ArrayList<Node> getAllNodesByType(String type) {
 		ArrayList<Node> nodesArray = new ArrayList<>();
-//observable list -- UI
-		try {
-			Statement stmt = connection.createStatement();
-			String query = "select * from node WHERE '" + type + "' = NODETYPE";
-			ResultSet rset = stmt.executeQuery(query);
+
+		String query = "select * from node WHERE '" + type + "' = NODETYPE";
+
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+
+			ResultSet rset = prepStat.executeQuery();
 
 			while (rset.next()) {
 				String NodeID = rset.getString("nodeID");
@@ -237,8 +232,6 @@ public class NodeDB{
 			}
 
 			rset.close();
-			stmt.close();
-
 		} catch (SQLException e) {
 			System.err.println("getAllNodes Error : " + e);
 		}
@@ -253,10 +246,12 @@ public class NodeDB{
 	public static ArrayList<Node> getAllNodes() {
 		ArrayList<Node> nodesArray = new ArrayList<>();
 //observable list -- UI
-		try {
-			Statement stmt = connection.createStatement();
-			String query = "Select * From node";
-			ResultSet rset = stmt.executeQuery(query);
+
+
+		String query = "Select * From node";
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+
+			ResultSet rset = prepStat.executeQuery();
 
 			while (rset.next()) {
 				String NodeID = rset.getString("nodeID");
@@ -273,7 +268,6 @@ public class NodeDB{
 			}
 
 			rset.close();
-			stmt.close();
 
 		} catch (SQLException e) {
 			System.err.println("getAllNodes Error : " + e);

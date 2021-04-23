@@ -1,6 +1,5 @@
 package edu.wpi.TeamE.views;
 
-import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -46,7 +45,7 @@ public class ServiceRequests {
     @FXML
     private void toFloralDelivery(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Floral.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/FloralV2.fxml"));
             App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -56,7 +55,7 @@ public class ServiceRequests {
     @FXML
     private void toExternalPatient(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/ExternalPatient.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/ExternalPatient.fxml"));
             App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -66,7 +65,7 @@ public class ServiceRequests {
     @FXML
     private void toMedicineDelivery(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MedicineDelivery.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/MedicineDeliveryV2.fxml"));
             App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -76,7 +75,7 @@ public class ServiceRequests {
     @FXML
     private void toSanitation(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Sanitation.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/SanitationV2.fxml"));
             App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -86,7 +85,7 @@ public class ServiceRequests {
     @FXML
     private void toSecurity(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/SecurityService.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/SecurityV2.fxml"));
             App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();

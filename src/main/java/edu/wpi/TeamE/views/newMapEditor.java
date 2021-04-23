@@ -214,16 +214,16 @@ public class newMapEditor {
 
 
         //if path is null
-        if (connection.getAllNodes() == null) {
+        if (NodeDB.getAllNodes() == null) {
             //todo snackbar to say error
             return;
         }
         Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
         ArrayList<Node> nodeArray = new ArrayList<Node>();
-        nodeArray = connection.getAllNodesByFloor(floorNum);
+        nodeArray = NodeDB.getAllNodesByFloor(floorNum);
         ArrayList<Edge> edgeArray = new ArrayList<Edge>();
-        edgeArray = connection.getAllEdges();
+        edgeArray = EdgeDB.getAllEdges();
 
         //display all nodes
         scale = imageWidth / imageView.getFitWidth();
@@ -297,7 +297,7 @@ public class newMapEditor {
             longNameArrayList = FXCollections.observableArrayList();
             nodeIDArrayList = new ArrayList<String>();
 
-            nodeArrayList = connection.getAllNodes();
+            nodeArrayList = NodeDB.getAllNodes();
             for (int i = 0; i < nodeArrayList.size(); i++) {
                 longNameArrayList.add(nodeArrayList.get(i).get("longName"));
                 nodeIDArrayList.add(nodeArrayList.get(i).get("id"));

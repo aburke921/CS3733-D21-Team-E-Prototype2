@@ -317,7 +317,7 @@ public class PathFinder {
         }
 
         //make iterator out of the parsed path
-        Iterator<Node> nodeIteratorThisFloorOnly = path.iterator(floorNum);
+        Iterator<Node> nodeIteratorThisFloorOnly = path.iterator();
         //if there are no nodes on this floor
         if (!nodeIteratorThisFloorOnly.hasNext()) {
             System.out.println("drawMap() has found that there are no nodes on this floor");
@@ -488,7 +488,7 @@ public class PathFinder {
         longNameArrayList = FXCollections.observableArrayList();
         nodeIDArrayList = new ArrayList<String>();
 
-        nodeArrayList = connection.getAllNodes();
+        nodeArrayList = NodeDB.getAllNodes();
         for (int i = 0; i < nodeArrayList.size(); i++) {
             longNameArrayList.add(nodeArrayList.get(i).get("longName"));
             nodeIDArrayList.add(nodeArrayList.get(i).get("id"));

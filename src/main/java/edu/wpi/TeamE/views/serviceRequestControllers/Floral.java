@@ -6,6 +6,8 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.TeamE.databases.NodeDB;
+import edu.wpi.TeamE.databases.RequestsDB;
 import edu.wpi.TeamE.databases.makeConnection;
 import edu.wpi.TeamE.views.serviceRequestControllers.ServiceRequestFormComponents;
 import javafx.collections.ObservableList;
@@ -18,6 +20,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+import java.io.Console;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -72,7 +75,6 @@ public class Floral extends ServiceRequestFormComponents {
     private void saveData(ActionEvent e) {
 
         if(validateInput()) {
-            makeConnection connection = makeConnection.makeConnection();
             int index = locationInput.getSelectionModel().getSelectedIndex();
 
             String nodeInfo = nodeID.get(index);
@@ -83,7 +85,7 @@ public class Floral extends ServiceRequestFormComponents {
             String reciever = recipient.getText();
             String mess = message.getText();
 
-            connection.addFloralRequest(App.userID, assigned, nodeInfo, reciever, type, 12, vase, mess);
+            RequestsDB.addFloralRequest(App.userID, assigned, nodeInfo, reciever, type, 12, vase, mess);
 
         }
     }
@@ -104,9 +106,8 @@ public class Floral extends ServiceRequestFormComponents {
 
     @FXML
     void initialize() {
-        makeConnection connection = makeConnection.makeConnection();
-        nodeID = connection.getListOfNodeIDS();
-        locations = connection.getAllNodeLongNames();
+        nodeID = NodeDB.getListOfNodeIDS();
+        locations = NodeDB.getAllNodeLongNames();
         locationInput.setItems(locations);
         assert locationInput != null;
         assert flowerType != null;

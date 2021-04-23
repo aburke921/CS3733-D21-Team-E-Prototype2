@@ -2,6 +2,8 @@ package edu.wpi.TeamE.views.serviceRequestControllers;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.validation.RequiredFieldValidator;
+import edu.wpi.TeamE.databases.NodeDB;
+import edu.wpi.TeamE.databases.RequestsDB;
 import edu.wpi.TeamE.databases.makeConnection;
 
 import javafx.collections.FXCollections;

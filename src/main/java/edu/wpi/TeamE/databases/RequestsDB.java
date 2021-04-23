@@ -841,4 +841,14 @@ public class RequestsDB {
 		}
 		return listOfLongNames;
 	}
+
+	/**
+	 * gets a list of available assignees based on the userType given
+	 * @param userType is type of user (i.e. "nurse", "EMT", "doctor", etc.)
+	 * @return a list of possible assignees for the specific request type
+	 */
+	public static ArrayList<String> getAvailableAssignees(String userType) {
+		return null;
+	}
+
 }

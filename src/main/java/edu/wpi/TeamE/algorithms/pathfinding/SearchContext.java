@@ -51,7 +51,7 @@ public class SearchContext {
         search.setType(constraint);
     }
 
-    public Path search(String startNode, String endNode){
+    public Path search(Object startNode, Object endNode){
         return save(search.search(startNode, endNode));
     }
 

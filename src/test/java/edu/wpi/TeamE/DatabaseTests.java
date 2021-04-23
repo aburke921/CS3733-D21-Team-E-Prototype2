@@ -32,7 +32,7 @@ public class DatabaseTests {
 
 
 		try {
-			connection.deleteAllTables(/*connection.getTablesToThatExist()*/);
+			connection.deleteAllTables();
 //			System.out.println("Tables were reset");
 		} catch (Exception e) {
 			//e.printStackTrace();
@@ -46,6 +46,8 @@ public class DatabaseTests {
 		RequestsDB.createExtTransportTable();
 		RequestsDB.createMedDeliveryTable();
 		RequestsDB.createSecurityServTable();
+		appointmentDB.createAppointmentTable();
+		appointmentDB.createDoctorExaminesAdmissionTable();
 //		System.out.println("Tables were created");
 	}
 

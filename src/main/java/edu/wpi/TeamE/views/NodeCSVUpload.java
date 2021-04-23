@@ -128,6 +128,8 @@ public class NodeCSVUpload {
             RequestsDB.createExtTransportTable();
             RequestsDB.createMedDeliveryTable();
             RequestsDB.createSecurityServTable();
+            appointmentDB.createAppointmentTable();
+            appointmentDB.createDoctorExaminesAdmissionTable();
             csvDB.populateTable("node", file);
             csvDB.populateTable("hasEdge", saveEdges);
             System.out.println("Some edges might be removed because their nodes are no longer here");

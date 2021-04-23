@@ -708,6 +708,8 @@ public class MapEditor {
             RequestsDB.createExtTransportTable();
             RequestsDB.createMedDeliveryTable();
             RequestsDB.createSecurityServTable();
+            appointmentDB.createAppointmentTable();
+            appointmentDB.createDoctorExaminesAdmissionTable();
             csvDB.populateTable("node", file);
             csvDB.populateTable("hasEdge", saveEdges);
             System.out.println("Success");

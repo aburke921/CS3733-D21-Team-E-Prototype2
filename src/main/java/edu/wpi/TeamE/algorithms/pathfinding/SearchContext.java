@@ -79,7 +79,9 @@ public class SearchContext {
         if(algo.equalsIgnoreCase("A*")){
             return new Searcher();
         } else if(algo.equalsIgnoreCase("DFS")){
-            return new DFSSearcher();
+            return new XFirstSearcher("DFS");
+        } else if(algo.equalsIgnoreCase("BFS")){
+            return new XFirstSearcher("BFS");
         } else {
             return null;
         }

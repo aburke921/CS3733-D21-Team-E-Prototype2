@@ -131,3 +131,9 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
     -fx-fill: white;
     -fx-stroke: white;
 }
+
+/*todo style centerPane
+
+/*.centerPane {*/
+/*    -fx-background-color: red;*/
+/*}*/

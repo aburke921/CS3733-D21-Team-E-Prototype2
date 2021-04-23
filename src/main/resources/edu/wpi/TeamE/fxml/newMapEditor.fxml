@@ -7,6 +7,7 @@
 <?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
@@ -135,33 +136,46 @@
                 <Insets top="10.0" />
             </VBox.margin>
             <children>
-                <StackPane fx:id="stackPane" prefHeight="708.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <children>
-                        <BorderPane fx:id="rootBorderPane" prefHeight="622.0" prefWidth="1101.0">
-                     <right>
-                        <AnchorPane prefHeight="627.0" prefWidth="186.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <JFXComboBox layoutX="49.0" layoutY="163.0" prefHeight="27.0" prefWidth="106.0" promptText="Floor" />
-                              <JFXComboBox layoutX="49.0" layoutY="200.0" prefHeight="27.0" prefWidth="106.0" promptText="ID" />
-                              <JFXComboBox layoutX="49.0" layoutY="237.0" prefHeight="27.0" prefWidth="106.0" promptText="Building" />
-                              <JFXComboBox layoutX="50.0" layoutY="276.0" prefHeight="27.0" prefWidth="107.0" promptText="Type" />
-                              <JFXTextField layoutX="48.0" layoutY="51.0" prefHeight="27.0" prefWidth="110.0" promptText="Short Name" />
-                              <JFXTextField layoutX="48.0" layoutY="14.0" prefHeight="27.0" prefWidth="110.0" promptText="Long Name" />
-                              <JFXTextField layoutX="48.0" layoutY="87.0" prefHeight="27.0" prefWidth="110.0" promptText="X Cord" />
-                              <JFXTextField layoutX="48.0" layoutY="123.0" prefHeight="27.0" prefWidth="110.0" promptText="Y Cord" />
-                              <JFXButton fx:id="floorChanger2" layoutX="62.0" layoutY="329.0" onAction="#nextFloor" styleClass="submit-button" text="Add Node" />
-                              <JFXButton fx:id="floorChanger3" layoutX="62.0" layoutY="380.0" onAction="#nextFloor" styleClass="submit-button" text="Edit Node" />
-                              <JFXButton fx:id="floorChanger31" layoutX="56.0" layoutY="432.0" onAction="#nextFloor" styleClass="submit-button" text="Delete Node" />
-                           </children>
-                        </AnchorPane>
-                     </right></BorderPane>
-                    </children>
-                </StackPane>
+            <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                      <StackPane fx:id="stackPane" prefHeight="708.0" prefWidth="1200.0">
+                          <children>
+                        <TreeTableView fx:id="edgeTreeTable" prefHeight="200.0" prefWidth="200.0">
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </TreeTableView>
+                        <TreeTableView fx:id="nodeTreeTable" prefHeight="200.0" prefWidth="200.0">
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </TreeTableView>
+                              <BorderPane fx:id="rootBorderPane" prefHeight="169.0" prefWidth="979.0">
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </BorderPane>
+                          </children>
+                      </StackPane>
+                  <VBox prefHeight="628.0" prefWidth="459.0">
+                     <children>
+                        <JFXTextField text="test">
+                           <VBox.margin>
+                              <Insets top="30.0" />
+                           </VBox.margin>
+                        </JFXTextField>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="lowerAnchorPane" prefHeight="150.0" prefWidth="1200.0">
+        <AnchorPane fx:id="lowerAnchorPane" prefHeight="59.0" prefWidth="1244.0">
             <children>
                 <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" onAction="#toDefault" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
+            <JFXButton layoutX="256.0" layoutY="16.0" onAction="#toNodeTable" text="Nodes" />
+            <JFXButton layoutX="129.0" layoutY="17.0" onAction="#toMap" text="Map" />
+            <JFXButton layoutX="373.0" layoutY="17.0" onAction="#toEdgeTable" text="Edges" />
             </children>
         </AnchorPane>
     </children>

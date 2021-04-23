@@ -111,11 +111,6 @@
                         <Insets left="20.0" top="20.0" />
                      </HBox.margin>
                   </JFXSlider>
-                  <JFXButton fx:id="directionsButton" onAction="#showDirections" styleClass="submit-button" text="Detailed Directions">
-                     <HBox.margin>
-                        <Insets left="15.0" top="10.0" />
-                     </HBox.margin>
-                  </JFXButton>
                     </children>
                 </HBox>
          </children>
@@ -125,11 +120,37 @@
             <Insets top="10.0" />
          </VBox.margin>
          <children>
-            <StackPane fx:id="stackPane" prefHeight="708.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <BorderPane fx:id="rootBorderPane" />
+                  <StackPane fx:id="stackPane" HBox.hgrow="ALWAYS">
+                     <children>
+                        <BorderPane fx:id="rootBorderPane" />
+                     </children>
+                  </StackPane>
+                  <VBox alignment="TOP_CENTER" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" HBox.hgrow="NEVER">
+                     <children>
+                        <JFXButton fx:id="directionsButton" onAction="#showDirections" styleClass="submit-button" text="Detailed Directions">
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                        <HBox alignment="CENTER" prefHeight="27.0" prefWidth="150.0">
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label fx:id="minETA" alignment="CENTER_RIGHT" maxWidth="18.0" minWidth="18.0" prefWidth="18.0" />
+                              <Label contentDisplay="CENTER" maxWidth="6.0" minWidth="6.0" prefWidth="6.0" text=" : " />
+                              <Label fx:id="secETA" maxWidth="18.0" minWidth="18.0" prefWidth="18.0" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
                </children>
-            </StackPane>
+            </HBox>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="lowerAnchorPane" prefHeight="150.0" prefWidth="1200.0">

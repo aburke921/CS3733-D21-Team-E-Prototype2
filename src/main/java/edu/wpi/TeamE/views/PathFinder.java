@@ -96,6 +96,11 @@ public class PathFinder {
     @FXML // fx:id="lowerAnchorPane"
     private AnchorPane lowerAnchorPane; // Value injected by FXMLLoader
 
+    @FXML // fx:id="minETA"
+    private Label minETA;
+    @FXML // fx:id="secETA"
+    private Label secETA;
+
     /*
      * Additional Variables
      */
@@ -281,6 +286,9 @@ public class PathFinder {
                 // Set map image to starting floor
                 String startFloor = foundPath.peek().get("floor");
                 setCurrentFloor(startFloor);
+
+                minETA.setText(Integer.toString(foundPath.getETA().getMin()));
+                secETA.setText(Integer.toString(foundPath.getETA().getSec()));
 
                 //save found path for when floors are switched
                 currentFoundPath = foundPath;
@@ -514,7 +522,8 @@ public class PathFinder {
         imageView.setImage(image);
 
         imageView.setPreserveRatio(true);
-        imageView.setFitWidth(primaryStage.getWidth());
+        imageView.setFitWidth(primaryStage.getWidth() - 150);
+        //TODO: fix this, make map dynamic
 
         StackPane stackPane = new StackPane(imageView, borderPane);
         ScrollPane scrollPane = new ScrollPane(new Group(stackPane));

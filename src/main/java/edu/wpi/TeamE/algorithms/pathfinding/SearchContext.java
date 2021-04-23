@@ -55,8 +55,8 @@ public class SearchContext {
         return save(search.search(startNode, endNode));
     }
 
-    public Path search(Collection<String> stopIds){
-        return save(search.search(stopIds));
+    public Path search(List stops){
+        return save(search.search(stops));
     }
 
     public Path searchAlongPath(Path route, String stopType){

@@ -767,8 +767,42 @@ public class RequestsDB {
 			rset.close();
 
 		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("getRequestInfo() error in the try/catch");
+			//e.printStackTrace();
+			System.err.println("getRequestInfo() got a SQLException");
+		}
+		return listOfInfo;
+	}
+
+	/**
+	 * Gets a list of all the "creatorIDs", "requestIDs", or "requestStatus" from the requests with the given type assigned to the given userID
+	 * @param tableType this is the name of the table that we are getting the info from
+	 * @param userID    this is the ID of the user who made the request
+	 * @param infoType  this is the type of information that is being retrieved
+	 * @return an ArrayList<String> with the desired info
+	 */
+	public static ArrayList<String> getMyAssignedRequestInfo(String tableType, int userID, String infoType) {
+
+		ArrayList<String> listOfInfo = new ArrayList<>();
+
+		String query;
+		if (userID >= -1) {
+			query = "Select " + infoType + " from requests where requestType = '" + tableType + "' and assigneeID = " + userID;
+		} else {
+			query = "Select " + infoType + " From requests where requestType = '" + tableType + "'";
+		}
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			while (rset.next()) {
+				String ID = rset.getString(infoType); //potential issue
+				listOfInfo.add(ID);
+			}
+			rset.close();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getRequestInfo() got a SQLException");
 		}
 
 		return listOfInfo;

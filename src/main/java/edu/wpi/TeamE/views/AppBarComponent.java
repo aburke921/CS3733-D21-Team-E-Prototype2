@@ -32,9 +32,6 @@ public class AppBarComponent {
     @FXML
     private VBox mainVBox;
 
-//    @FXML // fx:id="appBarAnchorPane"
-//    private AnchorPane appBarAnchorPane; // Value injected by FXMLLoader
-
     @FXML // fx:id="fullscreen"
     private Rectangle fullscreen; // Value injected by FXMLLoader
 
@@ -103,20 +100,18 @@ public class AppBarComponent {
         assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
         assert appBarTitleLabel != null : "fx:id=\"appBarTitleLabel\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
 
-        boolean showHelp = false; //todo code this into app
-        boolean loggedIn = true;
-        //todo add option for logged in user with and without help
 
-        if (!showHelp) { //if help button shouldn't be shown
+        //todo add option for logged in user with and without help
+        if (!App.isShowHelp()) { //if help button shouldn't be shown
             appBarHelpButton.setVisible(false); //remove help button
             appLoginButtonLeft.setVisible(false); //remove left login button
-            if (loggedIn) { //if a user is logged in, hide remaining login button
+            if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 //todo show currently logged in user? a log out button?
                 appLoginButton.setVisible(false); //hide remaining login button
             }
         } else {
             appLoginButton.setVisible(false); //remove right login button
-            if (loggedIn) { //if a user is logged in, hide remaining login button
+            if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 //same todo as above
                 appLoginButtonLeft.setVisible(false);
             }

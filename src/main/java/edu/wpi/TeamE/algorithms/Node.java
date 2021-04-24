@@ -11,7 +11,7 @@ import java.util.List;
  * Node Class, lots of specific Node implementation stuff
  * Handles node info
  */
-public class Node implements Comparable<Node>, Iterable<Node> {
+public class Node implements Comparable<Node> {
     private int xCoord, yCoord, zCoord;
     //mapping of node information
     private HashMap<String, String> nodeInfo;
@@ -56,7 +56,7 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         yCoord = _y;
         zCoord = calculateZ(_floor);
     }
-    public int calculateZ(String floor) {
+    public static int calculateZ(String floor) {
         //floor HashMap
         HashMap<String, Integer> floorMap = new HashMap<String, Integer>(){{
             put("L2", 0);
@@ -102,8 +102,6 @@ public class Node implements Comparable<Node>, Iterable<Node> {
     public int getZ(){
         return zCoord;
     }
-
-
 
     /**
      * cost is used in pathfinding to evaluate if this node is worth being part of the path
@@ -155,7 +153,16 @@ public class Node implements Comparable<Node>, Iterable<Node> {
      * @return true if the two nodes 'id's  are equal
      */
     public boolean equals(Node n){
-        return get("id").equalsIgnoreCase(n.get("id"));
+        if(nodeInfo == null && n.nodeInfo == null){
+            //two pathHeads, equal
+            return true;
+        } else if(nodeInfo == null || n.nodeInfo == null){
+            //one pathHead but not two, not equal
+            return false;
+        } else {
+            //no pathHeads, equal if ids are equal
+            return get("id").equalsIgnoreCase(n.get("id"));
+        }
     }
 
     /**
@@ -177,32 +184,6 @@ public class Node implements Comparable<Node>, Iterable<Node> {
         return get("id").hashCode();
     }
 
-    /**
-     * @return an iterator for iterating through Paths
-     */
-    @Override
-    public Iterator<Node> iterator() {
-        return new NodeIterator(this);
-    }
-
-    private class NodeIterator implements Iterator<Node> {
-        Node cursor;
-        private NodeIterator(Node _cursor){
-            cursor = _cursor;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return cursor != null;
-        }
-
-        @Override
-        public Node next() {
-            Node tmp = cursor;
-            cursor = cursor.getNext();
-            return tmp;
-        }
-    }
 
     /**
      * Calculate the euclidean distance between two nodes

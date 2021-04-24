@@ -47,7 +47,7 @@ public class DatabaseTests {
 		RequestsDB.createMedDeliveryTable();
 		RequestsDB.createSecurityServTable();
 		appointmentDB.createAppointmentTable();
-		appointmentDB.createDoctorExaminesAdmissionTable();
+
 //		System.out.println("Tables were created");
 	}
 

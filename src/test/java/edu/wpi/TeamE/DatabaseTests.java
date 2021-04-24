@@ -940,6 +940,35 @@ public class DatabaseTests {
 
 	}
 
+	@Test
+	@DisplayName("testAddAppointment")
+	public void testAddAppointment(){
+
+		NodeDB.addNode("ADEPT00101",1401,2628,"1","BTM","DEPT","Neuroscience Waiting Room","Neuro Waiting Room");
+
+		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+		int rowsAffected1 = appointmentDB.addAppointment(1, 400, 400, 2);
+		int rowsAffected2 = appointmentDB.addAppointment(2, 400, 400, 2);
+
+		int totalRowsAffected = rowsAffected1 + rowsAffected2;
+		assertEquals(2, totalRowsAffected);
+	}
+
+	@Test
+	@DisplayName("testAddAppointment")
+	public void testAddRemovedPatientAppointmentHistory(){
+
+		NodeDB.addNode("ADEPT00101",1401,2628,"1","BTM","DEPT","Neuroscience Waiting Room","Neuro Waiting Room");
+
+		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+		appointmentDB.addAppointment(1, 400, 400, 2);
+		appointmentDB.addAppointment(2, 400, 400, 2);
+
+		csvDB.addRemovedPatientAppointmentHistory(1);
+
+	}
 
 
 

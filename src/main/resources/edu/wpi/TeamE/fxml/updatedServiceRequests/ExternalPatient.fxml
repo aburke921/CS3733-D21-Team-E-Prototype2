@@ -89,7 +89,7 @@
                <center>
                   <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="785.0" BorderPane.alignment="CENTER">
                      <children>
-                        <VBox minHeight="0.0" minWidth="100.0" prefHeight="582.0" prefWidth="1089.0">
+                        <VBox maxWidth="600.0" prefHeight="582.0" prefWidth="1200.0">
                            <children>
                               <HBox maxWidth="600.0" prefHeight="501.0" prefWidth="600.0" styleClass="centerPane">
                                  <children>

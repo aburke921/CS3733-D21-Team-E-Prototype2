@@ -29,7 +29,7 @@ public class UserAccountDB {
 				"lastName  Varchar(31)," +
 				"creationTime Timestamp, " +
 				"Constraint userIDLimit Check ( userID != 0 )," +
-				"Constraint passwordLimit Check (Length(password) >= 8 )," +
+				// "Constraint passwordLimit Check (Length(password) >= 8 )," +
 				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {

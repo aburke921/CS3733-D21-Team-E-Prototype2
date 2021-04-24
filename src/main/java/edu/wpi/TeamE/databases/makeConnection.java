@@ -271,10 +271,14 @@ public class makeConnection {
 
 
 		//SuperAdmin:
-		String insertUser = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP )";
+		String insertUser1 = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP)";
+		String insertUser2 = "Insert Into userAccount Values (-99, 'admin', 'admin', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP)";
+		String insertUser3 = "Insert Into userAccount Values (100, 'staff', 'staff', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP)";
 		try {
 			Statement stmt = connection.createStatement();
-			stmt.executeUpdate(insertUser);
+			stmt.executeUpdate(insertUser1);
+			stmt.executeUpdate(insertUser2);
+			stmt.executeUpdate(insertUser3);
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

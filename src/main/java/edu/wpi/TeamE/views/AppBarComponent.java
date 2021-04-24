@@ -116,6 +116,12 @@ public class AppBarComponent {
                 appLoginButtonLeft.setVisible(false);
             }
         }
+        if (!App.isShowLogin()) { //if no login should be shown
+            //remove login buttons
+            appLoginButtonLeft.setVisible(false);
+            appLoginButton.setVisible(false);
+
+        }
         /*
          * Sets the App bar top left title text.
          * Must be set by the App class setter. If none was set, none will be printed

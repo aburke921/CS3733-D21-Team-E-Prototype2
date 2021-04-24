@@ -77,6 +77,7 @@ public class makeConnection {
 
 		try {
 			Statement stmt = this.connection.createStatement();
+			stmt.execute("Drop Table appointment");
 			stmt.execute("Drop Table securityServ");
 			stmt.execute("Drop Table medDelivery");
 			stmt.execute("Drop Table extTransport");

@@ -48,7 +48,9 @@ public class DatabaseTests {
 		RequestsDB.createExtTransportTable();
 		RequestsDB.createMedDeliveryTable();
 		RequestsDB.createSecurityServTable();
-		System.out.println("Tables were created");
+		appointmentDB.createAppointmentTable();
+
+//		System.out.println("Tables were created");
 	}
 
 	@Test
@@ -81,18 +83,6 @@ public class DatabaseTests {
 		assertTrue(testNode1.equals(testNode2));
 	}
 
-
-	@Test
-	@DisplayName("testGetNodeLite")
-	public void testGetNodeLite() {
-		NodeDB.addNode("test233", 22, 33, "1", "BTM", "WALK", "long", null);
-
-		Node testNode1 = new Node("test233", 22, 33, "1", "BTM", "WALK", "long", null);
-
-		Node testNode2 = NodeDB.getNodeLite("test233");
-
-		assertTrue(testNode1.equals(testNode2));
-	}
 
 	@Test
 	@DisplayName("testGetEdgeInfo")
@@ -201,142 +191,6 @@ public class DatabaseTests {
 
 		assertTrue(allCorrect);
 
-	}
-
-
-	@Test
-	@DisplayName("testGetAllNodesByFloor: 2 nodes with the given floor")
-	public void testGetAllNodesByFloor() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "PARK", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "PARK", "longName2", "shortName2");
-
-		ArrayList<Node> nodes = NodeDB.getAllNodesByFloor("1");
-
-		ArrayList<Node> correctNodes = new ArrayList<>();
-		Node node1 = new Node("nodeID1", 0, 0, "1", "Tower", "PARK", "longName1", "shortName1");
-		Node node2 = new Node("nodeID2", 1, 0, "1", "Tower", "PARK", "longName2", "shortName2");
-
-		correctNodes.add(node1);
-		correctNodes.add(node2);
-
-		boolean allCorrect = true;
-		boolean nodeID = false;
-		boolean xCoord = false;
-		boolean yCoord = false;
-		boolean floor = false;
-		boolean building = false;
-		boolean nodeType = false;
-		boolean longName = false;
-		boolean shortName = false;
-
-		if (nodes.size() == correctNodes.size()) {
-			for (int node = 0; node < nodes.size(); node++) {
-				Node returnedNode = nodes.get(node);
-				Node correctNode = correctNodes.get(node);
-				if (returnedNode.get("id").equals(correctNode.get("id"))) {
-					nodeID = true;
-				}
-				if (returnedNode.getX() == correctNode.getX()) {
-					xCoord = true;
-				}
-				if (returnedNode.getY() == correctNode.getY()) {
-					yCoord = true;
-				}
-				if (returnedNode.get("floor").equals(correctNode.get("floor"))) {
-					floor = true;
-				}
-				if (returnedNode.get("building").equals(correctNode.get("building"))) {
-					building = true;
-				}
-				if (returnedNode.get("type").equals(correctNode.get("type"))) {
-					nodeType = true;
-				}
-				if (returnedNode.get("longName").equals(correctNode.get("longName"))) {
-					longName = true;
-				}
-				if (returnedNode.get("shortName").equals(correctNode.get("shortName"))) {
-					shortName = true;
-				}
-				if (nodeID && xCoord && yCoord && floor && building && nodeType && longName && !shortName) {
-					allCorrect = false;
-				}
-			}
-		} else {
-			allCorrect = false;
-		}
-
-		assertTrue(allCorrect);
-	}
-
-	@Test
-	@DisplayName("testGetAllNodesByFloor: no nodes with the given floor")
-	public void testGetAllNodesByFloor2() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-		NodeDB.addNode("nodeID3", 3, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
-
-		ArrayList<Node> nodes = NodeDB.getAllNodesByFloor("3");
-
-		assertEquals(0, nodes.size());
-	}
-
-
-	@Test
-	@DisplayName("testGetAllNodeLongNamesByFloor: 2 nodes with the given floor")
-	public void testGetAllNodeLongNamesByFloor() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-
-		ObservableList<String> longNames = NodeDB.getAllNodeLongNamesByFloor("1");
-
-		ObservableList<String> correctLongNames = FXCollections.observableArrayList();
-
-		correctLongNames.add("longName1");
-		correctLongNames.add("longName2");
-
-		assertEquals(longNames, correctLongNames);
-
-	}
-
-	@Test
-	@DisplayName("testGetAllNodeLongNamesByFloor: no nodes with the given floor")
-	public void testGetAllNodeLongNamesByFloor2() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-		NodeDB.addNode("nodeID3", 0, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
-
-		ObservableList<String> longNames = NodeDB.getAllNodeLongNamesByFloor("3");
-
-		assertEquals(0, longNames.size());
-	}
-
-	@Test
-	@DisplayName("testGetListOfNodeIDSByFloor: 2 nodes with the given floor")
-	public void testGetListOfNodeIDSByFloor() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-
-		ArrayList<String> nodeIDs = NodeDB.getListOfNodeIDSByFloor("1");
-
-		ArrayList<String> correctNodeIDs = new ArrayList<>();
-
-		correctNodeIDs.add("nodeID1");
-		correctNodeIDs.add("nodeID2");
-
-		assertEquals(nodeIDs, correctNodeIDs);
-	}
-
-	@Test
-	@DisplayName("testGetListOfNodeIDSByFloor: no nodes with the given floor")
-	public void testGetListOfNodeIDSByFloor2() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-		NodeDB.addNode("nodeID3", 3, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
-
-		ArrayList<String> nodeIDs = NodeDB.getListOfNodeIDSByFloor("3");
-
-
-		assertEquals(0, nodeIDs.size());
 	}
 
 
@@ -498,7 +352,7 @@ public class DatabaseTests {
 
 		testResult = EdgeDB.deleteEdge("testEdge1", "testEdge2");
 
-		System.out.println(testResult);
+//		System.out.println(testResult);
 
 		assertEquals(0, testResult);
 	}
@@ -806,8 +660,8 @@ public class DatabaseTests {
 		correctLocations.add("long name #1");
 		correctLocations.add("long name #2");
 
-		for(String e: returnedLocations)
-			System.out.println(e);
+//		for(String e: returnedLocations)
+//			System.out.println(e);
 
 		assertTrue(correctLocations.equals(returnedLocations));
 

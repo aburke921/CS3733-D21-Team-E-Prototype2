@@ -33,6 +33,7 @@ public class PathFindingTests {
             RequestsDB.createExtTransportTable();
             RequestsDB.createMedDeliveryTable();
             RequestsDB.createSecurityServTable();
+            appointmentDB.createAppointmentTable();
             csvDB.populateTable("node", nodes);
             csvDB.populateTable("hasEdge", edges);
             System.out.println("Tables were created");
@@ -46,6 +47,7 @@ public class PathFindingTests {
             RequestsDB.createExtTransportTable();
             RequestsDB.createMedDeliveryTable();
             RequestsDB.createSecurityServTable();
+            appointmentDB.createAppointmentTable();
         }
 
         search = new SearchContext();

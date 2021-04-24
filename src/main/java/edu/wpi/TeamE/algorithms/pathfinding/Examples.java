@@ -29,6 +29,7 @@ public class Examples {
                 RequestsDB.createExtTransportTable();
                 RequestsDB.createMedDeliveryTable();
                 RequestsDB.createSecurityServTable();
+                appointmentDB.createAppointmentTable();
                 csvDB.populateTable("node", nodes);
                 csvDB.populateTable("hasEdge", edges);
 //                csvDB.addDataForPresentation();

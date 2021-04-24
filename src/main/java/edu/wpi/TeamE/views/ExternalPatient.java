@@ -79,7 +79,7 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
     @FXML // fx:id="exit"
     private Polygon exit;
 
-    makeConnection connection = makeConnection.makeConnection();
+
     RequiredFieldValidator validator = new RequiredFieldValidator();
     /**
      * todo This function will cause a pop-up modal to appear with help information for this form's fields

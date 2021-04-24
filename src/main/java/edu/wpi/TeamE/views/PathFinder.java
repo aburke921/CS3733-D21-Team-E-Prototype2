@@ -45,6 +45,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
+
 public class PathFinder {
 
     // TODO: Floor Change Count
@@ -217,18 +219,20 @@ public class PathFinder {
         if (currentFoundPath == null) return;
 
         List<String> directions = currentFoundPath.makeDirectionsWithDist();
-        StringBuilder directionsStringBuilder = new StringBuilder();
-        for (String dir: directions) {
-            System.out.println(dir);
-            directionsStringBuilder.append(dir).append(".\n"); //todo make scrollable
+        ListView<String> listView = new ListView<>();
+        for (String dir : directions) {
+            listView.getItems().add(dir);
         }
-        //make popup
+        listView.setPrefHeight(USE_COMPUTED_SIZE);
+
         JFXDialogLayout error = new JFXDialogLayout();
         error.setHeading(new Text("Detailed Path Directions"));
-        error.setBody(new Text(directionsStringBuilder.toString()));
+        error.setBody(listView);
+        error.setPrefHeight(USE_COMPUTED_SIZE);
         JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
-        dialog.setMaxWidth(200);
-        dialog.setMaxHeight(300);
+        dialog.setPrefHeight(USE_COMPUTED_SIZE);
+        dialog.setMaxWidth(350);
+        dialog.setMaxHeight(425);
         JFXButton okay = new JFXButton("Done");
         okay.setOnAction(new EventHandler<ActionEvent>() {
             @Override

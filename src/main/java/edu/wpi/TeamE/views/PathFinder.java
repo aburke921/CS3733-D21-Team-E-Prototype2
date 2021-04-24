@@ -20,6 +20,8 @@ import edu.wpi.TeamE.algorithms.pathfinding.*;
 import edu.wpi.TeamE.databases.*;
 
 import edu.wpi.TeamE.App;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -42,6 +44,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -49,10 +52,6 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class PathFinder {
 
-    // TODO: Floor Change Count
-    // TODO: Clean up UI
-    // TODO: Make page fully dynamic
-    // TODO: Directions are sad
 
     /*
      * FXML Values
@@ -598,7 +597,6 @@ public class PathFinder {
         //get rid of side scroll bars
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
         //bind the zoom slider to the map
         stackPane.scaleXProperty().bind(zoomSlider.valueProperty());
         stackPane.scaleYProperty().bind(zoomSlider.valueProperty());
@@ -606,6 +604,36 @@ public class PathFinder {
         rootBorderPane.setCenter(scrollPane);
         rootBorderPane.setPrefWidth(stageWidth);
         rootBorderPane.setPrefHeight(stageHeight);
+
+        scrollPane.vvalueProperty().bind(new DoubleBinding() {
+            {
+                super.bind(scrollPane.heightProperty(), zoomSlider.valueProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                double size = scrollPane.getVmax() - scrollPane.getVmin();
+                double zoomAdj = zoomSlider.getValue();
+                double zoomMax = zoomSlider.getMax();
+                double scale = zoomAdj/zoomMax;
+                return size * scale + scrollPane.getVmin();
+            }
+        });
+
+        scrollPane.hvalueProperty().bind(new DoubleBinding() {
+            {
+                super.bind(scrollPane.widthProperty(), zoomSlider.valueProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                double size = scrollPane.getHmax() - scrollPane.getHmin();
+                double zoomAdj = zoomSlider.getValue();
+                double zoomMax = zoomSlider.getMax();
+                double scale = zoomAdj/zoomMax;
+                return size * scale + scrollPane.getVmin();
+            }
+        });
 
         System.out.println("Finish PathFinder Init.");
     }
@@ -623,3 +651,5 @@ public class PathFinder {
         currFloor.setText(currentFloor);
     }
 }
+
+

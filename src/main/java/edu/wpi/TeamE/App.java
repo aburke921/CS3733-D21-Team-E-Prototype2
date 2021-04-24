@@ -1,5 +1,8 @@
 package edu.wpi.TeamE;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -9,6 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -21,7 +26,17 @@ public class App extends Application {
 	public static int userID = 0;
 	private static Stage primaryStage;
 	private static String pageTitle; //Title for the currently displayed page, set by AppBarComponent
+	private static String helpText;
+	private static StackPane stackPane;
 
+
+	public static String getHelpText() {
+		return helpText;
+	}
+
+	public static void setHelpText(String helpText) {
+		App.helpText = helpText;
+	}
 
 	//get the current page's app title.
 	public static String getPageTitle() {
@@ -33,12 +48,43 @@ public class App extends Application {
 		App.pageTitle = pageTitle;
 	}
 
+	/**
+	 *
+	 * @param message Message to display in the dialog box
+	 * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
+	 */
+	public static void newJFXDialogPopUp(String heading, String button, String message, StackPane stackPane) {
+		System.out.println("DialogBox Posted");
+		JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+		jfxDialogLayout.setHeading(new Text(heading));
+		jfxDialogLayout.setBody(new Text(message));
+		JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+		JFXButton okay = new JFXButton(button);
+		okay.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				dialog.close();
+
+			}
+		});
+		jfxDialogLayout.setActions(okay);
+		dialog.show();
+	}
+
 
 
 	private double x, y;
 
 	public static void setPrimaryStage(Stage primaryStage) {
 		App.primaryStage = primaryStage;
+	}
+
+	public static StackPane getStackPane() {
+		return stackPane;
+	}
+
+	public static void setStackPane(StackPane stackPane) {
+		App.stackPane = stackPane;
 	}
 
 

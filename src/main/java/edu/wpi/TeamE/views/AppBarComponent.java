@@ -51,7 +51,8 @@ public class AppBarComponent {
     private JFXButton appBarHelpButton; // Value injected by FXMLLoader
 
     @FXML
-    void getHelpDefault(ActionEvent event) {
+    void getHelpAppBar(ActionEvent event) {
+        App.newJFXDialogPopUp(App.getPageTitle() + " Help","Close",App.getHelpText(),App.getStackPane());
         //add the help button only on certain pages
     }
 

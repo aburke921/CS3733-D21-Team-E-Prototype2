@@ -63,7 +63,7 @@
                   <Insets right="30.0" />
                </padding>
                <children>
-                  <JFXButton fx:id="appBarHelpButton" onAction="#getHelpDefault" style="-fx-background-color: -fx--primary-dark;" text="Help" textFill="WHITE" />
+                  <JFXButton fx:id="appBarHelpButton" onAction="#getHelpAppBar" style="-fx-background-color: -fx--primary-dark;" text="Help" textFill="WHITE" />
                </children>
             </FlowPane>
          </children>

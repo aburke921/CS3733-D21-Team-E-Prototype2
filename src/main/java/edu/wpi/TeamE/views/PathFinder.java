@@ -471,6 +471,10 @@ public class PathFinder {
         javafx.scene.Node appBarComponent = null;
         try {
             App.setPageTitle("Path Finder"); //set AppBar title
+            App.setHelpText("To use the pathfinder, first select a starting location and end location you would like " +
+                    "to find the paths to.\n You may search to find what you are looking for as well. " +
+                    "\n..."); //todo add help text for pathfinding
+            App.setStackPane(stackPane);
             appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));
             appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's sideBarVBox element
         } catch (IOException e) {

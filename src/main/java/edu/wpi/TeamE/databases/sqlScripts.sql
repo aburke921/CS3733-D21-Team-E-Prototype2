@@ -49,7 +49,7 @@ Create Table userAccount (
                              firstName Varchar(31),
                              lastName  Varchar(31),
                              Constraint userIDLimit Check ( userID != 0 ),
-                             Constraint passwordLimit Check (Length(password) >= 8 ),
+                             -- Constraint passwordLimit Check (Length(password) >= 8 ),
                              Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin'))
 );
 

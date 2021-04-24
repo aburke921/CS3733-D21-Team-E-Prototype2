@@ -6,20 +6,34 @@ package edu.wpi.TeamE.views;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import com.jfoenix.controls.JFXButton;
+import edu.wpi.TeamE.App;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 public class AppBarComponent {
 
+
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
+
+    @FXML
+    private VBox mainVBox;
+
+//    @FXML // fx:id="appBarAnchorPane"
+//    private AnchorPane appBarAnchorPane; // Value injected by FXMLLoader
 
     @FXML // fx:id="fullscreen"
     private Rectangle fullscreen; // Value injected by FXMLLoader
@@ -33,9 +47,24 @@ public class AppBarComponent {
     @FXML // fx:id="appBarTitleLabel"
     private Label appBarTitleLabel; // Value injected by FXMLLoader
 
+    @FXML // fx:id="appBarHelpButton"
+    private JFXButton appBarHelpButton; // Value injected by FXMLLoader
+
     @FXML
     void getHelpDefault(ActionEvent event) {
         //add the help button only on certain pages
+    }
+
+    //If exit button is clicked, exit app
+    @FXML
+    void exit(MouseEvent event) {
+        App app = new App();
+        app.stop();
+    }
+
+    public void setAppBarTitleLabel(String title) {
+//        appBarTitleLabel.setText("");
+        this.appBarTitleLabel.setText(title);
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -46,7 +75,17 @@ public class AppBarComponent {
         assert appBarTitleLabel != null : "fx:id=\"appBarTitleLabel\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
 
         //todo, get text from somewhere and set it
-        //appBarTitleLabel.setText();
+        if (App.getPageTitle() != null) { //if pageTitle is set
+            appBarTitleLabel.setText(App.getPageTitle());
+        }
+
+
+        //make responsive to parent
+        AnchorPane.setBottomAnchor(mainVBox, 0.0);
+        AnchorPane.setRightAnchor(mainVBox, 0.0);
+        AnchorPane.setLeftAnchor(mainVBox, 0.0);
+        AnchorPane.setTopAnchor(mainVBox, 0.0);
+
 
     }
 }

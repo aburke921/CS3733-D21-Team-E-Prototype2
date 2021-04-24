@@ -20,6 +20,19 @@ public class App extends Application {
 
 	public static int userID = 0;
 	private static Stage primaryStage;
+	private static String pageTitle;
+
+//	private String pageTitle;
+
+	public static String getPageTitle() {
+		return pageTitle;
+	}
+
+	public static void setPageTitle(String pageTitle) {
+		App.pageTitle = pageTitle;
+	}
+
+
 
 	private double x, y;
 

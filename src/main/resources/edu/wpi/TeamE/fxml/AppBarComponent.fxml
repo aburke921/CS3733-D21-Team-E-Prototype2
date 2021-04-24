@@ -12,7 +12,8 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="app-bar-top" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.AppBarComponent">
+
+<VBox id="app-bar-top" fx:id="mainVBox" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.AppBarComponent">
    <children>
       <HBox id="app-bar-top-upper" maxHeight="25.0" minHeight="25.0" prefHeight="25.0">
          <children>
@@ -24,7 +25,7 @@
                         <Insets bottom="5.0" left="10.0" top="5.0" />
                      </FlowPane.margin>
                   </Circle>
-                  <Polygon fx:id="exit" rotate="180.0" stroke="#00000001" strokeType="INSIDE" styleClass="app-bar-button">
+                  <Polygon fx:id="exit" onMouseClicked="#exit" rotate="180.0" stroke="#00000001" strokeType="INSIDE" styleClass="app-bar-button">
                      <points>
                         <Double fx:value="-7.0" />
                         <Double fx:value="7.0" />
@@ -63,7 +64,7 @@
                   <Insets right="30.0" />
                </padding>
                <children>
-                  <JFXButton onAction="#getHelpDefault" style="-fx-background-color: -fx--primary-dark;" text="Help" textFill="WHITE" />
+                  <JFXButton fx:id="appBarHelpButton" onAction="#getHelpDefault" style="-fx-background-color: -fx--primary-dark;" text="Help" textFill="WHITE" />
                </children>
             </FlowPane>
          </children>

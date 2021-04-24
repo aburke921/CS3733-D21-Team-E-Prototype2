@@ -26,24 +26,38 @@ public class App extends Application {
 	public static int userID = 0;
 	private static Stage primaryStage;
 	private static String pageTitle; //Title for the currently displayed page, set by AppBarComponent
-	private static String helpText;
-	private static StackPane stackPane;
+	private static String helpText; //help text for current page
+	private static StackPane stackPane; //main stack page of current page
 
 
+	/**
+	 * @return String used by {@link edu.wpi.TeamE.views.AppBarComponent} to decide what to put in Help Dialog.
+	 */
 	public static String getHelpText() {
 		return helpText;
 	}
 
+	/**
+	 * Set's help text, used by pages to set help button content.
+	 * @param helpText Paragraph for help text dialog.
+	 */
 	public static void setHelpText(String helpText) {
 		App.helpText = helpText;
 	}
 
-	//get the current page's app title.
+	/**
+	 * @return Gets the current page's app title, for use by {@link edu.wpi.TeamE.views.AppBarComponent}
+	 */
 	public static String getPageTitle() {
 		return pageTitle;
 	}
 
 	//set this for every UI page on which a title is wanted in the App Bar
+
+	/**
+	 * Sets the page title for app bar
+	 * @param pageTitle Short string for page title
+	 */
 	public static void setPageTitle(String pageTitle) {
 		App.pageTitle = pageTitle;
 	}
@@ -79,10 +93,16 @@ public class App extends Application {
 		App.primaryStage = primaryStage;
 	}
 
+	/**
+	 * @return Gets the main stack page of current page
+	 */
 	public static StackPane getStackPane() {
 		return stackPane;
 	}
 
+	/**
+	 * @param stackPane Sets the main stack pane of the current page
+	 */
 	public static void setStackPane(StackPane stackPane) {
 		App.stackPane = stackPane;
 	}

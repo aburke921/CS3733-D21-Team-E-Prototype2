@@ -50,6 +50,12 @@ public class AppBarComponent {
     @FXML // fx:id="appBarHelpButton"
     private JFXButton appBarHelpButton; // Value injected by FXMLLoader
 
+    /**
+     * Called when the "Help" button is placed.
+     * Uses App variables: pageTitle, is heading; helpText, is the text of the help message; stackPane, where dialogBox will be shown.
+     * These app variables must be set (with App class setters) in the init function of the page the appBar is on.
+     * @param event calling event details
+     */
     @FXML
     void getHelpAppBar(ActionEvent event) {
         App.newJFXDialogPopUp(App.getPageTitle() + " Help","Close",App.getHelpText(),App.getStackPane());
@@ -63,11 +69,13 @@ public class AppBarComponent {
         app.stop();
     }
 
+    //Puts application in fullscreen if not already. todo not working on mac
     @FXML
     void fullscreenApplication(MouseEvent event) {
         App.getPrimaryStage().setFullScreen(!App.getPrimaryStage().isFullScreen());
     }
 
+    //Minimizes the app to tray
     @FXML
     void hideApplication(MouseEvent event) {
         App.getPrimaryStage().setIconified(true);
@@ -84,9 +92,13 @@ public class AppBarComponent {
         assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
         assert appBarTitleLabel != null : "fx:id=\"appBarTitleLabel\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
 
-        //todo, get text from somewhere and set it
+        /*
+         * Sets the App bar top left title text.
+         * Must be set by the App class setter. If none was set, none will be printed
+         */
         if (App.getPageTitle() != null) { //if pageTitle is set
             appBarTitleLabel.setText(App.getPageTitle());
+            App.setPageTitle(null);
         }
 
 

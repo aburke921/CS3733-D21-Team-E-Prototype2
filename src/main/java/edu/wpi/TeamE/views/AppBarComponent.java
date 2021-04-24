@@ -50,6 +50,17 @@ public class AppBarComponent {
     @FXML // fx:id="appBarHelpButton"
     private JFXButton appBarHelpButton; // Value injected by FXMLLoader
 
+    @FXML
+    private JFXButton appLoginButton;
+
+    @FXML
+    private JFXButton appLoginButtonLeft;
+
+    @FXML
+    void getLoginAppBar(ActionEvent event) {
+        System.out.println("Login Button Clicked!");
+    }
+
     /**
      * Called when the "Help" button is placed.
      * Uses App variables: pageTitle, is heading; helpText, is the text of the help message; stackPane, where dialogBox will be shown.
@@ -92,13 +103,30 @@ public class AppBarComponent {
         assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
         assert appBarTitleLabel != null : "fx:id=\"appBarTitleLabel\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
 
+        boolean showHelp = false; //todo code this into app
+        boolean loggedIn = true;
+        //todo add option for logged in user with and without help
+
+        if (!showHelp) { //if help button shouldn't be shown
+            appBarHelpButton.setVisible(false); //remove help button
+            appLoginButtonLeft.setVisible(false); //remove left login button
+            if (loggedIn) { //if a user is logged in, hide remaining login button
+                //todo show currently logged in user? a log out button?
+                appLoginButton.setVisible(false); //hide remaining login button
+            }
+        } else {
+            appLoginButton.setVisible(false); //remove right login button
+            if (loggedIn) { //if a user is logged in, hide remaining login button
+                //same todo as above
+                appLoginButtonLeft.setVisible(false);
+            }
+        }
         /*
          * Sets the App bar top left title text.
          * Must be set by the App class setter. If none was set, none will be printed
          */
         if (App.getPageTitle() != null) { //if pageTitle is set
             appBarTitleLabel.setText(App.getPageTitle());
-            App.setPageTitle(null);
         }
 
 

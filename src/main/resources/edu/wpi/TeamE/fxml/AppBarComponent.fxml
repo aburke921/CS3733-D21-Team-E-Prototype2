@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
@@ -63,7 +64,13 @@
                   <Insets right="30.0" />
                </padding>
                <children>
-                  <JFXButton fx:id="appBarHelpButton" onAction="#getHelpAppBar" style="-fx-background-color: -fx--primary-dark;" text="Help" textFill="WHITE" />
+                  <JFXButton fx:id="appLoginButtonLeft" onAction="#getLoginAppBar" style="-fx-background-color: -fx--primary-dark;" text="Login" textFill="WHITE" />
+                  <StackPane prefHeight="38.0" prefWidth="60.0">
+                     <children>
+                        <JFXButton fx:id="appBarHelpButton" onAction="#getHelpAppBar" style="-fx-background-color: -fx--primary-dark;" text="Help" textFill="WHITE" />
+                        <JFXButton fx:id="appLoginButton" onAction="#getLoginAppBar" style="-fx-background-color: -fx--primary-dark;" text="Login" textFill="WHITE" StackPane.alignment="CENTER" />
+                     </children>
+                  </StackPane>
                </children>
             </FlowPane>
          </children>

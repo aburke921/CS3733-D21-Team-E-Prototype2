@@ -146,6 +146,88 @@ public class UserAccountDB {
 		}
 	}
 
+	/**
+	 * This is allows an administrator or someone with access to the database to be able to edit a user account
+	 * with more permissions giving them more access to the certain requests available. This is function should not
+	 * be used while the app is being run.
+	 * @param email     this is the user's email that is connected to the account the are trying to edit
+	 * @param password  this is a password that the user will use to log into the account
+	 * @param userType  this is the type of account that the individual is being assigned to
+	 * @param firstName this is the user's first name that is associated with the account
+	 * @param lastName  this is the user's last name that is associated with the account
+	 */
+	public static int editUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
+		boolean added = false;
+		String query = "update userAccount set ";
+
+		if (email!= null) {
+			query = query + " email = '" + email + "'";
+
+			added = true;
+		}
+		if (password != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + "password = '" + password + "'";
+			added = true;
+		}
+		if (userType != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + "userType = '" + userType + "'";
+			added = true;
+		}
+		if (firstName!= null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + " firstName = '" + firstName + "'";
+
+			added = true;
+		}
+		if (lastName != null) {
+			if (added == true) {
+				query = query + ", ";
+			}
+			query = query + "lastName = '" + lastName + "'";
+		}
+
+		query = query + " where userID = " + userID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating userAccount table");
+			return 0;
+		}
+	}
+
+
+	/**
+	 * This is allows an administrator or someone with access to the database to be able to edit a user account
+	 * with more permissions giving them more access to the certain requests available. This is function should not
+	 * be used while the app is being run.
+	 * @param userID     this is the ID of the user the admin is trying to delete
+
+	 */
+	public static int deleteUserAccount(int userID) {
+		String insertDeleteQuery = "delete from userAccount where userID = ?";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertDeleteQuery)) {
+			prepState.setInt(1, userID);
+			prepState.execute();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error deleting in function deleteUserAccount()");
+			return 0;
+		}
+
+	}
 
 	/**
 	 * Function for logging a user in with their unique email and password

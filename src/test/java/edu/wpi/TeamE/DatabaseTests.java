@@ -470,6 +470,36 @@ public class DatabaseTests {
 
 	}
 
+	@Test
+	@DisplayName("testEditUserAccount")
+	public void testEditUserAccount() {
+		UserAccountDB.addSpecialUserType("test1@gmail.com", "testPassword", "patient", "patientFirstName", "patientLastName");
+		UserAccountDB.addSpecialUserType("test2@gmail.com", "testPassword1", "admin", "adminFirstName", "adminLastName");
+		UserAccountDB.addSpecialUserType("test3@gmail.com", "testPassword2", "doctor", "doctorFirstName", "doctorLastName");
+
+		int affectedRow = UserAccountDB.editUserAccount(1, "edited@gmail.com", null, null, "newFirstName", "newLastName");
+		int affectedRow1 = UserAccountDB.editUserAccount(3, null, "editedPassword", "patient", null, null);
+
+		int totalRowsAffected = affectedRow + affectedRow1;
+
+		assertTrue(totalRowsAffected == 2);
+	}
+
+	@Test
+	@DisplayName("testDeleteUserAccount")
+	public void testDeleteUserAccount() {
+		UserAccountDB.addSpecialUserType("test1@gmail.com", "testPassword", "patient", "patientFirstName", "patientLastName");
+		UserAccountDB.addSpecialUserType("test2@gmail.com", "testPassword1", "admin", "adminFirstName", "adminLastName");
+		UserAccountDB.addSpecialUserType("test3@gmail.com", "testPassword2", "doctor", "doctorFirstName", "doctorLastName");
+
+		int affectedRow = UserAccountDB.deleteUserAccount(1);
+		int affectedRow1 = UserAccountDB.deleteUserAccount(3);
+
+		int totalRowsAffected = affectedRow + affectedRow1;
+
+		assertTrue(totalRowsAffected == 2);
+	}
+
 
 	@Test
 	@DisplayName("testGetRequestStatus")

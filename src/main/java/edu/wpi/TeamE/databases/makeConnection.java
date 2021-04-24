@@ -175,105 +175,115 @@ public class makeConnection {
 
 
 		//Floral Requests: //RequestID: 1-9
-		RequestsDB.addFloralRequest(13,"Amy Castaneda", "ADEPT00101", "Adam", "Roses", 1, "None", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
-		RequestsDB.addFloralRequest(13,"Elsa Figueroa", "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
-		RequestsDB.addFloralRequest(14,"Caroline Sutton", "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Get well soon");
-		RequestsDB.addFloralRequest(15,"Miles Long", "ADEPT00301", "Nikki", "Assortment", 1, "None", "");
-		RequestsDB.addFloralRequest(15,"Hasan Perry", "ADEPT00101", "Monica", "Roses", 6, "Tall", "Love and miss you!!");
-		RequestsDB.addFloralRequest(17,"Caroline Richardson", "DDEPT00102", "Amy", "Tulips", 12, "Square", "Enjoy the flowers");
-		RequestsDB.addFloralRequest(17,"Miles Carroll", "ADEPT00102", "Alfred", "Carnations", 1, "Tall", "Miss you!");
-		RequestsDB.addFloralRequest(19,"Seth Warner", "ADEPT00101", "Caroline", "Assortment", 6, "Round", "Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
-		RequestsDB.addFloralRequest(19,"Darren Rossi", "ADEPT00301", "Carrie", "Assortment", 12, "Round", "");
+		RequestsDB.addFloralRequest(13,21, "ADEPT00101", "Adam", "Roses", 1, "None", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
+		RequestsDB.addFloralRequest(13,22, "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
+		RequestsDB.addFloralRequest(14,23, "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Get well soon");
+		RequestsDB.addFloralRequest(15,24, "ADEPT00301", "Nikki", "Assortment", 1, "None", "");
+		RequestsDB.addFloralRequest(15,25, "ADEPT00101", "Monica", "Roses", 6, "Tall", "Love and miss you!!");
+		RequestsDB.addFloralRequest(17,26, "DDEPT00102", "Amy", "Tulips", 12, "Square", "Enjoy the flowers");
+		RequestsDB.addFloralRequest(17,27, "ADEPT00102", "Alfred", "Carnations", 1, "Tall", "Miss you!");
+		RequestsDB.addFloralRequest(19,20, "ADEPT00101", "Caroline", "Assortment", 6, "Round", "Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
+		RequestsDB.addFloralRequest(19,21, "ADEPT00301", "Carrie", "Assortment", 12, "Round", "");
 
 
-		RequestsDB.editRequests(1, null,  "canceled");
-		RequestsDB.editRequests(4, null, "canceled");
-		RequestsDB.editRequests(5, null, "complete");
-		RequestsDB.editRequests(6, null, "canceled");
-		RequestsDB.editRequests(7, null, "complete");
+		RequestsDB.editRequests(1, 0, "canceled");
+		RequestsDB.editRequests(4, 0, "canceled");
+		RequestsDB.editRequests(5, 0, "complete");
+		RequestsDB.editRequests(6, 0, "canceled");
+		RequestsDB.editRequests(7, 0, "complete");
+
+		// TODO: Why are we dis-assigning people? We should only show inProgress requests anyways
 
 
 		//Sanitation Requests: //RequestID: 10 - 18
-		RequestsDB.addSanitationRequest(20,"Crystal Harvey", "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd");
-		RequestsDB.addSanitationRequest(20,"Minnie Newman", "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium", "Bill Byrd");
-		RequestsDB.addSanitationRequest(24,"Ayla Black", "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High", "Taylor Ramos");
-		RequestsDB.addSanitationRequest(25,"Lenard Jacobs", "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium", "Rosa Smith");
-		RequestsDB.addSanitationRequest(28,"Juan Williams", "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical", "Abby Williams");
-		RequestsDB.addSanitationRequest(30,"May Jimenez", "IREST00203", "Trash Removal", "Trash can smells bad", "Medium", "Alesha Harris");
-		RequestsDB.addSanitationRequest(29,"Herman Bull", "IREST00303", "Trash Removal", "Trash can full. Another one is available so don't rush.", "Low", "Andrew Guerrero");
-		RequestsDB.addSanitationRequest(22,"Umar Rojas", "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel");
-		RequestsDB.addSanitationRequest(23,"Reuben", "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
+		RequestsDB.addSanitationRequest(20,21, "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd");
+		RequestsDB.addSanitationRequest(20,22, "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium", "Bill Byrd");
+		RequestsDB.addSanitationRequest(24,23, "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High", "Taylor Ramos");
+		RequestsDB.addSanitationRequest(25,24, "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium", "Rosa Smith");
+		RequestsDB.addSanitationRequest(28,25, "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical", "Abby Williams");
+		RequestsDB.addSanitationRequest(30,26, "IREST00203", "Trash Removal", "Trash can smells bad", "Medium", "Alesha Harris");
+		RequestsDB.addSanitationRequest(29,27, "IREST00303", "Trash Removal", "Trash can full. Another one is available so don't rush.", "Low", "Andrew Guerrero");
+		RequestsDB.addSanitationRequest(22,20, "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel");
+		RequestsDB.addSanitationRequest(23,21, "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
 
 
-		RequestsDB.editRequests(11, null, "canceled");
-		RequestsDB.editRequests(14, null, "canceled");
-		RequestsDB.editRequests(15, null, "complete");
-		RequestsDB.editRequests(16, null, "canceled");
-		RequestsDB.editRequests(17, null, "complete");
+		RequestsDB.editRequests(11, 0, "canceled");
+		RequestsDB.editRequests(14, 0, "canceled");
+		RequestsDB.editRequests(15, 0, "complete");
+		RequestsDB.editRequests(16, 0, "canceled");
+		RequestsDB.editRequests(17, 0, "complete");
+
+		// TODO: Why are we dis-assigning people? We should only show inProgress requests anyways
 
 		//Medicine Delivery Request //RequestID: 19 - 30
-		RequestsDB.addMedicineRequest(20, "Clara Bryan", "BLABS00102", "Atorvastatin", 30, "20mg", "Once a day by mouth", "Bill Byrd");
-		RequestsDB.addMedicineRequest(20, "Jennifer Cunningham", "BLABS00202", "Lisinopril", 90, "20mg", "Once a day by mouth", "Bill Byrd");
-		RequestsDB.addMedicineRequest(21, "Jak Bishop", "IDEPT00103", "Levothyroxine", 90, "12.5mcg", "Once a day my bouth", "Amelia Knight");
-		RequestsDB.addMedicineRequest(24, "Ben Coles", "BLABS00102", "Metformin", 30, "850mg", "Twice a day by mouth", "Taylor Ramos");
-		RequestsDB.addMedicineRequest(27, "Gloria Webster", "IDEPT00803", "Amlodipine", 30, "5mg", "Once a day by mouth", "Lauren Bolton");
-		RequestsDB.addMedicineRequest(26, "Robbie Turner", "IDEPT00603", "Metoprolol", 90, "400mg", "Once a day by mouth", "Declan Patel");
-		RequestsDB.addMedicineRequest(23, "Lucas Whittaker", "IDEPT00403", "Omeprazole", 90, "40mg", "Three times a day by mouth before a meal", "Victoria Erickson");
-		RequestsDB.addMedicineRequest(24, "Alec Rees", "IDEPT00703", "Simvastatin", 30, "10mg", "Once a day by mouth", "Taylor Ramos");
-		RequestsDB.addMedicineRequest(27, "Francesca Ferguson", "IDEPT00903", "Losartan", 90, "100mg", "Once daily by mouth", "Lauren Bolton");
-		RequestsDB.addMedicineRequest(21, "Josie Pittman", "IDEPT00203", "Albuterol", 30, "0.63mg", "3 times a day via nebulizer. 4 times a day if needed.", "Amelia Knight");
-		RequestsDB.addMedicineRequest(20, "Will Ford", "BLABS00202", "Metformin", 30, "8.5mL", "Once daily with meals.", "Bill Byrd");
-		RequestsDB.addMedicineRequest(23, "Billy Gomez", "BLABS00102", "Metformin", 30, "5mL", "Twice a day with meals.", "Victoria Erickson");
+		RequestsDB.addMedicineRequest(20, 21, "BLABS00102", "Atorvastatin", 30, "20mg", "Once a day by mouth", "Bill Byrd");
+		RequestsDB.addMedicineRequest(20, 22, "BLABS00202", "Lisinopril", 90, "20mg", "Once a day by mouth", "Bill Byrd");
+		RequestsDB.addMedicineRequest(21, 23, "IDEPT00103", "Levothyroxine", 90, "12.5mcg", "Once a day my bouth", "Amelia Knight");
+		RequestsDB.addMedicineRequest(24, 24, "BLABS00102", "Metformin", 30, "850mg", "Twice a day by mouth", "Taylor Ramos");
+		RequestsDB.addMedicineRequest(27, 25, "IDEPT00803", "Amlodipine", 30, "5mg", "Once a day by mouth", "Lauren Bolton");
+		RequestsDB.addMedicineRequest(26, 26, "IDEPT00603", "Metoprolol", 90, "400mg", "Once a day by mouth", "Declan Patel");
+		RequestsDB.addMedicineRequest(23, 27, "IDEPT00403", "Omeprazole", 90, "40mg", "Three times a day by mouth before a meal", "Victoria Erickson");
+		RequestsDB.addMedicineRequest(24, 20, "IDEPT00703", "Simvastatin", 30, "10mg", "Once a day by mouth", "Taylor Ramos");
+		RequestsDB.addMedicineRequest(27, 21, "IDEPT00903", "Losartan", 90, "100mg", "Once daily by mouth", "Lauren Bolton");
+		RequestsDB.addMedicineRequest(21, 22, "IDEPT00203", "Albuterol", 30, "0.63mg", "3 times a day via nebulizer. 4 times a day if needed.", "Amelia Knight");
+		RequestsDB.addMedicineRequest(20, 23, "BLABS00202", "Metformin", 30, "8.5mL", "Once daily with meals.", "Bill Byrd");
+		RequestsDB.addMedicineRequest(23, 24, "BLABS00102", "Metformin", 30, "5mL", "Twice a day with meals.", "Victoria Erickson");
 
 
-		RequestsDB.editRequests(20, null, "canceled");
-		RequestsDB.editRequests(24, null, "canceled");
-		RequestsDB.editRequests(25, null, "complete");
-		RequestsDB.editRequests(26, null, "canceled");
-		RequestsDB.editRequests(27, null, "complete");
+		RequestsDB.editRequests(20, 0, "canceled");
+		RequestsDB.editRequests(24, 0, "canceled");
+		RequestsDB.editRequests(25, 0, "complete");
+		RequestsDB.editRequests(26, 0, "canceled");
+		RequestsDB.editRequests(27, 0, "complete");
+
+		// TODO: Why are we dis-assigning people? We should only show inProgress requests anyways
 
 
 		//Security Requests: //RequestID: 31 - 38
-		RequestsDB.addSecurityRequest(20, "James O'Moore","HDEPT00203", "Low", "Low");
-		RequestsDB.addSecurityRequest(22, "Russell Armstrong","WELEV00E01", "Medium", "Medium");
-		RequestsDB.addSecurityRequest(30, "Lillian Peters","HDEPT00203", "Low", "Low");
-		RequestsDB.addSecurityRequest(27, "Clara Dixon","ePARK00101", "Medium", "High");
-		RequestsDB.addSecurityRequest(24, "Herbert Ortega","BDEPT00402", "Medium", "Medium");
-		RequestsDB.addSecurityRequest(20, "Caleb Carr","BDEPT00302", "Low", "Low");
-		RequestsDB.addSecurityRequest(25, "Jasper Miller","CCONF002L1", "High", "Critical");
-		RequestsDB.addSecurityRequest(29, "Jennifer Brewer","eWALK00701", "Medium", "Medium");
+		RequestsDB.addSecurityRequest(20, 21,"HDEPT00203", "Low", "Low");
+		RequestsDB.addSecurityRequest(22, 22,"WELEV00E01", "Medium", "Medium");
+		RequestsDB.addSecurityRequest(30, 23,"HDEPT00203", "Low", "Low");
+		RequestsDB.addSecurityRequest(27, 24,"ePARK00101", "Medium", "High");
+		RequestsDB.addSecurityRequest(24, 25,"BDEPT00402", "Medium", "Medium");
+		RequestsDB.addSecurityRequest(20, 26,"BDEPT00302", "Low", "Low");
+		RequestsDB.addSecurityRequest(25, 27,"CCONF002L1", "High", "Critical");
+		RequestsDB.addSecurityRequest(29, 20,"eWALK00701", "Medium", "Medium");
 
 
-		RequestsDB.editRequests(31, null, "canceled");
-		RequestsDB.editRequests(34, null, "canceled");
-		RequestsDB.editRequests(35, null, "complete");
-		RequestsDB.editRequests(36, null, "canceled");
-		RequestsDB.editRequests(37, null, "complete");
+		RequestsDB.editRequests(31, 0, "canceled");
+		RequestsDB.editRequests(34, 0, "canceled");
+		RequestsDB.editRequests(35, 0, "complete");
+		RequestsDB.editRequests(36, 0, "canceled");
+		RequestsDB.editRequests(37, 0, "complete");
+
+		// TODO: Why are we dis-assigning people? We should only show inProgress requests anyways
 
 
 		//RequestID: 39 - 47
-		RequestsDB.addExternalPatientRequest(27,"Ciaran Goodwin","EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
-		RequestsDB.addExternalPatientRequest(30,"Lola Bond","EEXIT00101", "Ambulance","Low Severity", "4093380", "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
-		RequestsDB.addExternalPatientRequest(22,"Samantha Russell","FDEPT00501", "Helicopter","High Severity", "92017693", "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
-		RequestsDB.addExternalPatientRequest(20,"Caleb Chapman","FDEPT00501", "Helicopter","High Severity", "93754789", "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
-		RequestsDB.addExternalPatientRequest(24,"Dale Coates","EEXIT00101", "Ambulance","Medium Severity", "417592", "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
-		RequestsDB.addExternalPatientRequest(28,"Jerry Myers","FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
-		RequestsDB.addExternalPatientRequest(24,"Betty Warren","EEXIT00101", "Ambulance","Medium Severity", "33337861", "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
-		RequestsDB.addExternalPatientRequest(27,"Maxim Rawlings","EEXIT00101", "Ambulance","Low Severity", "40003829", "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
-		RequestsDB.addExternalPatientRequest(24,"Alan Singh","FDEPT00501", "Plane","High Severity", "38739983", "12 hours", "Heart transplant organ in route");
+		RequestsDB.addExternalPatientRequest(27,21,"EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
+		RequestsDB.addExternalPatientRequest(30,22,"EEXIT00101", "Ambulance","Low Severity", "4093380", "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
+		RequestsDB.addExternalPatientRequest(22,23,"FDEPT00501", "Helicopter","High Severity", "92017693", "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
+		RequestsDB.addExternalPatientRequest(20,24,"FDEPT00501", "Helicopter","High Severity", "93754789", "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
+		RequestsDB.addExternalPatientRequest(24,25,"EEXIT00101", "Ambulance","Medium Severity", "417592", "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
+		RequestsDB.addExternalPatientRequest(28,26,"FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
+		RequestsDB.addExternalPatientRequest(24,27,"EEXIT00101", "Ambulance","Medium Severity", "33337861", "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
+		RequestsDB.addExternalPatientRequest(27,20,"EEXIT00101", "Ambulance","Low Severity", "40003829", "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
+		RequestsDB.addExternalPatientRequest(24,21,"FDEPT00501", "Plane","High Severity", "38739983", "12 hours", "Heart transplant organ in route");
 
 
-		RequestsDB.editRequests(40, null, "complete");
-		RequestsDB.editRequests(42, null, "complete");
-		RequestsDB.editRequests(44, null, "complete");
-		RequestsDB.editRequests(45, null, "complete");
-		RequestsDB.editRequests(47, null, "complete");
+		RequestsDB.editRequests(40, 0, "complete");
+		RequestsDB.editRequests(42, 0, "complete");
+		RequestsDB.editRequests(44, 0, "complete");
+		RequestsDB.editRequests(45, 0, "complete");
+		RequestsDB.editRequests(47, 0, "complete");
+
+		// TODO: Why are we dis-assigning people? We should only show inProgress requests anyways
 
 
 		//SuperAdmin:
 		String insertUser1 = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP)";
 		String insertUser2 = "Insert Into userAccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', CURRENT TIMESTAMP)";
-		String insertUser3 = "Insert Into userAccount Values (100, 'staff', 'staff', 'doctor', 'staff', 'staff', CURRENT TIMESTAMP)";
+		String insertUser3 = "Insert Into userAccount Values (99, 'staff', 'staff', 'doctor', 'staff', 'staff', CURRENT TIMESTAMP)";
 		String insertUser4 = "Insert Into userAccount Values (100, 'guest', 'guest', 'patient', 'guest', 'visitor', CURRENT TIMESTAMP)";
 		try {
 			Statement stmt = connection.createStatement();

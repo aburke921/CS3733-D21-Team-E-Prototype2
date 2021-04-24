@@ -132,6 +132,9 @@
                                              <String fx:value="Tall Box" />
                                           </FXCollections>
                                        </items>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" top="20.0" />
+                                       </VBox.margin>
                                     </JFXComboBox>
                                                 <JFXTextField fx:id="recipient" prefHeight="27.0" prefWidth="280.0" promptText="Recipient">
                                                     <VBox.margin>

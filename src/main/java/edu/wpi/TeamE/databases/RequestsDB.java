@@ -725,18 +725,18 @@ public class RequestsDB {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error in updating request table");
 			return 0;
 		}
 	}
 
-//
-//
-//
-//
-//
-//
+// QUERYING TABLES::::
+// QUERYING TABLES::::
+// QUERYING TABLES::::
+// QUERYING TABLES::::
+// QUERYING TABLES::::
+// QUERYING TABLES::::
 // QUERYING TABLES::::
 
 	/**
@@ -751,10 +751,10 @@ public class RequestsDB {
 		ArrayList<String> listOfInfo = new ArrayList<>();
 
 		String query;
-		if (userID >= -1) {
-			query = "Select " + infoType + " from requests where requestType = '" + tableType + "' and creatorID = " + userID;
+		if (userID <= -1) {
+			query = "Select " + infoType + " From requests Natural Join " + tableType + " Where creatorID = " + userID;
 		} else {
-			query = "Select " + infoType + " From requests where requestType = '" + tableType + "'";
+			query = "Select " + infoType + " From requests Natural Join " + tableType;
 		}
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -786,9 +786,9 @@ public class RequestsDB {
 
 		String query;
 		if (userID >= -1) {
-			query = "Select " + infoType + " from requests where requestType = '" + tableType + "' and assigneeID = " + userID;
+			query = "Select " + infoType + " From requests Natural Join " + tableType + " Where assigneeID = " + userID;
 		} else {
-			query = "Select " + infoType + " From requests where requestType = '" + tableType + "'";
+			query = "Select " + infoType + " From requests Natural Join " + tableType;
 		}
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -884,5 +884,4 @@ public class RequestsDB {
 		}
 		return listOfAssignees;
 	}
-
 }

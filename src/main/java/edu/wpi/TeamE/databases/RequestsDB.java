@@ -822,12 +822,12 @@ public class RequestsDB {
 
 		String query;
 
-		if (userID != -1) {
-			query = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
-		}
-		else{
-			query ="Select longName from node,(Select roomID From " + tableName + ") correctTable where node.nodeID = correctTable.roomID";
-		}
+			if (userID != -1) {
+				query = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
+			}
+			else{
+				query ="Select requestID, longName from node,(Select requestID, roomID From " + tableName + ") correctTable where node.nodeID = correctTable.roomID order by requestID";
+			}
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
 			while(rset.next()){

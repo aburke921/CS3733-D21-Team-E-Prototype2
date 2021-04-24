@@ -3,8 +3,10 @@ package edu.wpi.TeamE;
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.*;
+import edu.wpi.TeamE.views.forms.ServiceRequestForm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
 import javafx.util.Pair;
 import org.junit.jupiter.api.*;
 
@@ -33,7 +35,7 @@ public class DatabaseTests {
 
 		try {
 			connection.deleteAllTables();
-//			System.out.println("Tables were reset");
+			System.out.println("Tables were reset");
 		} catch (Exception e) {
 			//e.printStackTrace();
 		}
@@ -847,6 +849,99 @@ public class DatabaseTests {
 
 		connection.addDataForPresentation();
 	}
+
+
+	@Test
+	@DisplayName("testGetRequestLocations")
+	public void testFunction(){
+
+		//Visitors:
+		// - have access to floral Delivery
+		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		UserAccountDB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
+		UserAccountDB.addUserAccount("smiddle@outlook.com", "visitor3", "Sharon", "Middleton");
+		UserAccountDB.addUserAccount("catherinehop12@gmail.com", "visitor4", "Catherine", "Hopkins");
+		UserAccountDB.addUserAccount("mbernard@wpi.edu", "visitor5", "Michelle", "Bernard");
+		UserAccountDB.addUserAccount("mccoy.meghan@hotmail.com", "visitor6", "Meghan", "Mccoy");
+		UserAccountDB.addUserAccount("harry89owens@gmail.com", "visitor7", "Harry", "Owens");
+		UserAccountDB.addUserAccount("hugowh@gmail.com", "visitor8", "Hugo", "Whitehouse");
+		UserAccountDB.addUserAccount("spenrodg@yahoo.com", "visitor9", "Spencer", "Rodgers");
+		UserAccountDB.addUserAccount("thomasemail@gmail.com", "visitor10", "Thomas", "Mendez");
+		UserAccountDB.addUserAccount("claytonmurray@gmail.com", "visitor11", "Clayton", "Murray");
+		UserAccountDB.addUserAccount("lawrencekhalid@yahoo.com", "visitor12", "Khalid", "Lawrence");
+
+		//Patients:
+		//13 - 19
+		UserAccountDB.addSpecialUserType("adamj@gmail.com","patient1","patient","Adam", "Jenkins");
+		UserAccountDB.addSpecialUserType("abbym@yahoo.com","patient2","patient","Abby", "Mohamed");
+		UserAccountDB.addSpecialUserType("wesleya@gmail.com","patient3","patient","Wesley", "Armstrong");
+		UserAccountDB.addSpecialUserType("travisc@yahoo.com","patient4","patient","Travis", "Cook");
+		UserAccountDB.addSpecialUserType("gabriellar@gmail.com","patient5","patient","Gabriella", "Reyes");
+		UserAccountDB.addSpecialUserType("troyo@yahoo.com","patient6","patient","Troy", "Olson");
+		UserAccountDB.addSpecialUserType("anat@gmail.com","patient7","patient","Ana", "Turner");
+
+		//Doctors:
+		//20-27
+		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+		UserAccountDB.addSpecialUserType("ameliak@yahoo.com","doctor02","doctor","Amelia", "Knight");
+		UserAccountDB.addSpecialUserType("simond@gmail.com","doctor03","doctor","Simon", "Daniel");
+		UserAccountDB.addSpecialUserType("victoriae@yahoo.com","doctor04","doctor","Victoria", "Erickson");
+		UserAccountDB.addSpecialUserType("taylorr@gmail.com","doctor05","doctor","Taylor", "Ramos");
+		UserAccountDB.addSpecialUserType("rosas@yahoo.com","doctor06","doctor","Rosa", "Smith");
+		UserAccountDB.addSpecialUserType("declanp@gmail.com","doctor07","doctor","Declan", "Patel");
+		UserAccountDB.addSpecialUserType("laurenb@yahoo.com","doctor08","doctor","Lauren", "Bolton");
+
+		//Admin:
+		//28 - 30
+		UserAccountDB.addSpecialUserType("abbyw@gmail.com","admin001","admin","Abby", "Williams");
+		UserAccountDB.addSpecialUserType("andrewg@yahoo.com","admin002","admin","Andrew", "Guerrero");
+		UserAccountDB.addSpecialUserType("aleshah@gmail.com","admin003","admin","Alesha", "Harris");
+
+		//External transport:
+		NodeDB.addNode("FDEPT00501",2128,1300,"1","Tower","DEPT","Emergency Department","Emergency");
+		NodeDB.addNode("EEXIT00101",2275,785,"1","45 Francis","EXIT","Ambulance Parking Exit Floor 1","AmbExit 1");
+
+		RequestsDB.addExternalPatientRequest(27,"Ciaran Goodwin","EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
+		RequestsDB.addExternalPatientRequest(30,"Lola Bond","EEXIT00101", "Ambulance","Low Severity", "4093380", "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
+		RequestsDB.addExternalPatientRequest(22,"Samantha Russell","FDEPT00501", "Helicopter","High Severity", "92017693", "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
+		RequestsDB.addExternalPatientRequest(20,"Caleb Chapman","FDEPT00501", "Helicopter","High Severity", "93754789", "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
+		RequestsDB.addExternalPatientRequest(24,"Dale Coates","EEXIT00101", "Ambulance","Medium Severity", "417592", "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
+		RequestsDB.addExternalPatientRequest(28,"Jerry Myers","FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
+		RequestsDB.addExternalPatientRequest(24,"Betty Warren","EEXIT00101", "Ambulance","Medium Severity", "33337861", "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
+		RequestsDB.addExternalPatientRequest(27,"Maxim Rawlings","EEXIT00101", "Ambulance","Low Severity", "40003829", "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
+		RequestsDB.addExternalPatientRequest(24,"Alan Singh","FDEPT00501", "Plane","High Severity", "38739983", "12 hours", "Heart transplant organ in route");
+
+
+
+		ArrayList<String> correctLongNames = new ArrayList<String>();
+		correctLongNames.add("Ambulance Parking Exit Floor 1");
+		correctLongNames.add("Ambulance Parking Exit Floor 1");
+		correctLongNames.add("Emergency Department");
+		correctLongNames.add("Emergency Department");
+		correctLongNames.add("Ambulance Parking Exit Floor 1");
+		correctLongNames.add("Emergency Department");
+		correctLongNames.add("Ambulance Parking Exit Floor 1");
+		correctLongNames.add("Ambulance Parking Exit Floor 1");
+		correctLongNames.add("Emergency Department");
+
+
+
+		ArrayList<String> locationArray = RequestsDB.getRequestLocations("extTransport", -1);
+
+
+
+		assertEquals(correctLongNames, locationArray);
+
+
+
+
+
+
+
+	}
+
+
+
 
 //	@Test
 //	@DisplayName("testGetTablesToThatExist")

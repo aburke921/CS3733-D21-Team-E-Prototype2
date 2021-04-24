@@ -2,7 +2,7 @@ package edu.wpi.TeamE.views;
 
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.TeamE.databases.*;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.shape.Polygon;
 import javafx.stage.FileChooser;
 
 import java.awt.*;
@@ -25,7 +26,8 @@ public class NodeCSVUpload {
     @FXML
     private TreeTableView<Node> treeTable;
 
-
+    @FXML // fx:id="exit"
+    private Polygon exit;
 
     /**
      * When the table is empty (aka no root), create the proper columns
@@ -35,8 +37,8 @@ public class NodeCSVUpload {
      * @param table this is the table being prepared with the nodes
      */
     public void prepareNodes(TreeTableView<Node> table) {
-        makeConnection connection = makeConnection.makeConnection();
-        ArrayList<Node> array = connection.getAllNodes();
+
+        ArrayList<Node> array = NodeDB.getAllNodes();
         if (table.getRoot() == null) {
             Node node0 = new
                     Node("ID",
@@ -93,6 +95,7 @@ public class NodeCSVUpload {
                     new ReadOnlyStringWrapper(p.getValue().getValue().get("type")));
             table.getColumns().add(column8);
         }
+        treeTable.setShowRoot(false);
         if (table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
             table.getRoot().getChildren().remove(0, array.size() - 1);
         }
@@ -111,14 +114,24 @@ public class NodeCSVUpload {
         makeConnection connection = makeConnection.makeConnection();
         if (file != null) {
             //Have to save edge table so we can get it back after deleting
-            connection.getNewCSVFile("hasEdge");
-            File saveEdges = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+            csvDB.getNewCSVFile("hasEdge");
+            File saveEdges = new File("CSVs/outputEdge.csv");
 
             //This is where tables are cleared and refilled
             connection.deleteAllTables();
-            connection.createTables();
-            connection.populateTable("node", file);
-            connection.populateTable("hasEdge", saveEdges);
+            NodeDB.createNodeTable();
+            EdgeDB.createEdgeTable();
+            UserAccountDB.createUserAccountTable();
+            RequestsDB.createRequestsTable();
+            RequestsDB.createFloralRequestsTable();
+            RequestsDB.createSanitationTable();
+            RequestsDB.createExtTransportTable();
+            RequestsDB.createMedDeliveryTable();
+            RequestsDB.createSecurityServTable();
+            appointmentDB.createAppointmentTable();
+            csvDB.populateTable("node", file);
+            csvDB.populateTable("hasEdge", saveEdges);
+            System.out.println("Some edges might be removed because their nodes are no longer here");
             System.out.println("Success");
         }
     }
@@ -132,8 +145,7 @@ public class NodeCSVUpload {
      */
     @FXML
     private void openFile(ActionEvent e) throws IOException {
-        makeConnection connection = makeConnection.makeConnection();
-        connection.getNewCSVFile("node");
+        csvDB.getNewCSVFile("node");
         File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
@@ -165,7 +177,7 @@ public class NodeCSVUpload {
     private void toNavigation(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditorNavigation.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -174,6 +186,11 @@ public class NodeCSVUpload {
     @FXML
     void initialize() {
         prepareNodes(treeTable);
+
+        exit.setOnMouseClicked(event -> {
+            App app = new App();
+            app.stop();
+        });
     }
 
 

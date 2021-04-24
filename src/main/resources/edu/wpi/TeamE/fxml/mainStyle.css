@@ -11,7 +11,7 @@
 }
 
 /*JFX Universal Form Field Styles*/
-JFXTextField, JFXTextArea, JFXComboBox {
+JFXTextField, JFXTextArea, JFXComboBox, JFXPasswordField {
     -fx-background-color: rgba(0,0,0,.05); /*form bounding box color*/ /*todo, set to variable for the rgba colors?*/
     -jfx-unfocus-color: rgba(0,0,0,.42); /*bottom line unfocused*/
     -jfx-focus-color: -fx--primary; /*bottom line focused*/
@@ -19,13 +19,13 @@ JFXTextField, JFXTextArea, JFXComboBox {
     -fx-prompt-text-fill: #808080; /*prompt text before entry*/
 }
 
-JFXTextField:hover, JFXTextArea:hover, JFXComboBox:hover {
+JFXTextField:hover, JFXTextArea:hover, JFXComboBox:hover, JFXPasswordField:hover {
     -fx-background-color: rgba(0,0,0,.1); /*form bounding box color*/
     -jfx-unfocus-color: rgba(0,0,0,.87); /*bottom line unfocused*/
     -jfx-focus-color: -fx--primary; /*bottom line focused*/
 }
 
-JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed {}
+JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField:pressed {}
 
 .submit-button {
     -jfx-button-type: RAISED;
@@ -60,6 +60,16 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed {}
     -fx-background-color: -fx--primary;
 }
 
+/*App bar buttons on hover*/
+.app-bar-button:hover {
+    -fx-fill: #63ccff;
+}
+
+/*App bar buttons default*/
+.app-bar-button {
+    -fx-fill: #039be5;
+}
+
 
 /*------------------------
     FONTS AND HEADERS
@@ -90,4 +100,34 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed {}
 }
 .jfx-snackbar-action {
     -fx-text-fill: #ff4081;
+}
+
+/*------------------------
+    SLIDER STYLES
+--------------------------*/
+
+/* Styling the slider track */
+.jfx-slider > .track {
+    -fx-background-color: -fx--primary-light;
+}
+
+/* Styling the slider thumb */
+.jfx-slider > .thumb {
+    -fx-background-color: -fx--primary-dark;
+}
+
+/* Styling the filled track */
+.jfx-slider > .colored-track {
+    -fx-background-color: -fx--primary;
+}
+
+/* Styling the animated thumb */
+.jfx-slider > .animated-thumb {
+    -fx-background-color: -fx--primary-dark;
+}
+
+/* Styling the slider value text inside animated thumb */
+.jfx-slider .slider-value {
+    -fx-fill: white;
+    -fx-stroke: white;
 }

@@ -227,6 +227,8 @@ public class PathFinder {
         error.setHeading(new Text("Detailed Path Directions"));
         error.setBody(new Text(directionsStringBuilder.toString()));
         JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+        dialog.setMaxWidth(200);
+        dialog.setMaxHeight(300);
         JFXButton okay = new JFXButton("Done");
         okay.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -324,7 +326,7 @@ public class PathFinder {
 
                 currentFoundPath = null;
                 // Set map image to starting floor
-                String startFloor = foundPath.peek().get("floor");
+                String startFloor = foundPath.getStart().get("floor");
                 setCurrentFloor(startFloor);
 
                 directionsButton.setOpacity(1);

@@ -9,13 +9,14 @@ public class appointmentDB {
 	static Connection connection = makeConnection.makeConnection().getConnection();
 
 	public static void createAppointmentTable() {
-
-		String query = "Create Table appointment(\n" +
-				"    appointmentID Int Primary Key,\n" +
-				"    patientID Int References userAccount (userID) on delete cascade,\n" +
-				"    startTime timeStamp,\n" +
-				"    endTime timestamp,\n" +
-				"    Constraint appointmentUnique Unique(patientID, startTime, endTime)\n" +
+		//TODO:
+		String query = "Create Table appointment( " +
+				"    appointmentID Int Primary Key, " +
+				"    patientID Int References userAccount (userID) on delete cascade , " +
+				"    doctorID Int References userAccount (userID) on delete cascade, " +
+				"    startTime timeStamp, " +
+				"    endTime timestamp, " +
+				"    Constraint appointmentUnique Unique(patientID, startTime, endTime) " +
 				")";
 
 
@@ -29,24 +30,24 @@ public class appointmentDB {
 		}
 	}
 
-	public static void createDoctorExaminesAdmissionTable() {
-
-		String query = "Create Table doctorExaminesAdmission(\n" +
-				"    appointmentID Int References appointment(appointmentID) on delete cascade,\n" +
-				"    doctorID Int References userAccount(userID) on delete cascade,\n" +
-				"    constraint examinesPK Primary Key(appointmentID,doctorID)\n" +
-				")";
-
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("error creating doctorExaminesAdmission table");
-		}
-	}
+//	public static void createDoctorExaminesAdmissionTable() {
+//
+//		String query = "Create Table doctorExaminesAdmission(\n" +
+//				"    appointmentID Int References appointment(appointmentID) on delete cascade,\n" +
+//				"    doctorID Int References userAccount(userID) on delete cascade,\n" +
+//				"    constraint examinesPK Primary Key(appointmentID,doctorID)\n" +
+//				")";
+//
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+//
+//			prepState.execute();
+//
+//		} catch (SQLException e) {
+////			e.printStackTrace();
+//			System.err.println("error creating doctorExaminesAdmission table");
+//		}
+//	}
 
 	/**
 	 * creates an appointment and adds to the appointmentDB table
@@ -80,28 +81,81 @@ public class appointmentDB {
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
 	public static int cancelAppointment(int appointmentID) {
-		return 0;
-	}
 
-	/**
-	 * adds a doctor to the given appointment
-	 * @param appointmentID is the ID of the appointment
-	 * @param doctorID is the ID of the doctor
-	 * @return an int (0 if add fails, 1 if add succeeded)
-	 */
-	public static int addDoctorExaminesAdmission(int appointmentID, int doctorID) {
-		return 0;
-	}
+		String insertCancelQuery = "delete from appointment where appointmentID = ?";
 
-	/**
-	 * edits a doctorExaminesAdmission
-	 * @param newAppointmentID
-	 * @param newDoctorID
-	 * @return an int (0 if add fails, 1 if add succeeded)
-	 */
-	public static int editDoctorExaminesAdmission(int newAppointmentID, int newDoctorID) {
+		try (PreparedStatement prepState = connection.prepareStatement(insertCancelQuery)) {
+			prepState.setInt(1, appointmentID);
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error deleting from cancelAppointment inside function addSecurityRequest()");
+		}
+
 		return 0;
 	}
+//
+//	/**
+//	 * adds a doctor to the given appointment
+//	 * @param appointmentID is the ID of the appointment
+//	 * @param doctorID is the ID of the doctor
+//	 * @return an int (0 if add fails, 1 if add succeeded)
+//	 */
+//	public static int addDoctorExaminesAdmission(int appointmentID, int doctorID) {
+//
+//		String insertAppointment = "insert into doctorExaminesAdmission where appointmentID = ?, doctorID = ?";
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(insertAppointment)) {
+//			prepState.setInt(1, appointmentID);
+//			prepState.setInt(2, doctorID);
+//			prepState.execute();
+//		}
+//		catch(SQLException e) {
+//			e.printStackTrace();
+//			System.err.println("Error adding into doctorExaminesAdmission inside function addDoctorExaminesAdmission()");
+//		}
+//		return 0;
+//	}
+//
+//	/**
+//	 * edits a doctorExaminesAdmission
+//	 * @param newAppointmentID
+//	 * @param newDoctorID
+//	 * @return an int (0 if add fails, 1 if add succeeded)
+//	 */
+//	public static int editDoctorExaminesAdmission(int newAppointmentID, int newDoctorID) {
+//
+//		String insertAppointment = "update doctorExaminesAdmission ";
+//
+//		boolean added = false;
+//		String query = "update securityServ set ";
+//
+//		if (newAppointmentID != null) {
+//			query = query + " appointmentID = '" + newAppointmentID + "'";
+//
+//			added = true;
+//		}
+//		if (newDoctorID != null) {
+//			if (added == true) {
+//				query = query + ", ";
+//			}
+//			query = query + "doctorID = '" + newDoctorID + "'";
+//			added = true;
+//		}
+//
+//		query = query + " where appointmentID = " + newAppointmentID;
+//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+//			prepState.executeUpdate();
+//			prepState.close();
+//			return 1;
+//		} catch (SQLException e) {
+////			e.printStackTrace();
+//			System.err.println("Error in editing editDoctorExaminesAdmission request");
+//			return 0;
+//		}
+//
+//		return 0;
+//	}
 
 
 

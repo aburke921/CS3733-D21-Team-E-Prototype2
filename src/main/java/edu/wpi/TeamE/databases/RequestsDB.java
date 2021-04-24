@@ -2,6 +2,7 @@ package edu.wpi.TeamE.databases;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RequestsDB {
 
@@ -844,11 +845,31 @@ public class RequestsDB {
 
 	/**
 	 * gets a list of available assignees based on the userType given
-	 * @param userType is type of user (i.e. "nurse", "EMT", "doctor", etc.)
+	 * @param givenUserType is type of user (i.e. "nurse", "EMT", "doctor", etc.)
 	 * @return a list of possible assignees for the specific request type
 	 */
-	public static ArrayList<String> getAvailableAssignees(String userType) {
-		return null;
+	public static HashMap<Integer,String> getSelectableAssignees(String givenUserType) {
+		//ArrayList<String> listOfAssignees = new ArrayList<String>();
+		HashMap<Integer, String> listOfAssignees = new HashMap<>();
+
+		String query = "Select firstName, lastName, userID from userAccount where userType = '" + givenUserType + "'";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while(rset.next()){
+				String firstName = rset.getString("firstName");
+				String lastName = rset.getString("lastName");
+				int assigneeID = rset.getInt("userID");
+				String fullName = firstName + " " + lastName;
+				listOfAssignees.put(assigneeID, fullName);
+			}
+
+			rset.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getAvailableAssignees() error in the try/catch");
+		}
+		return listOfAssignees;
 	}
 
 }

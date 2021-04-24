@@ -66,7 +66,11 @@ public class AppBarComponent {
      */
     @FXML
     void getHelpAppBar(ActionEvent event) {
-        App.newJFXDialogPopUp(App.getPageTitle() + " Help","Close",App.getHelpText(),App.getStackPane());
+        if (App.getPageTitle() == null || App.getPageTitle().equals("")) {
+            App.newJFXDialogPopUp("App Help","Close",App.getHelpText(),App.getStackPane());
+        } else {
+            App.newJFXDialogPopUp(App.getPageTitle() + " Help","Close",App.getHelpText(),App.getStackPane());
+        }
         //add the help button only on certain pages
     }
 
@@ -100,6 +104,7 @@ public class AppBarComponent {
         assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
         assert appBarTitleLabel != null : "fx:id=\"appBarTitleLabel\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
 
+        System.out.println("Here: " + App.getPageTitle());
 
         //todo add option for logged in user with and without help
         if (!App.isShowHelp()) { //if help button shouldn't be shown

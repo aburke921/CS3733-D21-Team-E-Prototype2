@@ -78,7 +78,7 @@ public class ServiceRequestStatus {
 
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            RequestsDB.editRequests(id, null, "canceled");
+            RequestsDB.editRequests(id, 0, "canceled");
             System.out.println("The request was cancelled");
         }
     }
@@ -92,7 +92,7 @@ public class ServiceRequestStatus {
     private void complete(TreeTableView<ServiceRequestForm> table) {
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            RequestsDB.editRequests(id,null, "complete");
+            RequestDB.editRequests(id,0, "complete");
             System.out.println("The request was completed");
         }
 
@@ -118,13 +118,13 @@ public class ServiceRequestStatus {
      */
     private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
 
-        ArrayList<String> idArray = RequestsDB.getRequestInfo(tableName, App.userID, "requestID");
+        ArrayList<String> idArray = RequestDB.getMyCreatedRequestInfo(tableName, App.userID, "requestID");
 //        for(int j = 0; j < idArray.size(); j++) {
 //            System.out.println(idArray.get(j));
 //        }
-        ArrayList<String> statusArray = RequestsDB.getRequestInfo(tableName, App.userID, "requestStatus");
-        ArrayList<String> locationArray = RequestsDB.getRequestLocations(tableName, App.userID);
-        ArrayList<String> assigneeArray = RequestsDB.getRequestInfo(tableName, App.userID, "assignee");
+        ArrayList<String> statusArray = RequestDB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
+        ArrayList<String> locationArray = RequestDB.getMyCreatedRequestInfo(tableName, App.userID, "roomID");
+        ArrayList<String> assigneeArray = RequestDB.getMyCreatedRequestInfo(tableName, App.userID, "assigneeID");
         if(idArray.size() > 0) {
             System.out.println("Array size" + idArray.size());
             if (!inProgress.getChildren().isEmpty()) {
@@ -239,10 +239,10 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> securityServiceCancelled = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
 
         //Adding request forms
-        addToTable("security", securityServiceInProgress, securityServiceCompleted, securityServiceCancelled);
+        addToTable("securityServ", securityServiceInProgress, securityServiceCompleted, securityServiceCancelled);
         addToTable("extTransport", externalPatientInProgress, externalPatientCompleted, externalPatientCancelled);
-        addToTable("floral", floralFormInProgress, floralFormCompleted, floralFormCancelled);
-        addToTable("sanitation", sanitationServicesInProgress, sanitationServicesCompleted, sanitationServicesCancelled);
+        addToTable("floralRequests", floralFormInProgress, floralFormCompleted, floralFormCancelled);
+        addToTable("sanitationRequest", sanitationServicesInProgress, sanitationServicesCompleted, sanitationServicesCancelled);
         addToTable("medDelivery", medicineDeliveryInProgress, medicineDeliveryCompleted, medicineDeliveryCancelled);
 
         //Adding children to sub-root nodes

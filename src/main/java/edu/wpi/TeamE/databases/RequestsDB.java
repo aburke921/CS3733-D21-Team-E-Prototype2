@@ -25,11 +25,11 @@ public class RequestsDB {
 
 		String query = "Create Table requests(" +
 				"requestID    int Primary Key,\n" +
-				"creatorID    int References useraccount On Delete Cascade," +
+				"creatorID    int References userAccount On Delete Cascade," +
 				"creationTime timestamp,\n" +
 				"requestType  varchar(31),\n" +
 				"requestStatus varchar(10),\n" +
-				"assignee varchar(31)," +
+				"assignee int References userAccount On Delete Cascade ," +
 				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
 				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 
@@ -217,7 +217,7 @@ public class RequestsDB {
 
 	//ADDING TO TABLES::::
 
-	public static void addRequest(int userID, String assignee, String requestType){
+	public static void addRequest(int userID, int assignee, String requestType){
 		String insertRequest = "Insert Into requests\n" +
 				"Values ((Select Count(*)\n" +
 				"         From requests) + 1, ?, Current Timestamp, ?, 'inProgress', ?)";
@@ -225,10 +225,10 @@ public class RequestsDB {
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
 			prepState.setString(2, requestType);
-			prepState.setString(3, assignee);
+			prepState.setInt(3, assignee);
 			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error inserting into requests inside function addRequest()");
 		}
 
@@ -238,7 +238,7 @@ public class RequestsDB {
 	 * This adds a sanitation services form to the table specific for it
 	 * @param //form this is the form being added to the table
 	 */
-	public static void addSanitationRequest(int userID, String assignee, String roomID, String sanitationType, String description, String urgency, String signature) {
+	public static void addSanitationRequest(int userID, int assignee, String roomID, String sanitationType, String description, String urgency, String signature) {
 		addRequest(userID, assignee, "sanitation");
 
 		String insertSanitationRequest = "Insert Into sanitationRequest\n" +
@@ -254,7 +254,7 @@ public class RequestsDB {
 
 			prepState.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error inserting into sanitationRequest inside function addSanitationRequest()");
 		}
 
@@ -264,7 +264,7 @@ public class RequestsDB {
 	 * This function needs to add a external patient form to the table for external patient forms
 	 * @param //form this is the form that we will create and send to the database
 	 */
-	public static void addExternalPatientRequest(int userID, String assignee, String roomID, String requestType, String severity, String patientID, String ETA, String description) {
+	public static void addExternalPatientRequest(int userID, int assignee, String roomID, String requestType, String severity, String patientID, String ETA, String description) {
 
 		addRequest(userID, assignee, "extTransport");
 
@@ -283,7 +283,7 @@ public class RequestsDB {
 			prepState.execute();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error inserting into extTransport inside function addExternalPatientRequest()");
 		}
 
@@ -300,7 +300,7 @@ public class RequestsDB {
 	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
 	 *                      for whoever is fufilling the request
 	 */
-	public static void addFloralRequest(int userID, String assignee, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
+	public static void addFloralRequest(int userID, int assignee, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
 		addRequest(userID, assignee, "floral");
 
 		String insertFloralRequest = "Insert Into floralRequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
@@ -315,7 +315,7 @@ public class RequestsDB {
 
 			prepState.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
 		}
 
@@ -347,7 +347,7 @@ public class RequestsDB {
 	 * This adds a medicine request form to the table for medicine request forms
 	 * @param //form this is the form being added
 	 */
-	public static void addMedicineRequest(int userID, String assignee, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
+	public static void addMedicineRequest(int userID, int assignee, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
 		addRequest(userID, assignee, "medDelivery");
 
 		String insertMedRequest = "Insert Into meddelivery Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
@@ -362,7 +362,7 @@ public class RequestsDB {
 
 			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
 		}
 
@@ -372,7 +372,7 @@ public class RequestsDB {
 	 * This adds a security form to the table for security service form
 	 * @param //form this is the form added to the table
 	 */
-	public static void addSecurityRequest(int userID, String assignee, String roomID, String level, String urgency) {
+	public static void addSecurityRequest(int userID, int assignee, String roomID, String level, String urgency) {
 		addRequest(userID, assignee, "security");
 
 		String insertSecurityRequest = "Insert Into securityserv Values ((Select Count(*) From requests), ?, ?, ?)";
@@ -384,7 +384,7 @@ public class RequestsDB {
 
 			prepState.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
 		}
 
@@ -837,7 +837,7 @@ public class RequestsDB {
 
 			rset.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("getRequestLocations() error in the try/catch");
 		}
 		return listOfLongNames;
@@ -866,7 +866,7 @@ public class RequestsDB {
 
 			rset.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("getAvailableAssignees() error in the try/catch");
 		}
 		return listOfAssignees;

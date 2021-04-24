@@ -136,7 +136,8 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
             int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
             String nodeID = nodeIDS.get(nodeIDIndex);
             System.out.println(location + " " + type + " " + severity + " "+ patientID + " "  + ETA + " " + details + " " + assignee);
-            RequestsDB.addExternalPatientRequest(15, assignee,nodeID,type,severity,patientID,ETA, details);
+            //DB changed the assignee in the function call to an int (not string) --> we need the assignee's userID
+            RequestsDB.addExternalPatientRequest(15, 0,nodeID,type,severity,patientID,ETA, details);
             super.handleButtonSubmit(actionEvent);
             //Setting up all variables to be entered
         }

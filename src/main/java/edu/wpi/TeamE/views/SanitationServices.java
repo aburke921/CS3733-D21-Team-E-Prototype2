@@ -93,7 +93,8 @@ public class SanitationServices extends ServiceRequestFormComponents {
       String signature = Signature.getText();
       int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
       String nodeID = nodeIDS.get(nodeIDIndex);
-      RequestsDB.addSanitationRequest(15,assignee,nodeID, serviceKind,details,severity,signature);
+      //DB changed the assignee in the function call to an int (not string) --> we need the assignee's userID
+      RequestsDB.addSanitationRequest(15,0,nodeID, serviceKind,details,severity,signature);
       System.out.println(serviceKind);
 
       super.handleButtonSubmit(actionEvent);

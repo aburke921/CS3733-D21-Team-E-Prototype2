@@ -35,7 +35,7 @@ public class DatabaseTests {
 
 		try {
 			connection.deleteAllTables();
-			System.out.println("Tables were reset");
+//			System.out.println("Tables were reset");
 		} catch (Exception e) {
 			//e.printStackTrace();
 		}
@@ -418,37 +418,47 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testAddSanitationRequest")
 	public void testAddSanitationRequest() {
-		NodeDB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
-		UserAccountDB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 
-		RequestsDB.addSanitationRequest(1, "bob","test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
+		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		UserAccountDB.addSpecialUserType("custodian@gmail.com", "testPass", "custodian","drew", "Shukla");
+
+		RequestsDB.addSanitationRequest(1, 2,"test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
 	}
 
 	@Test
 	@DisplayName("testAddExternalPatientRequest")
 	public void testAddExternalPatientRequest() {
-		NodeDB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		//('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian')))";
+		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		UserAccountDB.addSpecialUserType("EMT@gmail.com", "testPass", "EMT","drew", "Shukla");
 
-		RequestsDB.addExternalPatientRequest(1, "bob", "test", "Ambulance","severe", "123", "15 mins", "headache");
+		RequestsDB.addExternalPatientRequest(1, 2, "test", "Ambulance","severe", "123", "15 mins", "headache");
 	}
 
 	@Test
 	@DisplayName("testAddMedicineRequest")
 	public void testAddMedicineRequest() {
+		//('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian')))";
 		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		UserAccountDB.addSpecialUserType("pharmacist@gmail.com", "testPass", "pharmacist","drew", "Shukla");
+
+
+		RequestsDB.addMedicineRequest(1, 2,"test", "drugs", 2, "100ml", "take once a day", "Nupur");
 	}
 
 	@Test
 	@DisplayName("testSecurityRequest")
 	public void testAddSecurityRequest() {
+
+		//('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian')))";
 		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
-
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		UserAccountDB.addSpecialUserType("security@gmail.com", "testPass", "security","drew", "Shukla");
 
-		RequestsDB.addSecurityRequest(1, "bob", "test", "low", "Low");
+		RequestsDB.addSecurityRequest(1, 2, "test", "low", "Low");
 	}
 
 	@Test
@@ -456,8 +466,9 @@ public class DatabaseTests {
 	public void testAddFloralRequest() {
 		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
+		UserAccountDB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson","drew", "Shukla");
 
-		RequestsDB.addFloralRequest(1,"bob", "test", "Nupur", "Roses", 1, "Tall", "feel better");
+		RequestsDB.addFloralRequest(1, 2,"test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 	}
 
@@ -474,19 +485,27 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetRequestStatus")
 	public void testGetRequestStatus() {
+
 		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", "123", "15 mins", "headache");
-		RequestsDB.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", "123", "15 mins", "migraine");
-		RequestsDB.addExternalPatientRequest(2, "bob","test", "Ambulance", "severe", "123", "15 mins", "migraine");
-		RequestsDB.addFloralRequest(1, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
+
+		UserAccountDB.addSpecialUserType("EMT1@gmail.com", "testPass", "EMT","bob", "Shukla");
+		UserAccountDB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson","drew", "Shukla");
+
+
+		RequestsDB.addExternalPatientRequest(1, 3,"test", "Ambulance", "severe", "123", "15 mins", "headache");
+		RequestsDB.addExternalPatientRequest(1, 3,"test", "Ambulance", "severe", "123", "15 mins", "migraine");
+		RequestsDB.addExternalPatientRequest(2, 3,"test", "Ambulance", "severe", "123", "15 mins", "migraine");
+		RequestsDB.addFloralRequest(1, 4,"test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		ArrayList<String> returnedStatus = new ArrayList<String>();
 		ArrayList<String> correctStatus = new ArrayList<String>();
 
 		correctStatus.add("inProgress");
 		correctStatus.add("inProgress");
+
 
 		returnedStatus = RequestsDB.getRequestInfo("extTransport", 1, "requestStatus");
 
@@ -497,12 +516,18 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestStatus2")
 	public void testGetRequestStatus2() {
 		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", "123", "15 mins", "headache");
-		RequestsDB.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", "123", "15 mins", "migraine");
-		RequestsDB.addExternalPatientRequest(2, "bob","test", "Ambulance", "severe", "123", "15 mins", "migraine");
-		RequestsDB.addFloralRequest(1, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
+
+		UserAccountDB.addSpecialUserType("EMT1@gmail.com", "testPass", "EMT","bob", "Shukla");
+		UserAccountDB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson","drew", "Shukla");
+
+
+		RequestsDB.addExternalPatientRequest(1, 3,"test", "Ambulance", "severe", "123", "15 mins", "headache");
+		RequestsDB.addExternalPatientRequest(1, 3,"test", "Ambulance", "severe", "123", "15 mins", "migraine");
+		RequestsDB.addExternalPatientRequest(2, 3,"test", "Ambulance", "severe", "123", "15 mins", "migraine");
+		RequestsDB.addFloralRequest(1, 4,"test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		ArrayList<String> returnedStatus = new ArrayList<String>();
 		ArrayList<String> correctStatus = new ArrayList<String>();
@@ -532,11 +557,17 @@ public class DatabaseTests {
 	public void testGetRequestIDs() {
 
 		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", "123", "15 mins", "headache");
-		RequestsDB.addExternalPatientRequest(2, "bob","test", "Ambulance", "severe", "123", "15 mins", "migraine");
-		RequestsDB.addFloralRequest(1, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
+
+		UserAccountDB.addSpecialUserType("EMT1@gmail.com", "testPass", "EMT","bob", "Shukla");
+		UserAccountDB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson","drew", "Shukla");
+
+
+		RequestsDB.addExternalPatientRequest(1, 3,"test", "Ambulance", "severe", "123", "15 mins", "headache");
+		RequestsDB.addExternalPatientRequest(2, 3,"test", "Ambulance", "severe", "123", "15 mins", "migraine");
+		RequestsDB.addFloralRequest(1, 4,"test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		ArrayList<String> returnedIDs = new ArrayList<String>();
 		ArrayList<String> correctIDs = new ArrayList<String>();
@@ -552,12 +583,19 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestIDs2")
 	public void testGetRequestIDs2() {
 
+
 		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addExternalPatientRequest(1, "bob","test", "Ambulance", "severe", "123", "15 mins", "headache");
-		RequestsDB.addExternalPatientRequest(2, "bob","test", "Ambulance", "severe", "123", "15 mins", "migraine");
-		RequestsDB.addFloralRequest(1, "bob","test", "Nupur", "Roses", 1, "Tall", "feel better");
+
+		UserAccountDB.addSpecialUserType("EMT1@gmail.com", "testPass", "EMT","bob", "Shukla");
+		UserAccountDB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson","drew", "Shukla");
+
+
+		RequestsDB.addExternalPatientRequest(1, 3,"test", "Ambulance", "severe", "123", "15 mins", "headache");
+		RequestsDB.addExternalPatientRequest(2, 3,"test", "Ambulance", "severe", "123", "15 mins", "migraine");
+		RequestsDB.addFloralRequest(1, 4,"test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		ArrayList<String> returnedIDs = new ArrayList<String>();
 		ArrayList<String> correctIDs = new ArrayList<String>();
@@ -586,21 +624,27 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestAssignees")
 	public void testGetRequestAssignees(){
 
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
-		NodeDB.addNode("test3", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
-		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
-		RequestsDB.addMedicineRequest(1, "kim","test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
-		NodeDB.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+		NodeDB.addNode("test1", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		NodeDB.addNode("test2", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		NodeDB.addNode("test3", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+
+		UserAccountDB.addUserAccount("test1@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addMedicineRequest(2, "dell","test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		UserAccountDB.addSpecialUserType("pharmacist1@gmail.com", "testPass", "pharmacist","bob", "Shukla");
+		UserAccountDB.addSpecialUserType("pharmacist2@gmail.com", "testPass", "pharmacist","kim", "Shukla");
+		UserAccountDB.addSpecialUserType("pharmacist3@gmail.com", "testPass", "pharmacist","dell", "Shukla");
+
+		RequestsDB.addMedicineRequest(1, 3,"test1", "drugs", 2, "100ml", "take once a day", "Nupur");
+		RequestsDB.addMedicineRequest(1, 4,"test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		RequestsDB.addMedicineRequest(2, 5,"test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
 		ArrayList<String> returnedAssignees = RequestsDB.getRequestInfo("medDelivery", 1, "assignee");
 		ArrayList<String> correctAssignees = new ArrayList<String>();
 
-		correctAssignees.add("bob");
-		correctAssignees.add("kim");
+		correctAssignees.add("3");
+		correctAssignees.add("4");
 
 		assertTrue(correctAssignees.equals(returnedAssignees));
 	}
@@ -609,24 +653,28 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestAssignees2")
 	public void testGetRequestAssignees2(){
 
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
-		NodeDB.addNode("test3", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		NodeDB.addNode("test1", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		NodeDB.addNode("test2", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		NodeDB.addNode("test3", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
-		RequestsDB.addMedicineRequest(1, "kim","test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Ben", "Shukla");
 
-		NodeDB.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
-		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addMedicineRequest(2, "dell","test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		UserAccountDB.addSpecialUserType("pharmacist1@gmail.com", "testPass", "pharmacist","bob", "Shukla");
+		UserAccountDB.addSpecialUserType("pharmacist2@gmail.com", "testPass", "pharmacist","kim", "Shukla");
+		UserAccountDB.addSpecialUserType("pharmacist3@gmail.com", "testPass", "pharmacist","dell", "Shukla");
 
-		//"floral", "medDelivery", "sanitation", "security", "extTransport".
+		RequestsDB.addMedicineRequest(1, 3,"test1", "drugs", 2, "100ml", "take once a day", "Nupur");
+		RequestsDB.addMedicineRequest(1, 4,"test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		RequestsDB.addMedicineRequest(2, 5,"test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
 
 		ArrayList<String> returnedAssignees = RequestsDB.getRequestInfo("medDelivery", -1, "assignee");
 		ArrayList<String> correctAssignees = new ArrayList<String>();
 
-		correctAssignees.add("bob");
-		correctAssignees.add("kim");
-		correctAssignees.add("dell");
+		correctAssignees.add("3");
+		correctAssignees.add("4");
+		correctAssignees.add("5");
 
 		assertTrue(correctAssignees.equals(returnedAssignees));
 	}
@@ -644,15 +692,19 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestLocations")
 	public void testGetRequestLocations(){
 
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
-		NodeDB.addNode("test3", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
-		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
-		RequestsDB.addMedicineRequest(1, "kim","test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		NodeDB.addNode("test1", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		NodeDB.addNode("test2", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		NodeDB.addNode("test3", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
 
-		NodeDB.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addMedicineRequest(2, "kim","test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		UserAccountDB.addSpecialUserType("pharmacist1@gmail.com", "testPass", "pharmacist", "bob", "Shukla");
+		UserAccountDB.addSpecialUserType("pharmacist2@gmail.com", "testPass", "pharmacist", "kim", "Shukla");
+
+		RequestsDB.addMedicineRequest(1, 3,"test1", "drugs", 2, "100ml", "take once a day", "Nupur");
+		RequestsDB.addMedicineRequest(1, 4,"test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		RequestsDB.addMedicineRequest(2, 3,"test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
 		ArrayList<String> returnedLocations = RequestsDB.getRequestLocations("medDelivery", 1);
 		ArrayList<String> correctLocations = new ArrayList<String>();
@@ -671,15 +723,19 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestLocations2")
 	public void testGetRequestLocations2(){
 
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
-		NodeDB.addNode("test3", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
-		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
-		RequestsDB.addMedicineRequest(1, "kim","test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		NodeDB.addNode("test1", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		NodeDB.addNode("test2", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		NodeDB.addNode("test3", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
 
-		NodeDB.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addMedicineRequest(2, "kim","test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
+
+		UserAccountDB.addSpecialUserType("pharmacist1@gmail.com", "testPass", "pharmacist", "bob", "Shukla");
+		UserAccountDB.addSpecialUserType("pharmacist2@gmail.com", "testPass", "pharmacist", "kim", "Shukla");
+
+		RequestsDB.addMedicineRequest(1, 3,"test1", "drugs", 2, "100ml", "take once a day", "Nupur");
+		RequestsDB.addMedicineRequest(1, 4,"test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		RequestsDB.addMedicineRequest(2, 3,"test3", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
 		ArrayList<String> returnedLocations = RequestsDB.getRequestLocations("medDelivery", -1);
 		ArrayList<String> correctLocations = new ArrayList<String>();
@@ -708,11 +764,11 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testEditSanitationRequest")
 	public void testEditSanitationRequest(){
-
 		NodeDB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+		UserAccountDB.addSpecialUserType("custodian@gmail.com", "testPass", "custodian", "bob", "Shukla");
 
-		RequestsDB.addSanitationRequest(1, "bob","test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
+		RequestsDB.addSanitationRequest(1, 2,"test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
 
 		int result = 0;
 		result = RequestsDB.editSanitationRequest(1, "test", null, null, null, "hello test");
@@ -726,8 +782,9 @@ public class DatabaseTests {
 
 		NodeDB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+		UserAccountDB.addSpecialUserType("EMT@gmail.com", "testPass", "EMT", "bob", "Shukla");
 
-		RequestsDB.addExternalPatientRequest(1, "bob", "test", "Ambulance","severe", "123", "15 mins", "headache");
+		RequestsDB.addExternalPatientRequest(1, 2, "test", "Ambulance","severe", "123", "15 mins", "headache");
 
 		int result = 0;
 		result = RequestsDB.editExternalPatientRequest(1, "test", null, null, null, null, "15 mins");
@@ -741,8 +798,9 @@ public class DatabaseTests {
 
 		NodeDB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+		UserAccountDB.addSpecialUserType("pharmacist@gmail.com", "testPass", "pharmacist", "bob", "Shukla");
 
-		RequestsDB.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		RequestsDB.addMedicineRequest(1, 2,"test", "drugs", 2, "100ml", "take once a day", "Nupur");
 
 		int result = 0;
 		result = RequestsDB.editMedicineRequest(1,"test", "Tylenol", null, null, "Take twice everyday", null);
@@ -756,8 +814,9 @@ public class DatabaseTests {
 
 		NodeDB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+		UserAccountDB.addSpecialUserType("floralPerson@gmail.com", "testPass", "floralPerson", "bob", "Shukla");
 
-		RequestsDB.addFloralRequest(1,"bob", "test", "Nupur", "Roses", 1, "Tall", "feel better");
+		RequestsDB.addFloralRequest(1,2, "test", "Nupur", "Roses", 1, "Tall", "feel better");
 
 		int result = 0;
 		result = RequestsDB.editFloralRequest(1,"test", "Ashley", "Tulips", null, null, null);
@@ -771,8 +830,9 @@ public class DatabaseTests {
 
 		NodeDB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
+		UserAccountDB.addSpecialUserType("security@gmail.com", "testPass", "security", "bob", "Shukla");
 
-		RequestsDB.addSecurityRequest(1, "bob", "test", "low", "Low");
+		RequestsDB.addSecurityRequest(1, 2, "test", "low", "Low");
 
 		int result = 0;
 		result = RequestsDB.editSecurityRequest(1,null, "high", "High");
@@ -786,8 +846,10 @@ public class DatabaseTests {
 
 		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
-		RequestsDB.addMedicineRequest(1, "bob","test", "drugs", 2, "100ml", "take once a day", "Nupur");
-		RequestsDB.addMedicineRequest(1, "bob1","test", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		UserAccountDB.addSpecialUserType("pharmacist@gmail.com", "testPass", "pharmacist", "bob", "Shukla");
+
+		RequestsDB.addMedicineRequest(1, 2,"test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		RequestsDB.addMedicineRequest(1, 2,"test", "drugs2", 3, "10ml", "take once a day", "Nupur");
 
 		ArrayList<String> IDS = RequestsDB.getRequestInfo("medDelivery", 1, "requestID");
 
@@ -901,15 +963,29 @@ public class DatabaseTests {
 		NodeDB.addNode("FDEPT00501",2128,1300,"1","Tower","DEPT","Emergency Department","Emergency");
 		NodeDB.addNode("EEXIT00101",2275,785,"1","45 Francis","EXIT","Ambulance Parking Exit Floor 1","AmbExit 1");
 
-		RequestsDB.addExternalPatientRequest(27,"Ciaran Goodwin","EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
-		RequestsDB.addExternalPatientRequest(30,"Lola Bond","EEXIT00101", "Ambulance","Low Severity", "4093380", "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
-		RequestsDB.addExternalPatientRequest(22,"Samantha Russell","FDEPT00501", "Helicopter","High Severity", "92017693", "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
-		RequestsDB.addExternalPatientRequest(20,"Caleb Chapman","FDEPT00501", "Helicopter","High Severity", "93754789", "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
-		RequestsDB.addExternalPatientRequest(24,"Dale Coates","EEXIT00101", "Ambulance","Medium Severity", "417592", "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
-		RequestsDB.addExternalPatientRequest(28,"Jerry Myers","FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
-		RequestsDB.addExternalPatientRequest(24,"Betty Warren","EEXIT00101", "Ambulance","Medium Severity", "33337861", "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
-		RequestsDB.addExternalPatientRequest(27,"Maxim Rawlings","EEXIT00101", "Ambulance","Low Severity", "40003829", "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
-		RequestsDB.addExternalPatientRequest(24,"Alan Singh","FDEPT00501", "Plane","High Severity", "38739983", "12 hours", "Heart transplant organ in route");
+		// EMT:
+		// 31- 39
+		UserAccountDB.addSpecialUserType("ciarang@gmail.com","admin001","EMT","Ciaran", "Goodwin");
+		UserAccountDB.addSpecialUserType("lolab@gmail.com","admin001","EMT","Lola", "Bond");
+		UserAccountDB.addSpecialUserType("samanthar@gmail.com","admin001","EMT","Samantha", "Russell");
+		UserAccountDB.addSpecialUserType("calebc@gmail.com","admin001","EMT","Caleb", "Chapman");
+		UserAccountDB.addSpecialUserType("dalec@gmail.com","admin001","EMT","Dale", "Coates");
+		UserAccountDB.addSpecialUserType("jerrym@gmail.com","admin001","EMT","Jerry", "Myers");
+		UserAccountDB.addSpecialUserType("bettyw@gmail.com","admin001","EMT","Betty", "Warren");
+		UserAccountDB.addSpecialUserType("maximr@gmail.com","admin001","EMT","Maxim", "Rawlings");
+		UserAccountDB.addSpecialUserType("alans@gmail.com","admin001","EMT","Alan", "Singh");
+
+
+
+		RequestsDB.addExternalPatientRequest(27,31,"EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
+		RequestsDB.addExternalPatientRequest(30,32,"EEXIT00101", "Ambulance","Low Severity", "4093380", "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
+		RequestsDB.addExternalPatientRequest(22,33,"FDEPT00501", "Helicopter","High Severity", "92017693", "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
+		RequestsDB.addExternalPatientRequest(20,34,"FDEPT00501", "Helicopter","High Severity", "93754789", "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
+		RequestsDB.addExternalPatientRequest(24,35,"EEXIT00101", "Ambulance","Medium Severity", "417592", "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
+		RequestsDB.addExternalPatientRequest(28,36,"FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
+		RequestsDB.addExternalPatientRequest(24,37,"EEXIT00101", "Ambulance","Medium Severity", "33337861", "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
+		RequestsDB.addExternalPatientRequest(27,38,"EEXIT00101", "Ambulance","Low Severity", "40003829", "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
+		RequestsDB.addExternalPatientRequest(24,39,"FDEPT00501", "Plane","High Severity", "38739983", "12 hours", "Heart transplant organ in route");
 
 
 
@@ -1004,6 +1080,26 @@ public class DatabaseTests {
 		assertEquals(1, rowsAffected);
 	}
 
+
+	@Test
+	@DisplayName("testGetSelectableAssignees")
+	public void testGetSelectableAssignees(){
+//		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+//
+//		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+//		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+//		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+//		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+//		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+//
+//	//('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian')))";
+//
+//		RequestsDB.addMedicineRequest(20, "Clara Bryan", "BLABS00102", "Atorvastatin", 30, "20mg", "Once a day by mouth", "Bill Byrd");
+//		RequestsDB.addMedicineRequest(20, "Jennifer Cunningham", "BLABS00202", "Lisinopril", 90, "20mg", "Once a day by mouth", "Bill Byrd");
+//
+//		RequestsDB.addSecurityRequest(20, "James O'Moore","HDEPT00203", "Low", "Low");
+//		RequestsDB.addSecurityRequest(22, "Russell Armstrong","WELEV00E01", "Medium", "Medium");
+	}
 
 //	@Test
 //	@DisplayName("testGetTablesToThatExist")

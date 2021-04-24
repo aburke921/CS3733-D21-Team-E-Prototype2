@@ -1,0 +1,128 @@
+/**
+ * Sample Skeleton for 'Laundry.fxml' Controller Class
+ */
+
+package edu.wpi.TeamE.views.serviceRequestControllers;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
+import java.lang.String;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import edu.wpi.TeamE.databases.NodeDB;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+
+public class Laundry {
+
+    @FXML // ResourceBundle that was given to the FXMLLoader
+    private ResourceBundle resources;
+
+    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    private URL location;
+
+    @FXML // fx:id="fullscreen"
+    private Rectangle fullscreen; // Value injected by FXMLLoader
+
+    @FXML // fx:id="hide"
+    private Circle hide; // Value injected by FXMLLoader
+
+    @FXML // fx:id="exit"
+    private Polygon exit; // Value injected by FXMLLoader
+
+    @FXML // fx:id="locationInput"
+    private JFXComboBox<?> locationInput; // Value injected by FXMLLoader
+
+    @FXML // fx:id="ambulance1"
+    private String ambulance1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="helicopter1"
+    private String helicopter1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="plane1"
+    private String plane1; // Value injected by FXMLLoader
+
+    @FXML // fx:id="washLoadAmountInput"
+    private JFXComboBox<?> washLoadAmountInput; // Value injected by FXMLLoader
+
+    @FXML // fx:id="ambulance"
+    private String ambulance; // Value injected by FXMLLoader
+
+    @FXML // fx:id="helicopter"
+    private String helicopter; // Value injected by FXMLLoader
+
+    @FXML // fx:id="plane"
+    private String plane; // Value injected by FXMLLoader
+
+    @FXML // fx:id="dryLoadAmountInput"
+    private JFXComboBox<?> dryLoadAmountInput; // Value injected by FXMLLoader
+
+    @FXML // fx:id="high_severity"
+    private String high_severity; // Value injected by FXMLLoader
+
+    @FXML // fx:id="medium_severity"
+    private String medium_severity; // Value injected by FXMLLoader
+
+    @FXML // fx:id="low_severity"
+    private String low_severity; // Value injected by FXMLLoader
+
+    @FXML // fx:id="patientIdInput"
+    private JFXTextField patientIdInput; // Value injected by FXMLLoader
+
+    @FXML // fx:id="assignedPersonnel"
+    private JFXTextField assignedPersonnel; // Value injected by FXMLLoader
+
+    @FXML // fx:id="descriptionInput"
+    private JFXTextArea descriptionInput; // Value injected by FXMLLoader
+
+    @FXML // fx:id="cancel"
+    private JFXButton cancel; // Value injected by FXMLLoader
+
+    @FXML // fx:id="submit"
+    private JFXButton submit; // Value injected by FXMLLoader
+
+    @FXML
+    void handleButtonCancel(ActionEvent event) {
+
+    }
+
+    @FXML
+    void saveData(ActionEvent event) {
+
+    }
+
+    @FXML // This method is called by the FXMLLoader when initialization is complete
+    void initialize() {
+
+        assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'Laundry.fxml'.";
+        ObservableList<String> locations = NodeDB.getAllNodeLongNames();
+        locationInput.setItems(locations);
+        assert ambulance1 != null : "fx:id=\"ambulance1\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert helicopter1 != null : "fx:id=\"helicopter1\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert plane1 != null : "fx:id=\"plane1\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert washLoadAmountInput != null : "fx:id=\"washLoadAmountInput\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert ambulance != null : "fx:id=\"ambulance\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert helicopter != null : "fx:id=\"helicopter\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert plane != null : "fx:id=\"plane\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert dryLoadAmountInput != null : "fx:id=\"dryLoadAmountInput\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert high_severity != null : "fx:id=\"high_severity\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert medium_severity != null : "fx:id=\"medium_severity\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert low_severity != null : "fx:id=\"low_severity\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert patientIdInput != null : "fx:id=\"patientIdInput\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert assignedPersonnel != null : "fx:id=\"assignedPersonnel\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert descriptionInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'Laundry.fxml'.";
+        assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'Laundry.fxml'.";
+
+    }
+}

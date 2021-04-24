@@ -121,6 +121,14 @@
                               <Font size="18.0" />
                            </font>
                         </Button>
+                        <Button fx:id="languageInterpreterButton" layoutX="460.0" layoutY="234.0" mnemonicParsing="false" onAction="#toLanguageInterpreter" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Language Interpreter" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
                      </children>
                   </VBox>
                </center>

@@ -87,13 +87,13 @@ public class SanitationServices extends ServiceRequestFormComponents {
       //connection.addRequest("sanitationServices", request);
       ArrayList<String> nodeIDS = NodeDB.getListOfNodeIDS();
       String serviceKind = ServiceTypeinput.getValue();
-      String assignee = assignedIndividual.getText();
+      int assigneeID = 99999;
       String details = detailedInstructionsInput.getText();
       String severity = Severity.getValue();
       String signature = Signature.getText();
       int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
       String nodeID = nodeIDS.get(nodeIDIndex);
-      RequestsDB.addSanitationRequest(15,assignee,nodeID, serviceKind,details,severity,signature);
+      RequestsDB.addSanitationRequest(15,assigneeID,nodeID, serviceKind,details,severity,signature);
       System.out.println(serviceKind);
 
       super.handleButtonSubmit(actionEvent);

@@ -92,29 +92,42 @@ public class appointmentDB {
 	 * @param newDoctorID is the new doctor assigned
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int editAppointment(int appointmentID, String newStartTime, String newEndTime, Integer newDoctorID) {
+	public static int editAppointment(int appointmentID, int newStartTime, int newEndTime, Integer newDoctorID) {
 
 		boolean added = false;
 
 		String query = "update appointment set ";
 
-		if (newStartTime!= null) {
-			query = query + " startTime = '" + newStartTime + "'";
+		Integer newStartTimeI = newStartTime;
+		Integer newEndTimeI = newStartTime;
+
+		if (newStartTimeI!= null) {
+
+			long newStartTimelong = (long) newStartTime;
+			Long newStartTimeL = newStartTimelong;
+			Timestamp sTime = new Timestamp(newStartTimeL);
+
+			query = query + "startTime = '" + sTime + "'";
 
 			added = true;
 		}
-		if (newEndTime != null) {
+		if (newEndTimeI != null) {
+
+			long newEndTimelong = (long) newEndTime;
+			Long newEndTimeL = newEndTimelong;
+			Timestamp eTime = new Timestamp(newEndTimeL);
+
 			if (added == true) {
 				query = query + ", ";
 			}
-			query = query + "endTime = '" + newEndTime + "'";
+			query = query + "endTime = '" + eTime + "'";
 			added = true;
 		}
 		if (newDoctorID != null) {
 			if (added == true) {
 				query = query + ", ";
 			}
-			query = query + "doctorID = '" + newDoctorID + "'";
+			query = query + "doctorID = " + newDoctorID;
 			added = true;
 		}
 

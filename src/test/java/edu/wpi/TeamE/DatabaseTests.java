@@ -957,6 +957,29 @@ public class DatabaseTests {
 
 
 	@Test
+	@DisplayName("testEditAppointment")
+	public void testEditAppointment(){
+
+		NodeDB.addNode("ADEPT00101",1401,2628,"1","BTM","DEPT","Neuroscience Waiting Room","Neuro Waiting Room");
+
+		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+		UserAccountDB.addSpecialUserType("ameliak@yahoo.com","doctor02","doctor","Amelia", "Knight");
+
+		appointmentDB.addAppointment(1, 400, 400, 2);
+		appointmentDB.addAppointment(2, 400, 400, 2);
+
+
+		int rowAffected = appointmentDB.editAppointment(1, 700, 700, null);
+		int rowAffected2 = appointmentDB.editAppointment(2, 500, 500, 3);
+
+		int totalRowAffected = rowAffected + rowAffected2;
+
+		assertEquals(2, totalRowAffected);
+	}
+
+
+	@Test
 	@DisplayName("testAddAppointment")
 	public void testAddRemovedPatientAppointmentHistory(){
 

@@ -109,7 +109,7 @@
                                                                         <Insets top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXComboBox>
-                                                                <JFXComboBox fx:id="requestTypeInput" prefHeight="27.0" prefWidth="295.0" promptText="Request Type">
+                                                                <JFXComboBox fx:id="dietaryRestrictionsInput" prefHeight="27.0" prefWidth="295.0" promptText="Dietary Restrictions">
                                                                     <VBox.margin>
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
@@ -121,7 +121,7 @@
                                                                         </FXCollections>
                                                                     </items>
                                                                 </JFXComboBox>
-                                                                <JFXComboBox fx:id="severityInput" prefHeight="27.0" prefWidth="291.0" promptText="Severity">
+                                                                <JFXComboBox fx:id="allergysInput" prefHeight="27.0" prefWidth="291.0" promptText="Allergys">
                                                                     <VBox.margin>
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
@@ -133,16 +133,42 @@
                                                                         </FXCollections>
                                                                     </items>
                                                                 </JFXComboBox>
-                                                                <JFXTextField fx:id="patientIdInput" prefHeight="27.0" prefWidth="280.0" promptText="Patient ID #">
-                                                                    <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
-                                                                    </VBox.margin>
-                                                                </JFXTextField>
-                                                                <JFXTextField fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
-                                                                    <VBox.margin>
-                                                                        <Insets top="20.0" />
-                                                                    </VBox.margin>
-                                                                </JFXTextField>
+                                                <JFXComboBox fx:id="assigneeInput" layoutX="10.0" layoutY="30.0" prefHeight="27.0" prefWidth="295.0" promptText="Assignee">
+                                                   <items>
+                                                      <FXCollections fx:factory="observableArrayList">
+                                                         <String fx:id="ambulance11" fx:value="Ambulance" />
+                                                         <String fx:id="helicopter11" fx:value="Helicopter" />
+                                                         <String fx:id="plane11" fx:value="Plane" />
+                                                      </FXCollections>
+                                                   </items>
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" top="20.0" />
+                                                   </VBox.margin>
+                                                </JFXComboBox>
+                                                <JFXComboBox fx:id="foodInput" layoutX="10.0" layoutY="191.0" prefHeight="27.0" prefWidth="295.0" promptText="Food">
+                                                   <items>
+                                                      <FXCollections fx:factory="observableArrayList">
+                                                         <String fx:id="ambulance111" fx:value="Ambulance" />
+                                                         <String fx:id="helicopter111" fx:value="Helicopter" />
+                                                         <String fx:id="plane111" fx:value="Plane" />
+                                                      </FXCollections>
+                                                   </items>
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" top="20.0" />
+                                                   </VBox.margin>
+                                                </JFXComboBox>
+                                                <JFXComboBox fx:id="beveragesInput" layoutX="10.0" layoutY="248.0" prefHeight="27.0" prefWidth="295.0" promptText="Beverages">
+                                                   <items>
+                                                      <FXCollections fx:factory="observableArrayList">
+                                                         <String fx:id="ambulance1111" fx:value="Ambulance" />
+                                                         <String fx:id="helicopter1111" fx:value="Helicopter" />
+                                                         <String fx:id="plane1111" fx:value="Plane" />
+                                                      </FXCollections>
+                                                   </items>
+                                                   <VBox.margin>
+                                                      <Insets bottom="10.0" top="20.0" />
+                                                   </VBox.margin>
+                                                </JFXComboBox>
                                                             </children>
                                                             <FlowPane.margin>
                                                                 <Insets left="10.0" />

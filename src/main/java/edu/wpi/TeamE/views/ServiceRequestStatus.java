@@ -123,7 +123,7 @@ public class ServiceRequestStatus {
 //            System.out.println(idArray.get(j));
 //        }
         ArrayList<String> statusArray = RequestsDB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
-        ArrayList<String> locationArray = RequestsDB.getMyCreatedRequestInfo(tableName, App.userID, "roomID");
+        ArrayList<String> locationArray = RequestsDB.getRequestLocations(tableName, App.userID);
         ArrayList<String> assigneeArray = RequestsDB.getMyCreatedRequestInfo(tableName, App.userID, "assigneeID");
         if(idArray.size() > 0) {
             System.out.println("Array size" + idArray.size());

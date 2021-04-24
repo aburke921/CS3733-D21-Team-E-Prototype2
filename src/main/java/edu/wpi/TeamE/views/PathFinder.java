@@ -220,9 +220,7 @@ public class PathFinder {
 
         List<String> directions = currentFoundPath.makeDirectionsWithDist();
         ListView<String> listView = new ListView<>();
-        for (String dir : directions) {
-            listView.getItems().add(dir);
-        }
+        listView.getItems().addAll(directions);
         listView.setPrefHeight(USE_COMPUTED_SIZE);
 
         JFXDialogLayout error = new JFXDialogLayout();
@@ -230,9 +228,13 @@ public class PathFinder {
         error.setBody(listView);
         error.setPrefHeight(USE_COMPUTED_SIZE);
         JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
-        dialog.setPrefHeight(USE_COMPUTED_SIZE);
         dialog.setMaxWidth(350);
-        dialog.setMaxHeight(425);
+        int fullSize = listView.getItems().size() * 35 + 120;
+        if (fullSize > 425) {
+            dialog.setMaxHeight(425);
+        } else {
+            dialog.setMaxHeight(fullSize);
+        }
         JFXButton okay = new JFXButton("Done");
         okay.setOnAction(new EventHandler<ActionEvent>() {
             @Override

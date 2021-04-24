@@ -1,6 +1,9 @@
 package edu.wpi.TeamE.databases;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,17 +22,17 @@ public class RequestsDB {
 	 * - creationTime: this is a time stamp that is added to the request at the moment it is made.
 	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport".
 	 * - requestStatus: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
-	 * - assignee: this is the person who is assigned to the request
+	 * - assigneeID: this is the person who is assigned to the request
 	 */
 	public static void createRequestsTable() {
 
 		String query = "Create Table requests(" +
-				"requestID    int Primary Key,\n" +
-				"creatorID    int References useraccount On Delete Cascade," +
-				"creationTime timestamp,\n" +
-				"requestType  varchar(31),\n" +
-				"requestStatus varchar(10),\n" +
-				"assignee varchar(31)," +
+				"requestID     int Primary Key, " +
+				"creatorID     int References useraccount On Delete Cascade," +
+				"creationTime  timestamp, " +
+				"requestType   varchar(31), " +
+				"requestStatus varchar(10), " +
+				"assigneeID    int References useraccount," +
 				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
 				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 
@@ -66,7 +69,7 @@ public class RequestsDB {
 				"vaseType      varchar(31), " +
 				"message       varchar(5000), " +
 				"Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')), " +
-				"Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)),\n" +
+				"Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)), " +
 				"Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -92,15 +95,15 @@ public class RequestsDB {
 	 */
 	public static void createSanitationTable() {
 
-		String query = "Create Table sanitationRequest(\n" +
-				"    requestID int Primary Key References requests On Delete Cascade,\n" +
-				"    roomID varchar(31) Not Null References node On Delete Cascade,\n" +
-				"    signature varchar(31) Not Null,\n" +
-				"    description varchar(5000),\n" +
-				"    sanitationType varchar(31),\n" +
-				"    urgency varchar(31) Not Null,\n" +
+		String query = "Create Table sanitationRequest( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID varchar(31) Not Null References node On Delete Cascade, " +
+				"    signature varchar(31) Not Null, " +
+				"    description varchar(5000), " +
+				"    sanitationType varchar(31), " +
+				"    urgency varchar(31) Not Null, " +
 				"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))," +
-				"    Constraint urgencyTypeLimit Check (urgency In ('Low', 'Medium', 'High', 'Critical'))\n" +
+				"    Constraint urgencyTypeLimit Check (urgency In ('Low', 'Medium', 'High', 'Critical')) " +
 				")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -126,13 +129,13 @@ public class RequestsDB {
 	 */
 	public static void createExtTransportTable() {
 
-		String query = "Create Table extTransport(\n" +
-				"    requestID int Primary Key References requests On Delete Cascade,\n" +
-				"    roomID varchar(31) Not Null References node On Delete Cascade,\n" +
+		String query = "Create Table extTransport( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID varchar(31) Not Null References node On Delete Cascade, " +
 				"    requestType varchar(100) Not Null, " +
-				"    severity varchar(30) Not Null,\n" +
-				"    patientID varchar(31) Not Null,\n" +
-				"    ETA varchar(100),\n" +
+				"    severity varchar(30) Not Null, " +
+				"    patientID varchar(31) Not Null, " +
+				"    ETA varchar(100), " +
 				"    description varchar(5000)," +
 				"    Constraint requestTypeLimitExtTrans Check (requestType In ('Ambulance', 'Helicopter', 'Plane'))" +
 				")";
@@ -160,7 +163,7 @@ public class RequestsDB {
 	 */
 	public static void createMedDeliveryTable() {
 
-		String query = "Create Table medDelivery (\n" +
+		String query = "Create Table medDelivery ( " +
 				"requestID  int Primary Key References requests On Delete Cascade," +
 				"roomID     varchar(31) Not Null References node On Delete Cascade," +
 				"medicineName        varchar(31) Not Null," +
@@ -189,12 +192,12 @@ public class RequestsDB {
 	 */
 	public static void createSecurityServTable() {
 
-		String query = "Create Table securityServ (\n" +
+		String query = "Create Table securityServ ( " +
 				"requestID  int Primary Key References requests On Delete Cascade," +
 				"roomID     varchar(31) Not Null References node On Delete Cascade," +
 				"level     varchar(31)," +
 				"urgency   varchar(31) Not Null," +
-				"Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical'))\n" +
+				"Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical')) " +
 				")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -208,24 +211,23 @@ public class RequestsDB {
 		}
 	}
 
+// ADDING TO TABLES::::
+// ADDING TO TABLES::::
+// ADDING TO TABLES::::
+// ADDING TO TABLES::::
+// ADDING TO TABLES::::
+// ADDING TO TABLES::::
+// ADDING TO TABLES::::
 
-
-
-
-
-
-
-	//ADDING TO TABLES::::
-
-	public static void addRequest(int userID, String assignee, String requestType){
-		String insertRequest = "Insert Into requests\n" +
-				"Values ((Select Count(*)\n" +
+	public static void addRequest(int userID, int assigneeID, String requestType) {
+		String insertRequest = "Insert Into requests " +
+				"Values ((Select Count(*) " +
 				"         From requests) + 1, ?, Current Timestamp, ?, 'inProgress', ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
 			prepState.setString(2, requestType);
-			prepState.setString(3, assignee);
+			prepState.setInt(3, assigneeID);
 			prepState.execute();
 		} catch (SQLException e) {
 			//e.printStackTrace();
@@ -238,11 +240,11 @@ public class RequestsDB {
 	 * This adds a sanitation services form to the table specific for it
 	 * @param //form this is the form being added to the table
 	 */
-	public static void addSanitationRequest(int userID, String assignee, String roomID, String sanitationType, String description, String urgency, String signature) {
-		addRequest(userID, assignee, "sanitation");
+	public static void addSanitationRequest(int userID, int assigneeID, String roomID, String sanitationType, String description, String urgency, String signature) {
+		addRequest(userID, assigneeID, "sanitation");
 
-		String insertSanitationRequest = "Insert Into sanitationRequest\n" +
-				"Values ((Select Count(*)\n" +
+		String insertSanitationRequest = "Insert Into sanitationrequest " +
+				"Values ((Select Count(*) " +
 				"         From requests), ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertSanitationRequest)) {
@@ -262,14 +264,14 @@ public class RequestsDB {
 
 	/**
 	 * This function needs to add a external patient form to the table for external patient forms
-	 * @param //form this is the form that we will create and send to the database
+	 * //@param form this is the form that we will create and send to the database
 	 */
-	public static void addExternalPatientRequest(int userID, String assignee, String roomID, String requestType, String severity, String patientID, String ETA, String description) {
+	public static void addExternalPatientRequest(int userID, int assigneeID, String roomID, String requestType, String severity, String patientID, String ETA, String description) {
 
-		addRequest(userID, assignee, "extTransport");
+		addRequest(userID, assigneeID, "extTransport");
 
-		String insertExtTransport = "Insert Into exttransport\n" +
-				"Values ((Select Count(*)\n" +
+		String insertExtTransport = "Insert Into exttransport " +
+				"Values ((Select Count(*) " +
 				"         From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
@@ -292,18 +294,18 @@ public class RequestsDB {
 	/**
 	 * This adds a floral request to the database that the user is making
 	 * @param userID        this is the username that the user uses to log into the account
+	 * @param assigneeID    this is the ID of the assigned user
 	 * @param RoomNodeID    this is the nodeID/room the user is sending the request to
 	 * @param recipientName this is the name of the individual they want the flowers to be addressed to
 	 * @param flowerType    this is the type of flowers that the user wants to request
 	 * @param flowerAmount  this the number/quantity of flowers that the user is requesting
 	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
 	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
-	 *                      for whoever is fufilling the request
 	 */
-	public static void addFloralRequest(int userID, String assignee, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
-		addRequest(userID, assignee, "floral");
+	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
+		addRequest(userID, assigneeID, "floral");
 
-		String insertFloralRequest = "Insert Into floralRequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
 			prepState.setString(1, RoomNodeID);
@@ -318,37 +320,14 @@ public class RequestsDB {
 			e.printStackTrace();
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
 		}
-
-//			Create Table requests(
-		//			requestID    int Primary Key,
-		//			userID    int References userAccount On Delete Cascade,
-		//			creationTime timestamp,
-		//			requestType  varchar(31),
-		//			requestState varchar(10),
-		//			Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
-		//			Constraint requestStateLimit Check (requestState In ('complete', 'canceled', 'inProgress'))
-//          );
-
-//			Create Table floralRequests(
-//				requestID     int Primary Key References requests On Delete Cascade,
-//			    roomID        varchar(31) References node On Delete Cascade,
-//				recipientName varchar(31),
-//				flowerType    varchar(31),
-//				flowerAmount  int,
-//			    vaseType      varchar(31),
-//				message       varchar(255),
-//				Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')),
-//			    Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)),
-//				Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None'))
-//          );
 	}
 
 	/**
 	 * This adds a medicine request form to the table for medicine request forms
-	 * @param //form this is the form being added
+	 * // @param form this is the form being added
 	 */
-	public static void addMedicineRequest(int userID, String assignee, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
-		addRequest(userID, assignee, "medDelivery");
+	public static void addMedicineRequest(int userID, int assigneeID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
+		addRequest(userID, assigneeID, "medDelivery");
 
 		String insertMedRequest = "Insert Into meddelivery Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
 
@@ -370,10 +349,10 @@ public class RequestsDB {
 
 	/**
 	 * This adds a security form to the table for security service form
-	 * @param //form this is the form added to the table
+	 * // @param form this is the form added to the table
 	 */
-	public static void addSecurityRequest(int userID, String assignee, String roomID, String level, String urgency) {
-		addRequest(userID, assignee, "security");
+	public static void addSecurityRequest(int userID, int assigneeID, String roomID, String level, String urgency) {
+		addRequest(userID, assigneeID, "security");
 
 		String insertSecurityRequest = "Insert Into securityserv Values ((Select Count(*) From requests), ?, ?, ?)";
 
@@ -391,20 +370,21 @@ public class RequestsDB {
 
 	}
 
-
-
-
-
-
-	//EDITING TABLES::::
+// EDITING TABLES::::
+// EDITING TABLES::::
+// EDITING TABLES::::
+// EDITING TABLES::::
+// EDITING TABLES::::
+// EDITING TABLES::::
+// EDITING TABLES::::
 
 	/**
 	 * This edits a Sanitation Services form that is already in the database
-	 * @param requestID the ID that specifies which sanitation form that is being edited
-	 * @param description the new description that the user is using to update their form
-	 * @param roomID the new node/room/location the user is assigning this request to
+	 * @param requestID      the ID that specifies which sanitation form that is being edited
+	 * @param description    the new description that the user is using to update their form
+	 * @param roomID         the new node/room/location the user is assigning this request to
 	 * @param sanitationType the new type of sanitation that the user is changing their request to
-	 * @param urgency the new urgency that the user is changing in their request
+	 * @param urgency        the new urgency that the user is changing in their request
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editSanitationRequest(int requestID, String roomID, String sanitationType, String description, String urgency, String signature) {
@@ -426,7 +406,7 @@ public class RequestsDB {
 			query = query + " sanitationType = '" + sanitationType + "'";
 			added = true;
 		}
-		if (description!= null) {
+		if (description != null) {
 			query = query + " description = '" + description + "'";
 
 			added = true;
@@ -447,7 +427,6 @@ public class RequestsDB {
 		}
 
 
-
 		query = query + " where requestID = " + requestID;
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -461,19 +440,17 @@ public class RequestsDB {
 		}
 
 
-
-
 	}
 
 	/**
 	 * This edits a External Transport Services form that is already in the database
-	 * @param requestID the ID that specifies which external transfer form that is being edited
-	 * @param roomID this is the string used to update the hospital field
+	 * @param requestID   the ID that specifies which external transfer form that is being edited
+	 * @param roomID      this is the string used to update the hospital field
 	 * @param requestType this is the string used to update the type
-	 * @param severity this is the string used to update the severity
-	 * @param patientID this is the string used to update patientID
+	 * @param severity    this is the string used to update the severity
+	 * @param patientID   this is the string used to update patientID
 	 * @param description this is the string used to update the description
-	 * @param ETA this is the string used to update the eta
+	 * @param ETA         this is the string used to update the eta
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String description, String ETA) {
@@ -481,7 +458,7 @@ public class RequestsDB {
 		boolean added = false;
 		String query = "update extTransport set ";
 
-		if (roomID!= null) {
+		if (roomID != null) {
 			query = query + " roomID = '" + roomID + "'";
 
 			added = true;
@@ -537,12 +514,12 @@ public class RequestsDB {
 
 	/**
 	 * This edits a floral request form that is already in the database
-	 * @param requestID the ID that specifies which external transfer form that is being edited
-	 * @param roomID the new node/room/location the user is assigning this request to
-	 * @param flowerType the type of flower the user wants to change their request to
+	 * @param requestID    the ID that specifies which external transfer form that is being edited
+	 * @param roomID       the new node/room/location the user is assigning this request to
+	 * @param flowerType   the type of flower the user wants to change their request to
 	 * @param flowerAmount the new quantity of flowers the user wants to change their request to
-	 * @param vaseType the new vase type the user wants to change their request to
-	 * @param message the new message containing either instructions or to the recipient the user wants to change
+	 * @param vaseType     the new vase type the user wants to change their request to
+	 * @param message      the new message containing either instructions or to the recipient the user wants to change
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String message) {
@@ -550,7 +527,7 @@ public class RequestsDB {
 		boolean added = false;
 		String query = "update floralRequests set ";
 
-		if (recipientName!= null) {
+		if (recipientName != null) {
 			query = query + " recipientName = '" + recipientName + "'";
 
 			added = true;
@@ -605,21 +582,21 @@ public class RequestsDB {
 
 	/**
 	 * This function edits a current request for medicine delivery with the information below for a request already in the database
-	 * @param requestID the ID that specifies which external transfer form that is being edited
-	 * @param roomID the new node/room/location the user is assigning this request to
-	 * @param medicineName this is the name of the medicine the user is changing the request to
-	 * @param quantity this is the number of pills the user is changing the request to
-	 * @param dosage this is the dosage (ml or mg) the user is changing the request to
+	 * @param requestID           the ID that specifies which external transfer form that is being edited
+	 * @param roomID              the new node/room/location the user is assigning this request to
+	 * @param medicineName        this is the name of the medicine the user is changing the request to
+	 * @param quantity            this is the number of pills the user is changing the request to
+	 * @param dosage              this is the dosage (ml or mg) the user is changing the request to
 	 * @param specialInstructions this is the new special instructions the user is requesting
-	 * @param assignee this is the userID of the a new employee or administrator that will be fulfilling the request.
+	 * @param assigneeID          this is the userID of the a new employee or administrator that will be fulfilling the request.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, String assignee) {
+	public static int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, int assigneeID) {
 
 		boolean added = false;
 		String query = "update medDelivery set ";
 
-		if (roomID!= null) {
+		if (roomID != null) {
 			query = query + " roomID = '" + roomID + "'";
 
 			added = true;
@@ -652,11 +629,11 @@ public class RequestsDB {
 			query = query + " specialInstructions = '" + specialInstructions + "'";
 			added = true;
 		}
-		if (assignee != null) {
+		if (assigneeID != 0) {
 			if (added == true) {
 				query = query + ", ";
 			}
-			query = query + " assignee = '" + assignee + "'";
+			query = query + " assigneeID = '" + assigneeID + "'";
 			added = true;
 		}
 
@@ -676,16 +653,16 @@ public class RequestsDB {
 	/**
 	 * This edits a security form already within the database
 	 * @param requestID the ID that specifies which external transfer form that is being edited
-	 * @param roomID the new node/room/location the user is assigning this request to
-	 * @param level this is the info to update levelOfSecurity
-	 * @param urgency  this is the info to update levelOfUrgency
+	 * @param roomID    the new node/room/location the user is assigning this request to
+	 * @param level     this is the info to update levelOfSecurity
+	 * @param urgency   this is the info to update levelOfUrgency
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editSecurityRequest(int requestID, String roomID, String level, String urgency) {
 		boolean added = false;
 		String query = "update securityServ set ";
 
-		if (roomID!= null) {
+		if (roomID != null) {
 			query = query + " roomID = '" + roomID + "'";
 
 			added = true;
@@ -718,19 +695,19 @@ public class RequestsDB {
 	}
 
 	/**
-	 * Can change the assignee or the request status to any request
-	 * @param requestID is the generated ID of the request
-	 * @param assignee is the assignee that you want to change it to
+	 * Can change the assigneeID or the request status to any request
+	 * @param requestID     is the generated ID of the request
+	 * @param assigneeID    is the assignee's ID that you want to change it to
 	 * @param requestStatus is the status that you want to change it to
 	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
 	 */
-	public static int editRequests(int requestID, String assignee, String requestStatus){
+	public static int editRequests(int requestID, int assigneeID, String requestStatus) {
 
 		boolean added = false;
 		String query = "Update requests ";
 
-		if (assignee!= null) {
-			query = query + "Set assignee = '" + assignee + "'";
+		if (assigneeID != 0) {
+			query = query + "Set assigneeID = '" + assigneeID + "'";
 
 			added = true;
 		}
@@ -754,37 +731,36 @@ public class RequestsDB {
 		}
 	}
 
-
-
-
-
-
-
-	//QUERYING TABLES::::
+//
+//
+//
+//
+//
+//
+// QUERYING TABLES::::
 
 	/**
-	 * Gets a list of all the "assignees", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID
+	 * Gets a list of all the "assigneeIDs", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID
 	 * @param tableType this is the name of the table that we are getting the info from
-	 * @param userID this is the ID of the user who made the request
-	 * @param infoType this is the type of information that is being retrieved
+	 * @param userID    this is the ID of the user who made the request
+	 * @param infoType  this is the type of information that is being retrieved
 	 * @return an ArrayList<String> with the desired info
 	 */
-	public static ArrayList<String> getRequestInfo(String tableType, int userID, String infoType){
+	public static ArrayList<String> getMyCreatedRequestInfo(String tableType, int userID, String infoType) {
 
 		ArrayList<String> listOfInfo = new ArrayList<>();
 
 		String query;
-		if (userID != -1) {
+		if (userID >= -1) {
 			query = "Select " + infoType + " from requests where requestType = '" + tableType + "' and creatorID = " + userID;
-		}
-		else{
+		} else {
 			query = "Select " + infoType + " From requests where requestType = '" + tableType + "'";
 		}
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
 
-			while(rset.next()){
+			while (rset.next()) {
 				String ID = rset.getString(infoType); //potential issue
 				listOfInfo.add(ID);
 			}
@@ -803,42 +779,46 @@ public class RequestsDB {
 	 * @param tableType this is the name of the table that we are getting the requestIDs from
 	 * @return a list of all longNames for the location for all of the requests
 	 */
-	public static ArrayList<String> getRequestLocations(String tableType, int userID){
+	public static ArrayList<String> getRequestLocations(String tableType, int userID) {
 		ArrayList<String> listOfLongNames = new ArrayList<String>();
 
 		String tableName = "";
-		switch (tableType){
-			case "floral": tableName = "floralRequests";
+		switch (tableType) {
+			case "floral":
+				tableName = "floralRequests";
 				break;
-			case "medDelivery": tableName = "medDelivery";
+			case "medDelivery":
+				tableName = "medDelivery";
 				break;
-			case "sanitation": tableName = "sanitationRequest";
+			case "sanitation":
+				tableName = "sanitationRequest";
 				break;
-			case "security": tableName = "securityServ";
+			case "security":
+				tableName = "securityServ";
 				break;
-			case "extTransport": tableName = "extTransport";
+			case "extTransport":
+				tableName = "extTransport";
 				break;
 		}
 
 		String query;
 
-			if (userID != -1) {
-				query = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
-			}
-			else{
-				query ="Select requestID, longName from node,(Select requestID, roomID From " + tableName + ") correctTable where node.nodeID = correctTable.roomID order by requestID";
-			}
+		if (userID >= -1) {
+			query = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
+		} else {
+			query = "Select requestID, longname From node,(Select requestid, roomid From " + tableName + ") correctTable Where node.nodeid = correctTable.roomID Order By requestID";
+		}
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
-			while(rset.next()){
+			while (rset.next()) {
 				String status = rset.getString("longName");
 				listOfLongNames.add(status);
 			}
 
 			rset.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getRequestLocations() error in the try/catch");
+			//e.printStackTrace();
+			System.err.println("getRequestLocations() got a SQLException");
 		}
 		return listOfLongNames;
 	}
@@ -846,17 +826,16 @@ public class RequestsDB {
 	/**
 	 * gets a list of available assignees based on the userType given
 	 * @param givenUserType is type of user (i.e. "nurse", "EMT", "doctor", etc.)
-	 * @return a list of possible assignees for the specific request type
+	 * @return a HashMap of possible assignees for the specific request type
 	 */
-	public static HashMap<Integer,String> getSelectableAssignees(String givenUserType) {
-		//ArrayList<String> listOfAssignees = new ArrayList<String>();
+	public static HashMap<Integer, String> getSelectableAssignees(String givenUserType) {
 		HashMap<Integer, String> listOfAssignees = new HashMap<>();
 
 		String query = "Select firstName, lastName, userID from userAccount where userType = '" + givenUserType + "'";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
-			while(rset.next()){
+			while (rset.next()) {
 				String firstName = rset.getString("firstName");
 				String lastName = rset.getString("lastName");
 				int assigneeID = rset.getInt("userID");
@@ -866,8 +845,8 @@ public class RequestsDB {
 
 			rset.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("getAvailableAssignees() error in the try/catch");
+			//e.printStackTrace();
+			System.err.println("getAvailableAssignees() got a SQLException");
 		}
 		return listOfAssignees;
 	}

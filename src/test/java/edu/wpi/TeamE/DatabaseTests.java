@@ -955,6 +955,7 @@ public class DatabaseTests {
 		assertEquals(2, totalRowsAffected);
 	}
 
+
 	@Test
 	@DisplayName("testAddAppointment")
 	public void testAddRemovedPatientAppointmentHistory(){
@@ -970,6 +971,38 @@ public class DatabaseTests {
 
 	}
 
+	@Test
+	@DisplayName("testCancelAppointment")
+	public void testCancelAppointment(){
+		NodeDB.addNode("ADEPT00101",1401,2628,"1","BTM","DEPT","Neuroscience Waiting Room","Neuro Waiting Room");
+
+		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+
+		appointmentDB.addAppointment(1, 400, 400, 2);
+
+		int rowsAffected = appointmentDB.cancelAppointment(1);
+
+		assertEquals(1, rowsAffected);
+	}
+
+
+	@Test
+	@DisplayName("testCancelAppointment : multiple appointments")
+	public void testCancelAppointment2(){
+		NodeDB.addNode("ADEPT00101",1401,2628,"1","BTM","DEPT","Neuroscience Waiting Room","Neuro Waiting Room");
+
+		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+
+		appointmentDB.addAppointment(1, 400, 400, 2);
+		appointmentDB.addAppointment(1, 500, 500, 2);
+		appointmentDB.addAppointment(1, 600, 600, 2);
+
+		int rowsAffected = appointmentDB.cancelAppointment(1);
+
+		assertEquals(1, rowsAffected);
+	}
 
 
 //	@Test

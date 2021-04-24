@@ -192,8 +192,6 @@ public class makeConnection {
 		RequestsDB.editRequests(6, 0, "canceled");
 		RequestsDB.editRequests(7, 0, "complete");
 
-		// TODO: Why are we dis-assigning people? We should only show inProgress requests anyways
-
 
 		//Sanitation Requests: //RequestID: 10 - 18
 		RequestsDB.addSanitationRequest(20,21, "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd");
@@ -213,7 +211,6 @@ public class makeConnection {
 		RequestsDB.editRequests(16, 0, "canceled");
 		RequestsDB.editRequests(17, 0, "complete");
 
-		// TODO: Why are we dis-assigning people? We should only show inProgress requests anyways
 
 		//Medicine Delivery Request //RequestID: 19 - 30
 		RequestsDB.addMedicineRequest(20, 21, "BLABS00102", "Atorvastatin", 30, "20mg", "Once a day by mouth", "Bill Byrd");
@@ -236,7 +233,6 @@ public class makeConnection {
 		RequestsDB.editRequests(26, 0, "canceled");
 		RequestsDB.editRequests(27, 0, "complete");
 
-		// TODO: Why are we dis-assigning people? We should only show inProgress requests anyways
 
 
 		//Security Requests: //RequestID: 31 - 38
@@ -256,8 +252,6 @@ public class makeConnection {
 		RequestsDB.editRequests(36, 0, "canceled");
 		RequestsDB.editRequests(37, 0, "complete");
 
-		// TODO: Why are we dis-assigning people? We should only show inProgress requests anyways
-
 
 		//RequestID: 39 - 47
 		RequestsDB.addExternalPatientRequest(27,21,"EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
@@ -276,8 +270,6 @@ public class makeConnection {
 		RequestsDB.editRequests(44, 0, "complete");
 		RequestsDB.editRequests(45, 0, "complete");
 		RequestsDB.editRequests(47, 0, "complete");
-
-		// TODO: Why are we dis-assigning people? We should only show inProgress requests anyways
 
 
 		//SuperAdmin:

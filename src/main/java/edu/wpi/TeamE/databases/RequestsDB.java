@@ -32,7 +32,7 @@ public class RequestsDB {
 				"creationTime  timestamp, " +
 				"requestType   varchar(31), " +
 				"requestStatus varchar(10), " +
-				"assigneeID    int References useraccount," +
+				"assigneeID    int References useraccount On Delete Cascade," +
 				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
 				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 
@@ -41,7 +41,7 @@ public class RequestsDB {
 			prepState.execute();
 
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("error creating requests table");
 		}
 	}
@@ -741,28 +741,33 @@ public class RequestsDB {
 
 	/**
 	 * Gets a list of all the "assigneeIDs", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID
-	 * @param tableType this is the name of the table that we are getting the info from
+	 * @param tableName this is the name of the table that we are getting the info from
 	 * @param userID    this is the ID of the user who made the request
 	 * @param infoType  this is the type of information that is being retrieved
 	 * @return an ArrayList<String> with the desired info
 	 */
-	public static ArrayList<String> getMyCreatedRequestInfo(String tableType, int userID, String infoType) {
+	public static ArrayList<String> getMyCreatedRequestInfo(String tableName, int userID, String infoType) {
 
 		ArrayList<String> listOfInfo = new ArrayList<>();
 
 		String query;
-		if (userID <= -1) {
-			query = "Select " + infoType + " From requests Natural Join " + tableType + " Where creatorID = " + userID;
+		if (userID >= -1) {
+			query = "Select " + infoType + " From requests Natural Join " + tableName + " Where creatorID = " + userID;
 		} else {
-			query = "Select " + infoType + " From requests Natural Join " + tableType;
+			query = "Select " + infoType + " From requests Natural Join " + tableName;
 		}
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
 
 			while (rset.next()) {
-				String ID = rset.getString(infoType); //potential issue
-				listOfInfo.add(ID);
+				if (infoType.equals("AssigneeID")) {
+					int ID = rset.getInt(infoType);
+					listOfInfo.add(String.valueOf(ID));
+				} else {
+					String ID = rset.getString(infoType); // potential issue // -TO-DO-: won't work with int AssigneeIDs? Fixed by translating IDs to String, should it return a pair of Assignee ID and name?
+					listOfInfo.add(ID);
+				}
 			}
 			rset.close();
 

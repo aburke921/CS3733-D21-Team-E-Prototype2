@@ -20,14 +20,15 @@ public class App extends Application {
 
 	public static int userID = 0;
 	private static Stage primaryStage;
-	private static String pageTitle;
+	private static String pageTitle; //Title for the currently displayed page, set by AppBarComponent
 
-//	private String pageTitle;
 
+	//get the current page's app title.
 	public static String getPageTitle() {
 		return pageTitle;
 	}
 
+	//set this for every UI page on which a title is wanted in the App Bar
 	public static void setPageTitle(String pageTitle) {
 		App.pageTitle = pageTitle;
 	}

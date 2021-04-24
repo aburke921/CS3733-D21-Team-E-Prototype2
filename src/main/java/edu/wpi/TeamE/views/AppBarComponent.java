@@ -57,13 +57,22 @@ public class AppBarComponent {
 
     //If exit button is clicked, exit app
     @FXML
-    void exit(MouseEvent event) {
+    void exitApplication(MouseEvent event) {
         App app = new App();
         app.stop();
     }
 
+    @FXML
+    void fullscreenApplication(MouseEvent event) {
+        App.getPrimaryStage().setFullScreen(!App.getPrimaryStage().isFullScreen());
+    }
+
+    @FXML
+    void hideApplication(MouseEvent event) {
+        App.getPrimaryStage().setIconified(true);
+    }
+
     public void setAppBarTitleLabel(String title) {
-//        appBarTitleLabel.setText("");
         this.appBarTitleLabel.setText(title);
     }
 

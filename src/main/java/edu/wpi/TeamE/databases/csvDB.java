@@ -133,7 +133,7 @@ public class csvDB {
 				}
 
 				// create a file writer to write to files
-				FileWriter nodeWriter = new FileWriter("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+				FileWriter nodeWriter = new FileWriter("CSVs/outputNode.csv");
 				nodeWriter.write("nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName\n");
 				nodeWriter.write(String.valueOf(nodeSB));
 				nodeWriter.close();
@@ -165,5 +165,53 @@ public class csvDB {
 			ioException.printStackTrace();
 		}
 	}
+
+	public static void addRemovedPatientAppointmentHistory(int patientID){
+
+		String sqlQuery = "select * from appointment where patientID = ?";
+		try (PreparedStatement prepStat = connection.prepareStatement(sqlQuery)) {
+			prepStat.setInt(1, patientID);
+
+
+			ResultSet rset = prepStat.executeQuery();
+
+			StringBuilder strBuild = new StringBuilder();
+			while (rset.next()) {
+
+				//File nodeCSV = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+				strBuild.append(rset.getInt("appointmentID")).append(",");
+				strBuild.append(rset.getString("patientID")).append(",");
+				strBuild.append(rset.getString("doctorID")).append(",");
+				strBuild.append(rset.getString("nodeID")).append(",");
+				strBuild.append(rset.getTimestamp("startTime")).append(",");
+				strBuild.append(rset.getTimestamp("endTime")).append("\n");
+			}
+
+			// create a file writer to write to files
+			FileWriter nodeWriter = new FileWriter("CSVs/outputRemovedPatientAppointmentHistory.csv");
+			nodeWriter.write("appointmentID, patientID, doctorID, nodeID, startTime, endTime\n");
+			nodeWriter.write(String.valueOf(strBuild));
+			nodeWriter.close();
+
+
+			rset.close();
+
+
+
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
+		} catch (IOException ioException) {
+			ioException.printStackTrace();
+		}
+
+
+
+
+
+
+
+	}
+
+
 
 }

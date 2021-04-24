@@ -63,6 +63,16 @@ public class ServiceRequests {
     }
 
     @FXML
+    private void toLanguageInterpreter(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/LanguageInterpreter.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
     private void toMedicineDelivery(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/MedicineDeliveryV2.fxml"));

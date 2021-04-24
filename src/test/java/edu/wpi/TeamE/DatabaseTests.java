@@ -481,6 +481,36 @@ public class DatabaseTests {
 
 	}
 
+	@Test
+	@DisplayName("testEditUserAccount")
+	public void testEditUserAccount() {
+		UserAccountDB.addSpecialUserType("test1@gmail.com", "testPassword", "patient", "patientFirstName", "patientLastName");
+		UserAccountDB.addSpecialUserType("test2@gmail.com", "testPassword1", "admin", "adminFirstName", "adminLastName");
+		UserAccountDB.addSpecialUserType("test3@gmail.com", "testPassword2", "doctor", "doctorFirstName", "doctorLastName");
+
+		int affectedRow = UserAccountDB.editUserAccount(1, "edited@gmail.com", null, null, "newFirstName", "newLastName");
+		int affectedRow1 = UserAccountDB.editUserAccount(3, null, "editedPassword", "patient", null, null);
+
+		int totalRowsAffected = affectedRow + affectedRow1;
+
+		assertTrue(totalRowsAffected == 2);
+	}
+
+	@Test
+	@DisplayName("testDeleteUserAccount")
+	public void testDeleteUserAccount() {
+		UserAccountDB.addSpecialUserType("test1@gmail.com", "testPassword", "patient", "patientFirstName", "patientLastName");
+		UserAccountDB.addSpecialUserType("test2@gmail.com", "testPassword1", "admin", "adminFirstName", "adminLastName");
+		UserAccountDB.addSpecialUserType("test3@gmail.com", "testPassword2", "doctor", "doctorFirstName", "doctorLastName");
+
+		int affectedRow = UserAccountDB.deleteUserAccount(1);
+		int affectedRow1 = UserAccountDB.deleteUserAccount(3);
+
+		int totalRowsAffected = affectedRow + affectedRow1;
+
+		assertTrue(totalRowsAffected == 2);
+	}
+
 
 	@Test
 	@DisplayName("testGetRequestStatus")
@@ -1029,6 +1059,29 @@ public class DatabaseTests {
 
 		int totalRowsAffected = rowsAffected1 + rowsAffected2;
 		assertEquals(2, totalRowsAffected);
+	}
+
+
+	@Test
+	@DisplayName("testEditAppointment")
+	public void testEditAppointment(){
+
+		NodeDB.addNode("ADEPT00101",1401,2628,"1","BTM","DEPT","Neuroscience Waiting Room","Neuro Waiting Room");
+
+		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+		UserAccountDB.addSpecialUserType("ameliak@yahoo.com","doctor02","doctor","Amelia", "Knight");
+
+		appointmentDB.addAppointment(1, 400, 400, 2);
+		appointmentDB.addAppointment(2, 400, 400, 2);
+
+
+		int rowAffected = appointmentDB.editAppointment(1, 700, 700, null);
+		int rowAffected2 = appointmentDB.editAppointment(2, 500, 500, 3);
+
+		int totalRowAffected = rowAffected + rowAffected2;
+
+		assertEquals(2, totalRowAffected);
 	}
 
 

@@ -1,10 +1,7 @@
 package edu.wpi.TeamE;
 
 import edu.wpi.TeamE.databases.*;
-import edu.wpi.cs3733.D21.teamE.database.csvDB;
-import edu.wpi.cs3733.D21.teamE.database.EdgeDB;
-import edu.wpi.cs3733.D21.teamE.database.EdgeDB;
-import edu.wpi.cs3733.D21.teamE.database.NodeDB;
+import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -43,8 +40,8 @@ public class App extends Application {
     boolean tablesExist = connection.allTablesThere();
 		if(!tablesExist){
 			try {
-				NodeDB.createNodeTable();
-				EdgeDB.createEdgeTable();
+				DB.createNodeTable();
+				DB.createEdgeTable();
 				UserAccountDB.createUserAccountTable();
 				RequestsDB.createRequestsTable();
 				RequestsDB.createFloralRequestsTable();
@@ -52,8 +49,8 @@ public class App extends Application {
 				RequestsDB.createExtTransportTable();
 				RequestsDB.createMedDeliveryTable();
 				RequestsDB.createSecurityServTable();
-				csvDB.populateTable("node", nodes);
-				csvDB.populateTable("hasEdge", edges);
+				DB.populateTable("node", nodes);
+				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
 				System.out.println("Tables were created");
 			} catch (Exception e) {

@@ -3,8 +3,6 @@ package edu.wpi.TeamE;
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.*;
-import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
-import edu.wpi.cs3733.D21.teamE.database.csvDB;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.util.Pair;
@@ -47,7 +45,7 @@ public class DatabaseTests {
 		RequestsDB.createExtTransportTable();
 		RequestsDB.createMedDeliveryTable();
 		RequestsDB.createSecurityServTable();
-		appointmentDB.createAppointmentTable();
+		DB.createAppointmentTable();
 		//System.out.println("Tables were created");
 	}
 
@@ -984,8 +982,8 @@ public class DatabaseTests {
 
 		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		UserAccountDB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
-		int rowsAffected1 = appointmentDB.addAppointment(1, 400, 400, 2);
-		int rowsAffected2 = appointmentDB.addAppointment(2, 400, 400, 2);
+		int rowsAffected1 = DB.addAppointment(1, 400, 400, 2);
+		int rowsAffected2 = DB.addAppointment(2, 400, 400, 2);
 
 		int totalRowsAffected = rowsAffected1 + rowsAffected2;
 		assertEquals(2, totalRowsAffected);
@@ -1002,12 +1000,12 @@ public class DatabaseTests {
 		UserAccountDB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 		UserAccountDB.addSpecialUserType("ameliak@yahoo.com", "doctor02", "doctor", "Amelia", "Knight");
 
-		appointmentDB.addAppointment(1, 400, 400, 2);
-		appointmentDB.addAppointment(2, 400, 400, 2);
+		DB.addAppointment(1, 400, 400, 2);
+		DB.addAppointment(2, 400, 400, 2);
 
 
-		int rowAffected = appointmentDB.editAppointment(1, 700, 700, null);
-		int rowAffected2 = appointmentDB.editAppointment(2, 500, 500, 3);
+		int rowAffected = DB.editAppointment(1, 700, 700, null);
+		int rowAffected2 = DB.editAppointment(2, 500, 500, 3);
 
 		int totalRowAffected = rowAffected + rowAffected2;
 
@@ -1023,10 +1021,10 @@ public class DatabaseTests {
 
 		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		UserAccountDB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
-		appointmentDB.addAppointment(1, 400, 400, 2);
-		appointmentDB.addAppointment(2, 400, 400, 2);
+		DB.addAppointment(1, 400, 400, 2);
+		DB.addAppointment(2, 400, 400, 2);
 
-		csvDB.addRemovedPatientAppointmentHistory(1);
+		DB.addRemovedPatientAppointmentHistory(1);
 
 	}
 
@@ -1038,9 +1036,9 @@ public class DatabaseTests {
 		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		UserAccountDB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 
-		appointmentDB.addAppointment(1, 400, 400, 2);
+		DB.addAppointment(1, 400, 400, 2);
 
-		int rowsAffected = appointmentDB.cancelAppointment(1);
+		int rowsAffected = DB.cancelAppointment(1);
 
 		assertEquals(1, rowsAffected);
 	}
@@ -1054,11 +1052,11 @@ public class DatabaseTests {
 		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		UserAccountDB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 
-		appointmentDB.addAppointment(1, 400, 400, 2);
-		appointmentDB.addAppointment(1, 500, 500, 2);
-		appointmentDB.addAppointment(1, 600, 600, 2);
+		DB.addAppointment(1, 400, 400, 2);
+		DB.addAppointment(1, 500, 500, 2);
+		DB.addAppointment(1, 600, 600, 2);
 
-		int rowsAffected = appointmentDB.cancelAppointment(1);
+		int rowsAffected = DB.cancelAppointment(1);
 
 		assertEquals(1, rowsAffected);
 	}

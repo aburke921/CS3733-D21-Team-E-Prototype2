@@ -626,11 +626,13 @@ public class PathFinder {
         rootBorderPane.setPrefWidth(stageWidth);
         rootBorderPane.setPrefHeight(stageHeight);
 
+        /*
         zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue <?extends Number>observable, Number oldValue, Number newValue){
 
             }
         });
+         */
 
         assert startLocationComboBox != null : "fx:id=\"startLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert endLocationComboBox != null : "fx:id=\"endLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";

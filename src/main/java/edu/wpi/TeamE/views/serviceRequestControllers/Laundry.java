@@ -46,9 +46,6 @@ public class Laundry extends ServiceRequestFormComponents {
     @FXML // fx:id="dryLoadAmountInput"
     private JFXComboBox<String> dryLoadAmountInput; // Value injected by FXMLLoader
 
-    @FXML // fx:id="patientIdInput"
-    private JFXTextField patientIdInput; // Value injected by FXMLLoader
-
     @FXML // fx:id="assignedPersonnel"
     private JFXTextField assignedPersonnel; // Value injected by FXMLLoader
 
@@ -82,7 +79,6 @@ public class Laundry extends ServiceRequestFormComponents {
         locationInput.setItems(locations);
         assert washLoadAmountInput != null : "fx:id=\"washLoadAmountInput\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert dryLoadAmountInput != null : "fx:id=\"dryLoadAmountInput\" was not injected: check your FXML file 'Laundry.fxml'.";
-        assert patientIdInput != null : "fx:id=\"patientIdInput\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert assignedPersonnel != null : "fx:id=\"assignedPersonnel\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert descriptionInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'Laundry.fxml'.";

@@ -1,7 +1,3 @@
-/**
- * Sample Skeleton for 'AppBarComponent.fxml' Controller Class
- */
-
 package edu.wpi.TeamE.views;
 
 import java.io.IOException;
@@ -18,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
@@ -25,9 +22,14 @@ import javafx.scene.shape.Rectangle;
 
 /**
  * AppBar Component is the component that appears on the top of most pages in the app.
- * The app bar has multiple variants which can be set by calling certain getters in App.java.
- * These variants include whether to show the help button, and login button.
- * If you would like no login button to be shown, use {@link App#setShowLogin(boolean)}.
+ * The app bar has multiple variants which can be set by calling certain getters in App.java:
+ * {@link App#setPageTitle(String)} - set AppBar title.
+ * {@link App#setHelpText(String)} - set Help button content
+ * {@link App#setShowHelp(boolean)} - show the help button or not.
+ * {@link App#setShowLogin(boolean)} - show the login button or not.
+ * {@link App#setStackPane(StackPane)} - stack pane for dialog (help modal and others).
+ *
+ * Example Usage: https://gist.github.com/2ec777008b641b42d7dedaf8bd75938e [4/25/21]
  */
 public class AppBarComponent {
 

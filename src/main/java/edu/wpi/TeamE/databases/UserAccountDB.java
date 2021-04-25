@@ -2,6 +2,8 @@ package edu.wpi.TeamE.databases;
 
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
+import edu.wpi.cs3733.D21.teamE.database.csvDB;
+
 import java.sql.*;
 
 public class UserAccountDB {
@@ -216,7 +218,7 @@ public class UserAccountDB {
 	 */
 	public static int deleteUserAccount(int userID) {
 		String insertDeleteQuery = "Delete From useraccount Where userid = ?";
-
+		csvDB.addRemovedPatientAppointmentHistory(userID);
 		try (PreparedStatement prepState = connection.prepareStatement(insertDeleteQuery)) {
 			prepState.setInt(1, userID);
 			prepState.execute();

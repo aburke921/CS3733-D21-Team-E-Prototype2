@@ -2,7 +2,6 @@ package edu.wpi.TeamE.views;
 
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.algorithms.Edge;
-import edu.wpi.TeamE.databases.csvDB;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
@@ -82,7 +81,7 @@ public class EdgeCSVUpload {
         if (file != null) {
             DB.deleteEdgeTable();
             DB.createEdgeTable();
-            csvDB.populateTable("hasEdge", file);
+            DB.populateTable("hasEdge", file);
             System.out.println("Success");
         }
         prepareEdges(treeTable);
@@ -92,7 +91,7 @@ public class EdgeCSVUpload {
     private void openFile(ActionEvent e) throws IOException {
 
 
-        csvDB.getNewCSVFile("hasEdge");
+        DB.getNewCSVFile("hasEdge");
         File file = new File("CSVs/outputEdge.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);

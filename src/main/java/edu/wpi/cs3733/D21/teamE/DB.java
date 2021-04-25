@@ -1,5 +1,9 @@
 package edu.wpi.cs3733.D21.teamE;
 
+import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
+import edu.wpi.cs3733.D21.teamE.database.csvDB;
+
+import java.io.File;
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 //import edu.wpi.TeamE.databases.EdgeDB;
@@ -143,7 +147,7 @@ public class DB {
 		EdgeDB.createEdgeTable();
 	}
 
-	public static void deleteEdgeTable(){
+	public static void deleteEdgeTable() {
 		EdgeDB.deleteEdgeTable();
 	}
 
@@ -162,7 +166,7 @@ public class DB {
 	 * @param startNode the node ID for the starting node in the edge
 	 * @param endNode   the node ID for the ending node in the edge
 	 */
-	public static void addLength(String startNode, String endNode){
+	public static void addLength(String startNode, String endNode) {
 		EdgeDB.addLength(startNode, endNode);
 	}
 
@@ -205,6 +209,80 @@ public class DB {
 	public static ArrayList<Pair<Float, String>> getEdgeInfo(String nodeID){
 		return EdgeDB.getEdgeInfo(nodeID);
 	}
+
+	/**
+	 * creates appointment table in BWDB
+	 */
+	public static void createAppointmentTable() {
+		appointmentDB.createAppointmentTable();
+	}
+
+	/**
+	 * creates an appointment and adds to the appointmentDB table
+	 * @param patientID is the ID of the patient making the appointment
+	 * @param startTime is when the appointment starts
+	 * @param endTime is when the appointment ends
+	 * @param doctorID is the doctor assigned to the appointment
+	 * @return an int (0 if add fails, 1 if add succeeded)
+	 */
+	public static int addAppointment(int patientID, long startTime, long endTime, int doctorID) {
+		return appointmentDB.addAppointment(patientID, startTime, endTime, doctorID);
+	}
+
+	/**
+	 * increments appointmentID by 1 each time an appointment is made
+	 * @return 0 if ID cannot be incremented, 1 if ID is incremented correctly
+	 */
+	public static int getMaxAppointmentID() {
+		return appointmentDB.getMaxAppointmentID();
+	}
+
+	/**
+	 * edits an appointment
+	 * @param appointmentID is the ID of the appointment
+	 * @param newStartTime is the new start time of the appointment
+	 * @param newEndTime is the new end time of the appointment
+	 * @param newDoctorID is the new doctor assigned
+	 * @return an int (0 if add fails, 1 if add succeeded)
+	 */
+	public static int editAppointment(int appointmentID, int newStartTime, int newEndTime, Integer newDoctorID) {
+		return appointmentDB.editAppointment(appointmentID, newStartTime, newEndTime, newDoctorID);
+	}
+
+	/**
+	 * cancels an appointment given the appointmentID
+	 * @param appointmentID is the ID of the appointment
+	 * @return an int (0 if add fails, 1 if add succeeded)
+	 */
+	public static int cancelAppointment(int appointmentID) {
+		return appointmentDB.cancelAppointment(appointmentID);
+	}
+
+	/**
+	 * Reads csv & inserts into table
+	 * @param tableName name of the table that needs to be populated
+	 * @param file      file that is going to be read
+	 */
+	public static void populateTable(String tableName, File file) {
+		csvDB.populateTable(tableName, file);
+	}
+
+	/**
+	 * Translates a table into a csv file which can be later returned to the user.
+	 * @param tableName this is the table/data/information that will be translated into a csv file
+	 */
+	public static void getNewCSVFile(String tableName) {
+		csvDB.getNewCSVFile(tableName);
+	}
+
+	/**
+	 * saves patient information (called before deleting a patient and their history)
+	 * @param patientID is the userID of the patient
+	 */
+	public static void addRemovedPatientAppointmentHistory(int patientID) {
+		csvDB.addRemovedPatientAppointmentHistory(patientID);
+	}
+
 
 
 

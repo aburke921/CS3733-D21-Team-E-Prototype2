@@ -3,6 +3,8 @@ package edu.wpi.TeamE;
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.*;
+import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
+import edu.wpi.cs3733.D21.teamE.database.csvDB;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.util.Pair;

@@ -1,4 +1,4 @@
-package edu.wpi.TeamE.databases;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
@@ -8,6 +8,9 @@ public class appointmentDB {
 
 	static Connection connection = makeConnection.makeConnection().getConnection();
 
+	/**
+	 * creates appointment table in BWDB
+	 */
 	public static void createAppointmentTable() {
 		//TODO: before deleting any users, save their information from userAccount into CSV
 		String query = "Create Table appointment( " +
@@ -63,6 +66,10 @@ public class appointmentDB {
 
 	}
 
+	/**
+	 * increments appointmentID by 1 each time an appointment is made
+	 * @return 0 if ID cannot be incremented, 1 if ID is incremented correctly
+	 */
 	public static int getMaxAppointmentID(){
 
 		int maxID = 0;

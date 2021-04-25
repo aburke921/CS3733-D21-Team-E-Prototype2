@@ -1,11 +1,9 @@
-package edu.wpi.TeamE.databases;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
 import java.io.*;
 import java.sql.*;
-
 
 public class csvDB {
 
@@ -168,6 +166,10 @@ public class csvDB {
 		}
 	}
 
+	/**
+	 * saves patient information (called before deleting a patient and their history)
+	 * @param patientID is the userID of the patient
+	 */
 	public static void addRemovedPatientAppointmentHistory(int patientID){
 
 		String sqlQuery = "select * from appointment where patientID = ?";

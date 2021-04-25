@@ -2,8 +2,9 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.*;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.*;
+
 import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.cs3733.D21.teamE.DB;
+
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -697,7 +698,7 @@ public class MapEditor {
         makeConnection connection = makeConnection.makeConnection();
         if (file != null) {
             //Have to save edge table so we can get it back after deleting
-            csvDB.getNewCSVFile("hasEdge");
+            DB.getNewCSVFile("hasEdge");
             File saveEdges = new File("CSVs/outputEdge.csv");
 
             //This is where tables are cleared and refilled
@@ -711,9 +712,9 @@ public class MapEditor {
             RequestsDB.createExtTransportTable();
             RequestsDB.createMedDeliveryTable();
             RequestsDB.createSecurityServTable();
-            appointmentDB.createAppointmentTable();
-            csvDB.populateTable("node", file);
-            csvDB.populateTable("hasEdge", saveEdges);
+            DB.createAppointmentTable();
+            DB.populateTable("node", file);
+            DB.populateTable("hasEdge", saveEdges);
             System.out.println("Success");
         }
     }
@@ -728,7 +729,7 @@ public class MapEditor {
     @FXML
     private void openFile(ActionEvent e) throws IOException {
 
-        csvDB.getNewCSVFile("node");
+        DB.getNewCSVFile("node");
         File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);

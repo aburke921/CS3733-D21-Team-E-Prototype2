@@ -91,6 +91,14 @@
                            <font>
                               <Font size="18.0" />
                            </font></Button>
+                        <Button fx:id="covidSurvey" layoutX="510.0" layoutY="562.0" mnemonicParsing="false" onAction="#toCovidSurvey" prefWidth="200.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="COVID Survey" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                        </Button>
                      </children>
                      <BorderPane.margin>
                         <Insets bottom="40.0" />

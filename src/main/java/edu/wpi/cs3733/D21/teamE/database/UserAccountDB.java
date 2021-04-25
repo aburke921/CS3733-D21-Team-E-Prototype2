@@ -1,11 +1,10 @@
-package edu.wpi.TeamE.databases;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class UserAccountDB {
 
-	static Connection connection = makeConnection.makeConnection().getConnection();
+	static Connection connection = makeConnection.makeConnection().connection;
 
 	/**
 	 * Uses executes the SQL statements required to create the userAccount table.
@@ -29,7 +28,7 @@ public class UserAccountDB {
 				"lastName  Varchar(31)," +
 				"creationTime Timestamp, " +
 				"Constraint userIDLimit Check ( userID != 0 )," +
-				"Constraint passwordLimit Check (Length(password) >= 8 )," +
+				// "Constraint passwordLimit Check (Length(password) >= 8 )," +
 				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -39,7 +38,7 @@ public class UserAccountDB {
 			createUserAccountTypeViews();
 
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("error creating userAccount table");
 		}
 	}
@@ -123,7 +122,7 @@ public class UserAccountDB {
 	/**
 	 * This is allows an administrator or someone with access to the database to be able to create a user account
 	 * with more permissions giving them more access to the certain requests available. This is function should not
-	 * be used while the app is being run.
+	 * be used while the app is being run. This function can not be used to add a working admin account.
 	 * @param email     this is the user's email that is connected to the account the are trying to create
 	 * @param password  this is a password that the user will use to log into the account
 	 * @param userType  this is the type of account that the individual is being assigned to
@@ -146,6 +145,87 @@ public class UserAccountDB {
 		}
 	}
 
+	/**
+	 * This is allows an administrator or someone with access to the database to be able to edit a user account
+	 * with more permissions giving them more access to the certain requests available. This is function should not
+	 * be used while the app is being run.
+	 * @param email     this is the user's email that is connected to the account the are trying to edit
+	 * @param password  this is a password that the user will use to log into the account
+	 * @param userType  this is the type of account that the individual is being assigned to
+	 * @param firstName this is the user's first name that is associated with the account
+	 * @param lastName  this is the user's last name that is associated with the account
+	 */
+	public static int editUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
+		boolean added = false;
+		String query = "Update userAccount Set ";
+
+		if (email != null) {
+			query = query + " email = '" + email + "'";
+
+			added = true;
+		}
+		if (password != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "password = '" + password + "'";
+			added = true;
+		}
+		if (userType != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "userType = '" + userType + "'";
+			added = true;
+		}
+		if (firstName != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " firstName = '" + firstName + "'";
+
+			added = true;
+		}
+		if (lastName != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "lastName = '" + lastName + "'";
+		}
+
+		query = query + " where userID = " + userID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating userAccount table");
+			return 0;
+		}
+	}
+
+
+	/**
+	 * This is allows an administrator or someone with access to the database to be able to edit a user account
+	 * with more permissions giving them more access to the certain requests available. This is function should not
+	 * be used while the app is being run.
+	 * @param userID this is the ID of the user the admin is trying to delete
+	 */
+	public static int deleteUserAccount(int userID) {
+		String insertDeleteQuery = "Delete From useraccount Where userid = ?";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertDeleteQuery)) {
+			prepState.setInt(1, userID);
+			prepState.execute();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error deleting in function deleteUserAccount()");
+			return 0;
+		}
+
+	}
 
 	/**
 	 * Function for logging a user in with their unique email and password
@@ -154,7 +234,7 @@ public class UserAccountDB {
 	 * @return 0 when the credentials does not match with any user in the database, and returns the userID otherwise
 	 */
 	public static int userLogin(String email, String password) {
-		String userLoginS1 = "Select Count(*) As verification From userAccount Where email = ? And password = ?";
+		String userLoginS1 = "Select Count(*) As verification From useraccount Where email = ? And password = ?";
 		try (PreparedStatement userLoginPS1 = connection.prepareStatement(userLoginS1)) {
 			userLoginPS1.setString(1, email);
 			userLoginPS1.setString(2, password);
@@ -164,10 +244,10 @@ public class UserAccountDB {
 				verification = rset.getInt("verification");
 			}
 			rset.close();
-			if(verification == 0){
+			if (verification == 0) {
 				return verification;
-			} else {
-				String userLoginS2 = "Select userId From userAccount Where email = ? And password = ?";
+			} else if (verification == 1) {
+				String userLoginS2 = "Select userid From useraccount Where email = ? And password = ?";
 				try (PreparedStatement userLoginPS2 = connection.prepareStatement(userLoginS2)) {
 					userLoginPS2.setString(1, email);
 					userLoginPS2.setString(2, password);
@@ -176,10 +256,15 @@ public class UserAccountDB {
 					int userID = 0;
 					if (rset.next()) {
 						userID = rset.getInt("userID");
+						if (rset.next()) {
+							System.err.println("Fatal Error: Entered User Account credentials exist twice in database (should not happen)");
+						}
 					}
 					rset.close();
 					return userID;
 				}
+			} else {
+				System.err.println("Fatal Error: Entered User Account credentials exist twice in database (should not happen)");
 			}
 		} catch (SQLException e) {
 			// e.printStackTrace();
@@ -187,14 +272,6 @@ public class UserAccountDB {
 		}
 		return 0;
 	}
-
-
-
-
-
-
-
-
 
 
 }

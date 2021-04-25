@@ -10,7 +10,10 @@
     -fx--secondary-dark: #29434e;
 }
 
-/*JFX Universal Form Field Styles*/
+/*--------------------------
+    JFX [FORM] FIELD STYLES
+---------------------------*/
+
 JFXTextField, JFXTextArea, JFXComboBox, JFXPasswordField {
     -fx-background-color: rgba(0,0,0,.05); /*form bounding box color*/ /*todo, set to variable for the rgba colors?*/
     -jfx-unfocus-color: rgba(0,0,0,.42); /*bottom line unfocused*/
@@ -37,6 +40,16 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
     -jfx-button-type: FLAT;
     -fx-border-color: -fx--secondary-light;
     /*-fx-background-radius: 100px;*/
+}
+
+/*Toggle buttons*/
+JFXToggleButton  {
+    -jfx-toggle-color: -fx--primary;
+    -jfx-untoggle-color: -fx--primary;
+    -jfx-toggle-line-color: -fx--primary-light;
+    -jfx-untoggle-line-color: lightgrey;
+    -jfx-size: 10.0;
+    -jfx-disable-visual-focus: false;
 }
 
 /*------------------------
@@ -139,3 +152,9 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 .list-view .scroll-bar:horizontal {
     -fx-scale-x: 0;
 }
+
+/*todo style centerPane
+
+/*.centerPane {*/
+/*    -fx-background-color: red;*/
+/*}*/

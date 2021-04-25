@@ -1,8 +1,7 @@
-package edu.wpi.TeamE.databases;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.TeamE.algorithms.Edge;
 import javafx.util.Pair;
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -33,7 +32,7 @@ public class EdgeDB {
 			prepState.execute();
 
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("error creating hasEdge table");
 		}
 	}

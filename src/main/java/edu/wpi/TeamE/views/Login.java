@@ -80,7 +80,7 @@ public class Login {
 
 	public void submitLogin() {
 		int userID = 0;
-		makeConnection connection = makeConnection.makeConnection();
+
 		if (emailInput != null && passwordInput != null) {
 			userID = UserAccountDB.userLogin(emailInput.getText(), passwordInput.getText());
 			App.userID = userID; // app will be logged in as guest if userID = 0

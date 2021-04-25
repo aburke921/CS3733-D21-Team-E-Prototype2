@@ -169,7 +169,6 @@ public class PathFinder {
 
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
-     *
      * @param event calling event info.
      */
     @FXML
@@ -189,7 +188,6 @@ public class PathFinder {
 
     /**
      * Gets the currently selected item from {@link #startLocationComboBox} dropdown.
-     *
      * @param event calling event info.
      */
     @FXML
@@ -205,7 +203,6 @@ public class PathFinder {
 
     /**
      * Gets the currently selected item from {@link #endLocationComboBox} dropdown.
-     *
      * @param event calling event info.
      */
     @FXML
@@ -222,7 +219,6 @@ public class PathFinder {
     /**
      * Get textual directions from {@link Path#makeDirections()}, and prints them out onto
      * a popup dialog.
-     *
      * @param event the calling event's info
      */
     @FXML
@@ -281,7 +277,6 @@ public class PathFinder {
      * given the two current start and end positions ({@link #selectedStartNodeID} and {@link #selectedEndNodeID}).
      * Then calls {@link #drawMap(Path, String)}.
      * Sets {@link #currentFoundPath}. Returns a SnackBar when path is null.
-     *
      * @param event calling function's (Find Path Button) event info.
      */
     @FXML
@@ -370,7 +365,6 @@ public class PathFinder {
      * RED - Start & End for floor only.
      * GREEN - start of entire path.
      * BLACK - end node of entire path.
-     *
      * @param fullPath the path to be drawn on the map.
      */
     public void drawMap(Path fullPath, String floorNum) {
@@ -428,6 +422,7 @@ public class PathFinder {
 
                         }
                     } else if (!legItr.hasNext()) { //if current node is the ending node for this floor
+
                         Circle circle;
 
                         if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
@@ -470,8 +465,7 @@ public class PathFinder {
 
     /**
      * Looks through path and returns only nodes on the specified floor
-     *
-     * @param path     {@link Path} to parse
+     * @param path {@link Path} to parse
      * @param floorNum floor name to look for
      * @return a linkedList of nodes on the floor
      */
@@ -504,7 +498,6 @@ public class PathFinder {
 
     /**
      * Changes the displayed map, and path; sets {@link #currentFloor}.
-     *
      * @param floorNum floor to change to
      */
     public void setCurrentFloor(String floorNum) {
@@ -606,6 +599,7 @@ public class PathFinder {
         //get rid of side scroll bars
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
         //bind the zoom slider to the map
         stackPane.scaleXProperty().bind(zoomSlider.valueProperty());
         stackPane.scaleYProperty().bind(zoomSlider.valueProperty());

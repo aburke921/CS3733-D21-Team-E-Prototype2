@@ -26,7 +26,7 @@ public class EdgeCSVUpload {
     TreeTableView<Edge> treeTable;
 
     public void prepareEdges(TreeTableView<Edge> table) {
-        makeConnection connection = makeConnection.makeConnection();
+
         ArrayList<Edge> array = EdgeDB.getAllEdges();
         if (table.getRoot() == null) {
             Edge edge0 = new
@@ -79,7 +79,7 @@ public class EdgeCSVUpload {
     public void fileOpener(ActionEvent e) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
-        makeConnection connection = makeConnection.makeConnection();
+
         if (file != null) {
             EdgeDB.deleteEdgeTable();
             EdgeDB.createEdgeTable();
@@ -92,7 +92,7 @@ public class EdgeCSVUpload {
     @FXML
     private void openFile(ActionEvent e) throws IOException {
 
-        makeConnection connection = makeConnection.makeConnection();
+
         csvDB.getNewCSVFile("hasEdge");
         File file = new File("CSVs/outputEdge.csv");
         Desktop desktop = Desktop.getDesktop();

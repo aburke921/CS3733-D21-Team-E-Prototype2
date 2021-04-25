@@ -3,8 +3,10 @@ package edu.wpi.TeamE;
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.*;
+import edu.wpi.TeamE.views.forms.ServiceRequestForm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
 import javafx.util.Pair;
 import org.junit.jupiter.api.*;
 
@@ -32,7 +34,7 @@ public class DatabaseTests {
 
 
 		try {
-			connection.deleteAllTables(/*connection.getTablesToThatExist()*/);
+			connection.deleteAllTables();
 			System.out.println("Tables were reset");
 		} catch (Exception e) {
 			//e.printStackTrace();
@@ -46,7 +48,9 @@ public class DatabaseTests {
 		RequestsDB.createExtTransportTable();
 		RequestsDB.createMedDeliveryTable();
 		RequestsDB.createSecurityServTable();
-		System.out.println("Tables were created");
+		appointmentDB.createAppointmentTable();
+
+//		System.out.println("Tables were created");
 	}
 
 	@Test
@@ -79,18 +83,6 @@ public class DatabaseTests {
 		assertTrue(testNode1.equals(testNode2));
 	}
 
-
-	@Test
-	@DisplayName("testGetNodeLite")
-	public void testGetNodeLite() {
-		NodeDB.addNode("test233", 22, 33, "1", "BTM", "WALK", "long", null);
-
-		Node testNode1 = new Node("test233", 22, 33, "1", "BTM", "WALK", "long", null);
-
-		Node testNode2 = NodeDB.getNodeLite("test233");
-
-		assertTrue(testNode1.equals(testNode2));
-	}
 
 	@Test
 	@DisplayName("testGetEdgeInfo")
@@ -199,142 +191,6 @@ public class DatabaseTests {
 
 		assertTrue(allCorrect);
 
-	}
-
-
-	@Test
-	@DisplayName("testGetAllNodesByFloor: 2 nodes with the given floor")
-	public void testGetAllNodesByFloor() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "PARK", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "PARK", "longName2", "shortName2");
-
-		ArrayList<Node> nodes = NodeDB.getAllNodesByFloor("1");
-
-		ArrayList<Node> correctNodes = new ArrayList<>();
-		Node node1 = new Node("nodeID1", 0, 0, "1", "Tower", "PARK", "longName1", "shortName1");
-		Node node2 = new Node("nodeID2", 1, 0, "1", "Tower", "PARK", "longName2", "shortName2");
-
-		correctNodes.add(node1);
-		correctNodes.add(node2);
-
-		boolean allCorrect = true;
-		boolean nodeID = false;
-		boolean xCoord = false;
-		boolean yCoord = false;
-		boolean floor = false;
-		boolean building = false;
-		boolean nodeType = false;
-		boolean longName = false;
-		boolean shortName = false;
-
-		if (nodes.size() == correctNodes.size()) {
-			for (int node = 0; node < nodes.size(); node++) {
-				Node returnedNode = nodes.get(node);
-				Node correctNode = correctNodes.get(node);
-				if (returnedNode.get("id").equals(correctNode.get("id"))) {
-					nodeID = true;
-				}
-				if (returnedNode.getX() == correctNode.getX()) {
-					xCoord = true;
-				}
-				if (returnedNode.getY() == correctNode.getY()) {
-					yCoord = true;
-				}
-				if (returnedNode.get("floor").equals(correctNode.get("floor"))) {
-					floor = true;
-				}
-				if (returnedNode.get("building").equals(correctNode.get("building"))) {
-					building = true;
-				}
-				if (returnedNode.get("type").equals(correctNode.get("type"))) {
-					nodeType = true;
-				}
-				if (returnedNode.get("longName").equals(correctNode.get("longName"))) {
-					longName = true;
-				}
-				if (returnedNode.get("shortName").equals(correctNode.get("shortName"))) {
-					shortName = true;
-				}
-				if (nodeID && xCoord && yCoord && floor && building && nodeType && longName && !shortName) {
-					allCorrect = false;
-				}
-			}
-		} else {
-			allCorrect = false;
-		}
-
-		assertTrue(allCorrect);
-	}
-
-	@Test
-	@DisplayName("testGetAllNodesByFloor: no nodes with the given floor")
-	public void testGetAllNodesByFloor2() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-		NodeDB.addNode("nodeID3", 3, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
-
-		ArrayList<Node> nodes = NodeDB.getAllNodesByFloor("3");
-
-		assertEquals(0, nodes.size());
-	}
-
-
-	@Test
-	@DisplayName("testGetAllNodeLongNamesByFloor: 2 nodes with the given floor")
-	public void testGetAllNodeLongNamesByFloor() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-
-		ObservableList<String> longNames = NodeDB.getAllNodeLongNamesByFloor("1");
-
-		ObservableList<String> correctLongNames = FXCollections.observableArrayList();
-
-		correctLongNames.add("longName1");
-		correctLongNames.add("longName2");
-
-		assertEquals(longNames, correctLongNames);
-
-	}
-
-	@Test
-	@DisplayName("testGetAllNodeLongNamesByFloor: no nodes with the given floor")
-	public void testGetAllNodeLongNamesByFloor2() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-		NodeDB.addNode("nodeID3", 0, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
-
-		ObservableList<String> longNames = NodeDB.getAllNodeLongNamesByFloor("3");
-
-		assertEquals(0, longNames.size());
-	}
-
-	@Test
-	@DisplayName("testGetListOfNodeIDSByFloor: 2 nodes with the given floor")
-	public void testGetListOfNodeIDSByFloor() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-
-		ArrayList<String> nodeIDs = NodeDB.getListOfNodeIDSByFloor("1");
-
-		ArrayList<String> correctNodeIDs = new ArrayList<>();
-
-		correctNodeIDs.add("nodeID1");
-		correctNodeIDs.add("nodeID2");
-
-		assertEquals(nodeIDs, correctNodeIDs);
-	}
-
-	@Test
-	@DisplayName("testGetListOfNodeIDSByFloor: no nodes with the given floor")
-	public void testGetListOfNodeIDSByFloor2() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-		NodeDB.addNode("nodeID3", 3, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
-
-		ArrayList<String> nodeIDs = NodeDB.getListOfNodeIDSByFloor("3");
-
-
-		assertEquals(0, nodeIDs.size());
 	}
 
 
@@ -496,7 +352,7 @@ public class DatabaseTests {
 
 		testResult = EdgeDB.deleteEdge("testEdge1", "testEdge2");
 
-		System.out.println(testResult);
+//		System.out.println(testResult);
 
 		assertEquals(0, testResult);
 	}
@@ -804,8 +660,8 @@ public class DatabaseTests {
 		correctLocations.add("long name #1");
 		correctLocations.add("long name #2");
 
-		for(String e: returnedLocations)
-			System.out.println(e);
+//		for(String e: returnedLocations)
+//			System.out.println(e);
 
 		assertTrue(correctLocations.equals(returnedLocations));
 
@@ -993,6 +849,99 @@ public class DatabaseTests {
 
 		connection.addDataForPresentation();
 	}
+
+
+	@Test
+	@DisplayName("testGetRequestLocations")
+	public void testFunction(){
+
+		//Visitors:
+		// - have access to floral Delivery
+		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		UserAccountDB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
+		UserAccountDB.addUserAccount("smiddle@outlook.com", "visitor3", "Sharon", "Middleton");
+		UserAccountDB.addUserAccount("catherinehop12@gmail.com", "visitor4", "Catherine", "Hopkins");
+		UserAccountDB.addUserAccount("mbernard@wpi.edu", "visitor5", "Michelle", "Bernard");
+		UserAccountDB.addUserAccount("mccoy.meghan@hotmail.com", "visitor6", "Meghan", "Mccoy");
+		UserAccountDB.addUserAccount("harry89owens@gmail.com", "visitor7", "Harry", "Owens");
+		UserAccountDB.addUserAccount("hugowh@gmail.com", "visitor8", "Hugo", "Whitehouse");
+		UserAccountDB.addUserAccount("spenrodg@yahoo.com", "visitor9", "Spencer", "Rodgers");
+		UserAccountDB.addUserAccount("thomasemail@gmail.com", "visitor10", "Thomas", "Mendez");
+		UserAccountDB.addUserAccount("claytonmurray@gmail.com", "visitor11", "Clayton", "Murray");
+		UserAccountDB.addUserAccount("lawrencekhalid@yahoo.com", "visitor12", "Khalid", "Lawrence");
+
+		//Patients:
+		//13 - 19
+		UserAccountDB.addSpecialUserType("adamj@gmail.com","patient1","patient","Adam", "Jenkins");
+		UserAccountDB.addSpecialUserType("abbym@yahoo.com","patient2","patient","Abby", "Mohamed");
+		UserAccountDB.addSpecialUserType("wesleya@gmail.com","patient3","patient","Wesley", "Armstrong");
+		UserAccountDB.addSpecialUserType("travisc@yahoo.com","patient4","patient","Travis", "Cook");
+		UserAccountDB.addSpecialUserType("gabriellar@gmail.com","patient5","patient","Gabriella", "Reyes");
+		UserAccountDB.addSpecialUserType("troyo@yahoo.com","patient6","patient","Troy", "Olson");
+		UserAccountDB.addSpecialUserType("anat@gmail.com","patient7","patient","Ana", "Turner");
+
+		//Doctors:
+		//20-27
+		UserAccountDB.addSpecialUserType("billb@gmail.com","doctor01","doctor","Bill", "Byrd");
+		UserAccountDB.addSpecialUserType("ameliak@yahoo.com","doctor02","doctor","Amelia", "Knight");
+		UserAccountDB.addSpecialUserType("simond@gmail.com","doctor03","doctor","Simon", "Daniel");
+		UserAccountDB.addSpecialUserType("victoriae@yahoo.com","doctor04","doctor","Victoria", "Erickson");
+		UserAccountDB.addSpecialUserType("taylorr@gmail.com","doctor05","doctor","Taylor", "Ramos");
+		UserAccountDB.addSpecialUserType("rosas@yahoo.com","doctor06","doctor","Rosa", "Smith");
+		UserAccountDB.addSpecialUserType("declanp@gmail.com","doctor07","doctor","Declan", "Patel");
+		UserAccountDB.addSpecialUserType("laurenb@yahoo.com","doctor08","doctor","Lauren", "Bolton");
+
+		//Admin:
+		//28 - 30
+		UserAccountDB.addSpecialUserType("abbyw@gmail.com","admin001","admin","Abby", "Williams");
+		UserAccountDB.addSpecialUserType("andrewg@yahoo.com","admin002","admin","Andrew", "Guerrero");
+		UserAccountDB.addSpecialUserType("aleshah@gmail.com","admin003","admin","Alesha", "Harris");
+
+		//External transport:
+		NodeDB.addNode("FDEPT00501",2128,1300,"1","Tower","DEPT","Emergency Department","Emergency");
+		NodeDB.addNode("EEXIT00101",2275,785,"1","45 Francis","EXIT","Ambulance Parking Exit Floor 1","AmbExit 1");
+
+		RequestsDB.addExternalPatientRequest(27,"Ciaran Goodwin","EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
+		RequestsDB.addExternalPatientRequest(30,"Lola Bond","EEXIT00101", "Ambulance","Low Severity", "4093380", "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
+		RequestsDB.addExternalPatientRequest(22,"Samantha Russell","FDEPT00501", "Helicopter","High Severity", "92017693", "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
+		RequestsDB.addExternalPatientRequest(20,"Caleb Chapman","FDEPT00501", "Helicopter","High Severity", "93754789", "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
+		RequestsDB.addExternalPatientRequest(24,"Dale Coates","EEXIT00101", "Ambulance","Medium Severity", "417592", "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
+		RequestsDB.addExternalPatientRequest(28,"Jerry Myers","FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
+		RequestsDB.addExternalPatientRequest(24,"Betty Warren","EEXIT00101", "Ambulance","Medium Severity", "33337861", "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
+		RequestsDB.addExternalPatientRequest(27,"Maxim Rawlings","EEXIT00101", "Ambulance","Low Severity", "40003829", "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
+		RequestsDB.addExternalPatientRequest(24,"Alan Singh","FDEPT00501", "Plane","High Severity", "38739983", "12 hours", "Heart transplant organ in route");
+
+
+
+		ArrayList<String> correctLongNames = new ArrayList<String>();
+		correctLongNames.add("Ambulance Parking Exit Floor 1");
+		correctLongNames.add("Ambulance Parking Exit Floor 1");
+		correctLongNames.add("Emergency Department");
+		correctLongNames.add("Emergency Department");
+		correctLongNames.add("Ambulance Parking Exit Floor 1");
+		correctLongNames.add("Emergency Department");
+		correctLongNames.add("Ambulance Parking Exit Floor 1");
+		correctLongNames.add("Ambulance Parking Exit Floor 1");
+		correctLongNames.add("Emergency Department");
+
+
+
+		ArrayList<String> locationArray = RequestsDB.getRequestLocations("extTransport", -1);
+
+
+
+		assertEquals(correctLongNames, locationArray);
+
+
+
+
+
+
+
+	}
+
+
+
 
 //	@Test
 //	@DisplayName("testGetTablesToThatExist")

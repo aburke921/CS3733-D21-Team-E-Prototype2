@@ -133,6 +133,7 @@ public class PathFinder {
 
     private double radius = 6;
     private double strokeWidth = 3;
+    private int selection = 0;
 
 
 
@@ -513,7 +514,41 @@ public class PathFinder {
         //add ObservableLists to dropdowns
         startLocationComboBox.setItems(longNameArrayList);
         endLocationComboBox.setItems(longNameArrayList);
+
         System.out.println("done");
+        final ArrayList<Node> array = connection.getAllNodes();
+        pane.setOnMouseClicked(e -> {
+            /*double xCoord = e.getX();
+            double yCoord = e.getY();
+            Circle circle = new Circle(xCoord, yCoord, 2, Color.GREEN);
+            g.getChildren().add(circle);
+             */
+            System.out.println("click!");
+            double X = e.getX();
+            int xInt = (int)X;
+            double Y = e.getY();
+            int yInt = (int)Y;
+            System.out.println(xInt);
+            System.out.println(yInt);
+
+            for(int i = 0; i <array.size(); i++) {
+                double nodeX = array.get(i).getX() / scale;
+                int nodeXInt = (int)nodeX;
+                double nodeY = array.get(i).getY() / scale;
+                int nodeYInt = (int)nodeY;
+                if(Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2){
+                    selection++;
+                    if(selection == 1) {
+                        startLocationComboBox.getSelectionModel().select(array.get(i).get("longName"));
+                    }else if(selection == 2){
+                        endLocationComboBox.getSelectionModel().select(array.get(i).get("longName"));
+                        selection = 0;
+                    }
+                    System.out.println(array.get(i).get("longName"));
+
+                }
+            }
+        });
 
         new AutoCompleteComboBoxListener<>(startLocationComboBox);
         new AutoCompleteComboBoxListener<>(endLocationComboBox);

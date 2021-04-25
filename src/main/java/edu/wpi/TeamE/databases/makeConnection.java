@@ -167,7 +167,7 @@ public class makeConnection {
 		UserAccountDB.addSpecialUserType("declanp@gmail.com","doctor07","doctor","Declan", "Patel");
 		UserAccountDB.addSpecialUserType("laurenb@yahoo.com","doctor08","doctor","Lauren", "Bolton");
 
-		//Admin:
+		//Fake Admins:
 		//28 - 30
 		UserAccountDB.addSpecialUserType("abbyw@gmail.com","admin001","admin","Abby", "Williams");
 		UserAccountDB.addSpecialUserType("andrewg@yahoo.com","admin002","admin","Andrew", "Guerrero");
@@ -337,11 +337,11 @@ public class makeConnection {
 		RequestsDB.editRequests(47, 0, "complete");
 
 
-		//SuperAdmin:
+		//Real Admins:
 		String insertUser1 = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP)";
 		String insertUser2 = "Insert Into userAccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', CURRENT TIMESTAMP)";
-		String insertUser3 = "Insert Into userAccount Values (99, 'staff', 'staff', 'doctor', 'staff', 'staff', CURRENT TIMESTAMP)";
-		String insertUser4 = "Insert Into userAccount Values (100, 'guest', 'guest', 'patient', 'guest', 'visitor', CURRENT TIMESTAMP)";
+		String insertUser3 = "Insert Into userAccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', CURRENT TIMESTAMP)";
+		String insertUser4 = "Insert Into userAccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', CURRENT TIMESTAMP)";
 		try {
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(insertUser1);

@@ -95,6 +95,7 @@ public class Login {
 				ex.printStackTrace();
 			}
 		} else {
+		    App.newJFXDialogPopUp("User Not Found", "Try Again","This user cannot be found in the system.",stackPane);
 			System.out.println("User not in System");
 		}
 

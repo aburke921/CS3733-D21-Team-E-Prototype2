@@ -122,7 +122,6 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		assert foodInput != null : "fx:id=\"foodInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert beveragesInput != null : "fx:id=\"beveragesInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert descriptionInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
-		assert ETAInput != null : "fx:id=\"ETAInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 

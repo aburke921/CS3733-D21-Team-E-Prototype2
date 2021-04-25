@@ -20,6 +20,12 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * AppBar Component is the component that appears on the top of most pages in the app.
+ * The app bar has multiple variants which can be set by calling certain getters in App.java.
+ * These variants include whether to show the help button, and login button.
+ * If you would like no login button to be shown, use {@link App#setShowLogin(boolean)}.
+ */
 public class AppBarComponent {
 
 

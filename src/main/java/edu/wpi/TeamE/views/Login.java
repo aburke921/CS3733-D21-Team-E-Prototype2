@@ -65,8 +65,9 @@ public class Login {
         //init appBar
         javafx.scene.Node appBarComponent = null;
         try {
-            App.setShowHelp(true);
+            App.setShowHelp(true); //show help button
             App.setPageTitle(null); //set AppBar title
+            App.setShowLogin(false); //dont show login button
             App.setHelpText("Continue as a guest or login to an existing account. If you have no account... "); //todo set help text
             App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
             appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));

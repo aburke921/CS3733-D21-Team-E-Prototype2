@@ -24,10 +24,10 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 	private Polygon exit;
 
 	@FXML
-	private JFXComboBox<?> locationInput;
+	private JFXComboBox<String> locationInput;
 
 	@FXML
-	private JFXComboBox<?> languageSelection;
+	private JFXComboBox<String> languageSelection;
 
 	@FXML
 	private JFXTextField assignedPersonnel;
@@ -57,7 +57,7 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 	void initialize() {
 		assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		ObservableList<String> locations = NodeDB.getAllNodeLongNames();
-		locationInput.setItems(locations);
+		//locationInput.setItems(locations);
 	}
 
 }

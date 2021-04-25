@@ -31,10 +31,10 @@ public class Maintenance{
     private Polygon exit; // Value injected by FXMLLoader
 
     @FXML // fx:id="locationInput"
-    private JFXComboBox<?> locationInput; // Value injected by FXMLLoader
+    private JFXComboBox<String> locationInput; // Value injected by FXMLLoader
 
     @FXML // fx:id="requestTypeInput"
-    private JFXComboBox<?> requestTypeInput; // Value injected by FXMLLoader
+    private JFXComboBox<String> requestTypeInput; // Value injected by FXMLLoader
 
     @FXML // fx:id="power"
     private String power; // Value injected by FXMLLoader

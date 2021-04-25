@@ -100,6 +100,9 @@
                                              <children>
                                                 <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
                                                    <items>
+                                                      <FXCollections fx:factory="observableArrayList">
+
+                                                      </FXCollections>
                                                    </items>
                                                    <VBox.margin>
                                                       <Insets top="20.0" />

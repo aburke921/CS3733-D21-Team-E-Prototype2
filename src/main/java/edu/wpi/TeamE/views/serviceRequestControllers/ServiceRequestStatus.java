@@ -1,4 +1,4 @@
-package edu.wpi.TeamE.views;
+package edu.wpi.TeamE.views.serviceRequestControllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
@@ -90,13 +90,11 @@ public class ServiceRequestStatus {
     }
 
     private void complete(TreeTableView<ServiceRequestForm> table) {
-        makeConnection connection = makeConnection.makeConnection();
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
             RequestsDB.editRequests(id,null, "complete");
             System.out.println("The request was completed");
         }
-
     }
 
     /**

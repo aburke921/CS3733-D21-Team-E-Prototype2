@@ -551,7 +551,7 @@ public class PathFinder {
 
         new AutoCompleteComboBoxListener<>(startLocationComboBox);
         new AutoCompleteComboBoxListener<>(endLocationComboBox);
-        final ArrayList<Node> array = connection.getAllNodes();
+        final ArrayList<Node> array = NodeDB.getAllNodes();
 
         //Set up zoomable and pannable panes
         BorderPane borderPane = new BorderPane();

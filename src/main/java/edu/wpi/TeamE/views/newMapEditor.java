@@ -221,16 +221,16 @@ public class newMapEditor {
 
 
         //if path is null
-        if (connection.getAllNodes() == null) {
+        if (NodeDB.getAllNodes() == null) {
             //todo snackbar to say error
             return;
         }
         Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
         ArrayList<Node> nodeArray = new ArrayList<Node>();
-        nodeArray = connection.getAllNodesByFloor(floorNum);
+        nodeArray = NodeDB.getAllNodesByFloor(floorNum);
         ArrayList<Edge> edgeArray = new ArrayList<Edge>();
-        edgeArray = connection.getAllEdges();
+        edgeArray = EdgeDB.getAllEdges();
 
         //display all nodes
         scale = imageWidth / imageView.getFitWidth();
@@ -274,7 +274,7 @@ public class newMapEditor {
 
     public void prepareNodes(TreeTableView<Node> table) {
         makeConnection connection = makeConnection.makeConnection();
-        ArrayList<Node> array = connection.getAllNodes();
+        ArrayList<Node> array = NodeDB.getAllNodes();
         if (table.getRoot() == null) {
             //Column 1 - Location
             TreeTableColumn<Node, String> column = new TreeTableColumn<>("Location");
@@ -581,7 +581,7 @@ public class newMapEditor {
 
     public void prepareEdges(TreeTableView<Edge> table) {
         makeConnection connection = makeConnection.makeConnection();
-        ArrayList<Edge> array = connection.getAllEdges();
+        ArrayList<Edge> array = EdgeDB.getAllEdges();
         if (table.getRoot() == null) {
             Edge edge0 = new
                     Edge("ID", "0", "1", 0.00);
@@ -653,7 +653,7 @@ public class newMapEditor {
         }
         int xVal = Integer.parseInt(xCordInput.getText());
         int yVal = Integer.parseInt(yCordInput.getText());
-        i = connection.addNode(genNodeID(typeInput.getValue().toString(),floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
+        i = NodeDB.addNode(genNodeID(typeInput.getValue().toString(),floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
         System.out.println(i);
         return i;
     }
@@ -685,7 +685,7 @@ public class newMapEditor {
             //Elevator names need to start with 'Elevator X xxxxx"
         } else {
             makeConnection connection = makeConnection.makeConnection();
-            int instance = connection.countNodeTypeOnFloor("e", floor, type) + 1;
+            int instance = NodeDB.countNodeTypeOnFloor("e", floor, type) + 1;
             SB.append(String.format("%03d", instance));
         }
 
@@ -710,18 +710,18 @@ public class newMapEditor {
     public int deleteNode(TreeTableView<Node> table) {
         int s = -1;
         makeConnection connection = makeConnection.makeConnection();
-        ArrayList<Node> array = connection.getAllNodes();
+        ArrayList<Node> array = NodeDB.getAllNodes();
         if (table.getSelectionModel().getSelectedItem() != null) {
             for (int i = 0; i < array.size(); i++) {
                 if (array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
-                    s = connection.deleteNode(array.get(i).get("id"));
+                    s = NodeDB.deleteNode(array.get(i).get("id"));
                 }
             }
         } else {
             if (idInput.getValue() != null) {
                 for (int i = 0; i < array.size(); i++) {
                     if (array.get(i).get("id").equals(idInput.getValue().toString())) {
-                        s = connection.deleteNode(array.get(i).get("id"));
+                        s = NodeDB.deleteNode(array.get(i).get("id"));
                     }
                 }
 
@@ -802,7 +802,7 @@ public class newMapEditor {
 
 
         makeConnection connection = makeConnection.makeConnection();
-        connection.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
+        NodeDB.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
 
 
     }
@@ -877,7 +877,7 @@ public class newMapEditor {
         makeConnection connection = makeConnection.makeConnection();
 
         //Creating ID dropdown
-        ArrayList<String> idList = connection.getListOfNodeIDS();
+        ArrayList<String> idList = NodeDB.getListOfNodeIDS();
         ObservableList<String> listOfIDS = FXCollections.observableArrayList();
         listOfIDS.addAll(idList);
 
@@ -948,7 +948,7 @@ public class newMapEditor {
         longNameArrayList = FXCollections.observableArrayList();
         nodeIDArrayList = new ArrayList<String>();
 
-        nodeArrayList = connection.getAllNodes();
+        nodeArrayList = NodeDB.getAllNodes();
         for (int i = 0; i < nodeArrayList.size(); i++) {
             longNameArrayList.add(nodeArrayList.get(i).get("longName"));
             nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
@@ -1001,7 +1001,7 @@ public class newMapEditor {
         prepareNodes(nodeTreeTable);
         prepareEdges(edgeTreeTable);
 
-        final ArrayList<Node> array = connection.getAllNodes();
+        final ArrayList<Node> array = NodeDB.getAllNodes();
         Group g = new Group();
 
         pane.setOnMouseClicked(e -> {

@@ -7,7 +7,6 @@ import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import edu.wpi.TeamE.databases.*;
 import javafx.fxml.FXML;
 
 import java.util.ArrayList;
@@ -84,7 +83,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
       String signature = Signature.getText();
       int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
       String nodeID = nodeIDS.get(nodeIDIndex);
-      RequestsDB.addSanitationRequest(15,assigneeID,nodeID, serviceKind,details,severity,signature);
+      DB.addSanitationRequest(15,assigneeID,nodeID, serviceKind,details,severity,signature);
       //DB changed the assignee in the function call to an int (not string) --> we need the assignee's userID
       System.out.println(serviceKind);
 

@@ -1,22 +1,17 @@
 package edu.wpi.TeamE;
 
-import edu.wpi.TeamE.databases.*;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class App extends Application {
 
@@ -25,10 +20,24 @@ public class App extends Application {
 
 	private double x, y;
 
+	public static void setDraggableAndChangeScene(Parent root) {
+//		ResizeHelper.addResizeListener(App.getPrimaryStage()); //todo this is no longer necessary, making pretty much this whole fcn unnecessary?
+//		ResizeHelper.addResizeListener(primaryStage,435,325,Double.MAX_VALUE,Double.MAX_VALUE);
+		App.getPrimaryStage().getScene().setRoot(root);
+	}
+
+	public static void setDraggableAndChangeScene(Parent root, double minWidth, double minHeight, double maxWidth, double maxHeight) {
+		ResizeHelper.addResizeListener(App.getPrimaryStage(), minWidth, minHeight, maxWidth, maxHeight);
+		App.getPrimaryStage().getScene().setRoot(root);
+	}
+
+	public static Stage getPrimaryStage() {
+		return primaryStage;
+	}
+
 	public static void setPrimaryStage(Stage primaryStage) {
 		App.primaryStage = primaryStage;
 	}
-
 
 	@Override
 	public void init() {
@@ -37,18 +46,18 @@ public class App extends Application {
 		System.out.println("Connected to the DB");
 		File nodes = new File("CSVs/MapEAllnodes.csv");
 		File edges = new File("CSVs/MapEAlledges.csv");
-    boolean tablesExist = connection.allTablesThere();
-		if(!tablesExist){
+		boolean tablesExist = connection.allTablesThere();
+		if (!tablesExist) {
 			try {
 				DB.createNodeTable();
 				DB.createEdgeTable();
-				UserAccountDB.createUserAccountTable();
-				RequestsDB.createRequestsTable();
-				RequestsDB.createFloralRequestsTable();
-				RequestsDB.createSanitationTable();
-				RequestsDB.createExtTransportTable();
-				RequestsDB.createMedDeliveryTable();
-				RequestsDB.createSecurityServTable();
+				DB.createUserAccountTable();
+				DB.createRequestsTable();
+				DB.createFloralRequestsTable();
+				DB.createSanitationTable();
+				DB.createExtTransportTable();
+				DB.createMedDeliveryTable();
+				DB.createSecurityServTable();
 				DB.populateTable("node", nodes);
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
@@ -63,18 +72,6 @@ public class App extends Application {
 		}
 	}
 
-	public static void setDraggableAndChangeScene(Parent root) {
-//		ResizeHelper.addResizeListener(App.getPrimaryStage()); //todo this is no longer necessary, making pretty much this whole fcn unnecessary?
-//		ResizeHelper.addResizeListener(primaryStage,435,325,Double.MAX_VALUE,Double.MAX_VALUE);
-		App.getPrimaryStage().getScene().setRoot(root);
-	}
-
-	public static void setDraggableAndChangeScene(Parent root, double minWidth, double minHeight, double maxWidth, double maxHeight) {
-		ResizeHelper.addResizeListener(App.getPrimaryStage(),minWidth,minHeight,maxWidth,maxHeight);
-		App.getPrimaryStage().getScene().setRoot(root);
-	}
-
-
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		App.primaryStage = primaryStage;
@@ -87,15 +84,11 @@ public class App extends Application {
 			primaryStage.setHeight(675);
 			root.minWidth(576);
 			primaryStage.show();
-			ResizeHelper.addResizeListener(primaryStage,950,640,Double.MAX_VALUE,Double.MAX_VALUE);
+			ResizeHelper.addResizeListener(primaryStage, 950, 640, Double.MAX_VALUE, Double.MAX_VALUE);
 		} catch (IOException e) {
 			e.printStackTrace();
 			Platform.exit();
 		}
-	}
-
-	public static Stage getPrimaryStage() {
-		return primaryStage;
 	}
 
 	@Override

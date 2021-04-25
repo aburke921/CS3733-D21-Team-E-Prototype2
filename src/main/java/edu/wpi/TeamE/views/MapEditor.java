@@ -1,7 +1,7 @@
 package edu.wpi.TeamE.views;
 import com.jfoenix.controls.*;
 import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.databases.*;
+import edu.wpi.cs3733.D21.teamE.DB;
 
 import edu.wpi.cs3733.D21.teamE.DB;
 
@@ -12,7 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.scene.image.Image;
@@ -705,13 +704,13 @@ public class MapEditor {
             connection.deleteAllTables();
             DB.createNodeTable();
             DB.createEdgeTable();
-            UserAccountDB.createUserAccountTable();
-            RequestsDB.createRequestsTable();
-            RequestsDB.createFloralRequestsTable();
-            RequestsDB.createSanitationTable();
-            RequestsDB.createExtTransportTable();
-            RequestsDB.createMedDeliveryTable();
-            RequestsDB.createSecurityServTable();
+            DB.createUserAccountTable();
+            DB.createRequestsTable();
+            DB.createFloralRequestsTable();
+            DB.createSanitationTable();
+            DB.createExtTransportTable();
+            DB.createMedDeliveryTable();
+            DB.createSecurityServTable();
             DB.createAppointmentTable();
             DB.populateTable("node", file);
             DB.populateTable("hasEdge", saveEdges);

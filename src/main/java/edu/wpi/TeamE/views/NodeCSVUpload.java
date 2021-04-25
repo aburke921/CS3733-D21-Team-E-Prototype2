@@ -2,7 +2,6 @@ package edu.wpi.TeamE.views;
 
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.databases.*;
 
 import edu.wpi.cs3733.D21.teamE.DB;
 
@@ -125,13 +124,13 @@ public class NodeCSVUpload {
             connection.deleteAllTables();
             DB.createNodeTable();
             DB.createEdgeTable();
-            UserAccountDB.createUserAccountTable();
-            RequestsDB.createRequestsTable();
-            RequestsDB.createFloralRequestsTable();
-            RequestsDB.createSanitationTable();
-            RequestsDB.createExtTransportTable();
-            RequestsDB.createMedDeliveryTable();
-            RequestsDB.createSecurityServTable();
+            DB.createUserAccountTable();
+            DB.createRequestsTable();
+            DB.createFloralRequestsTable();
+            DB.createSanitationTable();
+            DB.createExtTransportTable();
+            DB.createMedDeliveryTable();
+            DB.createSecurityServTable();
             DB.createAppointmentTable();
             DB.populateTable("node", file);
             DB.populateTable("hasEdge", saveEdges);

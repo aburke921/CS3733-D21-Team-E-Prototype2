@@ -1,9 +1,8 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
-import edu.wpi.cs3733.D21.teamE.DB;
-
 import java.io.*;
 import java.sql.*;
+
 
 public class csvDB {
 
@@ -84,7 +83,7 @@ public class csvDB {
 
 					if (tableName.equals("hasEdge")) {
 						//System.out.println("Calling addLength");
-						DB.addLength(tempArr[1], tempArr[2]);
+						EdgeDB.addLength(tempArr[1], tempArr[2]);
 						//System.out.println("after calling addLength");
 					}
 
@@ -166,13 +165,9 @@ public class csvDB {
 		}
 	}
 
-	/**
-	 * saves patient information (called before deleting a patient and their history)
-	 * @param patientID is the userID of the patient
-	 */
-	public static void addRemovedPatientAppointmentHistory(int patientID){
+	public static void addRemovedPatientAppointmentHistory(int patientID) {
 
-		String sqlQuery = "select * from appointment where patientID = ?";
+		String sqlQuery = "Select * From appointment Where patientid = ?";
 		try (PreparedStatement prepStat = connection.prepareStatement(sqlQuery)) {
 			prepStat.setInt(1, patientID);
 
@@ -201,7 +196,6 @@ public class csvDB {
 			rset.close();
 
 
-
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		} catch (IOException ioException) {
@@ -209,13 +203,7 @@ public class csvDB {
 		}
 
 
-
-
-
-
-
 	}
-
 
 
 }

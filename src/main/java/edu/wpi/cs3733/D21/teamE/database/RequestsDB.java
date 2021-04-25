@@ -1,6 +1,4 @@
-package edu.wpi.TeamE.databases;
-
-import edu.wpi.cs3733.D21.teamE.database.makeConnection;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,15 +9,15 @@ import java.util.HashMap;
 
 public class RequestsDB {
 
-	static Connection connection = makeConnection.makeConnection().getConnection();
+	static Connection connection = makeConnection.makeConnection().connection;
 
-//CREATING TABLES:::
 // CREATING TABLES:::
 // CREATING TABLES:::
 // CREATING TABLES:::
-//CREATING TABLES:::
-//CREATING TABLES:::
-//CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
 
 	/**
 	 * Uses executes the SQL statements required to create the requests table.

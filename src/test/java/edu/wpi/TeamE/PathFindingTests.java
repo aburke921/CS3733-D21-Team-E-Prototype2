@@ -5,7 +5,6 @@ import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.SearchContext;
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.wpi.TeamE.databases.*;
 import edu.wpi.TeamE.views.MapEditor;
 import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
 import edu.wpi.cs3733.D21.teamE.database.csvDB;
@@ -31,13 +30,13 @@ public class PathFindingTests {
         try {
             DB.createNodeTable();
             DB.createEdgeTable();
-            UserAccountDB.createUserAccountTable();
-            RequestsDB.createRequestsTable();
-            RequestsDB.createFloralRequestsTable();
-            RequestsDB.createSanitationTable();
-            RequestsDB.createExtTransportTable();
-            RequestsDB.createMedDeliveryTable();
-            RequestsDB.createSecurityServTable();
+            DB.createUserAccountTable();
+            DB.createRequestsTable();
+            DB.createFloralRequestsTable();
+            DB.createSanitationTable();
+            DB.createExtTransportTable();
+            DB.createMedDeliveryTable();
+            DB.createSecurityServTable();
             appointmentDB.createAppointmentTable();
             csvDB.populateTable("node", nodes);
             csvDB.populateTable("hasEdge", edges);
@@ -45,13 +44,13 @@ public class PathFindingTests {
         } catch (Exception e) {
             DB.createNodeTable();
             DB.createEdgeTable();
-            UserAccountDB.createUserAccountTable();
-            RequestsDB.createRequestsTable();
-            RequestsDB.createFloralRequestsTable();
-            RequestsDB.createSanitationTable();
-            RequestsDB.createExtTransportTable();
-            RequestsDB.createMedDeliveryTable();
-            RequestsDB.createSecurityServTable();
+            DB.createUserAccountTable();
+            DB.createRequestsTable();
+            DB.createFloralRequestsTable();
+            DB.createSanitationTable();
+            DB.createExtTransportTable();
+            DB.createMedDeliveryTable();
+            DB.createSecurityServTable();
             appointmentDB.createAppointmentTable();
         }
 

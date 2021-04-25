@@ -2,8 +2,8 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableView;
 //import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.databases.RequestsDB;
 import edu.wpi.TeamE.views.forms.ServiceRequestForm;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
@@ -52,7 +52,7 @@ public class ServiceRequestStatus {
 
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            RequestsDB.editRequests(id, 0, "canceled");
+            DB.editRequests(id, 0, "canceled");
             System.out.println("The request was cancelled");
         }
     }
@@ -66,7 +66,7 @@ public class ServiceRequestStatus {
     private void complete(TreeTableView<ServiceRequestForm> table) {
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            RequestsDB.editRequests(id,0, "complete");
+            DB.editRequests(id,0, "complete");
             System.out.println("The request was completed");
         }
 
@@ -92,13 +92,13 @@ public class ServiceRequestStatus {
      */
     private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
 
-        ArrayList<String> idArray = RequestsDB.getMyCreatedRequestInfo(tableName, App.userID, "requestID");
+        ArrayList<String> idArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestID");
 //        for(int j = 0; j < idArray.size(); j++) {
 //            System.out.println(idArray.get(j));
 //        }
-        ArrayList<String> statusArray = RequestsDB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
-        ArrayList<String> locationArray = RequestsDB.getRequestLocations(tableName, App.userID);
-        ArrayList<String> assigneeArray = RequestsDB.getMyCreatedRequestInfo(tableName, App.userID, "assigneeID");
+        ArrayList<String> statusArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
+        ArrayList<String> locationArray = DB.getRequestLocations(tableName, App.userID);
+        ArrayList<String> assigneeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "assigneeID");
         if(idArray.size() > 0) {
             System.out.println("Array size" + idArray.size());
             if (!inProgress.getChildren().isEmpty()) {

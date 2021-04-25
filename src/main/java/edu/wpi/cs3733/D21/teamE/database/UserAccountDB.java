@@ -1,14 +1,10 @@
-package edu.wpi.TeamE.databases;
-
-import edu.wpi.cs3733.D21.teamE.database.makeConnection;
-
-import edu.wpi.cs3733.D21.teamE.database.csvDB;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import java.sql.*;
 
 public class UserAccountDB {
 
-	static Connection connection = makeConnection.makeConnection().getConnection();
+	static Connection connection = makeConnection.makeConnection().connection;
 
 	/**
 	 * Uses executes the SQL statements required to create the userAccount table.
@@ -218,7 +214,7 @@ public class UserAccountDB {
 	 */
 	public static int deleteUserAccount(int userID) {
 		String insertDeleteQuery = "Delete From useraccount Where userid = ?";
-		csvDB.addRemovedPatientAppointmentHistory(userID);
+
 		try (PreparedStatement prepState = connection.prepareStatement(insertDeleteQuery)) {
 			prepState.setInt(1, userID);
 			prepState.execute();

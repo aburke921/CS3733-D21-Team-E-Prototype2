@@ -42,20 +42,22 @@ public class Marker {
         checkBoxSelected.put("STAI", 0);
         checkBoxSelected.put("SERV", 0);
         checkBoxSelected.put("EXIT", 0);
-        checkBoxSelected.put("BATH", 0);
+        checkBoxSelected.put("PARK", 0);
+        checkBoxSelected.put("WALK", 0);
 
-        typeColor.put("HALL", Color.BLACK);
+        typeColor.put("HALL", Color.web("#7c7c7c"));
         typeColor.put("CONF", Color.ORANGE);
-        typeColor.put("DEPT", Color.PURPLE);
-        typeColor.put("ELEV", Color.GREEN);
-        typeColor.put("INFO", Color.BLUE);
-        typeColor.put("LABS", Color.TURQUOISE);
-        typeColor.put("REST", Color.PINK);
-        typeColor.put("RETL", Color.BROWN);
-        typeColor.put("STAI", Color.YELLOW);
-        typeColor.put("SERV", Color.LIGHTBLUE);
-        typeColor.put("EXIT", Color.GREENYELLOW);
-        typeColor.put("BATH", Color.VIOLET);
+        typeColor.put("DEPT", Color.web("#690080"));
+        typeColor.put("ELEV", Color.web("#769557"));
+        typeColor.put("INFO", Color.web("#b46e25"));
+        typeColor.put("LABS", Color.web("#a40289"));
+        typeColor.put("REST", Color.web("#b00404"));
+        typeColor.put("RETL", Color.web("#3d4f9d"));
+        typeColor.put("STAI", Color.web("#007f52"));
+        typeColor.put("SERV", Color.web("#4800ff"));
+        typeColor.put("EXIT", Color.YELLOWGREEN);
+        typeColor.put("PARK", Color.web("#159bd2"));
+        typeColor.put("WALK", Color.BLACK);
     }
 
     public HashMap<String, Integer> getSelectedCheckBox() {

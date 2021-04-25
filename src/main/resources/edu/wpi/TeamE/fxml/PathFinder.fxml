@@ -192,62 +192,67 @@
                                        <children>
                                           <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <children>
-                                                <JFXCheckBox fx:id="elev" onAction="#sortNodesByType" text="Elevators">
+                                                <JFXCheckBox fx:id="rest" checkedColor="#b00404" onAction="#sortNodesByType" text="Restrooms">
                                                    <VBox.margin>
                                                       <Insets top="12.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="bath" onAction="#sortNodesByType" text="Bathrooms">
+                                                <JFXCheckBox fx:id="info" checkedColor="#b46e25" onAction="#sortNodesByType" text="Information Desk">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="hall" onAction="#sortNodesByType" text="Hallways">
+                                                <JFXCheckBox fx:id="dept" checkedColor="#690080" onAction="#sortNodesByType" text="Departments">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="retl" onAction="#sortNodesByType" text="Restaurants">
+                                                <JFXCheckBox fx:id="labs" checkedColor="#a40289" onAction="#sortNodesByType" text="Laboratories">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="conf" onAction="#sortNodesByType" text="Conferences">
+                                                <JFXCheckBox fx:id="retl" checkedColor="#3d4f9d" onAction="#sortNodesByType" text="Retail">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="dept" onAction="#sortNodesByType" text="Departments">
+                                                <JFXCheckBox fx:id="serv" checkedColor="#4800ff" onAction="#sortNodesByType" text="Services">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="info" onAction="#sortNodesByType" text="Informations Center">
+                                                <JFXCheckBox fx:id="conf" checkedColor="ORANGE" onAction="#sortNodesByType" text="Conferences">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="labs" onAction="#sortNodesByType" text="Laboratories">
+                                                <JFXCheckBox fx:id="entr" checkedColor="YELLOWGREEN" onAction="#sortNodesByType" text="Exits/Entrances">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="rest" onAction="#sortNodesByType" text="Restrooms">
+                                                <JFXCheckBox fx:id="elev" checkedColor="#769557" onAction="#sortNodesByType" text="Elevators">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="stai" onAction="#sortNodesByType" text="Stairs">
+                                                <JFXCheckBox fx:id="stai" checkedColor="#007f52" onAction="#sortNodesByType" text="Stairs">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="serv" onAction="#sortNodesByType" text="Services">
+                                                <JFXCheckBox fx:id="park" checkedColor="#159bd2" onAction="#sortNodesByType" text="Parking">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="entr" onAction="#sortNodesByType" text="Exits/Entrances">
+                                                <JFXCheckBox fx:id="walk" checkedColor="BLACK" onAction="#sortNodesByType" text="Walkways">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="hall" checkedColor="#7c7c7c" onAction="#sortNodesByType" text="Hallways">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>

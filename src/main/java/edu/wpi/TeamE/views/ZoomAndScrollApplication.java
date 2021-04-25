@@ -281,8 +281,8 @@ public class ZoomAndScrollApplication extends Application {
 
         // we don't want the canvas on the top/left in this example => just
         // translate it a bit
-        canvas.setTranslateX(100);
-        canvas.setTranslateY(100);
+        canvas.setTranslateX(0);
+        canvas.setTranslateY(0);
 
         // create sample nodes which can be dragged
         NodeGestures nodeGestures = new NodeGestures( canvas);
@@ -324,7 +324,7 @@ public class ZoomAndScrollApplication extends Application {
         group.getChildren().add(canvas);
 
         // create scene which can be dragged and zoomed
-        Scene scene = new Scene(group, 1024, 768);
+        Scene scene = new Scene(group, 600, 600);
 
         SceneGestures sceneGestures = new SceneGestures(canvas);
         scene.addEventFilter( MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());

@@ -58,8 +58,6 @@ import javafx.stage.Stage;
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class PathFinder {
-
-
     /*
      * FXML Values
      */
@@ -607,8 +605,11 @@ public class PathFinder {
 //        dist.setOpacity(0);
 //        sideBar.setMaxWidth(0);
 //        clearPath.setOpacity(0);
+        minETA.setText("00");
+        secETA.setText("00");
 
         StackPane stackPane = new StackPane(imageView, markerPane, borderPane);
+        stackPane.maxWidthProperty().bind(primaryStage.widthProperty());
 
         ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
 

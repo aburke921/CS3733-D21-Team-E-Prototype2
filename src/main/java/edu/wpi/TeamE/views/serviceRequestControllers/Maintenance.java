@@ -6,7 +6,11 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.lang.String;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import edu.wpi.TeamE.databases.NodeDB;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.shape.Circle;
@@ -14,6 +18,9 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 public class Maintenance extends ServiceRequestFormComponents {
+
+    ObservableList<String> locations;
+    ArrayList<String> nodeID = new ArrayList<>();
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -99,6 +106,9 @@ public class Maintenance extends ServiceRequestFormComponents {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
+        nodeID = NodeDB.getListOfNodeIDS();
+        locations = NodeDB.getAllNodeLongNames();
+        locationInput.setItems(locations);
         assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";

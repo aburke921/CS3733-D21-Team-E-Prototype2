@@ -129,11 +129,6 @@
                                                                         </FXCollections>
                                                                     </items>
                                                                 </JFXComboBox>
-                                                                <JFXTextField fx:id="patientIdInput" prefHeight="27.0" prefWidth="280.0" promptText="Patient ID #">
-                                                                    <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
-                                                                    </VBox.margin>
-                                                                </JFXTextField>
                                                                 <JFXTextField fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
                                                                     <VBox.margin>
                                                                         <Insets top="20.0" />

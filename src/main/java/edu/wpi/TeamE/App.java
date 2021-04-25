@@ -23,12 +23,24 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class App extends Application {
 
-	public static int userID = 0;
+	public static int userID = 0; //todo assuming 0 means guest user? - cole
+	public static boolean showLogin;
 	private static Stage primaryStage;
 	private static String pageTitle; //Title for the currently displayed page, set by AppBarComponent
 	private static String helpText; //help text for current page
 	private static StackPane stackPane; //main stack page of current page
+	private static boolean showHelp = false; //should help button be shown (false by default)
 
+
+	//todo
+	public static boolean isShowLogin() {
+		return showLogin;
+	}
+
+	//todo
+	public static void setShowLogin(boolean showLogin) {
+		App.showLogin = showLogin;
+	}
 
 	/**
 	 * @return String used by {@link edu.wpi.TeamE.views.AppBarComponent} to decide what to put in Help Dialog.
@@ -51,8 +63,6 @@ public class App extends Application {
 	public static String getPageTitle() {
 		return pageTitle;
 	}
-
-	//set this for every UI page on which a title is wanted in the App Bar
 
 	/**
 	 * Sets the page title for app bar
@@ -105,6 +115,16 @@ public class App extends Application {
 	 */
 	public static void setStackPane(StackPane stackPane) {
 		App.stackPane = stackPane;
+	}
+
+	//getter for showHelp
+	public static boolean isShowHelp() {
+		return showHelp;
+	}
+
+	//setter for showHelp
+	public static void setShowHelp(boolean showHelp) {
+		App.showHelp = showHelp;
 	}
 
 

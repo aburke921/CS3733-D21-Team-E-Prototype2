@@ -6,20 +6,15 @@ import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.databases.UserAccountDB;
-import edu.wpi.TeamE.databases.makeConnection;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class createAccount {

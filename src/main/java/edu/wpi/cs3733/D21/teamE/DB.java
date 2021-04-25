@@ -6,25 +6,15 @@ import edu.wpi.TeamE.algorithms.Node;
 //import edu.wpi.TeamE.databases.NodeDB;
 //import edu.wpi.TeamE.databases.NodeDB;
 
+import edu.wpi.cs3733.D21.teamE.database.EdgeDB;
 import edu.wpi.cs3733.D21.teamE.database.NodeDB;
-import edu.wpi.TeamE.databases.makeConnection;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
 
 public class DB {
-	public static void main(String[] args) {
 
-		makeConnection BWDB;
-//		BWDB = new CarSystem("Ford Focus", "KABC");
-//		BWDB.drive();
-//		BWDB.radio();
-//		BWDB.turn("left");
-//		BWDB.turn("right");
-//		BWDB.MP3();
-//		BWDB.stop();
-	}
 
 
 	/**

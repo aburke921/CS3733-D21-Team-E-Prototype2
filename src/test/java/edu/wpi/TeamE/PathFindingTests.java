@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.TeamE.databases.*;
 import edu.wpi.TeamE.views.MapEditor;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,8 +27,8 @@ public class PathFindingTests {
         File nodes = new File("CSVs/MapEAllnodes.csv");
         File edges = new File("CSVs/MapEAlledges.csv");
         try {
-            NodeDB.createNodeTable();
-            EdgeDB.createEdgeTable();
+            DB.createNodeTable();
+            DB.createEdgeTable();
             UserAccountDB.createUserAccountTable();
             RequestsDB.createRequestsTable();
             RequestsDB.createFloralRequestsTable();
@@ -38,8 +41,8 @@ public class PathFindingTests {
             csvDB.populateTable("hasEdge", edges);
             System.out.println("Tables were created");
         } catch (Exception e) {
-            NodeDB.createNodeTable();
-            EdgeDB.createEdgeTable();
+            DB.createNodeTable();
+            DB.createEdgeTable();
             UserAccountDB.createUserAccountTable();
             RequestsDB.createRequestsTable();
             RequestsDB.createFloralRequestsTable();

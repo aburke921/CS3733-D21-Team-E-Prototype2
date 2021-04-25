@@ -1,5 +1,8 @@
 package edu.wpi.TeamE.databases;
 
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
+
 import java.io.*;
 import java.sql.*;
 
@@ -83,7 +86,7 @@ public class csvDB {
 
 					if (tableName.equals("hasEdge")) {
 						//System.out.println("Calling addLength");
-						EdgeDB.addLength(tempArr[1], tempArr[2]);
+						DB.addLength(tempArr[1], tempArr[2]);
 						//System.out.println("after calling addLength");
 					}
 

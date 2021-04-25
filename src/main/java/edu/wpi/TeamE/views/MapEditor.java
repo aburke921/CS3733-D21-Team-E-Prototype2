@@ -2,6 +2,9 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.*;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.*;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -107,7 +110,7 @@ public class MapEditor {
         listOfBuildings.addAll(nodeBuildingArrayList);
         //Creating ID Dropdown
         ArrayList<String> nodeIDArrayList = new ArrayList<String>();
-        nodeIDArrayList = NodeDB.getListOfNodeIDS();
+        nodeIDArrayList = DB.getListOfNodeIDS();
         ObservableList<String> listOfIDS = FXCollections.observableArrayList();
         listOfIDS.addAll(nodeIDArrayList);
         //add ObservableLists to dropdowns
@@ -184,7 +187,7 @@ public class MapEditor {
      */
     public void prepareNodes(TreeTableView<Node> table) {
 
-        ArrayList<Node> array = NodeDB.getAllNodes();
+        ArrayList<Node> array = DB.getAllNodes();
         if (table.getRoot() == null) {
             //Column 1 - Location
             TreeTableColumn<Node, String> column = new TreeTableColumn<>("Location");
@@ -544,7 +547,7 @@ public class MapEditor {
 
 
 
-        NodeDB.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
+        DB.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
     }
 
     /**
@@ -565,7 +568,7 @@ public class MapEditor {
             //Elevator names need to start with 'Elevator X xxxxx"
         } else {
 
-            int instance = NodeDB.countNodeTypeOnFloor("e", floor, type) + 1;
+            int instance = DB.countNodeTypeOnFloor("e", floor, type) + 1;
             SB.append(String.format("%03d", instance));
         }
 
@@ -621,7 +624,7 @@ public class MapEditor {
         }
         int xVal = Integer.parseInt(xCordInput.getText());
         int yVal = Integer.parseInt(yCordInput.getText());
-        i = NodeDB.addNode(genNodeID(typeInput.getValue().toString(),floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
+        i = DB.addNode(genNodeID(typeInput.getValue().toString(),floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
         System.out.println(i);
         return i;
     }
@@ -643,7 +646,7 @@ public class MapEditor {
     public int deleteNode(TreeTableView<Node> table) {
         int s = -1;
 
-        ArrayList<Node> array = NodeDB.getAllNodes();
+        ArrayList<Node> array = DB.getAllNodes();
         if(table.getSelectionModel().getSelectedItem().getValue() == null) {
             errorPopup("Must select Node ID to delete");
             return s;
@@ -651,7 +654,7 @@ public class MapEditor {
             //System.out.println(idDropDown.getValue().toString());
             for (int i = 0; i < array.size(); i++) {
                 if (array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
-                    s = NodeDB.deleteNode(array.get(i).get("id"));
+                    s = DB.deleteNode(array.get(i).get("id"));
                 }
             }
        }
@@ -699,8 +702,8 @@ public class MapEditor {
 
             //This is where tables are cleared and refilled
             connection.deleteAllTables();
-            NodeDB.createNodeTable();
-            EdgeDB.createEdgeTable();
+            DB.createNodeTable();
+            DB.createEdgeTable();
             UserAccountDB.createUserAccountTable();
             RequestsDB.createRequestsTable();
             RequestsDB.createFloralRequestsTable();

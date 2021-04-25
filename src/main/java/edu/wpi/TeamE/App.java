@@ -1,6 +1,10 @@
 package edu.wpi.TeamE;
 
 import edu.wpi.TeamE.databases.*;
+import edu.wpi.cs3733.D21.teamE.database.EdgeDB;
+import edu.wpi.cs3733.D21.teamE.database.EdgeDB;
+import edu.wpi.cs3733.D21.teamE.database.NodeDB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

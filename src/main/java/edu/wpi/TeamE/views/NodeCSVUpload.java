@@ -3,6 +3,9 @@ package edu.wpi.TeamE.views;
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.*;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
@@ -38,7 +41,7 @@ public class NodeCSVUpload {
      */
     public void prepareNodes(TreeTableView<Node> table) {
 
-        ArrayList<Node> array = NodeDB.getAllNodes();
+        ArrayList<Node> array = DB.getAllNodes();
         if (table.getRoot() == null) {
             Node node0 = new
                     Node("ID",
@@ -119,8 +122,8 @@ public class NodeCSVUpload {
 
             //This is where tables are cleared and refilled
             connection.deleteAllTables();
-            NodeDB.createNodeTable();
-            EdgeDB.createEdgeTable();
+            DB.createNodeTable();
+            DB.createEdgeTable();
             UserAccountDB.createUserAccountTable();
             RequestsDB.createRequestsTable();
             RequestsDB.createFloralRequestsTable();

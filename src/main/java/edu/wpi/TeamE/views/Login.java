@@ -3,7 +3,6 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.*;
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.databases.UserAccountDB;
-import edu.wpi.TeamE.databases.makeConnection;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,7 +15,6 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;

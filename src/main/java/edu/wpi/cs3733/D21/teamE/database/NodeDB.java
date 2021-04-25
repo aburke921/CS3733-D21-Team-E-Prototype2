@@ -1,4 +1,4 @@
-package edu.wpi.TeamE.databases;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.TeamE.algorithms.Node;
 import javafx.collections.FXCollections;

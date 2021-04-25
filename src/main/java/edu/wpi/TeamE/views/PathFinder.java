@@ -20,6 +20,7 @@ import edu.wpi.TeamE.algorithms.pathfinding.*;
 import edu.wpi.TeamE.databases.*;
 
 import edu.wpi.TeamE.App;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -481,7 +482,7 @@ public class PathFinder {
         longNameArrayList = FXCollections.observableArrayList();
         nodeIDArrayList = new ArrayList<String>();
 
-        nodeArrayList = NodeDB.getAllNodes();
+        nodeArrayList = DB.getAllNodes();
         for (int i = 0; i < nodeArrayList.size(); i++) {
             longNameArrayList.add(nodeArrayList.get(i).get("longName"));
             nodeIDArrayList.add(nodeArrayList.get(i).get("id"));

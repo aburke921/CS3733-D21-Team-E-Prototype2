@@ -1,5 +1,7 @@
 package edu.wpi.TeamE.databases;
 
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
+
 import java.sql.*;
 
 public class appointmentDB {

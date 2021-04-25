@@ -4,8 +4,8 @@ import java.util.*;
 
 import edu.wpi.TeamE.algorithms.*;
 import edu.wpi.TeamE.algorithms.pathfinding.constraints.SearchConstraint;
-import edu.wpi.TeamE.databases.makeConnection;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
 /**
  * Abstract Searcher Class for Pathfinding API

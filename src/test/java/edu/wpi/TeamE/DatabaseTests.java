@@ -725,7 +725,7 @@ public class DatabaseTests {
 		UserAccountDB.addSpecialUserType("pharmacist1@gmail.com", "testPass", "pharmacist", "bob", "Shukla");
 		UserAccountDB.addSpecialUserType("pharmacist2@gmail.com", "testPass", "pharmacist", "kim", "Shukla");
 
-		RequestsDB.addMedicineRequest(1, 3, "test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		RequestsDB.addMedicineRequest(1, 3, "test1", "drugs", 2, "100ml", "take once a day", "Nupur");
 		RequestsDB.addMedicineRequest(1, 4, "test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
 		RequestsDB.addMedicineRequest(2, 3, "test3", "drugs3", 4, "1ml", "take once a day", "Nupur");
 

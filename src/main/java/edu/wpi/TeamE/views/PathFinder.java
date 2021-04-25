@@ -2,11 +2,9 @@ package edu.wpi.TeamE.views;
 
 import com.jfoenix.controls.*;
 
-import java.awt.geom.RoundRectangle2D;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+
 import java.net.URL;
 import java.util.*;
 import java.util.ArrayList;
@@ -26,10 +24,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
+
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
+
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -37,13 +35,13 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
+
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
+
 import javafx.stage.Stage;
 
-import javax.imageio.IIOParam;
+
 
 public class PathFinder {
 
@@ -551,7 +549,7 @@ public class PathFinder {
 
         new AutoCompleteComboBoxListener<>(startLocationComboBox);
         new AutoCompleteComboBoxListener<>(endLocationComboBox);
-        final ArrayList<Node> array = NodeDB.getAllNodes();
+        final ArrayList<Node> array = DB.getAllNodes();
 
         //Set up zoomable and pannable panes
         BorderPane borderPane = new BorderPane();

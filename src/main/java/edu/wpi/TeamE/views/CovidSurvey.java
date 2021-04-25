@@ -1,18 +1,13 @@
 package edu.wpi.TeamE.views;
 import com.jfoenix.controls.*;
 import edu.wpi.TeamE.App;
-import edu.wpi.TeamE.databases.makeConnection;
+
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
+
 
 import java.io.IOException;
 

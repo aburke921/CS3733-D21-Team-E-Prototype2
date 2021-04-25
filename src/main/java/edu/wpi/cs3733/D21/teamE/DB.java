@@ -266,6 +266,48 @@ public class DB {
 		return NodeDB.getListOfNodeIDS();
 	}
 
+	public static void deleteNodeTable(){
+		NodeDB.deleteNodeTable();
+	}
+
+
+	/**
+	 * Given a NodeID, gives the xCoord, yCoord, Floor and Type of that node from Nodes
+	 * @param nodeID is the nodeID of the nodes you want info from
+	 * @return a Node with only xCoord, yCoord, floor and nodeType not null
+	 */
+	public static Node getNodeLite(String nodeID){
+		return NodeDB.getNodeLite(nodeID);
+	}
+
+	/**
+	 * Gets all node long names for a specified FLOOR column value.
+	 * @param floorName the value to check for in FLOOR column
+	 * @return ObservableList of node long names.
+	 */
+	public static ObservableList<String> getAllNodeLongNamesByFloor(String floorName){
+		return NodeDB.getAllNodeLongNamesByFloor(floorName);
+	}
+
+	/**
+	 * Gets a list of the nodeIDs of all of the nodes that are on the given floor
+	 * @param floorName the name of the floor that the nodes will be selected on
+	 * @return
+	 */
+	public static ArrayList<String> getListOfNodeIDSByFloor(String floorName){
+		return NodeDB.getListOfNodeIDSByFloor(floorName);
+	}
+
+	/**
+	 * gets all Nodes that have the given FLOOR value
+	 * @param floorName the value to check for in FLOOR column
+	 * @return ArrayList of Node objects
+	 */
+	public static ArrayList<Node> getAllNodesByFloor(String floorName){
+		return NodeDB.getAllNodesByFloor(floorName);
+	}
+
+
 	// RequestDB:
 
 	// Creating Tables:

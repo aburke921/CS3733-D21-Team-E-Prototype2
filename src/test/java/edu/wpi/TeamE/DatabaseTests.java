@@ -6,16 +6,15 @@ import edu.wpi.TeamE.algorithms.Node;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TreeItem;
+
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.util.Pair;
 import org.junit.jupiter.api.*;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -275,7 +274,7 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetNodeLite")
 	public void testGetNodeLite() {
-		NodeDB.addNode("test233", 22, 33, "1", "BTM", "WALK", "long", null);
+		DB.addNode("test233", 22, 33, "1", "BTM", "WALK", "long", null);
 
 		Node testNode1 = new Node("test233", 22, 33, "1", "BTM", "WALK", "long", null);
 
@@ -288,10 +287,10 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAllNodesByFloor: 2 nodes with the given floor")
 	public void testGetAllNodesByFloor() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "PARK", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "PARK", "longName2", "shortName2");
+		DB.addNode("nodeID1", 0, 0, "1", "Tower", "PARK", "longName1", "shortName1");
+		DB.addNode("nodeID2", 1, 0, "1", "Tower", "PARK", "longName2", "shortName2");
 
-		ArrayList<Node> nodes = NodeDB.getAllNodesByFloor("1");
+		ArrayList<Node> nodes = DB.getAllNodesByFloor("1");
 
 		ArrayList<Node> correctNodes = new ArrayList<>();
 		Node node1 = new Node("nodeID1", 0, 0, "1", "Tower", "PARK", "longName1", "shortName1");
@@ -353,11 +352,11 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAllNodesByFloor: no nodes with the given floor")
 	public void testGetAllNodesByFloor2() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-		NodeDB.addNode("nodeID3", 3, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
+		DB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
+		DB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
+		DB.addNode("nodeID3", 3, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
 
-		ArrayList<Node> nodes = NodeDB.getAllNodesByFloor("3");
+		ArrayList<Node> nodes = DB.getAllNodesByFloor("3");
 
 		assertEquals(0, nodes.size());
 	}
@@ -366,10 +365,10 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAllNodeLongNamesByFloor: 2 nodes with the given floor")
 	public void testGetAllNodeLongNamesByFloor() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
+		DB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
+		DB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
 
-		ObservableList<String> longNames = NodeDB.getAllNodeLongNamesByFloor("1");
+		ObservableList<String> longNames = DB.getAllNodeLongNamesByFloor("1");
 
 		ObservableList<String> correctLongNames = FXCollections.observableArrayList();
 
@@ -383,11 +382,11 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAllNodeLongNamesByFloor: no nodes with the given floor")
 	public void testGetAllNodeLongNamesByFloor2() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-		NodeDB.addNode("nodeID3", 0, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
+		DB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
+		DB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
+		DB.addNode("nodeID3", 0, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
 
-		ObservableList<String> longNames = NodeDB.getAllNodeLongNamesByFloor("3");
+		ObservableList<String> longNames = DB.getAllNodeLongNamesByFloor("3");
 
 		assertEquals(0, longNames.size());
 	}
@@ -395,10 +394,10 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetListOfNodeIDSByFloor: 2 nodes with the given floor")
 	public void testGetListOfNodeIDSByFloor() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
+		DB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
+		DB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
 
-		ArrayList<String> nodeIDs = NodeDB.getListOfNodeIDSByFloor("1");
+		ArrayList<String> nodeIDs = DB.getListOfNodeIDSByFloor("1");
 
 		ArrayList<String> correctNodeIDs = new ArrayList<>();
 
@@ -411,11 +410,11 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetListOfNodeIDSByFloor: no nodes with the given floor")
 	public void testGetListOfNodeIDSByFloor2() {
-		NodeDB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
-		NodeDB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
-		NodeDB.addNode("nodeID3", 3, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
+		DB.addNode("nodeID1", 0, 0, "1", "Tower", "ELEV", "longName1", "shortName1");
+		DB.addNode("nodeID2", 1, 0, "1", "Tower", "ELEV", "longName2", "shortName2");
+		DB.addNode("nodeID3", 3, 0, "1", "Tower", "ELEV", "longName3", "shortName3");
 
-		ArrayList<String> nodeIDs = NodeDB.getListOfNodeIDSByFloor("3");
+		ArrayList<String> nodeIDs = DB.getListOfNodeIDSByFloor("3");
 
 
 		assertEquals(0, nodeIDs.size());
@@ -1291,15 +1290,20 @@ public class DatabaseTests {
 		String insertUser2 = "Insert Into useraccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', CURRENT TIMESTAMP)";
 		String insertUser3 = "Insert Into useraccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', CURRENT TIMESTAMP)";
 		String insertUser4 = "Insert Into useraccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', CURRENT TIMESTAMP)";
-		try {
-			Statement stmt = makeConnection.makeConnection().connection.createStatement();
-			stmt.executeUpdate(insertUser1);
-			stmt.executeUpdate(insertUser2);
-			stmt.executeUpdate(insertUser3);
-			stmt.executeUpdate(insertUser4);
-			stmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
+
+		ArrayList<String> insertUsers = new ArrayList<String>();
+		insertUsers.add(insertUser1);
+		insertUsers.add(insertUser2);
+		insertUsers.add(insertUser3);
+		insertUsers.add(insertUser4);
+		for(String insertUser : insertUsers) {
+			try (PreparedStatement prepState = makeConnection.makeConnection().connection.prepareStatement(insertUser)) {
+				prepState.execute();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				//showError("This email all ready has an account");
+				System.err.println("Error inserting into userAccount inside function userLoginTest()");
+			}
 		}
 
 		//Visitors:

@@ -6,9 +6,9 @@ import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-import edu.wpi.TeamE.databases.makeConnection;
 
-import edu.wpi.TeamE.databases.*;
+
+
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -17,7 +17,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
+
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -25,7 +25,7 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
+
 
 public class App extends Application {
 

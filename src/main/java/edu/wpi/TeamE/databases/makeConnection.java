@@ -93,7 +93,7 @@ public class makeConnection {
 			stmt.execute("Drop Table node");
 			stmt.close();
 		} catch (SQLException e) {
-//			 e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("deleteAllTables() not working");
 		}
 	}

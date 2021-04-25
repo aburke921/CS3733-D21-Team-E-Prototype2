@@ -37,28 +37,13 @@ public class SecurityService extends ServiceRequestFormComponents {
     private Button helpSecurityService; // Value injected by FXMLLoader
 
     @FXML // fx:id="levelOfSecurity"
-    private JFXComboBox<?> levelOfSecurity; // Value injected by FXMLLoader
-
-        @FXML // fx:id="low"
-        private String low; // Value injected by FXMLLoader
-
-        @FXML // fx:id="medium"
-        private String medium; // Value injected by FXMLLoader
-
-        @FXML // fx:id="high"
-        private String high; // Value injected by FXMLLoader
+    private JFXComboBox<String> levelOfSecurity; // Value injected by FXMLLoader
 
     @FXML // fx:id="levelOfUrgency"
-    private JFXComboBox<?> levelOfUrgency; // Value injected by FXMLLoader
-
-        @FXML // fx:id="urgent"
-        private String urgent; // Value injected by FXMLLoader
-
-        @FXML // fx:id="nonurgent"
-        private String nonurgent; // Value injected by FXMLLoader
+    private JFXComboBox<String> levelOfUrgency; // Value injected by FXMLLoader
 
     @FXML // fx:id = "assignedPersonnel"
-    JFXTextField assignedPersonnel;
+    private JFXComboBox<String> assignedPersonnel;
 
     @FXML // fx:id="reasonForRequest"
     private JFXTextArea reasonForRequest; // Value injected by FXMLLoader
@@ -109,22 +94,18 @@ public class SecurityService extends ServiceRequestFormComponents {
 
     @FXML
     private void saveData(ActionEvent actionEvent){
-        makeConnection connection = makeConnection.makeConnection();
-
-
         if(validateInput()){
 
             ArrayList<String> nodeIDS = NodeDB.getListOfNodeIDS();
             String securityLevel = levelOfSecurity.getSelectionModel().getSelectedItem().toString();
             String urgencyLevel = levelOfUrgency.getSelectionModel().getSelectedItem().toString();
-            String assignee = assignedPersonnel.getText();
+            String assignee = assignedPersonnel.getSelectionModel().getSelectedItem();
             String reason = reasonForRequest.getText();
             int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
             String nodeID = nodeIDS.get(nodeIDIndex);
             System.out.println(securityLevel + "" + urgencyLevel + "" + assignee + "" + nodeID);
             RequestsDB.addSecurityRequest(App.userID, assignee, nodeID, securityLevel, urgencyLevel);
             super.handleButtonSubmit(actionEvent);
-
         }
     }
 
@@ -139,18 +120,12 @@ public class SecurityService extends ServiceRequestFormComponents {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        //makeConnection connection = makeConnection.makeConnection();
         ObservableList<String> locations = NodeDB.getAllNodeLongNames();
         locationInput.setItems(locations);
         assert helpSecurityService != null : "fx:id=\"helpSecurityService\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert locationInput != null : "fx:id=\"locationOfDelivery\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert levelOfSecurity != null : "fx:id=\"levelOfSecurity\" was not injected: check your FXML file 'SecurityService.fxml'.";
-        assert low != null : "fx:id=\"low\" was not injected: check your FXML file 'SecurityService.fxml'.";
-        assert medium != null : "fx:id=\"medium\" was not injected: check your FXML file 'SecurityService.fxml'.";
-        assert high != null : "fx:id=\"high\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert levelOfUrgency != null : "fx:id=\"levelOfUrgency\" was not injected: check your FXML file 'SecurityService.fxml'.";
-        assert urgent != null : "fx:id=\"urgent\" was not injected: check your FXML file 'SecurityService.fxml'.";
-        assert nonurgent != null : "fx:id=\"nonurgent\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert reasonForRequest != null : "fx:id=\"reasonForRequest\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert cancelSecurityRequest != null : "fx:id=\"cancelSecurityRequest\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert submitSecurityRequest != null : "fx:id=\"submitSecurityRequest\" was not injected: check your FXML file 'SecurityService.fxml'.";

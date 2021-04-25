@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -108,7 +109,7 @@ public class newMapEditor {
     @FXML
     private JFXTextField yCordInput;
     @FXML
-    private JFXTextField idInput;
+    private JFXComboBox idInput;
     @FXML
     private JFXComboBox floorInput;
     @FXML
@@ -333,6 +334,7 @@ public class newMapEditor {
                 "Node Type", "Long Name", "Short Name");
         final TreeItem<Node> rootNode = new TreeItem<Node>(node0);
         table.setRoot(rootNode);
+        /*
         //Setting up sub-root nodes
         Node l1Node = new Node("", 0, 0 , "", "", "", "L1", "");
         Node l2Node = new Node("", 0, 0 , "", "", "", "L2", "");
@@ -496,15 +498,20 @@ public class newMapEditor {
         TreeItem<Node> f3BathItem = new TreeItem<>(f3Bath);
         f3Item.getChildren().addAll(f3HallItem,f3ConfItem,f3DeptItem,f3ElevItem,f3InfoItem,f3LabsItem,f3RestItem,f3RetlItem,
                 f3StaiItem,f3ServItem,f3ExitItem,f3BathItem);
+        */
 
 
 //        if (table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
 //            table.getRoot().getChildren().remove(0, array.size() - 1);
 //        }
-        for (int i = 0; i < array.size(); i++) {
 
+        for (int i = 0; i < array.size(); i++) {
             Node s = array.get(i);
+            //int n = array.get(i).getX();
             final TreeItem<Node> node = new TreeItem<Node>(s);
+            table.getRoot().getChildren().add(node);
+        }
+            /*
 
             if(s.get("floor").equals("L1")) {
                 addToTable(node, l1HallItem,l1ConfItem,l1DeptItem,l1ElevItem,l1InfoItem,l1LabsItem,l1RestItem,l1RetlItem,
@@ -528,7 +535,7 @@ public class newMapEditor {
             }
             //int n = array.get(i).getX();
             //table.getRoot().getChildren().add(node);
-        }
+        }*/
     }
 
     private void addToTable(TreeItem<Node> add, TreeItem<Node> hall, TreeItem<Node> conf, TreeItem<Node> dept, TreeItem<Node> elev,
@@ -608,6 +615,58 @@ public class newMapEditor {
         }
     }
 
+    public void editNode(TreeTableView<Node> table) {
+        String id = null;
+        Integer xVal = null;
+        Integer yVal = null;
+        String floor = null;
+        String longName = null;
+        String shortName = null;
+        String type = null;
+        String building = null;
+
+        /*if(table.getSelectionModel().getSelectedItem().getValue() != null) {
+            id = table.getSelectionModel().getSelectedItem().getValue().get("id");
+        }*/
+        if (idInput.getValue() != null) {
+            id = idInput.getValue().toString();
+        }
+
+        if (floorInput.getValue() != null) {
+            floor = floorInput.getValue().toString();
+        }
+        if (!longNameInput.getText().equals("")) {
+            longName = longNameInput.getText();
+        }
+        if (!shortNameInput.getText().equals("")) {
+            shortName = shortNameInput.getText();
+        }
+        if (typeInput.getValue() != null) {
+            type = typeInput.getValue().toString();
+        }
+        if (buildingInput.getValue() != null) {
+            building = buildingInput.getValue().toString();
+        }
+        if (!xCordInput.getText().equals("")) {
+            xVal = Integer.parseInt(xCordInput.getText());
+            xVal = Integer.valueOf(xVal);
+        }
+        if (!yCordInput.getText().equals("")) {
+            yVal = Integer.parseInt(yCordInput.getText());
+            yVal = Integer.valueOf(yVal);
+        }
+
+
+       // makeConnection connection = makeConnection.makeConnection();
+        //connection.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
+
+
+    }
+
+    public void editNodeButton(ActionEvent e) {
+        editNode(nodeTreeTable);
+    }
+
     public void setCurrentFloor(String floorNum) {
 
         //set image
@@ -644,6 +703,55 @@ public class newMapEditor {
      */
     @FXML
     void initialize() {
+        //DB connection
+        makeConnection connection = makeConnection.makeConnection();
+
+        //Creating ID dropdown
+        ArrayList<String> idList = connection.getListOfNodeIDS();
+        ObservableList<String> listOfIDS = FXCollections.observableArrayList();
+        listOfIDS.addAll(idList);
+
+        //Creating Type dropdown
+        ArrayList<String> nodeTypeArrayList = new ArrayList<String>();
+        nodeTypeArrayList.add("HALL");
+        nodeTypeArrayList.add("CONF");
+        nodeTypeArrayList.add("DEPT");
+        nodeTypeArrayList.add("HALL");
+        nodeTypeArrayList.add("ELEV");
+        nodeTypeArrayList.add("INFO");
+        nodeTypeArrayList.add("LABS");
+        nodeTypeArrayList.add("REST");
+        nodeTypeArrayList.add("RETL");
+        nodeTypeArrayList.add("STAI");
+        nodeTypeArrayList.add("SERV");
+        nodeTypeArrayList.add("EXIT");
+        nodeTypeArrayList.add("BATH");
+        ObservableList<String> listOfType = FXCollections.observableArrayList();
+        listOfType.addAll(nodeTypeArrayList);
+
+        //Creating Floor Dropdown
+        ArrayList<String> nodeFloorArrayList = new ArrayList<String>();
+        nodeFloorArrayList.add("L1");
+        nodeFloorArrayList.add("L2");
+        nodeFloorArrayList.add("1");
+        nodeFloorArrayList.add("2");
+        nodeFloorArrayList.add("3");
+        ObservableList<String> listOfFloors = FXCollections.observableArrayList();
+        listOfFloors.addAll(nodeFloorArrayList);
+        //Creating Building Dropdown
+        ArrayList<String> nodeBuildingArrayList = new ArrayList<String>();
+        nodeBuildingArrayList.add("BTM");
+        nodeBuildingArrayList.add("45 Francis");
+        nodeBuildingArrayList.add("15 Francis");
+        nodeBuildingArrayList.add("Tower");
+        nodeBuildingArrayList.add("Shapiro");
+        ObservableList<String> listOfBuildings = FXCollections.observableArrayList();
+        listOfBuildings.addAll(nodeBuildingArrayList);
+        //add ObservableLists to dropdowns
+        typeInput.setItems(listOfType);
+        floorInput.setItems(listOfFloors);
+        buildingInput.setItems(listOfBuildings);
+        idInput.setItems(listOfIDS);
 
         System.out.println("Begin PathFinder Init");
 
@@ -662,9 +770,6 @@ public class newMapEditor {
 
         assert startLocationComboBox != null : "fx:id=\"startLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert endLocationComboBox != null : "fx:id=\"endLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";
-
-        //DB connection
-        makeConnection connection = makeConnection.makeConnection();
 
         //Get longNames & IDs
         System.out.print("Begin Adding to Dropdown List... ");
@@ -725,6 +830,43 @@ public class newMapEditor {
         drawMap(currentFloor);
         prepareNodes(nodeTreeTable);
         prepareEdges(edgeTreeTable);
+
+        final ArrayList<Node> array = connection.getAllNodes();
+        Group g = new Group();
+
+        pane.setOnMouseClicked(e -> {
+            /*double xCoord = e.getX();
+            double yCoord = e.getY();
+            Circle circle = new Circle(xCoord, yCoord, 2, Color.GREEN);
+            g.getChildren().add(circle);
+             */
+            System.out.println("click!");
+            double X = e.getX();
+            int xInt = (int)X;
+            double Y = e.getY();
+            int yInt = (int)Y;
+            System.out.println(xInt);
+            System.out.println(yInt);
+            for(int i = 0; i < array.size(); i++) {
+                double nodeX = array.get(i).getX() / scale;
+                int nodeXInt = (int)nodeX;
+                double nodeY = array.get(i).getY() / scale;
+                int nodeYInt = (int)nodeY;
+                if(Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1){
+                    idInput.setValue(array.get(i).get("id"));
+                    floorInput.setValue(array.get(i).get("floor"));
+                    longNameInput.setText(array.get(i).get("longName"));
+                    shortNameInput.setText(array.get(i).get("shortName"));
+                    xCordInput.setText(Integer.toString(array.get(i).getX()));
+                    yCordInput.setText(Integer.toString(array.get(i).getY()));
+                    typeInput.setValue(array.get(i).get("type"));
+                    buildingInput.setValue(array.get(i).get("building"));
+
+
+                }
+            }
+        });
+        pane.getChildren().add(g);
     }
 
 

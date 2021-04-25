@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
@@ -28,14 +29,14 @@ public class Login {
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
-    @FXML // fx:id="fullscreen"
-    private Rectangle fullscreen; // Value injected by FXMLLoader
-
-    @FXML // fx:id="hide"
-    private Circle hide; // Value injected by FXMLLoader
-
-    @FXML // fx:id="exit"
-    private Polygon exit; // Value injected by FXMLLoader
+//    @FXML // fx:id="fullscreen"
+//    private Rectangle fullscreen; // Value injected by FXMLLoader
+//
+//    @FXML // fx:id="hide"
+//    private Circle hide; // Value injected by FXMLLoader
+//
+//    @FXML // fx:id="exit"
+//    private Polygon exit; // Value injected by FXMLLoader
 
     @FXML // fx:id="emailInput"
     private JFXTextField emailInput; // Value injected by FXMLLoader
@@ -55,23 +56,25 @@ public class Login {
 
     @FXML private StackPane stackPane;
 
+    @FXML
+    private AnchorPane appBarAnchorPane;
+
 
     public void initialize() {
-        //If exit button is clicked, exit app
-        exit.setOnMouseClicked(event -> {
-            App app = new App();
-            app.stop();
-        });
 
-        //If minimize button is clicked...
-        hide.setOnMouseClicked(event -> {
-            App.getPrimaryStage().setIconified(true);
-        });
-
-        //If not fullscreen, make it, If already fullscreen, unfullscreen.
-        fullscreen.setOnMouseClicked(event -> {
-            App.getPrimaryStage().setFullScreen(!App.getPrimaryStage().isFullScreen());
-        });
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setShowHelp(true); //show help button
+            App.setPageTitle(null); //set AppBar title
+            App.setShowLogin(false); //dont show login button
+            App.setHelpText("Continue as a guest or login to an existing account. If you have no account... "); //todo set help text
+            App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //set submit as default (will submit on an "ENTER" keypress)
         submitLoginButton.setDefaultButton(true);

@@ -43,6 +43,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import javax.imageio.IIOParam;
+
 public class PathFinder {
 
     /*
@@ -54,6 +56,9 @@ public class PathFinder {
 
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
+
+    @FXML // fx:id="appBarAnchorPane"
+    private AnchorPane appBarAnchorPane; // Value injected by FXMLLoader
 
     @FXML // fix:id="findPathButton"
     public JFXButton findPathButton; // Value injected by FXMLLoader
@@ -90,8 +95,8 @@ public class PathFinder {
     @FXML // fx:id="stackPane"
     private StackPane stackPane; // Value injected by FXMLLoader
 
-    @FXML // fx:id="exit"
-    private Polygon exit;
+//    @FXML // fx:id="exit"
+//    private Polygon exit;
 
     @FXML // fx:id="lowerAnchorPane"
     private AnchorPane lowerAnchorPane; // Value injected by FXMLLoader
@@ -128,6 +133,7 @@ public class PathFinder {
 
     private double radius = 6;
     private double strokeWidth = 3;
+    private int selection = 0;
 
 
 
@@ -460,16 +466,25 @@ public class PathFinder {
     @FXML
     void initialize() {
 
-        System.out.println("Begin PathFinder Init");
+        System.out.println("Begin PathFinder Page Init");
+
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setPageTitle("Path Finder"); //set AppBar title
+            App.setHelpText("To use the pathfinder, first select a starting location and end location you would like " +
+                    "to find the paths to.\n You may search to find what you are looking for as well. " +
+                    "\n..."); //todo add help text for pathfinding
+            App.setStackPane(stackPane);
+            App.setShowHelp(true);
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's sideBarVBox element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //get primaryStage
         Stage primaryStage = App.getPrimaryStage();
-
-        //If exit button is clicked, exit app
-        exit.setOnMouseClicked(event -> {
-            App app = new App();
-            app.stop();
-        });
 
         //get dimensions of stage
         stageWidth = primaryStage.getWidth();
@@ -499,7 +514,41 @@ public class PathFinder {
         //add ObservableLists to dropdowns
         startLocationComboBox.setItems(longNameArrayList);
         endLocationComboBox.setItems(longNameArrayList);
+
         System.out.println("done");
+        final ArrayList<Node> array = connection.getAllNodes();
+        pane.setOnMouseClicked(e -> {
+            /*double xCoord = e.getX();
+            double yCoord = e.getY();
+            Circle circle = new Circle(xCoord, yCoord, 2, Color.GREEN);
+            g.getChildren().add(circle);
+             */
+            System.out.println("click!");
+            double X = e.getX();
+            int xInt = (int)X;
+            double Y = e.getY();
+            int yInt = (int)Y;
+            System.out.println(xInt);
+            System.out.println(yInt);
+
+            for(int i = 0; i <array.size(); i++) {
+                double nodeX = array.get(i).getX() / scale;
+                int nodeXInt = (int)nodeX;
+                double nodeY = array.get(i).getY() / scale;
+                int nodeYInt = (int)nodeY;
+                if(Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2){
+                    selection++;
+                    if(selection == 1) {
+                        startLocationComboBox.getSelectionModel().select(array.get(i).get("longName"));
+                    }else if(selection == 2){
+                        endLocationComboBox.getSelectionModel().select(array.get(i).get("longName"));
+                        selection = 0;
+                    }
+                    System.out.println(array.get(i).get("longName"));
+
+                }
+            }
+        });
 
         new AutoCompleteComboBoxListener<>(startLocationComboBox);
         new AutoCompleteComboBoxListener<>(endLocationComboBox);

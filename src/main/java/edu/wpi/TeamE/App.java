@@ -1,5 +1,8 @@
 package edu.wpi.TeamE;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -9,6 +12,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -18,13 +23,108 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class App extends Application {
 
-	public static int userID = 0;
+	public static int userID = 0; //todo assuming 0 means guest user? - cole
+	public static boolean showLogin;
 	private static Stage primaryStage;
+	private static String pageTitle; //Title for the currently displayed page, set by AppBarComponent
+	private static String helpText; //help text for current page
+	private static StackPane stackPane; //main stack page of current page
+	private static boolean showHelp = false; //should help button be shown (false by default)
+
+
+	//todo
+	public static boolean isShowLogin() {
+		return showLogin;
+	}
+
+	//todo
+	public static void setShowLogin(boolean showLogin) {
+		App.showLogin = showLogin;
+	}
+
+	/**
+	 * @return String used by {@link edu.wpi.TeamE.views.AppBarComponent} to decide what to put in Help Dialog.
+	 */
+	public static String getHelpText() {
+		return helpText;
+	}
+
+	/**
+	 * Set's help text, used by pages to set help button content.
+	 * @param helpText Paragraph for help text dialog.
+	 */
+	public static void setHelpText(String helpText) {
+		App.helpText = helpText;
+	}
+
+	/**
+	 * @return Gets the current page's app title, for use by {@link edu.wpi.TeamE.views.AppBarComponent}
+	 */
+	public static String getPageTitle() {
+		return pageTitle;
+	}
+
+	/**
+	 * Sets the page title for app bar
+	 * @param pageTitle Short string for page title
+	 */
+	public static void setPageTitle(String pageTitle) {
+		App.pageTitle = pageTitle;
+	}
+
+	/**
+	 *
+	 * @param message Message to display in the dialog box
+	 * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
+	 */
+	public static void newJFXDialogPopUp(String heading, String button, String message, StackPane stackPane) {
+		System.out.println("DialogBox Posted");
+		JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+		jfxDialogLayout.setHeading(new Text(heading));
+		jfxDialogLayout.setBody(new Text(message));
+		JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+		JFXButton okay = new JFXButton(button);
+		okay.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				dialog.close();
+
+			}
+		});
+		jfxDialogLayout.setActions(okay);
+		dialog.show();
+	}
+
+
 
 	private double x, y;
 
 	public static void setPrimaryStage(Stage primaryStage) {
 		App.primaryStage = primaryStage;
+	}
+
+	/**
+	 * @return Gets the main stack page of current page
+	 */
+	public static StackPane getStackPane() {
+		return stackPane;
+	}
+
+	/**
+	 * @param stackPane Sets the main stack pane of the current page
+	 */
+	public static void setStackPane(StackPane stackPane) {
+		App.stackPane = stackPane;
+	}
+
+	//getter for showHelp
+	public static boolean isShowHelp() {
+		return showHelp;
+	}
+
+	//setter for showHelp
+	public static void setShowHelp(boolean showHelp) {
+		App.showHelp = showHelp;
 	}
 
 

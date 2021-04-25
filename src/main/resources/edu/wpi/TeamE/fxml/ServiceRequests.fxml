@@ -122,7 +122,7 @@
                               <Font size="18.0" />
                            </font>
                         </JFXButton>
-                        <JFXButton fx:id="maintenanceRequestButton" layoutX="460.0" layoutY="234.0" mnemonicParsing="false" onAction="#toMaintenanceRequest" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Maintenance" textFill="WHITE">
+                        <JFXButton fx:id="maintenanceRequestButton" layoutX="460.0" layoutY="234.0" mnemonicParsing="false" onAction="#toMaintenanceRequest" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Facilities Maintenance" textFill="WHITE">
                            <font>
                               <Font size="18.0" />
                            </font>

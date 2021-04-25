@@ -5,7 +5,6 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 
-import java.io.IOException;
 import java.lang.String;
 import java.net.URL;
 import java.util.ArrayList;
@@ -13,14 +12,11 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
-import edu.wpi.TeamE.databases.NodeDB;
 import edu.wpi.TeamE.databases.RequestsDB;
-import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.shape.Polygon;
 
 public class ExternalPatient extends ServiceRequestFormComponents  {
@@ -126,7 +122,7 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
             //Adding service request to table
             //makeConnection connection = makeConnection.makeConnection();
             //connection.addRequest("sanitationServices", request);
-            ArrayList<String> nodeIDS = NodeDB.getListOfNodeIDS();
+            ArrayList<String> nodeIDS = DB.getListOfNodeIDS();
             String type = requestTypeInput.getSelectionModel().getSelectedItem().toString();
             String severity = severityInput.getSelectionModel().getSelectedItem().toString();
             String patientID = patientIdInput.getText();
@@ -146,7 +142,7 @@ public class ExternalPatient extends ServiceRequestFormComponents  {
 
     void initialize() {
         assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
-        ObservableList<String> locations  = NodeDB.getAllNodeLongNames();
+        ObservableList<String> locations  = DB.getAllNodeLongNames();
         locationInput.setItems(locations);
         assert requestTypeInput != null : "fx:id=\"requestTypeInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
         assert ambulance != null : "fx:id=\"ambulance\" was not injected: check your FXML file 'ExternalPatient.fxml'.";

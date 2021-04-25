@@ -3,6 +3,7 @@ package edu.wpi.TeamE;
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.*;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.util.Pair;
 import org.junit.jupiter.api.*;
 
@@ -34,8 +35,8 @@ public class DatabaseTests {
 		} catch (Exception e) {
 			//e.printStackTrace();
 		}
-		NodeDB.createNodeTable();
-		EdgeDB.createEdgeTable();
+		DB.createNodeTable();
+		DB.createEdgeTable();
 		UserAccountDB.createUserAccountTable();
 		RequestsDB.createRequestsTable();
 		RequestsDB.createFloralRequestsTable();
@@ -55,11 +56,11 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetNodeInfo")
 	public void testGetNodeInfo() {
-		NodeDB.addNode("test123", 12, 13, "1", "45 Francis", "PARK", "longName", "shortName");
+		DB.addNode("test123", 12, 13, "1", "45 Francis", "PARK", "longName", "shortName");
 
 		Node testNode1 = new Node("test123", 12, 13, "1", "45 Francis", "PARK", "longName", "shortName");
 
-		Node testNode2 = NodeDB.getNodeInfo("test123");
+		Node testNode2 = DB.getNodeInfo("test123");
 
 		assertTrue(testNode1.equals(testNode2));
 	}
@@ -68,11 +69,11 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("GetNodeInfo for a node with null values")
 	public void testGetNodeInfo2() {
-		NodeDB.addNode("test123", 12, 13, "1", "BTM", "PARK", "long", null);
+		DB.addNode("test123", 12, 13, "1", "BTM", "PARK", "long", null);
 
 		Node testNode1 = new Node("test123", 12, 13, "1", "BTM", "PARK", "long", null);
 
-		Node testNode2 = NodeDB.getNodeInfo("test123");
+		Node testNode2 = DB.getNodeInfo("test123");
 
 		assertTrue(testNode1.equals(testNode2));
 	}
@@ -81,14 +82,14 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetEdgeInfo")
 	public void testGetEdgeInfo() {
-		NodeDB.addNode("testEdge1", 121, 122, "1", "BTM", "EXIT", "String", "String");
-		NodeDB.addNode("testEdge2", 12, 15, "1", "BTM", "EXIT", "String", "String");
-		NodeDB.addNode("testEdge3", 122, 123, "1", "BTM", "EXIT", "String", "String");
-		NodeDB.addNode("testEdge4", 124, 153, "1", "BTM", "EXIT", "String", "String");
+		DB.addNode("testEdge1", 121, 122, "1", "BTM", "EXIT", "String", "String");
+		DB.addNode("testEdge2", 12, 15, "1", "BTM", "EXIT", "String", "String");
+		DB.addNode("testEdge3", 122, 123, "1", "BTM", "EXIT", "String", "String");
+		DB.addNode("testEdge4", 124, 153, "1", "BTM", "EXIT", "String", "String");
 
-		EdgeDB.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
-		EdgeDB.addEdge("testEdge3_testEdge4", "testEdge3", "testEdge4");
-		EdgeDB.addEdge("testEdge2_testEdge4", "testEdge2", "testEdge4");
+		DB.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
+		DB.addEdge("testEdge3_testEdge4", "testEdge3", "testEdge4");
+		DB.addEdge("testEdge2_testEdge4", "testEdge2", "testEdge4");
 
 		ArrayList<Pair<Float, String>> listOfEdgeInfo = new ArrayList<>();
 		ArrayList<Pair<Float, String>> resultEdgeInfo;
@@ -106,7 +107,7 @@ public class DatabaseTests {
 		listOfEdgeInfo.add(new Pair<>((float) length34, "testEdge3"));
 		listOfEdgeInfo.add(new Pair<>((float) length24, "testEdge2"));
 
-		resultEdgeInfo = EdgeDB.getEdgeInfo("testEdge4");
+		resultEdgeInfo = DB.getEdgeInfo("testEdge4");
 
 		assertEquals(resultEdgeInfo, listOfEdgeInfo);
 
@@ -118,10 +119,10 @@ public class DatabaseTests {
 	public void testGetAllNodes() {
 
 
-		NodeDB.addNode("testEdge1", 121, 122, "1", "BTM", "EXIT", "String", "String");
-		NodeDB.addNode("testEdge2", 12, 15, "1", "BTM", "EXIT", "String", "String");
-		NodeDB.addNode("testEdge3", 122, 123, "1", "BTM", "EXIT", "String", "String");
-		NodeDB.addNode("testEdge4", 124, 153, "1", "BTM", "EXIT", "String", "String");
+		DB.addNode("testEdge1", 121, 122, "1", "BTM", "EXIT", "String", "String");
+		DB.addNode("testEdge2", 12, 15, "1", "BTM", "EXIT", "String", "String");
+		DB.addNode("testEdge3", 122, 123, "1", "BTM", "EXIT", "String", "String");
+		DB.addNode("testEdge4", 124, 153, "1", "BTM", "EXIT", "String", "String");
 
 
 		Node n1 = new Node("testEdge1", 121, 122, "1", "BTM", "EXIT", "String", "String");
@@ -135,7 +136,7 @@ public class DatabaseTests {
 		testNodeArray.add(n3);
 		testNodeArray.add(n4);
 
-		ArrayList<Node> nodeArray = NodeDB.getAllNodes();
+		ArrayList<Node> nodeArray = DB.getAllNodes();
 
 		boolean allCorrect = true;
 		boolean nodeID = false;
@@ -191,9 +192,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAllEdges")
 	public void testGetAllEdges() {
-		NodeDB.addNode("test1", 0, 0, "1", "Tower", "ELEV", "test", "test");
-		NodeDB.addNode("test2", 2, 2, "1", "Tower", "ELEV", "test", "test");
-		EdgeDB.addEdge("test1_test2", "test1", "test2");
+		DB.addNode("test1", 0, 0, "1", "Tower", "ELEV", "test", "test");
+		DB.addNode("test2", 2, 2, "1", "Tower", "ELEV", "test", "test");
+		DB.addEdge("test1_test2", "test1", "test2");
 
 		ArrayList<Edge> listOfEdges = new ArrayList<>();
 
@@ -207,7 +208,7 @@ public class DatabaseTests {
 
 		listOfEdges.add(edge1);
 
-		ArrayList<Edge> resultListOfEdges = EdgeDB.getAllEdges();
+		ArrayList<Edge> resultListOfEdges = DB.getAllEdges();
 
 		boolean allCorrect = true;
 		boolean edgeID = false;
@@ -236,10 +237,10 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAllEdges: there are no edges")
 	public void testGetAllEdges2() {
-		NodeDB.addNode("test1", 0, 0, "1", "Tower", "ELEV", "test", "test");
-		NodeDB.addNode("test2", 2, 2, "1", "Tower", "ELEV", "test", "test");
+		DB.addNode("test1", 0, 0, "1", "Tower", "ELEV", "test", "test");
+		DB.addNode("test2", 2, 2, "1", "Tower", "ELEV", "test", "test");
 
-		ArrayList<Edge> listOfEdges = EdgeDB.getAllEdges();
+		ArrayList<Edge> listOfEdges = DB.getAllEdges();
 
 		assertEquals(0, listOfEdges.size());
 	}
@@ -250,7 +251,7 @@ public class DatabaseTests {
 		int testResult;
 
 		// if this works, testResult should be 1
-		testResult = NodeDB.addNode("testNode", 111, 222, "1", "Tower", "ELEV", "String", "String");
+		testResult = DB.addNode("testNode", 111, 222, "1", "Tower", "ELEV", "String", "String");
 
 		assertEquals(1, testResult);
 	}
@@ -258,9 +259,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testAddNode: the node added already exists")
 	public void testAddNode2() {
-		NodeDB.addNode("testNode12", 121, 222, "1", "Tower", "ELEV", "String", "String");
+		DB.addNode("testNode12", 121, 222, "1", "Tower", "ELEV", "String", "String");
 
-		int testResult = NodeDB.addNode("testNode12", 121, 222, "1", "Tower", "ELEV", "String", "String");
+		int testResult = DB.addNode("testNode12", 121, 222, "1", "Tower", "ELEV", "String", "String");
 
 		assertEquals(0, testResult);
 	}
@@ -272,11 +273,11 @@ public class DatabaseTests {
 
 		int testResult;
 
-		NodeDB.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
-		NodeDB.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
+		DB.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
+		DB.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
 
 		// if this works, testResult should be 1
-		testResult = EdgeDB.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
+		testResult = DB.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
 
 		assertEquals(1, testResult);
 
@@ -285,12 +286,12 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testAddEdge: the edgeID already exists")
 	public void testAddEdge2() {
-		NodeDB.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
-		NodeDB.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
+		DB.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
+		DB.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
 
-		EdgeDB.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
+		DB.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
 
-		int testResult = EdgeDB.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
+		int testResult = DB.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
 
 		assertEquals(0, testResult);
 	}
@@ -298,11 +299,11 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testAddEdge: the startNode does not exist")
 	public void testAddEdge3() {
-		NodeDB.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
-		NodeDB.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
+		DB.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
+		DB.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
 
 		// if this works, testResult should be 1
-		int testResult = EdgeDB.addEdge("testEdge1_testEdge2", "testEdge3", "testEdge2");
+		int testResult = DB.addEdge("testEdge1_testEdge2", "testEdge3", "testEdge2");
 
 		assertEquals(0, testResult);
 	}
@@ -310,11 +311,11 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testAddEdge: the endNode does not exist")
 	public void testAddEdge4() {
-		NodeDB.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
-		NodeDB.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
+		DB.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
+		DB.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
 
 		// if this works, testResult should be 1
-		int testResult = EdgeDB.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge3");
+		int testResult = DB.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge3");
 
 		assertEquals(0, testResult);
 	}
@@ -325,9 +326,9 @@ public class DatabaseTests {
 
 		int testResult;
 
-		NodeDB.addNode("originalNode", 121, 122, "1", "Tower", "ELEV", "String", "String");
+		DB.addNode("originalNode", 121, 122, "1", "Tower", "ELEV", "String", "String");
 
-		testResult = NodeDB.modifyNode("originalNode", 100, null, null, null, null, null, null);
+		testResult = DB.modifyNode("originalNode", 100, null, null, null, null, null, null);
 
 
 		assertEquals(1, testResult);
@@ -339,12 +340,12 @@ public class DatabaseTests {
 
 		int testResult;
 
-		NodeDB.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
-		NodeDB.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
+		DB.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
+		DB.addNode("testEdge2", 12, 15, "1", "Tower", "ELEV", "String", "String");
 
-		EdgeDB.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
+		DB.addEdge("testEdge1_testEdge2", "testEdge1", "testEdge2");
 
-		testResult = EdgeDB.deleteEdge("testEdge1", "testEdge2");
+		testResult = DB.deleteEdge("testEdge1", "testEdge2");
 
 //		System.out.println(testResult);
 
@@ -357,8 +358,8 @@ public class DatabaseTests {
 
 		int testResult;
 
-		NodeDB.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
-		testResult = NodeDB.deleteNode("testEdge1");
+		DB.addNode("testEdge1", 121, 122, "1", "Tower", "ELEV", "String", "String");
+		testResult = DB.deleteNode("testEdge1");
 
 		assertEquals(1, testResult);
 	}
@@ -367,10 +368,10 @@ public class DatabaseTests {
 	@DisplayName("testGetListOfNodeIDS")
 	public void testGetListOfNodeIDS() {
 
-		NodeDB.addNode("test1", 0, 0, "1", "Tower", "ELEV", "test", "test");
-		NodeDB.addNode("test2", 2, 2, "1", "Tower", "ELEV", "test", "test");
-		NodeDB.addNode("test3", 3, 3, "1", "Tower", "ELEV", "test", "test");
-		NodeDB.addNode("test4", 4, 4, "1", "Tower", "ELEV", "test", "test");
+		DB.addNode("test1", 0, 0, "1", "Tower", "ELEV", "test", "test");
+		DB.addNode("test2", 2, 2, "1", "Tower", "ELEV", "test", "test");
+		DB.addNode("test3", 3, 3, "1", "Tower", "ELEV", "test", "test");
+		DB.addNode("test4", 4, 4, "1", "Tower", "ELEV", "test", "test");
 
 		ArrayList<String> listOfNodeIDs = new ArrayList<>();
 
@@ -379,26 +380,26 @@ public class DatabaseTests {
 		listOfNodeIDs.add("test3");
 		listOfNodeIDs.add("test4");
 
-		assertEquals(listOfNodeIDs, NodeDB.getListOfNodeIDS());
+		assertEquals(listOfNodeIDs, DB.getListOfNodeIDS());
 	}
 
 	@Test
 	@DisplayName("Testing countNodeTypeOnFloor()")
 	public void testCountNodeTypeOnFloor() {
-		NodeDB.addNode("test1", 534, 0, "1", "Tower", "INFO", "long", "asd");
-		NodeDB.addNode("Test2", 54, 2, "1", "Tower", "ELEV", "name", "test");
-		NodeDB.addNode("test3", 43, 3, "1", "Tower", "ELEV", "test", "hert");
-		NodeDB.addNode("test4", 544, 4, "1", "Tower", "ELEV", "fun", "test");
-		NodeDB.addNode("Test5", 4350, 0, "1", "Tower", "ELEV", "long", "asd");
-		NodeDB.addNode("test6", 5342, 2, "1", "Tower", "ELEV", "name", "test");
-		NodeDB.addNode("test7", 433, 3, "1", "Tower", "ELEV", "test", "hert");
-		NodeDB.addNode("test8", 344, 4, "1", "Tower", "ELEV", "fun", "test");
-		NodeDB.addNode("test9", 430, 0, "1", "Tower", "ELEV", "long", "asd");
-		NodeDB.addNode("test10", 432, 2, "1", "Tower", "ELEV", "name", "test");
+		DB.addNode("test1", 534, 0, "1", "Tower", "INFO", "long", "asd");
+		DB.addNode("Test2", 54, 2, "1", "Tower", "ELEV", "name", "test");
+		DB.addNode("test3", 43, 3, "1", "Tower", "ELEV", "test", "hert");
+		DB.addNode("test4", 544, 4, "1", "Tower", "ELEV", "fun", "test");
+		DB.addNode("Test5", 4350, 0, "1", "Tower", "ELEV", "long", "asd");
+		DB.addNode("test6", 5342, 2, "1", "Tower", "ELEV", "name", "test");
+		DB.addNode("test7", 433, 3, "1", "Tower", "ELEV", "test", "hert");
+		DB.addNode("test8", 344, 4, "1", "Tower", "ELEV", "fun", "test");
+		DB.addNode("test9", 430, 0, "1", "Tower", "ELEV", "long", "asd");
+		DB.addNode("test10", 432, 2, "1", "Tower", "ELEV", "name", "test");
 
-		int returned = NodeDB.countNodeTypeOnFloor("t", "1", "INFO");
+		int returned = DB.countNodeTypeOnFloor("t", "1", "INFO");
 		assertEquals(1, returned);
-		int returned2 = NodeDB.countNodeTypeOnFloor("t", "1", "PARK");
+		int returned2 = DB.countNodeTypeOnFloor("t", "1", "PARK");
 		assertEquals(0, returned2);
 	}
 
@@ -413,7 +414,7 @@ public class DatabaseTests {
 	@DisplayName("testAddSanitationRequest")
 	public void testAddSanitationRequest() {
 
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addSpecialUserType("custodian@gmail.com", "testPass", "custodian", "drew", "Shukla");
 
@@ -424,7 +425,7 @@ public class DatabaseTests {
 	@DisplayName("testAddExternalPatientRequest")
 	public void testAddExternalPatientRequest() {
 		//('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian')))";
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addSpecialUserType("EMT@gmail.com", "testPass", "EMT", "drew", "Shukla");
 
@@ -435,7 +436,7 @@ public class DatabaseTests {
 	@DisplayName("testAddMedicineRequest")
 	public void testAddMedicineRequest() {
 		//('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian')))";
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addSpecialUserType("pharmacist@gmail.com", "testPass", "pharmacist", "drew", "Shukla");
 
@@ -448,7 +449,7 @@ public class DatabaseTests {
 	public void testAddSecurityRequest() {
 
 		//('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian')))";
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addSpecialUserType("security@gmail.com", "testPass", "security", "drew", "Shukla");
 
@@ -458,7 +459,7 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testAddFloralRequest")
 	public void testAddFloralRequest() {
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson", "drew", "Shukla");
 
@@ -509,7 +510,7 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestStatus")
 	public void testGetRequestStatus() {
 
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
@@ -535,7 +536,7 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetRequestStatus2 : Admin")
 	public void testGetRequestStatus2() {
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
@@ -572,7 +573,7 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestIDs")
 	public void testGetRequestIDs() {
 
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
@@ -596,7 +597,7 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestIDs2 : Admin")
 	public void testGetRequestIDs2() {
 
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
@@ -632,9 +633,9 @@ public class DatabaseTests {
 	public void testGetRequestAssignees() {
 
 
-		NodeDB.addNode("test1", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
-		NodeDB.addNode("test2", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
-		NodeDB.addNode("test3", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+		DB.addNode("test1", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		DB.addNode("test2", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		DB.addNode("test3", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
 
 		UserAccountDB.addUserAccount("test1@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
@@ -658,9 +659,9 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestAssignees2 : Admin")
 	public void testGetRequestAssignees2() {
 
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
-		NodeDB.addNode("test3", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
-		NodeDB.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		DB.addNode("test3", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		DB.addNode("test2", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
 
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Ben", "Shukla");
@@ -694,9 +695,9 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestLocations")
 	public void testGetRequestLocations() {
 
-		NodeDB.addNode("test1", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
-		NodeDB.addNode("test2", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
-		NodeDB.addNode("test3", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+		DB.addNode("test1", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		DB.addNode("test2", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		DB.addNode("test3", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
 
@@ -718,9 +719,9 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestLocations2 : Admin")
 	public void testGetRequestLocations2() {
 
-		NodeDB.addNode("test1", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
-		NodeDB.addNode("test2", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
-		NodeDB.addNode("test3", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
+		DB.addNode("test1", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
+		DB.addNode("test2", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
+		DB.addNode("test3", 0, 0, "3", "Tower", "INFO", "long name #3", "shortName");
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
 
@@ -751,7 +752,7 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testEditSanitationRequest")
 	public void testEditSanitationRequest() {
-		NodeDB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		UserAccountDB.addSpecialUserType("custodian@gmail.com", "testPass", "custodian", "bob", "Shukla");
 
@@ -764,7 +765,7 @@ public class DatabaseTests {
 	@DisplayName("testEditExternalPatientRequest")
 	public void testEditExternalPatientRequest() {
 
-		NodeDB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		UserAccountDB.addSpecialUserType("EMT@gmail.com", "testPass", "EMT", "bob", "Shukla");
 
@@ -777,7 +778,7 @@ public class DatabaseTests {
 	@DisplayName("testEditMedicineRequest")
 	public void testEditMedicineRequest() {
 
-		NodeDB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		UserAccountDB.addSpecialUserType("pharmacist@gmail.com", "testPass", "pharmacist", "bob", "Shukla");
 
@@ -790,7 +791,7 @@ public class DatabaseTests {
 	@DisplayName("testEditFloralRequest")
 	public void testEditFloralRequest() {
 
-		NodeDB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		UserAccountDB.addSpecialUserType("floralPerson@gmail.com", "testPass", "floralPerson", "bob", "Shukla");
 
@@ -803,7 +804,7 @@ public class DatabaseTests {
 	@DisplayName("testEditSecurityRequest")
 	public void testEditSecurityRequest() {
 
-		NodeDB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "1", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		UserAccountDB.addSpecialUserType("security@gmail.com", "testPass", "security", "bob", "Shukla");
 
@@ -816,7 +817,7 @@ public class DatabaseTests {
 	@DisplayName("testChangeRequestStatus")
 	public void testChangeRequestStatus() {
 
-		NodeDB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 		UserAccountDB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		UserAccountDB.addSpecialUserType("pharmacist@gmail.com", "testPass", "pharmacist", "bob", "Shukla");
 
@@ -831,51 +832,51 @@ public class DatabaseTests {
 	public void testDataForPresentation() {
 
 		//Floral Delivery Nodes:
-		NodeDB.addNode("ADEPT00101", 1401, 2628, "1", "BTM", "DEPT", "Neuroscience Waiting Room", "Neuro Waiting Room");
-		NodeDB.addNode("ADEPT00102", 1395, 2674, "2", "BTM", "DEPT", "Orthopedics and Rhemutalogy", "Orthopedics and Rhemutalogy");
-		NodeDB.addNode("ADEPT00201", 1720, 2847, "1", "BTM", "DEPT", "MS Waiting", "MS Waiting");
-		NodeDB.addNode("ADEPT00301", 986, 2852, "1", "BTM", "DEPT", "CART Waiting", "CART Waiting");
-		NodeDB.addNode("DDEPT00102", 4330, 700, "2", "15 Francis", "DEPT", "Chest Diseases Floor 2", "Chest Diseases");
+		DB.addNode("ADEPT00101", 1401, 2628, "1", "BTM", "DEPT", "Neuroscience Waiting Room", "Neuro Waiting Room");
+		DB.addNode("ADEPT00102", 1395, 2674, "2", "BTM", "DEPT", "Orthopedics and Rhemutalogy", "Orthopedics and Rhemutalogy");
+		DB.addNode("ADEPT00201", 1720, 2847, "1", "BTM", "DEPT", "MS Waiting", "MS Waiting");
+		DB.addNode("ADEPT00301", 986, 2852, "1", "BTM", "DEPT", "CART Waiting", "CART Waiting");
+		DB.addNode("DDEPT00102", 4330, 700, "2", "15 Francis", "DEPT", "Chest Diseases Floor 2", "Chest Diseases");
 
 
 		//Sanitation Nodes:
-		NodeDB.addNode("AREST00101", 1556, 2604, "1", "BTM", "REST", "Restroom S elevator 1st floor", "Restroom");
-		NodeDB.addNode("AREST00103", 1552, 2854, "3", "BTM", "REST", "Restroom BTM conference center 3rd floor", "Restroom");
-		NodeDB.addNode("ARETL00101", 1619, 2522, "1", "BTM", "RETL", "Cafe", "Cafe");
-		NodeDB.addNode("IREST00103", 2255, 1255, "3", "45 Francis", "REST", "Restroom 1 - Family", "R1");
-		NodeDB.addNode("IREST00203", 2570, 1257, "3", "45 Francis", "REST", "Restroom 2", "R2");
-		NodeDB.addNode("IREST00303", 2745, 1147, "3", "45 Francis", "REST", "Restroom 3", "R3");
-		NodeDB.addNode("IREST00403", 2300, 1018, "3", "45 Francis", "REST", "Restroom 4 - M wheelchair", "R4");
-		NodeDB.addNode("HRETL00102", 1935, 860, "2", "Tower", "RETL", "Garden Cafe", "Garden Cafe");
+		DB.addNode("AREST00101", 1556, 2604, "1", "BTM", "REST", "Restroom S elevator 1st floor", "Restroom");
+		DB.addNode("AREST00103", 1552, 2854, "3", "BTM", "REST", "Restroom BTM conference center 3rd floor", "Restroom");
+		DB.addNode("ARETL00101", 1619, 2522, "1", "BTM", "RETL", "Cafe", "Cafe");
+		DB.addNode("IREST00103", 2255, 1255, "3", "45 Francis", "REST", "Restroom 1 - Family", "R1");
+		DB.addNode("IREST00203", 2570, 1257, "3", "45 Francis", "REST", "Restroom 2", "R2");
+		DB.addNode("IREST00303", 2745, 1147, "3", "45 Francis", "REST", "Restroom 3", "R3");
+		DB.addNode("IREST00403", 2300, 1018, "3", "45 Francis", "REST", "Restroom 4 - M wheelchair", "R4");
+		DB.addNode("HRETL00102", 1935, 860, "2", "Tower", "RETL", "Garden Cafe", "Garden Cafe");
 
 
 		//med delivery Nodes:
-		NodeDB.addNode("BLABS00102", 2246, 1350, "2", "45 Francis", "LABS", "Vascular Diagnostic Lab", "Labs B0102");
-		NodeDB.addNode("BLABS00202", 2945, 995, "2", "45 Francis", "LABS", "Outpatient Specimen Collection", "Labs B0202");
-		NodeDB.addNode("IDEPT00103", 2323, 1328, "3", "45 Francis", "DEPT", "Center for Infertility and Reproductive Surgery", "D1");
-		NodeDB.addNode("IDEPT00203", 2448, 1328, "3", "45 Francis", "DEPT", "Gynecology Oncology MIGS", "D2");
-		NodeDB.addNode("IDEPT00303", 2730, 1315, "3", "45 Francis", "DEPT", "General Surgical Specialties Suite A", "D3");
-		NodeDB.addNode("IDEPT00403", 2738, 1227, "3", "45 Francis", "DEPT", "General Surgical Specialties Suite B", "D4");
-		NodeDB.addNode("IDEPT00503", 2868, 1075, "3", "45 Francis", "DEPT", "Urology", "D5");
-		NodeDB.addNode("IDEPT00603", 2333, 764, "3", "45 Francis", "DEPT", "Maternal Fetal Practice", "D6");
-		NodeDB.addNode("IDEPT00703", 2400, 764, "3", "45 Francis", "DEPT", "Obstetrics", "D7");
-		NodeDB.addNode("IDEPT00803", 2492, 887, "3", "45 Francis", "DEPT", "Fetal Med & Genetics", "D8");
-		NodeDB.addNode("IDEPT00903", 2631, 851, "3", "45 Francis", "DEPT", "Gynecology", "D9");
+		DB.addNode("BLABS00102", 2246, 1350, "2", "45 Francis", "LABS", "Vascular Diagnostic Lab", "Labs B0102");
+		DB.addNode("BLABS00202", 2945, 995, "2", "45 Francis", "LABS", "Outpatient Specimen Collection", "Labs B0202");
+		DB.addNode("IDEPT00103", 2323, 1328, "3", "45 Francis", "DEPT", "Center for Infertility and Reproductive Surgery", "D1");
+		DB.addNode("IDEPT00203", 2448, 1328, "3", "45 Francis", "DEPT", "Gynecology Oncology MIGS", "D2");
+		DB.addNode("IDEPT00303", 2730, 1315, "3", "45 Francis", "DEPT", "General Surgical Specialties Suite A", "D3");
+		DB.addNode("IDEPT00403", 2738, 1227, "3", "45 Francis", "DEPT", "General Surgical Specialties Suite B", "D4");
+		DB.addNode("IDEPT00503", 2868, 1075, "3", "45 Francis", "DEPT", "Urology", "D5");
+		DB.addNode("IDEPT00603", 2333, 764, "3", "45 Francis", "DEPT", "Maternal Fetal Practice", "D6");
+		DB.addNode("IDEPT00703", 2400, 764, "3", "45 Francis", "DEPT", "Obstetrics", "D7");
+		DB.addNode("IDEPT00803", 2492, 887, "3", "45 Francis", "DEPT", "Fetal Med & Genetics", "D8");
+		DB.addNode("IDEPT00903", 2631, 851, "3", "45 Francis", "DEPT", "Gynecology", "D9");
 
 
 		//Security Nodes:
-		NodeDB.addNode("HDEPT00203", 1690, 830, "3", "Tower", "DEPT", "MICU 3BC Waiting Room", "MICU 3BC WR");
-		NodeDB.addNode("WELEV00E01", 3265, 830, "1", "45 Francis", "ELEV", "Elevator E Floor 1", "Elevator E1");
-		NodeDB.addNode("ePARK00101", 381, 1725, "1", "Parking", "PARK", "Left Parking Lot Spot 001", "Parking Left 001");
-		NodeDB.addNode("ePARK00201", 406, 1725, "1", "Parking", "PARK", "Left Parking Lot Spot 002", "Parking Left 002");
-		NodeDB.addNode("eWALK00701", 1730, 1544, "1", "Parking", "WALK", "Entrance Sidewalk", "Walkway");
-		NodeDB.addNode("BDEPT00302", 2385, 753, "2", "45 Francis", "DEPT", "Lee Bell Breast Center", "DEPT B0302");
-		NodeDB.addNode("BDEPT00402", 2439, 902, "2", "45 Francis", "DEPT", "Jen Center for Primary Care", "DEPT B0402");
-		NodeDB.addNode("CCONF002L1", 2665, 1043, "L1", "45 Francis", "CONF", "Medical Records Conference Room Floor L1", "Conf C002L1");
+		DB.addNode("HDEPT00203", 1690, 830, "3", "Tower", "DEPT", "MICU 3BC Waiting Room", "MICU 3BC WR");
+		DB.addNode("WELEV00E01", 3265, 830, "1", "45 Francis", "ELEV", "Elevator E Floor 1", "Elevator E1");
+		DB.addNode("ePARK00101", 381, 1725, "1", "Parking", "PARK", "Left Parking Lot Spot 001", "Parking Left 001");
+		DB.addNode("ePARK00201", 406, 1725, "1", "Parking", "PARK", "Left Parking Lot Spot 002", "Parking Left 002");
+		DB.addNode("eWALK00701", 1730, 1544, "1", "Parking", "WALK", "Entrance Sidewalk", "Walkway");
+		DB.addNode("BDEPT00302", 2385, 753, "2", "45 Francis", "DEPT", "Lee Bell Breast Center", "DEPT B0302");
+		DB.addNode("BDEPT00402", 2439, 902, "2", "45 Francis", "DEPT", "Jen Center for Primary Care", "DEPT B0402");
+		DB.addNode("CCONF002L1", 2665, 1043, "L1", "45 Francis", "CONF", "Medical Records Conference Room Floor L1", "Conf C002L1");
 
 		//External transport:
-		NodeDB.addNode("FDEPT00501", 2128, 1300, "1", "Tower", "DEPT", "Emergency Department", "Emergency");
-		NodeDB.addNode("EEXIT00101", 2275, 785, "1", "45 Francis", "EXIT", "Ambulance Parking Exit Floor 1", "AmbExit 1");
+		DB.addNode("FDEPT00501", 2128, 1300, "1", "Tower", "DEPT", "Emergency Department", "Emergency");
+		DB.addNode("EEXIT00101", 2275, 785, "1", "45 Francis", "EXIT", "Ambulance Parking Exit Floor 1", "AmbExit 1");
 
 		connection.addDataForPresentation();
 	}
@@ -928,8 +929,8 @@ public class DatabaseTests {
 		UserAccountDB.addSpecialUserType("aleshah@gmail.com", "admin003", "admin", "Alesha", "Harris");
 
 		//External transport:
-		NodeDB.addNode("FDEPT00501", 2128, 1300, "1", "Tower", "DEPT", "Emergency Department", "Emergency");
-		NodeDB.addNode("EEXIT00101", 2275, 785, "1", "45 Francis", "EXIT", "Ambulance Parking Exit Floor 1", "AmbExit 1");
+		DB.addNode("FDEPT00501", 2128, 1300, "1", "Tower", "DEPT", "Emergency Department", "Emergency");
+		DB.addNode("EEXIT00101", 2275, 785, "1", "45 Francis", "EXIT", "Ambulance Parking Exit Floor 1", "AmbExit 1");
 
 		// EMT:
 		// 31- 39
@@ -976,7 +977,7 @@ public class DatabaseTests {
 	@DisplayName("testAddAppointment")
 	public void testAddAppointment() {
 
-		NodeDB.addNode("ADEPT00101", 1401, 2628, "1", "BTM", "DEPT", "Neuroscience Waiting Room", "Neuro Waiting Room");
+		DB.addNode("ADEPT00101", 1401, 2628, "1", "BTM", "DEPT", "Neuroscience Waiting Room", "Neuro Waiting Room");
 
 		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		UserAccountDB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
@@ -992,7 +993,7 @@ public class DatabaseTests {
 	@DisplayName("testEditAppointment")
 	public void testEditAppointment() {
 
-		NodeDB.addNode("ADEPT00101", 1401, 2628, "1", "BTM", "DEPT", "Neuroscience Waiting Room", "Neuro Waiting Room");
+		DB.addNode("ADEPT00101", 1401, 2628, "1", "BTM", "DEPT", "Neuroscience Waiting Room", "Neuro Waiting Room");
 
 		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		UserAccountDB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
@@ -1015,7 +1016,7 @@ public class DatabaseTests {
 	@DisplayName("testAddAppointment")
 	public void testAddRemovedPatientAppointmentHistory() {
 
-		NodeDB.addNode("ADEPT00101", 1401, 2628, "1", "BTM", "DEPT", "Neuroscience Waiting Room", "Neuro Waiting Room");
+		DB.addNode("ADEPT00101", 1401, 2628, "1", "BTM", "DEPT", "Neuroscience Waiting Room", "Neuro Waiting Room");
 
 		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		UserAccountDB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
@@ -1029,7 +1030,7 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testCancelAppointment")
 	public void testCancelAppointment() {
-		NodeDB.addNode("ADEPT00101", 1401, 2628, "1", "BTM", "DEPT", "Neuroscience Waiting Room", "Neuro Waiting Room");
+		DB.addNode("ADEPT00101", 1401, 2628, "1", "BTM", "DEPT", "Neuroscience Waiting Room", "Neuro Waiting Room");
 
 		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		UserAccountDB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
@@ -1045,7 +1046,7 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testCancelAppointment : multiple appointments")
 	public void testCancelAppointment2() {
-		NodeDB.addNode("ADEPT00101", 1401, 2628, "1", "BTM", "DEPT", "Neuroscience Waiting Room", "Neuro Waiting Room");
+		DB.addNode("ADEPT00101", 1401, 2628, "1", "BTM", "DEPT", "Neuroscience Waiting Room", "Neuro Waiting Room");
 
 		UserAccountDB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		UserAccountDB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");

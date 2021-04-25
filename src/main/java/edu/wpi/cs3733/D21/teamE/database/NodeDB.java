@@ -378,7 +378,7 @@ public class NodeDB{
 			rSet.close();
 			return countNum;
 		} catch (SQLException e) {
-			 e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("countNodeTypeOnFloor() error");
 		}
 		return -1;

@@ -2,7 +2,6 @@ package edu.wpi.TeamE.databases;
 
 import java.io.*;
 import java.sql.*;
-import edu.wpi.TeamE.databases.EdgeDB;
 
 
 public class csvDB {

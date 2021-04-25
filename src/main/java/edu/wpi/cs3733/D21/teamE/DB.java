@@ -2,27 +2,28 @@ package edu.wpi.cs3733.D21.teamE;
 
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.databases.EdgeDB;
-import edu.wpi.TeamE.databases.NodeDB;
+//import edu.wpi.TeamE.databases.EdgeDB;
+//import edu.wpi.TeamE.databases.NodeDB;
+//import edu.wpi.TeamE.databases.NodeDB;
+
+import edu.wpi.cs3733.D21.teamE.database.NodeDB;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class DB {
 	public static void main(String[] args) {
 
 		makeConnection BWDB;
-		BWDB = new CarSystem("Ford Focus", "KABC");
-		BWDB.drive();
-		BWDB.radio();
-		BWDB.turn("left");
-		BWDB.turn("right");
-		BWDB.MP3();
-		BWDB.stop();
+//		BWDB = new CarSystem("Ford Focus", "KABC");
+//		BWDB.drive();
+//		BWDB.radio();
+//		BWDB.turn("left");
+//		BWDB.turn("right");
+//		BWDB.MP3();
+//		BWDB.stop();
 	}
 
 
@@ -71,7 +72,7 @@ public class DB {
 	 * @return the amount of rows affected by executing this statement, should be 1 in this case
 	 */
 	public static int addNode(String nodeID, int xCoord, int yCoord, String floor, String building, String nodeType, String longName, String shortName) {
-		return addNode(nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName);
+		return NodeDB.addNode(nodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName);
 	}
 
 	/**
@@ -172,7 +173,7 @@ public class DB {
 	 * @param endNode   the node ID for the ending node in the edge
 	 */
 	public static void addLength(String startNode, String endNode){
-		addLength(startNode, endNode);
+		EdgeDB.addLength(startNode, endNode);
 	}
 
 	/**

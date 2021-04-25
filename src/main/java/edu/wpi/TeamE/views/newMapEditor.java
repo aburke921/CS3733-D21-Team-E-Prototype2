@@ -769,7 +769,7 @@ public class newMapEditor {
         if (table.getSelectionModel().getSelectedItem() != null) {
             xVal = table.getSelectionModel().getSelectedItem().getValue().getX();
         }
-        if (table.getSelectionModel().getSelectedItem()!= null) {
+        if (table.getSelectionModel().getSelectedItem() != null) {
             yVal = table.getSelectionModel().getSelectedItem().getValue().getY();
         }
 

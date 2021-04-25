@@ -43,6 +43,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import javax.imageio.IIOParam;
+
 public class PathFinder {
 
     /*
@@ -54,6 +56,9 @@ public class PathFinder {
 
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
+
+    @FXML // fx:id="appBarAnchorPane"
+    private AnchorPane appBarAnchorPane; // Value injected by FXMLLoader
 
     @FXML // fix:id="findPathButton"
     public JFXButton findPathButton; // Value injected by FXMLLoader
@@ -90,8 +95,8 @@ public class PathFinder {
     @FXML // fx:id="stackPane"
     private StackPane stackPane; // Value injected by FXMLLoader
 
-    @FXML // fx:id="exit"
-    private Polygon exit;
+//    @FXML // fx:id="exit"
+//    private Polygon exit;
 
     @FXML // fx:id="lowerAnchorPane"
     private AnchorPane lowerAnchorPane; // Value injected by FXMLLoader
@@ -460,16 +465,25 @@ public class PathFinder {
     @FXML
     void initialize() {
 
-        System.out.println("Begin PathFinder Init");
+        System.out.println("Begin PathFinder Page Init");
+
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setPageTitle("Path Finder"); //set AppBar title
+            App.setHelpText("To use the pathfinder, first select a starting location and end location you would like " +
+                    "to find the paths to.\n You may search to find what you are looking for as well. " +
+                    "\n..."); //todo add help text for pathfinding
+            App.setStackPane(stackPane);
+            App.setShowHelp(true);
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's sideBarVBox element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //get primaryStage
         Stage primaryStage = App.getPrimaryStage();
-
-        //If exit button is clicked, exit app
-        exit.setOnMouseClicked(event -> {
-            App app = new App();
-            app.stop();
-        });
 
         //get dimensions of stage
         stageWidth = primaryStage.getWidth();

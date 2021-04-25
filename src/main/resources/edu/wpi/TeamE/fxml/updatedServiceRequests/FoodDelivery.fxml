@@ -3,7 +3,6 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextArea?>
-<?import com.jfoenix.controls.JFXTextField?>
 <?import java.lang.Double?>
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
@@ -98,13 +97,6 @@
                                                         <VBox prefHeight="349.0" prefWidth="264.0">
                                                             <children>
                                                                 <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
-                                                                    <items>
-                                                                        <FXCollections fx:factory="observableArrayList">
-                                                                            <String fx:id="ambulance1" fx:value="Ambulance" />
-                                                                            <String fx:id="helicopter1" fx:value="Helicopter" />
-                                                                            <String fx:id="plane1" fx:value="Plane" />
-                                                                        </FXCollections>
-                                                                    </items>
                                                                     <VBox.margin>
                                                                         <Insets top="20.0" />
                                                                     </VBox.margin>
@@ -115,9 +107,9 @@
                                                                     </VBox.margin>
                                                                     <items>
                                                                         <FXCollections fx:factory="observableArrayList">
-                                                                            <String fx:id="ambulance" fx:value="Ambulance" />
-                                                                            <String fx:id="helicopter" fx:value="Helicopter" />
-                                                                            <String fx:id="plane" fx:value="Plane" />
+                                                                            <String fx:value="Vegetarian" />
+                                                                            <String fx:value="Vegan" />
+                                                                            <String fx:value="Gluten Free" />
                                                                         </FXCollections>
                                                                     </items>
                                                                 </JFXComboBox>
@@ -127,44 +119,23 @@
                                                                     </VBox.margin>
                                                                     <items>
                                                                         <FXCollections fx:factory="observableArrayList">
-                                                                            <String fx:id="high_severity" fx:value="High Severity" />
-                                                                            <String fx:id="medium_severity" fx:value="Medium Severity" />
-                                                                            <String fx:id="low_severity" fx:value="Low Severity" />
+                                                                            <String fx:value="Peanut" />
+                                                                            <String fx:value="Shell fish" />
+                                                                            <String fx:value="Lactose intolerant" />
                                                                         </FXCollections>
                                                                     </items>
                                                                 </JFXComboBox>
                                                 <JFXComboBox fx:id="assigneeInput" layoutX="10.0" layoutY="30.0" prefHeight="27.0" prefWidth="295.0" promptText="Assignee">
-                                                   <items>
-                                                      <FXCollections fx:factory="observableArrayList">
-                                                         <String fx:id="ambulance11" fx:value="Ambulance" />
-                                                         <String fx:id="helicopter11" fx:value="Helicopter" />
-                                                         <String fx:id="plane11" fx:value="Plane" />
-                                                      </FXCollections>
-                                                   </items>
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                 </JFXComboBox>
                                                 <JFXComboBox fx:id="foodInput" layoutX="10.0" layoutY="191.0" prefHeight="27.0" prefWidth="295.0" promptText="Food">
-                                                   <items>
-                                                      <FXCollections fx:factory="observableArrayList">
-                                                         <String fx:id="ambulance111" fx:value="Ambulance" />
-                                                         <String fx:id="helicopter111" fx:value="Helicopter" />
-                                                         <String fx:id="plane111" fx:value="Plane" />
-                                                      </FXCollections>
-                                                   </items>
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                 </JFXComboBox>
                                                 <JFXComboBox fx:id="beveragesInput" layoutX="10.0" layoutY="248.0" prefHeight="27.0" prefWidth="295.0" promptText="Beverages">
-                                                   <items>
-                                                      <FXCollections fx:factory="observableArrayList">
-                                                         <String fx:id="ambulance1111" fx:value="Ambulance" />
-                                                         <String fx:id="helicopter1111" fx:value="Helicopter" />
-                                                         <String fx:id="plane1111" fx:value="Plane" />
-                                                      </FXCollections>
-                                                   </items>
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
@@ -185,11 +156,6 @@
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXTextArea>
-                                                                <JFXTextField fx:id="ETAInput" promptText="ETA">
-                                                                    <VBox.margin>
-                                                                        <Insets top="20.0" />
-                                                                    </VBox.margin>
-                                                                </JFXTextField>
                                                                 <GridPane>
                                                                     <columnConstraints>
                                                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />

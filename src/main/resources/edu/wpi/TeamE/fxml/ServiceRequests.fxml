@@ -14,6 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.ServiceRequests">
    <children>
       <AnchorPane id="app-bar-top" prefWidth="1012.0">
@@ -81,54 +82,78 @@
                <center>
                   <VBox alignment="TOP_CENTER" prefWidth="1200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="floralGoButton" mnemonicParsing="false" onAction="#toFloralDelivery" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Floral Delivery" textFill="WHITE">
+                        <JFXButton fx:id="floralGoButton" mnemonicParsing="false" onAction="#toFloralDelivery" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Floral Delivery" textFill="WHITE">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
                               <Insets top="20.0" />
                            </VBox.margin>
-                        </Button>
-                        <Button fx:id="externalGoButton" mnemonicParsing="false" onAction="#toExternalPatient" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="External Patient Transport" textFill="WHITE">
+                        </JFXButton>
+                        <JFXButton fx:id="externalGoButton" mnemonicParsing="false" onAction="#toExternalPatient" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="External Patient Transport" textFill="WHITE">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
-                        </Button>
-                        <Button fx:id="sanitationGoButton" mnemonicParsing="false" onAction="#toSanitation" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Sanitation Services" textFill="WHITE">
+                        </JFXButton>
+                        <JFXButton fx:id="sanitationGoButton" mnemonicParsing="false" onAction="#toSanitation" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Sanitation Services" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
                            <font>
                               <Font size="18.0" />
                            </font>
-                        </Button>
-                        <Button fx:id="medicineGoButton" mnemonicParsing="false" onAction="#toMedicineDelivery" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Medicine Delivery" textFill="WHITE">
+                        </JFXButton>
+                        <JFXButton fx:id="medicineGoButton" mnemonicParsing="false" onAction="#toMedicineDelivery" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Medicine Delivery" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
                            <font>
                               <Font size="18.0" />
                            </font>
-                        </Button>
-                        <Button fx:id="securityGoButton" mnemonicParsing="false" onAction="#toSecurity" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Security Services" textFill="WHITE">
+                        </JFXButton>
+                        <JFXButton fx:id="securityGoButton" mnemonicParsing="false" onAction="#toSecurity" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Security Services" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
                            <font>
                               <Font size="18.0" />
                            </font>
-                        </Button>
-                        <Button fx:id="languageInterpreterButton" layoutX="460.0" layoutY="234.0" mnemonicParsing="false" onAction="#toLanguageInterpreter" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Language Interpreter" textFill="WHITE">
+                        </JFXButton>
+                        <JFXButton fx:id="maintenanceRequestButton" layoutX="460.0" layoutY="234.0" mnemonicParsing="false" onAction="#toMaintenanceRequest" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Maintenance" textFill="WHITE">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
-                        </Button>
+                        </JFXButton>
+                        <JFXButton fx:id="laundryRequestButton" layoutX="460.0" layoutY="234.0" mnemonicParsing="false" onAction="#toLaundryRequest" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Laundry" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="foodDeliveryButton" layoutX="460.0" layoutY="234.0" mnemonicParsing="false" onAction="#toFoodDelivery" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Food Delivery" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="languageInterpreterButton" layoutX="460.0" layoutY="234.0" mnemonicParsing="false" onAction="#toLanguageInterpreter" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Language Interpreter" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </JFXButton>
                      </children>
                   </VBox>
                </center>

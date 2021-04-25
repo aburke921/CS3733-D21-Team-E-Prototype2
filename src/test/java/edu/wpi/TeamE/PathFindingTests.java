@@ -6,7 +6,8 @@ import edu.wpi.TeamE.algorithms.pathfinding.SearchContext;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.TeamE.databases.*;
-import edu.wpi.TeamE.views.MapEditor;
+//import edu.wpi.TeamE.views.MapEditor;
+import edu.wpi.TeamE.views.mapEditorControllers.MapEditor;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

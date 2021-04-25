@@ -93,6 +93,36 @@ public class ServiceRequests {
     }
 
     @FXML
+    private void toFoodDelivery(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/FoodDelivery.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void toLaundryRequest(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/Laundry.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void toMaintenanceRequest(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/MaintenanceRequest.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
     private void toSecurity(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/SecurityV2.fxml"));

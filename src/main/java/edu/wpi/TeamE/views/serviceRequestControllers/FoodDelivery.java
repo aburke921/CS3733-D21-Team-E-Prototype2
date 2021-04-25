@@ -17,7 +17,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
-public class FoodDelivery {
+public class FoodDelivery extends ServiceRequestFormComponents {
 
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -66,12 +66,12 @@ public class FoodDelivery {
 
 	@FXML
 	void handleButtonCancel(ActionEvent event) {
-
+		super.handleButtonCancel(event);
 	}
 
 	@FXML
 	void saveData(ActionEvent event) {
-
+		super.handleButtonSubmit(event);
 	}
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete

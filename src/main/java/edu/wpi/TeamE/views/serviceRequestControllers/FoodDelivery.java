@@ -4,18 +4,36 @@
 
 package edu.wpi.TeamE.views.serviceRequestControllers;
 
+import java.io.IOException;
+
+import javafx.collections.FXCollections;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.lang.String;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+
+import edu.wpi.TeamE.databases.NodeDB;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+
+
+
+
+
 
 public class FoodDelivery extends ServiceRequestFormComponents {
 
@@ -76,6 +94,24 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
 	void initialize() {
+		ObservableList<String> locations  = NodeDB.getAllNodeLongNames();
+		locationInput.setItems(locations);
+
+		ArrayList<ArrayList<String>> menuStuff  = getMenuItems();
+		ArrayList<String> foods = menuStuff.get(0);
+		ArrayList<String> drinks = menuStuff.get(1);
+
+		// Can use later:
+		ArrayList<String> prices = menuStuff.get(2);
+		ArrayList<String> calories = menuStuff.get(3);
+		ArrayList<String> descriptions = menuStuff.get(4);
+
+		ObservableList<String> observableFoods = FXCollections.observableList(foods);
+		foodInput.setItems(observableFoods);
+
+		ObservableList<String> observableBeverages = FXCollections.observableList(drinks);
+		beveragesInput.setItems(observableBeverages);
+
 		assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
@@ -90,5 +126,78 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 
+	}
+
+	public static ArrayList<ArrayList<String>> getMenuItems(){
+		ArrayList<ArrayList<String>> menuItems = new ArrayList<ArrayList<String>>();
+
+		try {
+			Document doc = Jsoup.connect("https://order.aubonpain.com/menu/brigham-womens-hospital").get();
+			Elements media = doc.select("[src]"); // --> image urls
+			Elements foods = doc.getElementsByClass("product-name product__name");
+			Elements prices = doc.getElementsByClass("product__attribute product__attribute--price");
+			Elements calories = doc.getElementsByClass("product__attribute product__attribute--calorie-label");
+			Elements descriptions = doc.getElementsByClass("product__description");
+
+
+			ArrayList<String> listOfFoods = new ArrayList<String>();
+			ArrayList<String> listOfDrinks = new ArrayList<String>();
+
+			boolean drinkItem = false;
+			boolean foodItem = true;
+			for (Element item : foods) {
+				if(item.text().equals("Hot Coffee & Hot Tea")){
+					drinkItem = true;
+					foodItem = false;
+				}
+				if(item.text().equals("Chips & Salty Snacks")){
+					drinkItem = false;
+					foodItem = false;
+				}
+				if(item.text().equals("Bottled Spring Water (20 oz)")){
+					drinkItem = true;
+					foodItem = false;
+				}
+				if(item.text().equals("Cape Cod Lightly Salted Chips")){
+					drinkItem = false;
+					foodItem = true;
+				}
+
+				if(drinkItem){
+					listOfDrinks.add(item.text());
+				}
+				if(foodItem){
+					listOfFoods.add(item.text());
+				}
+			}
+
+			menuItems.add(listOfFoods);
+			menuItems.add(listOfDrinks);
+
+			ArrayList<String> listOfPrices = new ArrayList<>();
+			for(Element price : prices){
+				listOfPrices.add(price.text());
+			}
+			menuItems.add(listOfPrices);
+
+			ArrayList<String> listOfCalories = new ArrayList<>();
+			for(Element calory : calories){
+				listOfCalories.add(calory.text());
+			}
+			menuItems.add(listOfPrices);
+
+
+			ArrayList<String> listOfDescriptions = new ArrayList<>();
+			for(Element description : descriptions){
+				listOfDescriptions.add(description.text());
+
+			}
+			menuItems.add(listOfDescriptions);
+
+			return menuItems;
+		}catch (IOException e){
+			System.err.println("Error connecting to the website");
+			return null;
+		}
 	}
 }

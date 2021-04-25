@@ -160,6 +160,100 @@ Create Table appointment(
 
 
 
+-- Language Request
+    -- Location (Node)
+    -- Assigned Person
+    -- Language (String)
+    -- Description (String)
+--
+
+Create Table languageRequest
+(
+    requestID int Primary Key References requests On Delete Cascade,
+    roomID    varchar(31) Not Null References node On Delete Cascade,
+    languageType     varchar(31) Not Null,
+    Description   varchar(5000)
+);
+
+
+
+
+
+-- Laundry Request
+    -- Location (Node)
+    -- Wash Load (String)
+    -- Dry Load (String)
+    -- Patient (String)
+    -- Assigned Person
+    -- Description
+--
+
+Create Table laundryRequest
+(
+    requestID int Primary Key References requests On Delete Cascade,
+    roomID    varchar(31) Not Null References node On Delete Cascade,
+    washLoadAmount   varchar(31) Not Null,
+    dryLoadAmount   varchar(31) Not Null,
+    description varchar(5000)
+);
+
+
+
+
+
+
+
+-- Maintenance Request
+    -- Location (Node)
+    -- Type (String)
+    -- severity (String)
+    -- creator (String) wtf is this?
+    -- Assigned Person
+    -- description (String)
+--
+
+Create Table maintenanceRequest
+(
+    requestID int Primary Key References requests On Delete Cascade,
+    roomID    varchar(31) Not Null References node On Delete Cascade,
+    type varchar(31),
+    severity    varchar(31)  Not Null,
+    ETA   varchar(31) Not Null,
+    description varchar(5000)
+);
+
+
+
+
+
+
+-- Food Delivery Request
+    -- Location (Node)
+    -- Dietary Restrictions (String)
+    -- Allergies (String)
+    -- Assignee (String)
+    -- Food (String)
+    -- Beverage (String)
+    -- Description (String)
+--
+
+Create Table foodDeliveryRequest
+(
+    requestID int Primary Key References requests On Delete Cascade,
+    roomID    varchar(31) Not Null References node On Delete Cascade,
+    dietRestrictions varchar(31),
+    allergies    varchar(31)  Not Null,
+    food   varchar(31) Not Null,
+    bev   varchar(31) Not Null,
+    description varchar(5000)
+);
+
+
+drop table languageRequest;
+drop table laundryRequest;
+drop table maintenanceRequest;
+drop table foodDeliveryRequest;
+
 
 
 

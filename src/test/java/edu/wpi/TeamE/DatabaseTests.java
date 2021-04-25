@@ -50,6 +50,10 @@ public class DatabaseTests {
 		DB.createMedDeliveryTable();
 		DB.createSecurityServTable();
 		DB.createAppointmentTable();
+		DB.createLanguageRequestTable();
+		DB.createLaundryRequestTable();
+		DB.createMaintenanceRequestTable();
+		DB.createFoodDeliveryRequestTable();
 		//System.out.println("Tables were created");
 	}
 
@@ -419,8 +423,6 @@ public class DatabaseTests {
 
 		assertEquals(0, nodeIDs.size());
 	}
-
-
 
 	@Test
 	@DisplayName("testAddEdge")
@@ -1236,23 +1238,6 @@ public class DatabaseTests {
 //		DB.addSecurityRequest(22, "Russell Armstrong","WELEV00E01", "Medium", "Medium");
 	}
 
-//	@Test
-//	@DisplayName("testGetTablesToThatExist")
-//	public void testGetTablesToThatExist(){
-////		try {
-////			connection.deleteAllTables();
-////			connection.createNodeTable();
-////		} catch (Exception e) {
-////			connection.createNodeTable();
-////		}
-//		ArrayList<String> names = connection.getTablesToThatExist();
-//
-//		for(String name : names){
-//			System.out.println(name);
-//		}
-//		assertTrue(true);
-//
-//	}
 	@Test
 	@DisplayName("userLoginTest")
 	public void userLoginTest() {
@@ -1340,4 +1325,79 @@ public class DatabaseTests {
 		assertEquals(99999, DB.userLogin("staff", "staff"));
 		assertEquals(10000, DB.userLogin("guest", "guest"));
 	}
+
+	@Test
+	@DisplayName("testAddLanguageRequest")
+	public void testAddLanguageRequest() {
+
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test1@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
+
+		DB.addLanguageRequest(1, 2, "test", "Hindi", "I need help translating");
+	}
+
+	@Test
+	@DisplayName("testAddLaundryRequest")
+	public void testAddLaundryRequest() {
+
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
+
+		DB.addLaundryRequest(1, "test", 2, "2", "2", "I haven't done laundry in 2 weeks");
+	}
+
+	@Test
+	@DisplayName("testAddMaintenanceRequest")
+	public void testAddMaintenanceRequest() {
+
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "electrician", "drew", "Shukla");
+
+		DB.addMaintenanceRequest(1, "test", 2, "electrical", "not very severe", "15 mins", "light switch not working");
+	}
+
+	// this is where testAddFoodDeliveryRequest() can go
+
+	@Test
+	@DisplayName("testEditLanguageRequest")
+	public void testEditLanguageRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test1@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
+
+		DB.addLanguageRequest(1, 2, "test", "Hindi", "I need help translating");
+
+
+		assertEquals(1, DB.editLanguageRequest(1, "test", "Korean", null));
+	}
+
+	@Test
+	@DisplayName("testEditLaundryRequest")
+	public void testEditLaundryRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
+
+		DB.addLaundryRequest(1, "test", 2, "2", "2", "I haven't done laundry in 2 weeks");
+
+		assertEquals(1, DB.editLaundryRequest(1, "test", "3", "3", null));
+	}
+
+	@Test
+	@DisplayName("testEditMaintenanceRequest")
+	public void testEditMaintenanceRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "electrician", "drew", "Shukla");
+
+		DB.addMaintenanceRequest(1, "test", 2, "electrical", "not very severe", "15 mins", "light switch not working");
+
+		assertEquals(1, DB.editMaintenanceRequest(1, "test", null, "extremely severe", null, "wires are loose everywhere!"));
+	}
+
+	// this is where testEditFoodDeliveryRequest() can go
+
 }

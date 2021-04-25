@@ -151,6 +151,7 @@ public class App extends Application {
 				RequestsDB.createExtTransportTable();
 				RequestsDB.createMedDeliveryTable();
 				RequestsDB.createSecurityServTable();
+				appointmentDB.createAppointmentTable();
 				csvDB.populateTable("node", nodes);
 				csvDB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();

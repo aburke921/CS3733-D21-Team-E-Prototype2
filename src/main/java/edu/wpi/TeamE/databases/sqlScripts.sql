@@ -311,3 +311,4 @@ insert into extTransport values(9,'FDEPT00501', 'Plane','High Severity', 3873998
 
 
 
+Select longName from node, (Select roomID From ?, (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID

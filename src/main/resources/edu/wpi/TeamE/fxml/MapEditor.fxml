@@ -92,7 +92,7 @@
          <children>
                     <VBox prefHeight="318.0" prefWidth="591.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <TreeTableView fx:id="treeTable" prefHeight="200.0" prefWidth="341.0" />
+                  <TreeTableView fx:id="treeTable" prefHeight="188.0" prefWidth="1160.0" />
                   <HBox prefHeight="477.0" prefWidth="1160.0">
                      <children>
                         <VBox prefWidth="562.0">

@@ -167,7 +167,7 @@ public class makeConnection {
 		UserAccountDB.addSpecialUserType("declanp@gmail.com","doctor07","doctor","Declan", "Patel");
 		UserAccountDB.addSpecialUserType("laurenb@yahoo.com","doctor08","doctor","Lauren", "Bolton");
 
-		//Admin:
+		//Fake Admins:
 		//28 - 30
 		UserAccountDB.addSpecialUserType("abbyw@gmail.com","admin001","admin","Abby", "Williams");
 		UserAccountDB.addSpecialUserType("andrewg@yahoo.com","admin002","admin","Andrew", "Guerrero");
@@ -250,11 +250,11 @@ public class makeConnection {
 
 
 
-		RequestsDB.editRequests(1, null,  "canceled");
-		RequestsDB.editRequests(4, null, "canceled");
-		RequestsDB.editRequests(5, null, "complete");
-		RequestsDB.editRequests(6, null, "canceled");
-		RequestsDB.editRequests(7, null, "complete");
+		RequestsDB.editRequests(1, 0, "canceled");
+		RequestsDB.editRequests(4, 0, "canceled");
+		RequestsDB.editRequests(5, 0, "complete");
+		RequestsDB.editRequests(6, 0, "canceled");
+		RequestsDB.editRequests(7, 0, "complete");
 
 
 		//Sanitation Requests: //RequestID: 10 - 18
@@ -269,11 +269,12 @@ public class makeConnection {
 		RequestsDB.addSanitationRequest(23,48, "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
 
 
-		RequestsDB.editRequests(11, null, "canceled");
-		RequestsDB.editRequests(14, null, "canceled");
-		RequestsDB.editRequests(15, null, "complete");
-		RequestsDB.editRequests(16, null, "canceled");
-		RequestsDB.editRequests(17, null, "complete");
+		RequestsDB.editRequests(11, 0, "canceled");
+		RequestsDB.editRequests(14, 0, "canceled");
+		RequestsDB.editRequests(15, 0, "complete");
+		RequestsDB.editRequests(16, 0, "canceled");
+		RequestsDB.editRequests(17, 0, "complete");
+
 
 
 		//Medicine Delivery Request //RequestID: 19 - 30
@@ -291,12 +292,11 @@ public class makeConnection {
 		RequestsDB.addMedicineRequest(23, 60, "BLABS00102", "Metformin", 30, "5mL", "Twice a day with meals.", "Victoria Erickson");
 
 
-		RequestsDB.editRequests(20, null, "canceled");
-		RequestsDB.editRequests(24, null, "canceled");
-		RequestsDB.editRequests(25, null, "complete");
-		RequestsDB.editRequests(26, null, "canceled");
-		RequestsDB.editRequests(27, null, "complete");
-
+		RequestsDB.editRequests(20, 0, "canceled");
+		RequestsDB.editRequests(24, 0, "canceled");
+		RequestsDB.editRequests(25, 0, "complete");
+		RequestsDB.editRequests(26, 0, "canceled");
+		RequestsDB.editRequests(27, 0, "complete");
 
 
 
@@ -311,12 +311,11 @@ public class makeConnection {
 		RequestsDB.addSecurityRequest(29, 68,"eWALK00701", "Medium", "Medium");
 
 
-		RequestsDB.editRequests(31, null, "canceled");
-		RequestsDB.editRequests(34, null, "canceled");
-		RequestsDB.editRequests(35, null, "complete");
-		RequestsDB.editRequests(36, null, "canceled");
-		RequestsDB.editRequests(37, null, "complete");
-
+		RequestsDB.editRequests(31, 0, "canceled");
+		RequestsDB.editRequests(34, 0, "canceled");
+		RequestsDB.editRequests(35, 0, "complete");
+		RequestsDB.editRequests(36, 0, "canceled");
+		RequestsDB.editRequests(37, 0, "complete");
 
 
 		//RequestID: 39 - 47
@@ -331,18 +330,24 @@ public class makeConnection {
 		RequestsDB.addExternalPatientRequest(24,78,"FDEPT00501", "Plane","High Severity", "38739983", "12 hours", "Heart transplant organ in route");
 
 
-		RequestsDB.editRequests(40, null, "complete");
-		RequestsDB.editRequests(42, null, "complete");
-		RequestsDB.editRequests(44, null, "complete");
-		RequestsDB.editRequests(45, null, "complete");
-		RequestsDB.editRequests(47, null, "complete");
+		RequestsDB.editRequests(40, 0, "complete");
+		RequestsDB.editRequests(42, 0, "complete");
+		RequestsDB.editRequests(44, 0, "complete");
+		RequestsDB.editRequests(45, 0, "complete");
+		RequestsDB.editRequests(47, 0, "complete");
 
 
-		//SuperAdmin:
-		String insertUser = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP )";
+		//Real Admins:
+		String insertUser1 = "Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP)";
+		String insertUser2 = "Insert Into userAccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', CURRENT TIMESTAMP)";
+		String insertUser3 = "Insert Into userAccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', CURRENT TIMESTAMP)";
+		String insertUser4 = "Insert Into userAccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', CURRENT TIMESTAMP)";
 		try {
 			Statement stmt = connection.createStatement();
-			stmt.executeUpdate(insertUser);
+			stmt.executeUpdate(insertUser1);
+			stmt.executeUpdate(insertUser2);
+			stmt.executeUpdate(insertUser3);
+			stmt.executeUpdate(insertUser4);
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -824,16 +824,16 @@ public class RequestsDB {
 
 		String tableName = "";
 		switch (tableType) {
-			case "floral":
+			case "floralRequests":
 				tableName = "floralRequests";
 				break;
 			case "medDelivery":
 				tableName = "medDelivery";
 				break;
-			case "sanitation":
+			case "sanitationRequest":
 				tableName = "sanitationRequest";
 				break;
-			case "security":
+			case "securityServ":
 				tableName = "securityServ";
 				break;
 			case "extTransport":

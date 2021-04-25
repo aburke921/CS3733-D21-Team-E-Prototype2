@@ -81,7 +81,15 @@ public class Default {
             ex.printStackTrace();
         }
     }
-
+    @FXML
+    private void toCovidSurvey(ActionEvent e){
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/CovidSurvey.fxml"));
+            App.getPrimaryStage().getScene().setRoot(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {

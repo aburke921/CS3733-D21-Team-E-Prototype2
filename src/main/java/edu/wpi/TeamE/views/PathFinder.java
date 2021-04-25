@@ -477,6 +477,7 @@ public class PathFinder {
                     "\n..."); //todo add help text for pathfinding
             App.setStackPane(stackPane);
             App.setShowHelp(true);
+            App.setShowLogin(true);
             appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));
             appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's sideBarVBox element
         } catch (IOException e) {

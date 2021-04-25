@@ -1,9 +1,6 @@
-/**
- * Sample Skeleton for 'AppBarComponent.fxml' Controller Class
- */
-
 package edu.wpi.TeamE.views;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -12,9 +9,12 @@ import edu.wpi.TeamE.App;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
@@ -22,9 +22,14 @@ import javafx.scene.shape.Rectangle;
 
 /**
  * AppBar Component is the component that appears on the top of most pages in the app.
- * The app bar has multiple variants which can be set by calling certain getters in App.java.
- * These variants include whether to show the help button, and login button.
- * If you would like no login button to be shown, use {@link App#setShowLogin(boolean)}.
+ * The app bar has multiple variants which can be set by calling certain getters in App.java:
+ * {@link App#setPageTitle(String)} - set AppBar title.
+ * {@link App#setHelpText(String)} - set Help button content
+ * {@link App#setShowHelp(boolean)} - show the help button or not.
+ * {@link App#setShowLogin(boolean)} - show the login button or not.
+ * {@link App#setStackPane(StackPane)} - stack pane for dialog (help modal and others).
+ *
+ * Example Usage: https://gist.github.com/2ec777008b641b42d7dedaf8bd75938e [4/25/21]
  */
 public class AppBarComponent {
 
@@ -61,7 +66,15 @@ public class AppBarComponent {
 
     @FXML
     void getLoginAppBar(ActionEvent event) {
+        //if user is logged in - button will log out, otherwise, will take to login page. No...? either way... set userID = 0, and direct to main page
         System.out.println("Login Button Clicked!");
+        try {
+            App.userID = 0; //todo, double check that this is all you need to do to log a user out
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Login.fxml"));
+            App.getPrimaryStage().getScene().setRoot(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -110,21 +123,22 @@ public class AppBarComponent {
         assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
         assert appBarTitleLabel != null : "fx:id=\"appBarTitleLabel\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
 
-        System.out.println("Here: " + App.getPageTitle());
+        System.out.println("user ID is " + App.userID);
 
         //todo add option for logged in user with and without help
         if (!App.isShowHelp()) { //if help button shouldn't be shown
             appBarHelpButton.setVisible(false); //remove help button
             appLoginButtonLeft.setVisible(false); //remove left login button
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
-                //todo show currently logged in user? a log out button?
-                appLoginButton.setVisible(false); //hide remaining login button
+                appLoginButton.setVisible(true); //double check visibility (will be overridden by isShowLogin())
+                appLoginButton.setText("Logged in As " + App.userID);
             }
         } else {
             appLoginButton.setVisible(false); //remove right login button
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
-                //same todo as above
-                appLoginButtonLeft.setVisible(false);
+                appLoginButtonLeft.setVisible(true); //double check it is visible
+                appLoginButtonLeft.setText("Logged in As " + App.userID);
+
             }
         }
         if (!App.isShowLogin()) { //if no login should be shown

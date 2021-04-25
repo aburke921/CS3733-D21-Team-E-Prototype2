@@ -25,6 +25,7 @@ import edu.wpi.TeamE.App;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -625,33 +626,9 @@ public class PathFinder {
         rootBorderPane.setPrefWidth(stageWidth);
         rootBorderPane.setPrefHeight(stageHeight);
 
-        scrollPane.vvalueProperty().bind(new DoubleBinding() {
-            {
-                super.bind(scrollPane.heightProperty(), zoomSlider.valueProperty());
-            }
+        zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue <?extends Number>observable, Number oldValue, Number newValue){
 
-            @Override
-            protected double computeValue() {
-                double size = scrollPane.getVmax() - scrollPane.getVmin();
-                double zoomAdj = zoomSlider.getValue();
-                double zoomMax = zoomSlider.getMax();
-                double scale = zoomAdj / zoomMax;
-                return size * scale + scrollPane.getVmin();
-            }
-        });
-
-        scrollPane.hvalueProperty().bind(new DoubleBinding() {
-            {
-                super.bind(scrollPane.widthProperty(), zoomSlider.valueProperty());
-            }
-
-            @Override
-            protected double computeValue() {
-                double size = scrollPane.getHmax() - scrollPane.getHmin();
-                double zoomAdj = zoomSlider.getValue();
-                double zoomMax = zoomSlider.getMax();
-                double scale = zoomAdj / zoomMax;
-                return size * scale + scrollPane.getVmin();
             }
         });
 

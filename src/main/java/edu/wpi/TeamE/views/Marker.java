@@ -2,11 +2,14 @@ package edu.wpi.TeamE.views;
 
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.databases.NodeDB;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Marker {
 
@@ -16,19 +19,38 @@ public class Marker {
     private HashMap<String, Integer> checkBoxSelected;
     //Hashmap mapping Node type to color
     private HashMap<String, Color> typeColor;
+    //Hashmap mapping String(node type + floor) to an array holding the nodes with that node type and floor
+    private HashMap<String, ArrayList<Node>> typeAndFloorNode;
 
-    Integer sideLength = 5;
+    //Group containing all the rectangles
+    private Group markerGroup = new Group();
+
+    private Integer sideLength = 7;
+    private Integer numTypes = 13;
+    private Integer numFloors = 6;
+    private String[] types = {"HALL", "CONF", "DEPT", "ELEV", "INFO", "LABS", "REST","RETL", "STAI", "SERV", "EXIT", "PARK", "WALK"};
+    private String[] floors = {"L1", "L2", "G", "1", "2", "3"};
 
     public Marker() {
         locationMarker = new HashMap<String, NodeMarker>(800);
         checkBoxSelected = new HashMap<String, Integer>(20);
         typeColor = new HashMap<String, Color>(20);
+        typeAndFloorNode = new HashMap<String, ArrayList<Node>>(15);
 
-        ArrayList<Node> nodeArrayList = NodeDB.getAllNodes();
-        for (int i = 0; i < nodeArrayList.size(); i++) {
-            Rectangle rectangle = new Rectangle(0, 0, sideLength, sideLength);
-            NodeMarker nodeMarker = new NodeMarker(nodeArrayList.get(i), rectangle);
-            locationMarker.put(nodeArrayList.get(i).get("id"), nodeMarker);
+        for (int i = 0; i < numTypes; i++) {
+            ArrayList<Node> typeArrayList = NodeDB.getAllNodesByType(types[i]);
+            for (int j = 0; j < numFloors; j++) {
+                ArrayList<Node> floorArrayList = NodeDB.getAllNodesByFloor(floors[j]);
+
+                List<Node> intersection = floorArrayList.stream()
+                        .filter(type -> typeArrayList.stream()
+                                .anyMatch(floor ->
+                                        type.get("id").equals(floor.get("id"))))
+                        .collect(Collectors.toList());
+
+                String typeAndFloorString = types[i] + floors[j];
+                typeAndFloorNode.put(typeAndFloorString, (ArrayList<Node>) intersection);
+            }
         }
 
         checkBoxSelected.put("HALL", 0);
@@ -60,6 +82,25 @@ public class Marker {
         typeColor.put("WALK", Color.BLACK);
     }
 
+    public void populateLocationMarkerMarkerGroup(Double scale) {
+
+        ArrayList<Node> nodeArrayList = NodeDB.getAllNodes();
+
+        for (int i = 0; i < nodeArrayList.size(); i++) {
+            Double xCoord = nodeArrayList.get(i).getX() / scale;
+            Double yCoord = nodeArrayList.get(i).getY() / scale;
+            Rectangle rectangle = new Rectangle(xCoord, yCoord, sideLength, sideLength);
+            rectangle.setStroke(Color.BLACK);
+            rectangle.setVisible(false);
+
+            NodeMarker nodeMarker = new NodeMarker(nodeArrayList.get(i), rectangle);
+
+            this.getLocationMarker().put(nodeArrayList.get(i).get("id"), nodeMarker);
+            markerGroup.getChildren().add(rectangle);
+
+        }
+    }
+
     public HashMap<String, Integer> getSelectedCheckBox() {
         return this.checkBoxSelected;
     }
@@ -70,6 +111,14 @@ public class Marker {
 
     public HashMap<String, Color> getTypeColor() {
         return this.typeColor;
+    }
+
+    public HashMap<String, ArrayList<Node>>  getTypeAndFloorNode() {
+        return this.typeAndFloorNode;
+    }
+
+    public Group getMarkerGroup() {
+        return this.markerGroup;
     }
 
 }

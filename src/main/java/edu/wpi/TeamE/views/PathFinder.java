@@ -267,13 +267,6 @@ public class PathFinder {
     @FXML
     void pathClear(ActionEvent event) {
 
-//        directionsButton.setOpacity(0);
-//        ETA.setOpacity(0);
-//        dist.setOpacity(0);
-//        clearPath.setOpacity(0);
-//        sideBar.setMinWidth(0);
-//        sideBar.setMaxWidth(0);
-
         //clear map
         System.out.print("\nCLEARING MAP...");
         pane.getChildren().clear();
@@ -352,13 +345,6 @@ public class PathFinder {
                 String startFloor = foundPath.getStart().get("floor");
                 setCurrentFloor(startFloor);
 
-//                directionsButton.setOpacity(1);
-//                ETA.setOpacity(1);
-//                dist.setOpacity(1);
-//                clearPath.setOpacity(1);
-//                sideBar.setMinWidth(200);
-//                sideBar.setMaxWidth(200);
-
                 minETA.setText(Integer.toString(foundPath.getETA().getMin()));
                 secETA.setText(String.format("%02d", (foundPath.getETA().getSec())));
                 int len = (int) Math.round(foundPath.getPathLengthFeet());
@@ -375,7 +361,6 @@ public class PathFinder {
                 for (String dir : directions) {
                     System.out.println(dir);
                 }
-
             }
         }
     }
@@ -530,28 +515,30 @@ public class PathFinder {
         imageView.setImage(image);
         currFloor.setText(currentFloor);
 
-        for (String key : marker.getSelectedCheckBox().keySet()) {
-            ArrayList<Node> nodesByFloor = NodeDB.getAllNodesByFloor(currentFloor);
-            ArrayList<Node> nodesByType = NodeDB.getAllNodesByType(key);
-            // ArrayList<Node> intersection = new ArrayList<Node>(nodesByFloor);
-            List<Node> intersection = nodesByFloor.stream()
-                    .filter(nf -> nodesByType.stream()
-                            .anyMatch(nt ->
-                                    nf.get("id").equals(nt.get("id"))))
-                    .collect(Collectors.toList());
 
+        //Get a list of types that are currently selected
+        ArrayList<String> currentlyViewableTypes = new ArrayList<String>();
+        for (String key : marker.getSelectedCheckBox().keySet()) {
             if (marker.getSelectedCheckBox().get(key) == 1) {
-                for (Node node : intersection) {
-                    NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
-                    nM.getRectangle().setVisible(true);
-                    nM.getRectangle().setFill(marker.getTypeColor().get(key));
-                    currentMarkers.add(node);
-                }
-            } else {
-                for (Node node : intersection) {
-                    NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
-                    nM.getRectangle().setVisible(false);
-                }
+                currentlyViewableTypes.add(key);
+            }
+        }
+
+        ArrayList<Node> currentlyViewableNodes = new ArrayList<Node>();
+
+        //Iterate through all the types that are currently selected
+        for (String currViewType : currentlyViewableTypes) {
+            String typeAndFloorString = currViewType + currentFloor;
+            //Get the nodes with the current floor and type
+            currentlyViewableNodes = marker.getTypeAndFloorNode().get(typeAndFloorString);
+
+            //For every node, set it to visible
+            for (Node node : currentlyViewableNodes) {
+                NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                Rectangle r = nM.getRectangle();
+                r.setVisible(true);
+                r.setFill(marker.getTypeColor().get(currViewType));
+                currentMarkers.add(node);
             }
         }
 
@@ -595,23 +582,23 @@ public class PathFinder {
         imageView.setImage(image);
 
         imageView.setPreserveRatio(true);
+
         imageView.fitWidthProperty().bind(primaryStage.widthProperty());
+        //pane.minWidthProperty().bind(imageView.fitWidthProperty());
+        //borderPane.minWidthProperty().bind(imageView.fitWidthProperty());
 
         scale = imageWidth / imageView.getFitWidth();
 
         //Sidebar stuff
-//        directionsButton.setOpacity(0);
-//        ETA.setOpacity(0);
-//        dist.setOpacity(0);
-//        sideBar.setMaxWidth(0);
-//        clearPath.setOpacity(0);
         minETA.setText("00");
         secETA.setText("00");
 
+
         StackPane stackPane = new StackPane(imageView, markerPane, borderPane);
-        stackPane.maxWidthProperty().bind(primaryStage.widthProperty());
 
         ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
+        //stackPane.prefWidthProperty().bind(primaryStage.widthProperty());
+        //stackPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
         //make scroll pane pannable
         scrollPane.setPannable(true);
@@ -648,30 +635,14 @@ public class PathFinder {
         longNameArrayList = FXCollections.observableArrayList();
         nodeIDArrayList = new ArrayList<String>();
 
-        Group markerGroup = new Group();
+        marker.populateLocationMarkerMarkerGroup(scale);
+        markerPane.getChildren().add(marker.getMarkerGroup());
 
         nodeArrayList = NodeDB.getAllNodes();
         for (int i = 0; i < nodeArrayList.size(); i++) {
-            Double xCoord = nodeArrayList.get(i).getX() / scale;
-            Double yCoord = nodeArrayList.get(i).getY() / scale;
-            Rectangle rectangle = new Rectangle(xCoord, yCoord, 7, 7);
-            rectangle.setStroke(Color.BLACK);
-            rectangle.setVisible(false);
-
-            NodeMarker nodeMarker = new NodeMarker(nodeArrayList.get(i), rectangle);
-
-            marker.getLocationMarker().replace(nodeArrayList.get(i).get("id"), nodeMarker);
-            markerGroup.getChildren().add(rectangle);
-
             longNameArrayList.add(nodeArrayList.get(i).get("longName"));
             nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
         }
-        markerPane.getChildren().add(markerGroup);
-
-
-//        Node node = NodeDB.getNodeInfo("FEXIT00201");
-//        NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
-//        nM.getRectangle().setFill(Color.RED);
 
         //add ObservableLists to dropdowns
         startLocationComboBox.setItems(longNameArrayList);
@@ -703,22 +674,33 @@ public class PathFinder {
     }
 
     public void sortNodesByType(ActionEvent event) {
+        String currentType =((CheckBox) event.getSource()).getId().toUpperCase();
+        //create hashcode string for hashmap
+        String typeAndFloorString = currentType + currentFloor;
+        //Get the nodes with the current floor and type
+        ArrayList<Node> nodeList = marker.getTypeAndFloorNode().get(typeAndFloorString);
+
         if (((CheckBox) event.getSource()).isSelected()) {
-            if(((CheckBox) event.getSource()).getId().equals("entr")) {
-                marker.getSelectedCheckBox().replace("EXIT", 1);
-            } else {
-                System.out.println(((CheckBox) event.getSource()).getId().toUpperCase());
-                marker.getSelectedCheckBox().replace(((CheckBox) event.getSource()).getId().toUpperCase(), 1);
+            System.out.println(((CheckBox) event.getSource()).getId().toUpperCase());
+            marker.getSelectedCheckBox().replace(((CheckBox) event.getSource()).getId().toUpperCase(), 1);
+
+            for (Node node : nodeList) {
+                NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                Rectangle r = nM.getRectangle();
+                r.setVisible(true);
+                r.setFill(marker.getTypeColor().get(currentType));
+                currentMarkers.add(node);
             }
         } else {
-            if(((CheckBox) event.getSource()).getId().equals("entr")) {
-                marker.getSelectedCheckBox().replace("EXIT", 0);
-            } else {
-                System.out.println(((CheckBox) event.getSource()).getId().toUpperCase());
-                marker.getSelectedCheckBox().replace(((CheckBox) event.getSource()).getId().toUpperCase(), 0);
+            System.out.println(((CheckBox) event.getSource()).getId().toUpperCase());
+            marker.getSelectedCheckBox().replace(((CheckBox) event.getSource()).getId().toUpperCase(), 0);
+
+            for (Node node : nodeList) {
+                NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                nM.getRectangle().setVisible(false);
+                currentMarkers.remove(node);
             }
         }
-        setCurrentFloor(currentFloor);
     }
 }
 

@@ -484,7 +484,7 @@ public class DatabaseTests {
 
 		int totalRowsAffected = affectedRow + affectedRow1;
 
-		assertTrue(totalRowsAffected == 2);
+		assertEquals(2, totalRowsAffected);
 	}
 
 	@Test
@@ -499,7 +499,7 @@ public class DatabaseTests {
 
 		int totalRowsAffected = affectedRow + affectedRow1;
 
-		assertTrue(totalRowsAffected == 2);
+		assertEquals(2, totalRowsAffected);
 	}
 
 
@@ -690,7 +690,7 @@ public class DatabaseTests {
 
 	@Test
 	@DisplayName("testGetRequestLocations")
-	public void testGetRequestLocations(){
+	public void testGetRequestLocations() {
 
 		NodeDB.addNode("test1", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
 		NodeDB.addNode("test2", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");
@@ -714,7 +714,7 @@ public class DatabaseTests {
 
 	@Test
 	@DisplayName("testGetRequestLocations2 : Admin")
-	public void testGetRequestLocations2(){
+	public void testGetRequestLocations2() {
 
 		NodeDB.addNode("test1", 0, 0, "2", "Tower", "INFO", "long name #1", "shortName");
 		NodeDB.addNode("test2", 0, 0, "L1", "Tower", "INFO", "long name #2", "shortName");

@@ -11,8 +11,13 @@ public class RequestsDB {
 
 	static Connection connection = makeConnection.makeConnection().getConnection();
 
-
-	//CREATING TABLES:::
+//CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
+//CREATING TABLES:::
+//CREATING TABLES:::
+//CREATING TABLES:::
 
 	/**
 	 * Uses executes the SQL statements required to create the requests table.
@@ -77,7 +82,7 @@ public class RequestsDB {
 			prepState.execute();
 
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("error creating floralRequests table");
 		}
 	}
@@ -111,7 +116,7 @@ public class RequestsDB {
 			prepState.execute();
 
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("error creating sanitationRequest table");
 		}
 	}
@@ -145,7 +150,7 @@ public class RequestsDB {
 			prepState.execute();
 
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("error creating extTransport table");
 		}
 	}
@@ -177,7 +182,7 @@ public class RequestsDB {
 			prepState.execute();
 
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("error creating medDelivery table");
 		}
 	}
@@ -206,7 +211,7 @@ public class RequestsDB {
 
 
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("error creating securityServ table");
 		}
 	}
@@ -238,7 +243,7 @@ public class RequestsDB {
 
 	/**
 	 * This adds a sanitation services form to the table specific for it
-	 * @param //form this is the form being added to the table
+	 * //@param form this is the form being added to the table
 	 */
 	public static void addSanitationRequest(int userID, int assigneeID, String roomID, String sanitationType, String description, String urgency, String signature) {
 		addRequest(userID, assigneeID, "sanitation");
@@ -305,7 +310,7 @@ public class RequestsDB {
 	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
 		addRequest(userID, assigneeID, "floral");
 
-		String insertFloralRequest = "Insert Into floralRequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
 			prepState.setString(1, RoomNodeID);
@@ -344,7 +349,6 @@ public class RequestsDB {
 			//e.printStackTrace();
 			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
 		}
-
 	}
 
 	/**
@@ -366,8 +370,6 @@ public class RequestsDB {
 			//e.printStackTrace();
 			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
 		}
-
-
 	}
 
 // EDITING TABLES::::
@@ -393,14 +395,14 @@ public class RequestsDB {
 		String query = "update sanitationRequest set";
 
 		if (roomID != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " roomID = '" + roomID + "'";
 			added = true;
 		}
 		if (sanitationType != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " sanitationType = '" + sanitationType + "'";
@@ -412,14 +414,14 @@ public class RequestsDB {
 			added = true;
 		}
 		if (urgency != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " urgency = '" + urgency + "'";
 			added = true;
 		}
 		if (signature != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + "signature = '" + signature + "'";
@@ -434,7 +436,7 @@ public class RequestsDB {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error in updating sanitation request");
 			return 0;
 		}
@@ -456,7 +458,7 @@ public class RequestsDB {
 	public static int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String description, String ETA) {
 
 		boolean added = false;
-		String query = "update extTransport set ";
+		String query = "Update extTransport Set ";
 
 		if (roomID != null) {
 			query = query + " roomID = '" + roomID + "'";
@@ -464,35 +466,35 @@ public class RequestsDB {
 			added = true;
 		}
 		if (requestType != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " requestType = '" + requestType + "'";
 			added = true;
 		}
 		if (severity != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " severity = '" + severity + "'";
 			added = true;
 		}
 		if (patientID != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " patientID = '" + patientID + "'";
 			added = true;
 		}
 		if (description != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " description = '" + description + "'";
 			added = true;
 		}
 		if (ETA != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " ETA = '" + ETA + "'";
@@ -506,7 +508,7 @@ public class RequestsDB {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error in updating external transport request");
 			return 0;
 		}
@@ -525,7 +527,7 @@ public class RequestsDB {
 	public static int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String message) {
 
 		boolean added = false;
-		String query = "update floralRequests set ";
+		String query = "Update floralRequests Set ";
 
 		if (recipientName != null) {
 			query = query + " recipientName = '" + recipientName + "'";
@@ -533,35 +535,35 @@ public class RequestsDB {
 			added = true;
 		}
 		if (roomID != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " roomID = '" + roomID + "'";
 			added = true;
 		}
 		if (flowerType != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " flowerType = '" + flowerType + "'";
 			added = true;
 		}
 		if (flowerAmount != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " flowerAmount = " + flowerAmount;
 			added = true;
 		}
 		if (vaseType != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " vaseType = '" + vaseType + "'";
 			added = true;
 		}
 		if (message != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " message = '" + message + "'";
@@ -574,7 +576,7 @@ public class RequestsDB {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error in updating floral request");
 			return 0;
 		}
@@ -594,7 +596,7 @@ public class RequestsDB {
 	public static int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, int assigneeID) {
 
 		boolean added = false;
-		String query = "update medDelivery set ";
+		String query = "Update medDelivery Set ";
 
 		if (roomID != null) {
 			query = query + " roomID = '" + roomID + "'";
@@ -602,35 +604,35 @@ public class RequestsDB {
 			added = true;
 		}
 		if (medicineName != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " medicineName = '" + medicineName + "'";
 			added = true;
 		}
 		if (quantity != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " quantity = " + quantity;
 			added = true;
 		}
 		if (dosage != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " dosage = '" + dosage + "'";
 			added = true;
 		}
 		if (specialInstructions != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " specialInstructions = '" + specialInstructions + "'";
 			added = true;
 		}
 		if (assigneeID != 0) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + " assigneeID = '" + assigneeID + "'";
@@ -644,7 +646,7 @@ public class RequestsDB {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error in updating medicine request");
 			return 0;
 		}
@@ -660,7 +662,7 @@ public class RequestsDB {
 	 */
 	public static int editSecurityRequest(int requestID, String roomID, String level, String urgency) {
 		boolean added = false;
-		String query = "update securityServ set ";
+		String query = "Update securityServ Set ";
 
 		if (roomID != null) {
 			query = query + " roomID = '" + roomID + "'";
@@ -668,14 +670,14 @@ public class RequestsDB {
 			added = true;
 		}
 		if (level != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + "level = '" + level + "'";
 			added = true;
 		}
 		if (urgency != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + "urgency = '" + urgency + "'";
@@ -688,7 +690,7 @@ public class RequestsDB {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error in updating security request");
 			return 0;
 		}
@@ -712,14 +714,14 @@ public class RequestsDB {
 			added = true;
 		}
 		if (requestStatus != null) {
-			if (added == true) {
+			if (added) {
 				query = query + ", ";
 			}
 			query = query + "Set requestStatus = '" + requestStatus + "'";
 
 		}
 
-		query = query + " where requestID = " + requestID;
+		query = query + " Where requestID = " + requestID;
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.executeUpdate();
 			prepState.close();
@@ -751,10 +753,10 @@ public class RequestsDB {
 		ArrayList<String> listOfInfo = new ArrayList<>();
 
 		String query;
-		if (userID >= -1) {
-			query = "Select " + infoType + " From requests Natural Join " + tableName + " Where creatorID = " + userID;
+		if (userID > -1) {
+			query = "Select " + infoType + " From requests Join " + tableName + " Using (requestID) Where creatorID = " + userID;
 		} else {
-			query = "Select " + infoType + " From requests Natural Join " + tableName;
+			query = "Select " + infoType + " From requests Join " + tableName + " Using (requestID)";
 		}
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -780,20 +782,20 @@ public class RequestsDB {
 
 	/**
 	 * Gets a list of all the "creatorIDs", "requestIDs", or "requestStatus" from the requests with the given type assigned to the given userID
-	 * @param tableType this is the name of the table that we are getting the info from
+	 * @param tableName this is the name of the table that we are getting the info from
 	 * @param userID    this is the ID of the user who made the request
 	 * @param infoType  this is the type of information that is being retrieved
 	 * @return an ArrayList<String> with the desired info
 	 */
-	public static ArrayList<String> getMyAssignedRequestInfo(String tableType, int userID, String infoType) {
+	public static ArrayList<String> getMyAssignedRequestInfo(String tableName, int userID, String infoType) {
 
 		ArrayList<String> listOfInfo = new ArrayList<>();
 
 		String query;
-		if (userID >= -1) {
-			query = "Select " + infoType + " From requests Natural Join " + tableType + " Where assigneeID = " + userID;
+		if (userID > -1) {
+			query = "Select " + infoType + " From requests Join " + tableName + " Using (requestID) Where assigneeID = " + userID;
 		} else {
-			query = "Select " + infoType + " From requests Natural Join " + tableType;
+			query = "Select " + infoType + " From requests Join " + tableName + " Using (requestID)";
 		}
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -809,7 +811,6 @@ public class RequestsDB {
 			//e.printStackTrace();
 			System.err.println("getRequestInfo() got a SQLException");
 		}
-
 		return listOfInfo;
 	}
 
@@ -819,7 +820,7 @@ public class RequestsDB {
 	 * @return a list of all longNames for the location for all of the requests
 	 */
 	public static ArrayList<String> getRequestLocations(String tableType, int userID) {
-		ArrayList<String> listOfLongNames = new ArrayList<String>();
+		ArrayList<String> listOfLongNames = new ArrayList<>();
 
 		String tableName = "";
 		switch (tableType) {
@@ -845,7 +846,7 @@ public class RequestsDB {
 		if (userID > -1) {
 			query = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
 		} else {
-			query = "Select requestID, longname From node,(Select requestid, roomid From " + tableName + ") correctTable Where node.nodeid = correctTable.roomID Order By requestID";
+			query = "Select requestid, longname From node,(Select requestid, roomid From " + tableName + ") correctTable Where node.nodeid = correctTable.roomid Order By requestid";
 		}
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
@@ -853,7 +854,6 @@ public class RequestsDB {
 				String status = rset.getString("longName");
 				listOfLongNames.add(status);
 			}
-
 			rset.close();
 		} catch (SQLException e) {
 			//e.printStackTrace();
@@ -870,7 +870,7 @@ public class RequestsDB {
 	public static HashMap<Integer, String> getSelectableAssignees(String givenUserType) {
 		HashMap<Integer, String> listOfAssignees = new HashMap<>();
 
-		String query = "Select firstName, lastName, userID from userAccount where userType = '" + givenUserType + "'";
+		String query = "Select firstName, lastName, userID From userAccount Where userType = '" + givenUserType + "'";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
@@ -881,7 +881,6 @@ public class RequestsDB {
 				String fullName = firstName + " " + lastName;
 				listOfAssignees.put(assigneeID, fullName);
 			}
-
 			rset.close();
 		} catch (SQLException e) {
 			//e.printStackTrace();

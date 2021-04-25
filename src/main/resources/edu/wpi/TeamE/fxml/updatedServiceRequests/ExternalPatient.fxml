@@ -98,13 +98,6 @@
                                           <VBox prefHeight="349.0" prefWidth="264.0">
                                              <children>
                                                 <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
-                                                   <items>
-                                                      <FXCollections fx:factory="observableArrayList">
-                                                         <String fx:id="ambulance1" fx:value="Ambulance" />
-                                                         <String fx:id="helicopter1" fx:value="Helicopter" />
-                                                         <String fx:id="plane1" fx:value="Plane" />
-                                                      </FXCollections>
-                                                   </items>
                                                    <VBox.margin>
                                                       <Insets top="20.0" />
                                                    </VBox.margin>

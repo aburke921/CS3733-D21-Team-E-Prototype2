@@ -150,12 +150,12 @@ drop table doctorExaminesAdmission;
 drop table appointment;
 
 Create Table appointment(
-    appointmentID Int Primary Key,
-    patientID Int References userAccount (userID) on delete,
-    doctorID Int References userAccount (userID) on delete cascade,
-    startTime timeStamp,
-    endTime timestamp,
-    Constraint appointmentUnique Unique(patientID, startTime, endTime)
+                            appointmentID Int Primary Key,
+                            patientID Int References userAccount (userID) on delete,
+                            doctorID Int References userAccount (userID) on delete cascade,
+                            startTime timeStamp,
+                            endTime timestamp,
+                            Constraint appointmentUnique Unique(patientID, startTime, endTime)
 );
 
 
@@ -236,10 +236,10 @@ Where startNode = ?;
 -- new table for hasEdge+distance
 Create Table edgeLength
 (
-	startNode varchar(31) References node (nodeID) On Delete Cascade,
-	endNode   varchar(31) References node (nodeID) On Delete Cascade,
-	length    float,
-	Primary Key (startNode, endNode)
+    startNode varchar(31) References node (nodeID) On Delete Cascade,
+    endNode   varchar(31) References node (nodeID) On Delete Cascade,
+    length    float,
+    Primary Key (startNode, endNode)
 );
 
 /*CREATE TRIGGER calculateLength before INSERT ON hasEdge

@@ -132,7 +132,7 @@
                      <children>
                         <JFXButton fx:id="directionsButton" onAction="#showDirections" styleClass="submit-button" text="Detailed Directions">
                            <VBox.margin>
-                              <Insets top="15.0" />
+                              <Insets top="5.0" />
                            </VBox.margin>
                         </JFXButton>
                         <Label alignment="CENTER" text="Current Floor" textFill="#295ac3" underline="true">
@@ -140,7 +140,7 @@
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="15.0" />
+                              <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
                         <Label fx:id="currFloor" alignment="CENTER">
@@ -150,7 +150,7 @@
                         </Label>
                         <Label text="Estimated Time of Arrival" textFill="#295ac3" underline="true">
                            <VBox.margin>
-                              <Insets top="15.0" />
+                              <Insets top="10.0" />
                            </VBox.margin>
                            <font>
                               <Font size="14.0" />
@@ -158,7 +158,7 @@
                         </Label>
                         <HBox fx:id="ETA" alignment="CENTER" prefHeight="27.0" prefWidth="150.0">
                            <VBox.margin>
-                              <Insets />
+                              <Insets top="10.0" />
                            </VBox.margin>
                            <children>
                               <Label fx:id="minETA" alignment="CENTER_RIGHT" maxWidth="18.0" minWidth="18.0" prefWidth="18.0" />
@@ -171,7 +171,7 @@
                               <Font size="14.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="20.0" />
+                              <Insets top="5.0" />
                            </VBox.margin>
                         </Label>
                         <Label fx:id="dist" alignment="CENTER">
@@ -179,9 +179,9 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <AnchorPane maxHeight="1.7976931348623157E308" prefWidth="150.0" VBox.vgrow="ALWAYS">
+                        <AnchorPane prefWidth="150.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <VBox alignment="TOP_CENTER" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Label alignment="CENTER" text="Categories" textFill="#295ac3" underline="true">
                                        <font>
@@ -190,62 +190,62 @@
                                     </Label>
                                     <CheckBox fx:id="elev" mnemonicParsing="false" onAction="#sortNodesByType" text="Elevators">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </CheckBox>
                                     <CheckBox fx:id="bath" mnemonicParsing="false" onAction="#sortNodesByType" text="Bathrooms">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </CheckBox>
                                     <CheckBox fx:id="hall" mnemonicParsing="false" onAction="#sortNodesByType" text="Hallways">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </CheckBox>
                                     <CheckBox fx:id="retl" mnemonicParsing="false" onAction="#sortNodesByType" text="Restaurants">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </CheckBox>
                                     <CheckBox fx:id="conf" mnemonicParsing="false" onAction="#sortNodesByType" text="Conferences">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </CheckBox>
                                     <CheckBox fx:id="dept" mnemonicParsing="false" onAction="#sortNodesByType" text="Departments">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </CheckBox>
                                     <CheckBox fx:id="info" mnemonicParsing="false" onAction="#sortNodesByType" text="Information Center">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </CheckBox>
                                     <CheckBox fx:id="labs" mnemonicParsing="false" onAction="#sortNodesByType" text="Laboratories">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </CheckBox>
                                     <CheckBox fx:id="rest" mnemonicParsing="false" onAction="#sortNodesByType" text="Restrooms">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </CheckBox>
                                     <CheckBox fx:id="stai" mnemonicParsing="false" onAction="#sortNodesByType" text="Stairs">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </CheckBox>
                                     <CheckBox fx:id="serv" mnemonicParsing="false" onAction="#sortNodesByType" text="Services">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </CheckBox>
                                     <CheckBox fx:id="entr" mnemonicParsing="false" onAction="#sortNodesByType" text="Exits/Entrances">
                                        <VBox.margin>
-                                          <Insets top="10.0" />
+                                          <Insets top="5.0" />
                                        </VBox.margin>
                                     </CheckBox>
                                  </children>

@@ -166,6 +166,8 @@ public class PathFinder {
 
     private Marker marker = new Marker();
 
+    private ArrayList<Node> currentMarkers = new ArrayList<Node>();
+
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
      *
@@ -538,13 +540,13 @@ public class PathFinder {
                             .anyMatch(nt ->
                                     nf.get("id").equals(nt.get("id"))))
                     .collect(Collectors.toList());
-            System.out.println(marker.getSelectedCheckBox().get(key));
 
             if (marker.getSelectedCheckBox().get(key) == 1) {
                 for (Node node : intersection) {
                     NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
                     nM.getRectangle().setVisible(true);
                     nM.getRectangle().setFill(marker.getTypeColor().get(key));
+                    currentMarkers.add(node);
                 }
             } else {
                 for (Node node : intersection) {
@@ -672,7 +674,8 @@ public class PathFinder {
         for (int i = 0; i < nodeArrayList.size(); i++) {
             Double xCoord = nodeArrayList.get(i).getX() / scale;
             Double yCoord = nodeArrayList.get(i).getY() / scale;
-            Rectangle rectangle = new Rectangle(xCoord, yCoord, 5, 5);
+            Rectangle rectangle = new Rectangle(xCoord, yCoord, 7, 7);
+            rectangle.setStroke(Color.BLACK);
             rectangle.setVisible(false);
 
             NodeMarker nodeMarker = new NodeMarker(nodeArrayList.get(i), rectangle);
@@ -702,6 +705,12 @@ public class PathFinder {
     }
 
     public void nextFloor(ActionEvent event) {
+        //clear current floor of markers
+        for (Node node : currentMarkers) {
+            NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+            nM.getRectangle().setVisible(false);
+        }
+        currentMarkers.clear();
         //set current floor to one after current
         setCurrentFloor(floorNames[currentFloorNamesIndex]);
         System.out.println(currentFloor);

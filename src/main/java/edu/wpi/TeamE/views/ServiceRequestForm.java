@@ -1,4 +1,4 @@
-package edu.wpi.TeamE.views.forms;
+package edu.wpi.TeamE.views;
 
 public class ServiceRequestForm {
 

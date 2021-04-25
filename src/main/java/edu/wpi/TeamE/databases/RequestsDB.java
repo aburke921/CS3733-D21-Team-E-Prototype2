@@ -256,7 +256,7 @@ public class RequestsDB {
 
 			prepState.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error inserting into sanitationRequest inside function addSanitationRequest()");
 		}
 
@@ -285,7 +285,7 @@ public class RequestsDB {
 			prepState.execute();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error inserting into extTransport inside function addExternalPatientRequest()");
 		}
 
@@ -305,7 +305,7 @@ public class RequestsDB {
 	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
 		addRequest(userID, assigneeID, "floral");
 
-		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+		String insertFloralRequest = "Insert Into floralRequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
 			prepState.setString(1, RoomNodeID);
@@ -317,7 +317,7 @@ public class RequestsDB {
 
 			prepState.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
 		}
 	}
@@ -363,7 +363,7 @@ public class RequestsDB {
 
 			prepState.execute();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
 		}
 
@@ -842,7 +842,7 @@ public class RequestsDB {
 
 		String query;
 
-		if (userID >= -1) {
+		if (userID > -1) {
 			query = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
 		} else {
 			query = "Select requestID, longname From node,(Select requestid, roomid From " + tableName + ") correctTable Where node.nodeid = correctTable.roomID Order By requestID";

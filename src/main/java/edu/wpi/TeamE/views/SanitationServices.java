@@ -94,6 +94,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
       int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
       String nodeID = nodeIDS.get(nodeIDIndex);
       RequestsDB.addSanitationRequest(15,assigneeID,nodeID, serviceKind,details,severity,signature);
+      //DB changed the assignee in the function call to an int (not string) --> we need the assignee's userID
       System.out.println(serviceKind);
 
       super.handleButtonSubmit(actionEvent);

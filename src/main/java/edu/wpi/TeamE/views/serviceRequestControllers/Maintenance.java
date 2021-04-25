@@ -58,7 +58,7 @@ public class Maintenance{
     private String esc; // Value injected by FXMLLoader
 
     @FXML // fx:id="severityInput"
-    private JFXComboBox<?> severityInput; // Value injected by FXMLLoader
+    private JFXComboBox<String> severityInput; // Value injected by FXMLLoader
 
     @FXML // fx:id="high_severity"
     private String high_severity; // Value injected by FXMLLoader

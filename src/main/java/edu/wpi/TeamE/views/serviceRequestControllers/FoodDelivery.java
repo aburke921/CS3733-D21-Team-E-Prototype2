@@ -41,7 +41,7 @@ public class FoodDelivery {
 	private JFXComboBox<String> dietaryRestrictionsInput; // Value injected by FXMLLoader
 
 	@FXML // fx:id="allergysInput"
-	private JFXComboBox<?> allergysInput; // Value injected by FXMLLoader
+	private JFXComboBox<String> allergysInput; // Value injected by FXMLLoader
 
 	@FXML // fx:id="assigneeInput"
 	private JFXComboBox<String> assigneeInput; // Value injected by FXMLLoader

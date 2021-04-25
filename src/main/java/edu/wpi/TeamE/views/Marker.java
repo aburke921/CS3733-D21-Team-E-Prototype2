@@ -1,7 +1,7 @@
 package edu.wpi.TeamE.views;
 
 import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.databases.NodeDB;
+import edu.wpi.cs3733.D21.teamE.database.NodeDB;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

@@ -645,6 +645,7 @@ public class PathFinder {
 
         new AutoCompleteComboBoxListener<>(startLocationComboBox);
         new AutoCompleteComboBoxListener<>(endLocationComboBox);
+
         final ArrayList<Node> array = DB.getAllNodes();
 
         //Set up zoomable and pannable panes
@@ -667,7 +668,6 @@ public class PathFinder {
         minETA.setText("00");
         secETA.setText("00");
 
-
         StackPane stackPane = new StackPane(imageView, markerPane, borderPane);
 
         ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
@@ -688,6 +688,10 @@ public class PathFinder {
         rootBorderPane.setCenter(scrollPane);
         rootBorderPane.setPrefWidth(stageWidth);
         rootBorderPane.setPrefHeight(stageHeight);
+
+        //Set up location categories
+        marker.populateLocationMarkerMarkerGroup(scale);
+        markerPane.getChildren().add(marker.getMarkerGroup());
 
         System.out.println("Finish PathFinder Init.");
         pane.setOnMouseClicked(e -> {

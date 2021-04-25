@@ -1,18 +1,18 @@
-package edu.wpi.TeamE.databases;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import java.sql.*;
 
 public class appointmentDB {
 
-	static Connection connection = makeConnection.makeConnection().getConnection();
+	static Connection connection = makeConnection.makeConnection().connection;
 
 	public static void createAppointmentTable() {
 		//TODO: before deleting any users, save their information from userAccount into CSV
 		String query = "Create Table appointment( " +
 				"    appointmentID Int Primary Key, " +
-				"    patientID Int References userAccount (userID) on delete cascade , " +
-				"    doctorID Int References userAccount (userID) on delete cascade, " +
-				" 	 nodeID varchar(31) References node (nodeID) on delete cascade,  " +
+				"    patientID Int References useraccount (userid) On Delete Cascade , " +
+				"    doctorID Int References useraccount (userid) On Delete Cascade, " +
+				" 	 nodeID varchar(31) References node (nodeid) On Delete Cascade,  " +
 				"    startTime timeStamp, " +
 				"    endTime timestamp, " +
 				"    Constraint appointmentUnique Unique(patientID, startTime, endTime) " +
@@ -24,7 +24,7 @@ public class appointmentDB {
 			prepState.execute();
 
 		} catch (SQLException e) {
- 		e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("error creating appointment table");
 		}
 	}
@@ -33,8 +33,8 @@ public class appointmentDB {
 	 * creates an appointment and adds to the appointmentDB table
 	 * @param patientID is the ID of the patient making the appointment
 	 * @param startTime is when the appointment starts
-	 * @param endTime is when the appointment ends
-	 * @param doctorID is the doctor assigned to the appointment
+	 * @param endTime   is when the appointment ends
+	 * @param doctorID  is the doctor assigned to the appointment
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
 	public static int addAppointment(int patientID, long startTime, long endTime, int doctorID) {
@@ -61,16 +61,16 @@ public class appointmentDB {
 
 	}
 
-	public static int getMaxAppointmentID(){
+	public static int getMaxAppointmentID() {
 
 		int maxID = 0;
 
-		String query = "Select Max(appointmentID) as maxAppointmentID From appointment";
+		String query = "Select Max(appointmentid) As maxAppointmentID From appointment";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
 
-			if(rset.next()){
+			if (rset.next()) {
 				maxID = rset.getInt("maxAppointmentID");
 			}
 
@@ -87,9 +87,9 @@ public class appointmentDB {
 	/**
 	 * edits an appointment
 	 * @param appointmentID is the ID of the appointment
-	 * @param newStartTime is the new start time of the appointment
-	 * @param newEndTime is the new end time of the appointment
-	 * @param newDoctorID is the new doctor assigned
+	 * @param newStartTime  is the new start time of the appointment
+	 * @param newEndTime    is the new end time of the appointment
+	 * @param newDoctorID   is the new doctor assigned
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
 	public static int editAppointment(int appointmentID, int newStartTime, int newEndTime, Integer newDoctorID) {
@@ -101,7 +101,7 @@ public class appointmentDB {
 		Integer newStartTimeI = newStartTime;
 		Integer newEndTimeI = newStartTime;
 
-		if (newStartTimeI!= null) {
+		if (newStartTimeI != null) {
 
 			long newStartTimelong = (long) newStartTime;
 			Long newStartTimeL = newStartTimelong;
@@ -151,7 +151,7 @@ public class appointmentDB {
 	 */
 	public static int cancelAppointment(int appointmentID) {
 
-		String insertCancelQuery = "delete from appointment where appointmentID = ?";
+		String insertCancelQuery = "Delete From appointment Where appointmentid = ?";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertCancelQuery)) {
 			prepState.setInt(1, appointmentID);

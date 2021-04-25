@@ -1,10 +1,10 @@
-package edu.wpi.TeamE.databases;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import java.sql.*;
 
 public class UserAccountDB {
 
-	static Connection connection = makeConnection.makeConnection().getConnection();
+	static Connection connection = makeConnection.makeConnection().connection;
 
 	/**
 	 * Uses executes the SQL statements required to create the userAccount table.

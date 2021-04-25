@@ -1,33 +1,18 @@
 package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
 //import edu.wpi.TeamE.algorithms.Node;
+
 import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.databases.RequestsDB;
-import edu.wpi.TeamE.databases.makeConnection;
-import edu.wpi.TeamE.views.forms.ServiceRequestForm;
-import javafx.application.Application;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
+
+
+
+
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.layout.FlowPane;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import java.awt.*;
-import java.io.File;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import edu.wpi.TeamE.App;
@@ -35,14 +20,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.util.Callback;
-import sun.reflect.generics.tree.Tree;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.function.UnaryOperator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ServiceRequestStatus {
 
@@ -78,7 +57,7 @@ public class ServiceRequestStatus {
 
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            RequestsDB.editRequests(id, 0, "canceled");
+            DB.editRequests(id, 0, "canceled");
             System.out.println("The request was cancelled");
         }
     }
@@ -92,7 +71,7 @@ public class ServiceRequestStatus {
     private void complete(TreeTableView<ServiceRequestForm> table) {
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            RequestsDB.editRequests(id,0, "complete");
+            DB.editRequests(id,0, "complete");
             System.out.println("The request was completed");
         }
 
@@ -118,13 +97,13 @@ public class ServiceRequestStatus {
      */
     private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
 
-        ArrayList<String> idArray = RequestsDB.getMyCreatedRequestInfo(tableName, App.userID, "requestID");
+        ArrayList<String> idArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestID");
 //        for(int j = 0; j < idArray.size(); j++) {
 //            System.out.println(idArray.get(j));
 //        }
-        ArrayList<String> statusArray = RequestsDB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
-        ArrayList<String> locationArray = RequestsDB.getRequestLocations(tableName, App.userID);
-        ArrayList<String> assigneeArray = RequestsDB.getMyCreatedRequestInfo(tableName, App.userID, "assigneeID");
+        ArrayList<String> statusArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
+        ArrayList<String> locationArray = DB.getRequestLocations(tableName, App.userID);
+        ArrayList<String> assigneeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "assigneeID");
         if(idArray.size() > 0) {
             System.out.println("Array size" + idArray.size());
             if (!inProgress.getChildren().isEmpty()) {
@@ -239,10 +218,10 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> securityServiceCancelled = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
 
         //Adding request forms
-        addToTable("securityServ", securityServiceInProgress, securityServiceCompleted, securityServiceCancelled);
+        addToTable("security", securityServiceInProgress, securityServiceCompleted, securityServiceCancelled);
         addToTable("extTransport", externalPatientInProgress, externalPatientCompleted, externalPatientCancelled);
-        addToTable("floralRequests", floralFormInProgress, floralFormCompleted, floralFormCancelled);
-        addToTable("sanitationRequest", sanitationServicesInProgress, sanitationServicesCompleted, sanitationServicesCancelled);
+        addToTable("floral", floralFormInProgress, floralFormCompleted, floralFormCancelled);
+        addToTable("sanitation", sanitationServicesInProgress, sanitationServicesCompleted, sanitationServicesCancelled);
         addToTable("medDelivery", medicineDeliveryInProgress, medicineDeliveryCompleted, medicineDeliveryCancelled);
 
         //Adding children to sub-root nodes

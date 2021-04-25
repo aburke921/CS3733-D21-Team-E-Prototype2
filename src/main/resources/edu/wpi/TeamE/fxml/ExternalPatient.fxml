@@ -10,6 +10,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -84,100 +85,104 @@
       </AnchorPane>
       <AnchorPane prefHeight="687.0" prefWidth="1199.0">
          <children>
-            <HBox prefHeight="610.0" prefWidth="519.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <FlowPane prefHeight="361.0" prefWidth="299.0">
+            <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <center>
+                  <HBox maxWidth="600.0" prefHeight="610.0" prefWidth="519.0" styleClass="centerPane">
                      <children>
-                        <VBox prefHeight="349.0" prefWidth="264.0">
+                        <FlowPane prefHeight="361.0" prefWidth="299.0">
                            <children>
-                              <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
-                                 <items>
-                                    <FXCollections fx:factory="observableArrayList">
-                                       <String fx:id="ambulance1" fx:value="Ambulance" />
-                                       <String fx:id="helicopter1" fx:value="Helicopter" />
-                                       <String fx:id="plane1" fx:value="Plane" />
-                                    </FXCollections>
-                                 </items>
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                              </JFXComboBox>
-                              <JFXComboBox fx:id="requestTypeInput" prefHeight="27.0" prefWidth="295.0" promptText="Request Type">
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" top="20.0" />
-                                 </VBox.margin>
-                                 <items>
-                                    <FXCollections fx:factory="observableArrayList">
-                                       <String fx:id="ambulance" fx:value="Ambulance" />
-                                       <String fx:id="helicopter" fx:value="Helicopter" />
-                                       <String fx:id="plane" fx:value="Plane" />
-                                    </FXCollections>
-                                 </items>
-                              </JFXComboBox>
-                              <JFXComboBox fx:id="severityInput" prefHeight="27.0" prefWidth="291.0" promptText="Severity">
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" top="20.0" />
-                                 </VBox.margin>
-                                 <items>
-                                    <FXCollections fx:factory="observableArrayList">
-                                       <String fx:id="high_severity" fx:value="High Severity" />
-                                       <String fx:id="medium_severity" fx:value="Medium Severity" />
-                                       <String fx:id="low_severity" fx:value="Low Severity" />
-                                    </FXCollections>
-                                 </items>
-                              </JFXComboBox>
-                              <JFXTextField fx:id="patientIdInput" prefHeight="27.0" prefWidth="280.0" promptText="Patient ID #">
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" top="20.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
-                              <JFXTextField fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
+                              <VBox prefHeight="349.0" prefWidth="264.0">
+                                 <children>
+                                    <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
+                                       <items>
+                                          <FXCollections fx:factory="observableArrayList">
+                                             <String fx:id="ambulance1" fx:value="Ambulance" />
+                                             <String fx:id="helicopter1" fx:value="Helicopter" />
+                                             <String fx:id="plane1" fx:value="Plane" />
+                                          </FXCollections>
+                                       </items>
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </JFXComboBox>
+                                    <JFXComboBox fx:id="requestTypeInput" prefHeight="27.0" prefWidth="295.0" promptText="Request Type">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" top="20.0" />
+                                       </VBox.margin>
+                                       <items>
+                                          <FXCollections fx:factory="observableArrayList">
+                                             <String fx:id="ambulance" fx:value="Ambulance" />
+                                             <String fx:id="helicopter" fx:value="Helicopter" />
+                                             <String fx:id="plane" fx:value="Plane" />
+                                          </FXCollections>
+                                       </items>
+                                    </JFXComboBox>
+                                    <JFXComboBox fx:id="severityInput" prefHeight="27.0" prefWidth="291.0" promptText="Severity">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" top="20.0" />
+                                       </VBox.margin>
+                                       <items>
+                                          <FXCollections fx:factory="observableArrayList">
+                                             <String fx:id="high_severity" fx:value="High Severity" />
+                                             <String fx:id="medium_severity" fx:value="Medium Severity" />
+                                             <String fx:id="low_severity" fx:value="Low Severity" />
+                                          </FXCollections>
+                                       </items>
+                                    </JFXComboBox>
+                                    <JFXTextField fx:id="patientIdInput" prefHeight="27.0" prefWidth="280.0" promptText="Patient ID #">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" top="20.0" />
+                                       </VBox.margin>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </JFXTextField>
+                                 </children>
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" />
+                                 </FlowPane.margin>
+                              </VBox>
                            </children>
-                           <FlowPane.margin>
-                              <Insets left="10.0" />
-                           </FlowPane.margin>
-                        </VBox>
-                     </children>
-                  </FlowPane>
-                  <FlowPane prefHeight="361.0" prefWidth="329.0">
-                     <children>
-                        <VBox prefHeight="363.0" prefWidth="259.0">
+                        </FlowPane>
+                        <FlowPane prefHeight="361.0" prefWidth="329.0">
                            <children>
-                              <JFXTextArea fx:id="descriptionInput" prefHeight="141.0" prefWidth="259.0" promptText="Detailed Description">
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" top="20.0" />
-                                 </VBox.margin>
-                              </JFXTextArea>
-                              <JFXTextField fx:id="ETAInput" promptText="ETA">
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
-                              <GridPane>
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="69.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                                 <VBox.margin>
-                                    <Insets top="100.0" />
-                                 </VBox.margin>
-                              </GridPane>
+                              <VBox prefHeight="363.0" prefWidth="259.0">
+                                 <children>
+                                    <JFXTextArea fx:id="descriptionInput" prefHeight="141.0" prefWidth="259.0" promptText="Detailed Description">
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" top="20.0" />
+                                       </VBox.margin>
+                                    </JFXTextArea>
+                                    <JFXTextField fx:id="ETAInput" promptText="ETA">
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </JFXTextField>
+                                    <GridPane>
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="69.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <VBox.margin>
+                                          <Insets top="100.0" />
+                                       </VBox.margin>
+                                    </GridPane>
+                                 </children>
+                                 <FlowPane.margin>
+                                    <Insets left="20.0" />
+                                 </FlowPane.margin>
+                              </VBox>
                            </children>
-                           <FlowPane.margin>
-                              <Insets left="20.0" />
-                           </FlowPane.margin>
-                        </VBox>
+                        </FlowPane>
                      </children>
-                  </FlowPane>
-               </children>
-            </HBox>
+                  </HBox>
+               </center>
+            </BorderPane>
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="71.0" prefWidth="1200.0">

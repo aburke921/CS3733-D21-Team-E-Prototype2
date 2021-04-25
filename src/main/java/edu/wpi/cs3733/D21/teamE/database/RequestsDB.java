@@ -1,4 +1,4 @@
-package edu.wpi.TeamE.databases;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,15 +9,15 @@ import java.util.HashMap;
 
 public class RequestsDB {
 
-	static Connection connection = makeConnection.makeConnection().getConnection();
+	static Connection connection = makeConnection.makeConnection().connection;
 
-//CREATING TABLES:::
 // CREATING TABLES:::
 // CREATING TABLES:::
 // CREATING TABLES:::
-//CREATING TABLES:::
-//CREATING TABLES:::
-//CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
 
 	/**
 	 * Uses executes the SQL statements required to create the requests table.
@@ -824,16 +824,16 @@ public class RequestsDB {
 
 		String tableName = "";
 		switch (tableType) {
-			case "floral":
+			case "floralRequests":
 				tableName = "floralRequests";
 				break;
 			case "medDelivery":
 				tableName = "medDelivery";
 				break;
-			case "sanitation":
+			case "sanitationRequest":
 				tableName = "sanitationRequest";
 				break;
-			case "security":
+			case "securityServ":
 				tableName = "securityServ";
 				break;
 			case "extTransport":

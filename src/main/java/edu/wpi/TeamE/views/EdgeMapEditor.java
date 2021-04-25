@@ -3,6 +3,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.TeamE.databases.EdgeDB;
+import edu.wpi.TeamE.databases.NodeDB;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -67,8 +69,8 @@ public class EdgeMapEditor {
      * @param table this is the TreeTableView that is editing
      */
     public void prepareEdges(TreeTableView<Edge> table) {
-        makeConnection connection = makeConnection.makeConnection();
-        ArrayList<Edge> array = connection.getAllEdges();
+
+        ArrayList<Edge> array = EdgeDB.getAllEdges();
         if (table.getRoot() == null) {
             Edge edge0 = new
                     Edge("ID", "0", "1", 0.00);
@@ -120,9 +122,9 @@ public class EdgeMapEditor {
             if(endEdge.getValue() != null) {
                 endID = endEdge.getValue().toString();
             }
-            makeConnection connection = makeConnection.makeConnection();
-            connection.modifyEdge(edgeID, startID, endID);
-            connection.deleteEdge(table.getSelectionModel().getSelectedItem().getValue().getStartNodeId(), table.getSelectionModel().getSelectedItem().getValue().getEndNodeId());
+
+            EdgeDB.modifyEdge(edgeID, startID, endID);
+            EdgeDB.deleteEdge(table.getSelectionModel().getSelectedItem().getValue().getStartNodeId(), table.getSelectionModel().getSelectedItem().getValue().getEndNodeId());
         }
     }
 
@@ -133,10 +135,10 @@ public class EdgeMapEditor {
 
     //Function that take information after button press to add edge
     public void addEdge() {
-        makeConnection connection = makeConnection.makeConnection();
+
         if(startEdge.getValue() != null && endEdge.getValue() != null) {
             String ID = startEdge.getValue().toString() + "_" + endEdge.getValue().toString();
-            connection.addEdge(ID, startEdge.getValue().toString(), endEdge.getValue().toString());
+            EdgeDB.addEdge(ID, startEdge.getValue().toString(), endEdge.getValue().toString());
             System.out.println("This happened");
         }
     }
@@ -151,13 +153,13 @@ public class EdgeMapEditor {
      * @param table this is the table of edges that it is deleting from
      */
     public void deleteEdge(TreeTableView<Edge> table) {
-        makeConnection connection = makeConnection.makeConnection();
-        ArrayList<Edge> array = connection.getAllEdges();
+
+        ArrayList<Edge> array = EdgeDB.getAllEdges();
         if(idDropDown.getValue() != null && startEdge.getValue() != null && endEdge.getValue() != null) {
             for(int i = 0; i < array.size(); i++) {
                 if(array.get(i).getId().equals(idDropDown.getValue().toString())) {
                     System.out.println("This lies between " + startEdge.getValue().toString() + " and " + endEdge.getValue().toString());
-                    connection.deleteEdge(startEdge.getValue().toString(), endEdge.getValue().toString());
+                    EdgeDB.deleteEdge(startEdge.getValue().toString(), endEdge.getValue().toString());
                 }
             }
         }
@@ -216,11 +218,11 @@ public class EdgeMapEditor {
         assert endNodeIDInput != null : "fx:id=\"longNameInput\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
         assert idInput != null : "fx:id=\"idInput\" was not injected: check your FXML file 'EdgeMapEditor.fxml'.";
         */
-        makeConnection connection = makeConnection.makeConnection();
+
         prepareEdges(treeTable);
 
         ArrayList<String> nodeIDArrayList = new ArrayList<String>();
-        ArrayList< Node > nodeArray = connection.getAllNodes();
+        ArrayList< Node > nodeArray = NodeDB.getAllNodes();
         for (int i = 0; i < nodeArray.size(); i++) {
             Node s = nodeArray.get(i);
             final TreeItem<Node> node = new TreeItem<Node>(s);
@@ -231,7 +233,7 @@ public class EdgeMapEditor {
 
         ArrayList<Edge> array = new ArrayList<Edge>();
         ArrayList<String> edgeIDS = new ArrayList<String>();
-        array = connection.getAllEdges();
+        array = EdgeDB.getAllEdges();
         for(int i = 0; i < array.size(); i++) {
             edgeIDS.add(array.get(i).getId());
 
@@ -265,13 +267,13 @@ public class EdgeMapEditor {
                 //calculate scaling based on image and imageView size
                 double scale = image.getWidth() / imageView.getFitWidth();
                 //connect to database
-                makeConnection connection2 = makeConnection.makeConnection();
+
 
                 //Retrieve the x and y coordinates of the nodes connected to the edge
-                double xCoordStart = (double) connection2.getNodeInfo(edge.getStartNodeId()).getX() / scale;
-                double yCoordStart = (double) connection2.getNodeInfo(edge.getStartNodeId()).getY() / scale;
-                double xCoordEnd = (double) connection2.getNodeInfo(edge.getEndNodeId()).getX() / scale;
-                double yCoordEnd = (double) connection2.getNodeInfo(edge.getEndNodeId()).getY() / scale;
+                double xCoordStart = (double) NodeDB.getNodeInfo(edge.getStartNodeId()).getX() / scale;
+                double yCoordStart = (double) NodeDB.getNodeInfo(edge.getStartNodeId()).getY() / scale;
+                double xCoordEnd = (double) NodeDB.getNodeInfo(edge.getEndNodeId()).getX() / scale;
+                double yCoordEnd = (double) NodeDB.getNodeInfo(edge.getEndNodeId()).getY() / scale;
 
                 //Create a line using those coordinates
                 Line line = new Line(xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);

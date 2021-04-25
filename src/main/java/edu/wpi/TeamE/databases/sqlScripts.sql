@@ -146,6 +146,19 @@ Create Table securityServ (
 );
 
 
+drop table doctorExaminesAdmission;
+drop table appointment;
+
+Create Table appointment(
+    appointmentID Int Primary Key,
+    patientID Int References userAccount (userID) on delete,
+    doctorID Int References userAccount (userID) on delete cascade,
+    startTime timeStamp,
+    endTime timestamp,
+    Constraint appointmentUnique Unique(patientID, startTime, endTime)
+);
+
+
 
 
 
@@ -242,6 +255,59 @@ END;
 */
 
 
+
+
+
+
+insert into userAccount values(24, 'rosas1@yahoo.com','doctor06','doctor','Rosa', 'Smith');
+insert into userAccount values(25, 'rosas2@yahoo.com','doctor06','doctor','Rosa', 'Smith');
+insert into userAccount values(26, 'rosas3@yahoo.com','doctor06','doctor','Rosa', 'Smith');
+insert into userAccount values(27, 'rosas4@yahoo.com','doctor06','doctor','Rosa', 'Smith');
+insert into userAccount values(28, 'rosas5@yahoo.com','doctor06','doctor','Rosa', 'Smith');
+insert into userAccount values(29, 'rosas6@yahoo.com','doctor06','doctor','Rosa', 'Smith');
+insert into userAccount values(30, 'rosas7@yahoo.com','doctor06','doctor','Rosa', 'Smith');
+
+
+
+insert into node values('FDEPT00501',2128,1300,'1','Tower','DEPT','Emergency Department','Emergency');
+insert into node values('EEXIT00101',2275,785,'1','45 Francis','EXIT','Ambulance Parking Exit Floor 1','AmbExit 1');
+
+
+-- requestID    int Primary Key,
+--                          creatorID    int References userAccount On Delete Cascade,
+-- --                          creationTime timestamp,
+--                          requestType  varchar(31),
+--                          requestStatus varchar(10),
+--                          assignee varchar(31),
+insert into requests values (1, 24, 'extTransport', 'inProgress', 'asdflkdj');
+insert into requests values (2, 24, 'extTransport', 'inProgress', 'asdflkdj');
+insert into requests values (3, 24, 'extTransport', 'inProgress', 'asdflkdj');
+insert into requests values (4, 24, 'extTransport', 'inProgress', 'asdflkdj');
+insert into requests values (5, 24, 'extTransport', 'inProgress', 'asdflkdj');
+insert into requests values (6, 24, 'extTransport', 'inProgress', 'asdflkdj');
+insert into requests values (7, 24, 'extTransport', 'inProgress', 'asdflkdj');
+insert into requests values (8, 24, 'extTransport', 'inProgress', 'asdflkdj');
+insert into requests values (9, 24, 'extTransport', 'inProgress', 'asdflkdj');
+insert into requests values (10, 24, 'extTransport', 'inProgress', 'asdflkdj');
+insert into requests values (11, 24, 'extTransport', 'inProgress', 'asdflkdj');
+
+--                              requestID int Primary Key References requests On Delete Cascade,
+--                              roomID varchar(31) Not Null References node On Delete Cascade,
+--                              requestType varchar(100) Not Null,
+--                              severity varchar(30) Not Null,
+--                              patientID int Not Null,
+--                              ETA varchar(100),
+--                              description varchar(5000),
+
+insert into extTransport values(1,'EEXIT00101', 'Ambulance', 'High Severity', 12334567, '5 minutes', 'Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ');
+insert into extTransport values(2, 'EEXIT00101', 'Ambulance','Low Severity', 4093380, '20 minutes', 'Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.');
+insert into extTransport values(3,'FDEPT00501', 'Helicopter','High Severity', 92017693, '10 minutes', 'Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.');
+insert into extTransport values(4,'FDEPT00501', 'Helicopter','High Severity', 93754789, '20 minutes', 'Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.');
+insert into extTransport values(5, 'EEXIT00101', 'Ambulance','Medium Severity', 417592, '10 minutes', 'Smoke inhalation due to a fire. No burns but difficult time breathing.');
+insert into extTransport values(6, 'FDEPT00501', 'Helicopter', 'High Severity', 44888936, '15 minutes', 'Major car crash on highway. Middle aged woman ejected from the passengers seat. Awake and unresponsive and in critical condition');
+insert into extTransport values(7,'EEXIT00101', 'Ambulance','Medium Severity', 33337861, '7 minutes', 'Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.');
+insert into extTransport values(8, 'EEXIT00101', 'Ambulance','Low Severity', 40003829, '10 minutes', 'Relocating a patient with lung cancer from Mt.Auburn Hospital.');
+insert into extTransport values(9,'FDEPT00501', 'Plane','High Severity', 38739983, '12 hours', 'Heart transplant organ in route');
 
 
 

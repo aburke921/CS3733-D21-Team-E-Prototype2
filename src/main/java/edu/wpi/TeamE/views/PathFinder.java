@@ -338,9 +338,9 @@ public class PathFinder {
      * RED - Start & End for floor only.
      * GREEN - start of entire path.
      * BLACK - end node of entire path.
-     * @param path the path to be drawn on the map.
+     * @param fullPath the path to be drawn on the map.
      */
-    public void drawMap(Path path, String floorNum) {
+    public void drawMap(Path fullPath, String floorNum) {
 
         //clear map
         System.out.print("\nCLEARING MAP...");
@@ -351,96 +351,92 @@ public class PathFinder {
 
 
         //if path is null
-        if (path == null) {
+        if (fullPath == null) {
             //todo snackbar to say no path set
             return;
         }
 
-        //make iterator out of the parsed path
-        Iterator<Node> nodeIteratorThisFloorOnly = path.iterator(floorNum);
-        //if there are no nodes on this floor
-        if (!nodeIteratorThisFloorOnly.hasNext()) {
-            System.out.println("drawMap() has found that there are no nodes on this floor");
-            //todo snackbar to say no nodes on this floor?
-            return;
-        } else System.out.println("drawMap() has found nodes on this floor, drawing them now...");
-        //there is also a path.getStart() and path.getEnd()
-        //if that would be useful for coloring
-        /* End of Stuff Shane Wrote */
 
+        List<Path> paths = fullPath.splitByFloor();
+        for(Path path : paths){
+            if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
 
-        Group g = new Group(); //create group to contain all the shapes before we add them to the scene
+                Iterator<Node> legItr = path.iterator();
+                Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
-        //Use these variables to keep track of the coordinates of the previous node
-        double prevXCoord = 0;
-        double prevYCoord = 0;
-        scale = imageWidth / imageView.getFitWidth();
+                //Use these variables to keep track of the coordinates of the previous node
+                double prevXCoord = 0;
+                double prevYCoord = 0;
+                scale = imageWidth / imageView.getFitWidth();
 
-        int firstNode = 1;
-        while(nodeIteratorThisFloorOnly.hasNext()){ //loop through list
-            //this iterator will return a Node object
-            //which is just a container for all the node info like its coordinates
-            Node node = nodeIteratorThisFloorOnly.next();
+                int firstNode = 1;
+                while(legItr.hasNext()){ //loop through list
+                    //this iterator will return a Node object
+                    //which is just a container for all the node info like its coordinates
+                    Node node = legItr.next();
 
-            //Resize the coordinates to match the resized image
-            double xCoord = (double) node.getX() / scale;
-            double yCoord = (double) node.getY() / scale;
+                    //Resize the coordinates to match the resized image
+                    double xCoord = (double) node.getX() / scale;
+                    double yCoord = (double) node.getY() / scale;
 
-            if (firstNode == 1) { //if current node is the starting node
-                firstNode = 0;
-                prevXCoord = xCoord;
-                prevYCoord = yCoord;
+                    if (firstNode == 1) { //if current node is the starting node
+                        firstNode = 0;
+                        prevXCoord = xCoord;
+                        prevYCoord = yCoord;
 
-                if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
+                        if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
 
-                    //place a dot on the location
-                    Circle circle = new Circle(xCoord, yCoord, radius, Color.GREEN);
-                    g.getChildren().add(circle);
+                            //place a dot on the location
+                            Circle circle = new Circle(xCoord, yCoord, radius, Color.GREEN);
+                            g.getChildren().add(circle);
+                        } else { // start node of just this floor
 
-                } else { // start node of just this floor
+                            //place a red dot on the location
+                            Circle circle = new Circle(xCoord, yCoord, radius, Color.RED);
+                            g.getChildren().add(circle);
 
-                    //place a red dot on the location
-                    Circle circle = new Circle(xCoord, yCoord, radius, Color.RED);
-                    g.getChildren().add(circle);
+                        }
+                    } else if (!legItr.hasNext()) { //if current node is the ending node for this floor
 
+                        Circle circle;
+
+                        if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
+                            //place a dot on the location
+                            circle = new Circle(xCoord, yCoord, radius, Color.BLACK);
+                        } else { // end node of just this floor
+                            //place a dot on the location
+                            circle = new Circle(xCoord, yCoord, radius, Color.RED);
+                        }
+
+                        //create a line between this node and the previous node
+                        Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                        line.setStrokeLineCap(StrokeLineCap.ROUND);
+                        line.setStrokeWidth(strokeWidth);
+                        line.setStroke(Color.RED);
+
+                        g.getChildren().addAll(circle, line);
+                    }
+                    else {
+                        //create a line between this node and the previous node
+                        Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                        line.setStrokeLineCap(StrokeLineCap.ROUND);
+                        line.setStrokeWidth(strokeWidth);
+                        line.setStroke(Color.RED);
+
+                        g.getChildren().add(line);
+
+                        //update the coordinates for the previous node
+                        prevXCoord = xCoord;
+                        prevYCoord = yCoord;
+                    }
                 }
-            } else if (!nodeIteratorThisFloorOnly.hasNext()) { //if current node is the ending node for this floor
-
-                Circle circle;
-
-                if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
-                    //place a dot on the location
-                    circle = new Circle(xCoord, yCoord, radius, Color.BLACK);
-                } else { // end node of just this floor
-                    //place a dot on the location
-                    circle = new Circle(xCoord, yCoord, radius, Color.RED);
-                }
-
-                //create a line between this node and the previous node
-                Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-                line.setStrokeLineCap(StrokeLineCap.ROUND);
-                line.setStrokeWidth(strokeWidth);
-                line.setStroke(Color.RED);
-
-                g.getChildren().addAll(circle, line);
-            }
-            else {
-                //create a line between this node and the previous node
-                Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-                line.setStrokeLineCap(StrokeLineCap.ROUND);
-                line.setStrokeWidth(strokeWidth);
-                line.setStroke(Color.RED);
-
-                g.getChildren().add(line);
-
-                //update the coordinates for the previous node
-                prevXCoord = xCoord;
-                prevYCoord = yCoord;
+                //add all objects to the scene
+                pane.getChildren().add(g);
+            } else {
+                System.out.println("No path on this floor");
+                //todo snackback to say no nodes on this floor?
             }
         }
-
-        //add all objects to the scene
-        pane.getChildren().add(g);
     }
 
     /**
@@ -529,7 +525,7 @@ public class PathFinder {
         assert endLocationComboBox != null : "fx:id=\"endLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";
 
         //DB connection
-        makeConnection connection = makeConnection.makeConnection();
+
 
         //Get longNames & IDs
         System.out.print("Begin Adding to Dropdown List... ");
@@ -538,7 +534,7 @@ public class PathFinder {
         longNameArrayList = FXCollections.observableArrayList();
         nodeIDArrayList = new ArrayList<String>();
 
-        nodeArrayList = connection.getAllNodes();
+        nodeArrayList = NodeDB.getAllNodes();
         for (int i = 0; i < nodeArrayList.size(); i++) {
             longNameArrayList.add(nodeArrayList.get(i).get("longName"));
             nodeIDArrayList.add(nodeArrayList.get(i).get("id"));

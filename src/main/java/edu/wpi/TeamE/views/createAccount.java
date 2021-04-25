@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.TeamE.App;
+import edu.wpi.TeamE.databases.UserAccountDB;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -47,7 +48,7 @@ public class createAccount {
 
     public void createAccountButton() {
         int userID = 0;
-        makeConnection connection = makeConnection.makeConnection();
+
         if(email.getText().isEmpty()) {
             errorPopup("Must input an email");
             return;
@@ -83,8 +84,8 @@ public class createAccount {
             return;
         }
         if (firstName != null && lastName != null && email != null && password != null) {
-            connection.addUserAccount(email.getText(), password.getText(), firstName.getText(), lastName.getText());
-            userID = connection.userLogin(email.getText(), password.getText());
+            UserAccountDB.addUserAccount(email.getText(), password.getText(), firstName.getText(), lastName.getText());
+            userID = UserAccountDB.userLogin(email.getText(), password.getText());
         }
         if (userID != 0) {
             try {

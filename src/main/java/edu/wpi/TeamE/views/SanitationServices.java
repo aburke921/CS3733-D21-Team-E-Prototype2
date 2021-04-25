@@ -38,7 +38,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
 
   @FXML private RequiredFieldValidator validator = new RequiredFieldValidator();
-  makeConnection connection = makeConnection.makeConnection();
+
 
 
 
@@ -85,7 +85,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
       //Adding service request to table
       //makeConnection connection = makeConnection.makeConnection();
       //connection.addRequest("sanitationServices", request);
-      ArrayList<String> nodeIDS = connection.getListOfNodeIDS();
+      ArrayList<String> nodeIDS = NodeDB.getListOfNodeIDS();
       String serviceKind = ServiceTypeinput.getValue();
       String assignee = assignedIndividual.getText();
       String details = detailedInstructionsInput.getText();
@@ -93,7 +93,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
       String signature = Signature.getText();
       int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
       String nodeID = nodeIDS.get(nodeIDIndex);
-      connection.addSanitationRequest(15,assignee,nodeID, serviceKind,details,severity,signature);
+      RequestsDB.addSanitationRequest(15,assignee,nodeID, serviceKind,details,severity,signature);
       System.out.println(serviceKind);
 
       super.handleButtonSubmit(actionEvent);
@@ -117,7 +117,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
     ServiceTypeinput.setItems(Services);
 
     assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
-    ObservableList<String> locations  = connection.getAllNodeLongNames();
+    ObservableList<String> locations  = NodeDB.getAllNodeLongNames();
 
     locationInput.setItems(locations);
     assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";

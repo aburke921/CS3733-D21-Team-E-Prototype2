@@ -85,6 +85,24 @@ public class Path implements Comparable<Path>, Iterable<Node>{
         }
     }
 
+    public List<Path> splitByFloor(){
+        List<Path> paths = new LinkedList<>();
+        Iterator<Node> itr = iterator();
+        Path leg = new Path();
+        String prevFloor = getStart().get("floor");
+        while(itr.hasNext()){
+            Node node = itr.next();
+            if(node.get("floor").equals(prevFloor)){
+                leg.add(node);
+            } else {
+                prevFloor = node.get("floor");
+                paths.add(leg);
+                leg = new Path(node);
+            }
+        }
+        paths.add(leg);
+        return paths;
+    }
 
 
     /**
@@ -96,27 +114,18 @@ public class Path implements Comparable<Path>, Iterable<Node>{
      */
     @Override
     public Iterator<Node> iterator() {
-        return iterator("ALL");
-    }
-    public Iterator<Node> iterator(String floorNum){
-        return new NodeIterator(getStart(), floorNum);
+        return new NodeIterator(getStart());
     }
 
     private class NodeIterator implements Iterator<Node> {
         Node cursor;
-        String floorNum;
-        private NodeIterator(Node _cursor, String _floorNum){
+        private NodeIterator(Node _cursor){
             cursor = _cursor;
-            floorNum = _floorNum;
         }
 
         @Override
         public boolean hasNext() {
-            if(floorNum.equalsIgnoreCase("ALL")){
-                return cursor != null;
-            } else {
-                return cursor != null && cursor.get("floor").equalsIgnoreCase(floorNum);
-            }
+            return cursor != null;
         }
 
         @Override
@@ -288,7 +297,7 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                             directions.add("Take Elevator " + node1.get("longName").charAt(9) + " to Floor " + node2.get("floor"));
                             len = node3.dist(node2);
                             dist = (int) (Math.round((len * SCALE) / 10) * 10);
-                            directions.add("Exit Elevator " + node1.get("longName").charAt(9) + " and go straight ahead for " + dist + " feet");
+                            directions.add("Exit Elevator " + node1.get("longName").charAt(9) + " and go straight for " + dist + " feet");
                             break;
                         case 3:
                             len = node1.dist(node2);
@@ -302,46 +311,51 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                         case 4:
                             len = node3.dist(node2);
                             dist = (int) (Math.round((len * SCALE) / 10) * 10);
-                            directions.add("Exit the staircase and go straight ahead for " + dist + " feet");
+                            directions.add("Exit the staircase and go straight for " + dist + " feet");
                             break;
                         default:
-                            //p3 - p1
-                            Point p3_1 = new Point(node3.getX() - node1.getX(), node3.getY() - node1.getY());
 
-                            //p2 - p1
-                            Point p2_1 = new Point(node2.getX() - node1.getX(), node2.getY() - node1.getY());
+                            double len1_2 = node1.dist(node2);
+                            double len2_3 = node2.dist(node3);
+
+                            //vectors
+                            //p3 defined by p1m (p1-p3 vector components)
+                            Point p3p1 = new Point(node3.getX() - node1.getX(), node3.getY() - node1.getY());
+                            //p2 defined by p1 (p1-p2 vector components)
+                            Point p1p2 = new Point(node2.getX() - node1.getX(), node2.getY() - node1.getY());
+                            //p3 defined by p2 (p2-p3 vector components)
+                            Point p2p3 = new Point(node3.getX() - node2.getX(), node3.getY() - node2.getY());
 
                             //calculate the cross product
-                            double crossProduct = p3_1.getX() * p2_1.getY() - p2_1.getX() * p3_1.getY();
-
+                            double crossProduct = p3p1.getX() * p1p2.getY() - p1p2.getX() * p3p1.getY();
                             //find angle
                             double angle = 0;
-                            //vectors
-                            Point p1p2 = new Point(node2.getX() - node1.getX(), node2.getY() - node1.getY());
-                            Point p2p3 = new Point(node3.getX() - node2.getX(), node3.getY() - node2.getY());
                             //dot product p1p2 x p2p3
                             double dotProduct = p1p2.getX() * p2p3.getX() + p1p2.getY() * p2p3.getY();
-                            //length of vector p1p2
-                            double p1p2Length = Math.sqrt( p1p2.getX() *  p1p2.getX() + p1p2.getY() *  p1p2.getY());
-                            //length of vector p2p3
-                            double p2p3Length = Math.sqrt( p2p3.getX() *  p2p3.getX() + p2p3.getY() *  p2p3.getY());
 
-                            angle = Math.acos(dotProduct / (p1p2Length * p2p3Length));
+                            angle = Math.acos(dotProduct / (len1_2 * len2_3));
                             angle = 180 * angle / Math.PI;//convert radian to degree
 
-                            dist = (int) (Math.round((p1p2Length * SCALE) / 10) * 10);
-                            last = (int) (Math.round((p2p3Length * SCALE) / 10) * 10);
+
 
                             String turn = "";
+                            int angleComp = (int) Math.abs(angle);
 
-                            if (Math.abs(angle) < 30) {
+                            if (angleComp < 30) {
                                 turn = "Bend to the";
-                            } else if (Math.abs(angle) < 60) {
+                            } else if (angleComp < 60) {
                                 turn = "Take a shallow turn to the";
-                            } else if (Math.abs(angle) < 120) {
+                            } else if (angleComp < 120) {
                                 turn = "Turn to the";
                             } else {
                                 turn = "Take a sharp turn to the";
+                            }
+
+                            dist = (int) (Math.round((len1_2 * SCALE) / 10) * 10);
+                            last = (int) (Math.round((len2_3 * SCALE) / 10) * 10);
+
+                            if (dist == 0) {
+                                dist = 5;
                             }
 
                             // straight "tolerance"
@@ -360,6 +374,9 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                     //continue for next node
                     node1 = node2;
                     node2 = node3;
+                }
+                if (last == 0) {
+                    last = 5;
                 }
                 if (floorChangeState == 0) {
                     directions.add("Straight ahead for " + last + " feet");
@@ -423,6 +440,14 @@ public class Path implements Comparable<Path>, Iterable<Node>{
      */
     public double getPathLength(){
         return length;
+    }
+
+    /**
+     * Gets the length of the path in feet for Time Estimates
+     * @return The total length of the path
+     */
+    public double getPathLengthFeet(){
+        return length * SCALE;
     }
 
     /**

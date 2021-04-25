@@ -2,6 +2,8 @@ package edu.wpi.TeamE.views;
 
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.algorithms.Edge;
+import edu.wpi.TeamE.databases.EdgeDB;
+import edu.wpi.TeamE.databases.csvDB;
 import edu.wpi.TeamE.databases.makeConnection;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
@@ -24,8 +26,8 @@ public class EdgeCSVUpload {
     TreeTableView<Edge> treeTable;
 
     public void prepareEdges(TreeTableView<Edge> table) {
-        makeConnection connection = makeConnection.makeConnection();
-        ArrayList<Edge> array = connection.getAllEdges();
+
+        ArrayList<Edge> array = EdgeDB.getAllEdges();
         if (table.getRoot() == null) {
             Edge edge0 = new
                     Edge("ID", "0", "1", 0.00);
@@ -77,11 +79,11 @@ public class EdgeCSVUpload {
     public void fileOpener(ActionEvent e) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
-        makeConnection connection = makeConnection.makeConnection();
+
         if (file != null) {
-            connection.deleteEdgeTable();
-            connection.createEdgeTable();
-            connection.populateTable("hasEdge", file);
+            EdgeDB.deleteEdgeTable();
+            EdgeDB.createEdgeTable();
+            csvDB.populateTable("hasEdge", file);
             System.out.println("Success");
         }
         prepareEdges(treeTable);
@@ -90,8 +92,8 @@ public class EdgeCSVUpload {
     @FXML
     private void openFile(ActionEvent e) throws IOException {
 
-        makeConnection connection = makeConnection.makeConnection();
-        connection.getNewCSVFile("hasEdge");
+
+        csvDB.getNewCSVFile("hasEdge");
         File file = new File("CSVs/outputEdge.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);

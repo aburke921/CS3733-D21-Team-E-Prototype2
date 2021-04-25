@@ -1,9 +1,13 @@
 package edu.wpi.TeamE;
 
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import edu.wpi.TeamE.databases.makeConnection;
+
+import edu.wpi.TeamE.databases.*;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -138,9 +142,17 @@ public class App extends Application {
     boolean tablesExist = connection.allTablesThere();
 		if(!tablesExist){
 			try {
-				connection.createTables();
-				connection.populateTable("node", nodes);
-				connection.populateTable("hasEdge", edges);
+				NodeDB.createNodeTable();
+				EdgeDB.createEdgeTable();
+				UserAccountDB.createUserAccountTable();
+				RequestsDB.createRequestsTable();
+				RequestsDB.createFloralRequestsTable();
+				RequestsDB.createSanitationTable();
+				RequestsDB.createExtTransportTable();
+				RequestsDB.createMedDeliveryTable();
+				RequestsDB.createSecurityServTable();
+				csvDB.populateTable("node", nodes);
+				csvDB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
 				System.out.println("Tables were created");
 			} catch (Exception e) {

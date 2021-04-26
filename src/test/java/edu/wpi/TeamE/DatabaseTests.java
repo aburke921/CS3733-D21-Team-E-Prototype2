@@ -51,7 +51,8 @@ public class DatabaseTests {
 			DB.createLanguageRequestTable();
 			DB.createLaundryRequestTable();
 			DB.createMaintenanceRequestTable();
-			DB.createFoodDeliveryRequestTable();
+			DB.createFoodDeliveryTable();
+			DB.createAubonPainMenuTable();
 			//System.out.println("Tables were created");
 			//System.out.println("Tables were reset");
 		} catch (Exception e) {
@@ -68,7 +69,12 @@ public class DatabaseTests {
 			DB.createLanguageRequestTable();
 			DB.createLaundryRequestTable();
 			DB.createMaintenanceRequestTable();
-			DB.createFoodDeliveryRequestTable();
+			DB.createFoodDeliveryTable();
+//			DB.createFoodTable();
+//			DB.createFoodOrderedInRequestTable();
+//			DB.createBeverageTable();
+//			DB.createBeverageOrderedInRequestTable();
+			DB.createAubonPainMenuTable();
 			//e.printStackTrace();
 		}
 
@@ -1444,6 +1450,20 @@ public class DatabaseTests {
 		assertEquals(1, DB.editMaintenanceRequest(1, "test", null, "extremely severe", null, "wires are loose everywhere!"));
 	}
 
-// this is where testEditFoodDeliveryRequest() can go
+
+	@Test
+	@DisplayName("testAddAubonPainMenuItem")
+	public void testAddAubonPainMenuItem(){
+		DB.addAubonPainMenuItem("foodImage", "foodItem", "$56.00", "23 Calories", "foodDescription");
+	}
+
+	@Test
+	@DisplayName("testPopulateAbonPainTable")
+	public void testPopulateAbonPainTable(){
+		DB.populateAbonPainTable();
+	}
+
+
+
 
 }

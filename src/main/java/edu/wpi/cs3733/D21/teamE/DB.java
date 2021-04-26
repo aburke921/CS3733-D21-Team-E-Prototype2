@@ -440,9 +440,49 @@ public class DB {
 		RequestsDB.createMaintenanceRequestTable();
 	}
 
-	public static void createFoodDeliveryRequestTable() {
-		RequestsDB.createFoodDeliveryRequestTable();
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - allergy: this is an food allergy that the user might have
+	 * - dietRestriction: this is any dietary restrictions that the person fulfilling the request might need to know about
+	 * - beverage: the drink the user is ordering
+	 * - comments: any comments the user wants to leave for the person fulfilling the request
+	 */
+	public static void createFoodDeliveryTable(){
+		RequestsDB.createFoodDeliveryTable();
 	}
+
+	/**
+	 * Uses executes the SQL statements required to create a aubonPainMenu table.
+	 * This table has attributes:
+	 * - foodImage: this is the url to an image of the item
+	 * - foodItem: this is the item itself (this is unique and is used as an identifier)
+	 * - foodPrice: this is the price of the foodItem
+	 * - foodCalories: this is the number of calories the food item has
+	 * - foodDescription: this is a description of the food item
+	 */
+	public static void createAubonPainMenuTable(){
+		RequestsDB.createAubonPainMenuTable();
+	}
+
+	/**
+	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
+	 * description to the aubonPainMenu table
+	 * The link to the website being read is: https://order.aubonpain.com/menu/brigham-womens-hospital
+	 */
+	public static void populateAbonPainTable(){
+		RequestsDB.populateAbonPainTable();
+	}
+
+
+
+
+
+
+
+
 
 
 	// Adding To Tables:
@@ -538,19 +578,36 @@ public class DB {
 	}
 
 	/**
-	 *
+	 * adds a request for food delivery
 	 * @param userID ID of the user
 	 * @param roomID nodeID of the user
 	 * @param assigneeID ID of the assigned user who will complete this task
 	 * @param dietRestrictions any restrictions the user has diet wise
 	 * @param allergies any allergies the user has
-	 * @param food the food choice made by the user
-	 * @param beverage the beverage choice made by the user
-	 * @param description detailed description of request
+	 * @param foodItem the food item choice made by the user
+	 * @param foodQuantity the quantity of the food item the user wants
+	 * @param beverageItem the beverage item choice made by the user
+	 * @param beverageQuantity the quantity of the beverage item the user wants
 	 */
-	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String food, String beverage, String description) {
-		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, food, beverage, allergies, description);
+	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
+		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, allergies, foodItem, foodQuantity, beverageItem, beverageQuantity);
 	}
+
+
+	/**
+	 * adds a menuItem to the aubonPainMenu database table
+	 * @param foodImage this is the url to an image of the item
+	 * @param foodItem this is the item itself (this is unique and is used as an identifier)
+	 * @param foodPrice this is the price of the foodItem
+	 * @param foodCalories this is the number of calories the food item has
+	 * @param foodDescription this is a description of the food item
+	 */
+	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription){
+		RequestsDB.addAubonPainMenuItem(foodImage, foodItem, foodPrice, foodCalories, foodDescription);
+	}
+
+
+
 
 	// Editing Tables:
 
@@ -732,6 +789,14 @@ public class DB {
 		return RequestsDB.getSelectableAssignees(givenUserType);
 	}
 
+
+
+
+
+
+
+
+
 	// UserAccountDB:
 
 	/**
@@ -816,6 +881,10 @@ public class DB {
 	public static int userLogin(String email, String password) {
 		return UserAccountDB.userLogin(email, password);
 	}
+
+
+
+
 
 
 }

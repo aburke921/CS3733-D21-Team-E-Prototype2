@@ -5,9 +5,12 @@ import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.SearchContext;
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.wpi.TeamE.databases.*;
-//import edu.wpi.TeamE.views.MapEditor;
-import edu.wpi.TeamE.views.mapEditorControllers.MapEditor;
+import edu.wpi.TeamE.views.MapEditor;
+import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
+import edu.wpi.cs3733.D21.teamE.database.csvDB;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,28 +28,30 @@ public class PathFindingTests {
         File nodes = new File("CSVs/MapEAllnodes.csv");
         File edges = new File("CSVs/MapEAlledges.csv");
         try {
-            NodeDB.createNodeTable();
-            EdgeDB.createEdgeTable();
-            UserAccountDB.createUserAccountTable();
-            RequestsDB.createRequestsTable();
-            RequestsDB.createFloralRequestsTable();
-            RequestsDB.createSanitationTable();
-            RequestsDB.createExtTransportTable();
-            RequestsDB.createMedDeliveryTable();
-            RequestsDB.createSecurityServTable();
+            DB.createNodeTable();
+            DB.createEdgeTable();
+            DB.createUserAccountTable();
+            DB.createRequestsTable();
+            DB.createFloralRequestsTable();
+            DB.createSanitationTable();
+            DB.createExtTransportTable();
+            DB.createMedDeliveryTable();
+            DB.createSecurityServTable();
+            appointmentDB.createAppointmentTable();
             csvDB.populateTable("node", nodes);
             csvDB.populateTable("hasEdge", edges);
             System.out.println("Tables were created");
         } catch (Exception e) {
-            NodeDB.createNodeTable();
-            EdgeDB.createEdgeTable();
-            UserAccountDB.createUserAccountTable();
-            RequestsDB.createRequestsTable();
-            RequestsDB.createFloralRequestsTable();
-            RequestsDB.createSanitationTable();
-            RequestsDB.createExtTransportTable();
-            RequestsDB.createMedDeliveryTable();
-            RequestsDB.createSecurityServTable();
+            DB.createNodeTable();
+            DB.createEdgeTable();
+            DB.createUserAccountTable();
+            DB.createRequestsTable();
+            DB.createFloralRequestsTable();
+            DB.createSanitationTable();
+            DB.createExtTransportTable();
+            DB.createMedDeliveryTable();
+            DB.createSecurityServTable();
+            appointmentDB.createAppointmentTable();
         }
 
         search = new SearchContext();

@@ -1,8 +1,7 @@
-package edu.wpi.TeamE.databases;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.TeamE.algorithms.Edge;
 import javafx.util.Pair;
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -18,23 +17,22 @@ public class EdgeDB {
 	 * - endNode: this is a nodeID in which the edge connection ends.
 	 */
 	public static void createEdgeTable() {
-		try {
-			Statement stmt = connection.createStatement();
-			stmt.execute(
-					"Create Table hasEdge"
-							+ "("
-							+ "    edgeID    varchar(63) Primary Key,"
-							+ "    startNode varchar(31) Not Null References node (nodeid) On Delete Cascade,"
-							+ "    endNode   varchar(31) Not Null References node (nodeid) On Delete Cascade, "
-							+ "    length    float, "
-							+ "    Unique (startNode, endNode)"
-							+ ")");
 
-			// Needs a way to calculate edgeID, either in Java or by a sql trigger
-			// Probably in Java since it's a PK
+		String query = "Create Table hasEdge"
+				+ "("
+				+ "    edgeID    varchar(63) Primary Key,"
+				+ "    startNode varchar(31) Not Null References node (nodeid) On Delete Cascade,"
+				+ "    endNode   varchar(31) Not Null References node (nodeid) On Delete Cascade, "
+				+ "    length    float, "
+				+ "    Unique (startNode, endNode)"
+				+ ")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
 
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("error creating hasEdge table");
 		}
 	}

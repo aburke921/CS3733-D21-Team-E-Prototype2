@@ -2,24 +2,22 @@ package edu.wpi.TeamE.views;
 
 import com.jfoenix.controls.*;
 
-import java.awt.geom.RoundRectangle2D;
-import java.io.FileNotFoundException;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
+
+
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+
 import java.net.URL;
-import java.text.DecimalFormat;
-import java.util.*;
+
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+
 import java.util.ResourceBundle;
 
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
-import edu.wpi.TeamE.algorithms.pathfinding.*;
-import edu.wpi.TeamE.databases.*;
+
 
 import edu.wpi.TeamE.App;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
@@ -30,11 +28,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
+
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
+
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -45,7 +42,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
-import javafx.stage.Screen;
+
 import javafx.stage.Stage;
 
 
@@ -221,16 +218,16 @@ public class newMapEditor {
 
 
         //if path is null
-        if (NodeDB.getAllNodes() == null) {
+        if (DB.getAllNodes() == null) {
             //todo snackbar to say error
             return;
         }
         Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
         ArrayList<Node> nodeArray = new ArrayList<Node>();
-        nodeArray = NodeDB.getAllNodesByFloor(floorNum);
+        nodeArray = DB.getAllNodesByFloor(floorNum);
         ArrayList<Edge> edgeArray = new ArrayList<Edge>();
-        edgeArray = EdgeDB.getAllEdges();
+        edgeArray = DB.getAllEdges();
 
         //display all nodes
         scale = imageWidth / imageView.getFitWidth();
@@ -274,7 +271,7 @@ public class newMapEditor {
 
     public void prepareNodes(TreeTableView<Node> table) {
         makeConnection connection = makeConnection.makeConnection();
-        ArrayList<Node> array = NodeDB.getAllNodes();
+        ArrayList<Node> array = DB.getAllNodes();
         if (table.getRoot() == null) {
             //Column 1 - Location
             TreeTableColumn<Node, String> column = new TreeTableColumn<>("Location");
@@ -580,8 +577,8 @@ public class newMapEditor {
     }
 
     public void prepareEdges(TreeTableView<Edge> table) {
-//        makeConnection connection = makeConnection.makeConnection();
-        ArrayList<Edge> array = EdgeDB.getAllEdges();
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Edge> array = DB.getAllEdges();
         if (table.getRoot() == null) {
             Edge edge0 = new
                     Edge("ID", "0", "1", 0.00);
@@ -615,6 +612,130 @@ public class newMapEditor {
         }
     }
 
+    /**
+     * retrieves all the inputted info from the user, creates a new node and adds it to database
+     * using database's addNode fcn
+     * @return
+     */
+    public int addNode() {
+        int i = -1;
+        makeConnection connection = makeConnection.makeConnection();
+        if (floorInput.getValue().toString().equals("")) {
+            errorPopup("Must input Floor");
+            return i;
+        }
+        if (longNameInput.getText().equals("")) {
+            errorPopup("Must input Long Name");
+            return i;
+        }
+        if (shortNameInput.getText().equals("")) {
+            errorPopup("Must input Short Name");
+            return i;
+        }
+        if (typeInput.getSelectionModel().equals("")) {
+            errorPopup("Must input Type");
+            return i;
+        }
+        if (buildingInput.getValue().toString().equals("")) {
+            errorPopup("Must input Building");
+            return i;
+        }
+        if (xCordInput.getText().equals("")) {
+            errorPopup("Must input X Coordinate");
+            return i;
+        }
+        if (yCordInput.getText().equals("")) {
+            errorPopup("Must input Y Coordinate");
+            return i;
+        }
+        int xVal = Integer.parseInt(xCordInput.getText());
+        int yVal = Integer.parseInt(yCordInput.getText());
+        i = DB.addNode(genNodeID(typeInput.getValue().toString(),floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
+        System.out.println(i);
+        return i;
+    }
+
+    /**
+     * calls the addNode fcn when the add node button is pressed
+     * @param e
+     */
+    @FXML
+    public void addNodeButton(ActionEvent e) {
+        addNode();
+    }
+
+    /**
+     * Autogenerate NodeIDs
+     * Elevators need to have the format `Elevator X xxxxx`
+     * @param type The type of Node this is
+     * @param floor The floor this Node is on
+     * @param longName The longName of the node
+     * @return The NodeID of the given Node
+     */
+    public String genNodeID(String type, String floor, String longName){
+        StringBuilder SB = new StringBuilder("e");
+        SB.append(type);
+
+        if (type.equalsIgnoreCase("ELEV")) {
+            SB.append("00");
+            SB.append(longName.charAt(9));
+            //Elevator names need to start with 'Elevator X xxxxx"
+        } else {
+            makeConnection connection = makeConnection.makeConnection();
+            int instance = DB.countNodeTypeOnFloor("e", floor, type) + 1;
+            SB.append(String.format("%03d", instance));
+        }
+
+        try{
+            int num = Integer.parseInt(floor);
+            SB.append("0").append(num);
+        } catch (NumberFormatException e) {
+            if (floor.equalsIgnoreCase("G") || floor.equalsIgnoreCase("GG")){
+                SB.append("GG");
+            } else {
+                SB.append(floor);
+            }
+        }
+
+        return SB.toString();
+    }
+
+    /**
+     * retrieves the ID of the selected item in the table, passes that into deleteNode fcn from database
+     * @param table
+     */
+    public int deleteNode(TreeTableView<Node> table) {
+        int s = -1;
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Node> array = DB.getAllNodes();
+        if (table.getSelectionModel().getSelectedItem() != null) {
+            for (int i = 0; i < array.size(); i++) {
+                if (array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
+                    s = DB.deleteNode(array.get(i).get("id"));
+                }
+            }
+        } else {
+            if (idInput.getValue() != null) {
+                for (int i = 0; i < array.size(); i++) {
+                    if (array.get(i).get("id").equals(idInput.getValue().toString())) {
+                        s = DB.deleteNode(array.get(i).get("id"));
+                    }
+                }
+
+            }
+        }
+        return s;
+    }
+
+    /**
+     * calls the deleteNode fcn when the delete button is clicked
+     * @param e
+     */
+    @FXML
+    public void deleteNodeButton(ActionEvent e) {
+        deleteNode(nodeTreeTable);
+    }
+
     public void editNode(TreeTableView<Node> table) {
         String id = null;
         Integer xVal = null;
@@ -624,14 +745,34 @@ public class newMapEditor {
         String shortName = null;
         String type = null;
         String building = null;
-
-        /*if(table.getSelectionModel().getSelectedItem().getValue() != null) {
+        if (table.getSelectionModel().getSelectedItem() != null) {
             id = table.getSelectionModel().getSelectedItem().getValue().get("id");
-        }*/
+        }
+        if (table.getSelectionModel().getSelectedItem() != null) {
+            floor = table.getSelectionModel().getSelectedItem().getValue().get("floor");
+        }
+        if (table.getSelectionModel().getSelectedItem() != null) {
+            longName = table.getSelectionModel().getSelectedItem().getValue().get("longName");
+        }
+        if (table.getSelectionModel().getSelectedItem() != null) {
+            shortName = table.getSelectionModel().getSelectedItem().getValue().get("shortName");
+        }
+        if (table.getSelectionModel().getSelectedItem() != null) {
+            type = table.getSelectionModel().getSelectedItem().getValue().get("type");
+        }
+        if (table.getSelectionModel().getSelectedItem() != null) {
+            building = table.getSelectionModel().getSelectedItem().getValue().get("building");
+        }
+        if (table.getSelectionModel().getSelectedItem() != null) {
+            xVal = table.getSelectionModel().getSelectedItem().getValue().getX();
+        }
+        if (table.getSelectionModel().getSelectedItem()!= null) {
+            yVal = table.getSelectionModel().getSelectedItem().getValue().getY();
+        }
+
         if (idInput.getValue() != null) {
             id = idInput.getValue().toString();
         }
-
         if (floorInput.getValue() != null) {
             floor = floorInput.getValue().toString();
         }
@@ -657,8 +798,8 @@ public class newMapEditor {
         }
 
 
-       // makeConnection connection = makeConnection.makeConnection();
-        //connection.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
+        makeConnection connection = makeConnection.makeConnection();
+        DB.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
 
 
     }
@@ -696,6 +837,32 @@ public class newMapEditor {
 
 
     }
+    public void refresh() {
+        prepareEdges(edgeTreeTable);
+        prepareNodes(nodeTreeTable);
+        drawMap(currentFloor);
+    }
+    public void refreshButton(ActionEvent e) {
+        refresh();
+    }
+
+    @FXML
+    private void errorPopup(String errorMessage) {
+        JFXDialogLayout error = new JFXDialogLayout();
+        error.setHeading(new Text("Error!"));
+        error.setBody(new Text(errorMessage));
+        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Okay");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        error.setActions(okay);
+        dialog.show();
+    }
 
     /**
      * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
@@ -707,7 +874,7 @@ public class newMapEditor {
         makeConnection connection = makeConnection.makeConnection();
 
         //Creating ID dropdown
-        ArrayList<String> idList = NodeDB.getListOfNodeIDS();
+        ArrayList<String> idList = DB.getListOfNodeIDS();
         ObservableList<String> listOfIDS = FXCollections.observableArrayList();
         listOfIDS.addAll(idList);
 
@@ -778,11 +945,11 @@ public class newMapEditor {
         longNameArrayList = FXCollections.observableArrayList();
         nodeIDArrayList = new ArrayList<String>();
 
-            nodeArrayList = NodeDB.getAllNodes();
-            for (int i = 0; i < nodeArrayList.size(); i++) {
-                longNameArrayList.add(nodeArrayList.get(i).get("longName"));
-                nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
-            }
+        nodeArrayList = DB.getAllNodes();
+        for (int i = 0; i < nodeArrayList.size(); i++) {
+            longNameArrayList.add(nodeArrayList.get(i).get("longName"));
+            nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
+        }
 //        longNameArrayList = connection.getAllNodeLongNames();
 //        nodeIDArrayList = connection.getListOfNodeIDS();
 
@@ -831,42 +998,56 @@ public class newMapEditor {
         prepareNodes(nodeTreeTable);
         prepareEdges(edgeTreeTable);
 
-        final ArrayList<Node> array = NodeDB.getAllNodes();
+        final ArrayList<Node> array = DB.getAllNodes();
         Group g = new Group();
 
         pane.setOnMouseClicked(e -> {
-            /*double xCoord = e.getX();
-            double yCoord = e.getY();
-            Circle circle = new Circle(xCoord, yCoord, 2, Color.GREEN);
-            g.getChildren().add(circle);
-             */
-            System.out.println("click!");
-            double X = e.getX();
-            int xInt = (int)X;
-            double Y = e.getY();
-            int yInt = (int)Y;
-            System.out.println(xInt);
-            System.out.println(yInt);
-            for(int i = 0; i < array.size(); i++) {
-                double nodeX = array.get(i).getX() / scale;
-                int nodeXInt = (int)nodeX;
-                double nodeY = array.get(i).getY() / scale;
-                int nodeYInt = (int)nodeY;
-                if(Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1){
-                    idInput.setValue(array.get(i).get("id"));
-                    floorInput.setValue(array.get(i).get("floor"));
-                    longNameInput.setText(array.get(i).get("longName"));
-                    shortNameInput.setText(array.get(i).get("shortName"));
-                    xCordInput.setText(Integer.toString(array.get(i).getX()));
-                    yCordInput.setText(Integer.toString(array.get(i).getY()));
-                    typeInput.setValue(array.get(i).get("type"));
-                    buildingInput.setValue(array.get(i).get("building"));
-
-
+            if(e.getClickCount() == 2) {
+                //ints for displaying
+                double xCoordScale = e.getX();
+                xCoordScale = xCoordScale * scale;
+                int xCordIntScale = (int)xCoordScale;
+                double yCoordScale = e.getY();
+                yCoordScale = yCoordScale * scale;
+                int yCordIntScale = (int)yCoordScale;
+                //ints for placing circle
+                double xCoord= e.getX();
+                double yCoord = e.getY();
+                Circle circle = new Circle(xCoord, yCoord, 2, Color.GREEN);
+                g.getChildren().add(circle);
+                pane.getChildren().add(g);
+                xCordInput.setText(Integer.toString(xCordIntScale));
+                yCordInput.setText(Integer.toString(yCordIntScale));
+            } else {
+                if(e.getClickCount() == 1) {
+                    double X = e.getX();
+                    int xInt = (int)X;
+                    double Y = e.getY();
+                    int yInt = (int)Y;
+                    System.out.println(xInt);
+                    System.out.println(yInt);
+                    for(int i = 0; i < array.size(); i++) {
+                        double nodeX = array.get(i).getX() / scale;
+                        int nodeXInt = (int)nodeX;
+                        double nodeY = array.get(i).getY() / scale;
+                        int nodeYInt = (int)nodeY;
+                        if(Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1){
+                            idInput.setValue(array.get(i).get("id"));
+                            floorInput.setValue(array.get(i).get("floor"));
+                            longNameInput.setText(array.get(i).get("longName"));
+                            shortNameInput.setText(array.get(i).get("shortName"));
+                            xCordInput.setText(Integer.toString(array.get(i).getX()));
+                            yCordInput.setText(Integer.toString(array.get(i).getY()));
+                            typeInput.setValue(array.get(i).get("type"));
+                            buildingInput.setValue(array.get(i).get("building"));
+                        }
+                    }
                 }
             }
         });
-        pane.getChildren().add(g);
+
+        //ability to select edge and autofill fields
+
     }
 
 

@@ -213,23 +213,28 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <JFXButton fx:id="floorChanger1311" onAction="#editNodeButton" styleClass="submit-button" text="Edit Node" GridPane.rowIndex="1">
+                              <JFXButton fx:id="editNode" onAction="#editNodeButton" styleClass="submit-button" text="Edit Node" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets left="20.0" />
                                  </GridPane.margin>
                               </JFXButton>
-                              <JFXButton fx:id="floorChanger131" onAction="#nextFloor" styleClass="submit-button" text="Delete Node" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <JFXButton fx:id="deleteNode" onAction="#deleteNodeButton" styleClass="submit-button" text="Delete Node" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets left="10.0" />
                                  </GridPane.margin>
                               </JFXButton>
-                              <JFXButton fx:id="floorChanger1312" onAction="#nextFloor" styleClass="submit-button" text="Add Node" GridPane.rowIndex="2">
+                              <JFXButton fx:id="addNode" onAction="#addNodeButton" styleClass="submit-button" text="Add Node" GridPane.rowIndex="2">
                                  <GridPane.margin>
                                     <Insets left="20.0" top="20.0" />
                                  </GridPane.margin>
                               </JFXButton>
                            </children>
                         </GridPane>
+                        <JFXButton fx:id="refresh" onAction="#refreshButton" styleClass="submit-button" text="Refresh All">
+                           <VBox.margin>
+                              <Insets left="70.0" top="100.0" />
+                           </VBox.margin>
+                        </JFXButton>
                      </children>
                   </VBox>
                </children>

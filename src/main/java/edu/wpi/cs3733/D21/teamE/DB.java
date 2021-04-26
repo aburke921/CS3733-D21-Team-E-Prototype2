@@ -440,6 +440,19 @@ public class DB {
 		RequestsDB.createMaintenanceRequestTable();
 	}
 
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - religionID: is the type of maintenance required
+	 * - description: detailed description of request
+	 * - religionType: religion
+	 */
+	public static void createReligionRequestTable(){
+		RequestsDB.createReligionRequestTable();
+	}
+
 	public static void createFoodDeliveryRequestTable() {
 		RequestsDB.createFoodDeliveryRequestTable();
 	}

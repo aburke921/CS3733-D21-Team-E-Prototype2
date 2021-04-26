@@ -53,6 +53,7 @@ public class DatabaseTests {
 		DB.createLanguageRequestTable();
 		DB.createLaundryRequestTable();
 		DB.createMaintenanceRequestTable();
+		DB.createReligionRequestTable();
 		DB.createFoodDeliveryRequestTable();
 		//System.out.println("Tables were created");
 	}

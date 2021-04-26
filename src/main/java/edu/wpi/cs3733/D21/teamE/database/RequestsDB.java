@@ -300,17 +300,40 @@ public class RequestsDB {
 				"    ETA   varchar(31) Not Null, " +
 				"    description varchar(5000) " +
 				")";
-
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
 			prepState.execute();
-
-
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("error creating maintenanceRequest table");
 		}
+	}
 
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - religionID: is the type of maintenance required
+	 * - description: detailed description of request
+	 * - religionType: religion
+	 */
+	public static void createReligionRequestTable() {
+
+		String query = "Create Table religiousRequests " +
+				"( " +
+				"requestID         int Primary Key References requests(requestID) On Delete Cascade, " +
+				"roomID            varchar(31) Not Null References node(nodeID) On Delete Cascade, " +
+				"religionInput     varchar(31) Not Null, " +
+				"description       varchar(255) Not Null," +
+				"religionType      varchar(31) Not Null," +
+				"Constraint religionTypeLimit Check (religionType In ('Religion1', 'Religion2', 'Religion3', 'Religion4'))" +
+				")";
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating religiousRequests table");
+		}
 	}
 
 	//TODO: ASHLEY review this please (i didn't take your Food table into account)

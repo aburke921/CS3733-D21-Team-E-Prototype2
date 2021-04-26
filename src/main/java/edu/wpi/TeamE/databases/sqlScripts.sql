@@ -156,16 +156,12 @@ Create Table securityServ
 
 Create Table religiousRequests
 (
-
     requestID         int Primary Key References requests(requestID) On Delete Cascade,
     roomID            varchar(31) Not Null References node(nodeID) On Delete Cascade,
-    locationInput     varchar(31) Not Null,
     religionInput     varchar(31) Not Null,
-    assignedPersonnel varchar(31) Not Null,
-    description       varchar(31) Not Null,
-    firstName         varchar(31) Not Null,
-    lastName          varchar(31) Not Null
-
+    description       varchar(255) Not Null,
+    religionType      varchar(31) Not Null,
+    Constraint religionTypeLimit Check (religionType In ('Religion1', 'Religion2', 'Religion3', 'Religion4'))
 );
 
 
@@ -191,7 +187,7 @@ Insert Into requests Values (1, 24, 'extTransport', 'inProgress', 'asdflkdj');
 select requestID, lastName from religiousRequests;
 
 
-insert into RELIGIOUSREQUESTS values(1,'nodeID1', 'location', 'christianity', 'person', 'description', 'firstname', 'lastname');
+insert into RELIGIOUSREQUESTS values(requestID, roomID, religionInput, description, religionType);
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1
 Select startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) As distance

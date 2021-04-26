@@ -440,9 +440,101 @@ public class DB {
 		RequestsDB.createMaintenanceRequestTable();
 	}
 
-	public static void createFoodDeliveryRequestTable() {
-		RequestsDB.createFoodDeliveryRequestTable();
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - allergy: this is an food allergy that the user might have
+	 * - dietRestriction: this is any dietary restrictions that the person fulfilling the request might need to know about
+	 * - beverage: the drink the user is ordering
+	 * - comments: any comments the user wants to leave for the person fulfilling the request
+	 */
+	public static void createFoodDeliveryTable(){
+		RequestsDB.createFoodDeliveryTable();
 	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - foodID: this is used to identify a food item. Every food item must have one.
+	 * - item: this is the name of the food item
+	 * - price: this is the price of the food item
+	 * - calories: this is the number of calories that the food item has
+	 * - description: this is the description of the menu item
+	 */
+	public static void createFoodTable(){
+		RequestsDB.createFoodTable();
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is the identifier of the request where the user is ordering food
+	 * - foodID: this is the identifier of the food item the user is ordering
+	 * - quantity: this is the quantity of a single item the user is ordering
+	 */
+	public static void createFoodOrderedInRequestTable(){
+		RequestsDB.createFoodOrderedInRequestTable();
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - beverageID: this is the identifier of the beverage the user is ordering
+	 * - item: this is the name of the beverage on the menu
+	 */
+	public static void createBeverageTable(){
+		RequestsDB.createBeverageTable();
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is the identifier of the request where the user is ordering food
+	 * - beverageID: this is the identifier of the beverage the user is ordering
+	 * - quantity: this is the quantity of a single item the user is ordering
+	 */
+	public static void createBeverageOrderedInRequestTable(){
+		RequestsDB.createBeverageOrderedInRequestTable();
+	}
+
+
+	/**
+	 * Adds a food item to the food table
+	 * @param item this is the item that is on the menu
+	 * @param price this is the price of the item on the menu
+	 * @param calories this is how many calories the menu item has
+	 * @param description this is a description of the food item
+	 */
+	public static void addFoodItem(String item, double price, int calories, String description){
+		RequestsDB.addFoodItem(item, price, calories, description);
+	}
+
+	/**
+	 * Adds a beverage item to the beverage table
+	 * @param item this is the item that is on the menu
+	 */
+	public static void addBeverageItem(String item){
+		RequestsDB.addBeverageItem(item);
+	}
+
+	/**
+	 * Reads in the Aubon Pain website to populate the foods and drinks table with real information
+	 */
+	public static void updateFoodAndBeverageTable(){
+		RequestsDB.updateFoodAndBeverageTable();
+	}
+
+
+
+
+
+
+
+
+
+
 
 
 	// Adding To Tables:
@@ -538,18 +630,19 @@ public class DB {
 	}
 
 	/**
-	 *
+	 * adds a request for food delivery
 	 * @param userID ID of the user
 	 * @param roomID nodeID of the user
 	 * @param assigneeID ID of the assigned user who will complete this task
 	 * @param dietRestrictions any restrictions the user has diet wise
 	 * @param allergies any allergies the user has
-	 * @param food the food choice made by the user
-	 * @param beverage the beverage choice made by the user
-	 * @param description detailed description of request
+	 * @param foodItem the food item choice made by the user
+	 * @param foodQuantity the quantity of the food item the user wants
+	 * @param beverageItem the beverage item choice made by the user
+	 * @param beverageQuantity the quantity of the beverage item the user wants
 	 */
-	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String food, String beverage, String description) {
-		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, food, beverage, allergies, description);
+	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
+		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, allergies, foodItem, foodQuantity, beverageItem, beverageQuantity);
 	}
 
 	// Editing Tables:
@@ -731,6 +824,14 @@ public class DB {
 	public static HashMap<Integer, String> getSelectableAssignees(String givenUserType) {
 		return RequestsDB.getSelectableAssignees(givenUserType);
 	}
+
+
+
+
+
+
+
+
 
 	// UserAccountDB:
 

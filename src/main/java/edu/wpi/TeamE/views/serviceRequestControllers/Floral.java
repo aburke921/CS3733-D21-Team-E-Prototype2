@@ -6,9 +6,6 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.TeamE.algorithms.Node;
-
-import edu.wpi.TeamE.views.serviceRequestControllers.ServiceRequestFormComponents;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -80,7 +77,7 @@ public class Floral extends ServiceRequestFormComponents {
             String type = flowerType.getSelectionModel().getSelectedItem();
             String count = flowerCount.getSelectionModel().getSelectedItem();
             String vase = vaseType.getSelectionModel().getSelectedItem().toString();
-            String assigned = assignee.getText(); //TODO this needs to be an int now (userID)
+            int assigned = Integer.parseInt(assignee.getText());
             String reciever = recipient.getText();
             String mess = message.getText();
 

@@ -2,7 +2,7 @@ package edu.wpi.TeamE.views;
 
 import com.jfoenix.controls.*;
 import edu.wpi.TeamE.App;
-import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -76,15 +76,15 @@ public class Login {
             e.printStackTrace();
         }
 
-        //set submit as default (will submit on an "ENTER" keypress)
-        submitLoginButton.setDefaultButton(true);
-    }
+		//set submit as default (will submit on an "ENTER" keypress)
+		submitLoginButton.setDefaultButton(true);
+	}
 
 	public void submitLogin() {
 		int userID = 0;
-		makeConnection connection = makeConnection.makeConnection();
+
 		if (emailInput != null && passwordInput != null) {
-			userID = connection.userLogin(emailInput.getText(), passwordInput.getText());
+			userID = DB.userLogin(emailInput.getText(), passwordInput.getText());
 			App.userID = userID; // app will be logged in as guest if userID = 0
 		}
 		if (userID != 0) {
@@ -123,49 +123,49 @@ public class Login {
 //            errorPopup("Incorrect Email or Password");
 //        }
 
-}
+	}
 
-    public void toNewAccount(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/createAccount.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+	public void toNewAccount(ActionEvent actionEvent) {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/createAccount.fxml"));
+			App.getPrimaryStage().getScene().setRoot(root);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
 
-    @FXML
-    public void getHelpDefault(ActionEvent actionEvent) {
-    }
+	@FXML
+	public void getHelpDefault(ActionEvent actionEvent) {
+	}
 
-    @FXML
-    public void guestLogin(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+	@FXML
+	public void guestLogin(ActionEvent e) {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+			App.getPrimaryStage().getScene().setRoot(root);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
 
-    @FXML
-    private void errorPopup(String errorMessage) {
-        System.out.println("errorMessage: " + errorMessage);
-        JFXDialogLayout error = new JFXDialogLayout();
-        error.setHeading(new Text("Error!"));
-        error.setBody(new Text(errorMessage));
-        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
-        JFXButton okay = new JFXButton("Okay");
-        okay.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
+	@FXML
+	private void errorPopup(String errorMessage) {
+		System.out.println("errorMessage: " + errorMessage);
+		JFXDialogLayout error = new JFXDialogLayout();
+		error.setHeading(new Text("Error!"));
+		error.setBody(new Text(errorMessage));
+		JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+		JFXButton okay = new JFXButton("Okay");
+		okay.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				dialog.close();
 
-            }
-        });
-        error.setActions(okay);
-        dialog.show();
-    }
+			}
+		});
+		error.setActions(okay);
+		dialog.show();
+	}
 }
 
 

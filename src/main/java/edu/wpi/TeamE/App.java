@@ -1,9 +1,15 @@
 package edu.wpi.TeamE;
 
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-import edu.wpi.TeamE.databases.makeConnection;
+
+
+
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -11,7 +17,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
+
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -19,7 +25,7 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
+
 
 public class App extends Application {
 
@@ -138,9 +144,18 @@ public class App extends Application {
     boolean tablesExist = connection.allTablesThere();
 		if(!tablesExist){
 			try {
-				connection.createTables();
-				connection.populateTable("node", nodes);
-				connection.populateTable("hasEdge", edges);
+				DB.createNodeTable();
+				DB.createEdgeTable();
+				DB.createUserAccountTable();
+				DB.createRequestsTable();
+				DB.createFloralRequestsTable();
+				DB.createSanitationTable();
+				DB.createExtTransportTable();
+				DB.createMedDeliveryTable();
+				DB.createSecurityServTable();
+				DB.createAppointmentTable();
+				DB.populateTable("node", nodes);
+				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
 				System.out.println("Tables were created");
 			} catch (Exception e) {
@@ -177,7 +192,7 @@ public class App extends Application {
 			primaryStage.setHeight(675);
 			root.minWidth(576);
 			primaryStage.show();
-			ResizeHelper.addResizeListener(primaryStage,950,640,Double.MAX_VALUE,Double.MAX_VALUE);
+			ResizeHelper.addResizeListener(primaryStage, 950, 640, Double.MAX_VALUE, Double.MAX_VALUE);
 		} catch (IOException e) {
 			e.printStackTrace();
 			Platform.exit();

@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class UserAccountDB {
 
-	static Connection connection = makeConnection.makeConnection().connection;
+	static Connection connection = makeConnection.makeConnection().getConnection();
 
 	/**
 	 * Uses executes the SQL statements required to create the userAccount table.
@@ -29,7 +29,7 @@ public class UserAccountDB {
 				"creationTime Timestamp, " +
 				"Constraint userIDLimit Check ( userID != 0 )," +
 				// "Constraint passwordLimit Check (Length(password) >= 8 )," +
-				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian')))";
+				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian', 'interpreter')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 
@@ -273,5 +273,25 @@ public class UserAccountDB {
 		return 0;
 	}
 
+	public static String getUserType(int userID){
+		String insertUser = "Select userType From userAccount Where userID = ?";
+		try (PreparedStatement prepState = connection.prepareStatement(insertUser)){
+			prepState.setInt(1, userID);
+
+			ResultSet rset = prepState.executeQuery();
+
+			String userType = null;
+			if(rset.next()){
+				userType = rset.getString("userType");
+			}
+
+			return userType;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println("error in getUserType()");
+		}
+
+		return null;
+	}
 
 }

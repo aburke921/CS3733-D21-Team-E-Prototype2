@@ -1,4 +1,4 @@
-package edu.wpi.TeamE.views;
+package edu.wpi.TeamE.views.mapEditorControllers;
 import com.jfoenix.controls.JFXComboBox;
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;

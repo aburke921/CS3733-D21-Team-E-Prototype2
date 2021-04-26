@@ -154,6 +154,20 @@ Create Table securityServ
 	Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical'))
 );
 
+Create Table religiousRequests
+(
+
+    requestID         int Primary Key References requests(requestID) On Delete Cascade,
+    roomID            varchar(31) Not Null References node(nodeID) On Delete Cascade,
+    locationInput     varchar(31) Not Null,
+    religionInput     varchar(31) Not Null,
+    assignedPersonnel varchar(31) Not Null,
+    description       varchar(31) Not Null,
+    firstName         varchar(31) Not Null,
+    lastName          varchar(31) Not Null
+
+);
+
 
 Drop Table doctorexaminesadmission;
 Drop Table appointment;
@@ -168,6 +182,16 @@ Create Table appointment
 	Constraint appointmentUnique Unique (patientID, startTime, endTime)
 );
 
+insert into node values('nodeID1', 0, 0, '1', 'BTM', 'PARK', 'longName1', 'shortNmae1');
+
+Insert Into userAccount Values (24, 'rosas1@yahoo.com', 'doctor06', 'doctor', 'Rosa', 'Smith');
+
+Insert Into requests Values (1, 24, 'extTransport', 'inProgress', 'asdflkdj');
+
+select requestID, lastName from religiousRequests;
+
+
+insert into RELIGIOUSREQUESTS values(1,'nodeID1', 'location', 'christianity', 'person', 'description', 'firstname', 'lastname');
 
 -- Code for the lengthFromEdges(int searchType, String nodeID) method when searchType == 1
 Select startNode, endNode, sqrt(((startX - endX) * (startX - endX)) + ((startY - endY) * (startY - endY))) As distance

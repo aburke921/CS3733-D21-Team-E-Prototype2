@@ -1,11 +1,8 @@
 package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.databases.EdgeDB;
-import edu.wpi.TeamE.databases.NodeDB;
-import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,14 +14,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
-import javafx.stage.FileChooser;
 
-import java.awt.*;
-import java.io.File;
 import java.util.ArrayList;
 
 import edu.wpi.TeamE.App;
@@ -70,7 +63,7 @@ public class EdgeMapEditor {
      */
     public void prepareEdges(TreeTableView<Edge> table) {
 
-        ArrayList<Edge> array = EdgeDB.getAllEdges();
+        ArrayList<Edge> array = DB.getAllEdges();
         if (table.getRoot() == null) {
             Edge edge0 = new
                     Edge("ID", "0", "1", 0.00);
@@ -123,8 +116,8 @@ public class EdgeMapEditor {
                 endID = endEdge.getValue().toString();
             }
 
-            EdgeDB.modifyEdge(edgeID, startID, endID);
-            EdgeDB.deleteEdge(table.getSelectionModel().getSelectedItem().getValue().getStartNodeId(), table.getSelectionModel().getSelectedItem().getValue().getEndNodeId());
+            DB.modifyEdge(edgeID, startID, endID);
+            DB.deleteEdge(table.getSelectionModel().getSelectedItem().getValue().getStartNodeId(), table.getSelectionModel().getSelectedItem().getValue().getEndNodeId());
         }
     }
 
@@ -138,7 +131,7 @@ public class EdgeMapEditor {
 
         if(startEdge.getValue() != null && endEdge.getValue() != null) {
             String ID = startEdge.getValue().toString() + "_" + endEdge.getValue().toString();
-            EdgeDB.addEdge(ID, startEdge.getValue().toString(), endEdge.getValue().toString());
+            DB.addEdge(ID, startEdge.getValue().toString(), endEdge.getValue().toString());
             System.out.println("This happened");
         }
     }
@@ -154,12 +147,12 @@ public class EdgeMapEditor {
      */
     public void deleteEdge(TreeTableView<Edge> table) {
 
-        ArrayList<Edge> array = EdgeDB.getAllEdges();
+        ArrayList<Edge> array = DB.getAllEdges();
         if(idDropDown.getValue() != null && startEdge.getValue() != null && endEdge.getValue() != null) {
             for(int i = 0; i < array.size(); i++) {
                 if(array.get(i).getId().equals(idDropDown.getValue().toString())) {
                     System.out.println("This lies between " + startEdge.getValue().toString() + " and " + endEdge.getValue().toString());
-                    EdgeDB.deleteEdge(startEdge.getValue().toString(), endEdge.getValue().toString());
+                    DB.deleteEdge(startEdge.getValue().toString(), endEdge.getValue().toString());
                 }
             }
         }
@@ -222,7 +215,7 @@ public class EdgeMapEditor {
         prepareEdges(treeTable);
 
         ArrayList<String> nodeIDArrayList = new ArrayList<String>();
-        ArrayList< Node > nodeArray = NodeDB.getAllNodes();
+        ArrayList< Node > nodeArray = DB.getAllNodes();
         for (int i = 0; i < nodeArray.size(); i++) {
             Node s = nodeArray.get(i);
             final TreeItem<Node> node = new TreeItem<Node>(s);
@@ -233,7 +226,7 @@ public class EdgeMapEditor {
 
         ArrayList<Edge> array = new ArrayList<Edge>();
         ArrayList<String> edgeIDS = new ArrayList<String>();
-        array = EdgeDB.getAllEdges();
+        array = DB.getAllEdges();
         for(int i = 0; i < array.size(); i++) {
             edgeIDS.add(array.get(i).getId());
 
@@ -270,10 +263,11 @@ public class EdgeMapEditor {
 
 
                 //Retrieve the x and y coordinates of the nodes connected to the edge
-                double xCoordStart = (double) NodeDB.getNodeInfo(edge.getStartNodeId()).getX() / scale;
-                double yCoordStart = (double) NodeDB.getNodeInfo(edge.getStartNodeId()).getY() / scale;
-                double xCoordEnd = (double) NodeDB.getNodeInfo(edge.getEndNodeId()).getX() / scale;
-                double yCoordEnd = (double) NodeDB.getNodeInfo(edge.getEndNodeId()).getY() / scale;
+                double xCoordStart = (double) DB.getNodeInfo(edge.getStartNodeId()).getX() / scale;
+                double yCoordStart = (double) DB.getNodeInfo(edge.getStartNodeId()).getY() / scale;
+                double xCoordEnd = (double) DB.getNodeInfo(edge.getEndNodeId()).getX() / scale;
+                double yCoordEnd = (double) DB.getNodeInfo(edge.getEndNodeId()).getY() / scale;
+
 
                 //Create a line using those coordinates
                 Line line = new Line(xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);

@@ -1,6 +1,7 @@
-package edu.wpi.TeamE.databases;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -8,10 +9,9 @@ import java.sql.*;
 import java.util.ArrayList;
 
 
-public class NodeDB{
+public class NodeDB {
 
-	static Connection connection = makeConnection.makeConnection().getConnection();
-
+	static Connection connection = makeConnection.makeConnection().connection;
 
 
 	/**
@@ -30,34 +30,34 @@ public class NodeDB{
 	 * longName: this is the long version/more descriptive name of the node/location/room
 	 * shortName: this is the short/nickname of the node/location/room
 	 */
-	public static void createNodeTable() {
-		String query = "Create Table node( "
-				+ "    nodeID    varchar(31) Primary Key,"
-				+ "    xCoord    int Not Null,"
-				+ "    yCoord    int Not Null,"
-				+ "    floor     varchar(5) Not Null,"
-				+ "    building  varchar(20),"
-				+ "    nodeType  varchar(10),"
-				+ "    longName  varchar(100),"
-				+ "    shortName varchar(100),"
-				+ "    Unique (xCoord, yCoord, floor),"
-				+ "    Constraint floorLimit Check (floor In ('1', '2', '3', 'L1', 'L2')), "
-				+ "    Constraint buildingLimit Check (building In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')), "
-				+ "    Constraint nodeTypeLimit Check (nodeType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', 'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH'))"
-				+ ")";
-
-		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
-
-			prepStat.execute();
-
+	public static int createNodeTable() {
+		String nodeTableCreateS = "Create Table node " +
+				"(" +
+				"nodeID    varchar(31) Primary Key, " +
+				"xCoord    int        Not Null, " +
+				"yCoord    int        Not Null, " +
+				"floor     varchar(5) Not Null, " +
+				"building  varchar(20), " +
+				"nodeType  varchar(10), " +
+				"longName  varchar(100), " +
+				"shortName varchar(100), " +
+				"Unique (xCoord, yCoord, floor), " +
+				"Constraint floorLimit Check (floor In ('1', '2', '3', 'L1', 'L2')), " +
+				"Constraint buildingLimit Check (building In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')), " +
+				"Constraint nodeTypeLimit Check (nodeType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', " +
+				"                                             'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH')) " +
+				")";
+		try (PreparedStatement nodeTableCreatePS = connection.prepareStatement(nodeTableCreateS)) {
+			nodeTableCreatePS.execute();
+			//TODO if (nodeTableCreatePS.execute()) return 1;
+			//TODO else return 0;
 		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("error creating hasEdge table");
+			//e.printStackTrace();
+			System.out.println("|--- Failed to create node table");
+			return 0;
 		}
+		return 1; //TODO
 	}
-
-
-
 
 
 	/**
@@ -129,7 +129,6 @@ public class NodeDB{
 
 	/**
 	 * modifies a node, updating the DB, returning 0 or 1 depending on whether operation was successful
-	 *
 	 * @param nodeID
 	 * @param xCoord
 	 * @param yCoord
@@ -140,7 +139,7 @@ public class NodeDB{
 	 * @param shortName
 	 * @return int (0 if node couldn't be added, 1 if the node was added successfully)
 	 */
-	public static int modifyNode(String nodeID,  Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
+	public static int modifyNode(String nodeID, Integer xCoord, Integer yCoord, String floor, String building, String nodeType, String longName, String shortName) {
 
 		boolean added = false;
 		String query = "update node set ";
@@ -203,7 +202,6 @@ public class NodeDB{
 			return 0;
 		}
 	}
-
 
 
 	//POTENTIALLY COMBINED:
@@ -276,14 +274,6 @@ public class NodeDB{
 	}
 
 
-
-
-
-
-
-
-
-
 	/**
 	 * gets a node's all attributes given nodeID
 	 * @return a Node object with the matching nodeID
@@ -318,16 +308,14 @@ public class NodeDB{
 	}
 
 
-
-
-
 	//POTENTIALLY COMBINED:
+
 	/**
 	 * todo
 	 * @return
 	 */
 	public static ObservableList<String> getAllNodeLongNames() {
-		ObservableList<String> listOfNodeLongNames =  FXCollections.observableArrayList();
+		ObservableList<String> listOfNodeLongNames = FXCollections.observableArrayList();
 
 		String deleteNodeS = "Select longname From node";
 		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
@@ -351,13 +339,6 @@ public class NodeDB{
 	}
 
 
-
-
-
-
-
-
-
 	/**
 	 * counts the number of nodes already in the database of the given type and on the given floor that starts with the given teamNum
 	 * @param teamNum be a String like "E"
@@ -378,7 +359,7 @@ public class NodeDB{
 			rSet.close();
 			return countNum;
 		} catch (SQLException e) {
-			 e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("countNodeTypeOnFloor() error");
 		}
 		return -1;
@@ -414,6 +395,150 @@ public class NodeDB{
 		}
 
 	}
+
+
+
+
+	// previously deleted but they are back!:
+
+	public static void deleteNodeTable() {
+
+		try {
+			Statement stmt = connection.createStatement();
+			stmt.execute("Drop Table node");
+			stmt.close();
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			System.err.println("deleteNodeTable() not working");
+		}
+
+	}
+
+	/**
+	 * Given a NodeID, gives the xCoord, yCoord, Floor and Type of that node from Nodes
+	 * @param nodeID is the nodeID of the nodes you want info from
+	 * @return a Node with only xCoord, yCoord, floor and nodeType not null
+	 */
+	public static Node getNodeLite(String nodeID) {
+		String getNodeLiteS = "Select xcoord, ycoord, floor, nodetype From node Where nodeid = ?";
+		try (PreparedStatement getNodeLitePS = connection.prepareStatement(getNodeLiteS)) {
+			getNodeLitePS.setString(1, nodeID);
+			ResultSet getNodeLiteRS = getNodeLitePS.executeQuery();
+
+			while (getNodeLiteRS.next()) {
+				int xCoord = getNodeLiteRS.getInt("xCoord");
+				int yCoord = getNodeLiteRS.getInt("yCoord");
+				String floor = getNodeLiteRS.getString("floor");
+				String nodeType = getNodeLiteRS.getString("nodeType");
+				return new Node(nodeID, xCoord, yCoord, floor, null, nodeType, null, null);
+			}
+
+			getNodeLiteRS.close();
+			getNodeLitePS.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Could not get nodeLite Info");
+			return null;
+		}
+		return null;
+	}
+
+	/**
+	 * Gets all node long names for a specified FLOOR column value.
+	 * @param floorName the value to check for in FLOOR column
+	 * @return ObservableList of node long names.
+	 */
+	public static ObservableList<String> getAllNodeLongNamesByFloor(String floorName) {
+		ObservableList<String> listOfNodeIDs = FXCollections.observableArrayList();
+
+		String deleteNodeS = "SELECT LONGNAME FROM node WHERE '" + floorName + "' = FLOOR";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("LONGNAME");
+				listOfNodeIDs.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+
+			return listOfNodeIDs;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getListOfNodeIDS error try/catch");
+			return listOfNodeIDs;
+		}
+	}
+
+	/**
+	 * Gets a list of the nodeIDs of all of the nodes that are on the given floor
+	 * @param floorName the name of the floor that the nodes will be selected on
+	 * @return
+	 */
+	public static ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
+		ArrayList<String> listOfNodeIDs = new ArrayList<>();
+
+		String deleteNodeS = "SELECT nodeID FROM node WHERE '" + floorName + "' = FLOOR";
+		try (PreparedStatement deleteNodePS = connection.prepareStatement(deleteNodeS)) {
+
+			ResultSet rset = deleteNodePS.executeQuery();
+
+			while (rset.next()) {
+				String nodeID = rset.getString("nodeID");
+				listOfNodeIDs.add(nodeID);
+			}
+			rset.close();
+			deleteNodePS.close();
+			return listOfNodeIDs;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getListOfNodeIDS error try/catch");
+			return listOfNodeIDs;
+		}
+	}
+
+
+	/**
+	 * gets all Nodes that have the given FLOOR value
+	 * @param floorName the value to check for in FLOOR column
+	 * @return ArrayList of Node objects
+	 */
+	public static ArrayList<Node> getAllNodesByFloor(String floorName) {
+		ArrayList<Node> nodesArray = new ArrayList<>();
+		try {
+			Statement stmt = connection.createStatement();
+			String query = "select * from node WHERE '" + floorName + "' = FLOOR";
+			ResultSet rset = stmt.executeQuery(query);
+
+			while (rset.next()) {
+				String NodeID = rset.getString("nodeID");
+				int xCoord = rset.getInt("xCoord");
+				int yCoord = rset.getInt("yCoord");
+				String floor = rset.getString("floor");
+				String building = rset.getString("building");
+				String nodeType = rset.getString("nodeType");
+				String longName = rset.getString("longName");
+				String shortName = rset.getString("shortName");
+
+				nodesArray.add(new Node(NodeID, xCoord, yCoord, floor, building, nodeType, longName, shortName));
+
+			}
+
+			rset.close();
+			stmt.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllNodes Error : " + e);
+		}
+		return nodesArray;
+	}
+
+
+
+
+
 
 
 

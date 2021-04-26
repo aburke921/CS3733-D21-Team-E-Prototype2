@@ -1,8 +1,7 @@
-package edu.wpi.TeamE.databases;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import java.io.*;
 import java.sql.*;
-import edu.wpi.TeamE.databases.EdgeDB;
 
 
 public class csvDB {
@@ -166,9 +165,9 @@ public class csvDB {
 		}
 	}
 
-	public static void addRemovedPatientAppointmentHistory(int patientID){
+	public static void addRemovedPatientAppointmentHistory(int patientID) {
 
-		String sqlQuery = "select * from appointment where patientID = ?";
+		String sqlQuery = "Select * From appointment Where patientid = ?";
 		try (PreparedStatement prepStat = connection.prepareStatement(sqlQuery)) {
 			prepStat.setInt(1, patientID);
 
@@ -197,7 +196,6 @@ public class csvDB {
 			rset.close();
 
 
-
 		} catch (SQLException throwables) {
 			throwables.printStackTrace();
 		} catch (IOException ioException) {
@@ -205,13 +203,7 @@ public class csvDB {
 		}
 
 
-
-
-
-
-
 	}
-
 
 
 }

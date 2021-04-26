@@ -1,10 +1,10 @@
-package edu.wpi.TeamE.databases;
+package edu.wpi.cs3733.D21.teamE.database;
 
 import java.sql.*;
 
 public class UserAccountDB {
 
-	static Connection connection = makeConnection.makeConnection().getConnection();
+	static Connection connection = makeConnection.makeConnection().connection;
 
 	/**
 	 * Uses executes the SQL statements required to create the userAccount table.
@@ -29,7 +29,7 @@ public class UserAccountDB {
 				"creationTime Timestamp, " +
 				"Constraint userIDLimit Check ( userID != 0 )," +
 				// "Constraint passwordLimit Check (Length(password) >= 8 )," +
-				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian')))";
+				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian', 'interpreter')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 

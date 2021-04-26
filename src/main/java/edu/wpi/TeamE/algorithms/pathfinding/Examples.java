@@ -2,7 +2,10 @@ package edu.wpi.TeamE.algorithms.pathfinding;
 
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
-import edu.wpi.TeamE.databases.*;
+import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
+import edu.wpi.cs3733.D21.teamE.database.csvDB;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
 import java.io.File;
 import java.util.Iterator;
@@ -20,15 +23,15 @@ public class Examples {
         boolean tablesExist = connection.allTablesThere();
         if(!tablesExist){
             try {
-                NodeDB.createNodeTable();
-                EdgeDB.createEdgeTable();
-                UserAccountDB.createUserAccountTable();
-                RequestsDB.createRequestsTable();
-                RequestsDB.createFloralRequestsTable();
-                RequestsDB.createSanitationTable();
-                RequestsDB.createExtTransportTable();
-                RequestsDB.createMedDeliveryTable();
-                RequestsDB.createSecurityServTable();
+                DB.createNodeTable();
+                DB.createEdgeTable();
+                DB.createUserAccountTable();
+                DB.createRequestsTable();
+                DB.createFloralRequestsTable();
+                DB.createSanitationTable();
+                DB.createExtTransportTable();
+                DB.createMedDeliveryTable();
+                DB.createSecurityServTable();
                 appointmentDB.createAppointmentTable();
                 csvDB.populateTable("node", nodes);
                 csvDB.populateTable("hasEdge", edges);

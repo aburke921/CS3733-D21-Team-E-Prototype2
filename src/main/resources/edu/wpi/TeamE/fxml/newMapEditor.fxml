@@ -142,6 +142,69 @@
                       </StackPane>
                   <StackPane>
                      <children>
+                        <VBox fx:id="edgeVBox" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <JFXComboBox fx:id="edgeID" prefHeight="27.0" prefWidth="221.0" promptText="Edge ID">
+                                 <VBox.margin>
+                                    <Insets top="30.0" />
+                                 </VBox.margin>
+                              </JFXComboBox>
+                              <JFXComboBox fx:id="startLocation" prefHeight="27.0" prefWidth="150.0" promptText="Start Location">
+                                 <VBox.margin>
+                                    <Insets left="40.0" right="40.0" top="20.0" />
+                                 </VBox.margin>
+                              </JFXComboBox>
+                              <JFXComboBox fx:id="endLocation" prefHeight="27.0" prefWidth="149.0" promptText="End Location">
+                                 <VBox.margin>
+                                    <Insets left="40.0" right="40.0" top="20.0" />
+                                 </VBox.margin>
+                              </JFXComboBox>
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <JFXButton fx:id="editEdge" onAction="#editEdgeButton" styleClass="submit-button" text="Edit Edge" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="20.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
+                                    <JFXButton fx:id="deleteEdge" onAction="#deleteEdgeButton" styleClass="submit-button" text="Delete Edge" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="20.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
+                                    <JFXButton fx:id="addEdge" onAction="#addEdgeButton" styleClass="submit-button" text="Add Edge" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets left="20.0" top="20.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
+                                 </children>
+                              </GridPane>
+                              <JFXButton fx:id="refresh2" onAction="#refreshButton" styleClass="submit-button" text="Refresh All">
+                                 <VBox.margin>
+                                    <Insets left="80.0" top="40.0" />
+                                 </VBox.margin>
+                              </JFXButton>
+                              <JFXButton fx:id="nodeCSV" onAction="#fileOpenerEdge" styleClass="submit-button" text="Upload CSV">
+                                 <VBox.margin>
+                                    <Insets left="80.0" top="20.0" />
+                                 </VBox.margin>
+                              </JFXButton>
+                              <JFXButton onAction="#openFileEdge" styleClass="submit-button" text="Retrieve CSV">
+                                 <VBox.margin>
+                                    <Insets left="80.0" top="10.0" />
+                                 </VBox.margin>
+                              </JFXButton>
+                           </children>
+                        </VBox>
                         <VBox fx:id="nodeVBox" prefHeight="628.0" prefWidth="459.0">
                            <children>
                               <JFXTextField fx:id="longNameInput" promptText="Long Name">
@@ -212,62 +275,19 @@
                                     </JFXButton>
                                  </children>
                               </GridPane>
-                              <JFXButton fx:id="refresh" onAction="#refreshButton" styleClass="submit-button" text="Refresh All">
+                              <JFXButton fx:id="nodeCSV1" onAction="#fileOpenerNode" styleClass="submit-button" text="Upload CSV">
                                  <VBox.margin>
-                                    <Insets left="70.0" top="100.0" />
+                                    <Insets left="80.0" top="20.0" />
                                  </VBox.margin>
                               </JFXButton>
-                           </children>
-                        </VBox>
-                        <VBox fx:id="edgeVBox" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <JFXComboBox fx:id="edgeID" prefHeight="27.0" prefWidth="221.0" promptText="Edge ID">
+                              <JFXButton fx:id="nodeCSV2" onAction="#openFileNode" styleClass="submit-button" text="Retrieve CSV">
                                  <VBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets left="80.0" top="20.0" />
                                  </VBox.margin>
-                              </JFXComboBox>
-                              <JFXComboBox fx:id="startLocation" prefHeight="27.0" prefWidth="150.0" promptText="Start Location">
+                              </JFXButton>
+                              <JFXButton fx:id="refresh" onAction="#refreshButton" styleClass="submit-button" text="Refresh All">
                                  <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="20.0" />
-                                 </VBox.margin>
-                              </JFXComboBox>
-                              <JFXComboBox fx:id="endLocation" prefHeight="27.0" prefWidth="149.0" promptText="End Location">
-                                 <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="20.0" />
-                                 </VBox.margin>
-                              </JFXComboBox>
-                              <GridPane>
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <JFXButton fx:id="editEdge" onAction="#editEdgeButton" styleClass="submit-button" text="Edit Edge" GridPane.rowIndex="1">
-                                       <GridPane.margin>
-                                          <Insets left="20.0" />
-                                       </GridPane.margin>
-                                    </JFXButton>
-                                    <JFXButton fx:id="deleteEdge" onAction="#deleteEdgeButton" styleClass="submit-button" text="Delete Edge" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                       <GridPane.margin>
-                                          <Insets left="20.0" />
-                                       </GridPane.margin>
-                                    </JFXButton>
-                                    <JFXButton fx:id="addEdge" onAction="#addEdgeButton" styleClass="submit-button" text="Add Edge" GridPane.rowIndex="2">
-                                       <GridPane.margin>
-                                          <Insets left="20.0" top="20.0" />
-                                       </GridPane.margin>
-                                    </JFXButton>
-                                 </children>
-                              </GridPane>
-                              <JFXButton fx:id="refresh2" onAction="#refreshButton" styleClass="submit-button" text="Refresh All">
-                                 <VBox.margin>
-                                    <Insets left="80.0" top="40.0" />
+                                    <Insets left="70.0" top="60.0" />
                                  </VBox.margin>
                               </JFXButton>
                            </children>

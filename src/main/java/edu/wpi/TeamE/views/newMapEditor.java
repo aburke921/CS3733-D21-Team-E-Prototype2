@@ -6,6 +6,8 @@ import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 
 import java.net.URL;
@@ -33,6 +35,8 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -43,6 +47,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
 
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 
@@ -836,12 +841,37 @@ public class newMapEditor {
 
     public void toNodeTable(ActionEvent e) {
         nodeTreeTable.toFront();
+        nodeVBox.toFront();
+        nodeVBox.setVisible(true);
+        edgeVBox.setVisible(false);
+        longNameInput.clear();
+        shortNameInput.clear();
+        floorInput.getSelectionModel().clearSelection();
+        floorInput.setValue(null);
+        idInput.getSelectionModel().clearSelection();
+        idInput.setValue(null);
+        buildingInput.getSelectionModel().clearSelection();
+        buildingInput.setValue(null);
+        typeInput.getSelectionModel().clearSelection();
+        typeInput.setValue(null);
+        xCordInput.clear();
+        yCordInput.clear();
+        selection = 0;
 
 
     }
 
     public void toEdgeTable(ActionEvent e) {
         edgeTreeTable.toFront();
+        edgeVBox.toFront();
+        edgeVBox.setVisible(true);
+        nodeVBox.setVisible(false);
+        edgeID.setValue(null);
+        startLocation.getSelectionModel().clearSelection();
+        startLocation.setValue(null);
+        endLocation.getSelectionModel().clearSelection();
+        endLocation.setValue(null);
+        selection = 0;
 
     }
 
@@ -875,6 +905,92 @@ public class newMapEditor {
         });
         error.setActions(okay);
         dialog.show();
+    }
+
+    @FXML
+    public void fileOpenerEdge(ActionEvent e) {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(App.getPrimaryStage());
+        makeConnection connection = makeConnection.makeConnection();
+        if (file != null) {
+            //Have to save edge table so we can get it back after deleting
+            DB.getNewCSVFile("hasEdge");
+            File saveEdges = new File("CSVs/outputEdge.csv");
+
+            //This is where tables are cleared and refilled
+            connection.deleteAllTables();
+            DB.createNodeTable();
+            DB.createEdgeTable();
+            DB.createUserAccountTable();
+            DB.createRequestsTable();
+            DB.createFloralRequestsTable();
+            DB.createSanitationTable();
+            DB.createExtTransportTable();
+            DB.createMedDeliveryTable();
+            DB.createSecurityServTable();
+            DB.createAppointmentTable();
+            DB.populateTable("node", file);
+            DB.populateTable("hasEdge", saveEdges);
+            System.out.println("Success");
+        }
+    }
+
+    @FXML
+    public void fileOpenerNode(ActionEvent e) {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(App.getPrimaryStage());
+        makeConnection connection = makeConnection.makeConnection();
+        if (file != null) {
+            //Have to save edge table so we can get it back after deleting
+            DB.getNewCSVFile("node");
+            File saveEdges = new File("CSVs/outputNode.csv");
+
+            //This is where tables are cleared and refilled
+            connection.deleteAllTables();
+            DB.createNodeTable();
+            DB.createEdgeTable();
+            DB.createUserAccountTable();
+            DB.createRequestsTable();
+            DB.createFloralRequestsTable();
+            DB.createSanitationTable();
+            DB.createExtTransportTable();
+            DB.createMedDeliveryTable();
+            DB.createSecurityServTable();
+            DB.createAppointmentTable();
+            DB.populateTable("node", file);
+            DB.populateTable("hasEdge", saveEdges);
+            System.out.println("Success");
+        }
+    }
+
+
+
+    /**
+     *opens the file explorer on user's device, allows user to select CSV file,
+     * uploads file to database, refreshes page
+     * @param e actionevent
+     */
+    @FXML
+    private void openFileNode(ActionEvent e) throws IOException {
+
+        DB.getNewCSVFile("node");
+        File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+        Desktop desktop = Desktop.getDesktop();
+        desktop.open(file);
+    }
+
+    /**
+     *opens the file explorer on user's device, allows user to select CSV file,
+     * uploads file to database, refreshes page
+     * @param e actionevent
+     */
+    @FXML
+    private void openFileEdge(ActionEvent e) throws IOException {
+
+        DB.getNewCSVFile("hasEdge");
+        File file = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
+        Desktop desktop = Desktop.getDesktop();
+        desktop.open(file);
     }
 
     /**
@@ -1019,6 +1135,30 @@ public class newMapEditor {
         prepareEdges(edgeTreeTable);
         edgeVBox.setVisible(false);
 
+        nodeTreeTable.setOnMouseClicked(e -> {
+            if (nodeTreeTable.getSelectionModel().getSelectedItem() != null) {
+                System.out.println("in!");
+                longNameInput.setText(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("longName"));
+                shortNameInput.setText(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("shortName"));
+                xCordInput.setText(Integer.toString(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().getX()));
+                yCordInput.setText(Integer.toString(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().getY()));
+                floorInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("floor"));
+                typeInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("type"));
+                buildingInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("building"));
+                idInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("id"));
+
+            }
+        });
+
+        edgeTreeTable.setOnMouseClicked(e -> {
+            if(edgeTreeTable.getSelectionModel().getSelectedItem() != null) {
+                edgeID.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getId());
+                startLocation.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getStartNodeId());
+                endLocation.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getEndNodeId());
+
+            }
+        });
+
         final ArrayList<Node> array = DB.getAllNodes();
         Group g = new Group();
 
@@ -1081,10 +1221,14 @@ public class newMapEditor {
                         double nodeY = array.get(i).getY() / scale;
                         int nodeYInt = (int)nodeY;
                         if(Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2){
+                            selection++;
+                            System.out.println("IN1");
                             if(selection == 1) {
+                                System.out.println("IN2");
                                 startID = array.get(i).get("id");
                                 startLocation.setValue(array.get(i).get("longName"));
                             }if(selection == 2){
+                                System.out.println("IN3");
                                 endLocation.setValue(array.get(i).get("longName"));
                                 endID = array.get(i).get("id");
                                 edgeIDArrayList.add(startID + "_" + endID);
@@ -1166,7 +1310,6 @@ public class newMapEditor {
     }
 
     public void toEdgeMode(ActionEvent actionEvent) {
-        nodeMode = false;
         edgeVBox.toFront();
         edgeVBox.setVisible(true);
         nodeVBox.setVisible(false);
@@ -1180,7 +1323,6 @@ public class newMapEditor {
     }
 
     public void toNodeMode(ActionEvent actionEvent) {
-        nodeMode = true;
         nodeVBox.toFront();
         nodeVBox.setVisible(true);
         edgeVBox.setVisible(false);

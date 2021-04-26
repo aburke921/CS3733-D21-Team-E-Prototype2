@@ -12,6 +12,7 @@ public class LanguageInterpreterObj extends ServiceRequestObjs {
         super.userID = userID;
         this.language = language;
         this.description = description;
+        super.status = "In Progress";
 
     }
 

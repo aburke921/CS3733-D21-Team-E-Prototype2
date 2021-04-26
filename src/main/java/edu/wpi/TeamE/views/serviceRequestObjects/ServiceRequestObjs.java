@@ -5,5 +5,6 @@ public abstract class ServiceRequestObjs {
     protected String nodeID;
     protected int userID;
     protected int assigneeID;
+    protected String status;
 
 }

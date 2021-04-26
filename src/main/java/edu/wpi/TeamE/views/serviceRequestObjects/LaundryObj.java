@@ -14,6 +14,7 @@ public class LaundryObj extends ServiceRequestObjs {
         this.washLoadAmount = washLoadAmount;
         this.dryLoadAmount = dryLoadAmount;
         this.description = description;
+        super.status = "In Progress";
 
     }
 

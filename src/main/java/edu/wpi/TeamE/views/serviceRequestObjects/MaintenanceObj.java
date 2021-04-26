@@ -20,6 +20,7 @@ public class MaintenanceObj extends ServiceRequestObjs {
         this.author = author;
         this.eta = eta;
         this.description = description;
+        super.status = "In Progress";
 
     }
 

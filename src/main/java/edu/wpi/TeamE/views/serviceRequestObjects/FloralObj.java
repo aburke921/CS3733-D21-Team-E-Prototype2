@@ -18,6 +18,7 @@ public class FloralObj extends ServiceRequestObjs {
         this.vase = vase;
         this.recipient = recipient;
         this.message = message;
+        super.status = "In Progress";
 
     }
 

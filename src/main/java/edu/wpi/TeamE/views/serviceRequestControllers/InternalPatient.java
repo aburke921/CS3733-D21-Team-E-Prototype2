@@ -4,18 +4,20 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamE.DB;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 public class InternalPatient extends ServiceRequestFormComponents{
     @FXML
-    private JFXComboBox pickupInput;
+    private JFXComboBox<String> pickupInput;
     @FXML
-    private JFXComboBox dropoffInput;
+    private JFXComboBox<String> dropoffInput;
     @FXML
     private JFXTextField departmentInput;
     @FXML
-    private JFXComboBox severityInput;
+    private JFXComboBox<String> severityInput;
     @FXML
     private JFXTextField patientIdInput;
     @FXML
@@ -28,5 +30,14 @@ public class InternalPatient extends ServiceRequestFormComponents{
     private JFXButton submit;
 
     public void saveData(ActionEvent actionEvent) {
+
+
+    }
+
+    @FXML
+    void initialize() {
+        ObservableList<String> locations = DB.getAllNodeLongNames();
+        pickupInput.setItems(locations);
+        dropoffInput.setItems(locations);
     }
 }

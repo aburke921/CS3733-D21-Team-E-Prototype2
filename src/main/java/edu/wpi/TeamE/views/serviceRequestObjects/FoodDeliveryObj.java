@@ -18,6 +18,7 @@ public class FoodDeliveryObj extends ServiceRequestObjs {
         this.food = food;
         this.beverage = beverage;
         this.description = description;
+        super.status = "In Progress";
 
     }
 }

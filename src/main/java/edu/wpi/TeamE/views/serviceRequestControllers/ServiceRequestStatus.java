@@ -3,10 +3,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableView;
 //import edu.wpi.TeamE.algorithms.Node;
 
-import edu.wpi.TeamE.algorithms.Node;
 
-
-import edu.wpi.TeamE.views.ServiceRequestForm;
+import edu.wpi.TeamE.views.serviceRequestObjects.ServiceRequestForm;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.control.*;

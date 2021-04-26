@@ -15,5 +15,6 @@ public class SanitationServiceObj extends ServiceRequestObjs {
         this.detail = detail;
         this.service = service;
         this.severity = severity;
+        super.status = "In Progress";
     }
 }

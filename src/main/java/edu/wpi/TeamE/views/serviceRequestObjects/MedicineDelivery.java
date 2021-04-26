@@ -18,6 +18,7 @@ public class MedicineDelivery extends ServiceRequestObjs {
         this.author = author;
         this.description = description;
         this.eta = eta;
+        super.status = "In Progress";
 
     }
 }

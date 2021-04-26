@@ -375,7 +375,7 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                             }
 
                             // straight "tolerance"
-                            if (angleComp > 5) {
+                            if (angleComp > 8) {
                                 if (crossProduct < 0 ){
                                     directions.add(turn + " right");
                                     directions.add("Go straight ahead for " + dist + " feet");

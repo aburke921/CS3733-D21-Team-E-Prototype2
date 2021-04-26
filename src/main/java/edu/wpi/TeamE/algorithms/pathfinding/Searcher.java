@@ -12,7 +12,7 @@ import edu.wpi.TeamE.databases.makeConnection;
  * Abstract Searcher Class for Pathfinding API
  * On creation can be initialized to A* or DFS (already implemented) or others that can be added later
  */
-public class Searcher {
+class Searcher {
 
     private SearchConstraint type;
 

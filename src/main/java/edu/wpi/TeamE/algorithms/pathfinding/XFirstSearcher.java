@@ -12,7 +12,7 @@ import java.util.List;
  * DF Search Implementation
  * Contains specific implementation of DFS
  */
-public class XFirstSearcher extends Searcher {
+class XFirstSearcher extends Searcher {
 
     private String type;
 

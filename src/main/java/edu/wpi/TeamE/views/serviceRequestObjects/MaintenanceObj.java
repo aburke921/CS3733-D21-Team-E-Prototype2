@@ -24,4 +24,25 @@ public class MaintenanceObj extends ServiceRequestObjs {
 
     }
 
+    public String getRequest() {
+        return this.request;
+    }
+
+    public String getSeverity() {
+        return this.severity;
+    }
+
+    public String getAuthor() {
+        return this.author;
+    }
+
+    public String getEta() {
+        return this.eta;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+
 }

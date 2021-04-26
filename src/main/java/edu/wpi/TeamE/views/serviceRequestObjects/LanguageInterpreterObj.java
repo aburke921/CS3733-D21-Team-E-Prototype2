@@ -16,5 +16,13 @@ public class LanguageInterpreterObj extends ServiceRequestObjs {
 
     }
 
+    public String getLanguage() {
+        return this.language;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
 
 }

@@ -26,6 +26,28 @@ public class ExternalPatientObj extends ServiceRequestObjs {
 
     }
 
+    public String getSeverity() {
+        return  this.severity;
+    }
+
+    public String getRequestType() {
+        return this.requestType;
+    }
+
+    public String getPatientID() {
+        return this.patientID;
+    }
+
+    public String getEta() {
+        return this.eta;
+    }
+
+    public String getDetails() {
+        return this.details;
+    }
+
+
+
 
 
 }

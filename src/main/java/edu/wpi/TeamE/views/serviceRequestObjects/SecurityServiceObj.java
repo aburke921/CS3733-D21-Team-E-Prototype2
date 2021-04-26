@@ -18,4 +18,16 @@ public class SecurityServiceObj extends ServiceRequestObjs {
 
     }
 
+    public String getSecurityLevel() {
+        return this.securityLevel;
+    }
+
+    public String getUrgencyLevel() {
+        return this.urgencyLevel;
+    }
+
+    public String getReason() {
+        return this.reason;
+    }
+
 }

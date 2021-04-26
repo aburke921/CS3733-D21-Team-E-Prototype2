@@ -18,5 +18,17 @@ public class LaundryObj extends ServiceRequestObjs {
 
     }
 
+    public String getWashLoadAmount() {
+        return  this.washLoadAmount;
+    }
+
+    public String getDryLoadAmount() {
+        return this.dryLoadAmount;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
 
 }

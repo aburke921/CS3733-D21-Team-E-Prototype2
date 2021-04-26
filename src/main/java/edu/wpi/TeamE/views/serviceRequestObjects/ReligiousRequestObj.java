@@ -18,4 +18,12 @@ public class ReligiousRequestObj extends ServiceRequestObjs {
 
     }
 
+    public String getReligion() {
+        return this.religion;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
 }

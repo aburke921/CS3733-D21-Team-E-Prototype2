@@ -2,23 +2,43 @@ package edu.wpi.TeamE.views.serviceRequestObjects;
 
 public class MedicineDelivery extends ServiceRequestObjs {
 
-    private String severity;
-    private String author;
-    private String description;
-    private String eta;
-    private String type;
+    private String medicineName;
+    private String doseQuantity;
+    private String doseMeasure;
+    private String specialInstructions;
+    private String signature;
 
-    public MedicineDelivery(String nodeID, int assigneeID, int userID, String type, String severity, String author, String description, String eta) {
+    public MedicineDelivery(String nodeID, int assigneeID, int userID, String medicineName, String doseQuantity, String doseMeasure, String specialInstructions, String signature) {
 
         super.assigneeID = assigneeID;
         super.nodeID = nodeID;
         super.userID = userID;
-        this.type = type;
-        this.severity = severity;
-        this.author = author;
-        this.description = description;
-        this.eta = eta;
+        this.medicineName = medicineName;
+        this.doseQuantity = doseQuantity;
+        this.doseMeasure = doseMeasure;
+        this.specialInstructions = specialInstructions;
+        this.signature = signature;
         super.status = "In Progress";
 
+    }
+
+    public String getMedicineName() {
+        return this.medicineName;
+    }
+
+    public String getDoseQuantity() {
+        return this.doseQuantity;
+    }
+
+    public String getDoseMeasure() {
+        return this.doseMeasure;
+    }
+
+    public String getSpecialInstructions() {
+        return this.specialInstructions;
+    }
+
+    public String getSignature() {
+        return this.signature;
     }
 }

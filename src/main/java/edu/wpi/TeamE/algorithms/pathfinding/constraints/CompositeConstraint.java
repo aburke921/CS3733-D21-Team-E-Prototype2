@@ -21,6 +21,9 @@ public class CompositeConstraint implements SearchConstraint{
         constraints.remove(constraint);
     }
 
+    public void clear(){
+        constraints = new LinkedList<>();
+    }
 
     @Override
     public boolean isExcluded(Node node) {

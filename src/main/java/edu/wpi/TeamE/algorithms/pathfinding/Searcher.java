@@ -4,7 +4,8 @@ import java.util.*;
 
 import edu.wpi.TeamE.algorithms.*;
 import edu.wpi.TeamE.algorithms.pathfinding.constraints.SearchConstraint;
-import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
 /**
  * Abstract Searcher Class for Pathfinding API
@@ -38,8 +39,8 @@ public class Searcher {
     }
 
     public void refreshGraph(){
-        ArrayList<Edge> edges = con.getAllEdges();
-        ArrayList<Node> nodes = con.getAllNodes();
+        ArrayList<Edge> edges = DB.getAllEdges();
+        ArrayList<Node> nodes = DB.getAllNodes();
 
         for(Node node : nodes){
             graph.put(node.get("id"), node);
@@ -124,9 +125,29 @@ public class Searcher {
         return null;
     }
 
+    public Path search(Collection<String> stopIds){
+        Path fullPath = new Path();
+        Iterator<String> itr = stopIds.iterator();
+
+        if(itr.hasNext()){
+            String prev = itr.next();
+            while(itr.hasNext()){
+                String current = itr.next();
+                Path leg = search(prev, current);
+                if(fullPath.getEnd().equals(leg.getStart())){
+                    leg.pop();
+                }
+                fullPath.add(leg);
+                prev = current;
+            }
+            return fullPath;
+        } else {
+            return null;
+        }
+    }
 
     public Path searchAlongPath(Path route, String stopType){
-        List<Node> stops = con.getAllNodesByType(stopType);
+        List<Node> stops = DB.getAllNodesByType(stopType);
         Node start = route.getStart();
         Node end = route.getEnd();
 
@@ -141,7 +162,10 @@ public class Searcher {
             paths.add(leg1);
         }
 
-        return paths.poll();
+        Path shortestDetour = paths.poll();
+        System.out.printf("Added %f length\n", shortestDetour.getPathLength() - route.getPathLength());
+
+        return shortestDetour;
     }
 
 

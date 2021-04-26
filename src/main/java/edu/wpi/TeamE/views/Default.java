@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -17,6 +18,9 @@ import javafx.scene.shape.Rectangle;
 import java.io.IOException;
 
 public class Default {
+
+    @FXML
+    private AnchorPane appBarAnchorPane;
 
     @FXML // fx:id="imageView"
     private ImageView imageView;
@@ -96,14 +100,20 @@ public class Default {
     }
 
     public void initialize() {
+
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setShowHelp(false);
+            App.setShowLogin(true);
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Image image = new Image("edu/wpi/TeamE/logo.png");
         imageView.setImage(image);
-
-        //If exit button is clicked, exit app
-        exit.setOnMouseClicked(event -> {
-            App app = new App();
-            app.stop();
-        });
     }
 
 }

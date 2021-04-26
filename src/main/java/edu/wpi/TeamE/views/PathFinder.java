@@ -57,7 +57,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 
-
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class PathFinder {
@@ -175,6 +174,12 @@ public class PathFinder {
 
     private ArrayList<Node> currentMarkers = new ArrayList<Node>();
 
+    //Circle representing the current start location selected by the user
+    private Circle currStartCircle;
+
+    //Circle representing the current end location selected by the user
+    private Circle currEndCircle;
+
     /**
      * Returns to {@link edu.wpi.TeamE.views.Default} page.
      * @param event calling event info.
@@ -200,6 +205,15 @@ public class PathFinder {
      */
     @FXML
     void selectStartNode(ActionEvent event) {
+
+        pane.getChildren().remove(currStartCircle);
+        int startLocationListSelectedIndex = startLocationComboBox.getSelectionModel().getSelectedIndex();
+        Node selectedStartNode = nodeArrayList.get(startLocationListSelectedIndex);
+        double xCoord = (double) selectedStartNode.getX() / scale;
+        double yCoord = (double) selectedStartNode.getY() / scale;
+        currStartCircle = new Circle(xCoord, yCoord, radius, Color.GREEN);
+        pane.getChildren().add(currStartCircle);
+
         // findPath button validation
         if (startLocationComboBox.getSelectionModel().isEmpty() ||
                 endLocationComboBox.getSelectionModel().isEmpty()) {
@@ -215,6 +229,15 @@ public class PathFinder {
      */
     @FXML
     void selectEndNode(ActionEvent event) {
+
+        pane.getChildren().remove(currEndCircle);
+        int endLocationListSelectedIndex = endLocationComboBox.getSelectionModel().getSelectedIndex();
+        Node selectedEndNode = nodeArrayList.get(endLocationListSelectedIndex);
+        double xCoord = (double) selectedEndNode.getX() / scale;
+        double yCoord = (double) selectedEndNode.getY() / scale;
+        currEndCircle = new Circle(xCoord, yCoord, radius, Color.BLACK);
+        pane.getChildren().add(currEndCircle);
+
         // findPath button validation
         if (startLocationComboBox.getSelectionModel().isEmpty() ||
                 endLocationComboBox.getSelectionModel().isEmpty()) {
@@ -263,19 +286,25 @@ public class PathFinder {
         dialog.show();
     }
     @FXML
-    void clickOnNode( String longName){
+    void clickOnNode(String longName) {
         JFXDialogLayout error = new JFXDialogLayout();
         error.setHeading(new Text("Location selection"));
-        JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
+        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
         JFXButton start = new JFXButton("Start");
         JFXButton destination = new JFXButton("Destination");
         JFXButton bathroom = new JFXButton("Nearest Bathroom");
 
-
-       start.setOnAction(new EventHandler<ActionEvent>() {
+        start.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                pane.getChildren().remove(currStartCircle);
                 startLocationComboBox.setValue(longName);
+                int startLocationListSelectedIndex = startLocationComboBox.getSelectionModel().getSelectedIndex();
+                Node selectedStartNode = nodeArrayList.get(startLocationListSelectedIndex);
+                double xCoord = (double) selectedStartNode.getX() / scale;
+                double yCoord = (double) selectedStartNode.getY() / scale;
+                currStartCircle = new Circle(xCoord, yCoord, radius, Color.GREEN);
+                pane.getChildren().add(currStartCircle);
                 dialog.close();
 
             }
@@ -283,7 +312,14 @@ public class PathFinder {
         destination.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                pane.getChildren().remove(currEndCircle);
                 endLocationComboBox.setValue(longName);
+                int endLocationListSelectedIndex = endLocationComboBox.getSelectionModel().getSelectedIndex();
+                Node selectedEndNode = nodeArrayList.get(endLocationListSelectedIndex);
+                double xCoord = (double) selectedEndNode.getX() / scale;
+                double yCoord = (double) selectedEndNode.getY() / scale;
+                currEndCircle = new Circle(xCoord, yCoord, radius, Color.BLACK);
+                pane.getChildren().add(currEndCircle);
 
                 dialog.close();
 
@@ -299,16 +335,18 @@ public class PathFinder {
 
                 Path bathroomPath = new Path();
                 bathroomPath.add(selectedStartNode);
-                Path alongBathroom = aStar.searchAlongPath(bathroomPath,"REST");
-                drawMap(alongBathroom,currentFloor);
+                Path alongBathroom = aStar.searchAlongPath(bathroomPath, "REST");
+
+
+                //endLocationComboBox.setValue(alongBathroom.getEnd().get("longName"));
+                //findPath();
+                drawMap(alongBathroom, currentFloor);
                 dialog.close();
 
 
             }
         });
-        error.setActions(start,bathroom,destination);
-
-
+        error.setActions(start, bathroom, destination);
 
 
         dialog.show();
@@ -337,6 +375,7 @@ public class PathFinder {
      * given the two current start and end positions ({@link #selectedStartNodeID} and {@link #selectedEndNodeID}).
      * Then calls {@link #drawMap(Path, String)}.
      * Sets {@link #currentFoundPath}. Returns a SnackBar when path is null.
+     *
      * @param event calling function's (Find Path Button) event info.
      */
     @FXML
@@ -426,6 +465,7 @@ public class PathFinder {
      * RED - Start & End for floor only.
      * GREEN - start of entire path.
      * BLACK - end node of entire path.
+     *
      * @param fullPath the path to be drawn on the map.
      */
     public void drawMap(Path fullPath, String floorNum) {
@@ -445,8 +485,8 @@ public class PathFinder {
         }
 
         List<Path> paths = fullPath.splitByFloor();
-        for(Path path : paths){
-            if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
+        for (Path path : paths) {
+            if (path.getStart().get("floor").equalsIgnoreCase(floorNum)) {
 
                 Iterator<Node> legItr = path.iterator();
                 Group g = new Group(); //create group to contain all the shapes before we add them to the scene
@@ -557,7 +597,8 @@ public class PathFinder {
 
     /**
      * Looks through path and returns only nodes on the specified floor
-     * @param path {@link Path} to parse
+     *
+     * @param path     {@link Path} to parse
      * @param floorNum floor name to look for
      * @return a linkedList of nodes on the floor
      */
@@ -590,6 +631,7 @@ public class PathFinder {
 
     /**
      * Changes the displayed map, and path; sets {@link #currentFloor}.
+     *
      * @param floorNum floor to change to
      */
     public void setCurrentFloor(String floorNum) {
@@ -621,14 +663,14 @@ public class PathFinder {
             for (Node node : currentlyViewableNodes) {
                 NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
                 Rectangle r = nM.getRectangle();
+                //r.setOpacity();
                 r.setVisible(true);
-                r.setFill(marker.getTypeColor().get(currViewType));
                 currentMarkers.add(node);
             }
         }
 
         //draw path for new floor
-        drawMap(currentFoundPath,currentFloor);
+        drawMap(currentFoundPath, currentFloor);
 
         System.out.println("Current floor set to " + floorNum);
     }
@@ -758,13 +800,13 @@ public class PathFinder {
             scale = imageWidth / imageView.getFitWidth();
             System.out.println("click!");
             double X = e.getX();
-            int xInt = (int)X;
+            int xInt = (int) X;
             double Y = e.getY();
-            int yInt = (int)Y;
+            int yInt = (int) Y;
             /*System.out.println(xInt);
             System.out.println(yInt);*/
 
-            for(int i = 0; i < array.size(); i++) {
+            for (int i = 0; i < array.size(); i++) {
                 double nodeX = array.get(i).getX() / scale;
                 int nodeXInt = (int) nodeX;
                 double nodeY = array.get(i).getY() / scale;
@@ -808,7 +850,7 @@ public class PathFinder {
     }
 
     public void sortNodesByType(ActionEvent event) {
-        String currentType =((CheckBox) event.getSource()).getId().toUpperCase();
+        String currentType = ((CheckBox) event.getSource()).getId().toUpperCase();
         //create hashcode string for hashmap
         String typeAndFloorString = currentType + currentFloor;
         //Get the nodes with the current floor and type
@@ -821,8 +863,8 @@ public class PathFinder {
             for (Node node : nodeList) {
                 NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
                 Rectangle r = nM.getRectangle();
+                //r.setOpacity(1);
                 r.setVisible(true);
-                r.setFill(marker.getTypeColor().get(currentType));
                 currentMarkers.add(node);
             }
         } else {
@@ -831,6 +873,7 @@ public class PathFinder {
 
             for (Node node : nodeList) {
                 NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                //nM.getRectangle().setOpacity(0.25);
                 nM.getRectangle().setVisible(false);
                 currentMarkers.remove(node);
             }

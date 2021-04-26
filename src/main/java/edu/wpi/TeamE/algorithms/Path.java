@@ -308,7 +308,7 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                             if (dist == 0) {
                                 dist = 5;
                             }
-                            directions.add("Exit Elevator " + node1.get("longName").charAt(9) + " at Floor " + node2.get("floor"));
+                            directions.add("Exit the Elevator");
                             directions.add("Go straight ahead for " + dist + " feet");
                             break;
                         case 3:

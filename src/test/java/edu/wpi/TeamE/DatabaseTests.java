@@ -36,9 +36,10 @@ public class DatabaseTests {
 
 		try {
 			connection.deleteAllTables();
-			//System.out.println("Tables were reset");
+			System.out.println("Tables were deleted");
 		} catch (Exception e) {
 			//e.printStackTrace();
+			System.out.println("Tables were not deleted");
 		}
 		DB.createNodeTable();
 		DB.createEdgeTable();
@@ -55,7 +56,7 @@ public class DatabaseTests {
 		DB.createMaintenanceRequestTable();
 		DB.createReligionRequestTable();
 		DB.createFoodDeliveryRequestTable();
-		//System.out.println("Tables were created");
+		System.out.println("Tables were created");
 	}
 
 	@Test

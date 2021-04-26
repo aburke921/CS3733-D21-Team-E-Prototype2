@@ -36,7 +36,8 @@ public class RequestsDB {
 				"requestType   varchar(31), " +
 				"requestStatus varchar(10), " +
 				"assigneeID    int References useraccount On Delete Cascade," +
-				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'languageRequest', 'laundryRequest', 'maintenanceRequest', 'foodDeliveryRequest')), " +
+				//"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'languageRequest', 'laundryRequest', 'maintenanceRequest', 'religiousRequest', 'foodDeliveryRequest')), " +
+				// Let's slowly start and not use requestType anymore. We can use `Select * From requests Join sanitationRequest Using 'requestID' Where xxxxx` to do stuff.
 				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -321,12 +322,11 @@ public class RequestsDB {
 
 		String query = "Create Table religiousRequests " +
 				"( " +
-				"requestID         int Primary Key References requests(requestID) On Delete Cascade, " +
-				"roomID            varchar(31) Not Null References node(nodeID) On Delete Cascade, " +
-				"religionInput     varchar(31) Not Null, " +
-				"description       varchar(255) Not Null," +
-				"religionType      varchar(31) Not Null," +
-				"Constraint religionTypeLimit Check (religionType In ('Religion1', 'Religion2', 'Religion3', 'Religion4'))" +
+				"requestID     int Primary Key References requests (requestid) On Delete Cascade, " +
+				"roomID        varchar(31)  Not Null References node (nodeid) On Delete Cascade, " +
+				"religionType  varchar(31)  Not Null, " +
+				"description   varchar(255) Not Null, " +
+				"Constraint religionTypeLimit Check (religionType In ('Religion1', 'Religion2', 'Religion3', 'Religion4')) " +
 				")";
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.execute();
@@ -372,9 +372,7 @@ public class RequestsDB {
 
 	public static void addRequest(int userID, int assigneeID, String requestType) {
 		String insertRequest = "Insert Into requests " +
-				"Values ((Select Count(*) " +
-				"         From requests) + 1, ?, Current Timestamp, ?, 'inProgress', ?)";
-
+				"Values ((Select Count(*)  From requests) + 1, ?, Current Timestamp, ?, 'inProgress', ?)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
 			prepState.setString(2, requestType);
@@ -519,12 +517,11 @@ public class RequestsDB {
 	}
 
 	/**
-	 *
-	 * @param userID ID of the user
+	 * @param userID     ID of the user
 	 * @param assigneeID ID of the assigned user who will complete this task
-	 * @param roomID nodeID of the user
-	 * @param language type of language being requested
-	 * @param topic topic of request
+	 * @param roomID     nodeID of the user
+	 * @param language   type of language being requested
+	 * @param topic      topic of request
 	 */
 	public static void addLanguageRequest(int userID, int assigneeID, String roomID, String language, long plannedTime, String topic) {
 		addRequest(userID, assigneeID, "languageRequest");
@@ -546,15 +543,14 @@ public class RequestsDB {
 	}
 
 	/**
-	 *
-	 * @param userID ID of the user
-	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param userID         ID of the user
+	 * @param roomID         nodeID of the user
+	 * @param assigneeID     ID of the assigned user who will complete this task
 	 * @param washLoadAmount amount of loads needed to wash
-	 * @param dryLoadAmount amount of loads needed to dry
-	 * @param description detailed description of request
+	 * @param dryLoadAmount  amount of loads needed to dry
+	 * @param description    detailed description of request
 	 */
-	public static void addLaundryRequest(int userID, String roomID,  int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
+	public static void addLaundryRequest(int userID, String roomID, int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
 		addRequest(userID, assigneeID, "laundryRequest");
 
 		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?)";
@@ -573,16 +569,15 @@ public class RequestsDB {
 	}
 
 	/**
-	 *
-	 * @param userID ID of the user
-	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
-	 * @param type is the type of maintenance required
-	 * @param severity is how severe the situation is
-	 * @param ETA time taken to complete the request
+	 * @param userID      ID of the user
+	 * @param roomID      nodeID of the user
+	 * @param assigneeID  ID of the assigned user who will complete this task
+	 * @param type        is the type of maintenance required
+	 * @param severity    is how severe the situation is
+	 * @param ETA         time taken to complete the request
 	 * @param description detailed description of request
 	 */
-	public static void addMaintenanceRequest(int userID, String roomID,  int assigneeID,  String type, String severity, String ETA, String description) {
+	public static void addMaintenanceRequest(int userID, String roomID, int assigneeID, String type, String severity, String ETA, String description) {
 		addRequest(userID, assigneeID, "maintenanceRequest");
 
 		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?)";
@@ -603,18 +598,18 @@ public class RequestsDB {
 
 
 	//TODO: ASHLEY review this please (i didn't take your Food table into account)
+
 	/**
-	 *
-	 * @param userID ID of the user
-	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param userID           ID of the user
+	 * @param roomID           nodeID of the user
+	 * @param assigneeID       ID of the assigned user who will complete this task
 	 * @param dietRestrictions any restrictions the user has diet wise
-	 * @param allergies any allergies the user has
-	 * @param food the food choice made by the user
-	 * @param beverage the beverage choice made by the user
-	 * @param description detailed description of request
+	 * @param allergies        any allergies the user has
+	 * @param food             the food choice made by the user
+	 * @param beverage         the beverage choice made by the user
+	 * @param description      detailed description of request
 	 */
-	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String food, String beverage, String description) {
+	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID, String dietRestrictions, String allergies, String food, String beverage, String description) {
 		addRequest(userID, assigneeID, "foodDeliveryRequest");
 
 		String insertFoodDeliveryReq = "Insert Into foodDeliveryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
@@ -997,11 +992,10 @@ public class RequestsDB {
 	}
 
 	/**
-	 *
 	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
-	 * @param language is the new language type being requested by the user
-	 * @param topic is an edited topic
+	 * @param roomID    the new node/room/location the user is assigning this request to
+	 * @param language  is the new language type being requested by the user
+	 * @param topic     is an edited topic
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editLanguageRequest(int requestID, String roomID, String language, long plannedTime, String topic) {
@@ -1047,12 +1041,11 @@ public class RequestsDB {
 	}
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param requestID      is the generated ID of the request
+	 * @param roomID         the new node/room/location the user is assigning this request to
 	 * @param washLoadAmount is new amount of loads to be washed
-	 * @param dryLoadAmount is new amount of loads to be dried
-	 * @param description is an edited detailed description
+	 * @param dryLoadAmount  is new amount of loads to be dried
+	 * @param description    is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editLaundryRequest(int requestID, String roomID, String washLoadAmount, String dryLoadAmount, String description) {
@@ -1098,12 +1091,11 @@ public class RequestsDB {
 	}
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
-	 * @param type is the new type of maintenance request
-	 * @param severity is the new severity of the situation
-	 * @param ETA is the new estimated time
+	 * @param requestID   is the generated ID of the request
+	 * @param roomID      the new node/room/location the user is assigning this request to
+	 * @param type        is the new type of maintenance request
+	 * @param severity    is the new severity of the situation
+	 * @param ETA         is the new estimated time
 	 * @param description is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
@@ -1157,15 +1149,15 @@ public class RequestsDB {
 	}
 
 	//TODO: ASHLEY review this please (i didn't take your Food table into account)
+
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param requestID        is the generated ID of the request
+	 * @param roomID           the new node/room/location the user is assigning this request to
 	 * @param dietRestrictions is the edited restrictions of the user in terms of diet
-	 * @param allergies is the edited allergies the user has
-	 * @param food is the new food the user requests
-	 * @param beverage is the new beverage the user requests
-	 * @param description is an edited detailed description
+	 * @param allergies        is the edited allergies the user has
+	 * @param food             is the new food the user requests
+	 * @param beverage         is the new beverage the user requests
+	 * @param description      is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editFoodDeliveryRequest(int requestID, String roomID, String dietRestrictions, String allergies, String food, String beverage, String description) {
@@ -1223,7 +1215,6 @@ public class RequestsDB {
 			return 0;
 		}
 	}
-
 
 
 // QUERYING TABLES::::

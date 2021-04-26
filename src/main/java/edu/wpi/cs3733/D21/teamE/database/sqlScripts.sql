@@ -82,12 +82,11 @@ Create Table requests
 (
 	requestID     int Primary Key,
 	creatorID     int References userAccount On Delete Cascade,
---  creationTime timestamp,
+--	creationTime timestamp,
 	requestType   varchar(31),
 	requestStatus varchar(10),
 	assigneeID    int References userAccount,
-	Constraint requestTypeLimit Check (requestType In
-	                                   ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
+--	Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
 	Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress'))
 );
 
@@ -156,10 +155,10 @@ Create Table securityServ
 
 Create Table religiousRequests
 (
-	requestID     int Primary Key References requests (requestID) On Delete Cascade,
-	roomID        varchar(31)  Not Null References node (nodeID) On Delete Cascade,
-	religionType  varchar(31)  Not Null,
-	description   varchar(255) Not Null,
+	requestID    int Primary Key References requests (requestID) On Delete Cascade,
+	roomID       varchar(31)  Not Null References node (nodeID) On Delete Cascade,
+	religionType varchar(31)  Not Null,
+	description  varchar(255) Not Null,
 	Constraint religionTypeLimit Check (religionType In ('Religion1', 'Religion2', 'Religion3', 'Religion4'))
 );
 

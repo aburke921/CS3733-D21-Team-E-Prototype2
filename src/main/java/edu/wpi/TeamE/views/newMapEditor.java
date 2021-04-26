@@ -228,7 +228,6 @@ public class newMapEditor {
 
 
     public void drawMap(String floorNum) {
-        makeConnection connection = makeConnection.makeConnection();
 
         //clear map
         System.out.print("\nCLEARING MAP...");
@@ -247,6 +246,9 @@ public class newMapEditor {
 
         ArrayList<Node> nodeArray = new ArrayList<Node>();
         nodeArray = DB.getAllNodesByFloor(floorNum);
+        for(int i = 0; i < nodeArray.size(); i++) {
+            System.out.println(nodeArray.get(i).get("id"));
+        }
         ArrayList<Edge> edgeArray = new ArrayList<Edge>();
         edgeArray = DB.getAllEdges();
 
@@ -1201,45 +1203,49 @@ public class newMapEditor {
                     System.out.println(xInt);
                     System.out.println(yInt);
                     for (int i = 0; i < array.size(); i++) {
-                        double nodeX = array.get(i).getX() / scale;
-                        int nodeXInt = (int) nodeX;
-                        double nodeY = array.get(i).getY() / scale;
-                        int nodeYInt = (int) nodeY;
-                        if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
-                            idInput.setValue(array.get(i).get("id"));
-                            floorInput.setValue(array.get(i).get("floor"));
-                            longNameInput.setText(array.get(i).get("longName"));
-                            shortNameInput.setText(array.get(i).get("shortName"));
-                            xCordInput.setText(Integer.toString(array.get(i).getX()));
-                            yCordInput.setText(Integer.toString(array.get(i).getY()));
-                            typeInput.setValue(array.get(i).get("type"));
-                            buildingInput.setValue(array.get(i).get("building"));
+                        if(array.get(i).get("floor").equals(currentFloor)) {
+                            double nodeX = array.get(i).getX() / scale;
+                            int nodeXInt = (int) nodeX;
+                            double nodeY = array.get(i).getY() / scale;
+                            int nodeYInt = (int) nodeY;
+                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
+                                idInput.setValue(array.get(i).get("id"));
+                                floorInput.setValue(array.get(i).get("floor"));
+                                longNameInput.setText(array.get(i).get("longName"));
+                                shortNameInput.setText(array.get(i).get("shortName"));
+                                xCordInput.setText(Integer.toString(array.get(i).getX()));
+                                yCordInput.setText(Integer.toString(array.get(i).getY()));
+                                typeInput.setValue(array.get(i).get("type"));
+                                buildingInput.setValue(array.get(i).get("building"));
+                            }
                         }
                     }
 
                     for (int i = 0; i < array.size(); i++) {
-                        double nodeX = array.get(i).getX() / scale;
-                        int nodeXInt = (int) nodeX;
-                        double nodeY = array.get(i).getY() / scale;
-                        int nodeYInt = (int) nodeY;
-                        if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
-                            selection++;
-                            System.out.println("IN1");
-                            if (selection == 1) {
-                                System.out.println("IN2");
-                                startID = array.get(i).get("id");
-                                startLocation.setValue(array.get(i).get("longName"));
+                        if(array.get(i).get("floor").equals(currentFloor)) {
+                            double nodeX = array.get(i).getX() / scale;
+                            int nodeXInt = (int) nodeX;
+                            double nodeY = array.get(i).getY() / scale;
+                            int nodeYInt = (int) nodeY;
+                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
+                                selection++;
+                                System.out.println("IN1");
+                                if (selection == 1) {
+                                    System.out.println("IN2");
+                                    startID = array.get(i).get("id");
+                                    startLocation.setValue(array.get(i).get("longName"));
+                                }
+                                if (selection == 2) {
+                                    System.out.println("IN3");
+                                    endLocation.setValue(array.get(i).get("longName"));
+                                    endID = array.get(i).get("id");
+                                    edgeIDArrayList.add(startID + "_" + endID);
+                                    edgeID.setItems(edgeIDArrayList);
+                                    edgeID.setValue(startID + "_" + endID);
+                                    selection = 0;
+                                }
+                                System.out.println(array.get(i).get("longName"));
                             }
-                            if (selection == 2) {
-                                System.out.println("IN3");
-                                endLocation.setValue(array.get(i).get("longName"));
-                                endID = array.get(i).get("id");
-                                edgeIDArrayList.add(startID + "_" + endID);
-                                edgeID.setItems(edgeIDArrayList);
-                                edgeID.setValue(startID + "_" + endID);
-                                selection = 0;
-                            }
-                            System.out.println(array.get(i).get("longName"));
                         }
                     }
                 }
@@ -1291,8 +1297,7 @@ public class newMapEditor {
             for(int i = 0; i < array.size(); i++) {
                 if(array.get(i).getId().equals(edgeID.getValue().toString())) {
                     System.out.println("This lies between " + startLocation.getValue() + " and " + endLocation.getValue());
-                    //TODO fix this so it takes in ID
-                    DB.deleteEdge(startLocation.getValue(), endLocation.getValue());
+                    DB.deleteEdge(array.get(i).getStartNodeId(), array.get(i).getEndNodeId());
                 }
             }
         }

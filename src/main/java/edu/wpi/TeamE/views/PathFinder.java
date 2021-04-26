@@ -207,12 +207,15 @@ public class PathFinder {
     void selectStartNode(ActionEvent event) {
 
         pane.getChildren().remove(currStartCircle);
-        int startLocationListSelectedIndex = startLocationComboBox.getSelectionModel().getSelectedIndex();
-        Node selectedStartNode = nodeArrayList.get(startLocationListSelectedIndex);
-        double xCoord = (double) selectedStartNode.getX() / scale;
-        double yCoord = (double) selectedStartNode.getY() / scale;
-        currStartCircle = new Circle(xCoord, yCoord, radius, Color.GREEN);
-        pane.getChildren().add(currStartCircle);
+        if(startLocationComboBox.getSelectionModel() != null) {
+            int startLocationListSelectedIndex = startLocationComboBox.getSelectionModel().getSelectedIndex();
+            Node selectedStartNode = nodeArrayList.get(startLocationListSelectedIndex);
+            setCurrentFloor(selectedStartNode.get("floor"));
+            double xCoord = (double) selectedStartNode.getX() / scale;
+            double yCoord = (double) selectedStartNode.getY() / scale;
+            currStartCircle = new Circle(xCoord, yCoord, radius, Color.GREEN);
+            pane.getChildren().add(currStartCircle);
+        }
 
         // findPath button validation
         if (startLocationComboBox.getSelectionModel().isEmpty() ||
@@ -231,12 +234,15 @@ public class PathFinder {
     void selectEndNode(ActionEvent event) {
 
         pane.getChildren().remove(currEndCircle);
-        int endLocationListSelectedIndex = endLocationComboBox.getSelectionModel().getSelectedIndex();
-        Node selectedEndNode = nodeArrayList.get(endLocationListSelectedIndex);
-        double xCoord = (double) selectedEndNode.getX() / scale;
-        double yCoord = (double) selectedEndNode.getY() / scale;
-        currEndCircle = new Circle(xCoord, yCoord, radius, Color.BLACK);
-        pane.getChildren().add(currEndCircle);
+        if(endLocationComboBox.getSelectionModel() != null) {
+            int endLocationListSelectedIndex = endLocationComboBox.getSelectionModel().getSelectedIndex();
+            Node selectedEndNode = nodeArrayList.get(endLocationListSelectedIndex);
+            setCurrentFloor(selectedEndNode.get("floor"));
+            double xCoord = (double) selectedEndNode.getX() / scale;
+            double yCoord = (double) selectedEndNode.getY() / scale;
+            currEndCircle = new Circle(xCoord, yCoord, radius, Color.BLACK);
+            pane.getChildren().add(currEndCircle);
+        }
 
         // findPath button validation
         if (startLocationComboBox.getSelectionModel().isEmpty() ||
@@ -337,10 +343,10 @@ public class PathFinder {
                 bathroomPath.add(selectedStartNode);
                 Path alongBathroom = aStar.searchAlongPath(bathroomPath, "REST");
 
-
-                //endLocationComboBox.setValue(alongBathroom.getEnd().get("longName"));
-                //findPath();
-                drawMap(alongBathroom, currentFloor);
+                Node nearestBathroom = aStar.findNearest(selectedStartNode, "REST");
+                endLocationComboBox.setValue(nearestBathroom.get("longName"));
+                findPath();
+                //drawMap(alongBathroom, currentFloor);
                 dialog.close();
 
 
@@ -355,11 +361,9 @@ public class PathFinder {
 
     /**
      * Clears the path and closes the sidebar
-     *
-     * @param event the calling event's info
      */
     @FXML
-    void pathClear(ActionEvent event) {
+    void pathClear() {
 
         //clear map
         System.out.print("\nCLEARING MAP...");
@@ -375,11 +379,9 @@ public class PathFinder {
      * given the two current start and end positions ({@link #selectedStartNodeID} and {@link #selectedEndNodeID}).
      * Then calls {@link #drawMap(Path, String)}.
      * Sets {@link #currentFoundPath}. Returns a SnackBar when path is null.
-     *
-     * @param event calling function's (Find Path Button) event info.
      */
     @FXML
-    public void findPath(ActionEvent event) {
+    public void findPath() {
 
         System.out.println("\nFINDING PATH...");
 
@@ -810,16 +812,17 @@ public class PathFinder {
             int yInt = (int) Y;
             /*System.out.println(xInt);
             System.out.println(yInt);*/
+            ArrayList<Node> nodesOnFloor = DB.getAllNodesByFloor(currentFloor);
 
-            for (int i = 0; i < array.size(); i++) {
-                double nodeX = array.get(i).getX() / scale;
+            for (int i = 0; i < nodesOnFloor.size(); i++) {
+                double nodeX = nodesOnFloor.get(i).getX() / scale;
                 int nodeXInt = (int) nodeX;
-                double nodeY = array.get(i).getY() / scale;
+                double nodeY = nodesOnFloor.get(i).getY() / scale;
                 int nodeYInt = (int) nodeY;
                 System.out.println(nodeXInt);
                 if (Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) {
-                    System.out.println(array.get(i).get("longName"));
-                    clickOnNode(array.get(i).get("longName"));
+                    System.out.println(nodesOnFloor.get(i).get("longName"));
+                    clickOnNode(nodesOnFloor.get(i).get("longName"));
 
                 }
             }

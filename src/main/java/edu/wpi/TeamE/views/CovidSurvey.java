@@ -31,14 +31,27 @@ public class CovidSurvey extends ServiceRequests  {
         if(safe){
 
             System.out.println("Yay no COVID");
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-                App.setDraggableAndChangeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+
         }else{
             System.out.println("Oh no maybe COVID so sad =(");
+        }try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    /**
+     * Returns to the service request page
+     * @param event {@link ActionEvent} info for the cancel button call, passed automatically by system.
+     */
+    @FXML
+    void handleButtonCancel(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 

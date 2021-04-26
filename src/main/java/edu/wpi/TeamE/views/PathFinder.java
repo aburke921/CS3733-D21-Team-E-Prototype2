@@ -269,6 +269,7 @@ public class PathFinder {
         JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
         JFXButton start = new JFXButton("Start");
         JFXButton destination = new JFXButton("Destination");
+        JFXButton bathroom = new JFXButton("Nearest Bathroom");
 
 
        start.setOnAction(new EventHandler<ActionEvent>() {
@@ -283,11 +284,29 @@ public class PathFinder {
             @Override
             public void handle(ActionEvent event) {
                 endLocationComboBox.setValue(longName);
+
                 dialog.close();
 
             }
         });
-        error.setActions(start,destination);
+        bathroom.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                SearchContext aStar = new SearchContext();
+                startLocationComboBox.setValue(longName);
+                int startLocationListSelectedIndex = startLocationComboBox.getSelectionModel().getSelectedIndex();
+                Node selectedStartNode = nodeArrayList.get(startLocationListSelectedIndex);
+
+                Path bathroomPath = new Path();
+                bathroomPath.add(selectedStartNode);
+                Path alongBathroom = aStar.searchAlongPath(bathroomPath,"REST");
+                drawMap(alongBathroom,currentFloor);
+                dialog.close();
+
+
+            }
+        });
+        error.setActions(start,bathroom,destination);
 
 
 
@@ -750,17 +769,20 @@ public class PathFinder {
             /*System.out.println(xInt);
             System.out.println(yInt);*/
 
-//            for(int i = 0; i < array.size(); i++) {
-//                double nodeX = array.get(i).getX() / scale;
-//                int nodeXInt = (int)nodeX;
-//                double nodeY = array.get(i).getY() / scale;
-//                int nodeYInt = (int)nodeY;
-//                System.out.println(nodeXInt);
-//
-//                if(Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2){
-//                    clickOnNode(array.get(i).get("longName"));
-//                    //selection++;
-//                    /*if(selection == 1) {
+            for(int i = 0; i < array.size(); i++) {
+                double nodeX = array.get(i).getX() / scale;
+                int nodeXInt = (int) nodeX;
+                double nodeY = array.get(i).getY() / scale;
+                int nodeYInt = (int) nodeY;
+                System.out.println(nodeXInt);
+                if (Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) {
+                    System.out.println(array.get(i).get("longName"));
+                    clickOnNode(array.get(i).get("longName"));
+
+                }
+            }
+
+                    /*if(selection == 1) {
 //                        startLocationComboBox.setValue(array.get(i).get("longName"));
 //                    }else if(selection == 2){
 //                        endLocationComboBox.setValue(array.get(i).get("longName"));

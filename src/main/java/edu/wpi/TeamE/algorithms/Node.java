@@ -1,9 +1,6 @@
 package edu.wpi.TeamE.algorithms;
 
-import edu.wpi.TeamE.databases.makeConnection;
-
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 

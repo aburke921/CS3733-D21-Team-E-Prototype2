@@ -1,6 +1,8 @@
 package edu.wpi.TeamE.views;
 
+import com.jfoenix.controls.JFXButton;
 import edu.wpi.TeamE.App;
+import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +31,12 @@ public class Default {
 
     @FXML // fx:id="imageView"
     private Rectangle fullscreen;
+
+    @FXML // fx:id="mapEditorButton"
+    private JFXButton mapEditorButton;
+
+    @FXML // fx:id="serviceRequestButton"
+    private JFXButton serviceRequestButton;
 
     /**
      * Move to Service Request page
@@ -81,7 +89,15 @@ public class Default {
             ex.printStackTrace();
         }
     }
-
+    @FXML
+    private void toCovidSurvey(ActionEvent e){
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/CovidSurvey.fxml"));
+            App.getPrimaryStage().getScene().setRoot(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {
@@ -96,6 +112,15 @@ public class Default {
             App app = new App();
             app.stop();
         });
+
+        String userType = UserAccountDB.getUserType(App.userID);
+        if(App.userID == 0 || userType.equals("doctor") || userType.equals("patient") || userType.equals("visitor")) {
+            mapEditorButton.setVisible(false);
+        }
+
+        if(App.userID == 0) {
+            serviceRequestButton.setVisible(false);
+        }
     }
 
 }

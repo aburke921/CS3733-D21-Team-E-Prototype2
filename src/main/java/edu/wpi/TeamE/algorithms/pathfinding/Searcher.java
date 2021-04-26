@@ -4,9 +4,8 @@ import java.util.*;
 
 import edu.wpi.TeamE.algorithms.*;
 import edu.wpi.TeamE.algorithms.pathfinding.constraints.SearchConstraint;
-import edu.wpi.TeamE.databases.EdgeDB;
-import edu.wpi.TeamE.databases.NodeDB;
-import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
 /**
  * Abstract Searcher Class for Pathfinding API
@@ -40,8 +39,8 @@ class Searcher {
     }
 
     public void refreshGraph(){
-        ArrayList<Edge> edges = EdgeDB.getAllEdges();
-        ArrayList<Node> nodes = NodeDB.getAllNodes();
+        ArrayList<Edge> edges = DB.getAllEdges();
+        ArrayList<Node> nodes = DB.getAllNodes();
 
         for(Node node : nodes){
             graph.put(node.get("id"), node);
@@ -148,7 +147,7 @@ class Searcher {
     }
 
     public Path searchAlongPath(Path route, String stopType){
-        List<Node> stops = NodeDB.getAllNodesByType(stopType);
+        List<Node> stops = DB.getAllNodesByType(stopType);
         Node start = route.getStart();
         Node end = route.getEnd();
 

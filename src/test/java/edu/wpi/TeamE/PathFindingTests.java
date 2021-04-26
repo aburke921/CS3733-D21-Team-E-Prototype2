@@ -2,11 +2,17 @@ package edu.wpi.TeamE;
 
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
+import edu.wpi.TeamE.algorithms.Time;
 import edu.wpi.TeamE.algorithms.pathfinding.SearchContext;
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.wpi.TeamE.databases.*;
-import edu.wpi.TeamE.views.MapEditor;
+
+import edu.wpi.TeamE.views.mapEditorControllers.MapEditor;
+import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
+import edu.wpi.cs3733.D21.teamE.database.csvDB;
+import edu.wpi.cs3733.D21.teamE.DB;
+
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -24,28 +30,30 @@ public class PathFindingTests {
         File nodes = new File("CSVs/MapEAllnodes.csv");
         File edges = new File("CSVs/MapEAlledges.csv");
         try {
-            NodeDB.createNodeTable();
-            EdgeDB.createEdgeTable();
-            UserAccountDB.createUserAccountTable();
-            RequestsDB.createRequestsTable();
-            RequestsDB.createFloralRequestsTable();
-            RequestsDB.createSanitationTable();
-            RequestsDB.createExtTransportTable();
-            RequestsDB.createMedDeliveryTable();
-            RequestsDB.createSecurityServTable();
+            DB.createNodeTable();
+            DB.createEdgeTable();
+            DB.createUserAccountTable();
+            DB.createRequestsTable();
+            DB.createFloralRequestsTable();
+            DB.createSanitationTable();
+            DB.createExtTransportTable();
+            DB.createMedDeliveryTable();
+            DB.createSecurityServTable();
+            appointmentDB.createAppointmentTable();
             csvDB.populateTable("node", nodes);
             csvDB.populateTable("hasEdge", edges);
             System.out.println("Tables were created");
         } catch (Exception e) {
-            NodeDB.createNodeTable();
-            EdgeDB.createEdgeTable();
-            UserAccountDB.createUserAccountTable();
-            RequestsDB.createRequestsTable();
-            RequestsDB.createFloralRequestsTable();
-            RequestsDB.createSanitationTable();
-            RequestsDB.createExtTransportTable();
-            RequestsDB.createMedDeliveryTable();
-            RequestsDB.createSecurityServTable();
+            DB.createNodeTable();
+            DB.createEdgeTable();
+            DB.createUserAccountTable();
+            DB.createRequestsTable();
+            DB.createFloralRequestsTable();
+            DB.createSanitationTable();
+            DB.createExtTransportTable();
+            DB.createMedDeliveryTable();
+            DB.createSecurityServTable();
+            appointmentDB.createAppointmentTable();
         }
 
         search = new SearchContext();
@@ -318,6 +326,21 @@ public class PathFindingTests {
         Path path4 = search.search("ARETL00101", "ADEPT00102");
         assertEquals(575.26, path4.getPathLength(), 0.1);
         assertEquals(186.96, path4.getPathLength(), 0.1);
+    }
+
+    @Test
+    public void testETA() {
+        Path path1 = search.search("eWALK01101", "eWALK01001");
+        assertTrue(path1.getETA().equals(new Time(27)));
+
+        Path path2 = search.search("ePARK00101", "ePARK02501");
+        assertTrue(path2.getETA().equals(new Time(282)));
+
+        Path path3 = search.search("CRETL001L1", "BREST00102");
+        assertTrue(path3.getETA().equals(new Time(27)));
+
+        Path path4 = search.search("ARETL00101", "ADEPT00102");
+        assertTrue(path4.getETA().equals(new Time(47)));
     }
 
     @Test

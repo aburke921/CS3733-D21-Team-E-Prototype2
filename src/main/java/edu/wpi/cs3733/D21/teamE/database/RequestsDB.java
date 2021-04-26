@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class RequestsDB {
 
@@ -457,6 +458,7 @@ public class RequestsDB {
 			System.err.println("error creating beverageOrderedInRequest table");
 		}
 	}
+
 
 
 
@@ -1564,6 +1566,70 @@ public class RequestsDB {
 			System.err.println("Error connecting to the website");
 		}
 	}
+
+
+	public static void addAbonPainTable() throws IOException {
+
+		try {
+			Document doc = Jsoup.connect("https://order.aubonpain.com/menu/brigham-womens-hospital").get();
+			Set<String> classes = doc.classNames();
+
+			Elements elements = doc.body().select("*");
+
+			ArrayList<String> foodImage = new ArrayList<>();
+			ArrayList<String> foodItems = new ArrayList<>();
+			ArrayList<String> foodPrice = new ArrayList<>();
+			ArrayList<String> foodCalories = new ArrayList<>();
+			ArrayList<String> foodDescription = new ArrayList<>();
+
+
+			for (Element element : elements) {
+				if (element.normalName().equals("img")) {
+					foodImage.add(element.attr("abs:src"));
+				}
+
+				if(element.className().equals("product-name product__name")){
+					foodItems.add(element.ownText());
+				}
+				if(element.className().equals("product__attribute product__attribute--price")){
+					for(int i = 0; i < foodItems.size() - foodPrice.size() - 1; i++){
+						foodPrice.add(null);
+					}
+					foodPrice.add(element.ownText());
+				}
+				if(element.className().equals("product__attribute product__attribute--calorie-label")){
+					for(int i = 0; i < foodItems.size() - foodCalories.size() - 1; i++){
+						foodCalories.add(null);
+					}
+					foodCalories.add(element.ownText());
+				}
+				if(element.className().equals("product__description")){
+					for(int i = 0; i < foodItems.size() - foodDescription.size() - 1; i++){
+						foodDescription.add(null);
+					}
+					foodDescription.add(element.ownText());
+				}
+
+			}
+
+			for(int i = 0; i < foodItems.size(); i++){
+				addAbonPainItem(foodItems.get(i), foodPrice.get(i), foodCalories.get(i), foodDescription, foodImage.get(i));
+			}
+
+
+		}catch(IOException e){
+			e.printStackTrace();
+			System.out.println("error reading in Aubon Pain website in addAbonPainTable()");
+		}
+
+
+
+	}
+
+
+
+
+
 
 // QUERYING TABLES::::
 // QUERYING TABLES::::

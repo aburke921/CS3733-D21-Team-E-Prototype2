@@ -22,8 +22,31 @@ public class ExternalPatientObj extends ServiceRequestObjs {
         this.patientID = patientID;
         this.eta = eta;
         this.details = details;
+        super.status = "In Progress";
 
     }
+
+    public String getSeverity() {
+        return  this.severity;
+    }
+
+    public String getRequestType() {
+        return this.requestType;
+    }
+
+    public String getPatientID() {
+        return this.patientID;
+    }
+
+    public String getEta() {
+        return this.eta;
+    }
+
+    public String getDetails() {
+        return this.details;
+    }
+
+
 
 
 

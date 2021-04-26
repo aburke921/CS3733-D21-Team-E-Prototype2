@@ -210,7 +210,7 @@
                                     <MaterialDesignIconView fill="WHITE" glyphName="CHURCH" size="100" />
                                  </graphic>
                               </JFXButton>
-                              <JFXButton fx:id="religionButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#toReligous" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                              <JFXButton fx:id="internalPatientButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#toInternalPatient" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                  <font>
                                     <Font size="18.0" />
                                  </font>

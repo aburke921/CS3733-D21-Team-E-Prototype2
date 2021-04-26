@@ -15,5 +15,22 @@ public class SanitationServiceObj extends ServiceRequestObjs {
         this.detail = detail;
         this.service = service;
         this.severity = severity;
+        super.status = "In Progress";
+    }
+
+    public String getSignature() {
+        return this.signature;
+    }
+
+    public String getDetail() {
+        return this.detail;
+    }
+
+    public String getService() {
+        return this.service;
+    }
+
+    public String getSeverity() {
+        return this.severity;
     }
 }

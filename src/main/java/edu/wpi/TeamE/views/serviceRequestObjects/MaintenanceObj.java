@@ -20,7 +20,29 @@ public class MaintenanceObj extends ServiceRequestObjs {
         this.author = author;
         this.eta = eta;
         this.description = description;
+        super.status = "In Progress";
 
     }
+
+    public String getRequest() {
+        return this.request;
+    }
+
+    public String getSeverity() {
+        return this.severity;
+    }
+
+    public String getAuthor() {
+        return this.author;
+    }
+
+    public String getEta() {
+        return this.eta;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
 
 }

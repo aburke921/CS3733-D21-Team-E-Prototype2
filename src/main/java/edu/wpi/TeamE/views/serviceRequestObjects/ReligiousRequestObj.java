@@ -14,7 +14,16 @@ public class ReligiousRequestObj extends ServiceRequestObjs {
         super.assigneeID = assigneeID;
         this.religion = religion;
         this.description = description;
+        super.status = "In Progress";
 
+    }
+
+    public String getReligion() {
+        return this.religion;
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 
 }

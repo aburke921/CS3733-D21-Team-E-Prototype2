@@ -14,7 +14,20 @@ public class SecurityServiceObj extends ServiceRequestObjs {
         this.securityLevel = securityLevel;
         this.urgencyLevel = urgencyLevel;
         this.reason = reason;
+        super.status = "In Progress";
 
+    }
+
+    public String getSecurityLevel() {
+        return this.securityLevel;
+    }
+
+    public String getUrgencyLevel() {
+        return this.urgencyLevel;
+    }
+
+    public String getReason() {
+        return this.reason;
     }
 
 }

@@ -18,6 +18,27 @@ public class FoodDeliveryObj extends ServiceRequestObjs {
         this.food = food;
         this.beverage = beverage;
         this.description = description;
+        super.status = "In Progress";
 
+    }
+
+    public String getDietaryRestrictions() {
+        return this.dietaryRestrictions;
+    }
+
+    public String getAllergies() {
+        return this.allergies;
+    }
+
+    public String getFood() {
+        return this.food;
+    }
+
+    public String getBeverage() {
+        return this.beverage;
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 }

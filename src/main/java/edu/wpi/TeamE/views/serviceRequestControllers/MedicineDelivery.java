@@ -6,10 +6,8 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
-import edu.wpi.TeamE.databases.NodeDB;
-import edu.wpi.TeamE.databases.RequestsDB;
-import edu.wpi.TeamE.databases.makeConnection;
 import edu.wpi.TeamE.views.serviceRequestControllers.ServiceRequestFormComponents;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -78,11 +76,11 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         String name = medicineNameInput.getText();
         String doseMeasure = doseMeasureInput.getText();
         int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
-        String assigned = assignee.getText();
+        int assigned = Integer.parseInt( assignee.getText());
         String specialInstructions = specialInstructInput.getText();
         String signature = signatureInput.getText();
 
-        RequestsDB.addMedicineRequest(App.userID, assigned, location, name, doseQuantity, doseMeasure, specialInstructions, signature);
+        DB.addMedicineRequest(App.userID, assigned, location, name, doseQuantity, doseMeasure, specialInstructions, signature);
     }
 
     @FXML
@@ -102,8 +100,8 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     @FXML
     void initialize() {
 
-        locations = NodeDB.getAllNodeLongNames();
-        nodeIDs = NodeDB.getListOfNodeIDS();
+        locations = DB.getAllNodeLongNames();
+        nodeIDs = DB.getListOfNodeIDS();
 
         locationInput.setItems(locations);
 

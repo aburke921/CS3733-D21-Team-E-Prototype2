@@ -14,9 +14,7 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
-import edu.wpi.TeamE.databases.NodeDB;
-import edu.wpi.TeamE.databases.RequestsDB;
-import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -96,15 +94,15 @@ public class SecurityService extends ServiceRequestFormComponents {
     private void saveData(ActionEvent actionEvent){
         if(validateInput()){
 
-            ArrayList<String> nodeIDS = NodeDB.getListOfNodeIDS();
+            ArrayList<String> nodeIDS = DB.getListOfNodeIDS();
             String securityLevel = levelOfSecurity.getSelectionModel().getSelectedItem().toString();
             String urgencyLevel = levelOfUrgency.getSelectionModel().getSelectedItem().toString();
-            String assignee = assignedPersonnel.getSelectionModel().getSelectedItem();
+            int assignee = Integer.parseInt(assignedPersonnel.getSelectionModel().getSelectedItem());
             String reason = reasonForRequest.getText();
             int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
             String nodeID = nodeIDS.get(nodeIDIndex);
             System.out.println(securityLevel + "" + urgencyLevel + "" + assignee + "" + nodeID);
-            RequestsDB.addSecurityRequest(App.userID, assignee, nodeID, securityLevel, urgencyLevel);
+            DB.addSecurityRequest(App.userID, assignee, nodeID, securityLevel, urgencyLevel);
             super.handleButtonSubmit(actionEvent);
         }
     }
@@ -120,7 +118,7 @@ public class SecurityService extends ServiceRequestFormComponents {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        ObservableList<String> locations = NodeDB.getAllNodeLongNames();
+        ObservableList<String> locations = DB.getAllNodeLongNames();
         locationInput.setItems(locations);
         assert helpSecurityService != null : "fx:id=\"helpSecurityService\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert locationInput != null : "fx:id=\"locationOfDelivery\" was not injected: check your FXML file 'SecurityService.fxml'.";

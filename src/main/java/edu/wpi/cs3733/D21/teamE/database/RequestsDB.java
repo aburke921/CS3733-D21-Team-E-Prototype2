@@ -216,6 +216,43 @@ public class RequestsDB {
 		}
 	}
 
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - allergy: this is an food allergy that the user might have
+	 * - dietRestriction: this is any dietary restrictions that the person fulfilling the request might need to know about
+	 * - beverage: the drink the user is ordering
+	 * - comments: any comments the user wants to leave for the person fulfilling the request
+	 */
+	public static void createFoodDeliveryTable(){
+
+		String query = "Create Table foodDelivery (\n" +
+				"    requestID int Primary Key References requests (requestID) On Delete Cascade,\n" +
+				"    roomID varchar(31) Not Null References node (nodeID) On Delete Cascade,\n" +
+				"    allergy varchar(50),\n" +
+				"    dietRestriction varchar(50),\n" +
+				"    beverage varchar(50),\n" +
+				"    description varchar(3000)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating foodDelivery table");
+		}
+
+
+	}
+
+
+
+
 // ADDING TO TABLES::::
 // ADDING TO TABLES::::
 // ADDING TO TABLES::::
@@ -888,4 +925,7 @@ public class RequestsDB {
 		}
 		return listOfAssignees;
 	}
+
+
+
 }

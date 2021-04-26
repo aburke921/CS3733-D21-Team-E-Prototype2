@@ -268,7 +268,7 @@ public class DB {
 		return NodeDB.getListOfNodeIDS();
 	}
 
-	public static void deleteNodeTable(){
+	public static void deleteNodeTable() {
 		NodeDB.deleteNodeTable();
 	}
 
@@ -278,7 +278,7 @@ public class DB {
 	 * @param nodeID is the nodeID of the nodes you want info from
 	 * @return a Node with only xCoord, yCoord, floor and nodeType not null
 	 */
-	public static Node getNodeLite(String nodeID){
+	public static Node getNodeLite(String nodeID) {
 		return NodeDB.getNodeLite(nodeID);
 	}
 
@@ -287,7 +287,7 @@ public class DB {
 	 * @param floorName the value to check for in FLOOR column
 	 * @return ObservableList of node long names.
 	 */
-	public static ObservableList<String> getAllNodeLongNamesByFloor(String floorName){
+	public static ObservableList<String> getAllNodeLongNamesByFloor(String floorName) {
 		return NodeDB.getAllNodeLongNamesByFloor(floorName);
 	}
 
@@ -296,7 +296,7 @@ public class DB {
 	 * @param floorName the name of the floor that the nodes will be selected on
 	 * @return
 	 */
-	public static ArrayList<String> getListOfNodeIDSByFloor(String floorName){
+	public static ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
 		return NodeDB.getListOfNodeIDSByFloor(floorName);
 	}
 
@@ -305,7 +305,7 @@ public class DB {
 	 * @param floorName the value to check for in FLOOR column
 	 * @return ArrayList of Node objects
 	 */
-	public static ArrayList<Node> getAllNodesByFloor(String floorName){
+	public static ArrayList<Node> getAllNodesByFloor(String floorName) {
 		return NodeDB.getAllNodesByFloor(floorName);
 	}
 
@@ -449,7 +449,7 @@ public class DB {
 	 * - description: detailed description of request
 	 * - religionType: religion
 	 */
-	public static void createReligionRequestTable(){
+	public static void createReligionRequestTable() {
 		RequestsDB.createReligionRequestTable();
 	}
 
@@ -511,41 +511,38 @@ public class DB {
 	}
 
 	/**
-	 *
-	 * @param userID ID of the user
+	 * @param userID     ID of the user
 	 * @param assigneeID ID of the assigned user who will complete this task
-	 * @param roomID nodeID of the user
-	 * @param language type of language being requested
-	 * @param topic topic of request
+	 * @param roomID     nodeID of the user
+	 * @param language   type of language being requested
+	 * @param topic      topic of request
 	 */
 	public static void addLanguageRequest(int userID, int assigneeID, String roomID, String language, long plannedTime, String topic) {
 		RequestsDB.addLanguageRequest(userID, assigneeID, roomID, language, plannedTime, topic);
 	}
 
 	/**
-	 *
-	 * @param userID ID of the user
-	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param userID         ID of the user
+	 * @param roomID         nodeID of the user
+	 * @param assigneeID     ID of the assigned user who will complete this task
 	 * @param washLoadAmount amount of loads needed to wash
-	 * @param dryLoadAmount amount of loads needed to dry
-	 * @param description detailed description of request
+	 * @param dryLoadAmount  amount of loads needed to dry
+	 * @param description    detailed description of request
 	 */
-	public static void addLaundryRequest(int userID, String roomID,  int assigneeID, String washLoadAmount, String dryLoadAmount, String description){
+	public static void addLaundryRequest(int userID, String roomID, int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
 		RequestsDB.addLaundryRequest(userID, roomID, assigneeID, washLoadAmount, dryLoadAmount, description);
 	}
 
 	/**
-	 *
-	 * @param userID ID of the user
-	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
-	 * @param type is the type of maintenance required
-	 * @param severity is how severe the situation is
-	 * @param ETA time taken to complete the request
+	 * @param userID      ID of the user
+	 * @param roomID      nodeID of the user
+	 * @param assigneeID  ID of the assigned user who will complete this task
+	 * @param type        is the type of maintenance required
+	 * @param severity    is how severe the situation is
+	 * @param ETA         time taken to complete the request
 	 * @param description detailed description of request
 	 */
-	public static void addMaintenanceRequest(int userID, String roomID,  int assigneeID,  String type, String severity, String ETA, String description){
+	public static void addMaintenanceRequest(int userID, String roomID, int assigneeID, String type, String severity, String ETA, String description) {
 		RequestsDB.addMaintenanceRequest(userID, roomID, assigneeID, type, severity, ETA, description);
 	}
 
@@ -560,17 +557,16 @@ public class DB {
 	}
 
 	/**
-	 *
-	 * @param userID ID of the user
-	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param userID           ID of the user
+	 * @param roomID           nodeID of the user
+	 * @param assigneeID       ID of the assigned user who will complete this task
 	 * @param dietRestrictions any restrictions the user has diet wise
-	 * @param allergies any allergies the user has
-	 * @param food the food choice made by the user
-	 * @param beverage the beverage choice made by the user
-	 * @param description detailed description of request
+	 * @param allergies        any allergies the user has
+	 * @param food             the food choice made by the user
+	 * @param beverage         the beverage choice made by the user
+	 * @param description      detailed description of request
 	 */
-	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String food, String beverage, String description) {
+	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID, String dietRestrictions, String allergies, String food, String beverage, String description) {
 		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, food, beverage, allergies, description);
 	}
 
@@ -661,22 +657,21 @@ public class DB {
 	/**
 	 *
 	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
-	 * @param language is the new language type being requested by the user
-	 * @param topic is an edited topic
+	 * @param roomID    the new node/room/location the user is assigning this request to
+	 * @param language  is the new language type being requested by the user
+	 * @param topic     is an edited topic
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editLanguageRequest(int requestID, String roomID, String language, long plannedTime, String topic){
+	public static int editLanguageRequest(int requestID, String roomID, String language, long plannedTime, String topic) {
 		return RequestsDB.editLanguageRequest(requestID, roomID, language, plannedTime, topic);
 	}
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param requestID      is the generated ID of the request
+	 * @param roomID         the new node/room/location the user is assigning this request to
 	 * @param washLoadAmount is new amount of loads to be washed
-	 * @param dryLoadAmount is new amount of loads to be dried
-	 * @param description is an edited detailed description
+	 * @param dryLoadAmount  is new amount of loads to be dried
+	 * @param description    is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editLaundryRequest(int requestID, String roomID, String washLoadAmount, String dryLoadAmount, String description) {
@@ -684,12 +679,11 @@ public class DB {
 	}
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
-	 * @param type is the new type of maintenance request
-	 * @param severity is the new severity of the situation
-	 * @param ETA is the new estimated time
+	 * @param requestID   is the generated ID of the request
+	 * @param roomID      the new node/room/location the user is assigning this request to
+	 * @param type        is the new type of maintenance request
+	 * @param severity    is the new severity of the situation
+	 * @param ETA         is the new estimated time
 	 * @param description is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
@@ -708,14 +702,13 @@ public class DB {
 	}
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param requestID        is the generated ID of the request
+	 * @param roomID           the new node/room/location the user is assigning this request to
 	 * @param dietRestrictions is the edited restrictions of the user in terms of diet
-	 * @param allergies is the edited allergies the user has
-	 * @param food is the new food the user requests
-	 * @param beverage is the new beverage the user requests
-	 * @param description is an edited detailed description
+	 * @param allergies        is the edited allergies the user has
+	 * @param food             is the new food the user requests
+	 * @param beverage         is the new beverage the user requests
+	 * @param description      is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editFoodDeliveryRequest(int requestID, String roomID, String dietRestrictions, String allergies, String food, String beverage, String description) {

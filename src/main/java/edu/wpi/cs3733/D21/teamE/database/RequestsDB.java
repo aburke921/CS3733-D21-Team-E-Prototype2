@@ -250,7 +250,64 @@ public class RequestsDB {
 
 	}
 
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - foodID: this is used to identify a food item. Every food item must have one.
+	 * - item: this is the name of the food item
+	 * - price: this is the price of the food item
+	 * - calories: this is the number of calories that the food item has
+	 * - description: this is the description of the menu item
+	 */
+	public static void createFoodTable(){
 
+		String query = "Create Table food (\n" +
+				"    foodID int Primary KEY,\n" +
+				"    item varchar(50),\n" +
+				"    price Double,\n" +
+				"    calories int,\n" +
+				"    description varchar(3000)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating food table");
+		}
+
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is the identifier of the request where the user is ordering food
+	 * - foodID: this is the name of the food item the user is ordering
+	 * - quantity: this is the quantity of a single item the user is ordering
+	 */
+	public static void createFoodOrderedInDeliveryTable(){
+
+		String query = "Create Table foodOrderedInDelivery (\n" +
+				"    requestId int References foodDelivery (requestID)  on Delete Cascade,\n" +
+				"    foodID int References food (foodID) On Delete Cascade,\n" +
+				"    quantity int,\n" +
+				"    Primary Key (requestId, foodID)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating foodOrderedInDelivery table");
+		}
+
+
+	}
 
 
 // ADDING TO TABLES::::

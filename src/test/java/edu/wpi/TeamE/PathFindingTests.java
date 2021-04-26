@@ -6,11 +6,12 @@ import edu.wpi.TeamE.algorithms.Time;
 import edu.wpi.TeamE.algorithms.pathfinding.SearchContext;
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.wpi.TeamE.views.MapEditor;
+
+import edu.wpi.TeamE.views.mapEditorControllers.MapEditor;
 import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
 import edu.wpi.cs3733.D21.teamE.database.csvDB;
 import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.cs3733.D21.teamE.DB;
+
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;

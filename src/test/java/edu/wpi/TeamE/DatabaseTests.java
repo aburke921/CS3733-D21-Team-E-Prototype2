@@ -4,6 +4,8 @@ import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 
 
+import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
+import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -36,21 +38,48 @@ public class DatabaseTests {
 
 		try {
 			connection.deleteAllTables();
+			DB.createNodeTable();
+			DB.createEdgeTable();
+			DB.createUserAccountTable();
+			DB.createRequestsTable();
+			DB.createFloralRequestsTable();
+			DB.createSanitationTable();
+			DB.createExtTransportTable();
+			DB.createMedDeliveryTable();
+			DB.createSecurityServTable();
+			DB.createAppointmentTable();
+			DB.createLanguageRequestTable();
+			DB.createLaundryRequestTable();
+			DB.createMaintenanceRequestTable();
+			DB.createFoodDeliveryTable();
+			DB.createFoodTable();
+			DB.createFoodOrderedInRequestTable();
+			DB.createBeverageTable();
+			DB.createBeverageOrderedInRequestTable();
+			//System.out.println("Tables were created");
 			//System.out.println("Tables were reset");
 		} catch (Exception e) {
+			DB.createNodeTable();
+			DB.createEdgeTable();
+			DB.createUserAccountTable();
+			DB.createRequestsTable();
+			DB.createFloralRequestsTable();
+			DB.createSanitationTable();
+			DB.createExtTransportTable();
+			DB.createMedDeliveryTable();
+			DB.createSecurityServTable();
+			DB.createAppointmentTable();
+			DB.createLanguageRequestTable();
+			DB.createLaundryRequestTable();
+			DB.createMaintenanceRequestTable();
+			DB.createFoodDeliveryTable();
+			DB.createFoodTable();
+			DB.createFoodOrderedInRequestTable();
+			DB.createBeverageTable();
+			DB.createBeverageOrderedInRequestTable();
 			//e.printStackTrace();
 		}
-		DB.createNodeTable();
-		DB.createEdgeTable();
-		DB.createUserAccountTable();
-		DB.createRequestsTable();
-		DB.createFloralRequestsTable();
-		DB.createSanitationTable();
-		DB.createExtTransportTable();
-		DB.createMedDeliveryTable();
-		DB.createSecurityServTable();
-		DB.createAppointmentTable();
-		//System.out.println("Tables were created");
+
 	}
 
 	@Test
@@ -1340,4 +1369,108 @@ public class DatabaseTests {
 		assertEquals(99999, DB.userLogin("staff", "staff"));
 		assertEquals(10000, DB.userLogin("guest", "guest"));
 	}
+
+
+	@Test
+	@DisplayName("testGetUserType")
+	public void testGetUserType(){
+		DB.addSpecialUserType("email@gmail.com", "12345678", "admin", "firstName", "lastName");
+		String returnedUserType = UserAccountDB.getUserType(1);
+		assertEquals("admin", returnedUserType);
+	}
+
+
+	@Test
+	@DisplayName("testAddLanguageRequest")
+	public void testAddLanguageRequest() {
+
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test1@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
+
+		DB.addLanguageRequest(1, 2, "test", "Hindi", "I need help translating");
+	}
+
+	@Test
+	@DisplayName("testAddLaundryRequest")
+	public void testAddLaundryRequest() {
+
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
+
+		DB.addLaundryRequest(1, "test", 2, "2", "2", "I haven't done laundry in 2 weeks");
+	}
+
+	@Test
+	@DisplayName("testAddMaintenanceRequest")
+	public void testAddMaintenanceRequest() {
+
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "electrician", "drew", "Shukla");
+
+		DB.addMaintenanceRequest(1, "test", 2, "electrical", "not very severe", "15 mins", "light switch not working");
+	}
+
+// this is where testAddFoodDeliveryRequest() can go
+
+	@Test
+	@DisplayName("testEditLanguageRequest")
+	public void testEditLanguageRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test1@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
+
+		DB.addLanguageRequest(1, 2, "test", "Hindi", "I need help translating");
+
+
+		assertEquals(1, DB.editLanguageRequest(1, "test", "Korean", null));
+	}
+
+	@Test
+	@DisplayName("testEditLaundryRequest")
+	public void testEditLaundryRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
+
+		DB.addLaundryRequest(1, "test", 2, "2", "2", "I haven't done laundry in 2 weeks");
+
+		assertEquals(1, DB.editLaundryRequest(1, "test", "3", "3", null));
+	}
+
+	@Test
+	@DisplayName("testEditMaintenanceRequest")
+	public void testEditMaintenanceRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "electrician", "drew", "Shukla");
+
+		DB.addMaintenanceRequest(1, "test", 2, "electrical", "not very severe", "15 mins", "light switch not working");
+
+		assertEquals(1, DB.editMaintenanceRequest(1, "test", null, "extremely severe", null, "wires are loose everywhere!"));
+	}
+
+	@Test
+	@DisplayName("testAddFoodItem")
+	public void testAddFoodItem(){
+		DB.addFoodItem("Pancakes",9.99, 549, "Yummy!");
+	}
+
+	@Test
+	@DisplayName("testAddBeverageItem")
+	public void testAddBeverageItem(){
+		DB.addBeverageItem("Soda");
+	}
+
+	@Test
+	@DisplayName("testUpdateFoodAndBeverageTable")
+	public void testUpdateFoodAndBeverageTable(){
+		DB.updateFoodAndBeverageTable();
+	}
+
+
+
+
 }

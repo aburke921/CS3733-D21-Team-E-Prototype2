@@ -158,7 +158,11 @@ public class App extends Application {
 				DB.createLanguageRequestTable();
 				DB.createLaundryRequestTable();
 				DB.createMaintenanceRequestTable();
-				DB.createFoodDeliveryRequestTable();
+				DB.createFoodDeliveryTable();
+				DB.createFoodTable();
+				DB.createFoodOrderedInRequestTable();
+				DB.createBeverageTable();
+				DB.createBeverageOrderedInRequestTable();
 				DB.populateTable("node", nodes);
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();

@@ -157,13 +157,17 @@ Create Table appointment(
 );
 
 
+Drop Table beverageOrderedInRequest;
+Drop Table beverage;
+Drop Table foodOrderedInRequest;
+Drop Table food;
+Drop Table foodDelivery;
 
 Create Table foodDelivery (
     requestID int Primary Key References requests (requestID) On Delete Cascade,
     roomID varchar(31) Not Null References node (nodeID) On Delete Cascade,
     allergy varchar(50),
     dietRestriction varchar(50),
-    beverage varchar(50),
     description varchar(3000)
 );
 
@@ -175,16 +179,29 @@ Create Table food (
     description varchar(3000)
 );
 
-Create Table foodOrderedInDelivery (
+insert into food values (?,?,?,?,?);
+
+Create Table foodOrderedInRequest (
     requestId int References foodDelivery (requestID)  on Delete Cascade,
     foodID int References food (foodID) On Delete Cascade,
     quantity int,
     Primary Key (requestId, foodID)
 );
 
+Create Table beverage (
+    beverageID int Primary key,
+    item varchar(50)
+);
+
+Create Table beverageOrderedInRequest(
+    requestId int References foodDelivery (requestID)  on Delete Cascade,
+    beverageID int References beverage (beverageID) On Delete Cascade,
+    quantity int,
+    Primary Key (requestId, beverageID)
+);
 
 
-
+insert into foodOrderedInRequest values (?,?,?);
 
 
 

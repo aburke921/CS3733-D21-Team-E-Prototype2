@@ -49,7 +49,11 @@ public class DatabaseTests {
 			DB.createLanguageRequestTable();
 			DB.createLaundryRequestTable();
 			DB.createMaintenanceRequestTable();
-			DB.createFoodDeliveryRequestTable();
+			DB.createFoodDeliveryTable();
+			DB.createFoodTable();
+			DB.createFoodOrderedInRequestTable();
+			DB.createBeverageTable();
+			DB.createBeverageOrderedInRequestTable();
 			//System.out.println("Tables were created");
 			//System.out.println("Tables were reset");
 		} catch (Exception e) {
@@ -66,7 +70,11 @@ public class DatabaseTests {
 			DB.createLanguageRequestTable();
 			DB.createLaundryRequestTable();
 			DB.createMaintenanceRequestTable();
-			DB.createFoodDeliveryRequestTable();
+			DB.createFoodDeliveryTable();
+			DB.createFoodTable();
+			DB.createFoodOrderedInRequestTable();
+			DB.createBeverageTable();
+			DB.createBeverageOrderedInRequestTable();
 			//e.printStackTrace();
 		}
 
@@ -1432,6 +1440,25 @@ public class DatabaseTests {
 		assertEquals(1, DB.editMaintenanceRequest(1, "test", null, "extremely severe", null, "wires are loose everywhere!"));
 	}
 
-// this is where testEditFoodDeliveryRequest() can go
+	@Test
+	@DisplayName("testAddFoodItem")
+	public void testAddFoodItem(){
+		DB.addFoodItem("Pancakes",9.99, 549, "Yummy!");
+	}
+
+	@Test
+	@DisplayName("testAddBeverageItem")
+	public void testAddBeverageItem(){
+		DB.addBeverageItem("Soda");
+	}
+
+	@Test
+	@DisplayName("testUpdateFoodAndBeverageTable")
+	public void testUpdateFoodAndBeverageTable(){
+		DB.updateFoodAndBeverageTable();
+	}
+
+
+
 
 }

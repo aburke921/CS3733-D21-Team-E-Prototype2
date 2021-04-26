@@ -1334,7 +1334,7 @@ public class DatabaseTests {
 		DB.addUserAccount("test1@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
 
-		DB.addLanguageRequest(1, 2, "test", "Hindi", "I need help translating");
+		DB.addLanguageRequest(1, 2, "test", "Chinese", 400, "Business");
 	}
 
 	@Test
@@ -1368,10 +1368,10 @@ public class DatabaseTests {
 		DB.addUserAccount("test1@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
 
-		DB.addLanguageRequest(1, 2, "test", "Hindi", "I need help translating");
+		DB.addLanguageRequest(1, 2, "test", "Chinese", 400, "Business");
 
 
-		assertEquals(1, DB.editLanguageRequest(1, "test", "Korean", null));
+		assertEquals(1, DB.editLanguageRequest(1, "test", "Spanish", 600, "Non-Business"));
 	}
 
 	@Test

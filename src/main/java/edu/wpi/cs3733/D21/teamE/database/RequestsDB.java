@@ -1,10 +1,7 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -229,10 +226,13 @@ public class RequestsDB {
 
 		String query = "Create Table languageRequest " +
 				"( " +
-				"    requestID int Primary Key References requests On Delete Cascade, " +
-				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
-				"    languageType     varchar(31) Not Null, " +
-				"    description   varchar(5000) " +
+				"requestID   int Primary Key References requests On Delete Cascade, " +
+				"roomID      varchar(31) Not Null References node On Delete Cascade, " +
+				"language    varchar(31) Not Null, " +
+				"requestTime timestamp   Not Null, " +
+				"plannedTime timestamp   Not Null, " +
+				"topic       varchar(31), " +
+				"Constraint languageChoices Check ( language In ('Chinese', 'Spanish', 'Japanese')) " +
 				")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -500,25 +500,26 @@ public class RequestsDB {
 	 * @param userID ID of the user
 	 * @param assigneeID ID of the assigned user who will complete this task
 	 * @param roomID nodeID of the user
-	 * @param languageType type of language being requested
-	 * @param description detailed description of request
+	 * @param language type of language being requested
+	 * @param topic topic of request
 	 */
-	public static void addLanguageRequest(int userID, int assigneeID,  String roomID, String languageType, String description) {
+	public static void addLanguageRequest(int userID, int assigneeID, String roomID, String language, long plannedTime, String topic) {
 		addRequest(userID, assigneeID, "languageRequest");
+		Timestamp pTime = new Timestamp(plannedTime);
 
-		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, ?)";
+		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, current timestamp, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertLanguageReq)) {
 			prepState.setString(1, roomID);
-			prepState.setString(2, languageType);
-			prepState.setString(3, description);
+			prepState.setString(2, language);
+			prepState.setTimestamp(3, pTime);
+			prepState.setString(4, topic);
 
 			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error inserting into languageRequest inside function addLanguageRequest()");
 		}
-
 	}
 
 	/**
@@ -976,31 +977,38 @@ public class RequestsDB {
 	 *
 	 * @param requestID is the generated ID of the request
 	 * @param roomID  the new node/room/location the user is assigning this request to
-	 * @param languageType is the new language type being requested by the user
-	 * @param description is an edited detailed description
+	 * @param language is the new language type being requested by the user
+	 * @param topic is an edited topic
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description) {
+	public static int editLanguageRequest(int requestID, String roomID, String language, long plannedTime, String topic) {
 		boolean added = false;
-		String query = "Update languageRequest Set ";
+		String query = "Update languageRequest Set";
 
 		if (roomID != null) {
 			query = query + " roomID = '" + roomID + "'";
 			added = true;
 		}
-		if (languageType != null) {
+		if (language != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "languageType = '" + languageType + "'";
+			query = query + " language = '" + language + "'";
 			added = true;
 		}
-		if (description != null) {
+		if (plannedTime != 0) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "description = '" + description + "'";
+			Timestamp pTime = new Timestamp(plannedTime);
+			query = query + "plannedTime = '" + pTime + "'";
 			added = true;
+		}
+		if (topic != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " topic = '" + topic + "'";
 		}
 
 		query = query + " where requestID = " + requestID;
@@ -1009,11 +1017,10 @@ public class RequestsDB {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error in updating languageRequest");
 			return 0;
 		}
-
 	}
 
 	/**

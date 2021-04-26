@@ -151,7 +151,7 @@ drop table appointment;
 
 Create Table appointment(
                             appointmentID Int Primary Key,
-                            patientID Int References userAccount (userID) on delete,
+                            patientID Int References userAccount (userID) on delete cascade,
                             doctorID Int References userAccount (userID) on delete cascade,
                             startTime timeStamp,
                             endTime timestamp,
@@ -161,18 +161,20 @@ Create Table appointment(
 
 
 -- Language Request
-    -- Location (Node)
-    -- Assigned Person
-    -- Language (String)
-    -- Description (String)
---
+-- Location (Node)
+-- Language (String)
+-- Description (String)
+-- PlannedTime (timestamp)
 
 Create Table languageRequest
 (
-    requestID int Primary Key References requests On Delete Cascade,
-    roomID    varchar(31) Not Null References node On Delete Cascade,
-    languageType     varchar(31) Not Null,
-    Description   varchar(5000)
+	requestID   int Primary Key References requests On Delete Cascade,
+	roomID      varchar(31) Not Null References node On Delete Cascade,
+	language    varchar(31) Not Null,
+	requestTime timestamp   Not Null,
+	plannedTime timestamp   Not Null,
+	topic       varchar(31),
+	Constraint languageChoices Check ( language In ('Chinese', 'Spanish', 'Japanese'))
 );
 
 
@@ -405,4 +407,4 @@ insert into extTransport values(9,'FDEPT00501', 'Plane','High Severity', 3873998
 
 
 
-Select longName from node, (Select roomID From ?, (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID
+-- Select longName from node, (Select roomID From ?, (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID

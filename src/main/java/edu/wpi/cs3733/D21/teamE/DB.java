@@ -502,11 +502,11 @@ public class DB {
 	 * @param userID ID of the user
 	 * @param assigneeID ID of the assigned user who will complete this task
 	 * @param roomID nodeID of the user
-	 * @param languageType type of language being requested
-	 * @param description detailed description of request
+	 * @param language type of language being requested
+	 * @param topic topic of request
 	 */
-	public static void addLanguageRequest(int userID, int assigneeID,  String roomID, String languageType, String description) {
-		RequestsDB.addLanguageRequest(userID, assigneeID, roomID, languageType, description);
+	public static void addLanguageRequest(int userID, int assigneeID, String roomID, String language, long plannedTime, String topic) {
+		RequestsDB.addLanguageRequest(userID, assigneeID, roomID, language, plannedTime, topic);
 	}
 
 	/**
@@ -639,12 +639,12 @@ public class DB {
 	 *
 	 * @param requestID is the generated ID of the request
 	 * @param roomID  the new node/room/location the user is assigning this request to
-	 * @param languageType is the new language type being requested by the user
-	 * @param description is an edited detailed description
+	 * @param language is the new language type being requested by the user
+	 * @param topic is an edited topic
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description){
-		return RequestsDB.editLanguageRequest(requestID, roomID, languageType, description);
+	public static int editLanguageRequest(int requestID, String roomID, String language, long plannedTime, String topic){
+		return RequestsDB.editLanguageRequest(requestID, roomID, language, plannedTime, topic);
 	}
 
 	/**

@@ -24,7 +24,7 @@ public class appointmentDB {
 			prepState.execute();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("error creating appointment table");
 		}
 	}

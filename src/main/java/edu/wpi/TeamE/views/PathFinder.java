@@ -592,6 +592,11 @@ public class PathFinder {
 
         System.out.println("Begin PathFinder Page Init");
 
+        //todo remove in future iterations when default app size is changed
+        if (App.getPrimaryStage().getHeight() <= 775) { //if height less than minimum for seeing all contents,
+            App.getPrimaryStage().setHeight(775); //note, does not stop user from shrinking
+        }
+
         //init appBar
         javafx.scene.Node appBarComponent = null;
         try {

@@ -74,10 +74,10 @@ public class newMapEditor {
 
 
     @FXML // fx:id="startLocationList"
-    private JFXComboBox<String> startLocationComboBox; // Value injected by FXMLLoader
+    private JFXComboBox<String> startLocation; // Value injected by FXMLLoader
 
     @FXML // fx:id="endLocationList"
-    private JFXComboBox<String> endLocationComboBox; // Value injected by FXMLLoader
+    private JFXComboBox<String> endLocation; // Value injected by FXMLLoader
 
     //@FXML // fx:id="imageView"
     private ImageView imageView = new ImageView();
@@ -121,10 +121,21 @@ public class newMapEditor {
     private JFXTextField longNameInput;
     @FXML
     private JFXTextField shortNameInput;
+    @FXML
+    private VBox edgeVBox;
+    @FXML
+    private VBox nodeVBox;
+    @FXML
+    private JFXComboBox edgeID;
+
+
+
 
     /*
      * Additional Variables
      */
+
+    private boolean nodeMode = true;
 
     private String selectedStartNodeID; // selected starting value's ID
 
@@ -143,6 +154,7 @@ public class newMapEditor {
     private int currentFloorNamesIndex = 4; //start # should be init floor index + 1 (variable is actually always one beyond current floor)
 
     ObservableList<String> longNameArrayList;
+    ObservableList<String> edgeIDArrayList;
 
     private double stageWidth;
     private double stageHeight;
@@ -154,6 +166,7 @@ public class newMapEditor {
 
     private double radius = 6;
     private double strokeWidth = 3;
+    private int selection = 0;
 
 
     /**
@@ -177,15 +190,15 @@ public class newMapEditor {
     }
 
     /**
-     * Gets the currently selected item from {@link #startLocationComboBox} dropdown.
+     * Gets the currently selected item from {@link #startLocation} dropdown.
      *
      * @param event calling event info.
      */
     @FXML
     void selectStartNode(ActionEvent event) {
         // findPath button validation
-        if (startLocationComboBox.getSelectionModel().isEmpty() ||
-                endLocationComboBox.getSelectionModel().isEmpty()) {
+        if (startLocation.getSelectionModel().isEmpty() ||
+                endLocation.getSelectionModel().isEmpty()) {
             findPathButton.setDisable(true);
         } else {
             findPathButton.setDisable(false);
@@ -193,15 +206,15 @@ public class newMapEditor {
     }
 
     /**
-     * Gets the currently selected item from {@link #endLocationComboBox} dropdown.
+     * Gets the currently selected item from {@link #endLocation} dropdown.
      *
      * @param event calling event info.
      */
     @FXML
     void selectEndNode(ActionEvent event) {
         // findPath button validation
-        if (startLocationComboBox.getSelectionModel().isEmpty() ||
-                endLocationComboBox.getSelectionModel().isEmpty()) {
+        if (startLocation.getSelectionModel().isEmpty() ||
+                endLocation.getSelectionModel().isEmpty()) {
             findPathButton.setDisable(true);
         } else {
             findPathButton.setDisable(false);
@@ -938,8 +951,8 @@ public class newMapEditor {
         stageWidth = primaryStage.getWidth();
         stageHeight = primaryStage.getHeight();
 
-        assert startLocationComboBox != null : "fx:id=\"startLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";
-        assert endLocationComboBox != null : "fx:id=\"endLocationComboBox\" was not injected: check your FXML file 'PathFinder.fxml'.";
+        assert startLocation != null : "fx:id=\"startLocation\" was not injected: check your FXML file 'PathFinder.fxml'.";
+        assert endLocation != null : "fx:id=\"endLocation\" was not injected: check your FXML file 'PathFinder.fxml'.";
 
         //Get longNames & IDs
         System.out.print("Begin Adding to Dropdown List... ");
@@ -953,16 +966,23 @@ public class newMapEditor {
             longNameArrayList.add(nodeArrayList.get(i).get("longName"));
             nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
         }
-//        longNameArrayList = connection.getAllNodeLongNames();
-//        nodeIDArrayList = connection.getListOfNodeIDS();
+        edgeIDArrayList = FXCollections.observableArrayList();
+        ArrayList<Edge> edgeArray = new ArrayList<Edge>();
+        edgeArray = connection.getAllEdges();
+        for(int i = 0; i < edgeArray.size(); i++) {
+            edgeIDArrayList.add(edgeArray.get(i).getId());
+
+        }
+
 
         //add ObservableLists to dropdowns
-        startLocationComboBox.setItems(longNameArrayList);
-        endLocationComboBox.setItems(longNameArrayList);
+        edgeID.setItems(edgeIDArrayList);
+        startLocation.setItems(longNameArrayList);
+        endLocation.setItems(longNameArrayList);
         System.out.println("done");
 
-        new AutoCompleteComboBoxListener<>(startLocationComboBox);
-        new AutoCompleteComboBoxListener<>(endLocationComboBox);
+        new AutoCompleteComboBoxListener<>(startLocation);
+        new AutoCompleteComboBoxListener<>(endLocation);
 
         //Set up zoomable and pannable panes
         BorderPane borderPane = new BorderPane();
@@ -1000,41 +1020,52 @@ public class newMapEditor {
         drawMap(currentFloor);
         prepareNodes(nodeTreeTable);
         prepareEdges(edgeTreeTable);
+        edgeVBox.setVisible(false);
 
         final ArrayList<Node> array = connection.getAllNodes();
         Group g = new Group();
 
         pane.setOnMouseClicked(e -> {
-            if(e.getClickCount() == 2) {
+            if (e.getClickCount() == 2) {
                 //ints for displaying
                 double xCoordScale = e.getX();
                 xCoordScale = xCoordScale * scale;
-                int xCordIntScale = (int)xCoordScale;
+                int xCordIntScale = (int) xCoordScale;
                 double yCoordScale = e.getY();
                 yCoordScale = yCoordScale * scale;
-                int yCordIntScale = (int)yCoordScale;
+                int yCordIntScale = (int) yCoordScale;
                 //ints for placing circle
-                double xCoord= e.getX();
+                double xCoord = e.getX();
                 double yCoord = e.getY();
                 Circle circle = new Circle(xCoord, yCoord, 2, Color.GREEN);
                 g.getChildren().add(circle);
                 pane.getChildren().add(g);
+                longNameInput.clear();
+                shortNameInput.clear();
+                floorInput.getSelectionModel().clearSelection();
+                floorInput.setValue(null);
+                idInput.getSelectionModel().clearSelection();
+                idInput.setValue(null);
+                buildingInput.getSelectionModel().clearSelection();
+                buildingInput.setValue(null);
+                typeInput.getSelectionModel().clearSelection();
+                typeInput.setValue(null);
                 xCordInput.setText(Integer.toString(xCordIntScale));
                 yCordInput.setText(Integer.toString(yCordIntScale));
             } else {
-                if(e.getClickCount() == 1) {
+                if (e.getClickCount() == 1) {
                     double X = e.getX();
-                    int xInt = (int)X;
+                    int xInt = (int) X;
                     double Y = e.getY();
-                    int yInt = (int)Y;
+                    int yInt = (int) Y;
                     System.out.println(xInt);
                     System.out.println(yInt);
-                    for(int i = 0; i < array.size(); i++) {
+                    for (int i = 0; i < array.size(); i++) {
                         double nodeX = array.get(i).getX() / scale;
-                        int nodeXInt = (int)nodeX;
+                        int nodeXInt = (int) nodeX;
                         double nodeY = array.get(i).getY() / scale;
-                        int nodeYInt = (int)nodeY;
-                        if(Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1){
+                        int nodeYInt = (int) nodeY;
+                        if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
                             idInput.setValue(array.get(i).get("id"));
                             floorInput.setValue(array.get(i).get("floor"));
                             longNameInput.setText(array.get(i).get("longName"));
@@ -1045,13 +1076,38 @@ public class newMapEditor {
                             buildingInput.setValue(array.get(i).get("building"));
                         }
                     }
+                    String startID = "test";
+                    String endID = "test";
+                    for(int i = 0; i < array.size(); i++) {
+                        double nodeX = array.get(i).getX() / scale;
+                        int nodeXInt = (int)nodeX;
+                        double nodeY = array.get(i).getY() / scale;
+                        int nodeYInt = (int)nodeY;
+                        if(Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2){
+                            if(selection == 1) {
+                                startID = array.get(i).get("id");
+                                startLocation.setValue(array.get(i).get("longName"));
+                            }if(selection == 2){
+                                endLocation.setValue(array.get(i).get("longName"));
+                                endID = array.get(i).get("id");
+                                edgeIDArrayList.add(startID + "_" + endID);
+                                edgeID.setItems(edgeIDArrayList);
+                                edgeID.setValue(startID + "_" + endID);
+                                selection = 0;
+                            }
+                            System.out.println(array.get(i).get("longName"));
+
+                        }
+                    }
                 }
             }
         });
 
-        //ability to select edge and autofill fields
-
     }
+
+    //ability to select edge and autofill fields
+
+
 
 
     public void nextFloor(ActionEvent event) {
@@ -1062,6 +1118,89 @@ public class newMapEditor {
         if (currentFloorNamesIndex == 5) {
             currentFloorNamesIndex = 0;
         } else currentFloorNamesIndex++;
+    }
+
+    public void editEdgeButton(ActionEvent actionEvent) {
+        //editEdge(edgeTreeTable);
+    }
+    /*
+    public void editEdge(TreeTableView table) {
+    }*/
+
+    public void deleteEdgeButton(ActionEvent actionEvent) {
+        deleteEdge();
+    }
+
+    public void deleteEdge() {
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Edge> array = connection.getAllEdges();
+        if(edgeID.getValue() != null && startLocation.getValue() != null && endLocation.getValue() != null) {
+            for(int i = 0; i < array.size(); i++) {
+                if(array.get(i).getId().equals(edgeID.getValue().toString())) {
+                    System.out.println("This lies between " + startLocation.getValue() + " and " + endLocation.getValue());
+                    connection.deleteEdge(startLocation.getValue(), endLocation.getValue());
+                }
+            }
+        }
+    }
+
+    public void addEdgeButton(ActionEvent actionEvent) {
+        addEdge();
+    }
+
+    public void addEdge() {
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Node> array = connection.getAllNodes();
+        String startInput = null;
+        String endInput = null;
+        if(startLocation.getValue() != null && endLocation.getValue() != null) {
+            System.out.println(startLocation.getValue());
+            String ID = startLocation.getValue() + "_" + endLocation.getValue();
+            for(int i = 0; i < array.size(); i++) {
+                if(array.get(i).get("longName").equals(startLocation.getValue())) {
+                    startInput = array.get(i).get("id");
+                }
+                if(array.get(i).get("longName").equals(endLocation.getValue())) {
+                    endInput = array.get(i).get("id");
+                }
+            }
+            connection.addEdge(ID, startInput, endInput);
+            System.out.println("This happened");
+            edgeID.setValue(ID);
+        }
+    }
+
+    public void toEdgeMode(ActionEvent actionEvent) {
+        nodeMode = false;
+        edgeVBox.toFront();
+        edgeVBox.setVisible(true);
+        nodeVBox.setVisible(false);
+        edgeID.getSelectionModel().clearSelection();
+        edgeID.setValue(null);
+        startLocation.getSelectionModel().clearSelection();
+        startLocation.setValue(null);
+        endLocation.getSelectionModel().clearSelection();
+        endLocation.setValue(null);
+        selection = 0;
+    }
+
+    public void toNodeMode(ActionEvent actionEvent) {
+        nodeMode = true;
+        nodeVBox.toFront();
+        nodeVBox.setVisible(true);
+        edgeVBox.setVisible(false);
+        longNameInput.clear();
+        shortNameInput.clear();
+        floorInput.getSelectionModel().clearSelection();
+        floorInput.setValue(null);
+        idInput.getSelectionModel().clearSelection();
+        idInput.setValue(null);
+        buildingInput.getSelectionModel().clearSelection();
+        buildingInput.setValue(null);
+        typeInput.getSelectionModel().clearSelection();
+        typeInput.setValue(null);
+        xCordInput.clear();
+        yCordInput.clear();
     }
 }
 

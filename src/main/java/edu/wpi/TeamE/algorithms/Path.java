@@ -21,6 +21,8 @@ public class Path implements Comparable<Path>, Iterable<Node>{
 
     //Scale from pixel to foot
     public final double SCALE = 0.325;
+    //Average walking speed for someone in their 60s, a large portion of patient demographic
+    public final int SPEED = 4;
 
     /**
      * construct an empty list
@@ -444,10 +446,15 @@ public class Path implements Comparable<Path>, Iterable<Node>{
 
     /**
      * Gets the length of the path in feet for Time Estimates
-     * @return The total length of the path
+     * @return The total length of the path in feet
      */
     public double getPathLengthFeet(){
         return length * SCALE;
+    }
+
+    public Time getETA() {
+        int seconds = (int) Math.round(this.getPathLengthFeet() / SPEED + 0.5); //force round up
+        return new Time(seconds);
     }
 
     /**

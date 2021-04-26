@@ -2,6 +2,7 @@ package edu.wpi.TeamE.views;
 
 import com.jfoenix.controls.*;
 
+import edu.wpi.TeamE.algorithms.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
@@ -138,6 +139,8 @@ public class newMapEditor {
      */
 
     private boolean nodeMode = true;
+    private String startID = "test";
+    private String endID = "test";
 
     private String selectedStartNodeID; // selected starting value's ID
 
@@ -1213,21 +1216,21 @@ public class newMapEditor {
                             buildingInput.setValue(array.get(i).get("building"));
                         }
                     }
-                    String startID = "test";
-                    String endID = "test";
-                    for(int i = 0; i < array.size(); i++) {
+
+                    for (int i = 0; i < array.size(); i++) {
                         double nodeX = array.get(i).getX() / scale;
-                        int nodeXInt = (int)nodeX;
+                        int nodeXInt = (int) nodeX;
                         double nodeY = array.get(i).getY() / scale;
-                        int nodeYInt = (int)nodeY;
-                        if(Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2){
+                        int nodeYInt = (int) nodeY;
+                        if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
                             selection++;
                             System.out.println("IN1");
-                            if(selection == 1) {
+                            if (selection == 1) {
                                 System.out.println("IN2");
                                 startID = array.get(i).get("id");
                                 startLocation.setValue(array.get(i).get("longName"));
-                            }if(selection == 2){
+                            }
+                            if (selection == 2) {
                                 System.out.println("IN3");
                                 endLocation.setValue(array.get(i).get("longName"));
                                 endID = array.get(i).get("id");
@@ -1237,7 +1240,6 @@ public class newMapEditor {
                                 selection = 0;
                             }
                             System.out.println(array.get(i).get("longName"));
-
                         }
                     }
                 }
@@ -1246,10 +1248,21 @@ public class newMapEditor {
 
     }
 
+
     //ability to select edge and autofill fields
 
 
 
+    public void cancelButton(ActionEvent e) {
+        cancelEdge();
+    }
+
+    public void cancelEdge() {
+        startLocation.setValue(null);
+        endLocation.setValue(null);
+        edgeID.setValue(null);
+        selection = 0;
+    }
 
     public void nextFloor(ActionEvent event) {
         //set current floor to one after current
@@ -1278,6 +1291,7 @@ public class newMapEditor {
             for(int i = 0; i < array.size(); i++) {
                 if(array.get(i).getId().equals(edgeID.getValue().toString())) {
                     System.out.println("This lies between " + startLocation.getValue() + " and " + endLocation.getValue());
+                    //TODO fix this so it takes in ID
                     DB.deleteEdge(startLocation.getValue(), endLocation.getValue());
                 }
             }
@@ -1294,7 +1308,7 @@ public class newMapEditor {
         String endInput = null;
         if(startLocation.getValue() != null && endLocation.getValue() != null) {
             System.out.println(startLocation.getValue());
-            String ID = startLocation.getValue() + "_" + endLocation.getValue();
+            String ID = null;
             for(int i = 0; i < array.size(); i++) {
                 if(array.get(i).get("longName").equals(startLocation.getValue())) {
                     startInput = array.get(i).get("id");
@@ -1302,6 +1316,9 @@ public class newMapEditor {
                 if(array.get(i).get("longName").equals(endLocation.getValue())) {
                     endInput = array.get(i).get("id");
                 }
+            }
+            if(startInput != null && endInput != null) {
+                ID = startInput + "_" + endInput;
             }
             DB.addEdge(ID, startInput, endInput);
             System.out.println("This happened");

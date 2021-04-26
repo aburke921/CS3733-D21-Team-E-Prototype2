@@ -371,7 +371,7 @@ public class PathFinder {
     }
 
     /**
-     * Uses {@link Searcher}'s search() function to find the best path,
+     * Uses {@link SearchContext}'s search() function to find the best path,
      * given the two current start and end positions ({@link #selectedStartNodeID} and {@link #selectedEndNodeID}).
      * Then calls {@link #drawMap(Path, String)}.
      * Sets {@link #currentFoundPath}. Returns a SnackBar when path is null.
@@ -420,7 +420,12 @@ public class PathFinder {
             findPathButton.setDisable(true);
         } else { // run search
             //Call the path search function
-            Path foundPath = aStar.search(selectedStartNodeID, selectedEndNodeID);
+            //String stop = "FEXIT00201";
+            List<String> stops = new ArrayList<>();
+            stops.add(selectedStartNodeID);
+            //stops.add(stop);
+            stops.add(selectedEndNodeID);
+            Path foundPath = aStar.search(stops);
 
             //draw map, unless path is null
             if (foundPath == null) { //path is null

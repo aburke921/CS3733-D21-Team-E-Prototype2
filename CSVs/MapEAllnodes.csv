@@ -245,7 +245,7 @@ DHALL05402,3450,850,2,15 Francis,HALL,Hallway 54 Floor 2,Hallway D5402
 DHALL05502,3440,800,2,15 Francis,HALL,Hallway 55 Floor 2,Hallway D5502
 DHALL05602,3480,790,2,15 Francis,HALL,Hallway 56 Floor 2,Hallway D5602
 DHALL05702,3510,790,2,15 Francis,HALL,Hallway 57 Floor 2,Hallway D5702
-DHALL05802,3420,850,2,15 Francis,HALL,Hallway 58 Floor 2,Hallway D5802
+DHALL05802,3420,855,2,15 Francis,HALL,Hallway 58 Floor 2,Hallway D5802
 PHALL00102,4300,630,2,45 Francis,HALL,Kiosk,HALL
 ESTAI00101,2190,910,1,45 Francis,STAI,Staircase K1 Floor 1,Stair K1
 EHALL00301,2240,910,1,45 Francis,HALL,Hallway Node 1 Floor 1,Hall 01
@@ -624,3 +624,9 @@ eWALK01601,3189,1360,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01701,3185,1292,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01801,3338,1352,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01901,1789,1757,1,Parking,WALK,Shapiro Lobby Entrance Sidewalk,Walkway
+eHALL00101,1758,1083,1,Tower,HALL,Tower Hallway e1,Tower Hall eHALL00101
+eSTAI001L2,1586,2195,L2,Shapiro,STAI,Shapiro Stairs Floor L2 Stairs 1,Shapiro Stair eSTAI001L2
+eSTAI001L1,1643,2190,L1,Shapiro,STAI,Shapiro Stairs Floor L1 Stairs 1,Shapiro Stair eSTAI001L1
+eSTAI00101,1673,2179,1,Shapiro,STAI,Shapiro Stairs Floor 1 Stairs 1,Shapiro Stair eSTAI00101
+eSTAI00102,1592,2154,2,Shapiro,STAI,Shapiro Stairs Floor 2 Stairs 1,Shapiro Stair eSTAI00102
+eSTAI00103,1595,2181,3,Shapiro,STAI,Shapiro Stairs Floor 3 Stairs 1,Shapiro Stair eSTAI00103

@@ -32,7 +32,7 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 
 .submit-button {
     -jfx-button-type: RAISED;
-    -fx-text-fill:WHITE;
+    -fx-text-fill: WHITE;
     -fx-background-color: -fx--primary;
 }
 
@@ -40,6 +40,14 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
     -jfx-button-type: FLAT;
     -fx-border-color: -fx--secondary-light;
     /*-fx-background-radius: 100px;*/
+}
+
+.default-button {
+    -jfx-button-type: FLAT;
+    -fx-text-fill: WHITE;
+    -fx-background-color: -fx--primary-dark;
+    -fx-border-color:  -fx--primary-light;
+
 }
 
 /*Toggle buttons*/

@@ -1,6 +1,8 @@
 package edu.wpi.TeamE.views;
 
+import com.jfoenix.controls.JFXButton;
 import edu.wpi.TeamE.App;
+import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -18,17 +22,20 @@ import java.io.IOException;
 
 public class Default {
 
+    @FXML
+    private AnchorPane appBarAnchorPane;
+
     @FXML // fx:id="imageView"
     private ImageView imageView;
 
-    @FXML // fx:id="exit"
-    private Polygon exit;
+    @FXML // fx:id="stackPane"
+    private StackPane stackPane; //main stack pane used for JFXDialog popups
 
-    @FXML // fx:id="imageView"
-    private Circle hide;
+    @FXML // fx:id="mapEditorButton"
+    private JFXButton mapEditorButton;
 
-    @FXML // fx:id="imageView"
-    private Rectangle fullscreen;
+    @FXML // fx:id="serviceRequestButton"
+    private JFXButton serviceRequestButton;
 
     /**
      * Move to Service Request page
@@ -51,7 +58,7 @@ public class Default {
     @FXML
     private void toMapEditor(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MapEditorNavigation.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/newMapEditor.fxml"));
             App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -96,14 +103,33 @@ public class Default {
     }
 
     public void initialize() {
+
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setShowHelp(true);
+            App.setShowLogin(true);
+            App.setStackPane(stackPane);
+            App.setPageTitle("Home");
+            App.setHelpText(""); //todo help text
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Image image = new Image("edu/wpi/TeamE/logo.png");
         imageView.setImage(image);
 
-        //If exit button is clicked, exit app
-        exit.setOnMouseClicked(event -> {
-            App app = new App();
-            app.stop();
-        });
+
+        String userType = UserAccountDB.getUserType(App.userID);
+        if(App.userID == 0 || userType.equals("doctor") || userType.equals("patient") || userType.equals("visitor")) {
+            mapEditorButton.setVisible(false);
+        }
+
+        if(App.userID == 0) {
+            serviceRequestButton.setVisible(false);
+        }
     }
 
 }

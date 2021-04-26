@@ -437,6 +437,7 @@ public class PathFinder {
                 double prevYCoord = 0;
 
                 int firstNode = 1;
+                String firstID = null;
                 while (legItr.hasNext()) { //loop through list
                     //this iterator will return a Node object
                     //which is just a container for all the node info like its coordinates
@@ -447,22 +448,52 @@ public class PathFinder {
                     double yCoord = (double) node.getY() / scale;
 
                     if (firstNode == 1) { //if current node is the starting node
-                        firstNode = 0;
+                        if (!(prevYCoord < 1) || !(prevXCoord < 1)) {
+                            //technically second node, here to prevent circle from being "under" path line, prev will be fist node
+                            firstNode = 0;
+                            Circle circle;
+                            if (firstID.equalsIgnoreCase(selectedStartNodeID)) {
+                                // True first node
+                                circle = new Circle(prevXCoord, prevYCoord, radius, Color.GREEN);
+                            } else {
+                                // First on floor
+                                circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
+                            }
+
+
+                            //create a line between this node and the previous node
+                            Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                            line.setStrokeLineCap(StrokeLineCap.ROUND);
+                            line.setStrokeWidth(strokeWidth);
+                            line.setStroke(Color.RED);
+
+                            g.getChildren().addAll(line, circle);
+                        } else {
+                            //Track true first node's ID, for node color issue
+                            firstID = node.get("id");
+                        }
+                        if (!legItr.hasNext()) { //if current node is the ending node for this floor, e.g. last node is also first node on floor
+
+                            Circle circle;
+
+                            if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
+                                //place a dot on the location
+                                circle = new Circle(xCoord, yCoord, radius, Color.GREEN);
+                            } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
+                                //place a dot on the location
+                                circle = new Circle(xCoord, yCoord, radius, Color.BLACK);
+                            } else { // end node of just this floor
+                                //place a dot on the location
+                                circle = new Circle(xCoord, yCoord, radius, Color.RED);
+                            }
+
+                            g.getChildren().addAll(circle);
+                        }
+                        //update the coordinates for the previous node
                         prevXCoord = xCoord;
                         prevYCoord = yCoord;
 
-                        if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
 
-                            //place a dot on the location
-                            Circle circle = new Circle(xCoord, yCoord, radius, Color.GREEN);
-                            g.getChildren().add(circle);
-                        } else { // start node of just this floor
-
-                            //place a red dot on the location
-                            Circle circle = new Circle(xCoord, yCoord, radius, Color.RED);
-                            g.getChildren().add(circle);
-
-                        }
                     } else if (!legItr.hasNext()) { //if current node is the ending node for this floor
 
                         Circle circle;
@@ -481,7 +512,7 @@ public class PathFinder {
                         line.setStrokeWidth(strokeWidth);
                         line.setStroke(Color.RED);
 
-                        g.getChildren().addAll(circle, line);
+                        g.getChildren().addAll(line, circle);
                     } else {
                         //create a line between this node and the previous node
                         Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);

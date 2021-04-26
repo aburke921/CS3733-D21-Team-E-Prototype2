@@ -84,7 +84,8 @@ public class Floral extends ServiceRequestFormComponents {
             String reciever = recipient.getText();
             String mess = message.getText();
 
-            DB.addFloralRequest(App.userID, assigned, nodeInfo, reciever, type, 12, vase, mess);
+            //assigned is now an integer (userID) so must be changed
+            DB.addFloralRequest(App.userID, 0, nodeInfo, reciever, type, 12, vase, mess);
 
         }
     }
@@ -105,8 +106,8 @@ public class Floral extends ServiceRequestFormComponents {
 
     @FXML
     void initialize() {
-        nodeID = NodeDB.getListOfNodeIDS();
-        locations = NodeDB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
+        locations = DB.getAllNodeLongNames();
         locationInput.setItems(locations);
         assert locationInput != null;
         assert flowerType != null;

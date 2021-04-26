@@ -37,12 +37,6 @@ import javafx.scene.shape.Rectangle;
 
 public class FoodDelivery extends ServiceRequestFormComponents {
 
-	@FXML // ResourceBundle that was given to the FXMLLoader
-	private ResourceBundle resources;
-
-	@FXML // URL location of the FXML file that was given to the FXMLLoader
-	private URL location;
-
 	@FXML // fx:id="fullscreen"
 	private Rectangle fullscreen; // Value injected by FXMLLoader
 
@@ -72,9 +66,6 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 
 	@FXML // fx:id="descriptionInput"
 	private JFXTextArea descriptionInput; // Value injected by FXMLLoader
-
-	@FXML // fx:id="ETAInput"
-	private JFXTextField ETAInput; // Value injected by FXMLLoader
 
 	@FXML // fx:id="cancel"
 	private JFXButton cancel; // Value injected by FXMLLoader

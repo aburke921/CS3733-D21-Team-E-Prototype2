@@ -1,11 +1,11 @@
 package edu.wpi.TeamE.views.serviceRequestObjects;
 
-public class LanguageInterpreter extends ServiceRequestObjs {
+public class LanguageInterpreterObj extends ServiceRequestObjs {
 
     private String language;
     private String description;
 
-    public LanguageInterpreter(String nodeID, int assigneeID, int userID, String language, String description) {
+    public LanguageInterpreterObj(String nodeID, int assigneeID, int userID, String language, String description) {
 
         super.nodeID = nodeID;
         super.assigneeID = assigneeID;

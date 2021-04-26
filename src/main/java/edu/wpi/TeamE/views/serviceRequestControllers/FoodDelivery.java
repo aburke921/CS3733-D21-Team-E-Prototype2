@@ -6,6 +6,7 @@ package edu.wpi.TeamE.views.serviceRequestControllers;
 
 import java.io.IOException;
 
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.FXCollections;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import edu.wpi.TeamE.databases.NodeDB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -94,7 +94,7 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
 	void initialize() {
-		ObservableList<String> locations  = NodeDB.getAllNodeLongNames();
+		ObservableList<String> locations  = DB.getAllNodeLongNames();
 		locationInput.setItems(locations);
 
 		ArrayList<ArrayList<String>> menuStuff  = getMenuItems();

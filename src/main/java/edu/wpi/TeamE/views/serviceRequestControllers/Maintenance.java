@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import edu.wpi.TeamE.databases.NodeDB;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -106,8 +106,8 @@ public class Maintenance extends ServiceRequestFormComponents {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        nodeID = NodeDB.getListOfNodeIDS();
-        locations = NodeDB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
+        locations = DB.getAllNodeLongNames();
         locationInput.setItems(locations);
         assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";

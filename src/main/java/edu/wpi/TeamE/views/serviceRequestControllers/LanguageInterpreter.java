@@ -4,7 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
-import edu.wpi.TeamE.databases.NodeDB;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -68,7 +68,7 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 	void initialize() { ;
 //		ObservableList<String> employees = SomethingDB.getAllEmployeeNames();
 //		assignedPersonnel.setItems(employees);
-		locations = NodeDB.getAllNodeLongNames();
+		locations = DB.getAllNodeLongNames();
 		locationInput.setItems(locations);
 	}
 

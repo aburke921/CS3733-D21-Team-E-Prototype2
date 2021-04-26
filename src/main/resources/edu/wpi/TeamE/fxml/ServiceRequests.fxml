@@ -87,7 +87,7 @@
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="20.0" />
+                              <Insets top="15.0" />
                            </VBox.margin>
                         </JFXButton>
                         <JFXButton fx:id="externalGoButton" mnemonicParsing="false" onAction="#toExternalPatient" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="External Patient Transport" textFill="WHITE">
@@ -95,12 +95,12 @@
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets top="7.0" />
                            </VBox.margin>
                         </JFXButton>
                         <JFXButton fx:id="sanitationGoButton" mnemonicParsing="false" onAction="#toSanitation" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Sanitation Services" textFill="WHITE">
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets top="7.0" />
                            </VBox.margin>
                            <font>
                               <Font size="18.0" />
@@ -108,7 +108,7 @@
                         </JFXButton>
                         <JFXButton fx:id="medicineGoButton" mnemonicParsing="false" onAction="#toMedicineDelivery" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Medicine Delivery" textFill="WHITE">
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets top="7.0" />
                            </VBox.margin>
                            <font>
                               <Font size="18.0" />
@@ -116,7 +116,7 @@
                         </JFXButton>
                         <JFXButton fx:id="securityGoButton" mnemonicParsing="false" onAction="#toSecurity" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Security Services" textFill="WHITE">
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets top="7.0" />
                            </VBox.margin>
                            <font>
                               <Font size="18.0" />
@@ -127,7 +127,7 @@
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets top="7.0" />
                            </VBox.margin>
                         </JFXButton>
                         <JFXButton fx:id="laundryRequestButton" layoutX="460.0" layoutY="234.0" mnemonicParsing="false" onAction="#toLaundryRequest" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Laundry" textFill="WHITE">
@@ -135,7 +135,7 @@
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets top="7.0" />
                            </VBox.margin>
                         </JFXButton>
                         <JFXButton fx:id="foodDeliveryButton" layoutX="460.0" layoutY="234.0" mnemonicParsing="false" onAction="#toFoodDelivery" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Food Delivery" textFill="WHITE">
@@ -143,7 +143,7 @@
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets top="7.0" />
                            </VBox.margin>
                         </JFXButton>
                         <JFXButton fx:id="languageInterpreterButton" layoutX="460.0" layoutY="234.0" mnemonicParsing="false" onAction="#toLanguageInterpreter" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Language Interpreter" textFill="WHITE">
@@ -151,7 +151,15 @@
                               <Font size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets top="7.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="religionButton" layoutX="460.0" layoutY="234.0" mnemonicParsing="false" onAction="#toReligous" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Religious Requests" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="7.0" />
                            </VBox.margin>
                         </JFXButton>
                      </children>

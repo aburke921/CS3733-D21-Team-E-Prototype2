@@ -132,7 +132,15 @@ public class ServiceRequests {
         }
     }
 
-
+    @FXML
+    private void toReligous(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/ReligiousRequests.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {

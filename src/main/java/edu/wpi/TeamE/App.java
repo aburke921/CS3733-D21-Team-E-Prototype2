@@ -1,13 +1,12 @@
 package edu.wpi.TeamE;
 
-import edu.wpi.TeamE.databases.*;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-import edu.wpi.TeamE.databases.makeConnection;
+
 
 
 

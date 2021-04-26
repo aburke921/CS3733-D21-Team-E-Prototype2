@@ -12,9 +12,6 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
-import edu.wpi.TeamE.databases.NodeDB;
-import edu.wpi.TeamE.databases.RequestsDB;
-import edu.wpi.TeamE.databases.makeConnection;
 import edu.wpi.TeamE.views.serviceRequestControllers.ServiceRequestFormComponents;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
@@ -22,7 +19,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.shape.Polygon;
 
-public class ExternalPatient extends ServiceRequestFormComponents {
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;

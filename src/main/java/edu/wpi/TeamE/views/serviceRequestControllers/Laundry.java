@@ -12,7 +12,7 @@ import java.lang.String;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import edu.wpi.TeamE.databases.NodeDB;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -75,7 +75,7 @@ public class Laundry extends ServiceRequestFormComponents {
         assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'Laundry.fxml'.";
-        ObservableList<String> locations = NodeDB.getAllNodeLongNames();
+        ObservableList<String> locations = DB.getAllNodeLongNames();
         locationInput.setItems(locations);
         assert washLoadAmountInput != null : "fx:id=\"washLoadAmountInput\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert dryLoadAmountInput != null : "fx:id=\"dryLoadAmountInput\" was not injected: check your FXML file 'Laundry.fxml'.";

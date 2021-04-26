@@ -94,7 +94,7 @@
                                     <Insets />
                                  </HBox.margin>
                                  <graphic>
-                                    <MaterialDesignIconView fill="WHITE" glyphName="FLOWER" size="100" style="-fx-fill: -fx--primary;" />
+                                    <MaterialDesignIconView fill="WHITE" glyphName="FLOWER" size="100" />
                                  </graphic>
                               </JFXButton>
                               <JFXButton fx:id="externalGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#toExternalPatient" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="External Patient Transport" textAlignment="CENTER" textFill="#039be5" wrapText="true">
@@ -105,7 +105,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                                  <graphic>
-                                    <MaterialDesignIconView fill="WHITE" glyphName="AMBULANCE" size="100" style="-fx-fill: -fx--primary;" />
+                                    <MaterialDesignIconView fill="WHITE" glyphName="AMBULANCE" size="100" />
                                  </graphic>
                               </JFXButton>
                               <JFXButton fx:id="sanitationGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#toSanitation" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Sanitation Services" textAlignment="CENTER" textFill="#039be5" wrapText="true">
@@ -116,7 +116,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                                  <graphic>
-                                    <MaterialDesignIconView fill="WHITE" glyphName="DELETE" size="100" style="-fx-fill: -fx--primary;" />
+                                    <MaterialDesignIconView fill="WHITE" glyphName="DELETE" size="100" />
                                  </graphic>
                               </JFXButton>
                               <JFXButton fx:id="medicineGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#toMedicineDelivery" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Medicine Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
@@ -127,7 +127,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                                  <graphic>
-                                    <MaterialDesignIconView fill="WHITE" glyphName="PILL" size="100" style="-fx-fill: -fx--primary;" />
+                                    <MaterialDesignIconView fill="WHITE" glyphName="PILL" size="100" />
                                  </graphic>
                               </JFXButton>
                            </children>
@@ -145,7 +145,7 @@
                                     <Insets />
                                  </HBox.margin>
                                  <graphic>
-                                    <MaterialDesignIconView fill="WHITE" glyphName="SHIELD" size="100" style="-fx-fill: -fx--primary;" />
+                                    <MaterialDesignIconView fill="WHITE" glyphName="SHIELD" size="100" />
                                  </graphic>
                               </JFXButton>
                               <JFXButton fx:id="maintenanceRequestButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#toMaintenanceRequest" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Facilities Maintenance" textAlignment="CENTER" textFill="#039be5" wrapText="true">
@@ -156,7 +156,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                                  <graphic>
-                                    <MaterialDesignIconView fill="WHITE" glyphName="WRENCH" size="100" style="-fx-fill: -fx--primary;" />
+                                    <MaterialDesignIconView fill="WHITE" glyphName="WRENCH" size="100" />
                                  </graphic>
                               </JFXButton>
                               <JFXButton fx:id="laundryRequestButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#toLaundryRequest" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Laundry" textAlignment="CENTER" textFill="#039be5" wrapText="true">
@@ -167,7 +167,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                                  <graphic>
-                                    <MaterialDesignIconView fill="WHITE" glyphName="TSHIRT_CREW" size="100" style="-fx-fill: -fx--primary;" />
+                                    <MaterialDesignIconView fill="WHITE" glyphName="TSHIRT_CREW" size="100" />
                                  </graphic>
                               </JFXButton>
                               <JFXButton fx:id="foodDeliveryButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#toFoodDelivery" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Food Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
@@ -178,7 +178,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                                  <graphic>
-                                    <MaterialDesignIconView fill="WHITE" glyphName="FOOD" size="100" style="-fx-fill: -fx--primary;" />
+                                    <MaterialDesignIconView fill="WHITE" glyphName="FOOD" size="100" />
                                  </graphic>
                               </JFXButton>
                            </children>
@@ -196,7 +196,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                                  <graphic>
-                                    <FontAwesomeIconView fill="WHITE" glyphName="LANGUAGE" size="100" style="-fx-fill: -fx--primary;" />
+                                    <FontAwesomeIconView fill="WHITE" glyphName="LANGUAGE" size="100" />
                                  </graphic>
                               </JFXButton>
                               <JFXButton fx:id="religionButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#toReligous" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Religious Requests" textAlignment="CENTER" textFill="#039be5" wrapText="true">
@@ -207,7 +207,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                                  <graphic>
-                                    <MaterialDesignIconView fill="WHITE" glyphName="CHURCH" size="100" style="-fx-fill: -fx--primary;" />
+                                    <MaterialDesignIconView fill="WHITE" glyphName="CHURCH" size="100" />
                                  </graphic>
                               </JFXButton>
                               <JFXButton fx:id="religionButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#toReligous" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" textAlignment="CENTER" textFill="#039be5" wrapText="true">
@@ -218,7 +218,7 @@
                                     <Insets left="20.0" />
                                  </HBox.margin>
                                  <graphic>
-                                    <FontAwesomeIconView fill="WHITE" size="100" style="-fx-fill: -fx--primary;" />
+                                    <MaterialDesignIconView fill="WHITE" size="100" />
                                  </graphic>
                               </JFXButton>
                            </children>

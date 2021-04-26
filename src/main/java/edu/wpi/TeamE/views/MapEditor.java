@@ -1,17 +1,14 @@
 package edu.wpi.TeamE.views;
 import com.jfoenix.controls.*;
 import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.cs3733.D21.teamE.DB;
-
-import edu.wpi.cs3733.D21.teamE.DB;
-
-import edu.wpi.cs3733.D21.teamE.database.makeConnection;
+import edu.wpi.TeamE.databases.makeConnection;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.scene.image.Image;
@@ -70,7 +67,7 @@ public class MapEditor {
      */
     @FXML
     void initialize() {
-
+        makeConnection connection = makeConnection.makeConnection();
         prepareNodes(treeTable);
         //Creating Type dropdown
         ArrayList<String> nodeTypeArrayList = new ArrayList<String>();
@@ -110,7 +107,7 @@ public class MapEditor {
         listOfBuildings.addAll(nodeBuildingArrayList);
         //Creating ID Dropdown
         ArrayList<String> nodeIDArrayList = new ArrayList<String>();
-        nodeIDArrayList = DB.getListOfNodeIDS();
+        nodeIDArrayList = connection.getListOfNodeIDS();
         ObservableList<String> listOfIDS = FXCollections.observableArrayList();
         listOfIDS.addAll(nodeIDArrayList);
         //add ObservableLists to dropdowns
@@ -186,8 +183,8 @@ public class MapEditor {
      * @param table this is the table being prepared with the nodes
      */
     public void prepareNodes(TreeTableView<Node> table) {
-
-        ArrayList<Node> array = DB.getAllNodes();
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Node> array = connection.getAllNodes();
         if (table.getRoot() == null) {
             //Column 1 - Location
             TreeTableColumn<Node, String> column = new TreeTableColumn<>("Location");
@@ -546,8 +543,8 @@ public class MapEditor {
         }
 
 
-
-        DB.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
+        makeConnection connection = makeConnection.makeConnection();
+        connection.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
     }
 
     /**
@@ -567,8 +564,8 @@ public class MapEditor {
             SB.append(longName.charAt(9));
             //Elevator names need to start with 'Elevator X xxxxx"
         } else {
-
-            int instance = DB.countNodeTypeOnFloor("e", floor, type) + 1;
+            makeConnection connection = makeConnection.makeConnection();
+            int instance = connection.countNodeTypeOnFloor("e", floor, type) + 1;
             SB.append(String.format("%03d", instance));
         }
 
@@ -593,7 +590,7 @@ public class MapEditor {
      */
     public int addNode() {
         int i = -1;
-
+        makeConnection connection = makeConnection.makeConnection();
         if (floorInput.getValue().toString().equals("")) {
             errorPopup("Must input Floor");
             return i;
@@ -624,7 +621,7 @@ public class MapEditor {
         }
         int xVal = Integer.parseInt(xCordInput.getText());
         int yVal = Integer.parseInt(yCordInput.getText());
-        i = DB.addNode(genNodeID(typeInput.getValue().toString(),floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
+        i = connection.addNode(genNodeID(typeInput.getValue().toString(),floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
         System.out.println(i);
         return i;
     }
@@ -645,8 +642,8 @@ public class MapEditor {
      */
     public int deleteNode(TreeTableView<Node> table) {
         int s = -1;
-
-        ArrayList<Node> array = DB.getAllNodes();
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Node> array = connection.getAllNodes();
         if(table.getSelectionModel().getSelectedItem().getValue() == null) {
             errorPopup("Must select Node ID to delete");
             return s;
@@ -654,7 +651,7 @@ public class MapEditor {
             //System.out.println(idDropDown.getValue().toString());
             for (int i = 0; i < array.size(); i++) {
                 if (array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
-                    s = DB.deleteNode(array.get(i).get("id"));
+                    s = connection.deleteNode(array.get(i).get("id"));
                 }
             }
        }
@@ -697,23 +694,14 @@ public class MapEditor {
         makeConnection connection = makeConnection.makeConnection();
         if (file != null) {
             //Have to save edge table so we can get it back after deleting
-            DB.getNewCSVFile("hasEdge");
+            connection.getNewCSVFile("hasEdge");
             File saveEdges = new File("CSVs/outputEdge.csv");
 
             //This is where tables are cleared and refilled
             connection.deleteAllTables();
-            DB.createNodeTable();
-            DB.createEdgeTable();
-            DB.createUserAccountTable();
-            DB.createRequestsTable();
-            DB.createFloralRequestsTable();
-            DB.createSanitationTable();
-            DB.createExtTransportTable();
-            DB.createMedDeliveryTable();
-            DB.createSecurityServTable();
-            DB.createAppointmentTable();
-            DB.populateTable("node", file);
-            DB.populateTable("hasEdge", saveEdges);
+            connection.createTables();
+            connection.populateTable("node", file);
+            connection.populateTable("hasEdge", saveEdges);
             System.out.println("Success");
         }
     }
@@ -727,8 +715,8 @@ public class MapEditor {
      */
     @FXML
     private void openFile(ActionEvent e) throws IOException {
-
-        DB.getNewCSVFile("node");
+        makeConnection connection = makeConnection.makeConnection();
+        connection.getNewCSVFile("node");
         File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);

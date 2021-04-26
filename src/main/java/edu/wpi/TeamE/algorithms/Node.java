@@ -1,6 +1,9 @@
 package edu.wpi.TeamE.algorithms;
 
+import edu.wpi.TeamE.databases.makeConnection;
+
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -150,16 +153,7 @@ public class Node implements Comparable<Node> {
      * @return true if the two nodes 'id's  are equal
      */
     public boolean equals(Node n){
-        if(nodeInfo == null && n.nodeInfo == null){
-            //two pathHeads, equal
-            return true;
-        } else if(nodeInfo == null || n.nodeInfo == null){
-            //one pathHead but not two, not equal
-            return false;
-        } else {
-            //no pathHeads, equal if ids are equal
-            return get("id").equalsIgnoreCase(n.get("id"));
-        }
+        return get("id").equalsIgnoreCase(n.get("id"));
     }
 
     /**

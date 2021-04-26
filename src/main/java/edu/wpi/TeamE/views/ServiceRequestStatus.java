@@ -2,13 +2,7 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableView;
 //import edu.wpi.TeamE.algorithms.Node;
-
-import edu.wpi.TeamE.algorithms.Node;
-
-
-
-
-import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.TeamE.databases.makeConnection;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.control.*;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
@@ -54,10 +48,10 @@ public class ServiceRequestStatus {
     }
 
     private void cancel(TreeTableView<ServiceRequestForm> table) {
-
+        makeConnection connection = makeConnection.makeConnection();
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            DB.editRequests(id, 0, "canceled");
+            connection.changeRequestStatus(id, "canceled");
             System.out.println("The request was cancelled");
         }
     }
@@ -69,9 +63,10 @@ public class ServiceRequestStatus {
     }
 
     private void complete(TreeTableView<ServiceRequestForm> table) {
+        makeConnection connection = makeConnection.makeConnection();
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            DB.editRequests(id,0, "complete");
+            connection.changeRequestStatus(id,"complete");
             System.out.println("The request was completed");
         }
 
@@ -96,14 +91,14 @@ public class ServiceRequestStatus {
      * @param cancelled the TreeItem for the service requests that were cancelled
      */
     private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
-
-        ArrayList<String> idArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestID");
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<String> idArray = connection.getRequestIDs(tableName, App.userID);
 //        for(int j = 0; j < idArray.size(); j++) {
 //            System.out.println(idArray.get(j));
 //        }
-        ArrayList<String> statusArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
-        ArrayList<String> locationArray = DB.getRequestLocations(tableName, App.userID);
-        ArrayList<String> assigneeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "assigneeID");
+        ArrayList<String> statusArray = connection.getRequestStatus(tableName, App.userID);
+        ArrayList<String> locationArray = connection.getRequestLocations(tableName, App.userID);
+        ArrayList<String> assigneeArray = connection.getRequestAssignees(tableName, App.userID);
         if(idArray.size() > 0) {
             System.out.println("Array size" + idArray.size());
             if (!inProgress.getChildren().isEmpty()) {

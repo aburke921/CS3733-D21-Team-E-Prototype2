@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
@@ -22,7 +21,7 @@
 
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.CovidSurvey">
    <children>
-      <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefHeight="65.0" prefWidth="1012.0">
+      <AnchorPane id="app-bar-top" prefWidth="1012.0">
          <children>
             <VBox id="app-bar-top" layoutX="-10.0" layoutY="-10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -83,78 +82,74 @@
       </AnchorPane>
       <AnchorPane prefHeight="687.0" prefWidth="1199.0">
          <children>
-            <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <BorderPane>
-                     <center>
-                        <HBox maxWidth="600.0" prefHeight="610.0" prefWidth="519.0" styleClass="centerPane">
+            <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <center>
+                  <HBox maxWidth="600.0" prefHeight="610.0" prefWidth="519.0" styleClass="centerPane">
+                     <children>
+                        <FlowPane prefHeight="361.0" prefWidth="329.0">
                            <children>
-                              <FlowPane prefHeight="361.0" prefWidth="329.0">
+                              <FlowPane alignment="CENTER" prefHeight="361.0" prefWidth="299.0">
                                  <children>
-                                    <FlowPane alignment="CENTER" prefHeight="361.0" prefWidth="299.0">
+                                    <VBox prefHeight="344.0" prefWidth="232.0">
+                                       <FlowPane.margin>
+                                          <Insets top="20.0" />
+                                       </FlowPane.margin>
                                        <children>
-                                          <VBox prefHeight="344.0" prefWidth="232.0">
-                                             <FlowPane.margin>
-                                                <Insets top="20.0" />
-                                             </FlowPane.margin>
-                                             <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please Check all that apply:" wrappingWidth="306.662109375">
-                                                   <font>
-                                                      <Font size="20.0" />
-                                                   </font>
-                                                </Text>
-                                                <JFXCheckBox fx:id="positiveTest" checkedColor="#007cf8" stylesheets="@mainStyle.css" text="I have had a symptomatic COVID-19 test or I have recieved  a positive test result in the lat 14 days." unCheckedColor="BLACK">
-                                                   <padding>
-                                                      <Insets top="30.0" />
-                                                   </padding>
-                                                   <font>
-                                                      <Font size="15.0" />
-                                                   </font>
-                                                </JFXCheckBox>
-                                                <JFXCheckBox fx:id="symptoms" checkedColor="#007cf8" text="I am experiencing COVID-19 like symptoms." unCheckedColor="BLACK">
-                                                   <padding>
-                                                      <Insets top="30.0" />
-                                                   </padding>
-                                                   <font>
-                                                      <Font size="15.0" />
-                                                   </font>
-                                                </JFXCheckBox>
-                                                <JFXCheckBox fx:id="closeContact" checkedColor="#007cf8" text="I have been in close contact with someone diagnosed with COVID-19 in the last 14 days/" unCheckedColor="BLACK">
-                                                   <padding>
-                                                      <Insets top="30.0" />
-                                                   </padding>
-                                                   <font>
-                                                      <Font size="15.0" />
-                                                   </font>
-                                                </JFXCheckBox>
-                                                <JFXCheckBox fx:id="quarantine" checkedColor="#007cf8" text="I have been ask to self-isolate or quarantine by a doctor or local health official in the last 14 days?" unCheckedColor="BLACK">
-                                                   <font>
-                                                      <Font size="15.0" />
-                                                   </font>
-                                                </JFXCheckBox>
-                                                <JFXCheckBox fx:id="noSymptoms" checkedColor="#007cf8" text="I feel good(No COVID/No Symptoms)" unCheckedColor="BLACK">
-                                                   <VBox.margin>
-                                                      <Insets top="30.0" />
-                                                   </VBox.margin>
-                                                   <font>
-                                                      <Font size="15.0" />
-                                                   </font>
-                                                </JFXCheckBox>
-                                             </children>
-                                          </VBox>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please Check all that apply:" wrappingWidth="306.662109375">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXCheckBox fx:id="positiveTest" checkedColor="#007cf8" stylesheets="@mainStyle.css" text="I have had a symptomatic COVID-19 test or I have recieved  a positive test result in the lat 14 days." unCheckedColor="BLACK">
+                                             <padding>
+                                                <Insets top="30.0" />
+                                             </padding>
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                          <JFXCheckBox fx:id="symptoms" checkedColor="#007cf8" text="I am experiencing COVID-19 like symptoms." unCheckedColor="BLACK">
+                                             <padding>
+                                                <Insets top="30.0" />
+                                             </padding>
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                          <JFXCheckBox fx:id="closeContact" checkedColor="#007cf8" text="I have been in close contact with someone diagnosed with COVID-19 in the last 14 days/" unCheckedColor="BLACK">
+                                             <padding>
+                                                <Insets top="30.0" />
+                                             </padding>
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                          <JFXCheckBox fx:id="quarantine" checkedColor="#007cf8" text="I have been ask to self-isolate or quarantine by a doctor or local health official in the last 14 days?" unCheckedColor="BLACK">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                          <JFXCheckBox fx:id="noSymptoms" checkedColor="#007cf8" text="I feel good(No COVID/No Symptoms)" unCheckedColor="BLACK">
+                                             <VBox.margin>
+                                                <Insets top="30.0" />
+                                             </VBox.margin>
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </JFXCheckBox>
                                        </children>
-                                    </FlowPane>
+                                    </VBox>
                                  </children>
-                                 <padding>
-                                    <Insets left="150.0" />
-                                 </padding>
                               </FlowPane>
                            </children>
-                        </HBox>
-                     </center>
-                  </BorderPane>
-               </children>
-            </StackPane>
+                           <padding>
+                              <Insets left="150.0" />
+                           </padding>
+                        </FlowPane>
+                     </children>
+                  </HBox>
+               </center>
+            </BorderPane>
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="71.0" prefWidth="1200.0">

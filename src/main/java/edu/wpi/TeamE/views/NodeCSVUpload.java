@@ -2,10 +2,7 @@ package edu.wpi.TeamE.views;
 
 import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.algorithms.Node;
-
-import edu.wpi.cs3733.D21.teamE.DB;
-
-import edu.wpi.cs3733.D21.teamE.database.makeConnection;
+import edu.wpi.TeamE.databases.makeConnection;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
@@ -40,8 +37,8 @@ public class NodeCSVUpload {
      * @param table this is the table being prepared with the nodes
      */
     public void prepareNodes(TreeTableView<Node> table) {
-
-        ArrayList<Node> array = DB.getAllNodes();
+        makeConnection connection = makeConnection.makeConnection();
+        ArrayList<Node> array = connection.getAllNodes();
         if (table.getRoot() == null) {
             Node node0 = new
                     Node("ID",
@@ -117,23 +114,14 @@ public class NodeCSVUpload {
         makeConnection connection = makeConnection.makeConnection();
         if (file != null) {
             //Have to save edge table so we can get it back after deleting
-            DB.getNewCSVFile("hasEdge");
+            connection.getNewCSVFile("hasEdge");
             File saveEdges = new File("CSVs/outputEdge.csv");
 
             //This is where tables are cleared and refilled
             connection.deleteAllTables();
-            DB.createNodeTable();
-            DB.createEdgeTable();
-            DB.createUserAccountTable();
-            DB.createRequestsTable();
-            DB.createFloralRequestsTable();
-            DB.createSanitationTable();
-            DB.createExtTransportTable();
-            DB.createMedDeliveryTable();
-            DB.createSecurityServTable();
-            DB.createAppointmentTable();
-            DB.populateTable("node", file);
-            DB.populateTable("hasEdge", saveEdges);
+            connection.createTables();
+            connection.populateTable("node", file);
+            connection.populateTable("hasEdge", saveEdges);
             System.out.println("Some edges might be removed because their nodes are no longer here");
             System.out.println("Success");
         }
@@ -148,7 +136,8 @@ public class NodeCSVUpload {
      */
     @FXML
     private void openFile(ActionEvent e) throws IOException {
-        DB.getNewCSVFile("node");
+        makeConnection connection = makeConnection.makeConnection();
+        connection.getNewCSVFile("node");
         File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);

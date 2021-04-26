@@ -353,23 +353,25 @@ public class RequestsDB {
 
 	}
 
-	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - foodID: this is used to identify a food item. Every food item must have one.
-	 * - item: this is the name of the food item
-	 * - price: this is the price of the food item
-	 * - calories: this is the number of calories that the food item has
-	 * - description: this is the description of the menu item
-	 */
-	public static void createFoodTable(){
 
-		String query = "Create Table food (\n" +
-				"    foodID int Primary KEY,\n" +
-				"    item varchar(80),\n" +
-				"    price Double,\n" +
-				"    calories int,\n" +
-				"    description varchar(3000)\n" +
+
+
+	/**
+	 * Uses executes the SQL statements required to create a aubonPainMenu table.
+	 * This table has attributes:
+	 * - foodImage: this is the url to an image of the item
+	 * - foodItem: this is the item itself (this is unique and is used as an identifier)
+	 * - foodPrice: this is the price of the foodItem
+	 * - foodCalories: this is the number of calories the food item has
+	 * - foodDescription: this is a description of the food item
+	 */
+	public static void createAubonPainMenuTable(){
+		String query = "create Table aubonPainMenu(\n" +
+				"    foodImage varchar(600),\n" +
+				"    foodItem varchar(100) Primary Key,\n" +
+				"    foodPrice varchar(50),\n" +
+				"    foodCalories varchar(50),\n" +
+				"    foodDescription varchar(3000)\n" +
 				")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -378,93 +380,92 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating food table");
+			System.err.println("error creating aubonPainMenu table");
 		}
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is the identifier of the request where the user is ordering food
-	 * - foodID: this is the identifier of the food item the user is ordering
-	 * - quantity: this is the quantity of a single item the user is ordering
-	 */
-	public static void createFoodOrderedInRequestTable(){
-
-		String query = "Create Table foodOrderedInRequest (\n" +
-				"    requestId int References foodDelivery (requestID)  on Delete Cascade,\n" +
-				"    foodID int References food (foodID) On Delete Cascade,\n" +
-				"    quantity int,\n" +
-				"    Primary Key (requestId, foodID)\n" +
-				")";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating foodOrderedInDelivery table");
-		}
-
-
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - beverageID: this is the identifier of the beverage the user is ordering
-	 * - item: this is the name of the beverage on the menu
-	 */
-	public static void createBeverageTable(){
-		String query = "Create Table beverage (\n" +
-				"    beverageID int Primary key,\n" +
-				"    item varchar(50)\n" +
-				")";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating beverage table");
-		}
-
 	}
 
 
 	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is the identifier of the request where the user is ordering food
-	 * - beverageID: this is the identifier of the beverage the user is ordering
-	 * - quantity: this is the quantity of a single item the user is ordering
+	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
+	 * description to the aubonPainMenu table
+	 * The link to the website being read is: https://order.aubonpain.com/menu/brigham-womens-hospital
 	 */
-	public static void createBeverageOrderedInRequestTable(){
-		String query = "Create Table beverageOrderedInRequest(\n" +
-				"    requestId int References foodDelivery (requestID)  on Delete Cascade,\n" +
-				"    beverageID int References beverage (beverageID) On Delete Cascade,\n" +
-				"    quantity int,\n" +
-				"    Primary Key (requestId, beverageID)\n" +
-				")";
+	public static void populateAbonPainTable() {
 
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+		try {
+			Document doc = Jsoup.connect("https://order.aubonpain.com/menu/brigham-womens-hospital").get();
+			Set<String> classes = doc.classNames();
 
-			prepState.execute();
+			Elements elements = doc.body().select("*");
 
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating beverageOrderedInRequest table");
+			ArrayList<String> foodImage = new ArrayList<>();
+			ArrayList<String> foodItems = new ArrayList<>();
+			ArrayList<String> foodPrice = new ArrayList<>();
+			ArrayList<String> foodCalories = new ArrayList<>();
+			ArrayList<String> foodDescription = new ArrayList<>();
+
+			int count = 0;
+			for (Element element : elements) {
+				if(element.ownText().equals("Breakfast ON THE GO")){
+					count++;
+				}
+				if(count == 2){
+					if (element.normalName().equals("img")) {
+						foodImage.add(element.attr("abs:src"));
+					}
+
+					if(element.className().equals("product-name product__name")){
+						foodItems.add(element.ownText());
+					}
+					if(element.className().equals("product__attribute product__attribute--price")){
+						for(int i = 0; i < foodItems.size() - foodPrice.size() - 1; i++){
+							foodPrice.add(null);
+						}
+						foodPrice.add(element.ownText());
+					}
+					if(element.className().equals("product__attribute product__attribute--calorie-label")){
+						for(int i = 0; i < foodItems.size() - foodCalories.size() - 1; i++){
+							foodCalories.add(null);
+						}
+						foodCalories.add(element.ownText());
+					}
+					if(element.className().equals("product__description")){
+						for(int i = 0; i < foodItems.size() - foodDescription.size() - 1; i++){
+							foodDescription.add(null);
+						}
+						foodDescription.add(element.ownText());
+					}
+				}
+
+
+			}
+
+			for(int i = 0; i < foodImage.size(); i++){
+				String image = null;
+				String price = null;
+				String calories = null;
+				if(i < foodImage.size()){
+					image = foodImage.get(i);
+				}
+				if(i < foodPrice.size()){
+					price = foodPrice.get(i);
+				}
+				if(i < foodCalories.size()){
+					calories = foodCalories.get(i);
+				}
+
+				addAubonPainMenuItem(image, foodItems.get(i), price, calories, foodDescription.get(i));
+			}
+
+
+		}catch(IOException e){
+			e.printStackTrace();
+			System.out.println("error reading in Aubon Pain website in addAbonPainTable()");
 		}
+
+
+
 	}
-
-
-
-
-
-
-
 
 
 
@@ -740,56 +741,6 @@ public class RequestsDB {
 		}
 	}
 
-	/**
-	 * Adds a food item to the food table
-	 * @param item this is the item that is on the menu
-	 * @param price this is the price of the item on the menu
-	 * @param calories this is how many calories the menu item has
-	 * @param description this is a description of the food item
-	 */
-	public static void addFoodItem(String item, double price, int calories, String description){
-
-		int foodID = getMaxFoodID() + 1;
-		String query = "insert into food values (?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.setInt(1,foodID);
-			prepState.setString(2,item);
-			prepState.setDouble(3,price);
-			prepState.setInt(4,calories);
-			prepState.setString(5,description);
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("error addFoodItem()");
-		}
-
-	}
-
-	/**
-	 * Adds a beverage item to the beverage table
-	 * @param item this is the item that is on the menu
-	 */
-	public static void addBeverageItem(String item){
-
-		int beverageID = getMaxBeverageID() + 1;
-		String query = "insert into beverage values (?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.setInt(1,beverageID);
-			prepState.setString(2,item);
-
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("error addBeverageItem()");
-		}
-
-	}
 
 	/**
 	 * Gets the largest requestID, which can be used to increment and make a the next one
@@ -817,90 +768,35 @@ public class RequestsDB {
 	}
 
 	/**
-	 * Gets the largest foodID, which can be used to increment and make a the next one
-	 * @return the largest foodID in the food table
+	 * adds a menuItem to the aubonPainMenu database table
+	 * @param foodImage this is the url to an image of the item
+	 * @param foodItem this is the item itself (this is unique and is used as an identifier)
+	 * @param foodPrice this is the price of the foodItem
+	 * @param foodCalories this is the number of calories the food item has
+	 * @param foodDescription this is a description of the food item
 	 */
-	public static int getMaxFoodID(){
-		int maxID = 0;
+	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription){
 
-		String query = "Select Max(foodID) As maxFoodID From food";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			ResultSet rset = prepState.executeQuery();
-
-			if (rset.next()) {
-				maxID = rset.getInt("maxFoodID");
-			}
-
-			prepState.close();
-			return maxID;
-		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("Error in getMaxFoodID()");
-			return 0;
-		}
-	}
-
-	/**
-	 * Gets the largest beverageID, which can be used to increment and make a the next one
-	 * @return the largest beverageID in the beverage table
-	 */
-	public static int getMaxBeverageID(){
-		int maxID = 0;
-
-		String query = "Select Max(beverageID) As maxBeverage From beverage";
+		String query = "Insert Into aubonPainMenu Values(?,?,?,?,?) ";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			ResultSet rset = prepState.executeQuery();
+			prepState.setString(1,foodImage);
+			prepState.setString(2,foodItem);
+			prepState.setString(3,foodPrice);
+			prepState.setString(4,foodCalories);
+			prepState.setString(5,foodDescription);
 
-			if (rset.next()) {
-				maxID = rset.getInt("maxBeverage");
-			}
-
-			prepState.close();
-			return maxID;
-		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("Error in getMaxBeverageID()");
-			return 0;
-		}
-	}
-
-
-	//TODO: Not tested
-	public static void addFoodOrderedInRequestTable(int requestID, int foodID, int foodQuantity){
-		String query = "insert into foodOrderedInRequest values (?,?,?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.setInt(1,requestID);
-			prepState.setInt(2,foodID);
-			prepState.setInt(3, foodQuantity);
 			prepState.execute();
 
-		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("Error in addFoodOrderedInRequestTable()");
-		}
-
-	}
-
-	//TODO: Not tested
-	public static void addBeverageOrderedInRequestTable(int requestID, int beverageID, int beverageQuantity){
-		String query = "insert into beverageOrderedInRequest values (?,?,?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.setInt(1,requestID);
-			prepState.setInt(2,beverageID);
-			prepState.setInt(3, beverageQuantity);
-			prepState.execute();
 
 		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("Error in addFoodOrderedInRequestTable()");
+			e.printStackTrace();
+			System.err.println("error inserting addAubonPainMenuItem() ");
 		}
 
 
 	}
+
 
 
 
@@ -1490,141 +1386,6 @@ public class RequestsDB {
 	}
 
 
-	/**
-	 * Reads in the Aubon Pain website to populate the foods and drinks table with real information
-	 */
-	public static void updateFoodAndBeverageTable(){
-
-		try {
-			Document doc = Jsoup.connect("https://order.aubonpain.com/menu/brigham-womens-hospital").get();
-			Elements media = doc.select("[src]"); // --> image urls
-			Elements foods = doc.getElementsByClass("product-name product__name");
-			Elements prices = doc.getElementsByClass("product__attribute product__attribute--price");
-			Elements calories = doc.getElementsByClass("product__attribute product__attribute--calorie-label");
-			Elements descriptions = doc.getElementsByClass("product__description");
-
-			ArrayList<String> listOfFoods = new ArrayList<String>();
-			ArrayList<String> listOfDrinks = new ArrayList<String>();
-
-			HashMap<Boolean,String> menuItems = new HashMap<Boolean, String>();
-			boolean drinkItem = false;
-			boolean foodItem = true;
-			for (Element item : foods) {
-				if(item.text().equals("Hot Coffee & Hot Tea")){
-					drinkItem = true;
-					foodItem = false;
-				}
-				if(item.text().equals("Chips & Salty Snacks")){
-					drinkItem = false;
-					foodItem = false;
-				}
-				if(item.text().equals("Bottled Spring Water (20 oz)")){
-					drinkItem = true;
-					foodItem = false;
-				}
-				if(item.text().equals("Cape Cod Lightly Salted Chips")){
-					drinkItem = false;
-					foodItem = true;
-				}
-
-				if(drinkItem){
-					listOfDrinks.add(item.text());
-
-				}
-				if(foodItem){
-					listOfFoods.add(item.text());
-				}
-			}
-
-			for(String food : listOfFoods){
-				addFoodItem(food, 0, 0, "");
-			}
-
-			for(String drink : listOfDrinks){
-				addBeverageItem(drink);
-			}
-
-			ArrayList<String> listOfPrices = new ArrayList<>();
-			for(Element price : prices){
-				listOfPrices.add(price.text());
-			}
-
-
-			ArrayList<String> listOfCalories = new ArrayList<>();
-			for(Element calory : calories){
-				listOfCalories.add(calory.text());
-			}
-
-
-
-			ArrayList<String> listOfDescriptions = new ArrayList<>();
-			for(Element description : descriptions){
-				listOfDescriptions.add(description.text());
-
-			}
-		}catch (IOException e){
-			System.err.println("Error connecting to the website");
-		}
-	}
-
-
-	public static void addAbonPainTable() throws IOException {
-
-		try {
-			Document doc = Jsoup.connect("https://order.aubonpain.com/menu/brigham-womens-hospital").get();
-			Set<String> classes = doc.classNames();
-
-			Elements elements = doc.body().select("*");
-
-			ArrayList<String> foodImage = new ArrayList<>();
-			ArrayList<String> foodItems = new ArrayList<>();
-			ArrayList<String> foodPrice = new ArrayList<>();
-			ArrayList<String> foodCalories = new ArrayList<>();
-			ArrayList<String> foodDescription = new ArrayList<>();
-
-
-			for (Element element : elements) {
-				if (element.normalName().equals("img")) {
-					foodImage.add(element.attr("abs:src"));
-				}
-
-				if(element.className().equals("product-name product__name")){
-					foodItems.add(element.ownText());
-				}
-				if(element.className().equals("product__attribute product__attribute--price")){
-					for(int i = 0; i < foodItems.size() - foodPrice.size() - 1; i++){
-						foodPrice.add(null);
-					}
-					foodPrice.add(element.ownText());
-				}
-				if(element.className().equals("product__attribute product__attribute--calorie-label")){
-					for(int i = 0; i < foodItems.size() - foodCalories.size() - 1; i++){
-						foodCalories.add(null);
-					}
-					foodCalories.add(element.ownText());
-				}
-				if(element.className().equals("product__description")){
-					for(int i = 0; i < foodItems.size() - foodDescription.size() - 1; i++){
-						foodDescription.add(null);
-					}
-					foodDescription.add(element.ownText());
-				}
-
-			}
-
-			for(int i = 0; i < foodItems.size(); i++){
-				addAbonPainItem(foodItems.get(i), foodPrice.get(i), foodCalories.get(i), foodDescription, foodImage.get(i));
-			}
-
-
-		}catch(IOException e){
-			e.printStackTrace();
-			System.out.println("error reading in Aubon Pain website in addAbonPainTable()");
-		}
-
-
-
-	}
 
 
 
@@ -1786,4 +1547,29 @@ public class RequestsDB {
 		}
 		return listOfAssignees;
 	}
+
+
+//	public static void getAubonPanItems(){
+//		String query = "Select * From aubonPainMenu";
+//
+//
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+//			ResultSet rset = prepState.executeQuery();
+//			while (rset.next()) {
+//				String firstName = rset.getString("firstName");
+//				String lastName = rset.getString("lastName");
+//				int assigneeID = rset.getInt("userID");
+//				String fullName = firstName + " " + lastName;
+//				listOfAssignees.put(assigneeID, fullName);
+//			}
+//			rset.close();
+//		} catch (SQLException e) {
+//			//e.printStackTrace();
+//			System.err.println("getAvailableAssignees() got a SQLException");
+//		}
+//	}
+
+
+
 }

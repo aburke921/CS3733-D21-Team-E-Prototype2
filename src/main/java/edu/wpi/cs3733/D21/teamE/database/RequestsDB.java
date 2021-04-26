@@ -1,0 +1,1723 @@
+package edu.wpi.cs3733.D21.teamE.database;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class RequestsDB {
+
+	static Connection connection = makeConnection.makeConnection().connection;
+
+// CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
+// CREATING TABLES:::
+
+	/**
+	 * Uses executes the SQL statements required to create the requests table.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - creatorID: this is the username of the user who created the request.
+	 * - creationTime: this is a time stamp that is added to the request at the moment it is made.
+	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport".
+	 * - requestStatus: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
+	 * - assigneeID: this is the person who is assigned to the request
+	 */
+	public static void createRequestsTable() {
+
+		String query = "Create Table requests(" +
+				"requestID     int Primary Key, " +
+				"creatorID     int References useraccount On Delete Cascade," +
+				"creationTime  timestamp, " +
+				"requestType   varchar(31), " +
+				"requestStatus varchar(10), " +
+				"assigneeID    int References useraccount On Delete Cascade," +
+				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
+				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating requests table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a floralRequests table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user is sending the request to.
+	 * - recipientName: this is the name of the individual they want the flowers to be addressed to
+	 * - flowerType: this is the type of flowers that the user wants to request. The valid options are: 'Roses', 'Tulips', 'Carnations', 'Assortment'
+	 * - flowerAmount: this the number/quantity of flowers that the user is requesting. The valid options are: 1, 6, 12
+	 * - vaseType: this is the type of vase the user wants the flowers to be delivered in. The valid options are: 'Round', 'Square', 'Tall', 'None'
+	 * - message: this is a specific detailed message that the user can have delivered with the flowers or an instruction message
+	 * *                for whoever is fufilling the request
+	 */
+	public static void createFloralRequestsTable() {
+
+		String query = "Create Table floralRequests( " +
+				"requestID     int Primary Key References requests On Delete Cascade, " +
+				"roomID        varchar(31) References node On Delete Cascade, " +
+				"recipientName varchar(31), " +
+				"flowerType    varchar(31), " +
+				"flowerAmount  int, " +
+				"vaseType      varchar(31), " +
+				"message       varchar(5000), " +
+				"Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')), " +
+				"Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)), " +
+				"Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None')))";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating floralRequests table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a sanitationRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user is sending the request to.
+	 * - signature: this the signature (name in print) of the user who is filling out the request
+	 * - description: this is any description the user who is filling out the request wants to provide for the person who will be completing the request
+	 * - sanitationType: this is the type of sanitation/cleanup the user is requesting to be delt with. The valid options are: "Urine Cleanup",
+	 * "Feces Cleanup", "Preparation Cleanup", "Trash Removal"
+	 * - urgency: this is how urgent the request is and helpful for prioritizing. The valid options are: "Low", "Medium", "High", "Critical"
+	 */
+	public static void createSanitationTable() {
+
+		String query = "Create Table sanitationRequest( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID varchar(31) Not Null References node On Delete Cascade, " +
+				"    signature varchar(31) Not Null, " +
+				"    description varchar(5000), " +
+				"    sanitationType varchar(31), " +
+				"    urgency varchar(31) Not Null, " +
+				"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))," +
+				"    Constraint urgencyTypeLimit Check (urgency In ('Low', 'Medium', 'High', 'Critical')) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating sanitationRequest table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a extTransport table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user is sending the request to.
+	 * - requestType: this the mode of transportation that the request is being made for. The valid options are: 'Ambulance', 'Helicopter', 'Plane'
+	 * - severity: this is how sever the patient is who the user/first responders are transporting.
+	 * - patientID: this is the ID of the patient that is being transported.
+	 * - ETA: this is the estimated time the patient will arrive.
+	 * - description: this is a detailed description of request that generally includes what happened to the patient and their current situation.
+	 */
+	public static void createExtTransportTable() {
+
+		String query = "Create Table extTransport( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID varchar(31) Not Null References node On Delete Cascade, " +
+				"    requestType varchar(100) Not Null, " +
+				"    severity varchar(30) Not Null, " +
+				"    patientID varchar(31) Not Null, " +
+				"    ETA varchar(100), " +
+				"    description varchar(5000)," +
+				"    Constraint requestTypeLimitExtTrans Check (requestType In ('Ambulance', 'Helicopter', 'Plane'))" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating extTransport table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants the medecine delivered to.
+	 * - medicineName: this is the drug that the user is ordering/requesting
+	 * - quantity: the is the supply or the number of pills ordered
+	 * - dosage: this is the mg or ml quantity for a medication
+	 * - specialInstructions: this is any special details or instructions the user wants to give to who ever is processing the request.
+	 * - signature: this the signature (name in print) of the user who is filling out the request
+	 */
+	public static void createMedDeliveryTable() {
+
+		String query = "Create Table medDelivery ( " +
+				"requestID  int Primary Key References requests On Delete Cascade," +
+				"roomID     varchar(31) Not Null References node On Delete Cascade," +
+				"medicineName        varchar(31) Not Null," +
+				"quantity            int         Not Null," +
+				"dosage              varchar(31) Not Null," +
+				"specialInstructions varchar(5000)," +
+				"signature           varchar(31) Not Null" + ")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating medDelivery table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - level: this is the security level that is needed
+	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled. The valid options are: 'Low', 'Medium', 'High', 'Critical'
+	 */
+	public static void createSecurityServTable() {
+
+		String query = "Create Table securityServ ( " +
+				"requestID  int Primary Key References requests On Delete Cascade," +
+				"roomID     varchar(31) Not Null References node On Delete Cascade," +
+				"level     varchar(31)," +
+				"urgency   varchar(31) Not Null," +
+				"Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical')) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating securityServ table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - languageType: this is the type of language the user is requesting
+	 * - description: detailed description of request
+	 */
+	public static void createLanguageRequestTable() {
+
+		String query = "Create Table languageRequest " +
+				"( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
+				"    languageType     varchar(31) Not Null, " +
+				"    description   varchar(5000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating languageRequest table");
+		}
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - washLoadAmount: amount of loads needed to wash
+	 * - dryLoadAmount: amount of loads needed to dry
+	 * - description:  detailed description of request
+	 */
+	public static void createLaundryRequestTable() {
+
+		String query = "Create Table laundryRequest " +
+				"( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
+				"    washLoadAmount   varchar(31) Not Null, " +
+				"    dryLoadAmount   varchar(31) Not Null, " +
+				"    description varchar(5000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating laundryRequest table");
+		}
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - type: is the type of maintenance required
+	 * - severity: is how severe the situation is
+	 * - ETA: time taken to complete the request
+	 * - description: detailed description of request
+	 */
+	public static void createMaintenanceRequestTable() {
+
+		String query = "Create Table maintenanceRequest " +
+				"( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
+				"    type varchar(31), " +
+				"    severity    varchar(31)  Not Null, " +
+				"    ETA   varchar(31) Not Null, " +
+				"    description varchar(5000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating maintenanceRequest table");
+		}
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - allergy: this is an food allergy that the user might have
+	 * - dietRestriction: this is any dietary restrictions that the person fulfilling the request might need to know about
+	 * - beverage: the drink the user is ordering
+	 * - comments: any comments the user wants to leave for the person fulfilling the request
+	 */
+	public static void createFoodDeliveryTable(){
+
+		String query = "Create Table foodDelivery (\n" +
+				"    requestID int Primary Key References requests (requestID) On Delete Cascade,\n" +
+				"    roomID varchar(31) Not Null References node (nodeID) On Delete Cascade,\n" +
+				"    allergy varchar(50),\n" +
+				"    dietRestriction varchar(50),\n" +
+				"    beverage varchar(50),\n" +
+				"    description varchar(3000)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating foodDelivery table");
+		}
+
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - foodID: this is used to identify a food item. Every food item must have one.
+	 * - item: this is the name of the food item
+	 * - price: this is the price of the food item
+	 * - calories: this is the number of calories that the food item has
+	 * - description: this is the description of the menu item
+	 */
+	public static void createFoodTable(){
+
+		String query = "Create Table food (\n" +
+				"    foodID int Primary KEY,\n" +
+				"    item varchar(80),\n" +
+				"    price Double,\n" +
+				"    calories int,\n" +
+				"    description varchar(3000)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating food table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is the identifier of the request where the user is ordering food
+	 * - foodID: this is the identifier of the food item the user is ordering
+	 * - quantity: this is the quantity of a single item the user is ordering
+	 */
+	public static void createFoodOrderedInRequestTable(){
+
+		String query = "Create Table foodOrderedInRequest (\n" +
+				"    requestId int References foodDelivery (requestID)  on Delete Cascade,\n" +
+				"    foodID int References food (foodID) On Delete Cascade,\n" +
+				"    quantity int,\n" +
+				"    Primary Key (requestId, foodID)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating foodOrderedInDelivery table");
+		}
+
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - beverageID: this is the identifier of the beverage the user is ordering
+	 * - item: this is the name of the beverage on the menu
+	 */
+	public static void createBeverageTable(){
+		String query = "Create Table beverage (\n" +
+				"    beverageID int Primary key,\n" +
+				"    item varchar(50)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating beverage table");
+		}
+
+	}
+
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is the identifier of the request where the user is ordering food
+	 * - beverageID: this is the identifier of the beverage the user is ordering
+	 * - quantity: this is the quantity of a single item the user is ordering
+	 */
+	public static void createBeverageOrderedInRequestTable(){
+		String query = "Create Table beverageOrderedInRequest(\n" +
+				"    requestId int References foodDelivery (requestID)  on Delete Cascade,\n" +
+				"    beverageID int References beverage (beverageID) On Delete Cascade,\n" +
+				"    quantity int,\n" +
+				"    Primary Key (requestId, beverageID)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating beverageOrderedInRequest table");
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+// ADDING TO TABLES::::
+// ADDING TO TABLES::::
+// ADDING TO TABLES::::
+// ADDING TO TABLES::::
+// ADDING TO TABLES::::
+// ADDING TO TABLES::::
+// ADDING TO TABLES::::
+
+	public static void addRequest(int userID, int assigneeID, String requestType) {
+		String insertRequest = "Insert Into requests " +
+				"Values ((Select Count(*) " +
+				"         From requests) + 1, ?, Current Timestamp, ?, 'inProgress', ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
+			prepState.setInt(1, userID);
+			prepState.setString(2, requestType);
+			prepState.setInt(3, assigneeID);
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into requests inside function addRequest()");
+		}
+
+	}
+
+	/**
+	 * This adds a sanitation services form to the table specific for it
+	 * //@param form this is the form being added to the table
+	 */
+	public static void addSanitationRequest(int userID, int assigneeID, String roomID, String sanitationType, String description, String urgency, String signature) {
+		addRequest(userID, assigneeID, "sanitation");
+
+		String insertSanitationRequest = "Insert Into sanitationrequest " +
+				"Values ((Select Count(*) " +
+				"         From requests), ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertSanitationRequest)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, signature);
+			prepState.setString(3, description);
+			prepState.setString(4, sanitationType);
+			prepState.setString(5, urgency);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into sanitationRequest inside function addSanitationRequest()");
+		}
+
+	}
+
+	/**
+	 * This function needs to add a external patient form to the table for external patient forms
+	 * //@param form this is the form that we will create and send to the database
+	 */
+	public static void addExternalPatientRequest(int userID, int assigneeID, String roomID, String requestType, String severity, String patientID, String ETA, String description) {
+
+		addRequest(userID, assigneeID, "extTransport");
+
+		String insertExtTransport = "Insert Into exttransport " +
+				"Values ((Select Count(*) " +
+				"         From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, requestType);
+			prepState.setString(3, severity);
+			prepState.setString(4, patientID);
+			prepState.setString(5, ETA);
+			prepState.setString(6, description);
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into extTransport inside function addExternalPatientRequest()");
+		}
+
+	}
+
+	/**
+	 * This adds a floral request to the database that the user is making
+	 * @param userID        this is the username that the user uses to log into the account
+	 * @param assigneeID    this is the ID of the assigned user
+	 * @param RoomNodeID    this is the nodeID/room the user is sending the request to
+	 * @param recipientName this is the name of the individual they want the flowers to be addressed to
+	 * @param flowerType    this is the type of flowers that the user wants to request
+	 * @param flowerAmount  this the number/quantity of flowers that the user is requesting
+	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
+	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
+	 */
+	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
+		addRequest(userID, assigneeID, "floral");
+
+		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
+			prepState.setString(1, RoomNodeID);
+			prepState.setString(2, recipientName);
+			prepState.setString(3, flowerType);
+			prepState.setInt(4, flowerAmount);
+			prepState.setString(5, vaseType);
+			prepState.setString(6, message);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
+		}
+	}
+
+	/**
+	 * This adds a medicine request form to the table for medicine request forms
+	 * // @param form this is the form being added
+	 */
+	public static void addMedicineRequest(int userID, int assigneeID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
+		addRequest(userID, assigneeID, "medDelivery");
+
+		String insertMedRequest = "Insert Into meddelivery Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, medicineName);
+			prepState.setInt(3, quantity);
+			prepState.setString(4, dosage);
+			prepState.setString(5, specialInstructions);
+			prepState.setString(6, signature);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
+		}
+	}
+
+	/**
+	 * This adds a security form to the table for security service form
+	 * // @param form this is the form added to the table
+	 */
+	public static void addSecurityRequest(int userID, int assigneeID, String roomID, String level, String urgency) {
+		addRequest(userID, assigneeID, "security");
+
+		String insertSecurityRequest = "Insert Into securityserv Values ((Select Count(*) From requests), ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertSecurityRequest)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, level);
+			prepState.setString(3, urgency);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
+		}
+	}
+
+	/**
+	 *
+	 * @param userID ID of the user
+	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param roomID nodeID of the user
+	 * @param languageType type of language being requested
+	 * @param description detailed description of request
+	 */
+	public static void addLanguageRequest(int userID, int assigneeID,  String roomID, String languageType, String description) {
+		addRequest(userID, assigneeID, "languageRequest");
+
+		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertLanguageReq)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, languageType);
+			prepState.setString(3, description);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into languageRequest inside function addLanguageRequest()");
+		}
+
+	}
+
+	/**
+	 *
+	 * @param userID ID of the user
+	 * @param roomID nodeID of the user
+	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param washLoadAmount amount of loads needed to wash
+	 * @param dryLoadAmount amount of loads needed to dry
+	 * @param description detailed description of request
+	 */
+	public static void addLaundryRequest(int userID, String roomID,  int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
+		addRequest(userID, assigneeID, "laundryRequest");
+
+		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertLaundryReq)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, washLoadAmount);
+			prepState.setString(3, dryLoadAmount);
+			prepState.setString(4, description);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into laundryRequest inside function addLanguageRequest()");
+		}
+	}
+
+	/**
+	 *
+	 * @param userID ID of the user
+	 * @param roomID nodeID of the user
+	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param type is the type of maintenance required
+	 * @param severity is how severe the situation is
+	 * @param ETA time taken to complete the request
+	 * @param description detailed description of request
+	 */
+	public static void addMaintenanceRequest(int userID, String roomID,  int assigneeID,  String type, String severity, String ETA, String description) {
+		addRequest(userID, assigneeID, "maintenanceRequest");
+
+		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, type);
+			prepState.setString(3, severity);
+			prepState.setString(4, ETA);
+			prepState.setString(5, description);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into maintenanceRequest inside function addMaintenanceRequest()");
+		}
+	}
+
+	//TODO: Not tested
+	/**
+	 * adds a request for food delivery
+	 * @param userID ID of the user
+	 * @param roomID nodeID of the user
+	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param dietRestrictions any restrictions the user has diet wise
+	 * @param allergies any allergies the user has
+	 * @param foodItem the food item choice made by the user
+	 * @param foodQuantity the quantity of the food item the user wants
+	 * @param beverageItem the beverage item choice made by the user
+	 * @param beverageQuantity the quantity of the beverage item the user wants
+	 */
+	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
+		addRequest(userID, assigneeID, "foodDeliveryRequest");
+
+
+		int requestID = getMaxRequestID();
+
+		String insertFoodDeliveryReq = "Insert Into foodDelivery Values (?, ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertFoodDeliveryReq)) {
+			prepState.setInt(1, requestID);
+			prepState.setString(2, roomID);
+			prepState.setString(3, allergies);
+			prepState.setString(4, dietRestrictions);
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into foodDeliveryRequest inside function addFoodDeliveryRequest()");
+		}
+	}
+
+	/**
+	 * Adds a food item to the food table
+	 * @param item this is the item that is on the menu
+	 * @param price this is the price of the item on the menu
+	 * @param calories this is how many calories the menu item has
+	 * @param description this is a description of the food item
+	 */
+	public static void addFoodItem(String item, double price, int calories, String description){
+
+		int foodID = getMaxFoodID() + 1;
+		String query = "insert into food values (?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setInt(1,foodID);
+			prepState.setString(2,item);
+			prepState.setDouble(3,price);
+			prepState.setInt(4,calories);
+			prepState.setString(5,description);
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("error addFoodItem()");
+		}
+
+	}
+
+	/**
+	 * Adds a beverage item to the beverage table
+	 * @param item this is the item that is on the menu
+	 */
+	public static void addBeverageItem(String item){
+
+		int beverageID = getMaxBeverageID() + 1;
+		String query = "insert into beverage values (?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setInt(1,beverageID);
+			prepState.setString(2,item);
+
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("error addBeverageItem()");
+		}
+
+	}
+
+	/**
+	 * Gets the largest requestID, which can be used to increment and make a the next one
+	 * @return the largest requestID in the request table
+	 */
+	public static int getMaxRequestID(){
+		int maxID = 0;
+
+		String query = "Select Max(requestID) As maxRequestID From food";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if (rset.next()) {
+				maxID = rset.getInt("maxRequestID");
+			}
+
+			prepState.close();
+			return maxID;
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in getMaxRequestID()");
+			return 0;
+		}
+	}
+
+	/**
+	 * Gets the largest foodID, which can be used to increment and make a the next one
+	 * @return the largest foodID in the food table
+	 */
+	public static int getMaxFoodID(){
+		int maxID = 0;
+
+		String query = "Select Max(foodID) As maxFoodID From food";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if (rset.next()) {
+				maxID = rset.getInt("maxFoodID");
+			}
+
+			prepState.close();
+			return maxID;
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in getMaxFoodID()");
+			return 0;
+		}
+	}
+
+	/**
+	 * Gets the largest beverageID, which can be used to increment and make a the next one
+	 * @return the largest beverageID in the beverage table
+	 */
+	public static int getMaxBeverageID(){
+		int maxID = 0;
+
+		String query = "Select Max(beverageID) As maxBeverage From beverage";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if (rset.next()) {
+				maxID = rset.getInt("maxBeverage");
+			}
+
+			prepState.close();
+			return maxID;
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in getMaxBeverageID()");
+			return 0;
+		}
+	}
+
+
+	//TODO: Not tested
+	public static void addFoodOrderedInRequestTable(int requestID, int foodID, int foodQuantity){
+		String query = "insert into foodOrderedInRequest values (?,?,?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setInt(1,requestID);
+			prepState.setInt(2,foodID);
+			prepState.setInt(3, foodQuantity);
+			prepState.execute();
+
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in addFoodOrderedInRequestTable()");
+		}
+
+	}
+
+	//TODO: Not tested
+	public static void addBeverageOrderedInRequestTable(int requestID, int beverageID, int beverageQuantity){
+		String query = "insert into beverageOrderedInRequest values (?,?,?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setInt(1,requestID);
+			prepState.setInt(2,beverageID);
+			prepState.setInt(3, beverageQuantity);
+			prepState.execute();
+
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in addFoodOrderedInRequestTable()");
+		}
+
+
+	}
+
+
+
+
+// EDITING TABLES::::
+// EDITING TABLES::::
+// EDITING TABLES::::
+// EDITING TABLES::::
+// EDITING TABLES::::
+// EDITING TABLES::::
+// EDITING TABLES::::
+
+	/**
+	 * This edits a Sanitation Services form that is already in the database
+	 * @param requestID      the ID that specifies which sanitation form that is being edited
+	 * @param description    the new description that the user is using to update their form
+	 * @param roomID         the new node/room/location the user is assigning this request to
+	 * @param sanitationType the new type of sanitation that the user is changing their request to
+	 * @param urgency        the new urgency that the user is changing in their request
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editSanitationRequest(int requestID, String roomID, String sanitationType, String description, String urgency, String signature) {
+
+		boolean added = false;
+		String query = "update sanitationRequest set";
+
+		if (roomID != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (sanitationType != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " sanitationType = '" + sanitationType + "'";
+			added = true;
+		}
+		if (description != null) {
+			query = query + " description = '" + description + "'";
+
+			added = true;
+		}
+		if (urgency != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " urgency = '" + urgency + "'";
+			added = true;
+		}
+		if (signature != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "signature = '" + signature + "'";
+			added = true;
+		}
+
+
+		query = query + " where requestID = " + requestID;
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating sanitation request");
+			return 0;
+		}
+
+
+	}
+
+	/**
+	 * This edits a External Transport Services form that is already in the database
+	 * @param requestID   the ID that specifies which external transfer form that is being edited
+	 * @param roomID      this is the string used to update the hospital field
+	 * @param requestType this is the string used to update the type
+	 * @param severity    this is the string used to update the severity
+	 * @param patientID   this is the string used to update patientID
+	 * @param description this is the string used to update the description
+	 * @param ETA         this is the string used to update the eta
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String description, String ETA) {
+
+		boolean added = false;
+		String query = "Update extTransport Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+
+			added = true;
+		}
+		if (requestType != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " requestType = '" + requestType + "'";
+			added = true;
+		}
+		if (severity != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " severity = '" + severity + "'";
+			added = true;
+		}
+		if (patientID != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " patientID = '" + patientID + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " description = '" + description + "'";
+			added = true;
+		}
+		if (ETA != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " ETA = '" + ETA + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating external transport request");
+			return 0;
+		}
+	}
+
+	/**
+	 * This edits a floral request form that is already in the database
+	 * @param requestID    the ID that specifies which external transfer form that is being edited
+	 * @param roomID       the new node/room/location the user is assigning this request to
+	 * @param flowerType   the type of flower the user wants to change their request to
+	 * @param flowerAmount the new quantity of flowers the user wants to change their request to
+	 * @param vaseType     the new vase type the user wants to change their request to
+	 * @param message      the new message containing either instructions or to the recipient the user wants to change
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String message) {
+
+		boolean added = false;
+		String query = "Update floralRequests Set ";
+
+		if (recipientName != null) {
+			query = query + " recipientName = '" + recipientName + "'";
+
+			added = true;
+		}
+		if (roomID != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (flowerType != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " flowerType = '" + flowerType + "'";
+			added = true;
+		}
+		if (flowerAmount != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " flowerAmount = " + flowerAmount;
+			added = true;
+		}
+		if (vaseType != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " vaseType = '" + vaseType + "'";
+			added = true;
+		}
+		if (message != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " message = '" + message + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating floral request");
+			return 0;
+		}
+	}
+
+	/**
+	 * This function edits a current request for medicine delivery with the information below for a request already in the database
+	 * @param requestID           the ID that specifies which external transfer form that is being edited
+	 * @param roomID              the new node/room/location the user is assigning this request to
+	 * @param medicineName        this is the name of the medicine the user is changing the request to
+	 * @param quantity            this is the number of pills the user is changing the request to
+	 * @param dosage              this is the dosage (ml or mg) the user is changing the request to
+	 * @param specialInstructions this is the new special instructions the user is requesting
+	 * @param assigneeID          this is the userID of the a new employee or administrator that will be fulfilling the request.
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, int assigneeID) {
+
+		boolean added = false;
+		String query = "Update medDelivery Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+
+			added = true;
+		}
+		if (medicineName != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " medicineName = '" + medicineName + "'";
+			added = true;
+		}
+		if (quantity != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " quantity = " + quantity;
+			added = true;
+		}
+		if (dosage != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " dosage = '" + dosage + "'";
+			added = true;
+		}
+		if (specialInstructions != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " specialInstructions = '" + specialInstructions + "'";
+			added = true;
+		}
+		if (assigneeID != 0) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " assigneeID = '" + assigneeID + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating medicine request");
+			return 0;
+		}
+	}
+
+	/**
+	 * This edits a security form already within the database
+	 * @param requestID the ID that specifies which external transfer form that is being edited
+	 * @param roomID    the new node/room/location the user is assigning this request to
+	 * @param level     this is the info to update levelOfSecurity
+	 * @param urgency   this is the info to update levelOfUrgency
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editSecurityRequest(int requestID, String roomID, String level, String urgency) {
+		boolean added = false;
+		String query = "Update securityServ Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+
+			added = true;
+		}
+		if (level != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "level = '" + level + "'";
+			added = true;
+		}
+		if (urgency != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "urgency = '" + urgency + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating security request");
+			return 0;
+		}
+	}
+
+	/**
+	 * Can change the assigneeID or the request status to any request
+	 * @param requestID     is the generated ID of the request
+	 * @param assigneeID    is the assignee's ID that you want to change it to
+	 * @param requestStatus is the status that you want to change it to
+	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
+	 */
+	public static int editRequests(int requestID, int assigneeID, String requestStatus) {
+
+		boolean added = false;
+		String query = "Update requests ";
+
+		if (assigneeID != 0) {
+			query = query + "Set assigneeID = '" + assigneeID + "'";
+
+			added = true;
+		}
+		if (requestStatus != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "Set requestStatus = '" + requestStatus + "'";
+
+		}
+
+		query = query + " Where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating request table");
+			return 0;
+		}
+	}
+
+
+	/**
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param languageType is the new language type being requested by the user
+	 * @param description is an edited detailed description
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description) {
+		boolean added = false;
+		String query = "Update languageRequest Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (languageType != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "languageType = '" + languageType + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating languageRequest");
+			return 0;
+		}
+
+	}
+
+	/**
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param washLoadAmount is new amount of loads to be washed
+	 * @param dryLoadAmount is new amount of loads to be dried
+	 * @param description is an edited detailed description
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editLaundryRequest(int requestID, String roomID, String washLoadAmount, String dryLoadAmount, String description) {
+		boolean added = false;
+		String query = "Update laundryRequest Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (washLoadAmount != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "washLoadAmount = '" + washLoadAmount + "'";
+			added = true;
+		}
+		if (dryLoadAmount != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "dryLoadAmount = '" + dryLoadAmount + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating laundryRequest");
+			return 0;
+		}
+	}
+
+	/**
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param type is the new type of maintenance request
+	 * @param severity is the new severity of the situation
+	 * @param ETA is the new estimated time
+	 * @param description is an edited detailed description
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editMaintenanceRequest(int requestID, String roomID, String type, String severity, String ETA, String description) {
+		boolean added = false;
+		String query = "Update maintenanceRequest Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (type != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "type = '" + type + "'";
+			added = true;
+		}
+		if (severity != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "severity = '" + severity + "'";
+			added = true;
+		}
+		if (ETA != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "ETA = '" + ETA + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating maintenanceRequest");
+			return 0;
+		}
+	}
+
+	//TODO: ASHLEY review this please (i didn't take your Food table into account)
+	/**
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param dietRestrictions is the edited restrictions of the user in terms of diet
+	 * @param allergies is the edited allergies the user has
+	 * @param food is the new food the user requests
+	 * @param beverage is the new beverage the user requests
+	 * @param description is an edited detailed description
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editFoodDeliveryRequest(int requestID, String roomID, String dietRestrictions, String allergies, String food, String beverage, String description) {
+		boolean added = false;
+		String query = "Update foodDeliveryRequest Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (dietRestrictions != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "dietRestrictions = '" + dietRestrictions + "'";
+			added = true;
+		}
+		if (allergies != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "allergies = '" + allergies + "'";
+			added = true;
+		}
+		if (food != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "food = '" + food + "'";
+			added = true;
+		}
+		if (beverage != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "beverage = '" + beverage + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating foodDeliveryRequest");
+			return 0;
+		}
+	}
+
+
+	/**
+	 * Reads in the Aubon Pain website to populate the foods and drinks table with real information
+	 */
+	public static void updateFoodAndBeverageTable(){
+
+		try {
+			Document doc = Jsoup.connect("https://order.aubonpain.com/menu/brigham-womens-hospital").get();
+			Elements media = doc.select("[src]"); // --> image urls
+			Elements foods = doc.getElementsByClass("product-name product__name");
+			Elements prices = doc.getElementsByClass("product__attribute product__attribute--price");
+			Elements calories = doc.getElementsByClass("product__attribute product__attribute--calorie-label");
+			Elements descriptions = doc.getElementsByClass("product__description");
+
+			ArrayList<String> listOfFoods = new ArrayList<String>();
+			ArrayList<String> listOfDrinks = new ArrayList<String>();
+
+			HashMap<Boolean,String> menuItems = new HashMap<Boolean, String>();
+			boolean drinkItem = false;
+			boolean foodItem = true;
+			for (Element item : foods) {
+				if(item.text().equals("Hot Coffee & Hot Tea")){
+					drinkItem = true;
+					foodItem = false;
+				}
+				if(item.text().equals("Chips & Salty Snacks")){
+					drinkItem = false;
+					foodItem = false;
+				}
+				if(item.text().equals("Bottled Spring Water (20 oz)")){
+					drinkItem = true;
+					foodItem = false;
+				}
+				if(item.text().equals("Cape Cod Lightly Salted Chips")){
+					drinkItem = false;
+					foodItem = true;
+				}
+
+				if(drinkItem){
+					listOfDrinks.add(item.text());
+
+				}
+				if(foodItem){
+					listOfFoods.add(item.text());
+				}
+			}
+
+			for(String food : listOfFoods){
+				addFoodItem(food, 0, 0, "");
+			}
+
+			for(String drink : listOfDrinks){
+				addBeverageItem(drink);
+			}
+
+			ArrayList<String> listOfPrices = new ArrayList<>();
+			for(Element price : prices){
+				listOfPrices.add(price.text());
+			}
+
+
+			ArrayList<String> listOfCalories = new ArrayList<>();
+			for(Element calory : calories){
+				listOfCalories.add(calory.text());
+			}
+
+
+
+			ArrayList<String> listOfDescriptions = new ArrayList<>();
+			for(Element description : descriptions){
+				listOfDescriptions.add(description.text());
+
+			}
+		}catch (IOException e){
+			System.err.println("Error connecting to the website");
+		}
+	}
+
+// QUERYING TABLES::::
+// QUERYING TABLES::::
+// QUERYING TABLES::::
+// QUERYING TABLES::::
+// QUERYING TABLES::::
+// QUERYING TABLES::::
+// QUERYING TABLES::::
+
+	/**
+	 * Gets a list of all the "assigneeIDs", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID
+	 * @param tableName this is the name of the table that we are getting the info from
+	 * @param userID    this is the ID of the user who made the request
+	 * @param infoType  this is the type of information that is being retrieved
+	 * @return an ArrayList<String> with the desired info
+	 */
+	public static ArrayList<String> getMyCreatedRequestInfo(String tableName, int userID, String infoType) {
+
+		ArrayList<String> listOfInfo = new ArrayList<>();
+
+		String query;
+		if (userID > -1) {
+			query = "Select " + infoType + " From requests Join " + tableName + " Using (requestID) Where creatorID = " + userID;
+		} else {
+			query = "Select " + infoType + " From requests Join " + tableName + " Using (requestID)";
+		}
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			while (rset.next()) {
+				if (infoType.equals("AssigneeID")) {
+					int ID = rset.getInt(infoType);
+					listOfInfo.add(String.valueOf(ID));
+				} else {
+					String ID = rset.getString(infoType); // potential issue // -TO-DO-: won't work with int AssigneeIDs? Fixed by translating IDs to String, should it return a pair of Assignee ID and name?
+					listOfInfo.add(ID);
+				}
+			}
+			rset.close();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getRequestInfo() got a SQLException");
+		}
+		return listOfInfo;
+	}
+
+	/**
+	 * Gets a list of all the "creatorIDs", "requestIDs", or "requestStatus" from the requests with the given type assigned to the given userID
+	 * @param tableName this is the name of the table that we are getting the info from
+	 * @param userID    this is the ID of the user who made the request
+	 * @param infoType  this is the type of information that is being retrieved
+	 * @return an ArrayList<String> with the desired info
+	 */
+	public static ArrayList<String> getMyAssignedRequestInfo(String tableName, int userID, String infoType) {
+
+		ArrayList<String> listOfInfo = new ArrayList<>();
+
+		String query;
+		if (userID > -1) {
+			query = "Select " + infoType + " From requests Join " + tableName + " Using (requestID) Where assigneeID = " + userID;
+		} else {
+			query = "Select " + infoType + " From requests Join " + tableName + " Using (requestID)";
+		}
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			while (rset.next()) {
+				String ID = rset.getString(infoType); //potential issue
+				listOfInfo.add(ID);
+			}
+			rset.close();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getRequestInfo() got a SQLException");
+		}
+		return listOfInfo;
+	}
+
+	/**
+	 * Gets a list of all the longNames for the location from the given tableName
+	 * @param tableType this is the name of the table that we are getting the requestIDs from
+	 * @return a list of all longNames for the location for all of the requests
+	 */
+	public static ArrayList<String> getRequestLocations(String tableType, int userID) {
+		ArrayList<String> listOfLongNames = new ArrayList<>();
+
+		String tableName = "";
+		switch (tableType) {
+			case "floralRequests":
+				tableName = "floralRequests";
+				break;
+			case "medDelivery":
+				tableName = "medDelivery";
+				break;
+			case "sanitationRequest":
+				tableName = "sanitationRequest";
+				break;
+			case "securityServ":
+				tableName = "securityServ";
+				break;
+			case "extTransport":
+				tableName = "extTransport";
+				break;
+		}
+
+		String query;
+
+		if (userID > -1) {
+			query = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
+		} else {
+			query = "Select requestid, longname From node,(Select requestid, roomid From " + tableName + ") correctTable Where node.nodeid = correctTable.roomid Order By requestid";
+		}
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while (rset.next()) {
+				String status = rset.getString("longName");
+				listOfLongNames.add(status);
+			}
+			rset.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getRequestLocations() got a SQLException");
+		}
+		return listOfLongNames;
+	}
+
+	/**
+	 * gets a list of available assignees based on the userType given
+	 * @param givenUserType is type of user (i.e. "nurse", "EMT", "doctor", etc.)
+	 * @return a HashMap of possible assignees for the specific request type
+	 */
+	public static HashMap<Integer, String> getSelectableAssignees(String givenUserType) {
+		HashMap<Integer, String> listOfAssignees = new HashMap<>();
+
+		String query = "Select firstName, lastName, userID From userAccount Where userType = '" + givenUserType + "'";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while (rset.next()) {
+				String firstName = rset.getString("firstName");
+				String lastName = rset.getString("lastName");
+				int assigneeID = rset.getInt("userID");
+				String fullName = firstName + " " + lastName;
+				listOfAssignees.put(assigneeID, fullName);
+			}
+			rset.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getAvailableAssignees() got a SQLException");
+		}
+		return listOfAssignees;
+	}
+}

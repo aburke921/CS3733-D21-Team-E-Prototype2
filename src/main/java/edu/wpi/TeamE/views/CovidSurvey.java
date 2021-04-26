@@ -1,22 +1,22 @@
 package edu.wpi.TeamE.views;
 import com.jfoenix.controls.*;
 import edu.wpi.TeamE.App;
-import edu.wpi.TeamE.databases.makeConnection;
+
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
+
 
 import java.io.IOException;
 
 public class CovidSurvey extends ServiceRequests  {
+
+    @FXML private AnchorPane appBarAnchorPane;
+    @FXML private StackPane stackPane;
     @FXML JFXCheckBox positiveTest;
     @FXML JFXCheckBox symptoms;
     @FXML JFXCheckBox closeContact;
@@ -57,6 +57,21 @@ public class CovidSurvey extends ServiceRequests  {
 
     @FXML
     public void initialize() {
+
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setShowLogin(true);
+            App.setShowHelp(true);
+            App.setPageTitle("Covid Survey"); //set AppBar title
+            App.setHelpText(""); //set help text todo, fill in this field
+            App.setStackPane(stackPane); // required for dialog boxes
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         assert  positiveTest  != null : "fx:id=\"positiveTest\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert  symptoms  != null : "fx:id=\"symptoms\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert closeContact  != null : "fx:id=\"closeContact\" was not injected: check your FXML file 'PathFinder.fxml'.";

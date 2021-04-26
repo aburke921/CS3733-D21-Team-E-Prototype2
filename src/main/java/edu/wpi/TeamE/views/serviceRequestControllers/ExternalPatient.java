@@ -28,12 +28,10 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	RequiredFieldValidator validator = new RequiredFieldValidator();
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
-	@FXML // URL location of the FXML file that was given to the FXMLLoader
-	private URL location;
 	@FXML // fx:id="locationInput"
 	private JFXComboBox<String> locationInput; // Value injected by FXMLLoader
 	@FXML // fx:id="requestTypeInput"
-	private JFXComboBox<?> requestTypeInput; // Value injected by FXMLLoader
+	private JFXComboBox<String> requestTypeInput; // Value injected by FXMLLoader
 	@FXML // fx:id="ambulance"
 	private String ambulance; // Value injected by FXMLLoader
 	@FXML // fx:id="helicopter"
@@ -41,7 +39,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	@FXML // fx:id="plane"
 	private String plane; // Value injected by FXMLLoader
 	@FXML // fx:id="severityInput"
-	private JFXComboBox<?> severityInput; // Value injected by FXMLLoader
+	private JFXComboBox<String> severityInput; // Value injected by FXMLLoader
 	@FXML // fx:id="high_severity"
 	private String high_severity; // Value injected by FXMLLoader
 	@FXML // fx:id="medium_severity"
@@ -102,7 +100,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 
 
 		if (validateInput()) {
-			//String detailedInstructions = sdetailedInstructionsInput.getText();
+			//String detailedInstructions = detailedInstructionsInput.getText();
 			//creating the service request
 
 			//System.out.println(request.getAssignmentField());
@@ -118,7 +116,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 			int assigneeID = 99999;
 			int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
 			String nodeID = nodeIDS.get(nodeIDIndex);
-			System.out.println(location + " " + type + " " + severity + " " + patientID + " " + ETA + " " + details + " " + assigneeID);
+			System.out.println(nodeID + " " + type + " " + severity + " " + patientID + " " + ETA + " " + details + " " + assigneeID);
 			DB.addExternalPatientRequest(15, assigneeID, nodeID, type, severity, patientID, ETA, details);
 			//DB changed the assignee in the function call to an int (not string) --> we need the assignee's userID
 			super.handleButtonSubmit(actionEvent);

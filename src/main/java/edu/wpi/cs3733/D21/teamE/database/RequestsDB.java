@@ -1,5 +1,11 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -216,6 +222,251 @@ public class RequestsDB {
 		}
 	}
 
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - languageType: this is the type of language the user is requesting
+	 * - description: detailed description of request
+	 */
+	public static void createLanguageRequestTable() {
+
+		String query = "Create Table languageRequest " +
+				"( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
+				"    languageType     varchar(31) Not Null, " +
+				"    description   varchar(5000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating languageRequest table");
+		}
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - washLoadAmount: amount of loads needed to wash
+	 * - dryLoadAmount: amount of loads needed to dry
+	 * - description:  detailed description of request
+	 */
+	public static void createLaundryRequestTable() {
+
+		String query = "Create Table laundryRequest " +
+				"( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
+				"    washLoadAmount   varchar(31) Not Null, " +
+				"    dryLoadAmount   varchar(31) Not Null, " +
+				"    description varchar(5000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating laundryRequest table");
+		}
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - type: is the type of maintenance required
+	 * - severity: is how severe the situation is
+	 * - ETA: time taken to complete the request
+	 * - description: detailed description of request
+	 */
+	public static void createMaintenanceRequestTable() {
+
+		String query = "Create Table maintenanceRequest " +
+				"( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
+				"    type varchar(31), " +
+				"    severity    varchar(31)  Not Null, " +
+				"    ETA   varchar(31) Not Null, " +
+				"    description varchar(5000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating maintenanceRequest table");
+		}
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - allergy: this is an food allergy that the user might have
+	 * - dietRestriction: this is any dietary restrictions that the person fulfilling the request might need to know about
+	 * - beverage: the drink the user is ordering
+	 * - comments: any comments the user wants to leave for the person fulfilling the request
+	 */
+	public static void createFoodDeliveryTable(){
+
+		String query = "Create Table foodDelivery (\n" +
+				"    requestID int Primary Key References requests (requestID) On Delete Cascade,\n" +
+				"    roomID varchar(31) Not Null References node (nodeID) On Delete Cascade,\n" +
+				"    allergy varchar(50),\n" +
+				"    dietRestriction varchar(50),\n" +
+				"    beverage varchar(50),\n" +
+				"    description varchar(3000)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating foodDelivery table");
+		}
+
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - foodID: this is used to identify a food item. Every food item must have one.
+	 * - item: this is the name of the food item
+	 * - price: this is the price of the food item
+	 * - calories: this is the number of calories that the food item has
+	 * - description: this is the description of the menu item
+	 */
+	public static void createFoodTable(){
+
+		String query = "Create Table food (\n" +
+				"    foodID int Primary KEY,\n" +
+				"    item varchar(80),\n" +
+				"    price Double,\n" +
+				"    calories int,\n" +
+				"    description varchar(3000)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating food table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is the identifier of the request where the user is ordering food
+	 * - foodID: this is the identifier of the food item the user is ordering
+	 * - quantity: this is the quantity of a single item the user is ordering
+	 */
+	public static void createFoodOrderedInRequestTable(){
+
+		String query = "Create Table foodOrderedInRequest (\n" +
+				"    requestId int References foodDelivery (requestID)  on Delete Cascade,\n" +
+				"    foodID int References food (foodID) On Delete Cascade,\n" +
+				"    quantity int,\n" +
+				"    Primary Key (requestId, foodID)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating foodOrderedInDelivery table");
+		}
+
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - beverageID: this is the identifier of the beverage the user is ordering
+	 * - item: this is the name of the beverage on the menu
+	 */
+	public static void createBeverageTable(){
+		String query = "Create Table beverage (\n" +
+				"    beverageID int Primary key,\n" +
+				"    item varchar(50)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating beverage table");
+		}
+
+	}
+
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is the identifier of the request where the user is ordering food
+	 * - beverageID: this is the identifier of the beverage the user is ordering
+	 * - quantity: this is the quantity of a single item the user is ordering
+	 */
+	public static void createBeverageOrderedInRequestTable(){
+		String query = "Create Table beverageOrderedInRequest(\n" +
+				"    requestId int References foodDelivery (requestID)  on Delete Cascade,\n" +
+				"    beverageID int References beverage (beverageID) On Delete Cascade,\n" +
+				"    quantity int,\n" +
+				"    Primary Key (requestId, beverageID)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating beverageOrderedInRequest table");
+		}
+	}
+
+
+
+
+
+
+
+
+
+
 // ADDING TO TABLES::::
 // ADDING TO TABLES::::
 // ADDING TO TABLES::::
@@ -371,6 +622,286 @@ public class RequestsDB {
 			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
 		}
 	}
+
+	/**
+	 *
+	 * @param userID ID of the user
+	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param roomID nodeID of the user
+	 * @param languageType type of language being requested
+	 * @param description detailed description of request
+	 */
+	public static void addLanguageRequest(int userID, int assigneeID,  String roomID, String languageType, String description) {
+		addRequest(userID, assigneeID, "languageRequest");
+
+		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertLanguageReq)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, languageType);
+			prepState.setString(3, description);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into languageRequest inside function addLanguageRequest()");
+		}
+
+	}
+
+	/**
+	 *
+	 * @param userID ID of the user
+	 * @param roomID nodeID of the user
+	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param washLoadAmount amount of loads needed to wash
+	 * @param dryLoadAmount amount of loads needed to dry
+	 * @param description detailed description of request
+	 */
+	public static void addLaundryRequest(int userID, String roomID,  int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
+		addRequest(userID, assigneeID, "laundryRequest");
+
+		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertLaundryReq)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, washLoadAmount);
+			prepState.setString(3, dryLoadAmount);
+			prepState.setString(4, description);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into laundryRequest inside function addLanguageRequest()");
+		}
+	}
+
+	/**
+	 *
+	 * @param userID ID of the user
+	 * @param roomID nodeID of the user
+	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param type is the type of maintenance required
+	 * @param severity is how severe the situation is
+	 * @param ETA time taken to complete the request
+	 * @param description detailed description of request
+	 */
+	public static void addMaintenanceRequest(int userID, String roomID,  int assigneeID,  String type, String severity, String ETA, String description) {
+		addRequest(userID, assigneeID, "maintenanceRequest");
+
+		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, type);
+			prepState.setString(3, severity);
+			prepState.setString(4, ETA);
+			prepState.setString(5, description);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into maintenanceRequest inside function addMaintenanceRequest()");
+		}
+	}
+
+	//TODO: Not tested
+	/**
+	 * adds a request for food delivery
+	 * @param userID ID of the user
+	 * @param roomID nodeID of the user
+	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param dietRestrictions any restrictions the user has diet wise
+	 * @param allergies any allergies the user has
+	 * @param foodItem the food item choice made by the user
+	 * @param foodQuantity the quantity of the food item the user wants
+	 * @param beverageItem the beverage item choice made by the user
+	 * @param beverageQuantity the quantity of the beverage item the user wants
+	 */
+	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
+		addRequest(userID, assigneeID, "foodDeliveryRequest");
+
+
+		int requestID = getMaxRequestID();
+
+		String insertFoodDeliveryReq = "Insert Into foodDelivery Values (?, ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertFoodDeliveryReq)) {
+			prepState.setInt(1, requestID);
+			prepState.setString(2, roomID);
+			prepState.setString(3, allergies);
+			prepState.setString(4, dietRestrictions);
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into foodDeliveryRequest inside function addFoodDeliveryRequest()");
+		}
+	}
+
+	/**
+	 * Adds a food item to the food table
+	 * @param item this is the item that is on the menu
+	 * @param price this is the price of the item on the menu
+	 * @param calories this is how many calories the menu item has
+	 * @param description this is a description of the food item
+	 */
+	public static void addFoodItem(String item, double price, int calories, String description){
+
+		int foodID = getMaxFoodID() + 1;
+		String query = "insert into food values (?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setInt(1,foodID);
+			prepState.setString(2,item);
+			prepState.setDouble(3,price);
+			prepState.setInt(4,calories);
+			prepState.setString(5,description);
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("error addFoodItem()");
+		}
+
+	}
+
+	/**
+	 * Adds a beverage item to the beverage table
+	 * @param item this is the item that is on the menu
+	 */
+	public static void addBeverageItem(String item){
+
+		int beverageID = getMaxBeverageID() + 1;
+		String query = "insert into beverage values (?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setInt(1,beverageID);
+			prepState.setString(2,item);
+
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("error addBeverageItem()");
+		}
+
+	}
+
+	/**
+	 * Gets the largest requestID, which can be used to increment and make a the next one
+	 * @return the largest requestID in the request table
+	 */
+	public static int getMaxRequestID(){
+		int maxID = 0;
+
+		String query = "Select Max(requestID) As maxRequestID From food";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if (rset.next()) {
+				maxID = rset.getInt("maxRequestID");
+			}
+
+			prepState.close();
+			return maxID;
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in getMaxRequestID()");
+			return 0;
+		}
+	}
+
+	/**
+	 * Gets the largest foodID, which can be used to increment and make a the next one
+	 * @return the largest foodID in the food table
+	 */
+	public static int getMaxFoodID(){
+		int maxID = 0;
+
+		String query = "Select Max(foodID) As maxFoodID From food";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if (rset.next()) {
+				maxID = rset.getInt("maxFoodID");
+			}
+
+			prepState.close();
+			return maxID;
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in getMaxFoodID()");
+			return 0;
+		}
+	}
+
+	/**
+	 * Gets the largest beverageID, which can be used to increment and make a the next one
+	 * @return the largest beverageID in the beverage table
+	 */
+	public static int getMaxBeverageID(){
+		int maxID = 0;
+
+		String query = "Select Max(beverageID) As maxBeverage From beverage";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if (rset.next()) {
+				maxID = rset.getInt("maxBeverage");
+			}
+
+			prepState.close();
+			return maxID;
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in getMaxBeverageID()");
+			return 0;
+		}
+	}
+
+
+	//TODO: Not tested
+	public static void addFoodOrderedInRequestTable(int requestID, int foodID, int foodQuantity){
+		String query = "insert into foodOrderedInRequest values (?,?,?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setInt(1,requestID);
+			prepState.setInt(2,foodID);
+			prepState.setInt(3, foodQuantity);
+			prepState.execute();
+
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in addFoodOrderedInRequestTable()");
+		}
+
+	}
+
+	//TODO: Not tested
+	public static void addBeverageOrderedInRequestTable(int requestID, int beverageID, int beverageQuantity){
+		String query = "insert into beverageOrderedInRequest values (?,?,?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setInt(1,requestID);
+			prepState.setInt(2,beverageID);
+			prepState.setInt(3, beverageQuantity);
+			prepState.execute();
+
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in addFoodOrderedInRequestTable()");
+		}
+
+
+	}
+
+
+
 
 // EDITING TABLES::::
 // EDITING TABLES::::
@@ -730,6 +1261,307 @@ public class RequestsDB {
 			//e.printStackTrace();
 			System.err.println("Error in updating request table");
 			return 0;
+		}
+	}
+
+
+	/**
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param languageType is the new language type being requested by the user
+	 * @param description is an edited detailed description
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description) {
+		boolean added = false;
+		String query = "Update languageRequest Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (languageType != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "languageType = '" + languageType + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating languageRequest");
+			return 0;
+		}
+
+	}
+
+	/**
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param washLoadAmount is new amount of loads to be washed
+	 * @param dryLoadAmount is new amount of loads to be dried
+	 * @param description is an edited detailed description
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editLaundryRequest(int requestID, String roomID, String washLoadAmount, String dryLoadAmount, String description) {
+		boolean added = false;
+		String query = "Update laundryRequest Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (washLoadAmount != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "washLoadAmount = '" + washLoadAmount + "'";
+			added = true;
+		}
+		if (dryLoadAmount != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "dryLoadAmount = '" + dryLoadAmount + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating laundryRequest");
+			return 0;
+		}
+	}
+
+	/**
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param type is the new type of maintenance request
+	 * @param severity is the new severity of the situation
+	 * @param ETA is the new estimated time
+	 * @param description is an edited detailed description
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editMaintenanceRequest(int requestID, String roomID, String type, String severity, String ETA, String description) {
+		boolean added = false;
+		String query = "Update maintenanceRequest Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (type != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "type = '" + type + "'";
+			added = true;
+		}
+		if (severity != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "severity = '" + severity + "'";
+			added = true;
+		}
+		if (ETA != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "ETA = '" + ETA + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating maintenanceRequest");
+			return 0;
+		}
+	}
+
+	//TODO: ASHLEY review this please (i didn't take your Food table into account)
+	/**
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param dietRestrictions is the edited restrictions of the user in terms of diet
+	 * @param allergies is the edited allergies the user has
+	 * @param food is the new food the user requests
+	 * @param beverage is the new beverage the user requests
+	 * @param description is an edited detailed description
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editFoodDeliveryRequest(int requestID, String roomID, String dietRestrictions, String allergies, String food, String beverage, String description) {
+		boolean added = false;
+		String query = "Update foodDeliveryRequest Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (dietRestrictions != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "dietRestrictions = '" + dietRestrictions + "'";
+			added = true;
+		}
+		if (allergies != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "allergies = '" + allergies + "'";
+			added = true;
+		}
+		if (food != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "food = '" + food + "'";
+			added = true;
+		}
+		if (beverage != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "beverage = '" + beverage + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating foodDeliveryRequest");
+			return 0;
+		}
+	}
+
+
+	/**
+	 * Reads in the Aubon Pain website to populate the foods and drinks table with real information
+	 */
+	public static void updateFoodAndBeverageTable(){
+
+		try {
+			Document doc = Jsoup.connect("https://order.aubonpain.com/menu/brigham-womens-hospital").get();
+			Elements media = doc.select("[src]"); // --> image urls
+			Elements foods = doc.getElementsByClass("product-name product__name");
+			Elements prices = doc.getElementsByClass("product__attribute product__attribute--price");
+			Elements calories = doc.getElementsByClass("product__attribute product__attribute--calorie-label");
+			Elements descriptions = doc.getElementsByClass("product__description");
+
+			ArrayList<String> listOfFoods = new ArrayList<String>();
+			ArrayList<String> listOfDrinks = new ArrayList<String>();
+
+			HashMap<Boolean,String> menuItems = new HashMap<Boolean, String>();
+			boolean drinkItem = false;
+			boolean foodItem = true;
+			for (Element item : foods) {
+				if(item.text().equals("Hot Coffee & Hot Tea")){
+					drinkItem = true;
+					foodItem = false;
+				}
+				if(item.text().equals("Chips & Salty Snacks")){
+					drinkItem = false;
+					foodItem = false;
+				}
+				if(item.text().equals("Bottled Spring Water (20 oz)")){
+					drinkItem = true;
+					foodItem = false;
+				}
+				if(item.text().equals("Cape Cod Lightly Salted Chips")){
+					drinkItem = false;
+					foodItem = true;
+				}
+
+				if(drinkItem){
+					listOfDrinks.add(item.text());
+
+				}
+				if(foodItem){
+					listOfFoods.add(item.text());
+				}
+			}
+
+			for(String food : listOfFoods){
+				addFoodItem(food, 0, 0, "");
+			}
+
+			for(String drink : listOfDrinks){
+				addBeverageItem(drink);
+			}
+
+			ArrayList<String> listOfPrices = new ArrayList<>();
+			for(Element price : prices){
+				listOfPrices.add(price.text());
+			}
+
+
+			ArrayList<String> listOfCalories = new ArrayList<>();
+			for(Element calory : calories){
+				listOfCalories.add(calory.text());
+			}
+
+
+
+			ArrayList<String> listOfDescriptions = new ArrayList<>();
+			for(Element description : descriptions){
+				listOfDescriptions.add(description.text());
+
+			}
+		}catch (IOException e){
+			System.err.println("Error connecting to the website");
 		}
 	}
 

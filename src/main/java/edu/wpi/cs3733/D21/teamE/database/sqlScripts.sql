@@ -146,12 +146,10 @@ Create Table securityServ (
 );
 
 
-drop table doctorExaminesAdmission;
-drop table appointment;
 
 Create Table appointment(
                             appointmentID Int Primary Key,
-                            patientID Int References userAccount (userID) on delete,
+                            patientID Int References userAccount (userID) on delete cascade,
                             doctorID Int References userAccount (userID) on delete cascade,
                             startTime timeStamp,
                             endTime timestamp,
@@ -159,13 +157,51 @@ Create Table appointment(
 );
 
 
+Drop Table beverageOrderedInRequest;
+Drop Table beverage;
+Drop Table foodOrderedInRequest;
+Drop Table food;
+Drop Table foodDelivery;
+
+Create Table foodDelivery (
+    requestID int Primary Key References requests (requestID) On Delete Cascade,
+    roomID varchar(31) Not Null References node (nodeID) On Delete Cascade,
+    allergy varchar(50),
+    dietRestriction varchar(50),
+    description varchar(3000)
+);
+
+Create Table food (
+    foodID int Primary KEY,
+    item varchar(50),
+    price Double,
+    calories int,
+    description varchar(3000)
+);
+
+insert into food values (?,?,?,?,?);
+
+Create Table foodOrderedInRequest (
+    requestId int References foodDelivery (requestID)  on Delete Cascade,
+    foodID int References food (foodID) On Delete Cascade,
+    quantity int,
+    Primary Key (requestId, foodID)
+);
+
+Create Table beverage (
+    beverageID int Primary key,
+    item varchar(50)
+);
+
+Create Table beverageOrderedInRequest(
+    requestId int References foodDelivery (requestID)  on Delete Cascade,
+    beverageID int References beverage (beverageID) On Delete Cascade,
+    quantity int,
+    Primary Key (requestId, beverageID)
+);
 
 
-
-
-
-
-
+insert into foodOrderedInRequest values (?,?,?);
 
 
 
@@ -311,4 +347,3 @@ insert into extTransport values(9,'FDEPT00501', 'Plane','High Severity', 3873998
 
 
 
-Select longName from node, (Select roomID From ?, (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID

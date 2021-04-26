@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXDialogLayout;
 
 
 
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -154,6 +155,14 @@ public class App extends Application {
 				DB.createMedDeliveryTable();
 				DB.createSecurityServTable();
 				DB.createAppointmentTable();
+				DB.createLanguageRequestTable();
+				DB.createLaundryRequestTable();
+				DB.createMaintenanceRequestTable();
+				DB.createFoodDeliveryTable();
+				DB.createFoodTable();
+				DB.createFoodOrderedInRequestTable();
+				DB.createBeverageTable();
+				DB.createBeverageOrderedInRequestTable();
 				DB.populateTable("node", nodes);
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();

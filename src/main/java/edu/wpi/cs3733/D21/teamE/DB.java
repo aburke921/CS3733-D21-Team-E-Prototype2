@@ -7,6 +7,8 @@ import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -399,6 +401,142 @@ public class DB {
 		RequestsDB.createSecurityServTable();
 	}
 
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - languageType: this is the type of language the user is requesting
+	 * - description: detailed description of request
+	 */
+	public static void createLanguageRequestTable() {
+		RequestsDB.createLanguageRequestTable();
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - washLoadAmount: amount of loads needed to wash
+	 * - dryLoadAmount: amount of loads needed to dry
+	 * - description:  detailed description of request
+	 */
+	public static void createLaundryRequestTable() {
+		RequestsDB.createLaundryRequestTable();
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - type: is the type of maintenance required
+	 * - severity: is how severe the situation is
+	 * - ETA: time taken to complete the request
+	 * - description: detailed description of request
+	 */
+	public static void createMaintenanceRequestTable() {
+		RequestsDB.createMaintenanceRequestTable();
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - allergy: this is an food allergy that the user might have
+	 * - dietRestriction: this is any dietary restrictions that the person fulfilling the request might need to know about
+	 * - beverage: the drink the user is ordering
+	 * - comments: any comments the user wants to leave for the person fulfilling the request
+	 */
+	public static void createFoodDeliveryTable(){
+		RequestsDB.createFoodDeliveryTable();
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - foodID: this is used to identify a food item. Every food item must have one.
+	 * - item: this is the name of the food item
+	 * - price: this is the price of the food item
+	 * - calories: this is the number of calories that the food item has
+	 * - description: this is the description of the menu item
+	 */
+	public static void createFoodTable(){
+		RequestsDB.createFoodTable();
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is the identifier of the request where the user is ordering food
+	 * - foodID: this is the identifier of the food item the user is ordering
+	 * - quantity: this is the quantity of a single item the user is ordering
+	 */
+	public static void createFoodOrderedInRequestTable(){
+		RequestsDB.createFoodOrderedInRequestTable();
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - beverageID: this is the identifier of the beverage the user is ordering
+	 * - item: this is the name of the beverage on the menu
+	 */
+	public static void createBeverageTable(){
+		RequestsDB.createBeverageTable();
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is the identifier of the request where the user is ordering food
+	 * - beverageID: this is the identifier of the beverage the user is ordering
+	 * - quantity: this is the quantity of a single item the user is ordering
+	 */
+	public static void createBeverageOrderedInRequestTable(){
+		RequestsDB.createBeverageOrderedInRequestTable();
+	}
+
+
+	/**
+	 * Adds a food item to the food table
+	 * @param item this is the item that is on the menu
+	 * @param price this is the price of the item on the menu
+	 * @param calories this is how many calories the menu item has
+	 * @param description this is a description of the food item
+	 */
+	public static void addFoodItem(String item, double price, int calories, String description){
+		RequestsDB.addFoodItem(item, price, calories, description);
+	}
+
+	/**
+	 * Adds a beverage item to the beverage table
+	 * @param item this is the item that is on the menu
+	 */
+	public static void addBeverageItem(String item){
+		RequestsDB.addBeverageItem(item);
+	}
+
+	/**
+	 * Reads in the Aubon Pain website to populate the foods and drinks table with real information
+	 */
+	public static void updateFoodAndBeverageTable(){
+		RequestsDB.updateFoodAndBeverageTable();
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 	// Adding To Tables:
 
 	public static void addRequest(int userID, int assigneeID, String requestType) {
@@ -450,6 +588,61 @@ public class DB {
 	 */
 	public static void addSecurityRequest(int userID, int assigneeID, String roomID, String level, String urgency) {
 		RequestsDB.addSecurityRequest(userID, assigneeID, roomID, level, urgency);
+	}
+
+	/**
+	 *
+	 * @param userID ID of the user
+	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param roomID nodeID of the user
+	 * @param languageType type of language being requested
+	 * @param description detailed description of request
+	 */
+	public static void addLanguageRequest(int userID, int assigneeID,  String roomID, String languageType, String description) {
+		RequestsDB.addLanguageRequest(userID, assigneeID, roomID, languageType, description);
+	}
+
+	/**
+	 *
+	 * @param userID ID of the user
+	 * @param roomID nodeID of the user
+	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param washLoadAmount amount of loads needed to wash
+	 * @param dryLoadAmount amount of loads needed to dry
+	 * @param description detailed description of request
+	 */
+	public static void addLaundryRequest(int userID, String roomID,  int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
+		RequestsDB.addLaundryRequest(userID, roomID, assigneeID, washLoadAmount, dryLoadAmount, description);
+	}
+
+	/**
+	 *
+	 * @param userID ID of the user
+	 * @param roomID nodeID of the user
+	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param type is the type of maintenance required
+	 * @param severity is how severe the situation is
+	 * @param ETA time taken to complete the request
+	 * @param description detailed description of request
+	 */
+	public static void addMaintenanceRequest(int userID, String roomID,  int assigneeID,  String type, String severity, String ETA, String description) {
+		RequestsDB.addMaintenanceRequest(userID, roomID, assigneeID, type, severity, ETA, description);
+	}
+
+	/**
+	 * adds a request for food delivery
+	 * @param userID ID of the user
+	 * @param roomID nodeID of the user
+	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param dietRestrictions any restrictions the user has diet wise
+	 * @param allergies any allergies the user has
+	 * @param foodItem the food item choice made by the user
+	 * @param foodQuantity the quantity of the food item the user wants
+	 * @param beverageItem the beverage item choice made by the user
+	 * @param beverageQuantity the quantity of the beverage item the user wants
+	 */
+	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
+		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, allergies, foodItem, foodQuantity, beverageItem, beverageQuantity);
 	}
 
 	// Editing Tables:
@@ -535,6 +728,60 @@ public class DB {
 		return RequestsDB.editRequests(requestID, assigneeID, requestStatus);
 	}
 
+	/**
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param languageType is the new language type being requested by the user
+	 * @param description is an edited detailed description
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description) {
+		return RequestsDB.editLanguageRequest(requestID, roomID, languageType, description);
+	}
+
+	/**
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param washLoadAmount is new amount of loads to be washed
+	 * @param dryLoadAmount is new amount of loads to be dried
+	 * @param description is an edited detailed description
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editLaundryRequest(int requestID, String roomID, String washLoadAmount, String dryLoadAmount, String description) {
+		return RequestsDB.editLaundryRequest(requestID, roomID, washLoadAmount, dryLoadAmount, description);
+	}
+
+	/**
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param type is the new type of maintenance request
+	 * @param severity is the new severity of the situation
+	 * @param ETA is the new estimated time
+	 * @param description is an edited detailed description
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editMaintenanceRequest(int requestID, String roomID, String type, String severity, String ETA, String description) {
+		return RequestsDB.editMaintenanceRequest(requestID, roomID, type, severity, ETA, description);
+	}
+
+	/**
+	 *
+	 * @param requestID is the generated ID of the request
+	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param dietRestrictions is the edited restrictions of the user in terms of diet
+	 * @param allergies is the edited allergies the user has
+	 * @param food is the new food the user requests
+	 * @param beverage is the new beverage the user requests
+	 * @param description is an edited detailed description
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editFoodDeliveryRequest(int requestID, String roomID, String dietRestrictions, String allergies, String food, String beverage, String description) {
+		return RequestsDB.editFoodDeliveryRequest(requestID, roomID, dietRestrictions, allergies, food, beverage, description);
+	}
+
 
 	// Querying Tables:
 
@@ -577,6 +824,14 @@ public class DB {
 	public static HashMap<Integer, String> getSelectableAssignees(String givenUserType) {
 		return RequestsDB.getSelectableAssignees(givenUserType);
 	}
+
+
+
+
+
+
+
+
 
 	// UserAccountDB:
 
@@ -649,6 +904,7 @@ public class DB {
 	 * @param userID this is the ID of the user the admin is trying to delete
 	 */
 	public static int deleteUserAccount(int userID) {
+		csvDB.addRemovedPatientAppointmentHistory(userID);
 		return UserAccountDB.deleteUserAccount(userID);
 	}
 
@@ -661,5 +917,6 @@ public class DB {
 	public static int userLogin(String email, String password) {
 		return UserAccountDB.userLogin(email, password);
 	}
+
 
 }

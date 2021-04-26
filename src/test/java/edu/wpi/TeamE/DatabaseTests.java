@@ -36,25 +36,48 @@ public class DatabaseTests {
 
 		try {
 			connection.deleteAllTables();
+			DB.createNodeTable();
+			DB.createEdgeTable();
+			DB.createUserAccountTable();
+			DB.createRequestsTable();
+			DB.createFloralRequestsTable();
+			DB.createSanitationTable();
+			DB.createExtTransportTable();
+			DB.createMedDeliveryTable();
+			DB.createSecurityServTable();
+			DB.createAppointmentTable();
+			DB.createLanguageRequestTable();
+			DB.createLaundryRequestTable();
+			DB.createMaintenanceRequestTable();
+			DB.createFoodDeliveryTable();
+			DB.createFoodTable();
+			DB.createFoodOrderedInRequestTable();
+			DB.createBeverageTable();
+			DB.createBeverageOrderedInRequestTable();
+			//System.out.println("Tables were created");
 			//System.out.println("Tables were reset");
 		} catch (Exception e) {
+			DB.createNodeTable();
+			DB.createEdgeTable();
+			DB.createUserAccountTable();
+			DB.createRequestsTable();
+			DB.createFloralRequestsTable();
+			DB.createSanitationTable();
+			DB.createExtTransportTable();
+			DB.createMedDeliveryTable();
+			DB.createSecurityServTable();
+			DB.createAppointmentTable();
+			DB.createLanguageRequestTable();
+			DB.createLaundryRequestTable();
+			DB.createMaintenanceRequestTable();
+			DB.createFoodDeliveryTable();
+			DB.createFoodTable();
+			DB.createFoodOrderedInRequestTable();
+			DB.createBeverageTable();
+			DB.createBeverageOrderedInRequestTable();
 			//e.printStackTrace();
 		}
-		DB.createNodeTable();
-		DB.createEdgeTable();
-		DB.createUserAccountTable();
-		DB.createRequestsTable();
-		DB.createFloralRequestsTable();
-		DB.createSanitationTable();
-		DB.createExtTransportTable();
-		DB.createMedDeliveryTable();
-		DB.createSecurityServTable();
-		DB.createAppointmentTable();
-		DB.createLanguageRequestTable();
-		DB.createLaundryRequestTable();
-		DB.createMaintenanceRequestTable();
-		DB.createFoodDeliveryRequestTable();
-		//System.out.println("Tables were created");
+
 	}
 
 	@Test
@@ -1417,6 +1440,25 @@ public class DatabaseTests {
 		assertEquals(1, DB.editMaintenanceRequest(1, "test", null, "extremely severe", null, "wires are loose everywhere!"));
 	}
 
-// this is where testEditFoodDeliveryRequest() can go
+	@Test
+	@DisplayName("testAddFoodItem")
+	public void testAddFoodItem(){
+		DB.addFoodItem("Pancakes",9.99, 549, "Yummy!");
+	}
+
+	@Test
+	@DisplayName("testAddBeverageItem")
+	public void testAddBeverageItem(){
+		DB.addBeverageItem("Soda");
+	}
+
+	@Test
+	@DisplayName("testUpdateFoodAndBeverageTable")
+	public void testUpdateFoodAndBeverageTable(){
+		DB.updateFoodAndBeverageTable();
+	}
+
+
+
 
 }

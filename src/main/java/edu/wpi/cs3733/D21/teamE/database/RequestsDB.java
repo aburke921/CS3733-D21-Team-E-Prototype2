@@ -1,5 +1,11 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -312,18 +318,25 @@ public class RequestsDB {
 
 	}
 
-	//TODO: ASHLEY review this please (i didn't take your Food table into account)
-	public static void createFoodDeliveryRequestTable() {
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - allergy: this is an food allergy that the user might have
+	 * - dietRestriction: this is any dietary restrictions that the person fulfilling the request might need to know about
+	 * - beverage: the drink the user is ordering
+	 * - comments: any comments the user wants to leave for the person fulfilling the request
+	 */
+	public static void createFoodDeliveryTable(){
 
-		String query = "Create Table foodDeliveryRequest " +
-				"( " +
-				"    requestID int Primary Key References requests On Delete Cascade, " +
-				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
-				"    dietRestrictions varchar(31), " +
-				"    allergies    varchar(31)  Not Null, " +
-				"    food   varchar(31) Not Null, " +
-				"    bev   varchar(31) Not Null, " +
-				"    description varchar(5000) " +
+		String query = "Create Table foodDelivery (\n" +
+				"    requestID int Primary Key References requests (requestID) On Delete Cascade,\n" +
+				"    roomID varchar(31) Not Null References node (nodeID) On Delete Cascade,\n" +
+				"    allergy varchar(50),\n" +
+				"    dietRestriction varchar(50),\n" +
+				"    beverage varchar(50),\n" +
+				"    description varchar(3000)\n" +
 				")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -333,10 +346,124 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating foodDeliveryRequest table");
+			System.err.println("error creating foodDelivery table");
+		}
+
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - foodID: this is used to identify a food item. Every food item must have one.
+	 * - item: this is the name of the food item
+	 * - price: this is the price of the food item
+	 * - calories: this is the number of calories that the food item has
+	 * - description: this is the description of the menu item
+	 */
+	public static void createFoodTable(){
+
+		String query = "Create Table food (\n" +
+				"    foodID int Primary KEY,\n" +
+				"    item varchar(80),\n" +
+				"    price Double,\n" +
+				"    calories int,\n" +
+				"    description varchar(3000)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating food table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is the identifier of the request where the user is ordering food
+	 * - foodID: this is the identifier of the food item the user is ordering
+	 * - quantity: this is the quantity of a single item the user is ordering
+	 */
+	public static void createFoodOrderedInRequestTable(){
+
+		String query = "Create Table foodOrderedInRequest (\n" +
+				"    requestId int References foodDelivery (requestID)  on Delete Cascade,\n" +
+				"    foodID int References food (foodID) On Delete Cascade,\n" +
+				"    quantity int,\n" +
+				"    Primary Key (requestId, foodID)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating foodOrderedInDelivery table");
+		}
+
+
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - beverageID: this is the identifier of the beverage the user is ordering
+	 * - item: this is the name of the beverage on the menu
+	 */
+	public static void createBeverageTable(){
+		String query = "Create Table beverage (\n" +
+				"    beverageID int Primary key,\n" +
+				"    item varchar(50)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating beverage table");
 		}
 
 	}
+
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is the identifier of the request where the user is ordering food
+	 * - beverageID: this is the identifier of the beverage the user is ordering
+	 * - quantity: this is the quantity of a single item the user is ordering
+	 */
+	public static void createBeverageOrderedInRequestTable(){
+		String query = "Create Table beverageOrderedInRequest(\n" +
+				"    requestId int References foodDelivery (requestID)  on Delete Cascade,\n" +
+				"    beverageID int References beverage (beverageID) On Delete Cascade,\n" +
+				"    quantity int,\n" +
+				"    Primary Key (requestId, beverageID)\n" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating beverageOrderedInRequest table");
+		}
+	}
+
+
+
+
+
+
+
 
 
 
@@ -578,37 +705,202 @@ public class RequestsDB {
 		}
 	}
 
-	//TODO: ASHLEY review this please (i didn't take your Food table into account)
+	//TODO: Not tested
 	/**
-	 *
+	 * adds a request for food delivery
 	 * @param userID ID of the user
 	 * @param roomID nodeID of the user
 	 * @param assigneeID ID of the assigned user who will complete this task
 	 * @param dietRestrictions any restrictions the user has diet wise
 	 * @param allergies any allergies the user has
-	 * @param food the food choice made by the user
-	 * @param beverage the beverage choice made by the user
-	 * @param description detailed description of request
+	 * @param foodItem the food item choice made by the user
+	 * @param foodQuantity the quantity of the food item the user wants
+	 * @param beverageItem the beverage item choice made by the user
+	 * @param beverageQuantity the quantity of the beverage item the user wants
 	 */
-	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String food, String beverage, String description) {
+	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
 		addRequest(userID, assigneeID, "foodDeliveryRequest");
 
-		String insertFoodDeliveryReq = "Insert Into foodDeliveryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+
+		int requestID = getMaxRequestID();
+
+		String insertFoodDeliveryReq = "Insert Into foodDelivery Values (?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFoodDeliveryReq)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, dietRestrictions);
+			prepState.setInt(1, requestID);
+			prepState.setString(2, roomID);
 			prepState.setString(3, allergies);
-			prepState.setString(4, food);
-			prepState.setString(5, beverage);
-			prepState.setString(6, description);
-
+			prepState.setString(4, dietRestrictions);
 			prepState.execute();
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into foodDeliveryRequest inside function addFoodDeliveryRequest()");
 		}
 	}
+
+	/**
+	 * Adds a food item to the food table
+	 * @param item this is the item that is on the menu
+	 * @param price this is the price of the item on the menu
+	 * @param calories this is how many calories the menu item has
+	 * @param description this is a description of the food item
+	 */
+	public static void addFoodItem(String item, double price, int calories, String description){
+
+		int foodID = getMaxFoodID() + 1;
+		String query = "insert into food values (?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setInt(1,foodID);
+			prepState.setString(2,item);
+			prepState.setDouble(3,price);
+			prepState.setInt(4,calories);
+			prepState.setString(5,description);
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("error addFoodItem()");
+		}
+
+	}
+
+	/**
+	 * Adds a beverage item to the beverage table
+	 * @param item this is the item that is on the menu
+	 */
+	public static void addBeverageItem(String item){
+
+		int beverageID = getMaxBeverageID() + 1;
+		String query = "insert into beverage values (?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setInt(1,beverageID);
+			prepState.setString(2,item);
+
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("error addBeverageItem()");
+		}
+
+	}
+
+	/**
+	 * Gets the largest requestID, which can be used to increment and make a the next one
+	 * @return the largest requestID in the request table
+	 */
+	public static int getMaxRequestID(){
+		int maxID = 0;
+
+		String query = "Select Max(requestID) As maxRequestID From food";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if (rset.next()) {
+				maxID = rset.getInt("maxRequestID");
+			}
+
+			prepState.close();
+			return maxID;
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in getMaxRequestID()");
+			return 0;
+		}
+	}
+
+	/**
+	 * Gets the largest foodID, which can be used to increment and make a the next one
+	 * @return the largest foodID in the food table
+	 */
+	public static int getMaxFoodID(){
+		int maxID = 0;
+
+		String query = "Select Max(foodID) As maxFoodID From food";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if (rset.next()) {
+				maxID = rset.getInt("maxFoodID");
+			}
+
+			prepState.close();
+			return maxID;
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in getMaxFoodID()");
+			return 0;
+		}
+	}
+
+	/**
+	 * Gets the largest beverageID, which can be used to increment and make a the next one
+	 * @return the largest beverageID in the beverage table
+	 */
+	public static int getMaxBeverageID(){
+		int maxID = 0;
+
+		String query = "Select Max(beverageID) As maxBeverage From beverage";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if (rset.next()) {
+				maxID = rset.getInt("maxBeverage");
+			}
+
+			prepState.close();
+			return maxID;
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in getMaxBeverageID()");
+			return 0;
+		}
+	}
+
+
+	//TODO: Not tested
+	public static void addFoodOrderedInRequestTable(int requestID, int foodID, int foodQuantity){
+		String query = "insert into foodOrderedInRequest values (?,?,?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setInt(1,requestID);
+			prepState.setInt(2,foodID);
+			prepState.setInt(3, foodQuantity);
+			prepState.execute();
+
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in addFoodOrderedInRequestTable()");
+		}
+
+	}
+
+	//TODO: Not tested
+	public static void addBeverageOrderedInRequestTable(int requestID, int beverageID, int beverageQuantity){
+		String query = "insert into beverageOrderedInRequest values (?,?,?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setInt(1,requestID);
+			prepState.setInt(2,beverageID);
+			prepState.setInt(3, beverageQuantity);
+			prepState.execute();
+
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in addFoodOrderedInRequestTable()");
+		}
+
+
+	}
+
+
 
 
 // EDITING TABLES::::
@@ -1196,6 +1488,82 @@ public class RequestsDB {
 	}
 
 
+	/**
+	 * Reads in the Aubon Pain website to populate the foods and drinks table with real information
+	 */
+	public static void updateFoodAndBeverageTable(){
+
+		try {
+			Document doc = Jsoup.connect("https://order.aubonpain.com/menu/brigham-womens-hospital").get();
+			Elements media = doc.select("[src]"); // --> image urls
+			Elements foods = doc.getElementsByClass("product-name product__name");
+			Elements prices = doc.getElementsByClass("product__attribute product__attribute--price");
+			Elements calories = doc.getElementsByClass("product__attribute product__attribute--calorie-label");
+			Elements descriptions = doc.getElementsByClass("product__description");
+
+			ArrayList<String> listOfFoods = new ArrayList<String>();
+			ArrayList<String> listOfDrinks = new ArrayList<String>();
+
+			HashMap<Boolean,String> menuItems = new HashMap<Boolean, String>();
+			boolean drinkItem = false;
+			boolean foodItem = true;
+			for (Element item : foods) {
+				if(item.text().equals("Hot Coffee & Hot Tea")){
+					drinkItem = true;
+					foodItem = false;
+				}
+				if(item.text().equals("Chips & Salty Snacks")){
+					drinkItem = false;
+					foodItem = false;
+				}
+				if(item.text().equals("Bottled Spring Water (20 oz)")){
+					drinkItem = true;
+					foodItem = false;
+				}
+				if(item.text().equals("Cape Cod Lightly Salted Chips")){
+					drinkItem = false;
+					foodItem = true;
+				}
+
+				if(drinkItem){
+					listOfDrinks.add(item.text());
+
+				}
+				if(foodItem){
+					listOfFoods.add(item.text());
+				}
+			}
+
+			for(String food : listOfFoods){
+				addFoodItem(food, 0, 0, "");
+			}
+
+			for(String drink : listOfDrinks){
+				addBeverageItem(drink);
+			}
+
+			ArrayList<String> listOfPrices = new ArrayList<>();
+			for(Element price : prices){
+				listOfPrices.add(price.text());
+			}
+
+
+			ArrayList<String> listOfCalories = new ArrayList<>();
+			for(Element calory : calories){
+				listOfCalories.add(calory.text());
+			}
+
+
+
+			ArrayList<String> listOfDescriptions = new ArrayList<>();
+			for(Element description : descriptions){
+				listOfDescriptions.add(description.text());
+
+			}
+		}catch (IOException e){
+			System.err.println("Error connecting to the website");
+		}
+	}
 
 // QUERYING TABLES::::
 // QUERYING TABLES::::

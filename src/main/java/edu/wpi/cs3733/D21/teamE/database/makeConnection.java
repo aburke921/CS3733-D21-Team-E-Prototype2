@@ -67,7 +67,11 @@ public class makeConnection {
 
 		try {
 			Statement stmt = this.connection.createStatement();
-			stmt.execute("Drop Table foodDeliveryRequest");
+			stmt.execute("Drop Table beverageOrderedInRequest");
+			stmt.execute("Drop Table beverage");
+			stmt.execute("Drop Table foodOrderedInRequest");
+			stmt.execute("Drop Table food");
+			stmt.execute("Drop Table foodDelivery");
 			stmt.execute("Drop Table maintenanceRequest");
 			stmt.execute("Drop Table laundryRequest");
 			stmt.execute("Drop Table languageRequest");

@@ -965,7 +965,7 @@ public class newMapEditor {
         }
         edgeIDArrayList = FXCollections.observableArrayList();
         ArrayList<Edge> edgeArray = new ArrayList<Edge>();
-        edgeArray = connection.getAllEdges();
+        edgeArray = DB.getAllEdges();
         for(int i = 0; i < edgeArray.size(); i++) {
             edgeIDArrayList.add(edgeArray.get(i).getId());
 
@@ -1129,13 +1129,12 @@ public class newMapEditor {
     }
 
     public void deleteEdge() {
-        makeConnection connection = makeConnection.makeConnection();
-        ArrayList<Edge> array = connection.getAllEdges();
+        ArrayList<Edge> array = DB.getAllEdges();
         if(edgeID.getValue() != null && startLocation.getValue() != null && endLocation.getValue() != null) {
             for(int i = 0; i < array.size(); i++) {
                 if(array.get(i).getId().equals(edgeID.getValue().toString())) {
                     System.out.println("This lies between " + startLocation.getValue() + " and " + endLocation.getValue());
-                    connection.deleteEdge(startLocation.getValue(), endLocation.getValue());
+                    DB.deleteEdge(startLocation.getValue(), endLocation.getValue());
                 }
             }
         }
@@ -1146,8 +1145,7 @@ public class newMapEditor {
     }
 
     public void addEdge() {
-        makeConnection connection = makeConnection.makeConnection();
-        ArrayList<Node> array = connection.getAllNodes();
+        ArrayList<Node> array = DB.getAllNodes();
         String startInput = null;
         String endInput = null;
         if(startLocation.getValue() != null && endLocation.getValue() != null) {
@@ -1161,7 +1159,7 @@ public class newMapEditor {
                     endInput = array.get(i).get("id");
                 }
             }
-            connection.addEdge(ID, startInput, endInput);
+            DB.addEdge(ID, startInput, endInput);
             System.out.println("This happened");
             edgeID.setValue(ID);
         }

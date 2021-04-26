@@ -5,8 +5,8 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import com.jfoenix.controls.JFXToggleButton?>
-<?import javafx.scene.control.Label?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -131,17 +131,17 @@
                                                       <Insets top="12.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="info" checkedColor="#b46e25" onAction="#sortNodesByType" text="Information Desk">
+                                                <JFXCheckBox fx:id="info" checkedColor="#dc721c" onAction="#sortNodesByType" text="Information Desk">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="dept" checkedColor="#690080" onAction="#sortNodesByType" text="Departments">
+                                                <JFXCheckBox fx:id="dept" checkedColor="#74058c" onAction="#sortNodesByType" text="Departments">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="labs" checkedColor="#a40289" onAction="#sortNodesByType" text="Laboratories">
+                                                <JFXCheckBox fx:id="labs" checkedColor="#c900ae" onAction="#sortNodesByType" text="Laboratories">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
@@ -151,17 +151,17 @@
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="serv" checkedColor="#4800ff" onAction="#sortNodesByType" text="Services">
+                                                <JFXCheckBox fx:id="serv" checkedColor="#005cff" onAction="#sortNodesByType" text="Services">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="conf" checkedColor="ORANGE" onAction="#sortNodesByType" text="Conferences">
+                                                <JFXCheckBox fx:id="conf" checkedColor="#7f5124" onAction="#sortNodesByType" text="Conferences">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="EXIT" checkedColor="YELLOWGREEN" onAction="#sortNodesByType" text="Exits/Entrances">
+                                                <JFXCheckBox fx:id="EXIT" checkedColor="#90e430" onAction="#sortNodesByType" text="Exits/Entrances">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
@@ -176,7 +176,7 @@
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="park" checkedColor="#159bd2" onAction="#sortNodesByType" text="Parking">
+                                                <JFXCheckBox fx:id="park" checkedColor="#1299d2" onAction="#sortNodesByType" text="Parking">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>

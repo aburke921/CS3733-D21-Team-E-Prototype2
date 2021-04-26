@@ -11,7 +11,7 @@ import edu.wpi.cs3733.D21.teamE.database.makeConnection;
  * Abstract Searcher Class for Pathfinding API
  * On creation can be initialized to A* or DFS (already implemented) or others that can be added later
  */
-public class Searcher {
+class Searcher {
 
     private SearchConstraint type;
 
@@ -68,19 +68,22 @@ public class Searcher {
         return graph.get(nodeId).getNeighbors();
     }
 
+    public Path search(String startId, String endId){
+        Node start = getNode(startId);
+        Node end = getNode(endId);
+        return search(start, end);
+    }
+
     /**
      * Generic Search method for UI
      * Searches between Start and End Nodes for path
      * Searching algorithm can be A* or DFS (more can be added in the future)
      *
-     * @param startId The NodeID of the start node as a string
-     * @param endId   The NodeID of the end node as a string
+     * @param start The NodeID of the start node as a string
+     * @param end   The NodeID of the end node as a string
      * @return The path from Start to End as a Path (basically a LinkedList)
      */
-    public Path search(String startId, String endId){
-        //get nodes from database
-        Node start = getNode(startId);
-        Node end = getNode(endId);
+    public Path search(Node start, Node end){
 
         PriorityQueue<Node> potentials = new PriorityQueue<>();
         HashMap<Node, Double> prevCost = new HashMap<>();
@@ -125,14 +128,24 @@ public class Searcher {
         return null;
     }
 
-    public Path search(Collection<String> stopIds){
+    public Path search(Object start, Object end){
+        if(start instanceof String && end instanceof String){
+            return search((String)start, (String)end);
+        } else if(start instanceof Node && end instanceof Node){
+            return search((Node)start, (Node)end);
+        } else {
+            return null;
+        }
+    }
+
+    public Path search(List stops){
         Path fullPath = new Path();
-        Iterator<String> itr = stopIds.iterator();
+        Iterator itr = stops.iterator();
 
         if(itr.hasNext()){
-            String prev = itr.next();
+            Object prev = itr.next();
             while(itr.hasNext()){
-                String current = itr.next();
+                Object current = itr.next();
                 Path leg = search(prev, current);
                 if(fullPath.getEnd().equals(leg.getStart())){
                     leg.pop();
@@ -151,21 +164,35 @@ public class Searcher {
         Node start = route.getStart();
         Node end = route.getEnd();
 
-        PriorityQueue<Path> paths = new PriorityQueue<>();
-
+        Path shortestSF = new Path();
         for(Node stop : stops){
-            Path leg1 = search(start.get("id"), stop.get("id"));
+            Path path = search(start.get("id"), stop.get("id"));
             Path leg2 = search(stop.get("id"), end.get("id"));
             leg2.pop();
-            leg1.add(leg2);
+            path.add(leg2);
 
-            paths.add(leg1);
+            if(shortestSF.isEmpty() || path.getPathLength() < shortestSF.getPathLength()){
+                shortestSF = path;
+            }
         }
 
-        Path shortestDetour = paths.poll();
-        System.out.printf("Added %f length\n", shortestDetour.getPathLength() - route.getPathLength());
+        System.out.printf("Added %f length\n", shortestSF.getPathLength() - route.getPathLength());
 
-        return shortestDetour;
+        return shortestSF;
+    }
+
+    public Node findNearest(Node location, String stopType){
+        List<Node> stops = DB.getAllNodesByType(stopType);
+        Node nearestSF = null;
+        Path shortestSF = new Path();
+        for(Node stop : stops){
+            Path p = search(location, stop);
+            if(shortestSF.isEmpty() || p.getPathLength() < shortestSF.getPathLength()){
+                shortestSF = p;
+                nearestSF = stop;
+            }
+        }
+        return nearestSF;
     }
 
 

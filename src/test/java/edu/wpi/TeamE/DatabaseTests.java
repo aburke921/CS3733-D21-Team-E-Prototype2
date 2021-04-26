@@ -1363,6 +1363,17 @@ public class DatabaseTests {
 	// this is where testAddFoodDeliveryRequest() can go
 
 	@Test
+	@DisplayName("testAddReligiousRequest")
+	public void testAddReligiousRequest() {
+
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "electrician", "drew", "Shukla");
+
+		DB.addReligiousRequest(1, "test", 2, "Religion1", "Flying Spaghetti Monster");
+	}
+
+	@Test
 	@DisplayName("testEditLanguageRequest")
 	public void testEditLanguageRequest() {
 		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
@@ -1397,6 +1408,18 @@ public class DatabaseTests {
 		DB.addMaintenanceRequest(1, "test", 2, "electrical", "not very severe", "15 mins", "light switch not working");
 
 		assertEquals(1, DB.editMaintenanceRequest(1, "test", null, "extremely severe", null, "wires are loose everywhere!"));
+	}
+
+	@Test
+	@DisplayName("testEditReligiousRequest")
+	public void testEditReligiousRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "electrician", "drew", "Shukla");
+
+		DB.addReligiousRequest(1, "test", 2, "Religion1", "Flying Spaghetti Monster");
+
+		assertEquals(1, DB.editReligiousRequest(1,"test", "Religion2", "description"));
 	}
 
 	// this is where testEditFoodDeliveryRequest() can go

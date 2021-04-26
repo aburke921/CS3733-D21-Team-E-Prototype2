@@ -550,6 +550,16 @@ public class DB {
 	}
 
 	/**
+	 * add a religious request
+	 * @param roomID       where the request takes place
+	 * @param religionType the kind of the religion that request is requesting
+	 * @param description  some text to further describe the request
+	 */
+	public static void addReligiousRequest(int userID, String roomID, int assigneeID, String religionType, String description) {
+		RequestsDB.addReligiousRequest(userID, roomID, assigneeID, religionType, description);
+	}
+
+	/**
 	 *
 	 * @param userID ID of the user
 	 * @param roomID nodeID of the user
@@ -685,6 +695,16 @@ public class DB {
 	 */
 	public static int editMaintenanceRequest(int requestID, String roomID, String type, String severity, String ETA, String description) {
 		return RequestsDB.editMaintenanceRequest(requestID, roomID, type, severity, ETA, description);
+	}
+
+	/**
+	 * edit a religious request
+	 * @param roomID       where the request takes place
+	 * @param religionType the kind of the religion that request is requesting
+	 * @param description  some text to further describe the request
+	 */
+	public static int editReligiousRequest(int requestID, String roomID, String religionType, String description) {
+		return RequestsDB.editReligiousRequest(requestID, roomID, religionType, description);
 	}
 
 	/**

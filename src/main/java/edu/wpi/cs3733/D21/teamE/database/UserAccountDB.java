@@ -273,5 +273,25 @@ public class UserAccountDB {
 		return 0;
 	}
 
+	public static String getUserType(int userID){
+		String insertUser = "Select userType From userAccount Where userID = ?";
+		try (PreparedStatement prepState = connection.prepareStatement(insertUser)){
+			prepState.setInt(1, userID);
+
+			ResultSet rset = prepState.executeQuery();
+
+			String userType = null;
+			if(rset.next()){
+				userType = rset.getString("userType");
+			}
+
+			return userType;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println("error in getUserType()");
+		}
+
+		return null;
+	}
 
 }

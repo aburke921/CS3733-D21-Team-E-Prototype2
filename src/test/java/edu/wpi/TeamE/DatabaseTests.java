@@ -4,6 +4,8 @@ import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 
 
+import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
+import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -1340,4 +1342,14 @@ public class DatabaseTests {
 		assertEquals(99999, DB.userLogin("staff", "staff"));
 		assertEquals(10000, DB.userLogin("guest", "guest"));
 	}
+
+
+	@Test
+	@DisplayName("testGetUserType")
+	public void testGetUserType(){
+		DB.addSpecialUserType("email@gmail.com", "12345678", "admin", "firstName", "lastName");
+		String returnedUserType = UserAccountDB.getUserType(1);
+		assertEquals("admin", returnedUserType);
+	}
+
 }

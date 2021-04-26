@@ -5,11 +5,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
-import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.databases.NodeDB;
-import edu.wpi.TeamE.databases.RequestsDB;
-import edu.wpi.TeamE.databases.makeConnection;
-import edu.wpi.TeamE.views.serviceRequestControllers.ServiceRequestFormComponents;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -81,11 +77,11 @@ public class Floral extends ServiceRequestFormComponents {
             String type = flowerType.getSelectionModel().getSelectedItem();
             String count = flowerCount.getSelectionModel().getSelectedItem();
             String vase = vaseType.getSelectionModel().getSelectedItem().toString();
-            String assigned = assignee.getText();
+            int assigned = Integer.parseInt(assignee.getText());
             String reciever = recipient.getText();
             String mess = message.getText();
 
-            RequestsDB.addFloralRequest(App.userID, assigned, nodeInfo, reciever, type, 12, vase, mess);
+            DB.addFloralRequest(App.userID, assigned, nodeInfo, reciever, type, 12, vase, mess);
 
         }
     }
@@ -106,8 +102,8 @@ public class Floral extends ServiceRequestFormComponents {
 
     @FXML
     void initialize() {
-        nodeID = NodeDB.getListOfNodeIDS();
-        locations = NodeDB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
+        locations = DB.getAllNodeLongNames();
         locationInput.setItems(locations);
         assert locationInput != null;
         assert flowerType != null;

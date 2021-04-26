@@ -2,6 +2,7 @@ package edu.wpi.TeamE;
 
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
+import edu.wpi.TeamE.algorithms.Time;
 import edu.wpi.TeamE.algorithms.pathfinding.SearchContext;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -324,6 +325,21 @@ public class PathFindingTests {
         Path path4 = search.search("ARETL00101", "ADEPT00102");
         assertEquals(575.26, path4.getPathLength(), 0.1);
         assertEquals(186.96, path4.getPathLength(), 0.1);
+    }
+
+    @Test
+    public void testETA() {
+        Path path1 = search.search("eWALK01101", "eWALK01001");
+        assertTrue(path1.getETA().equals(new Time(27)));
+
+        Path path2 = search.search("ePARK00101", "ePARK02501");
+        assertTrue(path2.getETA().equals(new Time(282)));
+
+        Path path3 = search.search("CRETL001L1", "BREST00102");
+        assertTrue(path3.getETA().equals(new Time(27)));
+
+        Path path4 = search.search("ARETL00101", "ADEPT00102");
+        assertTrue(path4.getETA().equals(new Time(47)));
     }
 
     @Test

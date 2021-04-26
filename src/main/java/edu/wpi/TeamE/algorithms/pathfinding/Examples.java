@@ -2,8 +2,6 @@ package edu.wpi.TeamE.algorithms.pathfinding;
 
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
-import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
-import edu.wpi.cs3733.D21.teamE.database.csvDB;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
@@ -32,10 +30,10 @@ public class Examples {
                 DB.createExtTransportTable();
                 DB.createMedDeliveryTable();
                 DB.createSecurityServTable();
-                appointmentDB.createAppointmentTable();
-                csvDB.populateTable("node", nodes);
-                csvDB.populateTable("hasEdge", edges);
-//                csvDB.addDataForPresentation();
+                DB.createAppointmentTable();
+                DB.populateTable("node", nodes);
+                DB.populateTable("hasEdge", edges);
+//              DB.addDataForPresentation();
                 System.out.println("Tables were created");
             } catch (Exception e) {
                 System.out.println("Tables already there");

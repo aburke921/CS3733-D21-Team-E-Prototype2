@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class UserAccountDB {
 
-	static Connection connection = makeConnection.makeConnection().connection;
+	static Connection connection = makeConnection.makeConnection().getConnection();
 
 	/**
 	 * Uses executes the SQL statements required to create the userAccount table.

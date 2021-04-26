@@ -714,26 +714,26 @@ public class PathFinder {
             /*System.out.println(xInt);
             System.out.println(yInt);*/
 
-            for(int i = 0; i < array.size(); i++) {
-                double nodeX = array.get(i).getX() / scale;
-                int nodeXInt = (int)nodeX;
-                double nodeY = array.get(i).getY() / scale;
-                int nodeYInt = (int)nodeY;
-                System.out.println(nodeXInt);
-
-                if(Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2){
-                    clickOnNode(array.get(i).get("longName"));
-                    //selection++;
-                    /*if(selection == 1) {
-                        startLocationComboBox.setValue(array.get(i).get("longName"));
-                    }else if(selection == 2){
-                        endLocationComboBox.setValue(array.get(i).get("longName"));
-                        selection = 0;
-                    }*/
-                    System.out.println(array.get(i).get("longName"));
-
-                }
-            }
+//            for(int i = 0; i < array.size(); i++) {
+//                double nodeX = array.get(i).getX() / scale;
+//                int nodeXInt = (int)nodeX;
+//                double nodeY = array.get(i).getY() / scale;
+//                int nodeYInt = (int)nodeY;
+//                System.out.println(nodeXInt);
+//
+//                if(Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2){
+//                    clickOnNode(array.get(i).get("longName"));
+//                    //selection++;
+//                    /*if(selection == 1) {
+//                        startLocationComboBox.setValue(array.get(i).get("longName"));
+//                    }else if(selection == 2){
+//                        endLocationComboBox.setValue(array.get(i).get("longName"));
+//                        selection = 0;
+//                    }*/
+//                    System.out.println(array.get(i).get("longName"));
+//
+//                }
+//            }
         });
     }
 

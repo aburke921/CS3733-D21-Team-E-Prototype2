@@ -166,3 +166,19 @@ JFXToggleButton  {
 /*.centerPane {*/
 /*    -fx-background-color: red;*/
 /*}*/
+
+MaterialDesignIconView {
+    -fx-fill: -fx--primary;
+}
+
+FontAwesomeIconView {
+    -fx-fill: -fx--primary;
+}
+
+JFXButton:hover MaterialDesignIconView {
+    -fx-fill: -fx--primary-dark;
+}
+
+JFXButton:hover FontAwesomeIconView {
+    -fx-fill: -fx--primary-dark;
+}

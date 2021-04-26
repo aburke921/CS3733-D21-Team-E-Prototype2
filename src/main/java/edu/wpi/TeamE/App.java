@@ -155,6 +155,10 @@ public class App extends Application {
 				DB.createMedDeliveryTable();
 				DB.createSecurityServTable();
 				DB.createAppointmentTable();
+				DB.createLanguageRequestTable();
+				DB.createLaundryRequestTable();
+				DB.createMaintenanceRequestTable();
+				DB.createFoodDeliveryRequestTable();
 				DB.populateTable("node", nodes);
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();

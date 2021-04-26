@@ -1,12 +1,15 @@
 package edu.wpi.TeamE.views;
 
+import com.jfoenix.controls.JFXButton;
 import edu.wpi.TeamE.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 public class ServiceRequests {
@@ -20,7 +23,9 @@ public class ServiceRequests {
             App app = new App();
             app.stop();
         });
+
     }
+
 
     @FXML
     private void toDefault(ActionEvent e) {

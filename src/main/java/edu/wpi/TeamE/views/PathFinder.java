@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
+
 import edu.wpi.TeamE.algorithms.pathfinding.*;
 
 import edu.wpi.TeamE.App;
@@ -262,8 +263,12 @@ public class PathFinder {
         error.setActions(okay);
         dialog.show();
     }
+    /**
+     * finds path between a selected start and end location, or finds path to nearest bathroom from start location.
+     * @param index index of the clicked on node
+     */
     @FXML
-    void clickOnNode( String longName){
+    void clickOnNode(int index){
         JFXDialogLayout error = new JFXDialogLayout();
         error.setHeading(new Text("Location selection"));
         JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
@@ -275,7 +280,7 @@ public class PathFinder {
        start.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                startLocationComboBox.setValue(longName);
+                startLocationComboBox.getSelectionModel().select(index);
                 dialog.close();
 
             }
@@ -283,7 +288,7 @@ public class PathFinder {
         destination.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                endLocationComboBox.setValue(longName);
+                endLocationComboBox.getSelectionModel().select(index);;
 
                 dialog.close();
 
@@ -293,14 +298,17 @@ public class PathFinder {
             @Override
             public void handle(ActionEvent event) {
                 SearchContext aStar = new SearchContext();
-                startLocationComboBox.setValue(longName);
-                int startLocationListSelectedIndex = startLocationComboBox.getSelectionModel().getSelectedIndex();
-                Node selectedStartNode = nodeArrayList.get(startLocationListSelectedIndex);
+                startLocationComboBox.getSelectionModel().select(index);
+                Node bathroom = aStar.findNearest(nodeArrayList.get(index),"REST");
+                int endIndex = 0;
+                for(int i = 0; i < nodeArrayList.size();i++){
+                    if(nodeArrayList.get(i).get("id").equals(bathroom.get("id"))){
+                        endIndex = i;
+                    }
 
-                Path bathroomPath = new Path();
-                bathroomPath.add(selectedStartNode);
-                Path alongBathroom = aStar.searchAlongPath(bathroomPath,"REST");
-                drawMap(alongBathroom,currentFloor);
+                }
+                endLocationComboBox.getSelectionModel().select(endIndex);
+
                 dialog.close();
 
 
@@ -333,7 +341,7 @@ public class PathFinder {
     }
 
     /**
-     * Uses {@link SearchContext}'s search() function to find the best path,
+     * Uses {@link Searcher}'s search() function to find the best path,
      * given the two current start and end positions ({@link #selectedStartNodeID} and {@link #selectedEndNodeID}).
      * Then calls {@link #drawMap(Path, String)}.
      * Sets {@link #currentFoundPath}. Returns a SnackBar when path is null.
@@ -381,12 +389,7 @@ public class PathFinder {
             findPathButton.setDisable(true);
         } else { // run search
             //Call the path search function
-            //String stop = "FEXIT00201";
-            List<String> stops = new ArrayList<>();
-            stops.add(selectedStartNodeID);
-            //stops.add(stop);
-            stops.add(selectedEndNodeID);
-            Path foundPath = aStar.search(stops);
+            Path foundPath = aStar.search(selectedStartNodeID, selectedEndNodeID);
 
             //draw map, unless path is null
             if (foundPath == null) { //path is null
@@ -770,14 +773,16 @@ public class PathFinder {
             System.out.println(yInt);*/
 
             for(int i = 0; i < array.size(); i++) {
-                double nodeX = array.get(i).getX() / scale;
+                Node node = array.get(i);
+                double nodeX = node.getX() / scale;
                 int nodeXInt = (int) nodeX;
-                double nodeY = array.get(i).getY() / scale;
+                double nodeY = node.getY() / scale;
                 int nodeYInt = (int) nodeY;
                 System.out.println(nodeXInt);
-                if (Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) {
+                if ((Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) && (node.get("floor").equalsIgnoreCase(currentFloor))) {
+
                     System.out.println(array.get(i).get("longName"));
-                    clickOnNode(array.get(i).get("longName"));
+                    clickOnNode(i);
 
                 }
             }
@@ -827,7 +832,7 @@ public class PathFinder {
                 NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
                 Rectangle r = nM.getRectangle();
                 r.setVisible(true);
-                r.setFill(marker.getTypeColor().get(currentType));
+                //r.setFill(marker.getTypeColor().get(currentType));
                 currentMarkers.add(node);
             }
         } else {

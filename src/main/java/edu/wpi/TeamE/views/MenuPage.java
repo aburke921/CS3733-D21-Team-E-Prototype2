@@ -52,6 +52,13 @@ public class MenuPage {
             assigneeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<AubonPainItem, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().getFoodPrice()));
             menuTable.getColumns().add(assigneeColumn);
+            //Column 4 - Description
+            TreeTableColumn<AubonPainItem, String> descriptionColumn = new TreeTableColumn<>("Description");
+            assigneeColumn.setPrefWidth(150);
+            assigneeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<AubonPainItem, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getFoodDescription()));
+            menuTable.getColumns().add(descriptionColumn);
+
 
         }
         //Establishing root node

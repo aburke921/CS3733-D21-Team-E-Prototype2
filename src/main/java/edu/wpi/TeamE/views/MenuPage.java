@@ -55,8 +55,28 @@ public class MenuPage {
 
         }
         //Establishing root node
+        ArrayList<String> foodItems = DB.getAubonPainFeild("foodItem");
+        ArrayList<String> foodPrice = DB.getAubonPainFeild("foodPrice");
+        ArrayList<String> foodCalories = DB.getAubonPainFeild("foodCalories");
+
+        //COMMENT THIS PART OUT ----------------------
+//        ArrayList<AubonPainItem> items = DB.getAubonPanItems();
+//        TreeItem<AubonPainItem> rootNode = new TreeItem<>(new AubonPainItem("Aubon Pain Menu"));
+//        for(AubonPainItem item : items){
+//            TreeItem<AubonPainItem> childNode = new TreeItem<>(new AubonPainItem(item.getFoodItem(), item.getFoodCalories(), item.getFoodPrice()));
+//            addToTable(childNode);
+//            rootNode.getChildren().setAll(childNode);
+//
+//            //Adding Root
+//            menuTable.setRoot(rootNode);
+//            menuTable.setShowRoot(false);
+//        }
+        //COMMENT UP TO HERE ----------------------
+
         TreeItem<AubonPainItem> rootNode = new TreeItem<>(new AubonPainItem("Aubon Pain Menu"));
         TreeItem<AubonPainItem> inProgress = new TreeItem<>(new AubonPainItem("In Progress"));
+
+        TreeItem<ServiceRequestForm> externalPatientCompleted = new TreeItem<>(new ServiceRequestForm("External Patient Form"));
         addToTable(inProgress);
 
         rootNode.getChildren().setAll(inProgress);

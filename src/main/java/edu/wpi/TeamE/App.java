@@ -34,10 +34,20 @@ public class App extends Application {
 	 * Value of currently logged in user.
 	 * 0 Indicates no user logged in.
 	 */
-	public static int userID = 0; //User ID of currently logged in user. 0 indicates not logged in
+	public static int userID = 0;
 
 	/**The JavaFX application's primary stage. All Scenes are built upon this stage*/
 	private static Stage primaryStage;
+
+	//setter for primaryStage
+	public static void setPrimaryStage(Stage primaryStage) {
+		App.primaryStage = primaryStage;
+	}
+
+	//getter for primaryStage
+	public static Stage getPrimaryStage() {
+		return primaryStage;
+	}
 
 	/*-------------------------------------
 	* 	APPBAR VARIABLES/SETTERS/GETTERS
@@ -49,19 +59,19 @@ public class App extends Application {
 
 	/**Sets the page title.
 	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
-	private static String pageTitle; //Title for the currently displayed page, set by AppBarComponent
+	private static String pageTitle;
 
 	/**Sets the help dialog contents.
 	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
-	private static String helpText; //help text for current page
+	private static String helpText;
 
 	/**Sets the stackPane used by appBar for {@link #newJFXDialogPopUp(String, String, String, StackPane)} calls.
 	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
-	private static StackPane stackPane; //main stack page of current page
+	private static StackPane stackPane;
 
 	/**Sets the visibility of the help button
 	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
-	private static boolean showHelp = false; //should help button be shown (false by default)
+	private static boolean showHelp = false;
 
 	//getter for showLogin
 	public static boolean isShowLogin() {
@@ -140,12 +150,11 @@ public class App extends Application {
 	}
 
 
-	public static void setPrimaryStage(Stage primaryStage) {
-		App.primaryStage = primaryStage;
-	}
-
-
-
+	/**
+	 * Runs on Application (pre)startup
+	 * Typically not run by the user, but rather automatically by the JavaFX application.
+	 * @// TODO: 4/27/2021 document this function's tasks
+	 */
 	@Override
 	public void init() {
 		System.out.println("STARTING UP!!!");
@@ -188,18 +197,36 @@ public class App extends Application {
 		}
 	}
 
+	/**
+	 * @// TODO: 4/27/2021 this function requires some looking at, the original way it was used has been changed
+	 * @// TODO:			 at minimum its name should be changed, as it no longer applies the resizeListener.
+	 * @param root
+	 */
 	public static void setDraggableAndChangeScene(Parent root) {
 //		ResizeHelper.addResizeListener(App.getPrimaryStage()); //todo this is no longer necessary, making pretty much this whole fcn unnecessary?
 //		ResizeHelper.addResizeListener(primaryStage,435,325,Double.MAX_VALUE,Double.MAX_VALUE);
 		App.getPrimaryStage().getScene().setRoot(root);
 	}
 
+	/**
+	 * @// TODO: 4/27/2021 similar todo as above
+	 * @param root
+	 */
 	public static void setDraggableAndChangeScene(Parent root, double minWidth, double minHeight, double maxWidth, double maxHeight) {
 		ResizeHelper.addResizeListener(App.getPrimaryStage(),minWidth,minHeight,maxWidth,maxHeight);
 		App.getPrimaryStage().getScene().setRoot(root);
 	}
 
 
+	/**
+	 * Runs on Application startup, post-{@link #init()}.
+	 * Sets up the window starting/default size and size constraints.
+	 * Adds the {@link ResizeHelper} listener to the application.
+	 *
+	 * Typically not run by the user, but rather automatically by the JavaFX application.
+	 * @param primaryStage primaryStage of the application. Will set App's {@link #primaryStage} to this value.
+	 * @throws IOException thrown when the specified FXML cannot be found.
+	 */
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		App.primaryStage = primaryStage;
@@ -219,10 +246,9 @@ public class App extends Application {
 		}
 	}
 
-	public static Stage getPrimaryStage() {
-		return primaryStage;
-	}
-
+	/**
+	 * Stops the application safely.
+	 */
 	@Override
 	public void stop() {
 		System.out.println("Shutting Down");

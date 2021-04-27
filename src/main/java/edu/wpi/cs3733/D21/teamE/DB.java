@@ -526,7 +526,9 @@ public class DB {
 		RequestsDB.updateFoodAndBeverageTable();
 	}
 
-
+	public static void createInternalPatientRequest() {
+		RequestsDB.createInternalPatientRequest();
+	}
 
 
 
@@ -644,6 +646,11 @@ public class DB {
 	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
 		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, allergies, foodItem, foodQuantity, beverageItem, beverageQuantity);
 	}
+
+	public static void addInternalPatientRequest(int userID, String pickUpLocation, String dropOffLocation, int assigneeID, int patientID, String department, String severity, String description) {
+		RequestsDB.addInternalPatientRequest(userID, pickUpLocation, dropOffLocation, assigneeID, patientID, department, severity, description);
+	}
+
 
 	// Editing Tables:
 
@@ -780,6 +787,10 @@ public class DB {
 	 */
 	public static int editFoodDeliveryRequest(int requestID, String roomID, String dietRestrictions, String allergies, String food, String beverage, String description) {
 		return RequestsDB.editFoodDeliveryRequest(requestID, roomID, dietRestrictions, allergies, food, beverage, description);
+	}
+
+	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
+		return RequestsDB.editInternalPatientRequest(requestID, pickUpLocation, dropOffLocation,patientID, department, severity, description);
 	}
 
 

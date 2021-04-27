@@ -194,7 +194,7 @@ Create Table beverage (
 );
 
 Create Table beverageOrderedInRequest(
-    requestId int References foodDelivery (requestID)  on Delete Cascade,
+    requestID int References foodDelivery (requestID)  on Delete Cascade,
     beverageID int References beverage (beverageID) On Delete Cascade,
     quantity int,
     Primary Key (requestId, beverageID)
@@ -203,6 +203,15 @@ Create Table beverageOrderedInRequest(
 
 insert into foodOrderedInRequest values (?,?,?);
 
+Create Table internalPatientRequest(
+    requestID int Primary Key References requests On Delete Cascade,
+    patientID int References userAccount(userID) on Delete Cascade,
+    pickUpLocation varchar(31) Not Null References node On Delete Cascade,
+    dropOffLocation varchar(31) Not Null References node On Delete Cascade,
+    department varchar(31),
+    severity varchar(31),
+    description varchar(5000)
+);
 
 
 

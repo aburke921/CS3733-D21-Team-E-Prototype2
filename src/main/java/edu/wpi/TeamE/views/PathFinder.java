@@ -21,6 +21,7 @@ import edu.wpi.TeamE.algorithms.Path;
 import edu.wpi.TeamE.algorithms.pathfinding.*;
 
 import edu.wpi.TeamE.App;
+import edu.wpi.cs3733.D21.teamE.QRCode;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.binding.NumberBinding;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -813,5 +814,20 @@ public class PathFinder {
                 currentMarkers.remove(node);
             }
         }
+    }
+
+    public void startQRScanning(ActionEvent event) {
+        String result = QRCode.scanQR();
+        String nodeID = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
+        System.out.println("Scanned nodeID: " + nodeID);
+
+        ArrayList<Node> nodeArrayList = DB.getAllNodes();
+        int index = 0;
+        for(int i = 0; i < nodeArrayList.size();i++){
+            if(nodeArrayList.get(i).get("id").equals(nodeID)){
+                index = i;
+            }
+        }
+        startLocationComboBox.getSelectionModel().select(index);
     }
 }

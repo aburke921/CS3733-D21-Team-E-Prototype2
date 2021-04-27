@@ -33,7 +33,7 @@ public class UserAccountDB {
 				"creationTime Timestamp, " +
 				"Constraint userIDLimit Check ( userID != 0 )," +
 				// "Constraint passwordLimit Check (Length(password) >= 8 )," +
-				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian', 'interpreter')))";
+				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian', 'interpreter', 'religiousPerson')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 
@@ -208,7 +208,6 @@ public class UserAccountDB {
 			return 0;
 		}
 	}
-
 
 	/**
 	 * This is allows an administrator or someone with access to the database to be able to edit a user account

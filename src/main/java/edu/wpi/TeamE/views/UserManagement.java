@@ -13,6 +13,8 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
+import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -87,45 +89,15 @@ public class UserManagement {
         assert treeTableView != null : "fx:id=\"treeTableView\" was not injected: check your FXML file 'UserManagement.fxml'.";
         assert backButton != null : "fx:id=\"backButton\" was not injected: check your FXML file 'UserManagement.fxml'.";
 
-        //todo fill Table with user data
-
-        //get user data
-        HashMap<Integer, String> visitorHashMap = DB.getSelectableAssignees("visitor");
-        HashMap<Integer, String> doctorHashMap = DB.getSelectableAssignees("doctor");
-        HashMap<Integer, String> patientHashMap = DB.getSelectableAssignees("patient");
-        HashMap<Integer, String> adminHashMap = DB.getSelectableAssignees("admin");
-        System.out.println(visitorHashMap);
-
-        //add user data to userlist
-//        ObservableList<User> users = FXCollections.observableArrayList();
-        ArrayList<User> users = new ArrayList<>(); //todo maybe use above ObservableList?
-        visitorHashMap.forEach((type, id) -> {
-            //User(name, type, id)
-            users.add(new User("visitor", type, id));
-        });
-        doctorHashMap.forEach((type, id) -> {
-            //User(name, type, id)
-            users.add(new User("doctor", type, id));
-        });
-        patientHashMap.forEach((type, id) -> {
-            //User(name, type, id)
-            users.add(new User("patient", type, id));
-        });
-        adminHashMap.forEach((type, id) -> {
-            //User(name, type, id)
-            users.add(new User("admin", type, id));
-        });
-        System.out.println("userslist: " + users);
-
-        //todo build tree
-        //add users to table
-        prepareUsers(treeTableView, users);
+        //fill Table with user data
+        prepareUsers(treeTableView, UserAccountDB.getAllUsers());
 
         /* todo
             addSpecialUserType()
             editUserAccount()
             deleteUserAccount()
          */
+
     }
 
     private void editUser() {
@@ -133,7 +105,7 @@ public class UserManagement {
         String username = userNameInput.getText();
         String userType = userTypeInput.getText();
 
-        DB.addUserAccount(username,);
+//        DB.addUserAccount(username,);
 
     }
 
@@ -149,6 +121,11 @@ public class UserManagement {
 
 
     //User class
+
+    /**
+     * todo, temp user class, should be moved elsewhere
+     * firstName, lastName, userID, userType, email
+     */
     public static final class User {
         final StringProperty firstName;
         final StringProperty lastName;
@@ -228,30 +205,45 @@ public class UserManagement {
 
     public void prepareUsers(TreeTableView<User> table, ArrayList<User> array) {
         if (table.getRoot() == null) {
-            User user0 = new User("", 0, "");
+            User user0 = new User("", 0, "", "", "");
             final TreeItem<User> rootUser = new TreeItem<>(user0);
             table.setRoot(rootUser);
 
-            //column 1 - ID
-            TreeTableColumn<User, String> column1 = new TreeTableColumn<>("User Name");
-            column1.setPrefWidth(320);
+            //column 1 - first Name
+            TreeTableColumn<User, String> column1 = new TreeTableColumn<>("First Name");
+            column1.setPrefWidth(100);
             column1.setCellValueFactory((TreeTableColumn.CellDataFeatures<User, String> p) ->
-                    new ReadOnlyStringWrapper(p.getValue().getValue().getUserName()));
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getFirstName()));
             table.getColumns().add(column1);
 
-            //column 2 - Start Node
-            TreeTableColumn<User, Number> column2 = new TreeTableColumn<>("ID");
-            column2.setPrefWidth(320);
-            column2.setCellValueFactory((TreeTableColumn.CellDataFeatures<User, Number> p) ->
-                    new ReadOnlyIntegerWrapper(p.getValue().getValue().getUserID()));
+            //column 2 - lastname
+            TreeTableColumn<User, String> column2 = new TreeTableColumn<>("Last Name");
+            column2.setPrefWidth(100);
+            column2.setCellValueFactory((TreeTableColumn.CellDataFeatures<User, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getLastName()));
             table.getColumns().add(column2);
 
-            //column 3 - End Node
-            TreeTableColumn<User, String> column3 = new TreeTableColumn<>("User Type");
-            column3.setPrefWidth(320);
-            column3.setCellValueFactory((TreeTableColumn.CellDataFeatures<User, String> p) ->
-                    new ReadOnlyStringWrapper(p.getValue().getValue().getUserType()));
+
+            //column 3 - ID
+            TreeTableColumn<User, Number> column3 = new TreeTableColumn<>("ID");
+            column3.setPrefWidth(50);
+            column3.setCellValueFactory((TreeTableColumn.CellDataFeatures<User, Number> p) ->
+                    new ReadOnlyIntegerWrapper(p.getValue().getValue().getUserID()));
             table.getColumns().add(column3);
+
+            //column 4 - User Type
+            TreeTableColumn<User, String> column4 = new TreeTableColumn<>("User Type");
+            column4.setPrefWidth(100);
+            column4.setCellValueFactory((TreeTableColumn.CellDataFeatures<User, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getUserType()));
+            table.getColumns().add(column4);
+
+            //column 5 - Email
+            TreeTableColumn<User, String> column5 = new TreeTableColumn<>("Email");
+            column5.setPrefWidth(300);
+            column5.setCellValueFactory((TreeTableColumn.CellDataFeatures<User, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getEmail()));
+            table.getColumns().add(column5);
         }
         table.setShowRoot(false);
         for (int i = 0; i < array.size(); i++) {

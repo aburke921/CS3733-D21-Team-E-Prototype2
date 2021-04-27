@@ -1819,28 +1819,6 @@ public class RequestsDB {
 		return menuItems;
 	}
 
-	public static ObservableList<String> getAssigneeNames(String givenUserType) {
-		ObservableList<String> listOfAssignees = FXCollections.observableArrayList();
-
-		String query = "Select firstName, lastName From userAccount Where userType = '" + givenUserType + "'";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			ResultSet rset = prepState.executeQuery();
-			while (rset.next()) {
-				String firstName = rset.getString("firstName");
-				String lastName = rset.getString("lastName");
-				String fullName = firstName + " " + lastName;
-				listOfAssignees.add(fullName);
-			}
-			rset.close();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("getAssigneeNames() got a SQLException");
-		}
-		return listOfAssignees;
-
-	}
-
 	/**
 	 * Used to get a list of info from a given column name in the aubonPainMenu table
 	 * @param column this is the name of the column the information is extracted from
@@ -1890,26 +1868,6 @@ public class RequestsDB {
 		return listOfAssignees;
 
 	}
-
-	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
-		ArrayList<Integer> listOfAssigneesIDs = new ArrayList<Integer>();
-
-		String query = "Select userID From userAccount Where userType = '" + givenUserType + "'";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			ResultSet rset = prepState.executeQuery();
-			while (rset.next()) {
-				int assigneeID = rset.getInt("userID");
-				listOfAssigneesIDs.add(assigneeID);
-			}
-			rset.close();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("getAssigneeIDs() got a SQLException");
-		}
-		return listOfAssigneesIDs;
-	}
-
 
 	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
 		ArrayList<Integer> listOfAssigneesIDs = new ArrayList<Integer>();

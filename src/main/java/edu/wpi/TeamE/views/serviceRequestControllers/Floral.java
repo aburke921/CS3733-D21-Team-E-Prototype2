@@ -45,13 +45,13 @@ public class Floral extends ServiceRequestFormComponents {
     private JFXComboBox assignee;
 
     @FXML
-    private JFXTextField temperatureInput;
+    private JFXTextField arrangementStyle;
 
     @FXML
-    private JFXTextField oxygenInput;
+    private JFXComboBox<String> teddyBear;
 
     @FXML
-    private JFXTextField bloodPressureInput;
+    private JFXComboBox<String> chocolate;
 
     @FXML
     private JFXTextField recipient;
@@ -92,10 +92,13 @@ public class Floral extends ServiceRequestFormComponents {
             int count = Integer.parseInt(flowerCount.getSelectionModel().getSelectedItem());
             String vase = vaseType.getSelectionModel().getSelectedItem().toString();
             int assigned = userID.get(userIndex);
-            String reciever = recipient.getText();
+            String receiver = recipient.getText();
             String mess = message.getText();
+            String arrangement = arrangementStyle.getText();
+            String teddy = teddyBear.getSelectionModel().getSelectedItem();
+            String choc = chocolate.getSelectionModel().getSelectedItem();
             //assigned is now an integer (userID) so must be changed
-            DB.addFloralRequest(App.userID, assigned, nodeInfo, reciever, type, count, vase, mess);
+            //DB.addFloralRequest(App.userID, assigned, nodeInfo, receiver, type, count, vase, mess);
         }
     }
 

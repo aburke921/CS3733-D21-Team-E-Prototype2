@@ -25,6 +25,11 @@ import java.util.ResourceBundle;
 
 public class ExternalPatient extends ServiceRequestFormComponents {
 
+	ObservableList<String> locations;
+	ArrayList<String> nodeID = new ArrayList<>();
+	ObservableList<String> userNames;
+	ArrayList<Integer> userID = new ArrayList<>();
+
 	RequiredFieldValidator validator = new RequiredFieldValidator();
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -49,7 +54,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	@FXML // fx:id="patientIdInput"
 	private JFXTextField patientIdInput; // Value injected by FXMLLoader
 	@FXML // fx:id="assignedPersonnel"
-	private JFXTextField assignedPersonnel; // Value injected by FXMLLoader
+	private JFXComboBox<String> assignedPersonnel; // Value injected by FXMLLoader
 	@FXML // fx:id="descriptionInput"
 	private JFXTextArea descriptionInput; // Value injected by FXMLLoader
 	@FXML // fx:id="ETAInput"
@@ -60,6 +65,15 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	private JFXButton submit; // Value injected by FXMLLoader
 	@FXML // fx:id="exit"
 	private Polygon exit;
+
+	@FXML
+	private JFXTextField oxygenInput;
+
+	@FXML
+	private JFXTextField bloodPressureInput;
+
+	@FXML
+	private JFXTextField temperatureInput;
 
 	/**
 	 * todo This function will cause a pop-up modal to appear with help information for this form's fields
@@ -85,10 +99,13 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 		ETAInput.getValidators().add(validator);
 		descriptionInput.getValidators().add(validator);
 		assignedPersonnel.getValidators().add(validator);
+		oxygenInput.getValidators().add(validator);
+		bloodPressureInput.getValidators().add(validator);
+		temperatureInput.getValidators().add(validator);
 
-		return locationInput.validate() && requestTypeInput.validate() && severityInput.validate() && patientIdInput.validate() && assignedPersonnel.validate() && descriptionInput.validate() && ETAInput.validate();
-
-
+		return locationInput.validate() && requestTypeInput.validate() && severityInput.validate() &&
+				patientIdInput.validate() && assignedPersonnel.validate() && descriptionInput.validate() &&
+				ETAInput.validate() && oxygenInput.validate() && bloodPressureInput.validate() && temperatureInput.validate();
 	}
 
 	/**
@@ -112,9 +129,9 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 			String severity = severityInput.getSelectionModel().getSelectedItem().toString();
 			String patientID = patientIdInput.getText();
 			String ETA = ETAInput.getText();
-			String bloodPressure = "High"; //TODO: add this textBox/dropDown on external patient service request page
-			String temperature = "Low"; //TODO: add this textBox/dropDown on external patient service request page
-			String oxygenLevel = "High"; //TODO: add this textBox/dropDown on external patient service request page
+			String bloodPressure = bloodPressureInput.getText();
+			String temperature = temperatureInput.getText();
+			String oxygenLevel = oxygenInput.getText();
 			String details = descriptionInput.getText();
 			int assigneeID = 99999;
 			int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
@@ -131,8 +148,14 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 		// This method is called by the FXMLLoader when initialization is complete
 
 	void initialize() {
+
+		nodeID = DB.getListOfNodeIDS();
+		locations = DB.getAllNodeLongNames();
+		userID = DB.getAssigneeIDs("EMT");
+		userNames = DB.getAssigneeNames("EMT");
+
 		assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
-		ObservableList<String> locations = DB.getAllNodeLongNames();
+
 		locationInput.setItems(locations);
 		assert requestTypeInput != null : "fx:id=\"requestTypeInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert ambulance != null : "fx:id=\"ambulance\" was not injected: check your FXML file 'ExternalPatient.fxml'.";

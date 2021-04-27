@@ -30,12 +30,20 @@ import java.io.IOException;
 
 public class App extends Application {
 
-	public static int userID = 0; //User ID of currently logged in user. 0 indicates not logged in
-	private static Stage primaryStage;
-	private double x, y;
-
 	/**
-	 * Sets the visibility of the login button.
+	 * Value of currently logged in user.
+	 * 0 Indicates no user logged in.
+	 */
+	public static int userID = 0; //User ID of currently logged in user. 0 indicates not logged in
+
+	/**The JavaFX application's primary stage. All Scenes are built upon this stage*/
+	private static Stage primaryStage;
+
+	/*-------------------------------------
+	* 	APPBAR VARIABLES/SETTERS/GETTERS
+	*------------------------------------*/
+
+	/**Sets the visibility of the login button.
 	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
 	public static boolean showLogin;
 
@@ -54,7 +62,6 @@ public class App extends Application {
 	/**Sets the visibility off the help button
 	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
 	private static boolean showHelp = false; //should help button be shown (false by default)
-
 
 	//getter for showLogin
 	public static boolean isShowLogin() {
@@ -86,6 +93,29 @@ public class App extends Application {
 		App.pageTitle = pageTitle;
 	}
 
+	//getter for stackPane
+	public static StackPane getStackPane() {
+		return stackPane;
+	}
+
+	//setter for stackPane
+	public static void setStackPane(StackPane stackPane) {
+		App.stackPane = stackPane;
+	}
+
+	//getter for showHelp
+	public static boolean isShowHelp() {
+		return showHelp;
+	}
+
+	//setter for showHelp
+	public static void setShowHelp(boolean showHelp) {
+		App.showHelp = showHelp;
+	}
+
+	/*-------------------------------------*/
+
+
 	/**
 	 * Creates a new JFX Dialog on the current page.
 	 * @param message Message to display in the dialog box.
@@ -114,25 +144,6 @@ public class App extends Application {
 		App.primaryStage = primaryStage;
 	}
 
-	//getter for stackPane
-	public static StackPane getStackPane() {
-		return stackPane;
-	}
-
-	//setter for stackPane
-	public static void setStackPane(StackPane stackPane) {
-		App.stackPane = stackPane;
-	}
-
-	//getter for showHelp
-	public static boolean isShowHelp() {
-		return showHelp;
-	}
-
-	//setter for showHelp
-	public static void setShowHelp(boolean showHelp) {
-		App.showHelp = showHelp;
-	}
 
 
 	@Override

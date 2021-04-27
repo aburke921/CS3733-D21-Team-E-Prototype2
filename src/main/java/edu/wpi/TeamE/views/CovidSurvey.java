@@ -89,14 +89,9 @@ public class CovidSurvey extends ServiceRequests  {
     }
     @FXML
     void submitButton(ActionEvent actionEvent){
-        boolean complete = positiveTest.isSelected() || symptoms.isSelected() || closeContact.isSelected() || quarantine.isSelected() || noSymptoms.isSelected();
         int rating = 0;
-
         if(noSymptoms.isSelected()){
-
             rating = 1;
-
-
         }else {
             if(symptoms.isSelected()){
             rating = 2;
@@ -123,8 +118,6 @@ public class CovidSurvey extends ServiceRequests  {
             }
         }
         System.out.print(rating);
-
-
     }
     /**
      * Returns to the service request page

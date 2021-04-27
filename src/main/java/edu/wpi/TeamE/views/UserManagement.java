@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
+import edu.wpi.TeamE.App;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
@@ -96,19 +97,29 @@ public class UserManagement {
 
             //add user
             String[] firstAndLast = userNameInput.getText().split(" "); //get first and last name
-            DB.addUserAccount(userEmail.getText(),userPassword.getText(),firstAndLast[0],firstAndLast[1]); //add to DB
+            if (firstAndLast.length == 2) { //validate userNameInput field
+                System.out.println("Adding User Account:" +
+                        "\n...email: " + userEmail.getText() +
+                        "\n...password: " + userPassword.getText() +
+                        "\n...first: " + firstAndLast[0] +
+                        "\n...last: " + firstAndLast[1]);
+                DB.addUserAccount(userEmail.getText(),userPassword.getText(),firstAndLast[0],firstAndLast[1]); //add to DB
+//            DB.addUserAccount("cmanning@wpi.edu","aConformingPassword$#1","First","Last"); //add to DB
+            } else {
+                //todo pop-up, tell user it must be first and last name
+            }
+
+
 
             //cleanup
             addUser.setText("Add User");
             showFields(false);
-            userIDInput.setVisible(false);
             //todo refresh
             //todo confirmation popup?
 
         } else { //admin would like to start adding user
             addingUser = true;
             showFields(true);
-            userIDInput.setVisible(true);
             addUser.setText("Confirm Adding User");
         }
     }
@@ -147,8 +158,12 @@ public class UserManagement {
             //todo check if fields are valid
 
             String[] firstAndLast = userNameInput.getText().split(" ");
-            //todo have DB make this function check for empty strings, not just null chars.
-            DB.editUserAccount(currentlyEditing.getUserID(),userEmail.getText(),userPassword.getText(),userTypeInput.getValue(),firstAndLast[0], firstAndLast[1]);
+            if (firstAndLast.length == 2) { //validate userNameInput field
+                //todo have DB make this function check for empty strings, not just null chars.
+                DB.editUserAccount(currentlyEditing.getUserID(),userEmail.getText(),userPassword.getText(),userTypeInput.getValue(),firstAndLast[0], firstAndLast[1]);
+            } else {
+                //todo popup, invalid first and last
+            }
 
             //cleanup
             showFields(false);
@@ -157,6 +172,7 @@ public class UserManagement {
             currentlyEditing = null;
             //todo empty fields so they aren't pre-filled on next use
             //todo refresh
+            //todo confirmation popup?
         } else { //no edit is in progress
 
             if (treeTableView.getSelectionModel().getSelectedItem() != null) {

@@ -5,7 +5,6 @@ import edu.wpi.TeamE.algorithms.Node;
 
 
 import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
-import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -52,12 +51,7 @@ public class DatabaseTests {
 			DB.createLaundryRequestTable();
 			DB.createMaintenanceRequestTable();
 			DB.createFoodDeliveryTable();
-			DB.createFoodTable();
-			DB.createFoodOrderedInRequestTable();
-			DB.createBeverageTable();
-			DB.createBeverageOrderedInRequestTable();
-			//System.out.println("Tables were created");
-			//System.out.println("Tables were reset");
+			DB.createAubonPainMenuTable();
 		} catch (Exception e) {
 			DB.createNodeTable();
 			DB.createEdgeTable();
@@ -73,11 +67,7 @@ public class DatabaseTests {
 			DB.createLaundryRequestTable();
 			DB.createMaintenanceRequestTable();
 			DB.createFoodDeliveryTable();
-			DB.createFoodTable();
-			DB.createFoodOrderedInRequestTable();
-			DB.createBeverageTable();
-			DB.createBeverageOrderedInRequestTable();
-			//e.printStackTrace();
+			DB.createAubonPainMenuTable();
 		}
 
 	}
@@ -448,7 +438,6 @@ public class DatabaseTests {
 
 		assertEquals(0, nodeIDs.size());
 	}
-
 
 
 	@Test
@@ -1370,16 +1359,6 @@ public class DatabaseTests {
 		assertEquals(10000, DB.userLogin("guest", "guest"));
 	}
 
-
-	@Test
-	@DisplayName("testGetUserType")
-	public void testGetUserType(){
-		DB.addSpecialUserType("email@gmail.com", "12345678", "admin", "firstName", "lastName");
-		String returnedUserType = UserAccountDB.getUserType(1);
-		assertEquals("admin", returnedUserType);
-	}
-
-
 	@Test
 	@DisplayName("testAddLanguageRequest")
 	public void testAddLanguageRequest() {
@@ -1452,22 +1431,17 @@ public class DatabaseTests {
 		assertEquals(1, DB.editMaintenanceRequest(1, "test", null, "extremely severe", null, "wires are loose everywhere!"));
 	}
 
+
 	@Test
-	@DisplayName("testAddFoodItem")
-	public void testAddFoodItem(){
-		DB.addFoodItem("Pancakes",9.99, 549, "Yummy!");
+	@DisplayName("testAddAubonPainMenuItem")
+	public void testAddAubonPainMenuItem(){
+		DB.addAubonPainMenuItem("foodImage", "foodItem", "$56.00", "23 Calories", "foodDescription");
 	}
 
 	@Test
-	@DisplayName("testAddBeverageItem")
-	public void testAddBeverageItem(){
-		DB.addBeverageItem("Soda");
-	}
-
-	@Test
-	@DisplayName("testUpdateFoodAndBeverageTable")
-	public void testUpdateFoodAndBeverageTable(){
-		DB.updateFoodAndBeverageTable();
+	@DisplayName("testPopulateAbonPainTable")
+	public void testPopulateAbonPainTable(){
+		DB.populateAbonPainTable();
 	}
 
 

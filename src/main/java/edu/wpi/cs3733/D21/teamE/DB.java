@@ -455,78 +455,26 @@ public class DB {
 	}
 
 	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - foodID: this is used to identify a food item. Every food item must have one.
-	 * - item: this is the name of the food item
-	 * - price: this is the price of the food item
-	 * - calories: this is the number of calories that the food item has
-	 * - description: this is the description of the menu item
+	 * Uses executes the SQL statements required to create a aubonPainMenu table.
+	 * This table has attributes:
+	 * - foodImage: this is the url to an image of the item
+	 * - foodItem: this is the item itself (this is unique and is used as an identifier)
+	 * - foodPrice: this is the price of the foodItem
+	 * - foodCalories: this is the number of calories the food item has
+	 * - foodDescription: this is a description of the food item
 	 */
-	public static void createFoodTable(){
-		RequestsDB.createFoodTable();
+	public static void createAubonPainMenuTable(){
+		RequestsDB.createAubonPainMenuTable();
 	}
 
 	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is the identifier of the request where the user is ordering food
-	 * - foodID: this is the identifier of the food item the user is ordering
-	 * - quantity: this is the quantity of a single item the user is ordering
+	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
+	 * description to the aubonPainMenu table
+	 * The link to the website being read is: https://order.aubonpain.com/menu/brigham-womens-hospital
 	 */
-	public static void createFoodOrderedInRequestTable(){
-		RequestsDB.createFoodOrderedInRequestTable();
+	public static void populateAbonPainTable(){
+		RequestsDB.populateAbonPainTable();
 	}
-
-	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - beverageID: this is the identifier of the beverage the user is ordering
-	 * - item: this is the name of the beverage on the menu
-	 */
-	public static void createBeverageTable(){
-		RequestsDB.createBeverageTable();
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is the identifier of the request where the user is ordering food
-	 * - beverageID: this is the identifier of the beverage the user is ordering
-	 * - quantity: this is the quantity of a single item the user is ordering
-	 */
-	public static void createBeverageOrderedInRequestTable(){
-		RequestsDB.createBeverageOrderedInRequestTable();
-	}
-
-
-	/**
-	 * Adds a food item to the food table
-	 * @param item this is the item that is on the menu
-	 * @param price this is the price of the item on the menu
-	 * @param calories this is how many calories the menu item has
-	 * @param description this is a description of the food item
-	 */
-	public static void addFoodItem(String item, double price, int calories, String description){
-		RequestsDB.addFoodItem(item, price, calories, description);
-	}
-
-	/**
-	 * Adds a beverage item to the beverage table
-	 * @param item this is the item that is on the menu
-	 */
-	public static void addBeverageItem(String item){
-		RequestsDB.addBeverageItem(item);
-	}
-
-	/**
-	 * Reads in the Aubon Pain website to populate the foods and drinks table with real information
-	 */
-	public static void updateFoodAndBeverageTable(){
-		RequestsDB.updateFoodAndBeverageTable();
-	}
-
-
 
 
 
@@ -644,6 +592,22 @@ public class DB {
 	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
 		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, allergies, foodItem, foodQuantity, beverageItem, beverageQuantity);
 	}
+
+
+	/**
+	 * adds a menuItem to the aubonPainMenu database table
+	 * @param foodImage this is the url to an image of the item
+	 * @param foodItem this is the item itself (this is unique and is used as an identifier)
+	 * @param foodPrice this is the price of the foodItem
+	 * @param foodCalories this is the number of calories the food item has
+	 * @param foodDescription this is a description of the food item
+	 */
+	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription){
+		RequestsDB.addAubonPainMenuItem(foodImage, foodItem, foodPrice, foodCalories, foodDescription);
+	}
+
+
+
 
 	// Editing Tables:
 
@@ -917,6 +881,10 @@ public class DB {
 	public static int userLogin(String email, String password) {
 		return UserAccountDB.userLogin(email, password);
 	}
+
+
+
+
 
 
 }

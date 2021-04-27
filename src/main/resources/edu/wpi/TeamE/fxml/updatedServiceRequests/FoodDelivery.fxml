@@ -4,8 +4,6 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import java.lang.Double?>
-<?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -88,6 +86,8 @@
                     <center>
                         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="785.0" BorderPane.alignment="CENTER">
                             <children>
+                        <JFXButton text="Delivery Pickup" />
+                        <JFXButton text="Au bon Pain" />
                                 <VBox maxWidth="600.0" prefHeight="582.0" prefWidth="1200.0">
                                     <children>
                                         <HBox maxWidth="600.0" prefHeight="501.0" prefWidth="600.0" styleClass="centerPane">
@@ -101,41 +101,17 @@
                                                                         <Insets top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXComboBox>
-                                                                <JFXComboBox fx:id="dietaryRestrictionsInput" prefHeight="27.0" prefWidth="295.0" promptText="Dietary Restrictions">
-                                                                    <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
-                                                                    </VBox.margin>
-                                                                    <items>
-                                                                        <FXCollections fx:factory="observableArrayList">
-                                                                            <String fx:value="Vegetarian" />
-                                                                            <String fx:value="Vegan" />
-                                                                            <String fx:value="Gluten Free" />
-                                                                        </FXCollections>
-                                                                    </items>
-                                                                </JFXComboBox>
-                                                                <JFXComboBox fx:id="allergysInput" prefHeight="27.0" prefWidth="291.0" promptText="Allergys">
-                                                                    <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
-                                                                    </VBox.margin>
-                                                                    <items>
-                                                                        <FXCollections fx:factory="observableArrayList">
-                                                                            <String fx:value="Peanut" />
-                                                                            <String fx:value="Shell fish" />
-                                                                            <String fx:value="Lactose intolerant" />
-                                                                        </FXCollections>
-                                                                    </items>
-                                                                </JFXComboBox>
                                                 <JFXComboBox fx:id="assigneeInput" layoutX="10.0" layoutY="30.0" prefHeight="27.0" prefWidth="295.0" promptText="Assignee">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                 </JFXComboBox>
-                                                <JFXComboBox fx:id="foodInput" layoutX="10.0" layoutY="191.0" prefHeight="27.0" prefWidth="295.0" promptText="Food">
+                                                <JFXComboBox fx:id="foodInput" layoutX="10.0" layoutY="191.0" prefHeight="27.0" prefWidth="295.0" promptText="Restaurant/Delviery Service">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                 </JFXComboBox>
-                                                <JFXComboBox fx:id="beveragesInput" layoutX="10.0" layoutY="248.0" prefHeight="27.0" prefWidth="295.0" promptText="Beverages">
+                                                <JFXComboBox fx:id="beveragesInput" layoutX="10.0" layoutY="248.0" prefHeight="27.0" prefWidth="295.0" promptText="Order Number">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>

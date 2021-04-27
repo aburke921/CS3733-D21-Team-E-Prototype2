@@ -30,58 +30,65 @@ import java.io.IOException;
 
 public class App extends Application {
 
-	public static int userID = 0; //todo assuming 0 means guest user? - cole
-	public static boolean showLogin;
+	public static int userID = 0; //User ID of currently logged in user. 0 indicates not logged in
 	private static Stage primaryStage;
+	private double x, y;
+
+	/**
+	 * Sets the visibility of the login button.
+	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
+	public static boolean showLogin;
+
+	/**Sets the page title.
+	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
 	private static String pageTitle; //Title for the currently displayed page, set by AppBarComponent
+
+	/**Sets the help dialog contents.
+	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
 	private static String helpText; //help text for current page
+
+	/**Sets the stackPane used by appBar for {@link #newJFXDialogPopUp(String, String, String, StackPane)} calls.
+	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
 	private static StackPane stackPane; //main stack page of current page
+
+	/**Sets the visibility off the help button
+	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
 	private static boolean showHelp = false; //should help button be shown (false by default)
 
 
-	//todo
+	//getter for showLogin
 	public static boolean isShowLogin() {
 		return showLogin;
 	}
 
-	//todo
+	//setter for showLogin
 	public static void setShowLogin(boolean showLogin) {
 		App.showLogin = showLogin;
 	}
 
-	/**
-	 * @return String used by {@link edu.wpi.TeamE.views.AppBarComponent} to decide what to put in Help Dialog.
-	 */
+	//getter for helpText
 	public static String getHelpText() {
 		return helpText;
 	}
 
-	/**
-	 * Set's help text, used by pages to set help button content.
-	 * @param helpText Paragraph for help text dialog.
-	 */
+	//setter for helpText
 	public static void setHelpText(String helpText) {
 		App.helpText = helpText;
 	}
 
-	/**
-	 * @return Gets the current page's app title, for use by {@link edu.wpi.TeamE.views.AppBarComponent}
-	 */
+	//getter for pageTitle
 	public static String getPageTitle() {
 		return pageTitle;
 	}
 
-	/**
-	 * Sets the page title for app bar
-	 * @param pageTitle Short string for page title
-	 */
+	//setter for pageTitle
 	public static void setPageTitle(String pageTitle) {
 		App.pageTitle = pageTitle;
 	}
 
 	/**
-	 *
-	 * @param message Message to display in the dialog box
+	 * Creates a new JFX Dialog on the current page.
+	 * @param message Message to display in the dialog box.
 	 * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
 	 */
 	public static void newJFXDialogPopUp(String heading, String button, String message, StackPane stackPane) {
@@ -103,23 +110,16 @@ public class App extends Application {
 	}
 
 
-
-	private double x, y;
-
 	public static void setPrimaryStage(Stage primaryStage) {
 		App.primaryStage = primaryStage;
 	}
 
-	/**
-	 * @return Gets the main stack page of current page
-	 */
+	//getter for stackPane
 	public static StackPane getStackPane() {
 		return stackPane;
 	}
 
-	/**
-	 * @param stackPane Sets the main stack pane of the current page
-	 */
+	//setter for stackPane
 	public static void setStackPane(StackPane stackPane) {
 		App.stackPane = stackPane;
 	}

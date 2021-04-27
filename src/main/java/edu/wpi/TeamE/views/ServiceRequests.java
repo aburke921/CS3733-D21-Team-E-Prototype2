@@ -33,8 +33,8 @@ public class ServiceRequests {
     @FXML //anchorPane for the appBar
     private AnchorPane appBarAnchorPane;
 
-    @FXML //stackPane for DialogBoxes
-    private StackPane stackPane;
+//    @FXML //stackPane for DialogBoxes
+//    private StackPane stackPane;
 
     public void initialize() {
         //init appBar
@@ -43,8 +43,6 @@ public class ServiceRequests {
             App.setShowHelp(false); // show help or not
             App.setShowLogin(true); // show login or not
             App.setPageTitle("Select A Service"); //set AppBar title
-            App.setHelpText(""); //set help text todo
-            App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
             appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));
             appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
         } catch (IOException e) {

@@ -1,6 +1,8 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.TeamE.views.serviceRequestObjects.AubonPainItem;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -1789,6 +1791,47 @@ public class RequestsDB {
 		}
 
 		return foodItems;
+	}
+
+	public static ObservableList<String> getAssigneeNames(String givenUserType) {
+		ObservableList<String> listOfAssignees = FXCollections.observableArrayList();
+
+		String query = "Select firstName, lastName From userAccount Where userType = '" + givenUserType + "'";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while (rset.next()) {
+				String firstName = rset.getString("firstName");
+				String lastName = rset.getString("lastName");
+				String fullName = firstName + " " + lastName;
+				listOfAssignees.add(fullName);
+			}
+			rset.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getAssigneeNames() got a SQLException");
+		}
+		return listOfAssignees;
+
+	}
+
+	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
+		ArrayList<Integer> listOfAssigneesIDs = new ArrayList<Integer>();
+
+		String query = "Select userID From userAccount Where userType = '" + givenUserType + "'";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while (rset.next()) {
+				int assigneeID = rset.getInt("userID");
+				listOfAssigneesIDs.add(assigneeID);
+			}
+			rset.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getAssigneeIDs() got a SQLException");
+		}
+		return listOfAssigneesIDs;
 	}
 
 

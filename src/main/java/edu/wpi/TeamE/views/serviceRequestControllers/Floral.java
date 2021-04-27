@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+import javax.print.attribute.standard.RequestingUserName;
 import java.io.Console;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ public class Floral extends ServiceRequestFormComponents {
 
     ObservableList<String> locations;
     ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> userNames;
+    ArrayList<Integer> userID = new ArrayList<>();
 
     @FXML
     private JFXComboBox<String> locationInput;
@@ -80,19 +84,18 @@ public class Floral extends ServiceRequestFormComponents {
     private void saveData(ActionEvent e) {
 
         if(validateInput()) {
-            int index = locationInput.getSelectionModel().getSelectedIndex();
+            int locationIndex = locationInput.getSelectionModel().getSelectedIndex();
+            int userIndex = assignee.getSelectionModel().getSelectedIndex();
 
-            String nodeInfo = nodeID.get(index);
+            String nodeInfo = nodeID.get(locationIndex);
             String type = flowerType.getSelectionModel().getSelectedItem();
-            String count = flowerCount.getSelectionModel().getSelectedItem();
+            int count = Integer.parseInt(flowerCount.getSelectionModel().getSelectedItem());
             String vase = vaseType.getSelectionModel().getSelectedItem().toString();
-            int assigned = Integer.parseInt(assignee.getText());
+            int assigned = userID.get(userIndex);
             String reciever = recipient.getText();
             String mess = message.getText();
-
             //assigned is now an integer (userID) so must be changed
-            DB.addFloralRequest(App.userID, 0, nodeInfo, reciever, type, 12, vase, mess);
-
+            DB.addFloralRequest(App.userID, assigned, nodeInfo, reciever, type, count, vase, mess);
         }
     }
 
@@ -114,6 +117,9 @@ public class Floral extends ServiceRequestFormComponents {
     void initialize() {
         nodeID = DB.getListOfNodeIDS();
         locations = DB.getAllNodeLongNames();
+        userID = DB.getAssigneeIDs("floralPerson");
+        userNames = DB.getAssigneeNames("floralPerson");
+        assignee.setItems(userNames);
         locationInput.setItems(locations);
         assert locationInput != null;
         assert flowerType != null;

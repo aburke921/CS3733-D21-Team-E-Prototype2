@@ -939,7 +939,13 @@ public class DB {
 	}
 
 
+	public static ObservableList<String> getAssigneeNames(String givenUserType) {
+		return RequestsDB.getAssigneeNames(givenUserType);
+	}
 
+	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
+		return RequestsDB.getAssigneeIDs(givenUserType);
+	}
 
 
 

@@ -12,7 +12,7 @@ public class appointmentDB {
 				"    appointmentID Int Primary Key, " +
 				"    patientID Int References useraccount (userid) On Delete Cascade , " +
 				"    doctorID Int References useraccount (userid) On Delete Cascade, " +
-				" 	 nodeID varchar(31) References node (nodeid) On Delete Cascade,  " +
+				"    nodeID varchar(31) References node (nodeid) On Delete Cascade,  " +
 				"    startTime timeStamp, " +
 				"    endTime timestamp, " +
 				"    Constraint appointmentUnique Unique(patientID, startTime, endTime) " +

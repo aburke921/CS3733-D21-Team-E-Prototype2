@@ -220,7 +220,7 @@ public class newMapEditor {
             String end = edgeArray.get(i).getEndNodeId();
             //parse through nodes, when you reach ones that match start and end of this
             //edge, retrieve coordinates
-            for (int j = 0; j < nodeArray.size() - 1; j++) {
+            for (int j = 0; j < nodeArray.size(); j++) {
                 if (nodeArray.get(j).get("floor").equals(floorNum)) {
                     if (nodeArray.get(j).get("id").equals(start)) {
                         startX = nodeArray.get(j).getX() / scale;

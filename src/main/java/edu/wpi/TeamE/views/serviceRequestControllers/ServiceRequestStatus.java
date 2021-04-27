@@ -3,10 +3,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableView;
 //import edu.wpi.TeamE.algorithms.Node;
 
-import edu.wpi.TeamE.algorithms.Node;
 
-
-import edu.wpi.TeamE.views.ServiceRequestForm;
+import edu.wpi.TeamE.views.serviceRequestObjects.ServiceRequestForm;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.scene.control.*;
@@ -216,10 +214,10 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> securityServiceCancelled = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
 
         //Adding request forms
-        addToTable("security", securityServiceInProgress, securityServiceCompleted, securityServiceCancelled);
+        addToTable("securityServ", securityServiceInProgress, securityServiceCompleted, securityServiceCancelled);
         addToTable("extTransport", externalPatientInProgress, externalPatientCompleted, externalPatientCancelled);
-        addToTable("floral", floralFormInProgress, floralFormCompleted, floralFormCancelled);
-        addToTable("sanitation", sanitationServicesInProgress, sanitationServicesCompleted, sanitationServicesCancelled);
+        addToTable("floralRequests", floralFormInProgress, floralFormCompleted, floralFormCancelled);
+        addToTable("sanitationRequest", sanitationServicesInProgress, sanitationServicesCompleted, sanitationServicesCancelled);
         addToTable("medDelivery", medicineDeliveryInProgress, medicineDeliveryCompleted, medicineDeliveryCancelled);
 
         //Adding children to sub-root nodes

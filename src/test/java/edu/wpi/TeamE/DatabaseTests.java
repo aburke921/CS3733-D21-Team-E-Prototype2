@@ -4,8 +4,8 @@ import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 
 
+import edu.wpi.TeamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
-import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -38,46 +38,9 @@ public class DatabaseTests {
 
 		try {
 			connection.deleteAllTables();
-			DB.createNodeTable();
-			DB.createEdgeTable();
-			DB.createUserAccountTable();
-			DB.createRequestsTable();
-			DB.createFloralRequestsTable();
-			DB.createSanitationTable();
-			DB.createExtTransportTable();
-			DB.createMedDeliveryTable();
-			DB.createSecurityServTable();
-			DB.createAppointmentTable();
-			DB.createLanguageRequestTable();
-			DB.createLaundryRequestTable();
-			DB.createMaintenanceRequestTable();
-			DB.createFoodDeliveryTable();
-			DB.createFoodTable();
-			DB.createFoodOrderedInRequestTable();
-			DB.createBeverageTable();
-			DB.createBeverageOrderedInRequestTable();
-			//System.out.println("Tables were created");
-			//System.out.println("Tables were reset");
+			DB.createAllTables();
 		} catch (Exception e) {
-			DB.createNodeTable();
-			DB.createEdgeTable();
-			DB.createUserAccountTable();
-			DB.createRequestsTable();
-			DB.createFloralRequestsTable();
-			DB.createSanitationTable();
-			DB.createExtTransportTable();
-			DB.createMedDeliveryTable();
-			DB.createSecurityServTable();
-			DB.createAppointmentTable();
-			DB.createLanguageRequestTable();
-			DB.createLaundryRequestTable();
-			DB.createMaintenanceRequestTable();
-			DB.createFoodDeliveryTable();
-			DB.createFoodTable();
-			DB.createFoodOrderedInRequestTable();
-			DB.createBeverageTable();
-			DB.createBeverageOrderedInRequestTable();
-			//e.printStackTrace();
+			DB.createAllTables();
 		}
 
 	}
@@ -450,7 +413,6 @@ public class DatabaseTests {
 	}
 
 
-
 	@Test
 	@DisplayName("testAddEdge")
 	public void testAddEdge() {
@@ -613,7 +575,7 @@ public class DatabaseTests {
 		DB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("EMT@gmail.com", "testPass", "EMT", "drew", "Shukla");
 
-		DB.addExternalPatientRequest(1, 2, "test", "Ambulance", "severe", "123", "15 mins", "headache");
+		DB.addExternalPatientRequest(1, 2, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low", "They do not feel good");
 	}
 
 	@Test
@@ -647,7 +609,7 @@ public class DatabaseTests {
 		DB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson", "drew", "Shukla");
 
-		DB.addFloralRequest(1, 2, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+		DB.addFloralRequest(1, 2, "test", "Nupur", "Roses", 1, "Tall", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate","feel better");
 
 	}
 
@@ -703,10 +665,10 @@ public class DatabaseTests {
 		DB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson", "drew", "Shukla");
 
 
-		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "headache");
-		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "migraine");
-		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "migraine");
-		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low","headache");
+		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low","migraine");
+		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low","migraine");
+		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate","feel better");
 
 		ArrayList<String> returnedStatus;
 		ArrayList<String> correctStatus = new ArrayList<>();
@@ -729,10 +691,10 @@ public class DatabaseTests {
 		DB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson", "drew", "Shukla");
 
 
-		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "headache");
-		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "migraine");
-		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "migraine");
-		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low","headache");
+		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low","migraine");
+		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low","migraine");
+		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate","feel better");
 
 		ArrayList<String> returnedStatus;
 		ArrayList<String> correctStatus = new ArrayList<>();
@@ -766,9 +728,9 @@ public class DatabaseTests {
 		DB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson", "drew", "Shukla");
 
 
-		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "headache");
-		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "migraine");
-		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low","headache");
+		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low","migraine");
+		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate","feel better");
 
 		ArrayList<String> returnedIDs;
 		ArrayList<String> correctIDs = new ArrayList<>();
@@ -790,9 +752,9 @@ public class DatabaseTests {
 		DB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson", "drew", "Shukla");
 
 
-		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "headache");
-		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "migraine");
-		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low","headache");
+		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low","migraine");
+		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "High", "Low", "Low","feel better");
 
 		ArrayList<String> returnedIDs;
 		ArrayList<String> correctIDs = new ArrayList<>();
@@ -953,9 +915,9 @@ public class DatabaseTests {
 		DB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		DB.addSpecialUserType("EMT@gmail.com", "testPass", "EMT", "bob", "Shukla");
 
-		DB.addExternalPatientRequest(1, 2, "test", "Ambulance", "severe", "123", "15 mins", "headache");
+		DB.addExternalPatientRequest(1, 2, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low","headache");
 
-		assertEquals(1, DB.editExternalPatientRequest(1, "test", null, null, null, null, "15 mins"));
+		assertEquals(1, DB.editExternalPatientRequest(1, "test", null, null, null, null, "High", null, "High","15 mins"));
 	}
 
 	@Test
@@ -979,9 +941,9 @@ public class DatabaseTests {
 		DB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		DB.addSpecialUserType("floralPerson@gmail.com", "testPass", "floralPerson", "bob", "Shukla");
 
-		DB.addFloralRequest(1, 2, "test", "Nupur", "Roses", 1, "Tall", "feel better");
+		DB.addFloralRequest(1, 2, "test", "Nupur", "Roses", 1, "Tall", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate","feel better");
 
-		assertEquals(1, DB.editFloralRequest(1, "test", "Ashley", "Tulips", null, null, null));
+		assertEquals(1, DB.editFloralRequest(1, "test", "Ashley", "Tulips", null, "Round", "Include arrangement", "stuffed Animal", "Do not Include Chocolate",null));
 	}
 
 	@Test
@@ -1129,15 +1091,15 @@ public class DatabaseTests {
 		DB.addSpecialUserType("alans@gmail.com", "admin001", "EMT", "Alan", "Singh");
 
 
-		DB.addExternalPatientRequest(27, 31, "EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
-		DB.addExternalPatientRequest(30, 32, "EEXIT00101", "Ambulance", "Low Severity", "4093380", "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
-		DB.addExternalPatientRequest(22, 33, "FDEPT00501", "Helicopter", "High Severity", "92017693", "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
-		DB.addExternalPatientRequest(20, 34, "FDEPT00501", "Helicopter", "High Severity", "93754789", "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
-		DB.addExternalPatientRequest(24, 35, "EEXIT00101", "Ambulance", "Medium Severity", "417592", "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
-		DB.addExternalPatientRequest(28, 36, "FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
-		DB.addExternalPatientRequest(24, 37, "EEXIT00101", "Ambulance", "Medium Severity", "33337861", "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
-		DB.addExternalPatientRequest(27, 38, "EEXIT00101", "Ambulance", "Low Severity", "40003829", "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
-		DB.addExternalPatientRequest(24, 39, "FDEPT00501", "Plane", "High Severity", "38739983", "12 hours", "Heart transplant organ in route");
+		DB.addExternalPatientRequest(27, 31, "EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Low", "High", "Low","Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
+		DB.addExternalPatientRequest(30, 32, "EEXIT00101", "Ambulance", "Low Severity", "4093380", "20 minutes", "High", "Low", "Low","Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
+		DB.addExternalPatientRequest(22, 33, "FDEPT00501", "Helicopter", "High Severity", "92017693", "10 minutes", "Low", "Low", "High","Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
+		DB.addExternalPatientRequest(20, 34, "FDEPT00501", "Helicopter", "High Severity", "93754789", "20 minutes", "High", "Low", "Low","Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
+		DB.addExternalPatientRequest(24, 35, "EEXIT00101", "Ambulance", "Medium Severity", "417592", "10 minutes", "High", "High", "Low","Smoke inhalation due to a fire. No burns but difficult time breathing.");
+		DB.addExternalPatientRequest(28, 36, "FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Low", "Low", "High","Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
+		DB.addExternalPatientRequest(24, 37, "EEXIT00101", "Ambulance", "Medium Severity", "33337861", "7 minutes", "High", "Low", "Low","Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
+		DB.addExternalPatientRequest(27, 38, "EEXIT00101", "Ambulance", "Low Severity", "40003829", "10 minutes", "High", "Low", "Low","Relocating a patient with lung cancer from Mt.Auburn Hospital.");
+		DB.addExternalPatientRequest(24, 39, "FDEPT00501", "Plane", "High Severity", "38739983", "12 hours", "Low", "High", "Low","Heart transplant organ in route");
 
 
 		ArrayList<String> correctLongNames = new ArrayList<>();
@@ -1370,16 +1332,6 @@ public class DatabaseTests {
 		assertEquals(10000, DB.userLogin("guest", "guest"));
 	}
 
-
-	@Test
-	@DisplayName("testGetUserType")
-	public void testGetUserType(){
-		DB.addSpecialUserType("email@gmail.com", "12345678", "admin", "firstName", "lastName");
-		String returnedUserType = UserAccountDB.getUserType(1);
-		assertEquals("admin", returnedUserType);
-	}
-
-
 	@Test
 	@DisplayName("testAddLanguageRequest")
 	public void testAddLanguageRequest() {
@@ -1452,25 +1404,215 @@ public class DatabaseTests {
 		assertEquals(1, DB.editMaintenanceRequest(1, "test", null, "extremely severe", null, "wires are loose everywhere!"));
 	}
 
+
 	@Test
-	@DisplayName("testAddFoodItem")
-	public void testAddFoodItem(){
-		DB.addFoodItem("Pancakes",9.99, 549, "Yummy!");
+	@DisplayName("testAddAubonPainMenuItem")
+	public void testAddAubonPainMenuItem(){
+		DB.addAubonPainMenuItem("foodImage", "foodItem", "$56.00", "23 Calories", "foodDescription");
 	}
 
 	@Test
-	@DisplayName("testAddBeverageItem")
-	public void testAddBeverageItem(){
-		DB.addBeverageItem("Soda");
+	@DisplayName("testPopulateAbonPainTable")
+	public void testPopulateAbonPainTable(){
+		DB.populateAbonPainTable();
 	}
 
 	@Test
-	@DisplayName("testUpdateFoodAndBeverageTable")
-	public void testUpdateFoodAndBeverageTable(){
-		DB.updateFoodAndBeverageTable();
+	@DisplayName("testGetAubonPanItems")
+	public void testGetAubonPanItems(){
+
+		DB.addAubonPainMenuItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
+		DB.addAubonPainMenuItem("URLLLLL", "pancakes", "$23.45", "3290 calories", "yummmyyy");
+		DB.addAubonPainMenuItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+
+		AubonPainItem item1 = new AubonPainItem("foodImageURL","foodItem","$4732.23","243 calories","food description");
+		AubonPainItem item2 = new AubonPainItem("URLLLLL","pancakes","$23.45","3290 calories","yummmyyy");
+		AubonPainItem item3 = new AubonPainItem("foooooodddd URL","soup","$92.44","3 calories","goood");
+
+		ArrayList<AubonPainItem> correctItems = new ArrayList<>();
+		correctItems.add(item1);
+		correctItems.add(item2);
+		correctItems.add(item3);
+
+		ArrayList<AubonPainItem> returnedItems = DB.getAubonPanItems();
+
+
+
+		boolean allCorrect = true;
+		boolean foodImage = false;
+		boolean foodItem = false;
+		boolean foodPrice = false;
+		boolean foodCalories = false;
+		boolean foodDescription = false;
+
+
+		if (returnedItems.size() == correctItems.size()){
+			for (int item = 0; item < correctItems.size(); item++) {
+				AubonPainItem returnedItem = returnedItems.get(item);
+				AubonPainItem correctItem = correctItems.get(item);
+				if (returnedItem.getImageURL().equals(correctItem.getImageURL())) {
+					foodImage = true;
+				}
+				if (returnedItem.getFoodItem().equals(correctItem.getFoodItem())) {
+					foodItem = true;
+				}
+				if (returnedItem.getFoodPrice().equals(correctItem.getFoodPrice())) {
+					foodPrice = true;
+				}
+				if (returnedItem.getFoodCalories().equals(correctItem.getFoodCalories())) {
+					foodCalories = true;
+				}
+				if (returnedItem.getFoodDescription().equals(correctItem.getFoodDescription())) {
+					foodDescription = true;
+				}
+				if (!(foodImage && foodItem && foodPrice && foodCalories && foodDescription)) {
+					allCorrect = false;
+				}
+			}
+		} else {
+			allCorrect = false;
+		}
+		assertTrue(allCorrect);
+
+	}
+	@Test
+	@DisplayName("testAddInternalPatientRequest")
+	public void testAddInternalPatientRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test2", 1, 1, "3", "Tower", "INFO", "longName1", "shortName2");
+
+		DB.addUserAccount("test243@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter123@gmail.com", "testPass", "EMT", "drew", "Shukla");
+		DB.addSpecialUserType("helloherh@gmail.com", "testPass", "patient", "nupi", "Shukla");
+
+		DB.addInternalPatientRequest(1, "test", "test2", 2, 3, "department", "not severe", "she is in pain");
 	}
 
+	@Test
+	@DisplayName("testEditInternalPatientRequest")
+	public void testEditInternalPatientRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test2", 1, 1, "3", "Tower", "INFO", "longName1", "shortName2");
 
+		DB.addUserAccount("test243@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter123@gmail.com", "testPass", "EMT", "drew", "Shukla");
+		DB.addSpecialUserType("helloherh@gmail.com", "testPass", "patient", "nupi", "Shukla");
+		DB.addSpecialUserType("idk@gmail.com", "testPass", "patient", "notme", "Shukla");
 
+		DB.addInternalPatientRequest(1, "test", "test2", 2, 3, "department", "not severe", "she is in pain");
+		int result = DB.editInternalPatientRequest(1, null, "test", 4, null, null, "hellloooooo");
+
+		assertTrue(result == 1);
+
+	}
+
+	@Test
+	@DisplayName("testAddReligiousRequest")
+	public void testAddReligiousRequest() {
+
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test123@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("religiousPerson@gmail.com", "testPass", "religiousPerson", "drew", "Shukla");
+
+		DB.addReligiousRequest(1, "test", 2, "Religion1", "Flying Spaghetti Monster");
+	}
+
+	@Test
+	@DisplayName("testEditReligiousRequest")
+	public void testEditReligiousRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "religiousPerson", "drew", "Shukla");
+
+		DB.addReligiousRequest(1, "test", 2, "Religion1", "Flying Spaghetti Monster");
+
+		assertEquals(1, DB.editReligiousRequest(1,"test", "Religion2", "description"));
+	}
+
+	@Test
+	@DisplayName("testGetAubonPainFeild")
+	public void testGetAubonPainFeild(){
+		DB.addAubonPainMenuItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
+		DB.addAubonPainMenuItem("URLLLLL", "pancakes", "$23.45", "3290 calories", "yummmyyy");
+		DB.addAubonPainMenuItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+
+		ArrayList<String> correctFoodImages = new ArrayList<>();
+		correctFoodImages.add("foodImageURL");
+		correctFoodImages.add("URLLLLL");
+		correctFoodImages.add("foooooodddd URL");
+
+		ArrayList<String> returnedFoodImages= DB.getAubonPainFeild("foodImage");
+
+		assertEquals(correctFoodImages, returnedFoodImages);
+	}
+
+	@Test
+	@DisplayName("testGetAubonPainFeild2")
+	public void testGetAubonPainFeild2(){
+		DB.addAubonPainMenuItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
+		DB.addAubonPainMenuItem(null, "pancakes", "$23.45", "3290 calories", "yummmyyy");
+		DB.addAubonPainMenuItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+
+		ArrayList<String> correctFoodImages = new ArrayList<>();
+		correctFoodImages.add("foodImageURL");
+		correctFoodImages.add(null);
+		correctFoodImages.add("foooooodddd URL");
+
+		ArrayList<String> returnedFoodImages= DB.getAubonPainFeild("foodImage");
+
+		assertEquals(correctFoodImages, returnedFoodImages);
+	}
+
+	@Test
+	@DisplayName("testGetAssigneeNames")
+	public void testGetAssigneeNames(){
+
+		DB.addSpecialUserType("adamj@gmail.com", "patient1", "patient", "Adam", "Jenkins");
+		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
+		DB.addSpecialUserType("amyw@gmail.com", "floralPerson1", "floralPerson", "Amy", "Castaneda");
+
+		ObservableList<String> assigneeNamesPatient = FXCollections.observableArrayList();
+		assigneeNamesPatient.add("Adam Jenkins");
+
+		ObservableList<String> assigneeNamesDoctor = FXCollections.observableArrayList();
+		assigneeNamesDoctor.add("Bill Byrd");
+
+		ObservableList<String> assigneeNamesFloral = FXCollections.observableArrayList();
+		assigneeNamesFloral.add("Amy Castaneda");
+
+		ObservableList<String> returnedPatient = RequestsDB.getAssigneeNames("patient");
+		ObservableList<String> returnedDoctor = RequestsDB.getAssigneeNames("doctor");
+		ObservableList<String> returnedFloral = RequestsDB.getAssigneeNames("floralPerson");
+
+		assertEquals(assigneeNamesPatient, returnedPatient);
+		assertEquals(assigneeNamesDoctor, returnedDoctor);
+		assertEquals(assigneeNamesFloral, returnedFloral);
+	}
+
+	@Test
+	@DisplayName("testGetAssigneeIDs")
+	public void testGetAssigneeIDs(){
+
+		DB.addSpecialUserType("adamj@gmail.com", "patient1", "patient", "Adam", "Jenkins");
+		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
+		DB.addSpecialUserType("amyw@gmail.com", "floralPerson1", "floralPerson", "Amy", "Castaneda");
+
+		ArrayList<Integer> assigneeIDsPatient = new ArrayList<>();
+		assigneeIDsPatient.add(1);
+
+		ArrayList<Integer> assigneeIDsDoctor = new ArrayList<>();
+		assigneeIDsDoctor.add(2);
+
+		ArrayList<Integer> assigneeIDsFloral = new ArrayList<>();
+		assigneeIDsFloral.add(3);
+
+		ArrayList<Integer> returnedPatientIDs = RequestsDB.getAssigneeIDs("patient");
+		ArrayList<Integer> returnedDoctorIDs = RequestsDB.getAssigneeIDs("doctor");
+		ArrayList<Integer> returnedFloralIDs = RequestsDB.getAssigneeIDs("floralPerson");
+
+		assertEquals(assigneeIDsPatient, returnedPatientIDs);
+		assertEquals(assigneeIDsDoctor, returnedDoctorIDs);
+		assertEquals(assigneeIDsFloral, returnedFloralIDs);
+	}
 
 }

@@ -147,27 +147,11 @@ public class App extends Application {
     boolean tablesExist = connection.allTablesThere();
 		if(!tablesExist){
 			try {
-				DB.createNodeTable();
-				DB.createEdgeTable();
-				DB.createUserAccountTable();
-				DB.createRequestsTable();
-				DB.createFloralRequestsTable();
-				DB.createSanitationTable();
-				DB.createExtTransportTable();
-				DB.createMedDeliveryTable();
-				DB.createSecurityServTable();
-				DB.createAppointmentTable();
-				DB.createLanguageRequestTable();
-				DB.createLaundryRequestTable();
-				DB.createMaintenanceRequestTable();
-				DB.createFoodDeliveryTable();
-				DB.createFoodTable();
-				DB.createFoodOrderedInRequestTable();
-				DB.createBeverageTable();
-				DB.createBeverageOrderedInRequestTable();
+				DB.createAllTables();
 				DB.populateTable("node", nodes);
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
+				DB.populateAbonPainTable();
 				System.out.println("Tables were created");
 			} catch (Exception e) {
 				System.out.println("Tables already there");

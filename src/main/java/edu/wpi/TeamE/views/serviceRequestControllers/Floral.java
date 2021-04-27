@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+import javax.print.attribute.standard.RequestingUserName;
 import java.io.Console;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ public class Floral extends ServiceRequestFormComponents {
 
     ObservableList<String> locations;
     ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> userNames;
+    ArrayList<Integer> userID = new ArrayList<>();
 
     @FXML
     private JFXComboBox<String> locationInput;
@@ -38,7 +42,16 @@ public class Floral extends ServiceRequestFormComponents {
     private JFXComboBox<String> vaseType;
 
     @FXML
-    private JFXTextField assignee;
+    private JFXComboBox assignee;
+
+    @FXML
+    private JFXTextField arrangementStyle;
+
+    @FXML
+    private JFXComboBox<String> teddyBear;
+
+    @FXML
+    private JFXComboBox<String> chocolate;
 
     @FXML
     private JFXTextField recipient;
@@ -62,8 +75,13 @@ public class Floral extends ServiceRequestFormComponents {
         vaseType.getValidators().add(validator);
         assignee.getValidators().add(validator);
         message.getValidators().add(validator);
+        chocolate.getValidators().add(validator);
+        teddyBear.getValidators().add(validator);
+        arrangementStyle.getValidators().add(validator);
 
-        return  locationInput.validate() && flowerType.validate() && flowerCount.validate() && vaseType.validate() && assignee.validate() && message.validate();
+        return  locationInput.validate() && flowerType.validate() && flowerCount.validate() &&
+                vaseType.validate() && assignee.validate() && message.validate() && chocolate.validate()
+                && teddyBear.validate() && arrangementStyle.validate();
 
 
     }
@@ -71,19 +89,21 @@ public class Floral extends ServiceRequestFormComponents {
     private void saveData(ActionEvent e) {
 
         if(validateInput()) {
-            int index = locationInput.getSelectionModel().getSelectedIndex();
+            int locationIndex = locationInput.getSelectionModel().getSelectedIndex();
+            int userIndex = assignee.getSelectionModel().getSelectedIndex();
 
-            String nodeInfo = nodeID.get(index);
+            String nodeInfo = nodeID.get(locationIndex);
             String type = flowerType.getSelectionModel().getSelectedItem();
-            String count = flowerCount.getSelectionModel().getSelectedItem();
-            String vase = vaseType.getSelectionModel().getSelectedItem().toString();
-            int assigned = Integer.parseInt(assignee.getText());
-            String reciever = recipient.getText();
+            int count = Integer.parseInt(flowerCount.getSelectionModel().getSelectedItem());
+            String vase = vaseType.getSelectionModel().getSelectedItem();
+            int assigned = userID.get(userIndex);
+            String receiver = recipient.getText();
             String mess = message.getText();
-
-            //assigned is now an integer (userID) so must be changed
-            DB.addFloralRequest(App.userID, 0, nodeInfo, reciever, type, 12, vase, mess);
-
+            String arrangement = arrangementStyle.getText();
+            String teddy = teddyBear.getSelectionModel().getSelectedItem();
+            String choc = chocolate.getSelectionModel().getSelectedItem();
+           // assigned is now an integer (userID) so must be changed
+            DB.addFloralRequest(App.userID, assigned, nodeInfo, receiver, type, count, vase, arrangement, teddy, choc, mess);
         }
     }
 
@@ -105,6 +125,9 @@ public class Floral extends ServiceRequestFormComponents {
     void initialize() {
         nodeID = DB.getListOfNodeIDS();
         locations = DB.getAllNodeLongNames();
+        userID = DB.getAssigneeIDs("floralPerson");
+        userNames = DB.getAssigneeNames("floralPerson");
+        assignee.setItems(userNames);
         locationInput.setItems(locations);
         assert locationInput != null;
         assert flowerType != null;

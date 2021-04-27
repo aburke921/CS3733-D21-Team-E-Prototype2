@@ -52,9 +52,6 @@ public class UserManagement {
     private JFXTextField userNameInput;
 
     @FXML
-    private JFXTextField userIDInput;
-
-    @FXML
     private JFXComboBox<String> userTypeInput;
 
     @FXML
@@ -225,7 +222,6 @@ public class UserManagement {
 
         //hide form values until editing or adding
         showFields(false);
-        userIDInput.setVisible(false); //todo
 
         //add items to comboBox
         userTypeInput.getItems().addAll("visitor","patient","doctor","admin");

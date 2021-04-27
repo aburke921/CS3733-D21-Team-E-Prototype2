@@ -89,7 +89,7 @@ public class Floral extends ServiceRequestFormComponents {
             String arrangement = "arrangement"; //TODO: add this textBox on Floral service request page
             String stuffedAnimal = "Include Stuffed Animal"; //TODO: add this checkbox on Floral service request page
             String chocolate = "Do not Include Chocolate"; //TODO: add this checkbox on Floral service request page
-            int assigned = Integer.parseInt(assignee.getText());
+//            int assigned = Integer.parseInt(assignee.getText());
             String reciever = recipient.getText();
             String mess = message.getText();
 

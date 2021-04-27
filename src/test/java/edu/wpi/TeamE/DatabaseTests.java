@@ -38,41 +38,9 @@ public class DatabaseTests {
 
 		try {
 			connection.deleteAllTables();
-			DB.createNodeTable();
-			DB.createEdgeTable();
-			DB.createUserAccountTable();
-			DB.createRequestsTable();
-			DB.createFloralRequestsTable();
-			DB.createSanitationTable();
-			DB.createExtTransportTable();
-			DB.createMedDeliveryTable();
-			DB.createSecurityServTable();
-			DB.createAppointmentTable();
-			DB.createLanguageRequestTable();
-			DB.createLaundryRequestTable();
-			DB.createMaintenanceRequestTable();
-			DB.createFoodDeliveryTable();
-			DB.createInternalPatientRequest();
-			DB.createAubonPainMenuTable();
-			DB.createReligionRequestTable();
+			DB.createAllTables();
 		} catch (Exception e) {
-			DB.createNodeTable();
-			DB.createEdgeTable();
-			DB.createUserAccountTable();
-			DB.createRequestsTable();
-			DB.createFloralRequestsTable();
-			DB.createSanitationTable();
-			DB.createExtTransportTable();
-			DB.createMedDeliveryTable();
-			DB.createSecurityServTable();
-			DB.createAppointmentTable();
-			DB.createLanguageRequestTable();
-			DB.createLaundryRequestTable();
-			DB.createMaintenanceRequestTable();
-			DB.createFoodDeliveryTable();
-			DB.createInternalPatientRequest();
-			DB.createAubonPainMenuTable();
-			DB.createReligionRequestTable();
+			DB.createAllTables();
 		}
 
 	}

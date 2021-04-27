@@ -98,10 +98,6 @@ public class Default {
         }
     }
 
-    @FXML
-    public void getHelpDefault(ActionEvent actionEvent) {
-    }
-
     public void initialize() {
 
         //init appBar

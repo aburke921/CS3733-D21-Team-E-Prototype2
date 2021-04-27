@@ -915,7 +915,7 @@ public class newMapEditor {
 
     @FXML
     public void fileOpenerNode(ActionEvent e) {
-        /*FileChooser fileChooser = new FileChooser();
+        FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
         makeConnection connection = makeConnection.makeConnection();
         if (file != null) {
@@ -924,23 +924,16 @@ public class newMapEditor {
             File saveEdges = new File("CSVs/outputEdge.csv");
 
             //This is where tables are cleared and refilled
-            connection.deleteAllTables();
+            DB.deleteEdgeTable();
+            DB.deleteNodeTable();
             DB.createNodeTable();
             DB.createEdgeTable();
-            DB.createUserAccountTable();
-            DB.createRequestsTable();
-            DB.createFloralRequestsTable();
-            DB.createSanitationTable();
-            DB.createExtTransportTable();
-            DB.createMedDeliveryTable();
-            DB.createSecurityServTable();
-            DB.createAppointmentTable();
             DB.populateTable("node", file);
             DB.populateTable("hasEdge", saveEdges);
             System.out.println("Success");
         }
 
-         */
+
     }
 
     /**
@@ -950,13 +943,12 @@ public class newMapEditor {
      */
     @FXML
     private void openFileNode(ActionEvent e) throws IOException {
-/*
+
         DB.getNewCSVFile("node");
-        File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+        File file = new File("CSVs/outputNode.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
 
- */
     }
 
     /**

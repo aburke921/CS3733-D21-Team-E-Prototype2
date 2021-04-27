@@ -142,7 +142,7 @@ public class App extends Application {
 		System.out.println("Connected to the DB");
 		File nodes = new File("CSVs/MapEAllnodes.csv");
 		File edges = new File("CSVs/MapEAlledges.csv");
-    boolean tablesExist = connection.allTablesThere();
+	    boolean tablesExist = connection.allTablesThere();
 		if(!tablesExist){
 			try {
 				DB.createNodeTable();

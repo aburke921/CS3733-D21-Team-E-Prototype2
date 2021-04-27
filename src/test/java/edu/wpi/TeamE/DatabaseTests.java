@@ -4,6 +4,7 @@ import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 
 
+import edu.wpi.TeamE.views.UserManagement;
 import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
 import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.collections.FXCollections;
@@ -1468,6 +1469,73 @@ public class DatabaseTests {
 	@DisplayName("testUpdateFoodAndBeverageTable")
 	public void testUpdateFoodAndBeverageTable(){
 		DB.updateFoodAndBeverageTable();
+	}
+
+	@Test
+	@DisplayName("testGetAllNodes")
+	public void testGetAllUsers() {
+
+
+		DB.addSpecialUserType("adamj@gmail.com", "patient1", "patient", "Adam", "Jenkins");
+		DB.addSpecialUserType("abbym@yahoo.com", "patient2", "patient", "Abby", "Mohamed");
+		DB.addSpecialUserType("wesleya@gmail.com", "patient3", "patient", "Wesley", "Armstrong");
+		DB.addSpecialUserType("travisc@yahoo.com", "patient4", "patient", "Travis", "Cook");
+		DB.addSpecialUserType("gabriellar@gmail.com", "patient5", "patient", "Gabriella", "Reyes");
+
+
+		UserManagement.User u1 = new UserManagement.User("patient", 1, "Adam", "Jenkins", "adamj@gmail.com");
+		UserManagement.User u2 = new UserManagement.User("patient", 2, "Abby", "Mohamed", "abbym@yahoo.com");
+		UserManagement.User u3 = new UserManagement.User("patient", 3, "Wesley", "Armstrong", "wesleya@gmail.com");
+		UserManagement.User u4 = new UserManagement.User("patient", 4, "Travis", "Cook", "travisc@yahoo.com");
+		UserManagement.User u5 = new UserManagement.User("patient", 5, "Gabriella", "Reyes", "gabriellar@gmail.com");
+
+
+		ArrayList<UserManagement.User> testUserArray = new ArrayList<>();
+		testUserArray.add(u1);
+		testUserArray.add(u2);
+		testUserArray.add(u3);
+		testUserArray.add(u4);
+		testUserArray.add(u5);
+
+		ArrayList<UserManagement.User> userArray = UserAccountDB.getAllUsers();
+
+		boolean allCorrect = true;
+		boolean firstName = false;
+		boolean lastName = false;
+		boolean userID = false;
+		boolean userType = false;
+		boolean email = false;
+
+
+		if (testUserArray.size() == userArray.size()) {
+			for (int user = 0; user < userArray.size(); user++) {
+				UserManagement.User returnedUser = userArray.get(user);
+				UserManagement.User correctUser = testUserArray.get(user);
+				if (returnedUser.getUserType().equals(correctUser.getUserType())) {
+					userType = true;
+				}
+				if (returnedUser.getUserID() == correctUser.getUserID()) {
+					userID = true;
+				}
+				if (returnedUser.getFirstName() == correctUser.getFirstName()) {
+					firstName = true;
+				}
+				if (returnedUser.getLastName().equals(correctUser.getLastName())) {
+					lastName = true;
+				}
+				if (returnedUser.getEmail().equals(correctUser.getEmail())) {
+					email = true;
+				}
+				if (userType && userID && firstName && lastName && email) {
+					allCorrect = false;
+				}
+			}
+		} else {
+			allCorrect = false;
+		}
+
+		assertTrue(allCorrect);
+
 	}
 
 

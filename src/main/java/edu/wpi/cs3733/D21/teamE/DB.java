@@ -476,6 +476,11 @@ public class DB {
 		RequestsDB.populateAbonPainTable();
 	}
 
+	public static void createInternalPatientRequest() {
+		RequestsDB.createInternalPatientRequest();
+	}
+
+
 
 
 

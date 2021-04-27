@@ -90,19 +90,6 @@
                                     </VBox.margin>
                                 </JFXTreeTableView>
                                 <HBox>
-                                    <children>
-                                        <JFXButton fx:id="cancelButton" onAction="#cancelRequest" styleClass="submit-button" text="Cancel Request" />
-                                        <JFXButton fx:id="refreshButton" onAction="#refresh" styleClass="submit-button" text="Refresh">
-                                            <HBox.margin>
-                                                <Insets left="30.0" />
-                                            </HBox.margin>
-                                        </JFXButton>
-                                        <JFXButton fx:id="checkoutItem" onAction="#checkoutItem" styleClass="submit-button" text="Checkout Item">
-                                            <HBox.margin>
-                                                <Insets left="30.0" />
-                                            </HBox.margin>
-                                        </JFXButton>
-                                    </children>
                                     <VBox.margin>
                                         <Insets left="20.0" top="20.0" />
                                     </VBox.margin>
@@ -124,7 +111,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
                     </rowConstraints>
                     <children>
-                        <JFXButton fx:id="backButton" maxHeight="30.0" onAction="#toDefault" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back">
+                        <JFXButton fx:id="backButton" maxHeight="30.0" onAction="#toFoodDelivery" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back">
                             <GridPane.margin>
                                 <Insets bottom="20.0" left="20.0" />
                             </GridPane.margin>

@@ -6,8 +6,11 @@ package edu.wpi.TeamE.views.serviceRequestControllers;
 
 import java.io.IOException;
 
+import edu.wpi.TeamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.FXCollections;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -91,6 +94,20 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 
+	}
+
+	/**
+	 * Move to Service Request page
+	 * @param e
+	 */
+	@FXML
+	private void toAubonPainMenu(ActionEvent e) {
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MenuPage.fxml"));
+			App.setDraggableAndChangeScene(root);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 

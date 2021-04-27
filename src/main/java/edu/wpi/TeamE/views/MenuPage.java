@@ -10,6 +10,8 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableRow;
@@ -43,12 +45,14 @@ public class MenuPage {
 
         if(menuTable.getRoot() == null) {
 
-
+            menuTable.setFixedCellSize(140);
+//            menuTable.setMaxHeight();
 
             //Establishing some columns that are consistent throughout all the service requests
             //Column 1 - ID
             TreeTableColumn<AubonPainItem, String> itemColumn = new TreeTableColumn<>("Menu Item");
             itemColumn.setPrefWidth(400);
+
 
 
             itemColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<AubonPainItem, String> p) ->
@@ -81,8 +85,8 @@ public class MenuPage {
                     URL urlInput = new URL(item.getImageURL());
                     BufferedImage urlImage = ImageIO.read(urlInput);
                     ImageView foodImage = new ImageView (SwingFXUtils.toFXImage(urlImage, null));
-                    foodImage.setFitHeight(50);
-                    foodImage.setFitWidth(50);
+//                    foodImage.setFitHeight(50);
+//                    foodImage.setFitWidth(50);
 
                     itemInfo = new TreeItem<>(new AubonPainItem(item.getFoodItem(), item.getFoodPrice(), item.getFoodCalories()), foodImage);
                 }catch (IOException e){
@@ -149,8 +153,18 @@ public class MenuPage {
     }
 
     @FXML
-    void init() {
+    void initialize() {
         prepareTable(menuTable);
+    }
+
+    @FXML
+    private void toFoodDelivery(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/UpdatedServiceRequests/FoodDelivery.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

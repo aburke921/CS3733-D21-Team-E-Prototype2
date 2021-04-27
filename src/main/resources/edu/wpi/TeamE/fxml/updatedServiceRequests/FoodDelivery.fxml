@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -19,7 +20,6 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<?import com.jfoenix.controls.JFXTextField?>
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.serviceRequestControllers.FoodDelivery">
     <children>
         <AnchorPane id="app-bar-top" prefWidth="1012.0">
@@ -87,8 +87,6 @@
                     <center>
                         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="785.0" BorderPane.alignment="CENTER">
                             <children>
-                        <JFXButton text="Delivery Pickup" />
-                        <JFXButton text="Au bon Pain" />
                                 <VBox maxWidth="600.0" prefHeight="582.0" prefWidth="1200.0">
                                     <children>
                                         <HBox maxWidth="600.0" prefHeight="501.0" prefWidth="600.0" styleClass="centerPane">
@@ -133,6 +131,7 @@
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXTextArea>
+                                                <JFXButton fx:id="AubonPainButton" onAction="#toAubonPainMenu" text="Au bon Pain" />
                                                                 <GridPane>
                                                                     <columnConstraints>
                                                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />

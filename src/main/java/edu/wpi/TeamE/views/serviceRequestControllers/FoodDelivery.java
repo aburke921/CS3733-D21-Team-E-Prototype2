@@ -49,20 +49,14 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 	@FXML // fx:id="locationInput"
 	private JFXComboBox<String> locationInput; // Value injected by FXMLLoader
 
-	@FXML // fx:id="dietaryRestrictionsInput"
-	private JFXComboBox<String> dietaryRestrictionsInput; // Value injected by FXMLLoader
-
-	@FXML // fx:id="allergysInput"
-	private JFXComboBox<String> allergysInput; // Value injected by FXMLLoader
-
 	@FXML // fx:id="assigneeInput"
 	private JFXComboBox<String> assigneeInput; // Value injected by FXMLLoader
 
 	@FXML // fx:id="foodInput"
-	private JFXComboBox<String> foodInput; // Value injected by FXMLLoader
+	private JFXTextField deliveryService; // Value injected by FXMLLoader
 
 	@FXML // fx:id="beveragesInput"
-	private JFXComboBox<String> beveragesInput; // Value injected by FXMLLoader
+	private JFXTextField orderNumber; // Value injected by FXMLLoader
 
 	@FXML // fx:id="descriptionInput"
 	private JFXTextArea descriptionInput; // Value injected by FXMLLoader
@@ -97,21 +91,12 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		ArrayList<String> calories = menuStuff.get(3);
 		ArrayList<String> descriptions = menuStuff.get(4);
 
-		ObservableList<String> observableFoods = FXCollections.observableList(foods);
-		foodInput.setItems(observableFoods);
-
-		ObservableList<String> observableBeverages = FXCollections.observableList(drinks);
-		beveragesInput.setItems(observableBeverages);
 
 		assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
-		assert dietaryRestrictionsInput != null : "fx:id=\"dietaryRestrictionsInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
-		assert allergysInput != null : "fx:id=\"allergysInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert assigneeInput != null : "fx:id=\"assigneeInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
-		assert foodInput != null : "fx:id=\"foodInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
-		assert beveragesInput != null : "fx:id=\"beveragesInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert descriptionInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'FoodDelivery.fxml'.";

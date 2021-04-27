@@ -2,8 +2,6 @@ package edu.wpi.TeamE.algorithms.pathfinding;
 
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
-import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
-import edu.wpi.cs3733.D21.teamE.database.csvDB;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
@@ -23,19 +21,10 @@ public class Examples {
         boolean tablesExist = connection.allTablesThere();
         if(!tablesExist){
             try {
-                DB.createNodeTable();
-                DB.createEdgeTable();
-                DB.createUserAccountTable();
-                DB.createRequestsTable();
-                DB.createFloralRequestsTable();
-                DB.createSanitationTable();
-                DB.createExtTransportTable();
-                DB.createMedDeliveryTable();
-                DB.createSecurityServTable();
-                appointmentDB.createAppointmentTable();
-                csvDB.populateTable("node", nodes);
-                csvDB.populateTable("hasEdge", edges);
-//                csvDB.addDataForPresentation();
+                DB.createAllTables();
+                DB.populateTable("node", nodes);
+                DB.populateTable("hasEdge", edges);
+//              DB.addDataForPresentation();
                 System.out.println("Tables were created");
             } catch (Exception e) {
                 System.out.println("Tables already there");
@@ -87,8 +76,26 @@ public class Examples {
         Node node1 = new Node("1001", 5, 5, "L2", "building1", "type1", "name 1", "name 1");
         Node node2 = new Node("1002", 7, 7, "L2", "building1", "type1", "name 1", "name 1");
 
-        Path path = new Path(node1, node2);
-        for (String dir : path.makeDirectionsWithDist()) {
+
+        for (String dir : p.makeDirectionsWithDist()) {
+            System.out.println(dir);
+        }
+        System.out.println();
+
+        Path p2 = search.search("FSTAI00201", "ePARK01301");
+        p2.print("id");
+        System.out.println(p2.getPathLengthFeet());
+
+        for (String dir : p2.makeDirectionsWithDist()) {
+            System.out.println(dir);
+        }
+        System.out.println();
+
+        p2 = search.search("ePARK00101", "ePARK01301");
+        p2.print("id");
+        System.out.println(p2.getPathLengthFeet());
+
+        for (String dir : p2.makeDirectionsWithDist()) {
             System.out.println(dir);
         }
         System.out.println();

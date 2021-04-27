@@ -57,7 +57,7 @@
                                     <Insets top="20.0" />
                                  </VBox.margin>
                               </HBox>
-                              <Button fx:id="guestLoginButton" mnemonicParsing="false" onAction="#guestLogin" prefHeight="29.0" prefWidth="132.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Log In As Guest" textFill="WHITE">
+                              <Button fx:id="guestLoginButton" mnemonicParsing="false" onAction="#guestLogin" prefHeight="29.0" prefWidth="132.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Continue as Guest" textFill="WHITE">
                                  <VBox.margin>
                                     <Insets top="20.0" />
                                  </VBox.margin>

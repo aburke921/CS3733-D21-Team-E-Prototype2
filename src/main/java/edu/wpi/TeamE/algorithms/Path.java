@@ -260,7 +260,27 @@ public class Path implements Comparable<Path>, Iterable<Node>{
 
                 //node 2
                 Node node2 = itr.next();
-                int last = (int) (Math.round((node1.dist(node2) * SCALE) / 10) * 10);
+                double len = node1.dist(node2);
+                int dist = (int) (Math.round((len * SCALE) / 10) * 10);
+                if (dist == 0) {
+                    dist = 5;
+                }
+                if(node2.get("type").equalsIgnoreCase("ELEV") && node1.get("type").equalsIgnoreCase("ELEV")) {
+                    if (!itr.hasNext()) {
+                        directions.add("Take Elevator " + node1.get("longName").charAt(9) + " to Floor " + node2.get("floor"));
+                    }
+                } else if (node2.get("type").equalsIgnoreCase("STAI") && node1.get("type").equalsIgnoreCase("STAI")) {
+                    if (!itr.hasNext()) {
+                        if (Node.calculateZ(node1.get("floor")) > Node.calculateZ(node2.get("floor"))) {
+                            directions.add("Take the Stairs down to Floor " + node2.get("floor"));
+                        } else {
+                            directions.add("Take the Stairs up to Floor " + node2.get("floor"));
+                        }
+                    }
+                } else {
+                    directions.add("Go straight ahead for " + dist + " feet");
+                }
+
                 int floorChangeState = 0;
                 // 0 = normal
                 // 1 = elev in 2 and 3
@@ -272,8 +292,6 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                     floorChangeState = 0;
                     //node 3
                     Node node3 = itr.next();
-                    double len;
-                    int dist;
 
                     if(node2.get("type").equalsIgnoreCase("ELEV")) {
                         if (node3.get("type").equalsIgnoreCase("ELEV")) {
@@ -291,29 +309,43 @@ public class Path implements Comparable<Path>, Iterable<Node>{
 
                     switch (floorChangeState){
                         case 1:
-                            len = node1.dist(node2);
-                            dist = (int) (Math.round((len * SCALE) / 10) * 10);
-                            directions.add("Enter Elevator " + node2.get("longName").charAt(9) + " in " + dist + " feet");
+                            directions.add("Enter Elevator " + node2.get("longName").charAt(9));
+                            directions.add("Take Elevator " + node2.get("longName").charAt(9) + " to Floor " + node3.get("floor"));
                             break;
                         case 2:
-                            directions.add("Take Elevator " + node1.get("longName").charAt(9) + " to Floor " + node2.get("floor"));
                             len = node3.dist(node2);
                             dist = (int) (Math.round((len * SCALE) / 10) * 10);
-                            directions.add("Exit Elevator " + node1.get("longName").charAt(9) + " and go straight for " + dist + " feet");
+                            if (dist == 0) {
+                                dist = 5;
+                            }
+                            directions.add("Exit the Elevator and go straight for " + dist + " feet");
                             break;
                         case 3:
-                            len = node1.dist(node2);
-                            dist = (int) (Math.round((len * SCALE) / 10) * 10);
-                            if (Node.calculateZ(node2.get("floor")) > Node.calculateZ(node3.get("floor"))) {
-                                directions.add("Take the Stairs down one floor in " + dist + " feet");
-                            } else {
-                                directions.add("Take the Stairs up one floor in " + dist + " feet");
+                            String floor = "";
+                            while(node3.get("type").equalsIgnoreCase("STAI")) {
+                                floor = node3.get("floor");
+                                if (itr.hasNext()) {
+                                    node2 = node3;
+                                    node3 = itr.next();
+                                } else {
+                                    System.out.println("Last Stairs Found");
+                                    break;
+                                }
                             }
-                            break;
+                            if (Node.calculateZ(node1.get("floor")) > Node.calculateZ(node2.get("floor"))) {
+                                directions.add("Take the Stairs down to Floor " + floor);
+                            } else {
+                                directions.add("Take the Stairs up to Floor " + floor);
+                            }
                         case 4:
-                            len = node3.dist(node2);
-                            dist = (int) (Math.round((len * SCALE) / 10) * 10);
-                            directions.add("Exit the staircase and go straight for " + dist + " feet");
+                            if (!node3.get("type").equalsIgnoreCase("STAI")) {
+                                len = node3.dist(node2);
+                                dist = (int) (Math.round((len * SCALE) / 5) * 5);
+                                if (dist == 0) {
+                                    dist = 5;
+                                }
+                                directions.add("Exit the Stairwell and go straight for " + dist + " feet");
+                            }
                             break;
                         default:
 
@@ -338,50 +370,50 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                             angle = Math.acos(dotProduct / (len1_2 * len2_3));
                             angle = 180 * angle / Math.PI;//convert radian to degree
 
-
-
-                            String turn = "";
+                            String turn;
                             int angleComp = (int) Math.abs(angle);
 
-                            if (angleComp < 30) {
+                            if (angleComp < 35) {
                                 turn = "Bend to the";
-                            } else if (angleComp < 60) {
+                            } else if (angleComp < 65) {
                                 turn = "Take a shallow turn to the";
-                            } else if (angleComp < 120) {
+                            } else if (angleComp < 115) {
                                 turn = "Turn to the";
                             } else {
                                 turn = "Take a sharp turn to the";
                             }
 
-                            dist = (int) (Math.round((len1_2 * SCALE) / 10) * 10);
-                            last = (int) (Math.round((len2_3 * SCALE) / 10) * 10);
+                            dist = (int) (Math.round((len2_3 * SCALE) / 10) * 10);
 
                             if (dist == 0) {
                                 dist = 5;
                             }
 
                             // straight "tolerance"
-                            if (crossProduct < -0.4){
-                                directions.add(turn + " right in " + dist + " feet");
-                            }else if (crossProduct > 0.4){
-                                directions.add(turn + " left in " + dist + " feet");
-                            }else{
-                                directions.add("Straight ahead for " + dist + " feet");
+                            if (angleComp > 10) {
+                                if (crossProduct < 0 ){
+                                    directions.add(turn + " right");
+                                    directions.add("Go straight ahead for " + dist + " feet");
+                                } else {
+                                    directions.add(turn + " left");
+                                    directions.add("Go straight ahead for " + dist + " feet");
+                                }
+                            } else {
+                                int index = directions.size() - 1;
+                                String lastDir = directions.get(index);
+                                if (lastDir.contains("straight")){
+                                    directions.remove(index);
+                                    String clean = lastDir.replaceAll("\\D+","");
+                                    dist += Integer.parseInt(clean);
+                                }
+                                directions.add("Go straight ahead for " + dist + " feet");
                             }
                             break;
                     }
 
-
-
                     //continue for next node
                     node1 = node2;
                     node2 = node3;
-                }
-                if (last == 0) {
-                    last = 5;
-                }
-                if (floorChangeState == 0) {
-                    directions.add("Straight ahead for " + last + " feet");
                 }
             }
         }

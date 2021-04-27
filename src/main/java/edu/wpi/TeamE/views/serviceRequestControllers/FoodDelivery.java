@@ -6,8 +6,11 @@ package edu.wpi.TeamE.views.serviceRequestControllers;
 
 import java.io.IOException;
 
+import edu.wpi.TeamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.FXCollections;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -49,20 +52,14 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 	@FXML // fx:id="locationInput"
 	private JFXComboBox<String> locationInput; // Value injected by FXMLLoader
 
-	@FXML // fx:id="dietaryRestrictionsInput"
-	private JFXComboBox<String> dietaryRestrictionsInput; // Value injected by FXMLLoader
-
-	@FXML // fx:id="allergysInput"
-	private JFXComboBox<String> allergysInput; // Value injected by FXMLLoader
-
 	@FXML // fx:id="assigneeInput"
 	private JFXComboBox<String> assigneeInput; // Value injected by FXMLLoader
 
 	@FXML // fx:id="foodInput"
-	private JFXComboBox<String> foodInput; // Value injected by FXMLLoader
+	private JFXTextField deliveryService; // Value injected by FXMLLoader
 
 	@FXML // fx:id="beveragesInput"
-	private JFXComboBox<String> beveragesInput; // Value injected by FXMLLoader
+	private JFXTextField orderNumber; // Value injected by FXMLLoader
 
 	@FXML // fx:id="descriptionInput"
 	private JFXTextArea descriptionInput; // Value injected by FXMLLoader
@@ -88,106 +85,30 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		ObservableList<String> locations  = DB.getAllNodeLongNames();
 		locationInput.setItems(locations);
 
-		ArrayList<ArrayList<String>> menuStuff  = getMenuItems();
-		ArrayList<String> foods = menuStuff.get(0);
-		ArrayList<String> drinks = menuStuff.get(1);
-
-		// Can use later:
-		ArrayList<String> prices = menuStuff.get(2);
-		ArrayList<String> calories = menuStuff.get(3);
-		ArrayList<String> descriptions = menuStuff.get(4);
-
-		ObservableList<String> observableFoods = FXCollections.observableList(foods);
-		foodInput.setItems(observableFoods);
-
-		ObservableList<String> observableBeverages = FXCollections.observableList(drinks);
-		beveragesInput.setItems(observableBeverages);
-
 		assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
-		assert dietaryRestrictionsInput != null : "fx:id=\"dietaryRestrictionsInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
-		assert allergysInput != null : "fx:id=\"allergysInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert assigneeInput != null : "fx:id=\"assigneeInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
-		assert foodInput != null : "fx:id=\"foodInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
-		assert beveragesInput != null : "fx:id=\"beveragesInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert descriptionInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 
 	}
 
-	public static ArrayList<ArrayList<String>> getMenuItems(){
-		ArrayList<ArrayList<String>> menuItems = new ArrayList<ArrayList<String>>();
-
+	/**
+	 * Move to Service Request page
+	 * @param e
+	 */
+	@FXML
+	private void toAubonPainMenu(ActionEvent e) {
 		try {
-			Document doc = Jsoup.connect("https://order.aubonpain.com/menu/brigham-womens-hospital").get();
-			Elements media = doc.select("[src]"); // --> image urls
-			Elements foods = doc.getElementsByClass("product-name product__name");
-			Elements prices = doc.getElementsByClass("product__attribute product__attribute--price");
-			Elements calories = doc.getElementsByClass("product__attribute product__attribute--calorie-label");
-			Elements descriptions = doc.getElementsByClass("product__description");
-
-
-			ArrayList<String> listOfFoods = new ArrayList<String>();
-			ArrayList<String> listOfDrinks = new ArrayList<String>();
-
-			boolean drinkItem = false;
-			boolean foodItem = true;
-			for (Element item : foods) {
-				if(item.text().equals("Hot Coffee & Hot Tea")){
-					drinkItem = true;
-					foodItem = false;
-				}
-				if(item.text().equals("Chips & Salty Snacks")){
-					drinkItem = false;
-					foodItem = false;
-				}
-				if(item.text().equals("Bottled Spring Water (20 oz)")){
-					drinkItem = true;
-					foodItem = false;
-				}
-				if(item.text().equals("Cape Cod Lightly Salted Chips")){
-					drinkItem = false;
-					foodItem = true;
-				}
-
-				if(drinkItem){
-					listOfDrinks.add(item.text());
-				}
-				if(foodItem){
-					listOfFoods.add(item.text());
-				}
-			}
-
-			menuItems.add(listOfFoods);
-			menuItems.add(listOfDrinks);
-
-			ArrayList<String> listOfPrices = new ArrayList<>();
-			for(Element price : prices){
-				listOfPrices.add(price.text());
-			}
-			menuItems.add(listOfPrices);
-
-			ArrayList<String> listOfCalories = new ArrayList<>();
-			for(Element calory : calories){
-				listOfCalories.add(calory.text());
-			}
-			menuItems.add(listOfPrices);
-
-
-			ArrayList<String> listOfDescriptions = new ArrayList<>();
-			for(Element description : descriptions){
-				listOfDescriptions.add(description.text());
-
-			}
-			menuItems.add(listOfDescriptions);
-
-			return menuItems;
-		}catch (IOException e){
-			System.err.println("Error connecting to the website");
-			return null;
+			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MenuPage.fxml"));
+			App.setDraggableAndChangeScene(root);
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
 	}
+
+
 }

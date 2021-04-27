@@ -25,6 +25,11 @@ import java.util.ResourceBundle;
 
 public class ExternalPatient extends ServiceRequestFormComponents {
 
+	ObservableList<String> locations;
+	ArrayList<String> nodeID = new ArrayList<>();
+	ObservableList<String> userNames;
+	ArrayList<Integer> userID = new ArrayList<>();
+
 	RequiredFieldValidator validator = new RequiredFieldValidator();
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -49,7 +54,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	@FXML // fx:id="patientIdInput"
 	private JFXTextField patientIdInput; // Value injected by FXMLLoader
 	@FXML // fx:id="assignedPersonnel"
-	private JFXTextField assignedPersonnel; // Value injected by FXMLLoader
+	private JFXComboBox<String> assignedPersonnel; // Value injected by FXMLLoader
 	@FXML // fx:id="descriptionInput"
 	private JFXTextArea descriptionInput; // Value injected by FXMLLoader
 	@FXML // fx:id="ETAInput"
@@ -60,6 +65,15 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	private JFXButton submit; // Value injected by FXMLLoader
 	@FXML // fx:id="exit"
 	private Polygon exit;
+
+	@FXML
+	private JFXTextField oxygenInput;
+
+	@FXML
+	private JFXTextField bloodPressureInput;
+
+	@FXML
+	private JFXTextField temperatureInput;
 
 	/**
 	 * todo This function will cause a pop-up modal to appear with help information for this form's fields
@@ -85,10 +99,13 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 		ETAInput.getValidators().add(validator);
 		descriptionInput.getValidators().add(validator);
 		assignedPersonnel.getValidators().add(validator);
+		oxygenInput.getValidators().add(validator);
+		bloodPressureInput.getValidators().add(validator);
+		temperatureInput.getValidators().add(validator);
 
-		return locationInput.validate() && requestTypeInput.validate() && severityInput.validate() && patientIdInput.validate() && assignedPersonnel.validate() && descriptionInput.validate() && ETAInput.validate();
-
-
+		return locationInput.validate() && requestTypeInput.validate() && severityInput.validate() &&
+				patientIdInput.validate() && assignedPersonnel.validate() && descriptionInput.validate() &&
+				ETAInput.validate() && oxygenInput.validate() && bloodPressureInput.validate() && temperatureInput.validate();
 	}
 
 	/**
@@ -100,27 +117,25 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 
 
 		if (validateInput()) {
-			//String detailedInstructions = detailedInstructionsInput.getText();
-			//creating the service request
 
-			//System.out.println(request.getAssignmentField());
-			//Adding service request to table
-			//makeConnection connection = makeConnection.makeConnection();
-			//connection.addRequest("sanitationServices", request);
-			ArrayList<String> nodeIDS = DB.getListOfNodeIDS();
+
 			String type = requestTypeInput.getSelectionModel().getSelectedItem().toString();
 			String severity = severityInput.getSelectionModel().getSelectedItem().toString();
 			String patientID = patientIdInput.getText();
 			String ETA = ETAInput.getText();
+			String bloodPressure = bloodPressureInput.getText();
+			String temperature = temperatureInput.getText();
+			String oxygenLevel = oxygenInput.getText();
 			String details = descriptionInput.getText();
-			int assigneeID = 99999;
+			int assigneeIDIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
+			int assigneeID = userID.get(assigneeIDIndex);
 			int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
-			String nodeID = nodeIDS.get(nodeIDIndex);
+			String id = nodeID.get(nodeIDIndex);
 			System.out.println(nodeID + " " + type + " " + severity + " " + patientID + " " + ETA + " " + details + " " + assigneeID);
-			DB.addExternalPatientRequest(15, assigneeID, nodeID, type, severity, patientID, ETA, details);
-			//DB changed the assignee in the function call to an int (not string) --> we need the assignee's userID
+			DB.addExternalPatientRequest(App.userID, assigneeID, id, type, severity, patientID, ETA, bloodPressure, temperature, oxygenLevel, details);
+
 			super.handleButtonSubmit(actionEvent);
-			//Setting up all variables to be entered
+
 		}
 	}
 
@@ -128,9 +143,16 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 		// This method is called by the FXMLLoader when initialization is complete
 
 	void initialize() {
+
+		nodeID = DB.getListOfNodeIDS();
+		locations = DB.getAllNodeLongNames();
+		userID = DB.getAssigneeIDs("EMT");
+		userNames = DB.getAssigneeNames("EMT");
+
 		assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
-		ObservableList<String> locations = DB.getAllNodeLongNames();
+
 		locationInput.setItems(locations);
+		assignedPersonnel.setItems(userNames);
 		assert requestTypeInput != null : "fx:id=\"requestTypeInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert ambulance != null : "fx:id=\"ambulance\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert helicopter != null : "fx:id=\"helicopter\" was not injected: check your FXML file 'ExternalPatient.fxml'.";

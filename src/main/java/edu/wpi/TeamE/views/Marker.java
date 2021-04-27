@@ -87,8 +87,8 @@ public class Marker {
         ArrayList<Node> nodeArrayList = NodeDB.getAllNodes();
 
         for (int i = 0; i < nodeArrayList.size(); i++) {
-            Double xCoord = nodeArrayList.get(i).getX() / scale;
-            Double yCoord = nodeArrayList.get(i).getY() / scale;
+            Double xCoord = nodeArrayList.get(i).getX() / scale - sideLength * 0.5;
+            Double yCoord = nodeArrayList.get(i).getY() / scale - sideLength * 0.5;
             Rectangle rectangle = new Rectangle(xCoord, yCoord, sideLength, sideLength);
             rectangle.setStroke(Color.BLACK);
             rectangle.setVisible(false);

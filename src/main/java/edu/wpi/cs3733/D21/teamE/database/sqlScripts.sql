@@ -27,7 +27,7 @@ Create Table node(
                      longName  varchar(100),
                      shortName varchar(100),
                      Unique (xCoord, yCoord, floor),
-                     Constraint floorLimit Check (floor In ('1', '2', '3', 'L1', 'L2')),
+                     Constraint floorLimit Check (floor In ('1', '2', '3', 'L1', 'L2', 'G')),
                      Constraint buildingLimit Check (building In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')),
                      Constraint nodeTypeLimit Check (nodeType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', 'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH'))
 );
@@ -194,7 +194,7 @@ Create Table beverage (
 );
 
 Create Table beverageOrderedInRequest(
-    requestId int References foodDelivery (requestID)  on Delete Cascade,
+    requestID int References foodDelivery (requestID)  on Delete Cascade,
     beverageID int References beverage (beverageID) On Delete Cascade,
     quantity int,
     Primary Key (requestId, beverageID)
@@ -203,6 +203,15 @@ Create Table beverageOrderedInRequest(
 
 insert into foodOrderedInRequest values (?,?,?);
 
+Create Table internalPatientRequest(
+    requestID int Primary Key References requests On Delete Cascade,
+    patientID int References userAccount(userID) on Delete Cascade,
+    pickUpLocation varchar(31) Not Null References node On Delete Cascade,
+    dropOffLocation varchar(31) Not Null References node On Delete Cascade,
+    department varchar(31),
+    severity varchar(31),
+    description varchar(5000)
+);
 
 create Table aubonPainMenu(
     foodImage varchar(600),

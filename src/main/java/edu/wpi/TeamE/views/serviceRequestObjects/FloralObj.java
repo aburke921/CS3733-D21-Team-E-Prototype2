@@ -43,6 +43,4 @@ public class FloralObj extends ServiceRequestObjs {
         return this.message;
     }
 
-
-
 }

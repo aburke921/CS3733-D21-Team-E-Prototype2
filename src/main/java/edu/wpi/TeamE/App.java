@@ -1,6 +1,8 @@
 package edu.wpi.TeamE;
 
+import com.github.sarxos.webcam.Webcam;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.QRCode;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
 import com.jfoenix.controls.JFXButton;

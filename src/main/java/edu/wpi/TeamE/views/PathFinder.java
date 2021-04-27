@@ -818,9 +818,11 @@ public class PathFinder {
 
     public void startQRScanning(ActionEvent event) {
 
-        QRCode qrCode = new QRCode();
-        String nodeID = qrCode.scanQR();
+        System.out.println((QRCode.scanQR()));
 
+        String nodeID = QRCode.scanQR();
+
+        ArrayList<Node> nodeArrayList = DB.getAllNodes();
         if(nodeID != null) {
             int index = 0;
             for(int i = 0; i < nodeArrayList.size();i++){
@@ -830,6 +832,5 @@ public class PathFinder {
             }
             startLocationComboBox.getSelectionModel().select(index);
         }
-
     }
 }

@@ -4,6 +4,7 @@ import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 
 
+import edu.wpi.TeamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -1444,6 +1445,64 @@ public class DatabaseTests {
 		DB.populateAbonPainTable();
 	}
 
+	@Test
+	@DisplayName("testGetAubonPanItems")
+	public void testGetAubonPanItems(){
+
+		DB.addAubonPainMenuItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
+		DB.addAubonPainMenuItem("URLLLLL", "pancakes", "$23.45", "3290 calories", "yummmyyy");
+		DB.addAubonPainMenuItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+
+		AubonPainItem item1 = new AubonPainItem("foodImageURL","foodItem","$4732.23","243 calories","food description");
+		AubonPainItem item2 = new AubonPainItem("URLLLLL","pancakes","$23.45","3290 calories","yummmyyy");
+		AubonPainItem item3 = new AubonPainItem("foooooodddd URL","soup","$92.44","3 calories","goood");
+
+		ArrayList<AubonPainItem> correctItems = new ArrayList<>();
+		correctItems.add(item1);
+		correctItems.add(item2);
+		correctItems.add(item3);
+
+		ArrayList<AubonPainItem> returnedItems = DB.getAubonPanItems();
+
+
+
+		boolean allCorrect = true;
+		boolean foodImage = false;
+		boolean foodItem = false;
+		boolean foodPrice = false;
+		boolean foodCalories = false;
+		boolean foodDescription = false;
+
+
+		if (returnedItems.size() == correctItems.size()){
+			for (int item = 0; item < correctItems.size(); item++) {
+				AubonPainItem returnedItem = returnedItems.get(item);
+				AubonPainItem correctItem = correctItems.get(item);
+				if (returnedItem.getImageURL().equals(correctItem.getImageURL())) {
+					foodImage = true;
+				}
+				if (returnedItem.getFoodItem().equals(correctItem.getFoodItem())) {
+					foodItem = true;
+				}
+				if (returnedItem.getFoodPrice().equals(correctItem.getFoodPrice())) {
+					foodPrice = true;
+				}
+				if (returnedItem.getFoodCalories().equals(correctItem.getFoodCalories())) {
+					foodCalories = true;
+				}
+				if (returnedItem.getFoodDescription().equals(correctItem.getFoodDescription())) {
+					foodDescription = true;
+				}
+				if (!(foodImage && foodItem && foodPrice && foodCalories && foodDescription)) {
+					allCorrect = false;
+				}
+			}
+		} else {
+			allCorrect = false;
+		}
+		assertTrue(allCorrect);
+
+	}
 
 
 

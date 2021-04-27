@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.TeamE.views.serviceRequestObjects.AubonPainItem;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -1549,23 +1550,34 @@ public class RequestsDB {
 	}
 
 
-	public static void getAubonPanItems(){
+	/**
+	 * Gets a lits of all the menu items from aubon pain
+	 * @return list of AubonPainItem that are in the aubonPainMenu database table
+	 */
+	public static ArrayList<AubonPainItem> getAubonPanItems(){
 		String query = "Select * From aubonPainMenu";
 
-
-
-
+		ArrayList<AubonPainItem> menuItems = new ArrayList<>();
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
 			while (rset.next()) {
+				String foodImage = rset.getString("foodImage");
+				String foodItem = rset.getString("foodItem");
+				String foodPrice = rset.getString("foodPrice");
+				String foodCalories = rset.getString("foodCalories");
+				String foodDescription = rset.getString("foodDescription");
 
+				AubonPainItem item = new AubonPainItem(foodImage, foodItem, foodPrice, foodCalories, foodDescription);
+				menuItems.add(item);
 			}
 			rset.close();
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("getAvailableAssignees() got a SQLException");
 		}
+
+		return menuItems;
 	}
 
 

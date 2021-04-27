@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamE;
 
 import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.TeamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
@@ -789,7 +790,13 @@ public class DB {
 		return RequestsDB.getSelectableAssignees(givenUserType);
 	}
 
-
+	/**
+	 * Gets a lits of all the menu items from aubon pain
+	 * @return list of AubonPainItem that are in the aubonPainMenu database table
+	 */
+	public static ArrayList<AubonPainItem> getAubonPanItems(){
+		return RequestsDB.getAubonPanItems();
+	}
 
 
 

@@ -30,6 +30,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 
 public class UserManagement {
 
@@ -47,6 +48,9 @@ public class UserManagement {
 
     @FXML // fx:id="appBarAnchorPane"
     private AnchorPane appBarAnchorPane;
+
+    @FXML
+    private StackPane stackPane;
 
     @FXML
     private JFXTextField userNameInput;
@@ -88,10 +92,13 @@ public class UserManagement {
                 DB.addUserAccount(userEmail.getText(),userPassword.getText(),firstAndLast[0],firstAndLast[1]); //add to DB
 //            DB.addUserAccount("cmanning@wpi.edu","aConformingPassword$#1","First","Last"); //add to DB
 
-                //todo confirmation popup
+                //confirmation popup
+                // TODO: 4/27/21 get addUserAccount to return a success or failure status, and make separate pop-ups for each
+                App.newJFXDialogPopUp("User Add Successful","Okay","The user has been successfully added.",stackPane);
 
             } else {
-                //todo pop-up, tell user it must be first and last name
+                //todo, make this a field validation error instead? i.e. turn bottom red, print error below it
+                App.newJFXDialogPopUp("Invalid first and last name","Okay","You must enter a first name followed by a last name.",stackPane);
             }
 
 
@@ -144,11 +151,18 @@ public class UserManagement {
 
             String[] firstAndLast = userNameInput.getText().split(" ");
             if (firstAndLast.length == 2) { //validate userNameInput field
-                DB.editUserAccount(currentlyEditing.getUserID(),userEmail.getText(),userPassword.getText(),userTypeInput.getValue(),firstAndLast[0], firstAndLast[1]);
+                int editSuccess = DB.editUserAccount(currentlyEditing.getUserID(),userEmail.getText(),userPassword.getText(),userTypeInput.getValue(),firstAndLast[0], firstAndLast[1]);
 
-                //todo confirmation popup?
+                //confirmation popup
+                if (editSuccess == 1) {
+                    App.newJFXDialogPopUp("User Edit Successful","Okay","The user has been successfully edited.",stackPane);
+                } else {
+                    App.newJFXDialogPopUp("User Edit Failed","Okay","Sorry, something has gone wrong.",stackPane);
+                }
+
             } else {
-                //todo popup, invalid first and last
+                //todo, make this a field validation error instead? i.e. turn bottom red, print error below it
+                App.newJFXDialogPopUp("Invalid first and last name","Okay","You must enter a first name followed by a last name.",stackPane);
             }
 
             //cleanup
@@ -171,7 +185,7 @@ public class UserManagement {
                 userNameInput.setText(currentlyEditing.getFirstName()+ " " + currentlyEditing.getLastName());
                 userTypeInput.getSelectionModel().select(currentlyEditing.getUserType());
             } else {
-                //todo popup?
+                App.newJFXDialogPopUp("Cannot Edit User","Okay","No User has been selected. Please select a user from the dropdown",stackPane);
                 System.out.println("cannot edit, nothing selected");
             }
 

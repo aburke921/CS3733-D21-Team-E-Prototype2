@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.UserManagement">
@@ -20,64 +21,68 @@
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefHeight="65.0" prefWidth="1012.0" />
       <AnchorPane prefHeight="685.0" prefWidth="1200.0">
          <children>
-            <VBox prefHeight="318.0" prefWidth="591.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <JFXTreeTableView fx:id="treeTableView" prefHeight="512.0" prefWidth="1160.0" />
-                  <HBox prefHeight="477.0" prefWidth="1160.0">
+                  <VBox prefHeight="318.0" prefWidth="591.0">
                      <children>
-                        <VBox prefHeight="476.0" prefWidth="1443.0">
+                        <JFXTreeTableView fx:id="treeTableView" prefHeight="512.0" prefWidth="1160.0" />
+                        <HBox prefHeight="477.0" prefWidth="1160.0">
                            <children>
-                              <FlowPane prefHeight="41.0" prefWidth="297.0">
+                              <VBox prefHeight="476.0" prefWidth="1443.0">
                                  <children>
-                                    <Button fx:id="addUser" mnemonicParsing="false" onAction="#addUserButton" text="Add User">
-                                       <FlowPane.margin>
-                                          <Insets right="10.0" top="15.0" />
-                                       </FlowPane.margin>
-                                    </Button>
-                                    <Button fx:id="editUser" mnemonicParsing="false" onAction="#editUserButton" text="Edit User">
-                                       <FlowPane.margin>
-                                          <Insets right="10.0" top="15.0" />
-                                       </FlowPane.margin>
-                                    </Button>
-                                    <Button mnemonicParsing="false" onAction="#deleteUserButton" text="Delete User">
-                                       <FlowPane.margin>
-                                          <Insets top="15.0" />
-                                       </FlowPane.margin>
-                                    </Button>
+                                    <FlowPane prefHeight="41.0" prefWidth="297.0">
+                                       <children>
+                                          <Button fx:id="addUser" mnemonicParsing="false" onAction="#addUserButton" text="Add User">
+                                             <FlowPane.margin>
+                                                <Insets right="10.0" top="15.0" />
+                                             </FlowPane.margin>
+                                          </Button>
+                                          <Button fx:id="editUser" mnemonicParsing="false" onAction="#editUserButton" text="Edit User">
+                                             <FlowPane.margin>
+                                                <Insets right="10.0" top="15.0" />
+                                             </FlowPane.margin>
+                                          </Button>
+                                          <Button mnemonicParsing="false" onAction="#deleteUserButton" text="Delete User">
+                                             <FlowPane.margin>
+                                                <Insets top="15.0" />
+                                             </FlowPane.margin>
+                                          </Button>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </FlowPane>
+                                    <JFXTextField fx:id="userNameInput" maxWidth="200.0" prefHeight="27.0" prefWidth="200.0" promptText="Name">
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="userPassword" maxWidth="200.0" prefHeight="27.0" prefWidth="200.0" promptText="Password">
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="userEmail" maxWidth="200.0" prefHeight="27.0" prefWidth="200.0" promptText="email">
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </JFXTextField>
+                                    <JFXComboBox fx:id="userTypeInput" prefHeight="27.0" prefWidth="200.0" promptText="User Type">
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </JFXComboBox>
                                  </children>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </FlowPane>
-                              <JFXTextField fx:id="userNameInput" maxWidth="200.0" prefHeight="27.0" prefWidth="200.0" promptText="Name">
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
-                              <JFXTextField fx:id="userPassword" maxWidth="200.0" prefHeight="27.0" prefWidth="200.0" promptText="Password">
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
-                              <JFXTextField fx:id="userEmail" maxWidth="200.0" prefHeight="27.0" prefWidth="200.0" promptText="email">
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
-                              <JFXComboBox fx:id="userTypeInput" prefHeight="27.0" prefWidth="200.0" promptText="User Type">
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                              </JFXComboBox>
+                              </VBox>
                            </children>
-                        </VBox>
+                        </HBox>
                      </children>
-                  </HBox>
+                     <padding>
+                        <Insets left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </VBox>
                </children>
-               <padding>
-                  <Insets left="20.0" right="20.0" top="20.0" />
-               </padding>
-            </VBox>
+            </StackPane>
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="58.0" prefWidth="1200.0">

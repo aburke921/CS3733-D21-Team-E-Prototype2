@@ -70,7 +70,11 @@ public class UserManagement {
 
     @FXML
     void editUserButton(ActionEvent event) {
+        int id = Integer.parseInt(userIDInput.getText());
+        String username = userNameInput.getText();
+        String userType = userTypeInput.getText();
 
+//        DB.addUserAccount(username,);
     }
 
     @FXML
@@ -99,25 +103,6 @@ public class UserManagement {
          */
 
     }
-
-    private void editUser() {
-        int id = Integer.parseInt(userIDInput.getText());
-        String username = userNameInput.getText();
-        String userType = userTypeInput.getText();
-
-//        DB.addUserAccount(username,);
-
-    }
-
-    private void addUser() {
-        
-    }
-
-    private void deleteUser() {
-
-    }
-
-
 
 
     //User class

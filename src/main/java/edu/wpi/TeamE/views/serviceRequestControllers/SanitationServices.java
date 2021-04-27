@@ -105,7 +105,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
     ObservableList<String> Services  = FXCollections.observableArrayList();
     Services.setAll("Urine Cleanup","Feces Cleanup","Trash Removal");
 
-    ServiceTypeinput.setItems(Services);
+    //ServiceTypeinput.setItems(Services);
 
     assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
     ObservableList<String> locations  = DB.getAllNodeLongNames();
@@ -117,8 +117,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
     Severity.setItems(rating);
 
     assert assignedIndividual != null : "fx:id=\"assignedIndividual\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/Sanitation.fxml'.";
-    assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/ExternalPatient.fxml'.";
-    assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file '/edu/wpi/TeamE/fxml/ExternalPatient.fxml'.";
+
 
   }
 }

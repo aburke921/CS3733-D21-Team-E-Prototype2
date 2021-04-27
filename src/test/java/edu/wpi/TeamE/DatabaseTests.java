@@ -4,7 +4,6 @@ import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 
 
-import edu.wpi.TeamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -1503,7 +1502,36 @@ public class DatabaseTests {
 		assertTrue(allCorrect);
 
 	}
+	@Test
+	@DisplayName("testAddInternalPatientRequest")
+	public void testAddInternalPatientRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test2", 1, 1, "3", "Tower", "INFO", "longName1", "shortName2");
 
+		DB.addUserAccount("test243@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter123@gmail.com", "testPass", "EMT", "drew", "Shukla");
+		DB.addSpecialUserType("helloherh@gmail.com", "testPass", "patient", "nupi", "Shukla");
+
+		DB.addInternalPatientRequest(1, "test", "test2", 2, 3, "department", "not severe", "she is in pain");
+	}
+
+	@Test
+	@DisplayName("testEditInternalPatientRequest")
+	public void testEditInternalPatientRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addNode("test2", 1, 1, "3", "Tower", "INFO", "longName1", "shortName2");
+
+		DB.addUserAccount("test243@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter123@gmail.com", "testPass", "EMT", "drew", "Shukla");
+		DB.addSpecialUserType("helloherh@gmail.com", "testPass", "patient", "nupi", "Shukla");
+		DB.addSpecialUserType("idk@gmail.com", "testPass", "patient", "notme", "Shukla");
+
+		DB.addInternalPatientRequest(1, "test", "test2", 2, 3, "department", "not severe", "she is in pain");
+		int result = DB.editInternalPatientRequest(1, null, "test", 4, null, null, "hellloooooo");
+
+		assertTrue(result == 1);
+
+	}
 
 
 }

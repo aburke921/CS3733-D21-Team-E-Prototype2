@@ -2,10 +2,12 @@ package edu.wpi.TeamE.views;
 
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.TeamE.App;
+import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
@@ -17,6 +19,15 @@ public class ServiceRequests {
     @FXML // fx:id="exit"
     private Polygon exit;
 
+    @FXML // fx:id="adminServices"
+    private VBox adminServices;
+
+    @FXML // fx:id="adminServices"
+    private VBox patientServices;
+
+    @FXML // fx:id="adminServices"
+    private VBox visitorServices;
+
     public void initialize() {
         //If exit button is clicked, exit app
         exit.setOnMouseClicked(event -> {
@@ -24,8 +35,18 @@ public class ServiceRequests {
             app.stop();
         });
 
-    }
+        String userType = UserAccountDB.getUserType(App.userID);
+        if(userType.equals("visitor")) {
+            adminServices.setVisible(false);
+            visitorServices.setVisible(true);
+        }
 
+        if(userType.equals("patient")) {
+            adminServices.setVisible(false);
+            patientServices.setVisible(true);
+        }
+
+    }
 
     @FXML
     private void toDefault(ActionEvent e) {

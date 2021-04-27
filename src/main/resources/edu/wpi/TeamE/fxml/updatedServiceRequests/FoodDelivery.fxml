@@ -19,6 +19,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
+<?import com.jfoenix.controls.JFXTextField?>
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.TeamE.views.serviceRequestControllers.FoodDelivery">
     <children>
         <AnchorPane id="app-bar-top" prefWidth="1012.0">
@@ -106,16 +107,16 @@
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                 </JFXComboBox>
-                                                <JFXComboBox fx:id="foodInput" layoutX="10.0" layoutY="191.0" prefHeight="27.0" prefWidth="295.0" promptText="Restaurant/Delviery Service">
+                                                <JFXTextField fx:id="deliveryService" layoutX="10.0" layoutY="191.0" prefHeight="27.0" prefWidth="295.0" promptText="Restaurant/Delivery Service">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
-                                                </JFXComboBox>
-                                                <JFXComboBox fx:id="beveragesInput" layoutX="10.0" layoutY="248.0" prefHeight="27.0" prefWidth="295.0" promptText="Order Number">
+                                                </JFXTextField>
+                                                <JFXTextField fx:id="orderNumber" layoutX="10.0" layoutY="248.0" prefHeight="27.0" prefWidth="295.0" promptText="Order Number">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
-                                                </JFXComboBox>
+                                                </JFXTextField>
                                                             </children>
                                                             <FlowPane.margin>
                                                                 <Insets left="10.0" />

@@ -639,7 +639,7 @@ public class RequestsDB {
 
 			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
 		}
 	}
@@ -1674,7 +1674,7 @@ public class RequestsDB {
 			rset.close();
 
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("getRequestInfo() got a SQLException");
 		}
 		return listOfInfo;
@@ -1756,7 +1756,7 @@ public class RequestsDB {
 			}
 			rset.close();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("getRequestLocations() got a SQLException");
 		}
 		return listOfLongNames;

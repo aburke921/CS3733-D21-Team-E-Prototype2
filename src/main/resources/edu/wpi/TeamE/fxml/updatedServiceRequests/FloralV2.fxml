@@ -130,10 +130,10 @@
                                                                 <JFXComboBox fx:id="vaseType" prefHeight="27.0" prefWidth="291.0" promptText="Vase Type">
                                                                     <items>
                                                                         <FXCollections fx:factory="observableArrayList">
-                                                                            <String fx:value="No Box" />
-                                                                            <String fx:value="Square Box" />
-                                                                            <String fx:value="Round Box" />
-                                                                            <String fx:value="Tall Box" />
+                                                                            <String fx:value="None" />
+                                                                            <String fx:value="Square" />
+                                                                            <String fx:value="Round" />
+                                                                            <String fx:value="Tall" />
                                                                         </FXCollections>
                                                                     </items>
                                                                     <VBox.margin>
@@ -173,7 +173,7 @@
                                                                     <items>
                                                                         <FXCollections fx:factory="observableArrayList">
                                                                             <String fx:value="Include Teddy Bear" />
-                                                                            <String fx:value="Dont Include Teddy Bear" />
+                                                                            <String fx:value="Do Not Include Teddy Bear" />
                                                                         </FXCollections>
                                                                     </items>
                                                                 </JFXComboBox>
@@ -184,7 +184,7 @@
                                                                     <items>
                                                                         <FXCollections fx:factory="observableArrayList">
                                                                             <String fx:value="Include Chocolate" />
-                                                                            <String fx:value="Dont Include Chocolate" />
+                                                                            <String fx:value="Do Not Include Chocolate" />
                                                                         </FXCollections>
                                                                     </items>
                                                                 </JFXComboBox>

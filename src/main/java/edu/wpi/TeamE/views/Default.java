@@ -99,6 +99,16 @@ public class Default {
     }
 
     @FXML
+    private void toUserManagement(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/UserManagement.fxml"));
+            App.getPrimaryStage().getScene().setRoot(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
     public void getHelpDefault(ActionEvent actionEvent) {
     }
 

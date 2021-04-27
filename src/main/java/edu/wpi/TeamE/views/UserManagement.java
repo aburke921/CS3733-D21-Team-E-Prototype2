@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
@@ -30,6 +31,15 @@ public class UserManagement {
 
     @FXML // fx:id="appBarAnchorPane"
     private AnchorPane appBarAnchorPane; // Value injected by FXMLLoader
+
+    @FXML
+    private JFXTextField userNameInput;
+
+    @FXML
+    private JFXTextField userIDInput;
+
+    @FXML
+    private JFXTextField userTypeInput;
 
     @FXML // fx:id="treeTableView"
     private TreeTableView<User> treeTableView; // Value injected by FXMLLoader
@@ -116,6 +126,23 @@ public class UserManagement {
             editUserAccount()
             deleteUserAccount()
          */
+    }
+
+    private void editUser() {
+        int id = Integer.parseInt(userIDInput.getText());
+        String username = userNameInput.getText();
+        String userType = userTypeInput.getText();
+
+        DB.addUserAccount(username,);
+
+    }
+
+    private void addUser() {
+        
+    }
+
+    private void deleteUser() {
+
     }
 
 

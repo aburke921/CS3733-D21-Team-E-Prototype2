@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamE;
 
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamUtils;
 import com.github.sarxos.webcam.util.ImageUtils;
 import com.google.zxing.BinaryBitmap;
@@ -11,6 +12,7 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -18,6 +20,15 @@ public class QRCode {
 
 	public static String scanQR() {
 		Webcam webcam = Webcam.getDefault();
+//		webcam.open();
+//		WebcamPanel panel = new WebcamPanel(webcam);
+//		panel.setMirrored(true);
+//
+//		JFrame window = new JFrame("Scan QR Code");
+//		window.add(panel);
+//		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		window.setVisible(true);
+
 		String result = null;
 
 		while (result == null) {
@@ -28,6 +39,7 @@ public class QRCode {
 				e.printStackTrace();
 			}
 		}
+		//webcam.close();
 		return result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
 	}
 

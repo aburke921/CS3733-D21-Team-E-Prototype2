@@ -1840,6 +1840,7 @@ public class RequestsDB {
 		return listOfAssignees;
 
 	}
+
 	/**
 	 * Used to get a list of info from a given column name in the aubonPainMenu table
 	 * @param column this is the name of the column the information is extracted from

@@ -831,7 +831,7 @@ public class PathFinder {
                 NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
                 Rectangle r = nM.getRectangle();
                 r.setVisible(true);
-                r.setFill(marker.getTypeColor().get(currentType));
+                //r.setFill(marker.getTypeColor().get(currentType));
                 currentMarkers.add(node);
             }
         } else {

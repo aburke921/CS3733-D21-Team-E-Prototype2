@@ -818,9 +818,9 @@ public class PathFinder {
 
     public void startQRScanning(ActionEvent event) {
 
-        System.out.println((QRCode.scanQR()));
 
         String nodeID = QRCode.scanQR();
+        System.out.println("Scanned nodeID: " + nodeID);
 
         ArrayList<Node> nodeArrayList = DB.getAllNodes();
         if(nodeID != null) {

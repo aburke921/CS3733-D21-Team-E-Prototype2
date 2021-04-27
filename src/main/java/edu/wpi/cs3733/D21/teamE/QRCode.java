@@ -49,12 +49,12 @@ public class QRCode {
 	{
 
 		// Path where the QR code is saved
-		String path = "src/main/resources/edu/wpi/TeamE/temp/";
+		String filePath = "src/main/resources/edu/wpi/TeamE/temp/";
 
 		// Encoding charset
 		String charset = "UTF-8";
 
-		Map<EncodeHintType, ErrorCorrectionLevel> hashMap
+		Map<EncodeHintType, ErrorCorrectionLevel> hintMap
 				= new HashMap<EncodeHintType,
 				ErrorCorrectionLevel>();
 
@@ -63,7 +63,7 @@ public class QRCode {
 
 		System.out.println(
 				"QRCode output: "
-						+ readQRCode(filePath, charset, hintMap));
+						+ readQR(filePath, charset, hintMap));
 	}
 
 }

@@ -80,6 +80,9 @@ public class RequestsDB {
 				"flowerType    varchar(31), " +
 				"flowerAmount  int, " +
 				"vaseType      varchar(31), " +
+				"arrangement varchar(31), " +
+				"stuffedAnimal varchar(31), " +
+				"chocolate varchar(31), " +
 				"message       varchar(5000), " +
 				"Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')), " +
 				"Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)), " +
@@ -149,6 +152,9 @@ public class RequestsDB {
 				"    severity varchar(30) Not Null, " +
 				"    patientID varchar(31) Not Null, " +
 				"    ETA varchar(100), " +
+				"    bloodPressure varchar(31), " +
+				"    temperature varchar(31), " +
+				"    oxygenLevel varchar(31), " +
 				"    description varchar(5000)," +
 				"    Constraint requestTypeLimitExtTrans Check (requestType In ('Ambulance', 'Helicopter', 'Plane'))" +
 				")";
@@ -570,13 +576,13 @@ public class RequestsDB {
 	 * This function needs to add a external patient form to the table for external patient forms
 	 * //@param form this is the form that we will create and send to the database
 	 */
-	public static void addExternalPatientRequest(int userID, int assigneeID, String roomID, String requestType, String severity, String patientID, String ETA, String description) {
+	public static void addExternalPatientRequest(int userID, int assigneeID, String roomID, String requestType, String severity, String patientID, String ETA, String bloodPressure, String temperature, String oxygenLevel, String description) {
 
 		addRequest(userID, assigneeID, "extTransport");
 
 		String insertExtTransport = "Insert Into exttransport " +
 				"Values ((Select Count(*) " +
-				"         From requests), ?, ?, ?, ?, ?, ?)";
+				"         From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
 			prepState.setString(1, roomID);
@@ -584,7 +590,10 @@ public class RequestsDB {
 			prepState.setString(3, severity);
 			prepState.setString(4, patientID);
 			prepState.setString(5, ETA);
-			prepState.setString(6, description);
+			prepState.setString(6, bloodPressure);
+			prepState.setString(7, temperature);
+			prepState.setString(8, oxygenLevel);
+			prepState.setString(9, description);
 
 			prepState.execute();
 
@@ -606,10 +615,10 @@ public class RequestsDB {
 	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
 	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
 	 */
-	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
+	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String arrangement, String stuffedAnimal, String chocolate, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
 		addRequest(userID, assigneeID, "floral");
 
-		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
 			prepState.setString(1, RoomNodeID);
@@ -617,7 +626,10 @@ public class RequestsDB {
 			prepState.setString(3, flowerType);
 			prepState.setInt(4, flowerAmount);
 			prepState.setString(5, vaseType);
-			prepState.setString(6, message);
+			prepState.setString(6, arrangement);
+			prepState.setString(7, stuffedAnimal);
+			prepState.setString(8, chocolate);
+			prepState.setString(9, message);
 
 			prepState.execute();
 		} catch (SQLException e) {
@@ -974,7 +986,7 @@ public class RequestsDB {
 	 * @param ETA         this is the string used to update the eta
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String description, String ETA) {
+	public static int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String description, String ETA, String bloodPressure, String temperature, String oxygenLevel) {
 
 		boolean added = false;
 		String query = "Update extTransport Set ";
@@ -1019,6 +1031,27 @@ public class RequestsDB {
 			query = query + " ETA = '" + ETA + "'";
 			added = true;
 		}
+		if (bloodPressure != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " bloodPressure = '" + bloodPressure + "'";
+			added = true;
+		}
+		if (temperature != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " temperature = '" + temperature + "'";
+			added = true;
+		}
+		if (oxygenLevel != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " oxygenLevel = '" + oxygenLevel + "'";
+			added = true;
+		}
 
 		query = query + " where requestID = " + requestID;
 
@@ -1043,7 +1076,7 @@ public class RequestsDB {
 	 * @param message      the new message containing either instructions or to the recipient the user wants to change
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String message) {
+	public static int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message) {
 
 		boolean added = false;
 		String query = "Update floralRequests Set ";

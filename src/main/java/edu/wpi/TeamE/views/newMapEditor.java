@@ -63,48 +63,32 @@ public class newMapEditor {
 
     @FXML // fx:id="zoomSlider"
     private Slider zoomSlider;
-
-
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
-
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
-
     @FXML // fix:id="findPathButton"
     public JFXButton findPathButton; // Value injected by FXMLLoader
-
     @FXML // fix:id="backButton"
     public Button backButton; // Value injected by FXMLLoader
-
-
     @FXML // fx:id="startLocationList"
     private JFXComboBox<String> startLocation; // Value injected by FXMLLoader
-
     @FXML // fx:id="endLocationList"
     private JFXComboBox<String> endLocation; // Value injected by FXMLLoader
-
-    //@FXML // fx:id="imageView"
+    // fx:id="imageView"
     private ImageView imageView = new ImageView();
-
     @FXML // fx:id="pane"
     private Pane pane = new Pane();
-
     @FXML // fx:id="scrollPane"
     private BorderPane rootBorderPane;
-
     @FXML // fx:id="directionsButton"
     private JFXButton directionsButton; // Value injected by FXMLLoader
-
     @FXML // fx:id="stackPane"
     private StackPane stackPane; // Value injected by FXMLLoader
-
     @FXML // fx:id="exit"
     private Polygon exit;
-
     @FXML // fx:id="lowerAnchorPane"
     private AnchorPane lowerAnchorPane; // Value injected by FXMLLoader
-
     @FXML
     private TreeTableView<Node> nodeTreeTable;
     @FXML
@@ -121,7 +105,6 @@ public class newMapEditor {
     private JFXComboBox typeInput;
     @FXML
     private JFXComboBox buildingInput;
-    //    @FXML private JFXComboBox idDropDown;
     @FXML
     private JFXTextField longNameInput;
     @FXML
@@ -132,8 +115,8 @@ public class newMapEditor {
     private VBox nodeVBox;
     @FXML
     private JFXComboBox edgeID;
-
-    @FXML private JFXComboBox floorSelector;
+    @FXML
+    private JFXComboBox floorSelector;
 
 
 
@@ -143,18 +126,15 @@ public class newMapEditor {
      */
 
     private String startID = "test";
+
     private String endID = "test";
-
-    private String selectedStartNodeID; // selected starting value's ID
-
-    private String selectedEndNodeID; // selected ending value's ID
 
     private String currentFloor = "1"; // set based on button presses
 
     private Path currentFoundPath; // the last found path todo null if no path has been found yet
 
     ArrayList<String> nodeIDArrayList;
-
+    ArrayList<Edge> edgeArrayList;
     ArrayList<Node> nodeArrayList;
 
     private final String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; //list of floorNames
@@ -171,9 +151,6 @@ public class newMapEditor {
     private double imageHeight;
 
     private double scale;
-
-    private double radius = 6;
-    private double strokeWidth = 3;
     private int selection = 0;
 
 
@@ -198,38 +175,9 @@ public class newMapEditor {
     }
 
     /**
-     * Gets the currently selected item from {@link #startLocation} dropdown.
-     *
-     * @param event calling event info.
+     * displays map of current floor
+     * @param floorNum current floor number
      */
-    @FXML
-    void selectStartNode(ActionEvent event) {
-        // findPath button validation
-        if (startLocation.getSelectionModel().isEmpty() ||
-                endLocation.getSelectionModel().isEmpty()) {
-            findPathButton.setDisable(true);
-        } else {
-            findPathButton.setDisable(false);
-        }
-    }
-
-    /**
-     * Gets the currently selected item from {@link #endLocation} dropdown.
-     *
-     * @param event calling event info.
-     */
-    @FXML
-    void selectEndNode(ActionEvent event) {
-        // findPath button validation
-        if (startLocation.getSelectionModel().isEmpty() ||
-                endLocation.getSelectionModel().isEmpty()) {
-            findPathButton.setDisable(true);
-        } else {
-            findPathButton.setDisable(false);
-        }
-    }
-
-
     public void drawMap(String floorNum) {
 
         //clear map
@@ -237,16 +185,16 @@ public class newMapEditor {
         pane.getChildren().clear();
         System.out.println(" DONE");
 
-        System.out.println("drawMap() is Finding path for floor " + floorNum);
-
 
         //if path is null
         if (DB.getAllNodes() == null) {
             //todo snackbar to say error
             return;
         }
-        Group g = new Group(); //create group to contain all the shapes before we add them to the scene
+        //create group to contain all the shapes before we add them to the scene
+        Group g = new Group();
 
+        //retrieves nodes and edges from DB
         ArrayList<Node> nodeArray = new ArrayList<Node>();
         nodeArray = DB.getAllNodesByFloor(floorNum);
         ArrayList<Edge> edgeArray = new ArrayList<Edge>();
@@ -261,13 +209,17 @@ public class newMapEditor {
             g.getChildren().add(circle);
 
         }
+        //display all edges
         for(int i = 0; i < edgeArray.size(); i++) {
             double startX = -1;
             double startY = -1;
             double endX = -1;
             double endY = -1;
+            //get start and end node for each edge
             String start = edgeArray.get(i).getStartNodeId();
             String end = edgeArray.get(i).getEndNodeId();
+            //parse through nodes, when you reach ones that match start and end of this
+            //edge, retrieve coordinates
             for (int j = 0; j < nodeArray.size() - 1; j++) {
                 if (nodeArray.get(j).get("floor").equals(floorNum)) {
                     if (nodeArray.get(j).get("id").equals(start)) {
@@ -279,6 +231,7 @@ public class newMapEditor {
                         endY = nodeArray.get(j).getY() / scale;
                     }
                 }
+                //if you've retrieved the edge, create a line
                 if (startX != -1 && startY != -1 && endX != -1 && endY != -1) {
                     Line line = new Line(startX, startY, endX, endY);
                     line.setStrokeLineCap(StrokeLineCap.ROUND);
@@ -292,9 +245,13 @@ public class newMapEditor {
         pane.getChildren().add(g);
     }
 
+    /**
+     * creates node table
+     * @param table
+     */
     public void prepareNodes(TreeTableView<Node> table) {
-        makeConnection connection = makeConnection.makeConnection();
         ArrayList<Node> array = DB.getAllNodes();
+        //create columns only the first time the table is created
         if (table.getRoot() == null) {
             //Column 1 - Location
             TreeTableColumn<Node, String> column = new TreeTableColumn<>("Location");
@@ -524,10 +481,9 @@ public class newMapEditor {
 //        if (table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
 //            table.getRoot().getChildren().remove(0, array.size() - 1);
 //        }
-
+        //iterate over list of nodes from DB, add to table
         for (int i = 0; i < array.size(); i++) {
             Node s = array.get(i);
-            //int n = array.get(i).getX();
             final TreeItem<Node> node = new TreeItem<Node>(s);
             table.getRoot().getChildren().add(node);
         }
@@ -558,6 +514,22 @@ public class newMapEditor {
         }*/
     }
 
+    /**
+     * for creating dropdowns in node table
+     * @param add
+     * @param hall
+     * @param conf
+     * @param dept
+     * @param elev
+     * @param info
+     * @param labs
+     * @param rest
+     * @param retl
+     * @param stai
+     * @param serv
+     * @param exit
+     * @param bath
+     */
     private void addToTable(TreeItem<Node> add, TreeItem<Node> hall, TreeItem<Node> conf, TreeItem<Node> dept, TreeItem<Node> elev,
                             TreeItem<Node> info, TreeItem<Node> labs, TreeItem<Node> rest, TreeItem<Node> retl, TreeItem<Node> stai,
                             TreeItem<Node> serv, TreeItem<Node> exit, TreeItem<Node> bath) {
@@ -599,9 +571,13 @@ public class newMapEditor {
         }
     }
 
+    /**
+     * creates edge table
+     * @param table
+     */
     public void prepareEdges(TreeTableView<Edge> table) {
-        makeConnection connection = makeConnection.makeConnection();
         ArrayList<Edge> array = DB.getAllEdges();
+        //make columns only first time table is created
         if (table.getRoot() == null) {
             Edge edge0 = new
                     Edge("ID", "0", "1", 0.00);
@@ -626,10 +602,11 @@ public class newMapEditor {
                     new ReadOnlyStringWrapper(p.getValue().getValue().getEndNodeId()));
             table.getColumns().add(column3);
         }
+        //gets rid of dropdown
         table.setShowRoot(false);
+        //iterate over edge list from DB, add to table
         for (int i = 0; i < array.size(); i++) {
             Edge s = array.get(i);
-            //int n = array.get(i).getX();
             final TreeItem<Edge> edge = new TreeItem<>(s);
             table.getRoot().getChildren().add(edge);
         }
@@ -642,7 +619,6 @@ public class newMapEditor {
      */
     public int addNode() {
         int i = -1;
-        makeConnection connection = makeConnection.makeConnection();
         if (floorInput.getValue().toString().equals("")) {
             errorPopup("Must input Floor");
             return i;
@@ -729,14 +705,15 @@ public class newMapEditor {
      */
     public int deleteNode(TreeTableView<Node> table) {
         int s = -1;
-        makeConnection connection = makeConnection.makeConnection();
         ArrayList<Node> array = DB.getAllNodes();
+        //for using tree table
         if (table.getSelectionModel().getSelectedItem() != null) {
             for (int i = 0; i < array.size(); i++) {
                 if (array.get(i).get("id").equals(table.getSelectionModel().getSelectedItem().getValue().get("id"))) {
                     s = DB.deleteNode(array.get(i).get("id"));
                 }
             }
+            //for using map
         } else {
             if (idInput.getValue() != null) {
                 for (int i = 0; i < array.size(); i++) {
@@ -768,6 +745,7 @@ public class newMapEditor {
         String shortName = null;
         String type = null;
         String building = null;
+        //for selecting item from table
         if (table.getSelectionModel().getSelectedItem() != null) {
             id = table.getSelectionModel().getSelectedItem().getValue().get("id");
         }
@@ -793,6 +771,7 @@ public class newMapEditor {
             yVal = table.getSelectionModel().getSelectedItem().getValue().getY();
         }
 
+        //for selecting item from map
         if (idInput.getValue() != null) {
             id = idInput.getValue().toString();
         }
@@ -819,30 +798,18 @@ public class newMapEditor {
             yVal = Integer.parseInt(yCordInput.getText());
             yVal = Integer.valueOf(yVal);
         }
-
-
-        makeConnection connection = makeConnection.makeConnection();
         DB.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
-
-
     }
 
     public void editNodeButton(ActionEvent e) {
         editNode(nodeTreeTable);
     }
 
-    public void setCurrentFloor(String floorNum) {
-
-        //set image
-        currentFloor = floorNum;
-        Image image = new Image("edu/wpi/TeamE/maps/" + floorNum + ".png");
-        imageView.setImage(image);
-
-        //draw path for new floor
-        drawMap(currentFloor);
-
-        System.out.println("Current floor set to " + floorNum);
-    }
+    /**
+     * brings user to the node table, clears fields, brings you to
+     * node editor fields as well. Resets click count to 0 for edges
+     * @param e
+     */
 
     public void toNodeTable(ActionEvent e) {
         nodeTreeTable.toFront();
@@ -866,6 +833,11 @@ public class newMapEditor {
 
     }
 
+    /**
+     * brings user to the edge table, clears fields, brings you to
+     * edge editor fields as well. Resets click count to 0 for edges
+     * @param e
+     */
     public void toEdgeTable(ActionEvent e) {
         edgeTreeTable.toFront();
         edgeVBox.toFront();
@@ -880,20 +852,35 @@ public class newMapEditor {
 
     }
 
+    /**
+     * brings user to map
+     * @param e
+     */
     public void toMap(ActionEvent e) {
         rootBorderPane.toFront();
-
-
     }
+
+    /**
+     * resets tables and map after edits made
+     */
     public void refresh() {
         prepareEdges(edgeTreeTable);
         prepareNodes(nodeTreeTable);
         drawMap(currentFloor);
     }
+
+    /**
+     * button that refreshes
+     * @param e
+     */
     public void refreshButton(ActionEvent e) {
         refresh();
     }
 
+    /**
+     * brings up error popup
+     * @param errorMessage what the popup will say
+     */
     @FXML
     private void errorPopup(String errorMessage) {
         JFXDialogLayout error = new JFXDialogLayout();
@@ -913,6 +900,10 @@ public class newMapEditor {
     }
 
 
+    /**
+     * allows user to retrieve current data being used
+     * @param e
+     */
     @FXML
     public void fileOpenerNode(ActionEvent e) {
         FileChooser fileChooser = new FileChooser();
@@ -957,8 +948,6 @@ public class newMapEditor {
      */
     @FXML
     void initialize() {
-        //DB connection
-        makeConnection connection = makeConnection.makeConnection();
 
         //Creating ID dropdown
         ArrayList<String> idList = DB.getListOfNodeIDS();
@@ -992,6 +981,7 @@ public class newMapEditor {
         nodeFloorArrayList.add("3");
         ObservableList<String> listOfFloors = FXCollections.observableArrayList();
         listOfFloors.addAll(nodeFloorArrayList);
+
         //Creating Building Dropdown
         ArrayList<String> nodeBuildingArrayList = new ArrayList<String>();
         nodeBuildingArrayList.add("BTM");
@@ -1001,14 +991,13 @@ public class newMapEditor {
         nodeBuildingArrayList.add("Shapiro");
         ObservableList<String> listOfBuildings = FXCollections.observableArrayList();
         listOfBuildings.addAll(nodeBuildingArrayList);
+
         //add ObservableLists to dropdowns
         typeInput.setItems(listOfType);
         floorInput.setItems(listOfFloors);
         buildingInput.setItems(listOfBuildings);
         idInput.setItems(listOfIDS);
         floorSelector.setItems(listOfFloors);
-
-        System.out.println("Begin PathFinder Init");
 
         //get primaryStage
         Stage primaryStage = App.getPrimaryStage();
@@ -1027,22 +1016,21 @@ public class newMapEditor {
         assert endLocation != null : "fx:id=\"endLocation\" was not injected: check your FXML file 'PathFinder.fxml'.";
 
         //Get longNames & IDs
-        System.out.print("Begin Adding to Dropdown List... ");
-        //todo here
-
         longNameArrayList = FXCollections.observableArrayList();
-        nodeIDArrayList = new ArrayList<String>();
 
+        //nodes and longnames
+        nodeIDArrayList = new ArrayList<String>();
         nodeArrayList = DB.getAllNodes();
         for (int i = 0; i < nodeArrayList.size(); i++) {
             longNameArrayList.add(nodeArrayList.get(i).get("longName"));
             nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
         }
+
+        //edges
         edgeIDArrayList = FXCollections.observableArrayList();
-        ArrayList<Edge> edgeArray = new ArrayList<Edge>();
-        edgeArray = DB.getAllEdges();
-        for(int i = 0; i < edgeArray.size(); i++) {
-            edgeIDArrayList.add(edgeArray.get(i).getId());
+        edgeArrayList = DB.getAllEdges();
+        for(int i = 0; i < edgeArrayList.size(); i++) {
+            edgeIDArrayList.add(edgeArrayList.get(i).getId());
 
         }
 
@@ -1094,6 +1082,7 @@ public class newMapEditor {
         prepareEdges(edgeTreeTable);
         edgeVBox.setVisible(false);
 
+        //populates fields with information of selected node in table
         nodeTreeTable.setOnMouseClicked(e -> {
             if (nodeTreeTable.getSelectionModel().getSelectedItem() != null) {
                 System.out.println("in!");
@@ -1109,6 +1098,7 @@ public class newMapEditor {
             }
         });
 
+        //populates fields with information of selected edge in table
         edgeTreeTable.setOnMouseClicked(e -> {
             if(edgeTreeTable.getSelectionModel().getSelectedItem() != null) {
                 edgeID.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getId());
@@ -1118,10 +1108,15 @@ public class newMapEditor {
             }
         });
 
-        final ArrayList<Node> array = DB.getAllNodes();
+        //retrieving nodes
+        ArrayList<Node> array = DB.getAllNodes();
+
+        //creating group for adding nodes/edges
         Group g = new Group();
 
+        //for clicks interacting with map
         pane.setOnMouseClicked(e -> {
+            //double click
             if (e.getClickCount() == 2) {
                 //ints for displaying
                 double xCoordScale = e.getX();
@@ -1136,6 +1131,7 @@ public class newMapEditor {
                 Circle circle = new Circle(xCoord, yCoord, 2, Color.GREEN);
                 g.getChildren().add(circle);
                 pane.getChildren().add(g);
+                //clears fields, populates X, Y coordinates of created node in fields
                 longNameInput.clear();
                 shortNameInput.clear();
                 floorInput.getSelectionModel().clearSelection();
@@ -1149,19 +1145,22 @@ public class newMapEditor {
                 xCordInput.setText(Integer.toString(xCordIntScale));
                 yCordInput.setText(Integer.toString(yCordIntScale));
             } else {
+                //single click
                 if (e.getClickCount() == 1) {
+                    //coordinates of click
                     double X = e.getX();
                     int xInt = (int) X;
                     double Y = e.getY();
                     int yInt = (int) Y;
-                    System.out.println(xInt);
-                    System.out.println(yInt);
                     for (int i = 0; i < array.size(); i++) {
                         if(array.get(i).get("floor").equals(currentFloor)) {
+                            //coordinates of current node
                             double nodeX = array.get(i).getX() / scale;
                             int nodeXInt = (int) nodeX;
                             double nodeY = array.get(i).getY() / scale;
                             int nodeYInt = (int) nodeY;
+
+                            //if node coordinates match click coordinates +- 1, autofill fields with node info
                             if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
                                 idInput.setValue(array.get(i).get("id"));
                                 floorInput.setValue(array.get(i).get("floor"));
@@ -1171,26 +1170,15 @@ public class newMapEditor {
                                 yCordInput.setText(Integer.toString(array.get(i).getY()));
                                 typeInput.setValue(array.get(i).get("type"));
                                 buildingInput.setValue(array.get(i).get("building"));
-                            }
-                        }
-                    }
 
-                    for (int i = 0; i < array.size(); i++) {
-                        if(array.get(i).get("floor").equals(currentFloor)) {
-                            double nodeX = array.get(i).getX() / scale;
-                            int nodeXInt = (int) nodeX;
-                            double nodeY = array.get(i).getY() / scale;
-                            int nodeYInt = (int) nodeY;
-                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
+                                //for edges, use counter to determine if it is first or second node selected
+                                //populate edge fields with information
                                 selection++;
-                                System.out.println("IN1");
                                 if (selection == 1) {
-                                    System.out.println("IN2");
                                     startID = array.get(i).get("id");
                                     startLocation.setValue(array.get(i).get("longName"));
                                 }
                                 if (selection == 2) {
-                                    System.out.println("IN3");
                                     endLocation.setValue(array.get(i).get("longName"));
                                     endID = array.get(i).get("id");
                                     edgeIDArrayList.add(startID + "_" + endID);
@@ -1198,7 +1186,6 @@ public class newMapEditor {
                                     edgeID.setValue(startID + "_" + endID);
                                     selection = 0;
                                 }
-                                System.out.println(array.get(i).get("longName"));
                             }
                         }
                     }
@@ -1209,11 +1196,17 @@ public class newMapEditor {
     }
 
 
-
+    /**
+     * cancel button function
+     * @param e
+     */
     public void cancelButton(ActionEvent e) {
         cancelEdge();
     }
 
+    /**
+     * clears fields and selection of edge, resets edge process
+     */
     public void cancelEdge() {
         startLocation.setValue(null);
         endLocation.setValue(null);
@@ -1221,20 +1214,17 @@ public class newMapEditor {
         selection = 0;
     }
 
-    public void nextFloor(ActionEvent event) {
-        //set current floor to one after current
-        setCurrentFloor(floorNames[currentFloorNamesIndex]);
-
-        //increment unless at max, then back to 0
-        if (currentFloorNamesIndex == 5) {
-            currentFloorNamesIndex = 0;
-        } else currentFloorNamesIndex++;
-    }
-
+    /**
+     * delete edge button function
+     * @param actionEvent
+     */
     public void deleteEdgeButton(ActionEvent actionEvent) {
         deleteEdge();
     }
 
+    /**
+     * deletes edge if ID in the dropdown matches ID of an edge in DB
+     */
     public void deleteEdge() {
         ArrayList<Edge> array = DB.getAllEdges();
         if(edgeID.getValue() != null && startLocation.getValue() != null && endLocation.getValue() != null) {
@@ -1247,10 +1237,17 @@ public class newMapEditor {
         }
     }
 
+    /**
+     * add edge button function
+     * @param actionEvent
+     */
     public void addEdgeButton(ActionEvent actionEvent) {
         addEdge();
     }
 
+    /**
+     * creates an edge using information taken from fields
+     */
     public void addEdge() {
         ArrayList<Node> array = DB.getAllNodes();
         String startInput = null;
@@ -1258,6 +1255,7 @@ public class newMapEditor {
         if(startLocation.getValue() != null && endLocation.getValue() != null) {
             System.out.println(startLocation.getValue());
             String ID = null;
+            //retrieves start and end node of new edge
             for(int i = 0; i < array.size(); i++) {
                 if(array.get(i).get("longName").equals(startLocation.getValue())) {
                     startInput = array.get(i).get("id");
@@ -1266,15 +1264,21 @@ public class newMapEditor {
                     endInput = array.get(i).get("id");
                 }
             }
+            //creates node ID
             if(startInput != null && endInput != null) {
                 ID = startInput + "_" + endInput;
             }
+            //adds edge, populates edge ID field with new ID
             DB.addEdge(ID, startInput, endInput);
-            System.out.println("This happened");
             edgeID.setValue(ID);
         }
     }
 
+    /**
+     * brings user to Edge editor mode, which brings edge fields into view and clears
+     * the fields
+     * @param actionEvent
+     */
     public void toEdgeMode(ActionEvent actionEvent) {
         edgeVBox.toFront();
         edgeVBox.setVisible(true);
@@ -1288,6 +1292,11 @@ public class newMapEditor {
         selection = 0;
     }
 
+    /**
+     * brings user to Node editor mode, which brings node fields into view and clears
+     * the fields
+     * @param actionEvent
+     */
     public void toNodeMode(ActionEvent actionEvent) {
         nodeVBox.toFront();
         nodeVBox.setVisible(true);
@@ -1306,6 +1315,10 @@ public class newMapEditor {
         yCordInput.clear();
     }
 
+    /**
+     * function for floor dropdown, allows user to change which floor's
+     * map they are currently viewing
+     */
     public void selectFloor() {
         //set image
         currentFloor = floorSelector.getValue().toString();

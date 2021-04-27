@@ -44,7 +44,7 @@ public class UserManagement {
     private JFXTextField userIDInput;
 
     @FXML
-    private JFXTextField userTypeInput;
+    private JFXComboBox<String> userTypeInput;
 
     @FXML // fx:id="treeTableView"
     private TreeTableView<User> treeTableView;
@@ -87,7 +87,7 @@ public class UserManagement {
     void editUserButton(ActionEvent event) {
         int id = Integer.parseInt(userIDInput.getText());
         String username = userNameInput.getText();
-        String userType = userTypeInput.getText();
+//        String userType = userTypeInput.getText();
 
 //        DB.addUserAccount(username,);
     }

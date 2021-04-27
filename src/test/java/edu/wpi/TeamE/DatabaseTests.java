@@ -1561,4 +1561,39 @@ public class DatabaseTests {
 		assertEquals(1, DB.editReligiousRequest(1,"test", "Religion2", "description"));
 	}
 
+	@Test
+	@DisplayName("testGetAubonPainFeild")
+	public void testGetAubonPainFeild(){
+		DB.addAubonPainMenuItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
+		DB.addAubonPainMenuItem("URLLLLL", "pancakes", "$23.45", "3290 calories", "yummmyyy");
+		DB.addAubonPainMenuItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+
+		ArrayList<String> correctFoodImages = new ArrayList<>();
+		correctFoodImages.add("foodImageURL");
+		correctFoodImages.add("URLLLLL");
+		correctFoodImages.add("foooooodddd URL");
+
+		ArrayList<String> returnedFoodImages= DB.getAubonPainFeild("foodImage");
+
+		assertEquals(correctFoodImages, returnedFoodImages);
+	}
+
+	@Test
+	@DisplayName("testGetAubonPainFeild2")
+	public void testGetAubonPainFeild2(){
+		DB.addAubonPainMenuItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
+		DB.addAubonPainMenuItem(null, "pancakes", "$23.45", "3290 calories", "yummmyyy");
+		DB.addAubonPainMenuItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+
+		ArrayList<String> correctFoodImages = new ArrayList<>();
+		correctFoodImages.add("foodImageURL");
+		correctFoodImages.add(null);
+		correctFoodImages.add("foooooodddd URL");
+
+		ArrayList<String> returnedFoodImages= DB.getAubonPainFeild("foodImage");
+
+		assertEquals(correctFoodImages, returnedFoodImages);
+	}
+
+
 }

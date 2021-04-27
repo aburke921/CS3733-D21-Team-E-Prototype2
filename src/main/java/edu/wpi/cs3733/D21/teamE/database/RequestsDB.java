@@ -478,19 +478,22 @@ public class RequestsDB {
 						foodItems.add(element.ownText());
 					}
 					if(element.className().equals("product__attribute product__attribute--price")){
-						for(int i = 0; i < foodItems.size() - foodPrice.size() - 1; i++){
+						int numOfEmptySpacesToAdd = foodItems.size() - foodPrice.size() - 1;
+						for(int i = 0; i < numOfEmptySpacesToAdd; i++){
 							foodPrice.add(null);
 						}
 						foodPrice.add(element.ownText());
 					}
 					if(element.className().equals("product__attribute product__attribute--calorie-label")){
-						for(int i = 0; i < foodItems.size() - foodCalories.size() - 1; i++){
+						int numOfEmptySpacesToAdd = foodItems.size() - foodCalories.size() - 1;
+						for(int i = 0; i < numOfEmptySpacesToAdd; i++){
 							foodCalories.add(null);
 						}
 						foodCalories.add(element.ownText());
 					}
 					if(element.className().equals("product__description")){
-						for(int i = 0; i < foodItems.size() - foodDescription.size() - 1; i++){
+						int numOfEmptySpacesToAdd = foodItems.size() - foodDescription.size() - 1;
+						for(int i = 0; i < numOfEmptySpacesToAdd; i++){
 							foodDescription.add(null);
 						}
 						foodDescription.add(element.ownText());
@@ -1152,7 +1155,7 @@ public class RequestsDB {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error in updating floral request");
 			return 0;
 		}
@@ -1837,6 +1840,34 @@ public class RequestsDB {
 		return listOfAssignees;
 
 	}
+	/**
+	 * Used to get a list of info from a given column name in the aubonPainMenu table
+	 * @param column this is the name of the column the information is extracted from
+	 * @return a list of the given information
+	 */
+	public static ArrayList<String> getAubonPainFeild(String column){
+
+		String query = "Select " + column + " From aubonPainMenu";
+
+		ArrayList<String> foodItems = new ArrayList<>();
+
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+
+			ResultSet rset = prepStat.executeQuery();
+			while (rset.next()) {
+				String foodImage = rset.getString(column);
+
+				foodItems.add(foodImage);
+			}
+			rset.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getAubonPainFeild() got a SQLException");
+		}
+
+		return foodItems;
+	}
+
 
 	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
 		ArrayList<Integer> listOfAssigneesIDs = new ArrayList<Integer>();

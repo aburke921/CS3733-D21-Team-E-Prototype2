@@ -38,7 +38,16 @@ public class Floral extends ServiceRequestFormComponents {
     private JFXComboBox<String> vaseType;
 
     @FXML
-    private JFXTextField assignee;
+    private JFXComboBox assignee;
+
+    @FXML
+    private JFXTextField temperatureInput;
+
+    @FXML
+    private JFXTextField oxygenInput;
+
+    @FXML
+    private JFXTextField bloodPressureInput;
 
     @FXML
     private JFXTextField recipient;

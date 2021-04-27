@@ -74,7 +74,7 @@ public class MenuPage {
         //COMMENT UP TO HERE ----------------------
 
         TreeItem<AubonPainItem> rootNode = new TreeItem<>(new AubonPainItem("Aubon Pain Menu"));
-        TreeItem<AubonPainItem> inProgress = new TreeItem<>(new AubonPainItem("In Progress"));
+        TreeItem<AubonPainItem> inProgress = new TreeItem<>(new AubonPainItem("Menu"));
 
         TreeItem<ServiceRequestForm> externalPatientCompleted = new TreeItem<>(new ServiceRequestForm("External Patient Form"));
         addToTable(inProgress);
@@ -91,7 +91,7 @@ public class MenuPage {
      * This function populates a specific part of the table from the database
      * @param inProgress the TreeItem for the service requests still in progress
      */
-    private void addToTable(TreeItem<AubonPainItem> inProgress) {
+    private void addToTable(TreeItem<AubonPainItem> menu) {
 
         ArrayList<AubonPainItem> items = DB.getAubonPanItems();
 
@@ -124,7 +124,7 @@ public class MenuPage {
                 TreeItem<AubonPainItem> request = new TreeItem<>(new AubonPainItem(foodItems.get(i), foodPrice.get(i), foodCalories.get(i)));
                 System.out.println(request.getValue().getFoodItem());
 //                if (request.getValue().getStatus().equals("inProgress")) {
-                    inProgress.getChildren().add(request);
+                    menu.getChildren().add(request);
 //                }
 //                if (request.getValue().getStatus().equals("complete")) {
 //                    completed.getChildren().add(request);

@@ -67,10 +67,24 @@ public class UserManagement {
     @FXML
     void deleteUserButton(ActionEvent event) {
         if (treeTableView.getSelectionModel().getSelectedItem() != null) { //if User has been selected...
+
+            //get selected user
             User userForDeletion = treeTableView.getSelectionModel().getSelectedItem().getValue();
-            //todo delete from DB
-            System.out.println("Deleting user " + userForDeletion);
-            //todo refresh TreeTable
+
+            //delete from DB
+            System.out.print("Deleting user " + userForDeletion.getUserID() + ", "+ userForDeletion.getEmail() +"");
+            int removeDB = UserAccountDB.deleteUserAccount(userForDeletion.getUserID());
+            if (removeDB == 1) {
+                System.out.print("...deleted from db");
+            } else System.out.println("...Could not delete user from DB");
+
+            //delete from TTV
+            TreeItem c = treeTableView.getSelectionModel().getSelectedItem();
+            boolean removeTTV = c.getParent().getChildren().remove(c);
+            if (removeTTV) {
+                System.out.println("...deleted from TTV");
+            } else System.out.println("...Could not delete user from table");
+
         } else { //nothing selected in TTV
             System.out.println("Deletion failed - No item was selected"); //todo popup?
         }
@@ -87,12 +101,18 @@ public class UserManagement {
 
     @FXML
     void startTableButton(ActionEvent event) {
+        System.out.println("removing...");
+        //todo refresh table?
+        //remove old?
+//        treeTableView = new TreeTableView<User>();
 
+        //add values
+        prepareUsers(treeTableView, UserAccountDB.getAllUsers());
     }
 
     @FXML
     void toNavigation(ActionEvent event) {
-
+        //todo go back a page
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

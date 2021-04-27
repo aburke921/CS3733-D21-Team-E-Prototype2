@@ -60,10 +60,38 @@ public class CovidSurvey extends ServiceRequests  {
         error.setActions(okay);
         dialog.show();
     }
+    /**
+     *
+     *
+     *
+     * Detects if the user has entered all required fields
+     *
+     */
+    private void validateInput(){
+        JFXDialogLayout error = new JFXDialogLayout();
+        error.setHeading(new Text("Please select at least one checkbox"));
+
+        error.setPrefHeight(USE_COMPUTED_SIZE);
+        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+        dialog.setMaxWidth(350);
+        JFXButton okay = new JFXButton("done");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+
+            }
+        });
+        error.setActions(okay);
+        dialog.show();
+
+    }
     @FXML
     void submitButton(ActionEvent actionEvent){
-        boolean safe = !(positiveTest.isSelected() || symptoms.isSelected() || closeContact.isSelected() || quarantine.isSelected()) && noSymptoms.isSelected();
+        boolean complete = positiveTest.isSelected() || symptoms.isSelected() || closeContact.isSelected() || quarantine.isSelected() || noSymptoms.isSelected();
         int rating = 0;
+
         if(noSymptoms.isSelected()){
 
             rating = 1;
@@ -80,9 +108,13 @@ public class CovidSurvey extends ServiceRequests  {
                 rating = 5;
             }
         }
-        if(rating > 1){
+        if(rating == 0){
+            validateInput();
+        }
+        else if(rating > 1){
             popUp();
-        }else{
+        }
+        else{
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
                 App.setDraggableAndChangeScene(root);

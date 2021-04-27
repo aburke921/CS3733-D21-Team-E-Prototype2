@@ -119,6 +119,9 @@ public class MenuPage {
     @FXML
     void toDefault() {}
 
+    @FXML
+    void refresh() {}
+
 
     @FXML
     void init() {

@@ -4,6 +4,7 @@ import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.TeamE.algorithms.Node;
 
 
+import edu.wpi.TeamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,6 +52,7 @@ public class DatabaseTests {
 			DB.createLaundryRequestTable();
 			DB.createMaintenanceRequestTable();
 			DB.createFoodDeliveryTable();
+			DB.createInternalPatientRequest();
 			DB.createAubonPainMenuTable();
 		} catch (Exception e) {
 			DB.createNodeTable();
@@ -67,6 +69,7 @@ public class DatabaseTests {
 			DB.createLaundryRequestTable();
 			DB.createMaintenanceRequestTable();
 			DB.createFoodDeliveryTable();
+			DB.createInternalPatientRequest();
 			DB.createAubonPainMenuTable();
 		}
 

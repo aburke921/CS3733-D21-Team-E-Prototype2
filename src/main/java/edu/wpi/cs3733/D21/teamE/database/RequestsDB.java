@@ -33,7 +33,7 @@ public class RequestsDB {
 	 * - requestID: this is used to identify a request. Every request must have one.
 	 * - creatorID: this is the username of the user who created the request.
 	 * - creationTime: this is a time stamp that is added to the request at the moment it is made.
-	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport".
+	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport", 'languageRequest' 'laundryRequest' 'maintenanceRequest' 'foodDelivery' 'internalPatientRequest'
 	 * - requestStatus: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
 	 * - assigneeID: this is the person who is assigned to the request
 	 */
@@ -46,7 +46,7 @@ public class RequestsDB {
 				"requestType   varchar(31), " +
 				"requestStatus varchar(10), " +
 				"assigneeID    int References useraccount On Delete Cascade," +
-				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'internalPatientRequest')), " +
+				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'internalPatientRequest', 'languageRequest', 'laundryRequest', 'maintenanceRequest', 'foodDelivery' )) " +
 				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -643,6 +643,7 @@ public class RequestsDB {
 			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
 		}
 	}
+
 
 	/**
 	 *

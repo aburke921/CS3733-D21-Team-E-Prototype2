@@ -5,14 +5,12 @@
 package edu.wpi.TeamE.views;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTreeTableColumn;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-import edu.wpi.TeamE.algorithms.Edge;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
@@ -20,7 +18,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
 public class UserManagement {
@@ -110,8 +107,9 @@ public class UserManagement {
         });
         System.out.println("userslist: " + users);
 
-        // build tree
-        //todo
+        //todo build tree
+        //add users to table
+        prepareUsers(treeTableView, users);
     }
 
 
@@ -120,15 +118,88 @@ public class UserManagement {
     //User class
     private static final class User {
         final StringProperty userName;
-        final IntegerProperty userType;
-        final StringProperty userID;
+        final IntegerProperty userID;
+        final StringProperty userType;
 
-        User(String userID, int userType, String userName) {
-            this.userID = new SimpleStringProperty(userID);
-            this.userType = new SimpleIntegerProperty(userType);
+        public String getUserName() {
+            return userName.get();
+        }
+
+        public StringProperty userNameProperty() {
+            return userName;
+        }
+
+        public void setUserName(String userName) {
+            this.userName.set(userName);
+        }
+
+        public int getUserID() {
+            return userID.get();
+        }
+
+        public IntegerProperty userIDProperty() {
+            return userID;
+        }
+
+        public void setUserID(int userID) {
+            this.userID.set(userID);
+        }
+
+        public String getUserType() {
+            return userType.get();
+        }
+
+        public StringProperty userTypeProperty() {
+            return userType;
+        }
+
+        public void setUserType(String userType) {
+            this.userType.set(userType);
+        }
+
+        User(String userType, int userID, String userName) {
+            this.userType = new SimpleStringProperty(userType);
+            this.userID = new SimpleIntegerProperty(userID);
             this.userName = new SimpleStringProperty(userName);
         }
     }
+
+    public void prepareUsers(TreeTableView<User> table, ArrayList<User> array) {
+        if (table.getRoot() == null) {
+            User user0 = new User("", 0, "");
+            final TreeItem<User> rootUser = new TreeItem<>(user0);
+            table.setRoot(rootUser);
+
+            //column 1 - ID
+            TreeTableColumn<User, String> column1 = new TreeTableColumn<>("User Name");
+            column1.setPrefWidth(320);
+            column1.setCellValueFactory((TreeTableColumn.CellDataFeatures<User, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getUserName()));
+            table.getColumns().add(column1);
+
+            //column 2 - Start Node
+            TreeTableColumn<User, Number> column2 = new TreeTableColumn<>("ID");
+            column2.setPrefWidth(320);
+            column2.setCellValueFactory((TreeTableColumn.CellDataFeatures<User, Number> p) ->
+                    new ReadOnlyIntegerWrapper(p.getValue().getValue().getUserID()));
+            table.getColumns().add(column2);
+
+            //column 3 - End Node
+            TreeTableColumn<User, String> column3 = new TreeTableColumn<>("User Type");
+            column3.setPrefWidth(320);
+            column3.setCellValueFactory((TreeTableColumn.CellDataFeatures<User, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getUserType()));
+            table.getColumns().add(column3);
+        }
+        table.setShowRoot(false);
+        for (int i = 0; i < array.size(); i++) {
+            User s = array.get(i);
+            //int n = array.get(i).getX();
+            final TreeItem<User> user = new TreeItem<>(s);
+            table.getRoot().getChildren().add(user);
+        }
+    }
+
 }
 
 

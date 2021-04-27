@@ -107,7 +107,7 @@ public class Default {
         //init appBar
         javafx.scene.Node appBarComponent = null;
         try {
-            App.setShowHelp(true);
+            App.setShowHelp(false);
             App.setShowLogin(true);
             App.setStackPane(stackPane);
             App.setPageTitle("Home");

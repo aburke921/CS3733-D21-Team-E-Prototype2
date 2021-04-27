@@ -163,26 +163,26 @@ public class UserAccountDB {
 		boolean added = false;
 		String query = "Update userAccount Set ";
 
-		if (email != null) {
+		if (email != null && !email.equals("")) {
 			query = query + " email = '" + email + "'";
 
 			added = true;
 		}
-		if (password != null) {
+		if (password != null && !password.equals("")) {
 			if (added) {
 				query = query + ", ";
 			}
 			query = query + "password = '" + password + "'";
 			added = true;
 		}
-		if (userType != null) {
+		if (userType != null && !userType.equals("")) {
 			if (added) {
 				query = query + ", ";
 			}
 			query = query + "userType = '" + userType + "'";
 			added = true;
 		}
-		if (firstName != null) {
+		if (firstName != null && !firstName.equals("")) {
 			if (added) {
 				query = query + ", ";
 			}
@@ -190,7 +190,7 @@ public class UserAccountDB {
 
 			added = true;
 		}
-		if (lastName != null) {
+		if (lastName != null && !lastName.equals("")) {
 			if (added) {
 				query = query + ", ";
 			}

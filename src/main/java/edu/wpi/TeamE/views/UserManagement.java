@@ -160,7 +160,6 @@ public class UserManagement {
 
             String[] firstAndLast = userNameInput.getText().split(" ");
             if (firstAndLast.length == 2) { //validate userNameInput field
-                //todo have DB make this function check for empty strings, not just null chars.
                 DB.editUserAccount(currentlyEditing.getUserID(),userEmail.getText(),userPassword.getText(),userTypeInput.getValue(),firstAndLast[0], firstAndLast[1]);
 
                 //todo confirmation popup?

@@ -140,6 +140,19 @@ public class PathFinder {
     private Button clearPath;
     @FXML private RequiredFieldValidator validator = new RequiredFieldValidator();
 
+    @FXML // fx:id="floorL2"
+    private Button floorL2;
+    @FXML // fx:id="floorL1"
+    private Button floorL1;
+    @FXML // fx:id="floorG"
+    private Button floorG;
+    @FXML // fx:id="floor1"
+    private Button floor1;
+    @FXML // fx:id="floor2"
+    private Button floor2;
+    @FXML // fx:id="floor3"
+    private Button floor3;
+
     /*
      * Additional Variables
      */
@@ -815,21 +828,16 @@ public class PathFinder {
         });
     }
 
-    public void nextFloor(ActionEvent event) {
+    public void chooseFloor(ActionEvent e) {
         //clear current floor of markers
         for (Node node : currentMarkers) {
             NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
             nM.getRectangle().setVisible(false);
         }
         currentMarkers.clear();
-        //set current floor to one after current
-        setCurrentFloor(floorNames[currentFloorNamesIndex]);
-
-        //increment unless at max, then back to 0
-        if (currentFloorNamesIndex == 5) {
-            currentFloorNamesIndex = 0;
-        } else currentFloorNamesIndex++;
-        currFloor.setText(currentFloor);
+        String floor = ((Button) e.getSource()).getText();
+        currFloor.setText(floor);
+        setCurrentFloor(floor);
     }
 
     public void sortNodesByType(ActionEvent event) {

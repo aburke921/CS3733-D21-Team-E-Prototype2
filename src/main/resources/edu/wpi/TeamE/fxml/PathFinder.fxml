@@ -36,16 +36,41 @@
                         <Insets left="15.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floorChanger" onAction="#nextFloor" styleClass="submit-button" text="Change Floor">
-                     <HBox.margin>
-                        <Insets left="15.0" top="10.0" />
-                     </HBox.margin>
-                  </JFXButton>
                   <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
                      <HBox.margin>
-                        <Insets left="20.0" top="20.0" />
+                        <Insets left="20.0" top="17.0" />
                      </HBox.margin>
                   </JFXSlider>
+                  <JFXButton fx:id="floorL2" onAction="#chooseFloor" styleClass="submit-button" text="L2">
+                     <HBox.margin>
+                        <Insets left="20.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="floorL1" onAction="#chooseFloor" styleClass="submit-button" text="L1">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="floorG" onAction="#chooseFloor" styleClass="submit-button" text="G">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="floor1" minWidth="26.0" onAction="#chooseFloor" styleClass="submit-button" text="1">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="floor2" onAction="#chooseFloor" styleClass="submit-button" text="2">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="floor3" onAction="#chooseFloor" styleClass="submit-button" text="3">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
                     </children>
                 </HBox>
          </children>

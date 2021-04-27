@@ -30,29 +30,13 @@ public class PathFindingTests {
         File nodes = new File("CSVs/MapEAllnodes.csv");
         File edges = new File("CSVs/MapEAlledges.csv");
         try {
-            DB.createNodeTable();
-            DB.createEdgeTable();
-            DB.createUserAccountTable();
-            DB.createRequestsTable();
-            DB.createFloralRequestsTable();
-            DB.createSanitationTable();
-            DB.createExtTransportTable();
-            DB.createMedDeliveryTable();
-            DB.createSecurityServTable();
+            DB.createAllTables();
             appointmentDB.createAppointmentTable();
             csvDB.populateTable("node", nodes);
             csvDB.populateTable("hasEdge", edges);
             System.out.println("Tables were created");
         } catch (Exception e) {
-            DB.createNodeTable();
-            DB.createEdgeTable();
-            DB.createUserAccountTable();
-            DB.createRequestsTable();
-            DB.createFloralRequestsTable();
-            DB.createSanitationTable();
-            DB.createExtTransportTable();
-            DB.createMedDeliveryTable();
-            DB.createSecurityServTable();
+            DB.createAllTables();
             appointmentDB.createAppointmentTable();
         }
 

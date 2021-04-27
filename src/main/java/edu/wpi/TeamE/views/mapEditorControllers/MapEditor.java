@@ -702,16 +702,7 @@ public class MapEditor {
 
             //This is where tables are cleared and refilled
             connection.deleteAllTables();
-            DB.createNodeTable();
-            DB.createEdgeTable();
-            DB.createUserAccountTable();
-            DB.createRequestsTable();
-            DB.createFloralRequestsTable();
-            DB.createSanitationTable();
-            DB.createExtTransportTable();
-            DB.createMedDeliveryTable();
-            DB.createSecurityServTable();
-            DB.createAppointmentTable();
+            DB.createAllTables();
             DB.populateTable("node", file);
             DB.populateTable("hasEdge", saveEdges);
             System.out.println("Success");

@@ -17,11 +17,24 @@ public class DB {
 
 	// AppointmentDB:
 
-	/**
-	 * creates appointment table in BWDB
-	 */
-	public static void createAppointmentTable() {
+	public static void createAllTables(){
+		NodeDB.createNodeTable();
+		EdgeDB.createEdgeTable();
+		UserAccountDB.createUserAccountTable();
+		RequestsDB.createRequestsTable();
+		RequestsDB.createFloralRequestsTable();
+		RequestsDB.createSanitationTable();
+		RequestsDB.createExtTransportTable();
+		RequestsDB.createMedDeliveryTable();
+		RequestsDB.createSecurityServTable();
 		appointmentDB.createAppointmentTable();
+		RequestsDB.createLanguageRequestTable();
+		RequestsDB.createLaundryRequestTable();
+		RequestsDB.createMaintenanceRequestTable();
+		RequestsDB.createFoodDeliveryTable();
+		RequestsDB.createInternalPatientRequest();
+		RequestsDB.createAubonPainMenuTable();
+		RequestsDB.createReligionRequestTable();
 	}
 
 	/**
@@ -166,25 +179,6 @@ public class DB {
 
 	// NodeDB:
 
-	/**
-	 * Uses executes the SQL statements required to create the node table.
-	 * This table has the attributes:
-	 * - nodeID: this is a unique identifier for the each node. Every node must contain a nodeID.
-	 * - xCoord: this is the X-Coordinate/pixel location of the node on the map of the hospital.
-	 * - yCoord: this is the Y-Coordinate/pixel location of the node on the map of the hospital.
-	 * - floor: this is the floor of the hospital that the node is located on. The available options are: "1", "2", "3", "L1", "L2"
-	 * - building: this is the building of the hospital that the node is located in. The available options are: "BTM", "45 Francis", "Tower",
-	 * "15 Francis", "Shapiro", "Parking".
-	 * - nodeType: this is the type room/location that the node is specifying. The available options are: "PARK" (parking), "EXIT" (exit),
-	 * "WALK" (sidewalk/out door walkway), "HALL' (indoor walkway), "CONF" (conference room), "DEPT" (department room), "ELEV" (elevator),
-	 * "INFO" (information), "LABS" (lab testing/results room), "REST" (rest areas/sitting areas), "RETL" (retail/food and shopping),
-	 * "STAI" (stairs), "SERV" (services), "BATH" (bathrooms).
-	 * longName: this is the long version/more descriptive name of the node/location/room
-	 * shortName: this is the short/nickname of the node/location/room
-	 */
-	public static void createNodeTable() {
-		NodeDB.createNodeTable();
-	}
 
 	/**
 	 * matches the nodeID to a node and deletes it from DB
@@ -315,158 +309,8 @@ public class DB {
 
 	// Creating Tables:
 
-	/**
-	 * Uses executes the SQL statements required to create the requests table.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - creatorID: this is the username of the user who created the request.
-	 * - creationTime: this is a time stamp that is added to the request at the moment it is made.
-	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport".
-	 * - requestStatus: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
-	 * - assigneeID: this is the person who is assigned to the request
-	 */
-	public static void createRequestsTable() {
-		RequestsDB.createRequestsTable();
-	}
 
-	/**
-	 * Uses executes the SQL statements required to create a floralRequests table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user is sending the request to.
-	 * - recipientName: this is the name of the individual they want the flowers to be addressed to
-	 * - flowerType: this is the type of flowers that the user wants to request. The valid options are: 'Roses', 'Tulips', 'Carnations', 'Assortment'
-	 * - flowerAmount: this the number/quantity of flowers that the user is requesting. The valid options are: 1, 6, 12
-	 * - vaseType: this is the type of vase the user wants the flowers to be delivered in. The valid options are: 'Round', 'Square', 'Tall', 'None'
-	 * - message: this is a specific detailed message that the user can have delivered with the flowers or an instruction message
-	 * *                for whoever is fufilling the request
-	 */
-	public static void createFloralRequestsTable() {
-		RequestsDB.createFloralRequestsTable();
-	}
 
-	/**
-	 * Uses executes the SQL statements required to create a sanitationRequest table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user is sending the request to.
-	 * - signature: this the signature (name in print) of the user who is filling out the request
-	 * - description: this is any description the user who is filling out the request wants to provide for the person who will be completing the request
-	 * - sanitationType: this is the type of sanitation/cleanup the user is requesting to be delt with. The valid options are: "Urine Cleanup",
-	 * "Feces Cleanup", "Preparation Cleanup", "Trash Removal"
-	 * - urgency: this is how urgent the request is and helpful for prioritizing. The valid options are: "Low", "Medium", "High", "Critical"
-	 */
-	public static void createSanitationTable() {
-		RequestsDB.createSanitationTable();
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a extTransport table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user is sending the request to.
-	 * - requestType: this the mode of transportation that the request is being made for. The valid options are: 'Ambulance', 'Helicopter', 'Plane'
-	 * - severity: this is how sever the patient is who the user/first responders are transporting.
-	 * - patientID: this is the ID of the patient that is being transported.
-	 * - ETA: this is the estimated time the patient will arrive.
-	 * - description: this is a detailed description of request that generally includes what happened to the patient and their current situation.
-	 */
-	public static void createExtTransportTable() {
-		RequestsDB.createExtTransportTable();
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants the medecine delivered to.
-	 * - medicineName: this is the drug that the user is ordering/requesting
-	 * - quantity: the is the supply or the number of pills ordered
-	 * - dosage: this is the mg or ml quantity for a medication
-	 * - specialInstructions: this is any special details or instructions the user wants to give to who ever is processing the request.
-	 * - signature: this the signature (name in print) of the user who is filling out the request
-	 */
-	public static void createMedDeliveryTable() {
-		RequestsDB.createMedDeliveryTable();
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants security assistance at
-	 * - level: this is the security level that is needed
-	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled. The valid options are: 'Low', 'Medium', 'High', 'Critical'
-	 */
-	public static void createSecurityServTable() {
-		RequestsDB.createSecurityServTable();
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants security assistance at
-	 * - languageType: this is the type of language the user is requesting
-	 * - description: detailed description of request
-	 */
-	public static void createLanguageRequestTable() {
-		RequestsDB.createLanguageRequestTable();
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants security assistance at
-	 * - washLoadAmount: amount of loads needed to wash
-	 * - dryLoadAmount: amount of loads needed to dry
-	 * - description:  detailed description of request
-	 */
-	public static void createLaundryRequestTable() {
-		RequestsDB.createLaundryRequestTable();
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants security assistance at
-	 * - type: is the type of maintenance required
-	 * - severity: is how severe the situation is
-	 * - ETA: time taken to complete the request
-	 * - description: detailed description of request
-	 */
-	public static void createMaintenanceRequestTable() {
-		RequestsDB.createMaintenanceRequestTable();
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants security assistance at
-	 * - allergy: this is an food allergy that the user might have
-	 * - dietRestriction: this is any dietary restrictions that the person fulfilling the request might need to know about
-	 * - beverage: the drink the user is ordering
-	 * - comments: any comments the user wants to leave for the person fulfilling the request
-	 */
-	public static void createFoodDeliveryTable(){
-		RequestsDB.createFoodDeliveryTable();
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a aubonPainMenu table.
-	 * This table has attributes:
-	 * - foodImage: this is the url to an image of the item
-	 * - foodItem: this is the item itself (this is unique and is used as an identifier)
-	 * - foodPrice: this is the price of the foodItem
-	 * - foodCalories: this is the number of calories the food item has
-	 * - foodDescription: this is a description of the food item
-	 */
-	public static void createAubonPainMenuTable(){
-		RequestsDB.createAubonPainMenuTable();
-	}
 
 	/**
 	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
@@ -477,22 +321,6 @@ public class DB {
 		RequestsDB.populateAbonPainTable();
 	}
 
-	public static void createInternalPatientRequest() {
-		RequestsDB.createInternalPatientRequest();
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants security assistance at
-	 * - religionID: is the type of maintenance required
-	 * - description: detailed description of request
-	 * - religionType: religion
-	 */
-	public static void createReligionRequestTable() {
-		RequestsDB.createReligionRequestTable();
-	}
 
 
 
@@ -855,28 +683,6 @@ public class DB {
 
 	// UserAccountDB:
 
-	/**
-	 * Uses executes the SQL statements required to create the userAccount table.
-	 * This table has the attributes:
-	 * - userID: used to identify the individual. Every account must have a unique userID and account must have one.
-	 * - email: the email must be under 31 characters long and must be unique.
-	 * - password: the password must be under 31 characters long.
-	 * - userType: is the type of account the user is enrolled with. The valid options are: "visitor", "patient", "doctor", "admin".
-	 * - firstName: the user's first name.
-	 * - lastName: the user's last name.
-	 * - creationTime: a time stamp that is added to the table when an account is created
-	 */
-	public static void createUserAccountTable() {
-		UserAccountDB.createUserAccountTable();
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create views for different types of users. The views created
-	 * are: visitorAccount, patientAccount, doctorAccount, adminAccount.
-	 */
-	public static void createUserAccountTypeViews() {
-		UserAccountDB.createUserAccountTypeViews();
-	}
 
 	/**
 	 * This is allows a visitor to create a user account giving them more access to the certain requests available

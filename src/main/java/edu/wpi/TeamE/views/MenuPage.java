@@ -7,12 +7,21 @@ import edu.wpi.TeamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.TeamE.views.serviceRequestObjects.ServiceRequestForm;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MenuPage {
@@ -30,48 +39,67 @@ public class MenuPage {
     private JFXButton checkoutItem;
 
     //TODO: Fix this
-    public void prepareTable(TreeTableView menuTable) {
+    public void prepareTable(TreeTableView menuTable)  {
 
         if(menuTable.getRoot() == null) {
+
+
+
             //Establishing some columns that are consistent throughout all the service requests
             //Column 1 - ID
-            TreeTableColumn<AubonPainItem, String> formColumn = new TreeTableColumn<>("Item Name");
-            formColumn.setPrefWidth(320);
-            formColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<AubonPainItem, String> p) ->
+            TreeTableColumn<AubonPainItem, String> itemColumn = new TreeTableColumn<>("Menu Item");
+            itemColumn.setPrefWidth(400);
+
+
+            itemColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<AubonPainItem, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().getFoodItem()));
-            menuTable.getColumns().add(formColumn);
+            menuTable.getColumns().add(itemColumn);
             //Column 2 - Location
-            TreeTableColumn<AubonPainItem, String> locationColumn = new TreeTableColumn<>("Calories");
-            locationColumn.setPrefWidth(150);
-            locationColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<AubonPainItem, String> p) ->
+            TreeTableColumn<AubonPainItem, String> caloriesColumn = new TreeTableColumn<>("Calories");
+            caloriesColumn.setPrefWidth(150);
+            caloriesColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<AubonPainItem, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().getFoodCalories()));
-            menuTable.getColumns().add(locationColumn);
+            menuTable.getColumns().add(caloriesColumn);
             //Column 3 - Assignee
-            TreeTableColumn<AubonPainItem, String> assigneeColumn = new TreeTableColumn<>("Price");
-            assigneeColumn.setPrefWidth(150);
-            assigneeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<AubonPainItem, String> p) ->
+            TreeTableColumn<AubonPainItem, String> priceColumn = new TreeTableColumn<>("Price");
+            priceColumn.setPrefWidth(50);
+            priceColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<AubonPainItem, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().getFoodPrice()));
-            menuTable.getColumns().add(assigneeColumn);
+            menuTable.getColumns().add(priceColumn);
 
         }
-        //Establishing root node
-        ArrayList<String> foodItems = DB.getAubonPainFeild("foodItem");
-        ArrayList<String> foodPrice = DB.getAubonPainFeild("foodPrice");
-        ArrayList<String> foodCalories = DB.getAubonPainFeild("foodCalories");
 
-        //COMMENT THIS PART OUT ----------------------
+
+
         ArrayList<AubonPainItem> items = DB.getAubonPanItems();
         TreeItem<AubonPainItem> rootNode = new TreeItem<>(new AubonPainItem("Aubon Pain Menu"));
 
         for(AubonPainItem item : items){
-            TreeItem<AubonPainItem> childNode = new TreeItem<>(new AubonPainItem(item.getFoodItem(), item.getFoodPrice(), item.getFoodCalories()));
-            TreeItem<AubonPainItem> realDescription = new TreeItem<>(new AubonPainItem(item.getFoodDescription()));
-//            TreeItem<AubonPainItem> description = new TreeItem<>(new AubonPainItem(null, item.getFoodItem(), null, null, null));
-//            childNode.getChildren().add(description);
-//            addToTable(childNode);
+            TreeItem<AubonPainItem> itemInfo = new TreeItem<>();
+            if(item.getImageURL() != null){
+                try {
+                    URL urlInput = new URL(item.getImageURL());
+                    BufferedImage urlImage = ImageIO.read(urlInput);
+                    ImageView foodImage = new ImageView (SwingFXUtils.toFXImage(urlImage, null));
+                    foodImage.setFitHeight(50);
+                    foodImage.setFitWidth(50);
 
-            rootNode.getChildren().add(childNode);
-            childNode.getChildren().add(realDescription);
+                    itemInfo = new TreeItem<>(new AubonPainItem(item.getFoodItem(), item.getFoodPrice(), item.getFoodCalories()), foodImage);
+                }catch (IOException e){
+                    e.printStackTrace();
+                    System.out.println("error reading image URL");
+                }
+            }
+            else{
+                itemInfo = new TreeItem<>(new AubonPainItem(item.getFoodItem(), item.getFoodPrice(), item.getFoodCalories()));
+            }
+
+            TreeItem<AubonPainItem> realDescription = new TreeItem<>(new AubonPainItem(item.getFoodDescription()));
+
+
+
+            rootNode.getChildren().add(itemInfo);
+            itemInfo.getChildren().add(realDescription);
         }
 
 
@@ -79,79 +107,21 @@ public class MenuPage {
         //Adding Root
         menuTable.setRoot(rootNode);
         menuTable.setShowRoot(false);
-        //COMMENT UP TO HERE ----------------------
 
-//        TreeItem<AubonPainItem> rootNode = new TreeItem<>(new AubonPainItem("Aubon Pain Menu"));
-//        TreeItem<AubonPainItem> inProgress = new TreeItem<>(new AubonPainItem("In Progress"));
-//
-//        TreeItem<ServiceRequestForm> externalPatientCompleted = new TreeItem<>(new ServiceRequestForm("External Patient Form"));
-//        addToTable(inProgress);
-//
-//        rootNode.getChildren().setAll(inProgress);
-//
-//        //Adding Root
-//        menuTable.setRoot(rootNode);
-//        menuTable.setShowRoot(false);
     }
 
-    //TODO: Fix this
-    /**
-     * This function populates a specific part of the table from the database
-     * @param inProgress the TreeItem for the service requests still in progress
-     */
-    private void addToTable(TreeItem<AubonPainItem> inProgress) {
-
-        ArrayList<AubonPainItem> items = DB.getAubonPanItems();
-
-        ArrayList<String> foodItems = DB.getAubonPainFeild("foodItem");
-        ArrayList<String> foodPrice = DB.getAubonPainFeild("foodPrice");
-        ArrayList<String> foodCalories = DB.getAubonPainFeild("foodCalories");
-        ArrayList<String> foodDescription = DB.getAubonPainFeild("foodDescription");
-//        ArrayList<String> idArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestID");
-//        for(int j = 0; j < idArray.size(); j++) {
-//            System.out.println(idArray.get(j));
-//        }
-//        ArrayList<String> statusArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
-//        ArrayList<String> locationArray = DB.getRequestLocations(tableName, App.userID);
-//        ArrayList<String> assigneeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "assigneeID");
-        if(foodItems.size() > 0) {
-            System.out.println("Array size" + foodItems.size());
-//            if (!inProgress.getChildren().isEmpty()) {
-//                removeChildren(inProgress);
-//            }
 
 
-//            if (!completed.getChildren().isEmpty()) {
-//                removeChildren(completed);
-//            }
-//            if (!cancelled.getChildren().isEmpty()) {
-//                removeChildren(cancelled);
-//            }
-            for (int i = 0; i < foodItems.size(); i++) {
-                System.out.println("Before");
-                TreeItem<AubonPainItem> request = new TreeItem<>(new AubonPainItem(foodDescription.get(i), null, null));
-                System.out.println(request.getValue().getFoodItem());
-//                if (request.getValue().getStatus().equals("inProgress")) {
-                    inProgress.getChildren().add(request);
-//                }
-//                if (request.getValue().getStatus().equals("complete")) {
-//                    completed.getChildren().add(request);
-//                }
-//                if (request.getValue().getStatus().equals("canceled")) {
-//                    cancelled.getChildren().add(request);
-//                }
-            }
-        }
-    }
+
 
     //TODO: Fix this
-    public void removeChildren(TreeItem<ServiceRequestForm> treeItem) {
+    public void removeChildren(TreeItem<AubonPainItem> treeItem) {
         int removal = treeItem.getChildren().size();
         System.out.println(removal);
         if(treeItem.getChildren().size() != 0) {
             treeItem.getChildren().remove(0,removal);
         }
-        TreeItem<ServiceRequestForm> test = treeItem;
+        TreeItem<AubonPainItem> test = treeItem;
         System.out.println(test.getChildren().size());
     }
 

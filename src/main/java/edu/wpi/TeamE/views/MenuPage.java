@@ -9,10 +9,13 @@ import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MenuPage {
@@ -58,8 +61,6 @@ public class MenuPage {
             assigneeColumn.setCellValueFactory((TreeTableColumn.CellDataFeatures<AubonPainItem, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().getFoodDescription()));
             menuTable.getColumns().add(descriptionColumn);
-
-
         }
         //Establishing root node
         ArrayList<String> foodItems = DB.getAubonPainFeild("foodItem");
@@ -96,7 +97,7 @@ public class MenuPage {
     //TODO: Fix this
     /**
      * This function populates a specific part of the table from the database
-     * @param inProgress the TreeItem for the service requests still in progress
+     * @param menu the TreeItem for the service requests still in progress
      */
     private void addToTable(TreeItem<AubonPainItem> menu) {
 
@@ -106,39 +107,13 @@ public class MenuPage {
         ArrayList<String> foodPrice = DB.getAubonPainFeild("foodPrice");
         ArrayList<String> foodCalories = DB.getAubonPainFeild("foodCalories");
         ArrayList<String> foodDescription = DB.getAubonPainFeild("foodDescription");
-//        ArrayList<String> idArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestID");
-//        for(int j = 0; j < idArray.size(); j++) {
-//            System.out.println(idArray.get(j));
-//        }
-//        ArrayList<String> statusArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
-//        ArrayList<String> locationArray = DB.getRequestLocations(tableName, App.userID);
-//        ArrayList<String> assigneeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "assigneeID");
         if(foodItems.size() > 0) {
             System.out.println("Array size" + foodItems.size());
-//            if (!inProgress.getChildren().isEmpty()) {
-//                removeChildren(inProgress);
-//            }
-
-
-//            if (!completed.getChildren().isEmpty()) {
-//                removeChildren(completed);
-//            }
-//            if (!cancelled.getChildren().isEmpty()) {
-//                removeChildren(cancelled);
-//            }
             for (int i = 0; i < foodItems.size(); i++) {
                 System.out.println("Before");
-                TreeItem<AubonPainItem> request = new TreeItem<>(new AubonPainItem(foodItems.get(i), foodPrice.get(i), foodCalories.get(i)));
-                System.out.println(request.getValue().getFoodItem());
-//                if (request.getValue().getStatus().equals("inProgress")) {
-                    menu.getChildren().add(request);
-//                }
-//                if (request.getValue().getStatus().equals("complete")) {
-//                    completed.getChildren().add(request);
-//                }
-//                if (request.getValue().getStatus().equals("canceled")) {
-//                    cancelled.getChildren().add(request);
-//                }
+                TreeItem<AubonPainItem> menuItem = new TreeItem<>(new AubonPainItem(foodItems.get(i), foodPrice.get(i), foodCalories.get(i), foodDescription.get(i)));
+                System.out.println(menuItem.getValue().getFoodItem());
+                    menu.getChildren().add(menuItem);
             }
         }
     }
@@ -161,10 +136,19 @@ public class MenuPage {
     void checkoutItem() {}
 
     @FXML
-    void toDefault() {}
+    void toDefault() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @FXML
-    void refresh() {}
+    void refresh() {
+        prepareTable(menuTable);
+    }
 
 
     /**

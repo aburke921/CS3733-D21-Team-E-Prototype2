@@ -1,6 +1,10 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
 import java.sql.*;
+import java.util.ArrayList;
+
+import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.TeamE.views.UserManagement.*;
 
 public class UserAccountDB {
 
@@ -292,6 +296,33 @@ public class UserAccountDB {
 		}
 
 		return null;
+	}
+
+	public static ArrayList<User> getAllUsers() {
+		ArrayList<User> listOfUsers = new ArrayList<>();
+
+		String query = "Select * From userAccount";
+
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+
+			ResultSet rset = prepStat.executeQuery();
+
+			while (rset.next()) {
+				int userID = rset.getInt("userID");
+				String email = rset.getString("email");
+				String userType = rset.getString("userType");
+				String firstName = rset.getString("firstName");
+				String lastName = rset.getString("lastName");
+
+				listOfUsers.add(new User(userType, userID, firstName, lastName, email));
+			}
+
+			rset.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllUsers Error : " + e);
+		}
+		return listOfUsers;
 	}
 
 }

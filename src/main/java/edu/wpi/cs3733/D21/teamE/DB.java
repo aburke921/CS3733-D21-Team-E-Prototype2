@@ -481,6 +481,18 @@ public class DB {
 		RequestsDB.createInternalPatientRequest();
 	}
 
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - religionID: is the type of maintenance required
+	 * - description: detailed description of request
+	 * - religionType: religion
+	 */
+	public static void createReligionRequestTable() {
+		RequestsDB.createReligionRequestTable();
+	}
 
 
 
@@ -603,8 +615,6 @@ public class DB {
 		RequestsDB.addInternalPatientRequest(userID, pickUpLocation, dropOffLocation, assigneeID, patientID, department, severity, description);
 	}
 
-
-
 	/**
 	 * adds a menuItem to the aubonPainMenu database table
 	 * @param foodImage this is the url to an image of the item
@@ -617,7 +627,15 @@ public class DB {
 		RequestsDB.addAubonPainMenuItem(foodImage, foodItem, foodPrice, foodCalories, foodDescription);
 	}
 
-
+	/**
+	 * add a religious request
+	 * @param roomID       where the request takes place
+	 * @param religionType the kind of the religion that request is requesting
+	 * @param description  some text to further describe the request
+	 */
+	public static void addReligiousRequest(int userID, String roomID, int assigneeID, String religionType, String description) {
+		RequestsDB.addReligiousRequest(userID, roomID, assigneeID, religionType, description);
+	}
 
 
 	// Editing Tables:
@@ -759,6 +777,16 @@ public class DB {
 
 	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
 		return RequestsDB.editInternalPatientRequest(requestID, pickUpLocation, dropOffLocation,patientID, department, severity, description);
+	}
+
+	/**
+	 * edit a religious request
+	 * @param roomID       where the request takes place
+	 * @param religionType the kind of the religion that request is requesting
+	 * @param description  some text to further describe the request
+	 */
+	public static int editReligiousRequest(int requestID, String roomID, String religionType, String description) {
+		return RequestsDB.editReligiousRequest(requestID, roomID, religionType,description);
 	}
 
 

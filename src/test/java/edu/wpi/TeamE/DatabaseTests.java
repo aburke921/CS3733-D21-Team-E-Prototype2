@@ -54,6 +54,7 @@ public class DatabaseTests {
 			DB.createFoodDeliveryTable();
 			DB.createInternalPatientRequest();
 			DB.createAubonPainMenuTable();
+			DB.createReligionRequestTable();
 		} catch (Exception e) {
 			DB.createNodeTable();
 			DB.createEdgeTable();
@@ -71,6 +72,7 @@ public class DatabaseTests {
 			DB.createFoodDeliveryTable();
 			DB.createInternalPatientRequest();
 			DB.createAubonPainMenuTable();
+			DB.createReligionRequestTable();
 		}
 
 	}
@@ -1536,5 +1538,27 @@ public class DatabaseTests {
 
 	}
 
+	@Test
+	@DisplayName("testAddReligiousRequest")
+	public void testAddReligiousRequest() {
+
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test123@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("religiousPerson@gmail.com", "testPass", "religiousPerson", "drew", "Shukla");
+
+		DB.addReligiousRequest(1, "test", 2, "Religion1", "Flying Spaghetti Monster");
+	}
+
+	@Test
+	@DisplayName("testEditReligiousRequest")
+	public void testEditReligiousRequest() {
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "religiousPerson", "drew", "Shukla");
+
+		DB.addReligiousRequest(1, "test", 2, "Religion1", "Flying Spaghetti Monster");
+
+		assertEquals(1, DB.editReligiousRequest(1,"test", "Religion2", "description"));
+	}
 
 }

@@ -46,7 +46,7 @@ public class RequestsDB {
 				"requestType   varchar(31), " +
 				"requestStatus varchar(10), " +
 				"assigneeID    int References useraccount On Delete Cascade," +
-				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'internalPatientRequest', 'languageRequest', 'laundryRequest', 'maintenanceRequest', 'foodDelivery' )) " +
+				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'internalPatientRequest', 'languageRequest', 'laundryRequest', 'maintenanceRequest', 'foodDelivery', 'religiousRequest')), " +
 				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -374,6 +374,33 @@ public class RequestsDB {
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("error creating internalPatientRequest table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - religionID: is the type of maintenance required
+	 * - description: detailed description of request
+	 * - religionType: religion
+	 */
+	public static void createReligionRequestTable() {
+
+		String query = "Create Table religiousRequest " +
+				"( " +
+				"requestID     int Primary Key References requests (requestID) On Delete Cascade, " +
+				"roomID        varchar(31)  Not Null References node (nodeID) On Delete Cascade, " +
+				"religionType  varchar(31)  Not Null, " +
+				"description   varchar(5000) Not Null, " +
+				"Constraint religionTypeLimit Check (religionType In ('Religion1', 'Religion2', 'Religion3', 'Religion4')) " +
+				")";
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating religiousRequests table");
 		}
 	}
 
@@ -839,7 +866,28 @@ public class RequestsDB {
 		}
 	}
 
+	/**
+	 * add a religious request
+	 * @param roomID       where the request takes place
+	 * @param religionType the kind of the religion that request is requesting
+	 * @param description  some text to further describe the request
+	 */
+	public static void addReligiousRequest(int userID, String roomID, int assigneeID, String religionType, String description) {
+		addRequest(userID, assigneeID, "religiousRequest");
 
+		String insertMaintenanceReq = "Insert Into religiousRequest Values ((Select Count(*) From requests), ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, religionType);
+			prepState.setString(3, description);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into religiousRequest inside function addReligiousRequest()");
+		}
+	}
 
 
 
@@ -1427,13 +1475,6 @@ public class RequestsDB {
 		}
 	}
 
-
-
-
-
-
-
-
 	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
 		boolean added = false;
 		String query = "Update internalPatientRequest Set ";
@@ -1487,6 +1528,46 @@ public class RequestsDB {
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error in updating editInternalPatientRequest");
+			return 0;
+		}
+	}
+
+	/**
+	 * edit a religious request
+	 * @param roomID       where the request takes place
+	 * @param religionType the kind of the religion that request is requesting
+	 * @param description  some text to further describe the request
+	 */
+	public static int editReligiousRequest(int requestID, String roomID, String religionType, String description) {
+		boolean added = false;
+		String query = "Update religiousRequest Set ";
+
+		if (roomID != null) {
+			query = query + "roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (religionType != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "religionType = '" + religionType + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating religiousRequest");
 			return 0;
 		}
 	}

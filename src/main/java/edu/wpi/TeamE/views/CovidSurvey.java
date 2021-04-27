@@ -28,13 +28,26 @@ public class CovidSurvey extends ServiceRequests  {
     @FXML
     void submitButton(ActionEvent actionEvent){
         boolean safe = !(positiveTest.isSelected() || symptoms.isSelected() || closeContact.isSelected() || quarantine.isSelected()) && noSymptoms.isSelected();
-        if(safe){
+        int rating = 0;
+        if(noSymptoms.isSelected()){
 
-            System.out.println("Yay no COVID");
+            rating = 1;
+            System.out.print(rating);
 
-        }else{
-            System.out.println("Oh no maybe COVID so sad =(");
-        }try {
+        }else {
+            if(symptoms.isSelected()){
+            rating = 2;
+            }if(closeContact.isSelected()){
+                rating = 3;
+            }if(quarantine.isSelected()){
+                rating = 4;
+            }if(positiveTest.isSelected()){
+                rating = 5;
+            }
+        }
+        System.out.print(rating);
+
+        try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
             App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {

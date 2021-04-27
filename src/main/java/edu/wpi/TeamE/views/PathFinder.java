@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
 
@@ -137,6 +138,7 @@ public class PathFinder {
     private HBox ETA;
     @FXML // fx:id="clearPath"
     private Button clearPath;
+    @FXML private RequiredFieldValidator validator = new RequiredFieldValidator();
 
     /*
      * Additional Variables

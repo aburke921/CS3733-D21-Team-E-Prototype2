@@ -219,7 +219,7 @@ public class makeConnection {
 
 
 		//security
-		//61-69
+		//61-68
 		DB.addSpecialUserType("jameso@gmail.com", "security1", "security", "James", "O'Moore");
 		DB.addSpecialUserType("russella@gmail.com", "security2", "security", "Russell", "Armstrong");
 		DB.addSpecialUserType("lillianp@gmail.com", "security3", "security", "Lillian", "Peters");
@@ -231,7 +231,7 @@ public class makeConnection {
 
 
 		//EMT:
-		//70 - 78
+		//69 - 77
 		DB.addSpecialUserType("ciarang@gmail.com", "EMT000001", "EMT", "Ciaran", "Goodwin");
 		DB.addSpecialUserType("lolab@gmail.com", "EMT000002", "EMT", "Lola", "Bond");
 		DB.addSpecialUserType("samanthar@gmail.com", "EMT000003", "EMT", "Samantha", "Russell");
@@ -318,7 +318,7 @@ public class makeConnection {
 		DB.addExternalPatientRequest(28, 75, "FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
 		DB.addExternalPatientRequest(24, 76, "EEXIT00101", "Ambulance", "Medium Severity", "33337861", "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
 		DB.addExternalPatientRequest(27, 77, "EEXIT00101", "Ambulance", "Low Severity", "40003829", "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
-		DB.addExternalPatientRequest(24, 78, "FDEPT00501", "Plane", "High Severity", "38739983", "12 hours", "Heart transplant organ in route");
+		DB.addExternalPatientRequest(24, 77, "FDEPT00501", "Plane", "High Severity", "38739983", "12 hours", "Heart transplant organ in route");
 
 
 		DB.editRequests(40, 0, "complete");

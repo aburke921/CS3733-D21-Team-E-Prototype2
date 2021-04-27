@@ -90,7 +90,27 @@ public class UserManagement {
 
     @FXML
     void addUserButton(ActionEvent event) {
+        if (addingUser) { //admin is submitting new user
+            addingUser = false;
+            //todo add a user, cleanup
 
+            //add user
+            String[] firstAndLast = userNameInput.getText().split(" "); //get first and last name
+            DB.addUserAccount(userEmail.getText(),userPassword.getText(),firstAndLast[0],firstAndLast[1]); //add to DB
+
+            //cleanup
+            addUser.setText("Add User");
+            showFields(false);
+            userIDInput.setVisible(false);
+            //todo refresh
+            //todo confirmation popup?
+
+        } else { //admin would like to start adding user
+            addingUser = true;
+            showFields(true);
+            userIDInput.setVisible(true);
+            addUser.setText("Confirm Adding User");
+        }
     }
 
     @FXML
@@ -124,16 +144,19 @@ public class UserManagement {
         if (editingUser) {
             //user is being edited, clicks button to submit
 
-            //todo check if fields are valid, empty fields, refresh table
+            //todo check if fields are valid
 
             String[] firstAndLast = userNameInput.getText().split(" ");
             //todo have DB make this function check for empty strings, not just null chars.
             DB.editUserAccount(currentlyEditing.getUserID(),userEmail.getText(),userPassword.getText(),userTypeInput.getValue(),firstAndLast[0], firstAndLast[1]);
 
+            //cleanup
             showFields(false);
             editingUser = false;
             editUser.setText("Edit User");
             currentlyEditing = null;
+            //todo empty fields so they aren't pre-filled on next use
+            //todo refresh
         } else { //no edit is in progress
 
             if (treeTableView.getSelectionModel().getSelectedItem() != null) {

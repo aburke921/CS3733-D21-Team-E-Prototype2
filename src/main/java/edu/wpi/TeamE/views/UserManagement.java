@@ -21,6 +21,7 @@ import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
@@ -34,6 +35,12 @@ public class UserManagement {
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
+    @FXML
+    private Button addUser;
+
+    @FXML
+    private Button editUser;
+
     @FXML // fx:id="appBarAnchorPane"
     private AnchorPane appBarAnchorPane;
 
@@ -46,11 +53,40 @@ public class UserManagement {
     @FXML
     private JFXComboBox<String> userTypeInput;
 
+    @FXML
+    private JFXTextField userPassword;
+
+    @FXML
+    private JFXTextField userEmail;
+
     @FXML // fx:id="treeTableView"
     private TreeTableView<User> treeTableView;
 
     @FXML
     private JFXButton backButton;
+
+    @FXML
+    private JFXButton submitEditButton;
+
+    @FXML
+    private JFXButton submitNewUserButton;
+
+    private boolean addingUser = false;
+
+    private boolean editingUser = false;
+
+    private User currentlyEditing;
+
+    @FXML
+    void submitEdits(ActionEvent event) {
+
+    }
+
+    @FXML
+    void sumbmitNewUser(ActionEvent event) {
+
+    }
+
 
     @FXML
     void addUserButton(ActionEvent event) {
@@ -85,11 +121,40 @@ public class UserManagement {
 
     @FXML
     void editUserButton(ActionEvent event) {
-        int id = Integer.parseInt(userIDInput.getText());
-        String username = userNameInput.getText();
-//        String userType = userTypeInput.getText();
+        if (editingUser) {
+            //user is being edited, clicks button to submit
 
-//        DB.addUserAccount(username,);
+            //todo check if fields are valid, empty fields, refresh table
+
+            String[] firstAndLast = userNameInput.getText().split(" ");
+            //todo have DB make this function check for empty strings, not just null chars.
+            DB.editUserAccount(currentlyEditing.getUserID(),userEmail.getText(),userPassword.getText(),userTypeInput.getValue(),firstAndLast[0], firstAndLast[1]);
+
+            showFields(false);
+            editingUser = false;
+            editUser.setText("Edit User");
+            currentlyEditing = null;
+        } else { //no edit is in progress
+
+            if (treeTableView.getSelectionModel().getSelectedItem() != null) {
+                currentlyEditing = treeTableView.getSelectionModel().getSelectedItem().getValue(); //get selected user
+                editUser.setText("Confirm User Edit"); //change button text
+                showFields(true); //show form fields
+                editingUser = true; //flag start of edit
+
+                //set fields
+                userEmail.setText(currentlyEditing.getEmail());
+                userNameInput.setText(currentlyEditing.getFirstName()+ " " + currentlyEditing.getLastName());
+                userTypeInput.getSelectionModel().select(currentlyEditing.getUserType());
+            } else {
+                //todo popup?
+                System.out.println("cannot edit, nothing selected");
+            }
+
+        }
+
+
+
     }
 
     @FXML
@@ -110,6 +175,13 @@ public class UserManagement {
 
         //fill Table with user data
         prepareUsers(treeTableView, UserAccountDB.getAllUsers());
+
+        //hide form values until editing or adding
+        showFields(false);
+        userIDInput.setVisible(false); //todo
+
+        //add items to comboBox
+        userTypeInput.getItems().addAll("visitor","patient","doctor","admin");
 
         /* todo
             addSpecialUserType()
@@ -252,6 +324,17 @@ public class UserManagement {
             final TreeItem<User> user = new TreeItem<>(s);
             table.getRoot().getChildren().add(user);
         }
+    }
+
+    /**
+     * Shows and hides the form fields
+     * @param status
+     */
+    private void showFields(boolean status) {
+        userNameInput.setVisible(status);
+        userTypeInput.setVisible(status);
+        userPassword.setVisible(status);
+        userEmail.setVisible(status);
     }
 
 }

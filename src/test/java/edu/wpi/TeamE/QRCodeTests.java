@@ -18,7 +18,7 @@ public class QRCodeTests {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		assertEquals(result, "https://www.geeksforgeeks.org/how-to-generate-and-read-qr-code-with-java-using-zxing-library/");
+		assertEquals(result, "https://anrong.online/emeraldemus/EEXIT00101.html");
 	}
 
 	@Test

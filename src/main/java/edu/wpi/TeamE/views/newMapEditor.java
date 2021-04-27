@@ -864,9 +864,7 @@ public class newMapEditor {
      * resets tables and map after edits made
      */
     public void refresh() {
-        prepareEdges(edgeTreeTable);
-        prepareNodes(nodeTreeTable);
-        drawMap(currentFloor);
+        initialize();
     }
 
     /**
@@ -874,6 +872,7 @@ public class newMapEditor {
      * @param e
      */
     public void refreshButton(ActionEvent e) {
+        toNodeMode(e);
         refresh();
     }
 

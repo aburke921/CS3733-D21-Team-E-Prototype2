@@ -469,19 +469,22 @@ public class RequestsDB {
 						foodItems.add(element.ownText());
 					}
 					if(element.className().equals("product__attribute product__attribute--price")){
-						for(int i = 0; i < foodItems.size() - foodPrice.size() - 1; i++){
+						int numOfEmptySpacesToAdd = foodItems.size() - foodPrice.size() - 1;
+						for(int i = 0; i < numOfEmptySpacesToAdd; i++){
 							foodPrice.add(null);
 						}
 						foodPrice.add(element.ownText());
 					}
 					if(element.className().equals("product__attribute product__attribute--calorie-label")){
-						for(int i = 0; i < foodItems.size() - foodCalories.size() - 1; i++){
+						int numOfEmptySpacesToAdd = foodItems.size() - foodCalories.size() - 1;
+						for(int i = 0; i < numOfEmptySpacesToAdd; i++){
 							foodCalories.add(null);
 						}
 						foodCalories.add(element.ownText());
 					}
 					if(element.className().equals("product__description")){
-						for(int i = 0; i < foodItems.size() - foodDescription.size() - 1; i++){
+						int numOfEmptySpacesToAdd = foodItems.size() - foodDescription.size() - 1;
+						for(int i = 0; i < numOfEmptySpacesToAdd; i++){
 							foodDescription.add(null);
 						}
 						foodDescription.add(element.ownText());

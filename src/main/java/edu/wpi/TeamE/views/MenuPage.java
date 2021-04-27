@@ -64,7 +64,7 @@ public class MenuPage {
         TreeItem<AubonPainItem> rootNode = new TreeItem<>(new AubonPainItem("Aubon Pain Menu"));
 
         for(AubonPainItem item : items){
-            TreeItem<AubonPainItem> childNode = new TreeItem<>(new AubonPainItem(item.getFoodItem(), item.getFoodCalories(), item.getFoodPrice()));
+            TreeItem<AubonPainItem> childNode = new TreeItem<>(new AubonPainItem(item.getFoodItem(), item.getFoodPrice(), item.getFoodCalories()));
             TreeItem<AubonPainItem> realDescription = new TreeItem<>(new AubonPainItem(item.getFoodDescription()));
 //            TreeItem<AubonPainItem> description = new TreeItem<>(new AubonPainItem(null, item.getFoodItem(), null, null, null));
 //            childNode.getChildren().add(description);

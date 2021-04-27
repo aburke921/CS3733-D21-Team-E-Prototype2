@@ -213,7 +213,13 @@ Create Table internalPatientRequest(
     description varchar(5000)
 );
 
-
+create Table aubonPainMenu(
+    foodImage varchar(600),
+    foodItems varchar(100) Primary Key,
+    foodPrice varchar(10),
+    foodCalories varchar(10),
+    foodDescription varchar(3000)
+);
 
 
 

@@ -182,3 +182,7 @@ JFXButton:hover MaterialDesignIconView {
 JFXButton:hover FontAwesomeIconView {
     -fx-fill: -fx--primary-dark;
 }
+
+.table-row-cell{
+    -fx-cell-size: 200;
+}

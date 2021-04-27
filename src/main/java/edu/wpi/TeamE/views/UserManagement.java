@@ -93,7 +93,6 @@ public class UserManagement {
     void addUserButton(ActionEvent event) {
         if (addingUser) { //admin is submitting new user
             addingUser = false;
-            //todo add a user, cleanup
 
             //add user
             String[] firstAndLast = userNameInput.getText().split(" "); //get first and last name
@@ -105,6 +104,9 @@ public class UserManagement {
                         "\n...last: " + firstAndLast[1]);
                 DB.addUserAccount(userEmail.getText(),userPassword.getText(),firstAndLast[0],firstAndLast[1]); //add to DB
 //            DB.addUserAccount("cmanning@wpi.edu","aConformingPassword$#1","First","Last"); //add to DB
+
+                //todo confirmation popup
+
             } else {
                 //todo pop-up, tell user it must be first and last name
             }
@@ -115,7 +117,6 @@ public class UserManagement {
             addUser.setText("Add User");
             showFields(false);
             //todo refresh
-            //todo confirmation popup?
 
         } else { //admin would like to start adding user
             addingUser = true;
@@ -161,6 +162,8 @@ public class UserManagement {
             if (firstAndLast.length == 2) { //validate userNameInput field
                 //todo have DB make this function check for empty strings, not just null chars.
                 DB.editUserAccount(currentlyEditing.getUserID(),userEmail.getText(),userPassword.getText(),userTypeInput.getValue(),firstAndLast[0], firstAndLast[1]);
+
+                //todo confirmation popup?
             } else {
                 //todo popup, invalid first and last
             }
@@ -172,7 +175,6 @@ public class UserManagement {
             currentlyEditing = null;
             //todo empty fields so they aren't pre-filled on next use
             //todo refresh
-            //todo confirmation popup?
         } else { //no edit is in progress
 
             if (treeTableView.getSelectionModel().getSelectedItem() != null) {
@@ -221,13 +223,6 @@ public class UserManagement {
 
         //add items to comboBox
         userTypeInput.getItems().addAll("visitor","patient","doctor","admin");
-
-        /* todo
-            addSpecialUserType()
-            editUserAccount()
-            deleteUserAccount()
-         */
-
     }
 
 

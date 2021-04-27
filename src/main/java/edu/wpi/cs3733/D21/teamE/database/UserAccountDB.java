@@ -158,6 +158,7 @@ public class UserAccountDB {
 	 * @param userType  this is the type of account that the individual is being assigned to
 	 * @param firstName this is the user's first name that is associated with the account
 	 * @param lastName  this is the user's last name that is associated with the account
+	 * @// TODO: 4/27/21 JavaDoc return explanation, also, consider bool return?
 	 */
 	public static int editUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
 		boolean added = false;

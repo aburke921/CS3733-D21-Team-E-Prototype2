@@ -69,12 +69,14 @@ public class MenuPage {
             TreeItem<AubonPainItem> description = new TreeItem<>(new AubonPainItem(null, item.getFoodItem(), null, null, null));
             childNode.getChildren().add(description);
             addToTable(childNode);
-            rootNode.getChildren().setAll(childNode);
-
-            //Adding Root
-            menuTable.setRoot(rootNode);
-            menuTable.setShowRoot(false);
+            rootNode.getChildren().add(childNode);
         }
+
+
+
+        //Adding Root
+        menuTable.setRoot(rootNode);
+        menuTable.setShowRoot(false);
         //COMMENT UP TO HERE ----------------------
 
 //        TreeItem<AubonPainItem> rootNode = new TreeItem<>(new AubonPainItem("Aubon Pain Menu"));
@@ -125,7 +127,7 @@ public class MenuPage {
 //            }
             for (int i = 0; i < foodItems.size(); i++) {
                 System.out.println("Before");
-                TreeItem<AubonPainItem> request = new TreeItem<>(new AubonPainItem(foodItems.get(i), foodPrice.get(i), foodCalories.get(i)));
+                TreeItem<AubonPainItem> request = new TreeItem<>(new AubonPainItem(foodDescription.get(i), null, null));
                 System.out.println(request.getValue().getFoodItem());
 //                if (request.getValue().getStatus().equals("inProgress")) {
                     inProgress.getChildren().add(request);

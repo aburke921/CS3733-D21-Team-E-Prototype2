@@ -52,8 +52,6 @@ public class DatabaseTests {
 			DB.createMaintenanceRequestTable();
 			DB.createFoodDeliveryTable();
 			DB.createAubonPainMenuTable();
-			//System.out.println("Tables were created");
-			//System.out.println("Tables were reset");
 		} catch (Exception e) {
 			DB.createNodeTable();
 			DB.createEdgeTable();
@@ -69,12 +67,7 @@ public class DatabaseTests {
 			DB.createLaundryRequestTable();
 			DB.createMaintenanceRequestTable();
 			DB.createFoodDeliveryTable();
-//			DB.createFoodTable();
-//			DB.createFoodOrderedInRequestTable();
-//			DB.createBeverageTable();
-//			DB.createBeverageOrderedInRequestTable();
 			DB.createAubonPainMenuTable();
-			//e.printStackTrace();
 		}
 
 	}
@@ -445,7 +438,6 @@ public class DatabaseTests {
 
 		assertEquals(0, nodeIDs.size());
 	}
-
 
 
 	@Test

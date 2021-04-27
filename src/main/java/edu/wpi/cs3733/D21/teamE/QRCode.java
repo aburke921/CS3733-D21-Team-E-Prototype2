@@ -39,8 +39,9 @@ public class QRCode {
 				e.printStackTrace();
 			}
 		}
+		return result;
 		//webcam.close();
-		return result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
+		//return result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
 	}
 
 	public static String readQR(String path) throws IOException {
@@ -53,5 +54,9 @@ public class QRCode {
 			return null;
 		}
 		return result.getText();
+	}
+
+	public static void main(String[] args) {
+		System.out.println(scanQR());
 	}
 }

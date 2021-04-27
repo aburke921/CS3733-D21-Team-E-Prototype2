@@ -817,20 +817,17 @@ public class PathFinder {
     }
 
     public void startQRScanning(ActionEvent event) {
-
-
-        String nodeID = QRCode.scanQR();
+        String result = QRCode.scanQR();
+        String nodeID = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
         System.out.println("Scanned nodeID: " + nodeID);
 
         ArrayList<Node> nodeArrayList = DB.getAllNodes();
-        if(nodeID != null) {
-            int index = 0;
-            for(int i = 0; i < nodeArrayList.size();i++){
-                if(nodeArrayList.get(i).get("id").equals(nodeID)){
-                    index = i;
-                }
+        int index = 0;
+        for(int i = 0; i < nodeArrayList.size();i++){
+            if(nodeArrayList.get(i).get("id").equals(nodeID)){
+                index = i;
             }
-            startLocationComboBox.getSelectionModel().select(index);
         }
+        startLocationComboBox.getSelectionModel().select(index);
     }
 }

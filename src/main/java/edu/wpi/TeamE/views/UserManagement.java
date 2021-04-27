@@ -110,6 +110,12 @@ public class UserManagement {
         //todo build tree
         //add users to table
         prepareUsers(treeTableView, users);
+
+        /* todo
+            addSpecialUserType()
+            editUserAccount()
+            deleteUserAccount()
+         */
     }
 
 

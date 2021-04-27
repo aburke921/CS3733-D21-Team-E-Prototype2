@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
 import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
@@ -65,7 +66,14 @@ public class UserManagement {
 
     @FXML
     void deleteUserButton(ActionEvent event) {
-
+        if (treeTableView.getSelectionModel().getSelectedItem() != null) { //if User has been selected...
+            User userForDeletion = treeTableView.getSelectionModel().getSelectedItem().getValue();
+            //todo delete from DB
+            System.out.println("Deleting user " + userForDeletion);
+            //todo refresh TreeTable
+        } else { //nothing selected in TTV
+            System.out.println("Deletion failed - No item was selected"); //todo popup?
+        }
     }
 
     @FXML

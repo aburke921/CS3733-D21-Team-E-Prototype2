@@ -12,7 +12,7 @@ import javafx.scene.control.TreeTableView;
 public class MenuPage {
 
     @FXML
-    private JFXTreeTableView<> menuTable;
+    private JFXTreeTableView menuTable;
 
     @FXML
     private JFXButton cancelButton;

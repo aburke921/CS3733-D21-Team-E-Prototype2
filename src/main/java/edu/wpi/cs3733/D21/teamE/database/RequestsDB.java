@@ -1,5 +1,8 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.TeamE.views.serviceRequestObjects.AubonPainItem;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,6 +15,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Set;
 
 public class RequestsDB {
 
@@ -31,7 +36,7 @@ public class RequestsDB {
 	 * - requestID: this is used to identify a request. Every request must have one.
 	 * - creatorID: this is the username of the user who created the request.
 	 * - creationTime: this is a time stamp that is added to the request at the moment it is made.
-	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport".
+	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport", 'languageRequest' 'laundryRequest' 'maintenanceRequest' 'foodDelivery' 'internalPatientRequest'
 	 * - requestStatus: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
 	 * - assigneeID: this is the person who is assigned to the request
 	 */
@@ -44,7 +49,7 @@ public class RequestsDB {
 				"requestType   varchar(31), " +
 				"requestStatus varchar(10), " +
 				"assigneeID    int References useraccount On Delete Cascade," +
-				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
+				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'internalPatientRequest', 'languageRequest', 'laundryRequest', 'maintenanceRequest', 'foodDelivery', 'religiousRequest')), " +
 				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -78,6 +83,9 @@ public class RequestsDB {
 				"flowerType    varchar(31), " +
 				"flowerAmount  int, " +
 				"vaseType      varchar(31), " +
+				"arrangement varchar(31), " +
+				"stuffedAnimal varchar(31), " +
+				"chocolate varchar(31), " +
 				"message       varchar(5000), " +
 				"Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')), " +
 				"Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)), " +
@@ -147,6 +155,9 @@ public class RequestsDB {
 				"    severity varchar(30) Not Null, " +
 				"    patientID varchar(31) Not Null, " +
 				"    ETA varchar(100), " +
+				"    bloodPressure varchar(31), " +
+				"    temperature varchar(31), " +
+				"    oxygenLevel varchar(31), " +
 				"    description varchar(5000)," +
 				"    Constraint requestTypeLimitExtTrans Check (requestType In ('Ambulance', 'Helicopter', 'Plane'))" +
 				")";
@@ -352,23 +363,75 @@ public class RequestsDB {
 
 	}
 
-	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - foodID: this is used to identify a food item. Every food item must have one.
-	 * - item: this is the name of the food item
-	 * - price: this is the price of the food item
-	 * - calories: this is the number of calories that the food item has
-	 * - description: this is the description of the menu item
-	 */
-	public static void createFoodTable(){
+	public static void createInternalPatientRequest() {
+		String query = "Create Table internalPatientRequest " +
+				"( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    patientID int References userAccount(userID) on Delete Cascade, " +
+				"    pickUpLocation varchar(31) Not Null References node On Delete Cascade, " +
+				"    dropOffLocation varchar(31) Not Null References node On Delete Cascade, " +
+				"    department varchar(31), " +
+				"    severity varchar(31), " +
+				"    description varchar(5000) " +
+				")";
 
-		String query = "Create Table food (\n" +
-				"    foodID int Primary KEY,\n" +
-				"    item varchar(80),\n" +
-				"    price Double,\n" +
-				"    calories int,\n" +
-				"    description varchar(3000)\n" +
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating internalPatientRequest table");
+		}
+	}
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - religionID: is the type of maintenance required
+	 * - description: detailed description of request
+	 * - religionType: religion
+	 */
+	public static void createReligionRequestTable() {
+
+		String query = "Create Table religiousRequest " +
+				"( " +
+				"requestID     int Primary Key References requests (requestID) On Delete Cascade, " +
+				"roomID        varchar(31)  Not Null References node (nodeID) On Delete Cascade, " +
+				"religionType  varchar(31)  Not Null, " +
+				"description   varchar(5000) Not Null, " +
+				"Constraint religionTypeLimit Check (religionType In ('Religion1', 'Religion2', 'Religion3', 'Religion4')) " +
+				")";
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating religiousRequests table");
+		}
+	}
+
+
+
+
+	/**
+	 * Uses executes the SQL statements required to create a aubonPainMenu table.
+	 * This table has attributes:
+	 * - foodImage: this is the url to an image of the item
+	 * - foodItem: this is the item itself (this is unique and is used as an identifier)
+	 * - foodPrice: this is the price of the foodItem
+	 * - foodCalories: this is the number of calories the food item has
+	 * - foodDescription: this is a description of the food item
+	 */
+	public static void createAubonPainMenuTable(){
+		String query = "create Table aubonPainMenu(\n" +
+				"    foodImage varchar(600),\n" +
+				"    foodItem varchar(100) Primary Key,\n" +
+				"    foodPrice varchar(50),\n" +
+				"    foodCalories varchar(50),\n" +
+				"    foodDescription varchar(3000)\n" +
 				")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -377,95 +440,92 @@ public class RequestsDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating food table");
+			System.err.println("error creating aubonPainMenu table");
 		}
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is the identifier of the request where the user is ordering food
-	 * - foodID: this is the identifier of the food item the user is ordering
-	 * - quantity: this is the quantity of a single item the user is ordering
-	 */
-	public static void createFoodOrderedInRequestTable(){
-
-		String query = "Create Table foodOrderedInRequest (\n" +
-				"    requestId int References foodDelivery (requestID)  on Delete Cascade,\n" +
-				"    foodID int References food (foodID) On Delete Cascade,\n" +
-				"    quantity int,\n" +
-				"    Primary Key (requestId, foodID)\n" +
-				")";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating foodOrderedInDelivery table");
-		}
-
-
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - beverageID: this is the identifier of the beverage the user is ordering
-	 * - item: this is the name of the beverage on the menu
-	 */
-	public static void createBeverageTable(){
-		String query = "Create Table beverage (\n" +
-				"    beverageID int Primary key,\n" +
-				"    item varchar(50)\n" +
-				")";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating beverage table");
-		}
-
 	}
 
 
 	/**
-	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is the identifier of the request where the user is ordering food
-	 * - beverageID: this is the identifier of the beverage the user is ordering
-	 * - quantity: this is the quantity of a single item the user is ordering
+	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
+	 * description to the aubonPainMenu table
+	 * The link to the website being read is: https://order.aubonpain.com/menu/brigham-womens-hospital
 	 */
-	public static void createBeverageOrderedInRequestTable(){
-		String query = "Create Table beverageOrderedInRequest(\n" +
-				"    requestId int References foodDelivery (requestID)  on Delete Cascade,\n" +
-				"    beverageID int References beverage (beverageID) On Delete Cascade,\n" +
-				"    quantity int,\n" +
-				"    Primary Key (requestId, beverageID)\n" +
-				")";
+	public static void populateAbonPainTable() {
 
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+		try {
+			Document doc = Jsoup.connect("https://order.aubonpain.com/menu/brigham-womens-hospital").get();
+			Set<String> classes = doc.classNames();
 
-			prepState.execute();
+			Elements elements = doc.body().select("*");
 
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating beverageOrderedInRequest table");
+			ArrayList<String> foodImage = new ArrayList<>();
+			ArrayList<String> foodItems = new ArrayList<>();
+			ArrayList<String> foodPrice = new ArrayList<>();
+			ArrayList<String> foodCalories = new ArrayList<>();
+			ArrayList<String> foodDescription = new ArrayList<>();
+
+			int count = 0;
+			for (Element element : elements) {
+				if(element.ownText().equals("Breakfast ON THE GO")){
+					count++;
+				}
+				if(count == 2){
+					if (element.normalName().equals("img")) {
+						foodImage.add(element.attr("abs:src"));
+					}
+
+					if(element.className().equals("product-name product__name")){
+						foodItems.add(element.ownText());
+					}
+					if(element.className().equals("product__attribute product__attribute--price")){
+						int numOfEmptySpacesToAdd = foodItems.size() - foodPrice.size() - 1;
+						for(int i = 0; i < numOfEmptySpacesToAdd; i++){
+							foodPrice.add(null);
+						}
+						foodPrice.add(element.ownText());
+					}
+					if(element.className().equals("product__attribute product__attribute--calorie-label")){
+						int numOfEmptySpacesToAdd = foodItems.size() - foodCalories.size() - 1;
+						for(int i = 0; i < numOfEmptySpacesToAdd; i++){
+							foodCalories.add(null);
+						}
+						foodCalories.add(element.ownText());
+					}
+					if(element.className().equals("product__description")){
+						int numOfEmptySpacesToAdd = foodItems.size() - foodDescription.size() - 1;
+						for(int i = 0; i < numOfEmptySpacesToAdd; i++){
+							foodDescription.add(null);
+						}
+						foodDescription.add(element.ownText());
+					}
+				}
+
+			}
+
+			for(int i = 0; i < foodImage.size(); i++){
+				String image = null;
+				String price = null;
+				String calories = null;
+				if(i < foodImage.size()){
+					image = foodImage.get(i);
+				}
+				if(i < foodPrice.size()){
+					price = foodPrice.get(i);
+				}
+				if(i < foodCalories.size()){
+					calories = foodCalories.get(i);
+				}
+
+				addAubonPainMenuItem(image, foodItems.get(i), price, calories, foodDescription.get(i));
+			}
+
+
+		}catch(IOException e){
+			e.printStackTrace();
+			System.out.println("error reading in Aubon Pain website in addAbonPainTable()");
 		}
+
 	}
-
-
-
-
-
-
-
-
-
 
 // ADDING TO TABLES::::
 // ADDING TO TABLES::::
@@ -522,13 +582,13 @@ public class RequestsDB {
 	 * This function needs to add a external patient form to the table for external patient forms
 	 * //@param form this is the form that we will create and send to the database
 	 */
-	public static void addExternalPatientRequest(int userID, int assigneeID, String roomID, String requestType, String severity, String patientID, String ETA, String description) {
+	public static void addExternalPatientRequest(int userID, int assigneeID, String roomID, String requestType, String severity, String patientID, String ETA, String bloodPressure, String temperature, String oxygenLevel, String description) {
 
 		addRequest(userID, assigneeID, "extTransport");
 
 		String insertExtTransport = "Insert Into exttransport " +
 				"Values ((Select Count(*) " +
-				"         From requests), ?, ?, ?, ?, ?, ?)";
+				"         From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
 			prepState.setString(1, roomID);
@@ -536,7 +596,10 @@ public class RequestsDB {
 			prepState.setString(3, severity);
 			prepState.setString(4, patientID);
 			prepState.setString(5, ETA);
-			prepState.setString(6, description);
+			prepState.setString(6, bloodPressure);
+			prepState.setString(7, temperature);
+			prepState.setString(8, oxygenLevel);
+			prepState.setString(9, description);
 
 			prepState.execute();
 
@@ -558,10 +621,10 @@ public class RequestsDB {
 	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
 	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
 	 */
-	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
+	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message) {
 		addRequest(userID, assigneeID, "floral");
 
-		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
 			prepState.setString(1, RoomNodeID);
@@ -569,11 +632,14 @@ public class RequestsDB {
 			prepState.setString(3, flowerType);
 			prepState.setInt(4, flowerAmount);
 			prepState.setString(5, vaseType);
-			prepState.setString(6, message);
+			prepState.setString(6, arrangement);
+			prepState.setString(7, stuffedAnimal);
+			prepState.setString(8, chocolate);
+			prepState.setString(9, message);
 
 			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
 		}
 	}
@@ -622,6 +688,7 @@ public class RequestsDB {
 			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
 		}
 	}
+
 
 	/**
 	 *
@@ -738,56 +805,8 @@ public class RequestsDB {
 		}
 	}
 
-	/**
-	 * Adds a food item to the food table
-	 * @param item this is the item that is on the menu
-	 * @param price this is the price of the item on the menu
-	 * @param calories this is how many calories the menu item has
-	 * @param description this is a description of the food item
-	 */
-	public static void addFoodItem(String item, double price, int calories, String description){
-
-		int foodID = getMaxFoodID() + 1;
-		String query = "insert into food values (?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.setInt(1,foodID);
-			prepState.setString(2,item);
-			prepState.setDouble(3,price);
-			prepState.setInt(4,calories);
-			prepState.setString(5,description);
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("error addFoodItem()");
-		}
-
-	}
-
-	/**
-	 * Adds a beverage item to the beverage table
-	 * @param item this is the item that is on the menu
-	 */
-	public static void addBeverageItem(String item){
-
-		int beverageID = getMaxBeverageID() + 1;
-		String query = "insert into beverage values (?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.setInt(1,beverageID);
-			prepState.setString(2,item);
 
 
-			prepState.execute();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("error addBeverageItem()");
-		}
-
-	}
 
 	/**
 	 * Gets the largest requestID, which can be used to increment and make a the next one
@@ -815,91 +834,78 @@ public class RequestsDB {
 	}
 
 	/**
-	 * Gets the largest foodID, which can be used to increment and make a the next one
-	 * @return the largest foodID in the food table
+	 * adds a menuItem to the aubonPainMenu database table
+	 * @param foodImage this is the url to an image of the item
+	 * @param foodItem this is the item itself (this is unique and is used as an identifier)
+	 * @param foodPrice this is the price of the foodItem
+	 * @param foodCalories this is the number of calories the food item has
+	 * @param foodDescription this is a description of the food item
 	 */
-	public static int getMaxFoodID(){
-		int maxID = 0;
+	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription){
 
-		String query = "Select Max(foodID) As maxFoodID From food";
+		String query = "Insert Into aubonPainMenu Values(?,?,?,?,?) ";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			ResultSet rset = prepState.executeQuery();
+			prepState.setString(1,foodImage);
+			prepState.setString(2,foodItem);
+			prepState.setString(3,foodPrice);
+			prepState.setString(4,foodCalories);
+			prepState.setString(5,foodDescription);
 
-			if (rset.next()) {
-				maxID = rset.getInt("maxFoodID");
-			}
+			prepState.execute();
 
-			prepState.close();
-			return maxID;
+
 		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("Error in getMaxFoodID()");
-			return 0;
+			e.printStackTrace();
+			System.err.println("error inserting addAubonPainMenuItem() ");
+		}
+
+
+	}
+
+
+	public static void addInternalPatientRequest(int userID, String pickUpLocation, String dropOffLocation, int assigneeID, int patientID, String department, String severity, String description) {
+		addRequest(userID, assigneeID, "internalPatientRequest");
+
+		String insertInternalPatientReq = "Insert Into internalPatientRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertInternalPatientReq)) {
+			prepState.setInt(1, patientID);
+			prepState.setString(2, pickUpLocation);
+			prepState.setString(3, dropOffLocation);
+			prepState.setString(4, department);
+			prepState.setString(5, severity);
+			prepState.setString(6, description);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into internalPatientRequest inside function addInternalPatientRequest()");
 		}
 	}
 
 	/**
-	 * Gets the largest beverageID, which can be used to increment and make a the next one
-	 * @return the largest beverageID in the beverage table
+	 * add a religious request
+	 * @param roomID       where the request takes place
+	 * @param religionType the kind of the religion that request is requesting
+	 * @param description  some text to further describe the request
 	 */
-	public static int getMaxBeverageID(){
-		int maxID = 0;
+	public static void addReligiousRequest(int userID, String roomID, int assigneeID, String religionType, String description) {
+		addRequest(userID, assigneeID, "religiousRequest");
 
-		String query = "Select Max(beverageID) As maxBeverage From beverage";
+		String insertMaintenanceReq = "Insert Into religiousRequest Values ((Select Count(*) From requests), ?, ?, ?)";
 
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			ResultSet rset = prepState.executeQuery();
+		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, religionType);
+			prepState.setString(3, description);
 
-			if (rset.next()) {
-				maxID = rset.getInt("maxBeverage");
-			}
-
-			prepState.close();
-			return maxID;
-		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("Error in getMaxBeverageID()");
-			return 0;
-		}
-	}
-
-
-	//TODO: Not tested
-	public static void addFoodOrderedInRequestTable(int requestID, int foodID, int foodQuantity){
-		String query = "insert into foodOrderedInRequest values (?,?,?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.setInt(1,requestID);
-			prepState.setInt(2,foodID);
-			prepState.setInt(3, foodQuantity);
 			prepState.execute();
-
 		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("Error in addFoodOrderedInRequestTable()");
+			e.printStackTrace();
+			System.err.println("Error inserting into religiousRequest inside function addReligiousRequest()");
 		}
-
 	}
-
-	//TODO: Not tested
-	public static void addBeverageOrderedInRequestTable(int requestID, int beverageID, int beverageQuantity){
-		String query = "insert into beverageOrderedInRequest values (?,?,?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.setInt(1,requestID);
-			prepState.setInt(2,beverageID);
-			prepState.setInt(3, beverageQuantity);
-			prepState.execute();
-
-		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("Error in addFoodOrderedInRequestTable()");
-		}
-
-
-	}
-
 
 
 
@@ -986,7 +992,7 @@ public class RequestsDB {
 	 * @param ETA         this is the string used to update the eta
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String description, String ETA) {
+	public static int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String description, String ETA, String bloodPressure, String temperature, String oxygenLevel) {
 
 		boolean added = false;
 		String query = "Update extTransport Set ";
@@ -1031,6 +1037,27 @@ public class RequestsDB {
 			query = query + " ETA = '" + ETA + "'";
 			added = true;
 		}
+		if (bloodPressure != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " bloodPressure = '" + bloodPressure + "'";
+			added = true;
+		}
+		if (temperature != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " temperature = '" + temperature + "'";
+			added = true;
+		}
+		if (oxygenLevel != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " oxygenLevel = '" + oxygenLevel + "'";
+			added = true;
+		}
 
 		query = query + " where requestID = " + requestID;
 
@@ -1055,13 +1082,13 @@ public class RequestsDB {
 	 * @param message      the new message containing either instructions or to the recipient the user wants to change
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String message) {
+	public static int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message) {
 
 		boolean added = false;
 		String query = "Update floralRequests Set ";
 
 		if (recipientName != null) {
-			query = query + " recipientName = '" + recipientName + "'";
+			query = query + "recipientName = '" + recipientName + "'";
 
 			added = true;
 		}
@@ -1091,6 +1118,27 @@ public class RequestsDB {
 				query = query + ", ";
 			}
 			query = query + " vaseType = '" + vaseType + "'";
+			added = true;
+		}
+		if (arrangement != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " arrangement = '" + arrangement + "'";
+			added = true;
+		}
+		if (stuffedAnimal != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " stuffedAnimal = '" + stuffedAnimal + "'";
+			added = true;
+		}
+		if (chocolate != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " chocolate = '" + chocolate + "'";
 			added = true;
 		}
 		if (message != null) {
@@ -1487,83 +1535,103 @@ public class RequestsDB {
 		}
 	}
 
+	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
+		boolean added = false;
+		String query = "Update internalPatientRequest Set ";
 
-	/**
-	 * Reads in the Aubon Pain website to populate the foods and drinks table with real information
-	 */
-	public static void updateFoodAndBeverageTable(){
-
-		try {
-			Document doc = Jsoup.connect("https://order.aubonpain.com/menu/brigham-womens-hospital").get();
-			Elements media = doc.select("[src]"); // --> image urls
-			Elements foods = doc.getElementsByClass("product-name product__name");
-			Elements prices = doc.getElementsByClass("product__attribute product__attribute--price");
-			Elements calories = doc.getElementsByClass("product__attribute product__attribute--calorie-label");
-			Elements descriptions = doc.getElementsByClass("product__description");
-
-			ArrayList<String> listOfFoods = new ArrayList<String>();
-			ArrayList<String> listOfDrinks = new ArrayList<String>();
-
-			HashMap<Boolean,String> menuItems = new HashMap<Boolean, String>();
-			boolean drinkItem = false;
-			boolean foodItem = true;
-			for (Element item : foods) {
-				if(item.text().equals("Hot Coffee & Hot Tea")){
-					drinkItem = true;
-					foodItem = false;
-				}
-				if(item.text().equals("Chips & Salty Snacks")){
-					drinkItem = false;
-					foodItem = false;
-				}
-				if(item.text().equals("Bottled Spring Water (20 oz)")){
-					drinkItem = true;
-					foodItem = false;
-				}
-				if(item.text().equals("Cape Cod Lightly Salted Chips")){
-					drinkItem = false;
-					foodItem = true;
-				}
-
-				if(drinkItem){
-					listOfDrinks.add(item.text());
-
-				}
-				if(foodItem){
-					listOfFoods.add(item.text());
-				}
+		if (pickUpLocation != null) {
+			query = query + " pickUpLocation = '" + pickUpLocation + "'";
+			added = true;
+		}
+		if (dropOffLocation != null) {
+			if (added) {
+				query = query + ", ";
 			}
-
-			for(String food : listOfFoods){
-				addFoodItem(food, 0, 0, "");
+			query = query + "dropOffLocation = '" + dropOffLocation + "'";
+			added = true;
+		}
+		Integer patientIDObj = patientID;
+		if (patientIDObj != null) {
+			if (added) {
+				query = query + ", ";
 			}
-
-			for(String drink : listOfDrinks){
-				addBeverageItem(drink);
+			query = query + "patientID = " + patientID;
+			added = true;
+		}
+		if (department != null) {
+			if (added) {
+				query = query + ", ";
 			}
-
-			ArrayList<String> listOfPrices = new ArrayList<>();
-			for(Element price : prices){
-				listOfPrices.add(price.text());
+			query = query + "department = '" + department + "'";
+			added = true;
+		}
+		if (severity != null) {
+			if (added) {
+				query = query + ", ";
 			}
-
-
-			ArrayList<String> listOfCalories = new ArrayList<>();
-			for(Element calory : calories){
-				listOfCalories.add(calory.text());
+			query = query + "severity = '" + severity + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
 			}
+			query = query + "description = '" + description + "'";
+			added = true;
+		}
 
-
-
-			ArrayList<String> listOfDescriptions = new ArrayList<>();
-			for(Element description : descriptions){
-				listOfDescriptions.add(description.text());
-
-			}
-		}catch (IOException e){
-			System.err.println("Error connecting to the website");
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating editInternalPatientRequest");
+			return 0;
 		}
 	}
+
+	/**
+	 * edit a religious request
+	 * @param roomID       where the request takes place
+	 * @param religionType the kind of the religion that request is requesting
+	 * @param description  some text to further describe the request
+	 */
+	public static int editReligiousRequest(int requestID, String roomID, String religionType, String description) {
+		boolean added = false;
+		String query = "Update religiousRequest Set ";
+
+		if (roomID != null) {
+			query = query + "roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (religionType != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "religionType = '" + religionType + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating religiousRequest");
+			return 0;
+		}
+	}
+
 
 // QUERYING TABLES::::
 // QUERYING TABLES::::
@@ -1606,7 +1674,7 @@ public class RequestsDB {
 			rset.close();
 
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("getRequestInfo() got a SQLException");
 		}
 		return listOfInfo;
@@ -1688,7 +1756,7 @@ public class RequestsDB {
 			}
 			rset.close();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("getRequestLocations() got a SQLException");
 		}
 		return listOfLongNames;
@@ -1720,4 +1788,107 @@ public class RequestsDB {
 		}
 		return listOfAssignees;
 	}
+
+	/**
+	 * Gets a lits of all the menu items from aubon pain
+	 * @return list of AubonPainItem that are in the aubonPainMenu database table
+	 */
+	public static ArrayList<AubonPainItem> getAubonPanItems(){
+		String query = "Select * From aubonPainMenu";
+
+		ArrayList<AubonPainItem> menuItems = new ArrayList<>();
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while (rset.next()) {
+				String foodImage = rset.getString("foodImage");
+				String foodItem = rset.getString("foodItem");
+				String foodPrice = rset.getString("foodPrice");
+				String foodCalories = rset.getString("foodCalories");
+				String foodDescription = rset.getString("foodDescription");
+
+				AubonPainItem item = new AubonPainItem(foodImage, foodItem, foodPrice, foodCalories, foodDescription);
+				menuItems.add(item);
+			}
+			rset.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getAvailableAssignees() got a SQLException");
+		}
+
+		return menuItems;
+	}
+
+	/**
+	 * Used to get a list of info from a given column name in the aubonPainMenu table
+	 * @param column this is the name of the column the information is extracted from
+	 * @return a list of the given information
+	 */
+	public static ArrayList<String> getAubonPainFeild(String column){
+
+		String query = "Select " + column + " From aubonPainMenu";
+
+		ArrayList<String> foodItems = new ArrayList<>();
+
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+
+			ResultSet rset = prepStat.executeQuery();
+			while (rset.next()) {
+				String foodImage = rset.getString(column);
+
+				foodItems.add(foodImage);
+			}
+			rset.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getAubonPainFeild() got a SQLException");
+		}
+
+		return foodItems;
+	}
+
+	public static ObservableList<String> getAssigneeNames(String givenUserType) {
+		ObservableList<String> listOfAssignees = FXCollections.observableArrayList();
+
+		String query = "Select firstName, lastName From userAccount Where userType = '" + givenUserType + "'";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while (rset.next()) {
+				String firstName = rset.getString("firstName");
+				String lastName = rset.getString("lastName");
+				String fullName = firstName + " " + lastName;
+				listOfAssignees.add(fullName);
+			}
+			rset.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getAssigneeNames() got a SQLException");
+		}
+		return listOfAssignees;
+
+	}
+
+	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
+		ArrayList<Integer> listOfAssigneesIDs = new ArrayList<Integer>();
+
+		String query = "Select userID From userAccount Where userType = '" + givenUserType + "'";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while (rset.next()) {
+				int assigneeID = rset.getInt("userID");
+				listOfAssigneesIDs.add(assigneeID);
+			}
+			rset.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getAssigneeIDs() got a SQLException");
+		}
+		return listOfAssigneesIDs;
+	}
+
+
+
+
 }

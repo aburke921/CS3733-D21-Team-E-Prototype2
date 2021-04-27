@@ -63,7 +63,7 @@
                      <children>
                         <FlowPane style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="38.0" prefWidth="486.0" text="Language Interpreter" textFill="WHITE">
+                              <Label prefHeight="38.0" prefWidth="486.0" text="Language Interpreter (Yihong Xu)" textFill="WHITE">
                                  <font>
                                     <Font size="20.0" />
                                  </font>

@@ -63,10 +63,8 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 	}
 
 	@FXML
-		// This method is called by the FXMLLoader when initialization is complete
-
 	void initialize() { ;
-//		ObservableList<String> employees = SomethingDB.getAllEmployeeNames();
+//		ObservableList<String> employees = DB.getAllEmployeeNames();
 //		assignedPersonnel.setItems(employees);
 		locations = DB.getAllNodeLongNames();
 		locationInput.setItems(locations);

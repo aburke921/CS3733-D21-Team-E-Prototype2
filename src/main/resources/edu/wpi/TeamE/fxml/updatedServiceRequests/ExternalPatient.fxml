@@ -62,7 +62,7 @@
                      <children>
                         <FlowPane style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="38.0" prefWidth="486.0" text="External Patient Transportation" textFill="WHITE">
+                              <Label prefHeight="38.0" prefWidth="486.0" text="External Patient Transportation (Cole Manning)" textFill="WHITE">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -131,11 +131,11 @@
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                 </JFXTextField>
-                                                <JFXTextField fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
+                                                <JFXComboBox fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
                                                    <VBox.margin>
                                                       <Insets top="20.0" />
                                                    </VBox.margin>
-                                                </JFXTextField>
+                                                </JFXComboBox>
                                              </children>
                                              <FlowPane.margin>
                                                 <Insets left="10.0" />
@@ -147,6 +147,21 @@
                                        <children>
                                           <VBox prefHeight="363.0" prefWidth="259.0">
                                              <children>
+                                                <JFXTextField fx:id="bloodPressureInput" prefHeight="27.0" prefWidth="280.0" promptText="Blood Pressure">
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </JFXTextField>
+                                                <JFXTextField fx:id="temperatureInput" prefHeight="27.0" prefWidth="280.0" promptText="Temperature">
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </JFXTextField>
+                                                <JFXTextField fx:id="oxygenInput" prefHeight="27.0" prefWidth="280.0" promptText="Oxygen">
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </JFXTextField>
                                                 <JFXTextArea fx:id="descriptionInput" prefHeight="141.0" prefWidth="259.0" promptText="Detailed Description">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />

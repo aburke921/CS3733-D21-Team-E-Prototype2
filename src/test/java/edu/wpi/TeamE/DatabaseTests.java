@@ -1595,5 +1595,56 @@ public class DatabaseTests {
 		assertEquals(correctFoodImages, returnedFoodImages);
 	}
 
+	@Test
+	@DisplayName("testGetAssigneeNames")
+	public void testGetAssigneeNames(){
+
+		DB.addSpecialUserType("adamj@gmail.com", "patient1", "patient", "Adam", "Jenkins");
+		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
+		DB.addSpecialUserType("amyw@gmail.com", "floralPerson1", "floralPerson", "Amy", "Castaneda");
+
+		ObservableList<String> assigneeNamesPatient = FXCollections.observableArrayList();
+		assigneeNamesPatient.add("Adam Jenkins");
+
+		ObservableList<String> assigneeNamesDoctor = FXCollections.observableArrayList();
+		assigneeNamesDoctor.add("Bill Byrd");
+
+		ObservableList<String> assigneeNamesFloral = FXCollections.observableArrayList();
+		assigneeNamesFloral.add("Amy Castaneda");
+
+		ObservableList<String> returnedPatient = RequestsDB.getAssigneeNames("patient");
+		ObservableList<String> returnedDoctor = RequestsDB.getAssigneeNames("doctor");
+		ObservableList<String> returnedFloral = RequestsDB.getAssigneeNames("floralPerson");
+
+		assertEquals(assigneeNamesPatient, returnedPatient);
+		assertEquals(assigneeNamesDoctor, returnedDoctor);
+		assertEquals(assigneeNamesFloral, returnedFloral);
+	}
+
+	@Test
+	@DisplayName("testGetAssigneeIDs")
+	public void testGetAssigneeIDs(){
+
+		DB.addSpecialUserType("adamj@gmail.com", "patient1", "patient", "Adam", "Jenkins");
+		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
+		DB.addSpecialUserType("amyw@gmail.com", "floralPerson1", "floralPerson", "Amy", "Castaneda");
+
+		ArrayList<Integer> assigneeIDsPatient = new ArrayList<>();
+		assigneeIDsPatient.add(1);
+
+		ArrayList<Integer> assigneeIDsDoctor = new ArrayList<>();
+		assigneeIDsDoctor.add(2);
+
+		ArrayList<Integer> assigneeIDsFloral = new ArrayList<>();
+		assigneeIDsFloral.add(3);
+
+		ArrayList<Integer> returnedPatientIDs = RequestsDB.getAssigneeIDs("patient");
+		ArrayList<Integer> returnedDoctorIDs = RequestsDB.getAssigneeIDs("doctor");
+		ArrayList<Integer> returnedFloralIDs = RequestsDB.getAssigneeIDs("floralPerson");
+
+		assertEquals(assigneeIDsPatient, returnedPatientIDs);
+		assertEquals(assigneeIDsDoctor, returnedDoctorIDs);
+		assertEquals(assigneeIDsFloral, returnedFloralIDs);
+	}
 
 }

@@ -45,7 +45,7 @@ public class RequestsDB {
 				"requestType   varchar(31), " +
 				"requestStatus varchar(10), " +
 				"assigneeID    int References useraccount On Delete Cascade," +
-				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')), " +
+				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'internalPatientRequest')), " +
 				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -353,6 +353,29 @@ public class RequestsDB {
 
 	}
 
+	public static void createInternalPatientRequest() {
+		String query = "Create Table internalPatientRequest " +
+				"( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    patientID int References userAccount(userID) on Delete Cascade, " +
+				"    pickUpLocation varchar(31) Not Null References node On Delete Cascade, " +
+				"    dropOffLocation varchar(31) Not Null References node On Delete Cascade, " +
+				"    department varchar(31), " +
+				"    severity varchar(31), " +
+				"    description varchar(5000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating internalPatientRequest table");
+		}
+	}
+
 
 
 
@@ -437,7 +460,6 @@ public class RequestsDB {
 					}
 				}
 
-
 			}
 
 			for(int i = 0; i < foodImage.size(); i++){
@@ -463,12 +485,7 @@ public class RequestsDB {
 			System.out.println("error reading in Aubon Pain website in addAbonPainTable()");
 		}
 
-
-
 	}
-
-
-
 
 // ADDING TO TABLES::::
 // ADDING TO TABLES::::
@@ -742,6 +759,8 @@ public class RequestsDB {
 	}
 
 
+
+
 	/**
 	 * Gets the largest requestID, which can be used to increment and make a the next one
 	 * @return the largest requestID in the request table
@@ -795,6 +814,27 @@ public class RequestsDB {
 		}
 
 
+	}
+
+
+	public static void addInternalPatientRequest(int userID, String pickUpLocation, String dropOffLocation, int assigneeID, int patientID, String department, String severity, String description) {
+		addRequest(userID, assigneeID, "internalPatientRequest");
+
+		String insertInternalPatientReq = "Insert Into internalPatientRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertInternalPatientReq)) {
+			prepState.setInt(1, patientID);
+			prepState.setString(2, pickUpLocation);
+			prepState.setString(3, dropOffLocation);
+			prepState.setString(4, department);
+			prepState.setString(5, severity);
+			prepState.setString(6, description);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into internalPatientRequest inside function addInternalPatientRequest()");
+		}
 	}
 
 
@@ -1390,6 +1430,64 @@ public class RequestsDB {
 
 
 
+
+
+	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
+		boolean added = false;
+		String query = "Update internalPatientRequest Set ";
+
+		if (pickUpLocation != null) {
+			query = query + " pickUpLocation = '" + pickUpLocation + "'";
+			added = true;
+		}
+		if (dropOffLocation != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "dropOffLocation = '" + dropOffLocation + "'";
+			added = true;
+		}
+		Integer patientIDObj = patientID;
+		if (patientIDObj != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "patientID = " + patientID;
+			added = true;
+		}
+		if (department != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "department = '" + department + "'";
+			added = true;
+		}
+		if (severity != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "severity = '" + severity + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating editInternalPatientRequest");
+			return 0;
+		}
+	}
 
 
 // QUERYING TABLES::::

@@ -160,6 +160,7 @@ public class App extends Application {
 				DB.createMaintenanceRequestTable();
 				DB.createFoodDeliveryTable();
 				DB.createAubonPainMenuTable();
+				DB.createInternalPatientRequest();
 				DB.populateTable("node", nodes);
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();

@@ -2,16 +2,23 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.*;
 import edu.wpi.TeamE.App;
 
+import edu.wpi.TeamE.algorithms.Path;
 import javafx.event.ActionEvent;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 
 
 import java.io.IOException;
+import java.util.List;
+
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class CovidSurvey extends ServiceRequests  {
 
@@ -23,8 +30,36 @@ public class CovidSurvey extends ServiceRequests  {
     @FXML JFXCheckBox quarantine;
     @FXML JFXCheckBox noSymptoms;
 
+    /**
+     * Creates a popup if the user indicates any symptoms.
+     *
+     */
+    @FXML
+    void popUp() {
 
+        JFXDialogLayout error = new JFXDialogLayout();
+        error.setHeading(new Text("Based on your response you should go home"));
 
+        error.setPrefHeight(USE_COMPUTED_SIZE);
+        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+        dialog.setMaxWidth(350);
+        JFXButton okay = new JFXButton("Exit");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+                    App.setDraggableAndChangeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+        error.setActions(okay);
+        dialog.show();
+    }
     @FXML
     void submitButton(ActionEvent actionEvent){
         boolean safe = !(positiveTest.isSelected() || symptoms.isSelected() || closeContact.isSelected() || quarantine.isSelected()) && noSymptoms.isSelected();
@@ -32,7 +67,7 @@ public class CovidSurvey extends ServiceRequests  {
         if(noSymptoms.isSelected()){
 
             rating = 1;
-            System.out.print(rating);
+
 
         }else {
             if(symptoms.isSelected()){
@@ -45,14 +80,19 @@ public class CovidSurvey extends ServiceRequests  {
                 rating = 5;
             }
         }
+        if(rating > 1){
+            popUp();
+        }else{
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+                App.setDraggableAndChangeScene(root);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
         System.out.print(rating);
 
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
-            App.setDraggableAndChangeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+
     }
     /**
      * Returns to the service request page

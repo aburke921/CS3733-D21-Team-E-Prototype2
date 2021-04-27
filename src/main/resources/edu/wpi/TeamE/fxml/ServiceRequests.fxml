@@ -58,7 +58,7 @@
                      <children>
                         <FlowPane style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
                            <children>
-                              <Label prefHeight="38.0" prefWidth="486.0" text="Select A Service" textFill="WHITE">
+                              <Label prefHeight="38.0" prefWidth="486.0" text="Service Request System" textFill="WHITE">
                                  <font>
                                     <Font size="20.0" />
                                  </font>

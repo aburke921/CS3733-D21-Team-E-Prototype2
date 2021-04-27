@@ -299,9 +299,9 @@ public class PathFinder {
         bathroom.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                SearchContext aStar = new SearchContext();
+                SearchContext search = new SearchContext();
                 startLocationComboBox.getSelectionModel().select(index);
-                Node bathroom = aStar.findNearest(nodeArrayList.get(index),"REST");
+                Node bathroom = search.findNearest(nodeArrayList.get(index),"REST");
                 int endIndex = 0;
                 for(int i = 0; i < nodeArrayList.size();i++){
                     if(nodeArrayList.get(i).get("id").equals(bathroom.get("id"))){
@@ -368,16 +368,29 @@ public class PathFinder {
 
         //Define A* Search
         System.out.println("A* Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
-        SearchContext aStar = new SearchContext();
+        SearchContext search = new SearchContext();
+        String algoType = null;
+        switch (App.getSearchAlgo()) {
+            case 1:
+                algoType = "DFS";
+                break;
+            case 2:
+                algoType = "BFS";
+                break;
+            default:
+                algoType = "A*";
+                break;
+        }
+        search.setAlgo(algoType);
 
         //set constrains
         if (handicap.isSelected()) {
             System.out.println("Yay Handicap");
-            aStar.addConstraint("HANDICAP");
+            search.addConstraint("HANDICAP");
         }
         if (safe.isSelected()) {
             System.out.println("Yay Safe =)");
-            aStar.addConstraint("SAFE");
+            search.addConstraint("SAFE");
         }
 
         //Check if starting and ending node are the same
@@ -391,7 +404,7 @@ public class PathFinder {
             findPathButton.setDisable(true);
         } else { // run search
             //Call the path search function
-            Path foundPath = aStar.search(selectedStartNodeID, selectedEndNodeID);
+            Path foundPath = search.search(selectedStartNodeID, selectedEndNodeID);
 
             //draw map, unless path is null
             if (foundPath == null) { //path is null

@@ -388,7 +388,7 @@ public class PathFinder {
             System.out.println("Yay Handicap");
             search.addConstraint("HANDICAP");
         }
-        if (safe.isSelected()) {
+        if (!safe.isSelected()) {
             System.out.println("Yay Safe =)");
             search.addConstraint("SAFE");
         }

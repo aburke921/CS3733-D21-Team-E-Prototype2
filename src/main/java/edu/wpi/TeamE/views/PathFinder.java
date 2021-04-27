@@ -773,12 +773,13 @@ public class PathFinder {
             System.out.println(yInt);*/
 
             for(int i = 0; i < array.size(); i++) {
-                double nodeX = array.get(i).getX() / scale;
+                Node node = array.get(i);
+                double nodeX = node.getX() / scale;
                 int nodeXInt = (int) nodeX;
-                double nodeY = array.get(i).getY() / scale;
+                double nodeY = node.getY() / scale;
                 int nodeYInt = (int) nodeY;
                 System.out.println(nodeXInt);
-                if (Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) {
+                if ((Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) && (node.get("floor").equalsIgnoreCase(currentFloor))) {
 
                     System.out.println(array.get(i).get("longName"));
                     clickOnNode(i);

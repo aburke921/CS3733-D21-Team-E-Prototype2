@@ -8,6 +8,7 @@ import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
 
 import java.awt.*;
+import java.awt.Label;
 import java.io.File;
 import java.io.IOException;
 
@@ -40,6 +41,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -131,6 +133,8 @@ public class newMapEditor {
     @FXML
     private JFXComboBox edgeID;
 
+    @FXML private JFXComboBox floorSelector;
+
 
 
 
@@ -138,7 +142,6 @@ public class newMapEditor {
      * Additional Variables
      */
 
-    private boolean nodeMode = true;
     private String startID = "test";
     private String endID = "test";
 
@@ -246,9 +249,6 @@ public class newMapEditor {
 
         ArrayList<Node> nodeArray = new ArrayList<Node>();
         nodeArray = DB.getAllNodesByFloor(floorNum);
-        for(int i = 0; i < nodeArray.size(); i++) {
-            System.out.println(nodeArray.get(i).get("id"));
-        }
         ArrayList<Edge> edgeArray = new ArrayList<Edge>();
         edgeArray = DB.getAllEdges();
 
@@ -912,9 +912,10 @@ public class newMapEditor {
         dialog.show();
     }
 
+
     @FXML
-    public void fileOpenerEdge(ActionEvent e) {
-        FileChooser fileChooser = new FileChooser();
+    public void fileOpenerNode(ActionEvent e) {
+        /*FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
         makeConnection connection = makeConnection.makeConnection();
         if (file != null) {
@@ -938,37 +939,9 @@ public class newMapEditor {
             DB.populateTable("hasEdge", saveEdges);
             System.out.println("Success");
         }
+
+         */
     }
-
-    @FXML
-    public void fileOpenerNode(ActionEvent e) {
-        FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(App.getPrimaryStage());
-        makeConnection connection = makeConnection.makeConnection();
-        if (file != null) {
-            //Have to save edge table so we can get it back after deleting
-            DB.getNewCSVFile("node");
-            File saveEdges = new File("CSVs/outputNode.csv");
-
-            //This is where tables are cleared and refilled
-            connection.deleteAllTables();
-            DB.createNodeTable();
-            DB.createEdgeTable();
-            DB.createUserAccountTable();
-            DB.createRequestsTable();
-            DB.createFloralRequestsTable();
-            DB.createSanitationTable();
-            DB.createExtTransportTable();
-            DB.createMedDeliveryTable();
-            DB.createSecurityServTable();
-            DB.createAppointmentTable();
-            DB.populateTable("node", file);
-            DB.populateTable("hasEdge", saveEdges);
-            System.out.println("Success");
-        }
-    }
-
-
 
     /**
      *opens the file explorer on user's device, allows user to select CSV file,
@@ -977,25 +950,13 @@ public class newMapEditor {
      */
     @FXML
     private void openFileNode(ActionEvent e) throws IOException {
-
+/*
         DB.getNewCSVFile("node");
         File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
-    }
 
-    /**
-     *opens the file explorer on user's device, allows user to select CSV file,
-     * uploads file to database, refreshes page
-     * @param e actionevent
-     */
-    @FXML
-    private void openFileEdge(ActionEvent e) throws IOException {
-
-        DB.getNewCSVFile("hasEdge");
-        File file = new File("src/main/resources/edu/wpi/TeamE/output/outputEdge.csv");
-        Desktop desktop = Desktop.getDesktop();
-        desktop.open(file);
+ */
     }
 
     /**
@@ -1053,6 +1014,7 @@ public class newMapEditor {
         floorInput.setItems(listOfFloors);
         buildingInput.setItems(listOfBuildings);
         idInput.setItems(listOfIDS);
+        floorSelector.setItems(listOfFloors);
 
         System.out.println("Begin PathFinder Init");
 
@@ -1255,9 +1217,6 @@ public class newMapEditor {
     }
 
 
-    //ability to select edge and autofill fields
-
-
 
     public void cancelButton(ActionEvent e) {
         cancelEdge();
@@ -1279,13 +1238,6 @@ public class newMapEditor {
             currentFloorNamesIndex = 0;
         } else currentFloorNamesIndex++;
     }
-
-    public void editEdgeButton(ActionEvent actionEvent) {
-        //editEdge(edgeTreeTable);
-    }
-    /*
-    public void editEdge(TreeTableView table) {
-    }*/
 
     public void deleteEdgeButton(ActionEvent actionEvent) {
         deleteEdge();
@@ -1360,6 +1312,16 @@ public class newMapEditor {
         typeInput.setValue(null);
         xCordInput.clear();
         yCordInput.clear();
+    }
+
+    public void selectFloor() {
+        //set image
+        currentFloor = floorSelector.getValue().toString();
+        Image image = new Image("edu/wpi/TeamE/maps/" + floorSelector.getValue().toString() + ".png");
+        imageView.setImage(image);
+
+        //draw path for new floor
+        drawMap(currentFloor);
     }
 }
 

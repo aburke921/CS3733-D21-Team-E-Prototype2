@@ -32,9 +32,9 @@ public class QRCode {
 		String result = null;
 
 		while (result == null) {
-			WebcamUtils.capture(webcam, "src/main/resources/edu/wpi/TeamE/temp/temp", ImageUtils.FORMAT_PNG);
+			WebcamUtils.capture(webcam, "src/main/resources/edu/wpi/TeamE/QRcode/temp", ImageUtils.FORMAT_PNG);
 			try {
-				result = QRCode.readQR("src/main/resources/edu/wpi/TeamE/temp/temp.png");
+				result = QRCode.readQR("src/main/resources/edu/wpi/TeamE/QRcode/temp.png");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

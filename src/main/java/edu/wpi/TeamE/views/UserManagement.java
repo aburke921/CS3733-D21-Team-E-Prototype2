@@ -99,6 +99,7 @@ public class UserManagement {
             //cleanup
             addUser.setText("Add User");
             showFields(false);
+            clearFieldContent();
             //todo refresh
 
         } else { //admin would like to start adding user
@@ -155,7 +156,7 @@ public class UserManagement {
             editingUser = false;
             editUser.setText("Edit User");
             currentlyEditing = null;
-            //todo empty fields so they aren't pre-filled on next use
+            clearFieldContent();
             //todo refresh
         } else { //no edit is in progress
 
@@ -371,6 +372,16 @@ public class UserManagement {
         userTypeInput.setVisible(status);
         userPassword.setVisible(status);
         userEmail.setVisible(status);
+    }
+
+    /**
+     * @// TODO: 4/27/21
+     */
+    private void clearFieldContent() {
+        userNameInput.setText(null);
+        userTypeInput.getSelectionModel().select(null);
+        userPassword.setText(null);
+        userEmail.setText(null);
     }
 
 }

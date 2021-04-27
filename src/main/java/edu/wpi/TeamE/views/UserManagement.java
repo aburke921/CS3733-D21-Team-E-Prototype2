@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTreeTableView;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.RequestsDB;
@@ -33,7 +35,7 @@ public class UserManagement {
     private URL location;
 
     @FXML // fx:id="appBarAnchorPane"
-    private AnchorPane appBarAnchorPane; // Value injected by FXMLLoader
+    private AnchorPane appBarAnchorPane;
 
     @FXML
     private JFXTextField userNameInput;
@@ -45,19 +47,10 @@ public class UserManagement {
     private JFXTextField userTypeInput;
 
     @FXML // fx:id="treeTableView"
-    private TreeTableView<User> treeTableView; // Value injected by FXMLLoader
+    private TreeTableView<User> treeTableView;
 
-//    @FXML // fx:id="userIDEditableColumn"
-//    private JFXTreeTableColumn<User, ?> userIDColumn; // Value injected by FXMLLoader
-//
-//    @FXML // fx:id="fullNameEditableColumn"
-//    private JFXTreeTableColumn<User, ?> fullNameColumn; // Value injected by FXMLLoader
-//
-//    @FXML
-//    private JFXTreeTableColumn<User, ?> userTypeEditableColumn;
-
-    @FXML // fx:id="backButton"
-    private JFXButton backButton; // Value injected by FXMLLoader
+    @FXML
+    private JFXButton backButton;
 
     @FXML
     void addUserButton(ActionEvent event) {

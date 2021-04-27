@@ -30,7 +30,8 @@ repositories {
 dependencies {
     implementation(
             'com.jfoenix:jfoenix:8.0.10',
-
+            'com.google.zxing:zxing-parent:3.4.1',
+            //'com.google.zxing:core:3.4.1',
             'org.jsoup:jsoup:1.13.1',
 
             // https://mvnrepository.com/artifact/de.jensd/fontawesomefx
@@ -77,7 +78,7 @@ jar {
 
 
 //Added for Testing Only
-run{
+run {
     standardInput = System.in
 }
 

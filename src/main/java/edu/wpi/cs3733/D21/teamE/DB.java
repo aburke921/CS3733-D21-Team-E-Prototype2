@@ -7,8 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.io.File;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 

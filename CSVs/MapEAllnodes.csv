@@ -43,7 +43,7 @@ ALABS00203,1671,2695,3,BTM,LABS,Clinical Trials,Clinical Trials
 AREST00101,1556,2604,1,BTM,REST,Restroom S elevator 1st floor,Restroom
 AREST00103,1552,2854,3,BTM,REST,Restroom BTM conference center 3rd floor,Restroom
 ARETL00101,1619,2522,1,BTM,RETL,Cafe,Cafe
-ASTAI00101,1642,2596,1,BTM,STAI,Cafe Stairs,Cafe Staris
+ASTAI00101,1642,2596,1,BTM,STAI,Cafe Stairs,Cafe Stairs
 ASTAI00102,1650,2602,2,BTM,STAI,Stairs Floor 2,Stairs Floor 2
 BCONF00102,2150,1025,2,45 Francis,CONF,Duncan Reid Conference Room,Conf B0102
 BHALL03802,2279,786,2,45 Francis,HALL,Hallway Intersection 38 Level 2,Hallway B3802
@@ -630,3 +630,22 @@ eSTAI001L1,1643,2190,L1,Shapiro,STAI,Shapiro Stairs Floor L1 Stairs 1,Shapiro St
 eSTAI00101,1673,2179,1,Shapiro,STAI,Shapiro Stairs Floor 1 Stairs 1,Shapiro Stair eSTAI00101
 eSTAI00102,1592,2154,2,Shapiro,STAI,Shapiro Stairs Floor 2 Stairs 1,Shapiro Stair eSTAI00102
 eSTAI00103,1595,2181,3,Shapiro,STAI,Shapiro Stairs Floor 3 Stairs 1,Shapiro Stair eSTAI00103
+eDEPT001GG,1565,2863,G,BTM,DEPT,Infusion Station, Infusion
+eDEPT002GG,1548,2821,G,BTM,DEPT,Blood Work Waiting Room, Blood Waiting Room
+eDEPT003GG,1527,2500,G,BTM,DEPT,Neurosciences Testing Waiting Room, Neuro Waiting Room
+eLABS001GG,1601,2921,G,BTM,LABS,Outpatient Phlebotomy, Phlebotomy
+eLABS002GG,1506,2543,G,BTM,LABS,Neurosciences Testing,Neuro Testing
+eSERV001GG,1696,2705,G,BTM,INFO,Information Desk Floor G,Info Desk Floor G
+eSERV002GG,1483,2715,G,BTM,INFO,Valet Service Floor G,Valet Floor G
+eELEV00SGG,1523,2735,G,BTM,ELEV,Elevator S Floor G, Elev S Floor G
+eSTAI001GG,1618,2554,G,BTM,STAI,Cafe Stairs Floor G,Cafe Stairs Floor G
+eHALL001GG,1600,2856,G,BTM,HALL,Blood Labs Hallway, Blood Hall
+eHALL002GG,1600,2741,G,BTM,HALL,Main Hallway Floor G Node 1, Main Hall G 1
+eHALL003GG,1526,2741,G,BTM,HALL,BTM Elevator Bank Floor G, BTM Elev Floor G
+eHALL004GG,1703,2645,G,BTM,HALL,Main Hallway Floor G Node 2, Main Hall G 2
+eHALL005GG,1600,2645,G,BTM,HALL,Main Hallway Floor G Node 3, Main Hall G 3
+eHALL006GG,1703,2533,G,BTM,HALL,Main Hallway Floor G Node 4, Main Hall G 4
+eHALL007GG,1600,2533,G,BTM,HALL,Main Hallway Floor G Node 5, Main Hall G 5
+eHALL008GG,1555,2536,G,BTM,HALL,Neurosciences Hallway, Neuro Hall
+eWALK001GG,1680,2445,G,BTM,WALK,BTM Entrance Sidewalk,BTM Sidewalk
+eEXIT001GG,1680,2488,G,BTM,EXIT,BTM Entrance Ground Floor,BTM Entrance

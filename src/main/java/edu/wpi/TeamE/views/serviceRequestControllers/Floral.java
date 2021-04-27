@@ -77,12 +77,15 @@ public class Floral extends ServiceRequestFormComponents {
             String type = flowerType.getSelectionModel().getSelectedItem();
             String count = flowerCount.getSelectionModel().getSelectedItem();
             String vase = vaseType.getSelectionModel().getSelectedItem().toString();
+            String arrangement = "arrangement"; //TODO: add this textBox on Floral service request page
+            String stuffedAnimal = "Include Stuffed Animal"; //TODO: add this checkbox on Floral service request page
+            String chocolate = "Do not Include Chocolate"; //TODO: add this checkbox on Floral service request page
             int assigned = Integer.parseInt(assignee.getText());
             String reciever = recipient.getText();
             String mess = message.getText();
 
             //assigned is now an integer (userID) so must be changed
-            DB.addFloralRequest(App.userID, 0, nodeInfo, reciever, type, 12, vase, mess);
+            DB.addFloralRequest(App.userID, 0, nodeInfo, reciever, type, 12, vase, arrangement, stuffedAnimal, chocolate, mess);
 
         }
     }

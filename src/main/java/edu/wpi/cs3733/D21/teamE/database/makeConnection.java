@@ -181,15 +181,15 @@ public class makeConnection {
 		DB.addSpecialUserType("darrenr@gmail.com", "floralPerson9", "floralPerson", "Darren", "Rossi");
 
 		//Floral Requests: //RequestID: 1-9
-		DB.addFloralRequest(13, 31, "ADEPT00101", "Adam", "Roses", 1, "None", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
-		DB.addFloralRequest(13, 32, "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
-		DB.addFloralRequest(14, 33, "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Get well soon");
-		DB.addFloralRequest(15, 34, "ADEPT00301", "Nikki", "Assortment", 1, "None", "");
-		DB.addFloralRequest(15, 35, "ADEPT00101", "Monica", "Roses", 6, "Tall", "Love and miss you!!");
-		DB.addFloralRequest(17, 36, "DDEPT00102", "Amy", "Tulips", 12, "Square", "Enjoy the flowers");
-		DB.addFloralRequest(17, 37, "ADEPT00102", "Alfred", "Carnations", 1, "Tall", "Miss you!");
-		DB.addFloralRequest(19, 38, "ADEPT00101", "Caroline", "Assortment", 6, "Round", "Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
-		DB.addFloralRequest(19, 39, "ADEPT00301", "Carrie", "Assortment", 12, "Round", "");
+		DB.addFloralRequest(13, 31, "ADEPT00101", "Adam", "Roses", 1, "None", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
+		DB.addFloralRequest(13, 32, "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
+		DB.addFloralRequest(14, 33, "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate","Get well soon");
+		DB.addFloralRequest(15, 34, "ADEPT00301", "Nikki", "Assortment", 1, "None", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Feel Better!");
+		DB.addFloralRequest(15, 35, "ADEPT00101", "Monica", "Roses", 6, "Tall", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate","Love and miss you!!");
+		DB.addFloralRequest(17, 36, "DDEPT00102", "Amy", "Tulips", 12, "Square", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Enjoy the flowers");
+		DB.addFloralRequest(17, 37, "ADEPT00102", "Alfred", "Carnations", 1, "Tall", "Include arrangement", "Include stuffed Animal", "Include Chocolate","Miss you!");
+		DB.addFloralRequest(19, 38, "ADEPT00101", "Caroline", "Assortment", 6, "Round", "do not Include arrangement", "do not Include stuffed Animal", "do not Include Chocolate","Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
+		DB.addFloralRequest(19, 39, "ADEPT00301", "Carrie", "Assortment", 12, "Round", "Include arrangement", "Include stuffed Animal", "Include Chocolate","Miss you!");
 
 		//custodian:
 		//40 - 48
@@ -258,7 +258,7 @@ public class makeConnection {
 		DB.addSanitationRequest(25, 43, "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium", "Rosa Smith");
 		DB.addSanitationRequest(28, 44, "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical", "Abby Williams");
 		DB.addSanitationRequest(30, 45, "IREST00203", "Trash Removal", "Trash can smells bad", "Medium", "Alesha Harris");
-		DB.addSanitationRequest(29, 46, "IREST00303", "Trash Removal", "Trash can full. Another one is available so don't rush.", "Low", "Andrew Guerrero");
+		DB.addSanitationRequest(29, 46, "IREST00303", "Trash Removal", "Trash can full. Another one is available so do not rush.", "Low", "Andrew Guerrero");
 		DB.addSanitationRequest(22, 47, "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel");
 		DB.addSanitationRequest(23, 48, "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
 
@@ -311,15 +311,15 @@ public class makeConnection {
 
 
 		//RequestID: 39 - 47
-		DB.addExternalPatientRequest(27, 70, "EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. ");
-		DB.addExternalPatientRequest(30, 71, "EEXIT00101", "Ambulance", "Low Severity", "4093380", "20 minutes", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
-		DB.addExternalPatientRequest(22, 72, "FDEPT00501", "Helicopter", "High Severity", "92017693", "10 minutes", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
-		DB.addExternalPatientRequest(20, 73, "FDEPT00501", "Helicopter", "High Severity", "93754789", "20 minutes", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
-		DB.addExternalPatientRequest(24, 74, "EEXIT00101", "Ambulance", "Medium Severity", "417592", "10 minutes", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
-		DB.addExternalPatientRequest(28, 75, "FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
-		DB.addExternalPatientRequest(24, 76, "EEXIT00101", "Ambulance", "Medium Severity", "33337861", "7 minutes", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
-		DB.addExternalPatientRequest(27, 77, "EEXIT00101", "Ambulance", "Low Severity", "40003829", "10 minutes", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
-		DB.addExternalPatientRequest(24, 77, "FDEPT00501", "Plane", "High Severity", "38739983", "12 hours", "Heart transplant organ in route");
+		DB.addExternalPatientRequest(27, 70, "EEXIT00101", "Ambulance", "High Severity", "12334567", "5 minutes", "High", "Low", "Low", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident.");
+		DB.addExternalPatientRequest(30, 71, "EEXIT00101", "Ambulance", "Low Severity", "4093380", "20 minutes", "Low", "High", "High","Patient coming in with cut on right hand. Needs stitches. Bleeding is stable.");
+		DB.addExternalPatientRequest(22, 72, "FDEPT00501", "Helicopter", "High Severity", "92017693", "10 minutes", "High", "High", "Low","Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head.");
+		DB.addExternalPatientRequest(20, 73, "FDEPT00501", "Helicopter", "High Severity", "93754789", "20 minutes", "High", "High", "Low","Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse.");
+		DB.addExternalPatientRequest(24, 74, "EEXIT00101", "Ambulance", "Medium Severity", "417592", "10 minutes", "Low", "Low", "High","Smoke inhalation due to a fire. No burns but difficult time breathing.");
+		DB.addExternalPatientRequest(28, 75, "FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "High", "High", "Low","Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
+		DB.addExternalPatientRequest(24, 76, "EEXIT00101", "Ambulance", "Medium Severity", "33337861", "7 minutes", "High", "Low", "High","Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
+		DB.addExternalPatientRequest(27, 77, "EEXIT00101", "Ambulance", "Low Severity", "40003829", "10 minutes", "Low", "High", "Low","Relocating a patient with lung cancer from Mt.Auburn Hospital.");
+		DB.addExternalPatientRequest(24, 77, "FDEPT00501", "Plane", "High Severity", "38739983", "12 hours", "Low", "Low", "High","Heart transplant organ in route");
 
 
 		DB.editRequests(40, 0, "complete");

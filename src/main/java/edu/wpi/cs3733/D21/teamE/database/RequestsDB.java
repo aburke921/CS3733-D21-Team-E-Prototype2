@@ -1,6 +1,8 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.TeamE.views.serviceRequestObjects.AubonPainItem;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
 import java.util.Set;
 
 public class RequestsDB {
@@ -615,7 +618,7 @@ public class RequestsDB {
 	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
 	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
 	 */
-	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String arrangement, String stuffedAnimal, String chocolate, String recipientName, String flowerType, int flowerAmount, String vaseType, String message) {
+	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message) {
 		addRequest(userID, assigneeID, "floral");
 
 		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -1082,7 +1085,7 @@ public class RequestsDB {
 		String query = "Update floralRequests Set ";
 
 		if (recipientName != null) {
-			query = query + " recipientName = '" + recipientName + "'";
+			query = query + "recipientName = '" + recipientName + "'";
 
 			added = true;
 		}
@@ -1114,6 +1117,27 @@ public class RequestsDB {
 			query = query + " vaseType = '" + vaseType + "'";
 			added = true;
 		}
+		if (arrangement != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " arrangement = '" + arrangement + "'";
+			added = true;
+		}
+		if (stuffedAnimal != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " stuffedAnimal = '" + stuffedAnimal + "'";
+			added = true;
+		}
+		if (chocolate != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " chocolate = '" + chocolate + "'";
+			added = true;
+		}
 		if (message != null) {
 			if (added) {
 				query = query + ", ";
@@ -1128,7 +1152,7 @@ public class RequestsDB {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error in updating floral request");
 			return 0;
 		}
@@ -1762,7 +1786,6 @@ public class RequestsDB {
 		return listOfAssignees;
 	}
 
-
 	/**
 	 * Gets a lits of all the menu items from aubon pain
 	 * @return list of AubonPainItem that are in the aubonPainMenu database table
@@ -1793,8 +1816,46 @@ public class RequestsDB {
 		return menuItems;
 	}
 
+	public static ObservableList<String> getAssigneeNames(String givenUserType) {
+		ObservableList<String> listOfAssignees = FXCollections.observableArrayList();
 
+		String query = "Select firstName, lastName From userAccount Where userType = '" + givenUserType + "'";
 
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while (rset.next()) {
+				String firstName = rset.getString("firstName");
+				String lastName = rset.getString("lastName");
+				String fullName = firstName + " " + lastName;
+				listOfAssignees.add(fullName);
+			}
+			rset.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getAssigneeNames() got a SQLException");
+		}
+		return listOfAssignees;
+
+	}
+
+	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
+		ArrayList<Integer> listOfAssigneesIDs = new ArrayList<Integer>();
+
+		String query = "Select userID From userAccount Where userType = '" + givenUserType + "'";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while (rset.next()) {
+				int assigneeID = rset.getInt("userID");
+				listOfAssigneesIDs.add(assigneeID);
+			}
+			rset.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getAssigneeIDs() got a SQLException");
+		}
+		return listOfAssigneesIDs;
+	}
 
 
 

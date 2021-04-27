@@ -59,7 +59,7 @@ public class App extends Application {
 	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
 	private static StackPane stackPane; //main stack page of current page
 
-	/**Sets the visibility off the help button
+	/**Sets the visibility of the help button
 	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
 	private static boolean showHelp = false; //should help button be shown (false by default)
 

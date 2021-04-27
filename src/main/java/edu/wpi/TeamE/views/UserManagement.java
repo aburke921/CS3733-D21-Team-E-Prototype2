@@ -101,13 +101,7 @@ public class UserManagement {
 
     @FXML
     void startTableButton(ActionEvent event) {
-        System.out.println("removing...");
         //todo refresh table?
-        //remove old?
-//        treeTableView = new TreeTableView<User>();
-
-        //add values
-        prepareUsers(treeTableView, UserAccountDB.getAllUsers());
     }
 
     @FXML

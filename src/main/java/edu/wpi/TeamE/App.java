@@ -37,7 +37,15 @@ public class App extends Application {
 	private static String helpText; //help text for current page
 	private static StackPane stackPane; //main stack page of current page
 	private static boolean showHelp = false; //should help button be shown (false by default)
+	private static int searchAlgo = 0; //search algo should be A* by defualt
 
+	public static int getSearchAlgo() {
+		return searchAlgo;
+	}
+
+	public static void setSearchAlgo(int searchAlgo) {
+		App.searchAlgo = searchAlgo;
+	}
 
 	//todo
 	public static boolean isShowLogin() {

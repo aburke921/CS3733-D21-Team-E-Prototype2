@@ -1,6 +1,10 @@
 package edu.wpi.TeamE.views;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
 import edu.wpi.TeamE.App;
 import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.event.ActionEvent;
@@ -19,6 +23,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Default {
 
@@ -36,6 +41,31 @@ public class Default {
 
     @FXML // fx:id="serviceRequestButton"
     private JFXButton serviceRequestButton;
+
+    @FXML // fx:id="algo"
+    private JFXComboBox algo;
+
+    @FXML // fx:id="applyChange"
+    private JFXButton applyChange;
+
+    @FXML // fx:id="algoTextTop"
+    private Label algoTextTop;
+
+    @FXML // fx:id="algoTextBottom"
+    private Label algoTextBottom;
+
+    private ObservableList<String> algoNames;
+
+    /**
+     * Change Pathfinding Algorithm
+     * @param e
+     */
+    @FXML
+    private void changeAlgo(ActionEvent e) {
+        int algoIndex = algo.getSelectionModel().getSelectedIndex();
+        App.setSearchAlgo(algoIndex);
+    }
+
 
     /**
      * Move to Service Request page
@@ -121,10 +151,21 @@ public class Default {
         Image image = new Image("edu/wpi/TeamE/logo.png");
         imageView.setImage(image);
 
+        algoNames = FXCollections.observableArrayList();
+        algoNames.add("A* Search");
+        algoNames.add("Depth First Search");
+        algoNames.add("Breadth First Search");
+
+        algo.setItems(algoNames);
+        algo.setValue(algoNames.get(App.getSearchAlgo()));
 
         String userType = UserAccountDB.getUserType(App.userID);
         if(App.userID == 0 || userType.equals("doctor") || userType.equals("patient") || userType.equals("visitor")) {
             mapEditorButton.setVisible(false);
+            algoTextTop.setVisible(false);
+            algoTextBottom.setVisible(false);
+            algo.setVisible(false);
+            applyChange.setVisible(false);
         }
 
         if(App.userID == 0) {

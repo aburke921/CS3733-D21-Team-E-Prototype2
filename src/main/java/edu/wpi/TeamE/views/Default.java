@@ -37,6 +37,9 @@ public class Default {
     @FXML // fx:id="serviceRequestButton"
     private JFXButton serviceRequestButton;
 
+    @FXML // fx:id="userManagementButton"
+    private JFXButton userManagementButton;
+
     /**
      * Move to Service Request page
      * @param e
@@ -145,10 +148,12 @@ public class Default {
         String userType = UserAccountDB.getUserType(App.userID);
         if(App.userID == 0 || userType.equals("doctor") || userType.equals("patient") || userType.equals("visitor")) {
             mapEditorButton.setVisible(false);
+            userManagementButton.setVisible(false);
         }
 
         if(App.userID == 0) {
             serviceRequestButton.setVisible(false);
+            userManagementButton.setVisible(false);
         }
     }
 

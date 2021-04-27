@@ -193,7 +193,7 @@ public class App extends Application {
 	public void start(Stage primaryStage) throws IOException {
 		App.primaryStage = primaryStage;
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("fxml/Login.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("fxml/Default.fxml"));
 			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
 			Scene scene = new Scene(root); //init
 			primaryStage.setScene(scene);

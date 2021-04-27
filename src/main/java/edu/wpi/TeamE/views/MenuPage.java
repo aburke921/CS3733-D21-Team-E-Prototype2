@@ -110,6 +110,15 @@ public class MenuPage {
         System.out.println(test.getChildren().size());
     }
 
+    @FXML
+    void cancelRequest() {}
+
+    @FXML
+    void checkoutItem() {}
+
+    @FXML
+    void toDefault() {}
+
 
     @FXML
     void init() {

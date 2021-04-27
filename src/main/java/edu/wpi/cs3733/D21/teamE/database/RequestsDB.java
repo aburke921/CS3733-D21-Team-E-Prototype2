@@ -1647,26 +1647,28 @@ public class RequestsDB {
 	}
 
 
-//	public static void getAubonPanItems(){
-//		String query = "Select * From aubonPainMenu";
-//
-//
-//
-//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-//			ResultSet rset = prepState.executeQuery();
-//			while (rset.next()) {
-//				String firstName = rset.getString("firstName");
-//				String lastName = rset.getString("lastName");
-//				int assigneeID = rset.getInt("userID");
-//				String fullName = firstName + " " + lastName;
-//				listOfAssignees.put(assigneeID, fullName);
-//			}
-//			rset.close();
-//		} catch (SQLException e) {
-//			//e.printStackTrace();
-//			System.err.println("getAvailableAssignees() got a SQLException");
-//		}
-//	}
+	public static void getAubonPanItems(){
+		String query = "Select * From aubonPainMenu";
+
+
+
+
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while (rset.next()) {
+
+			}
+			rset.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getAvailableAssignees() got a SQLException");
+		}
+	}
+
+
+
+
 
 
 

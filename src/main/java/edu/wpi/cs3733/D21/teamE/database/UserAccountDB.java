@@ -205,7 +205,6 @@ public class UserAccountDB {
 		}
 	}
 
-
 	/**
 	 * This is allows an administrator or someone with access to the database to be able to edit a user account
 	 * with more permissions giving them more access to the certain requests available. This is function should not

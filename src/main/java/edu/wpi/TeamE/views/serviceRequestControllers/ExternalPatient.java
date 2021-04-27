@@ -112,12 +112,15 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 			String severity = severityInput.getSelectionModel().getSelectedItem().toString();
 			String patientID = patientIdInput.getText();
 			String ETA = ETAInput.getText();
+			String bloodPressure = "High"; //TODO: add this textBox/dropDown on external patient service request page
+			String temperature = "Low"; //TODO: add this textBox/dropDown on external patient service request page
+			String oxygenLevel = "High"; //TODO: add this textBox/dropDown on external patient service request page
 			String details = descriptionInput.getText();
 			int assigneeID = 99999;
 			int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
 			String nodeID = nodeIDS.get(nodeIDIndex);
 			System.out.println(nodeID + " " + type + " " + severity + " " + patientID + " " + ETA + " " + details + " " + assigneeID);
-			DB.addExternalPatientRequest(15, assigneeID, nodeID, type, severity, patientID, ETA, details);
+			DB.addExternalPatientRequest(15, assigneeID, nodeID, type, severity, patientID, ETA, bloodPressure, temperature, oxygenLevel, details);
 			//DB changed the assignee in the function call to an int (not string) --> we need the assignee's userID
 			super.handleButtonSubmit(actionEvent);
 			//Setting up all variables to be entered

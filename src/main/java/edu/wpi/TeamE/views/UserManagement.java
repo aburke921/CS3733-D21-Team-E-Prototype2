@@ -6,6 +6,7 @@ package edu.wpi.TeamE.views;
 
 import com.jfoenix.controls.JFXButton;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,8 @@ import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
@@ -66,28 +69,11 @@ public class UserManagement {
     @FXML
     private JFXButton backButton;
 
-    @FXML
-    private JFXButton submitEditButton;
-
-    @FXML
-    private JFXButton submitNewUserButton;
-
     private boolean addingUser = false;
 
     private boolean editingUser = false;
 
     private User currentlyEditing;
-
-    @FXML
-    void submitEdits(ActionEvent event) {
-
-    }
-
-    @FXML
-    void sumbmitNewUser(ActionEvent event) {
-
-    }
-
 
     @FXML
     void addUserButton(ActionEvent event) {
@@ -202,9 +188,18 @@ public class UserManagement {
         //todo refresh table?
     }
 
+    /**
+     * Returns to {@link edu.wpi.TeamE.views.Default} page.
+     * @param event calling event info.
+     */
     @FXML
-    void toNavigation(ActionEvent event) {
-        //todo go back a page
+    void toDefault(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -212,6 +207,18 @@ public class UserManagement {
         assert appBarAnchorPane != null : "fx:id=\"appBarAnchorPane\" was not injected: check your FXML file 'UserManagement.fxml'.";
         assert treeTableView != null : "fx:id=\"treeTableView\" was not injected: check your FXML file 'UserManagement.fxml'.";
         assert backButton != null : "fx:id=\"backButton\" was not injected: check your FXML file 'UserManagement.fxml'.";
+
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setPageTitle("User Management"); //set AppBar title
+            App.setShowHelp(false);
+            App.setShowLogin(true);
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's sideBarVBox element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //fill Table with user data
         prepareUsers(treeTableView, UserAccountDB.getAllUsers());

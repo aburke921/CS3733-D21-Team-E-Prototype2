@@ -165,6 +165,7 @@ public class App extends Application {
 				DB.populateTable("node", nodes);
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
+				DB.populateAbonPainTable();
 				System.out.println("Tables were created");
 			} catch (Exception e) {
 				System.out.println("Tables already there");

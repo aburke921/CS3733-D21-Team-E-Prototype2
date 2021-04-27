@@ -1760,6 +1760,34 @@ public class RequestsDB {
 		return menuItems;
 	}
 
+	/**
+	 * Used to get a list of info from a given column name in the aubonPainMenu table
+	 * @param column this is the name of the column the information is extracted from
+	 * @return a list of the given information
+	 */
+	public static ArrayList<String> getAubonPainFeild(String column){
+
+		String query = "Select " + column + " From aubonPainMenu";
+
+		ArrayList<String> foodItems = new ArrayList<>();
+
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+
+			ResultSet rset = prepStat.executeQuery();
+			while (rset.next()) {
+				String foodImage = rset.getString(column);
+
+				foodItems.add(foodImage);
+			}
+			rset.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("getAubonPainFeild() got a SQLException");
+		}
+
+		return foodItems;
+	}
+
 
 
 

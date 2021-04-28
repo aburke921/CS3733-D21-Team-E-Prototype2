@@ -1,5 +1,6 @@
-package edu.wpi.cs3733.D21.teamE.algorithms;
+package edu.wpi.cs3733.D21.teamE.map;
 
+import edu.wpi.cs3733.D21.teamE.Time;
 import java.util.Iterator;
 import java.awt.*;
 import java.util.ArrayList;

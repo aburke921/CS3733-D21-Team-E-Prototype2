@@ -1,5 +1,4 @@
-package edu.wpi.cs3733.D21.teamE.algorithms;
-
+package edu.wpi.cs3733.D21.teamE.map;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
-import edu.wpi.cs3733.D21.teamE.algorithms.Node;
+import edu.wpi.cs3733.D21.teamE.map.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

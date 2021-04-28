@@ -22,7 +22,7 @@ import javafx.stage.Stage;
  * @author Alexander.Berg
  * @author Evgenii Kanivets
  * @author Zachary Perales
- * @author TeamE CS3733-D21
+ * @author cs3733.D21.teamE CS3733-D21
  */
 
 public class ResizeHelper {

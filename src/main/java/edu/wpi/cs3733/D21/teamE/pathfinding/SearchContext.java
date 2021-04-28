@@ -1,8 +1,9 @@
-package edu.wpi.cs3733.D21.teamE.algorithms.pathfinding;
+package edu.wpi.cs3733.D21.teamE.pathfinding;
 
-import edu.wpi.cs3733.D21.teamE.algorithms.Node;
-import edu.wpi.cs3733.D21.teamE.algorithms.Path;
-import edu.wpi.cs3733.D21.teamE.algorithms.pathfinding.constraints.*;
+import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.map.Path;
+import edu.wpi.cs3733.D21.teamE.pathfinding.constraints.*;
+import edu.wpi.cs3733.D21.teamE.pathfinding.algorithms.*;
 
 import java.util.ArrayList;
 import java.util.List;

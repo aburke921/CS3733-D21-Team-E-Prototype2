@@ -1,6 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.views.mapEditorControllers;
 import com.jfoenix.controls.*;
-import edu.wpi.cs3733.D21.teamE.algorithms.Node;
+import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 
@@ -118,7 +118,7 @@ public class MapEditor {
         });
 
         //set image to map
-        javafx.scene.image.Image image = new Image("edu/wpi/TeamE/maps/1.png");
+        javafx.scene.image.Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/1.png");
         imageView.setImage(image);
 
         //when tree table is clicked
@@ -712,7 +712,7 @@ public class MapEditor {
     private void openFile(ActionEvent e) throws IOException {
 
         DB.getNewCSVFile("node");
-        File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+        File file = new File("src/main/resources/edu/wpi/cs3733/D21/teamE/output/outputNode.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
     }

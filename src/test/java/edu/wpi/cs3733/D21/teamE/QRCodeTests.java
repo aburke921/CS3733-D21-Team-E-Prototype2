@@ -14,7 +14,7 @@ public class QRCodeTests {
 	public void testRealQR() {
 		String result = null;
 		try {
-			result = readQR("src/main/resources/edu/wpi/TeamE/QRcode/RealQR.png");
+			result = readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/RealQR.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -25,7 +25,7 @@ public class QRCodeTests {
 	public void testFakeQR() {
 		String result = null;
 		try {
-			result = readQR("src/main/resources/edu/wpi/TeamE/QRcode/FakeQR.png");
+			result = readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/FakeQR.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

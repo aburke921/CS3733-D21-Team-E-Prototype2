@@ -1,7 +1,7 @@
 package edu.wpi.cs3733.D21.teamE.views.mapEditorControllers;
 
 import edu.wpi.cs3733.D21.teamE.App;
-import edu.wpi.cs3733.D21.teamE.algorithms.Node;
+import edu.wpi.cs3733.D21.teamE.map.Node;
 
 import edu.wpi.cs3733.D21.teamE.DB;
 
@@ -139,7 +139,7 @@ public class NodeCSVUpload {
     @FXML
     private void openFile(ActionEvent e) throws IOException {
         DB.getNewCSVFile("node");
-        File file = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+        File file = new File("src/main/resources/edu/wpi/cs3733/D21/teamE/output/outputNode.csv");
         Desktop desktop = Desktop.getDesktop();
         desktop.open(file);
     }

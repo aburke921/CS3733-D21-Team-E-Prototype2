@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
-import edu.wpi.cs3733.D21.teamE.algorithms.Node;
-import edu.wpi.cs3733.D21.teamE.algorithms.Path;
+import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.map.Path;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.QRCode;
-import edu.wpi.cs3733.D21.teamE.algorithms.pathfinding.SearchContext;
+import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -620,7 +620,7 @@ public class PathFinder {
 
         //set image
         currentFloor = floorNum;
-        Image image = new Image("edu/wpi/TeamE/maps/" + floorNum + ".png");
+        Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/" + floorNum + ".png");
         imageView.setImage(image);
         currFloor.setText(currentFloor);
 
@@ -728,7 +728,7 @@ public class PathFinder {
         borderPane.setCenter(pane);
 
         //set default/initial floor for map
-        Image image = new Image("edu/wpi/TeamE/maps/1.png");
+        Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/1.png");
         currFloor.setText(currentFloor);
         imageWidth = image.getWidth();
         imageHeight = image.getHeight();
@@ -858,6 +858,7 @@ public class PathFinder {
         String result = QRCode.scanQR();
         String nodeID = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
         System.out.println("Scanned nodeID: " + nodeID);
+
 
         ArrayList<Node> nodeArrayList = DB.getAllNodes();
         int index = 0;

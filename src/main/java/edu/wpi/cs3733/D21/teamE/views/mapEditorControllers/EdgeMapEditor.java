@@ -1,7 +1,7 @@
 package edu.wpi.cs3733.D21.teamE.views.mapEditorControllers;
 import com.jfoenix.controls.JFXComboBox;
-import edu.wpi.cs3733.D21.teamE.algorithms.Edge;
-import edu.wpi.cs3733.D21.teamE.algorithms.Node;
+import edu.wpi.cs3733.D21.teamE.map.Edge;
+import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -244,7 +244,7 @@ public class EdgeMapEditor {
         });
 
         //set image to map
-        javafx.scene.image.Image image = new Image("edu/wpi/TeamE/maps/1.png");
+        javafx.scene.image.Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/1.png");
         imageView.setImage(image);
 
         //when tree table is clicked

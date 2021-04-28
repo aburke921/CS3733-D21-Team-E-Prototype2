@@ -1,7 +1,7 @@
 package edu.wpi.cs3733.D21.teamE.views.mapEditorControllers;
 
 import edu.wpi.cs3733.D21.teamE.App;
-import edu.wpi.cs3733.D21.teamE.algorithms.Edge;
+import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;

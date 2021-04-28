@@ -1,5 +1,4 @@
-package edu.wpi.cs3733.D21.teamE.algorithms;
-
+package edu.wpi.cs3733.D21.teamE;
 public class Time {
     private int sec;
     private int min;

@@ -119,7 +119,7 @@ public class csvDB {
 				StringBuilder nodeSB = new StringBuilder();
 				while (rset1.next()) {
 
-					//File nodeCSV = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+					//File nodeCSV = new File("src/main/resources/edu/wpi/cs3733/D21/teamE/output/outputNode.csv");
 					nodeSB.append(rset1.getString("nodeID")).append(",");
 					nodeSB.append(rset1.getInt("xCoord")).append(",");
 					nodeSB.append(rset1.getInt("yCoord")).append(",");
@@ -177,7 +177,7 @@ public class csvDB {
 			StringBuilder strBuild = new StringBuilder();
 			while (rset.next()) {
 
-				//File nodeCSV = new File("src/main/resources/edu/wpi/TeamE/output/outputNode.csv");
+				//File nodeCSV = new File("src/main/resources/edu/wpi/cs3733/D21/teamE/output/outputNode.csv");
 				strBuild.append(rset.getInt("appointmentID")).append(",");
 				strBuild.append(rset.getString("patientID")).append(",");
 				strBuild.append(rset.getString("doctorID")).append(",");

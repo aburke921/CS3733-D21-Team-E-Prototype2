@@ -1,6 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
-import edu.wpi.cs3733.D21.teamE.algorithms.Edge;
+import edu.wpi.cs3733.D21.teamE.map.Edge;
 import javafx.util.Pair;
 import java.sql.*;
 import java.util.ArrayList;

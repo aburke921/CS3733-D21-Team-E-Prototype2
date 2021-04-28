@@ -1,6 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
-import edu.wpi.cs3733.D21.teamE.algorithms.Node;
+import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.database.NodeDB;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;

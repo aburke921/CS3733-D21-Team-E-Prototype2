@@ -1,9 +1,9 @@
 package edu.wpi.cs3733.D21.teamE;
 
-import edu.wpi.cs3733.D21.teamE.algorithms.Node;
-import edu.wpi.cs3733.D21.teamE.algorithms.Path;
-import edu.wpi.cs3733.D21.teamE.algorithms.Time;
-import edu.wpi.cs3733.D21.teamE.algorithms.pathfinding.SearchContext;
+import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.map.Path;
+import edu.wpi.cs3733.D21.teamE.Time;
+import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import static org.junit.jupiter.api.Assertions.*;
 
 

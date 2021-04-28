@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 import java.util.ResourceBundle;
 
-import edu.wpi.cs3733.D21.teamE.algorithms.Edge;
-import edu.wpi.cs3733.D21.teamE.algorithms.Node;
-import edu.wpi.cs3733.D21.teamE.algorithms.Path;
+import edu.wpi.cs3733.D21.teamE.map.Edge;
+import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.map.Path;
 
 
 import edu.wpi.cs3733.D21.teamE.App;
@@ -1045,7 +1045,7 @@ public class newMapEditor {
         borderPane.setCenter(pane);
 
         //set default/initial floor for map
-        Image image = new Image("edu/wpi/TeamE/maps/1.png");
+        Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/1.png");
         imageWidth = image.getWidth();
         imageHeight = image.getHeight();
         imageView.setImage(image);
@@ -1318,7 +1318,7 @@ public class newMapEditor {
     public void selectFloor() {
         //set image
         currentFloor = floorSelector.getValue().toString();
-        Image image = new Image("edu/wpi/TeamE/maps/" + floorSelector.getValue().toString() + ".png");
+        Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/" + floorSelector.getValue().toString() + ".png");
         imageView.setImage(image);
 
         //draw path for new floor

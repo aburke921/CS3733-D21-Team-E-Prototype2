@@ -1,11 +1,11 @@
-package edu.wpi.cs3733.D21.teamE.algorithms.pathfinding;
+package edu.wpi.cs3733.D21.teamE.pathfinding.algorithms;
 
 import java.util.*;
 
-import edu.wpi.cs3733.D21.teamE.algorithms.Edge;
-import edu.wpi.cs3733.D21.teamE.algorithms.Node;
-import edu.wpi.cs3733.D21.teamE.algorithms.Path;
-import edu.wpi.cs3733.D21.teamE.algorithms.pathfinding.constraints.SearchConstraint;
+import edu.wpi.cs3733.D21.teamE.map.Edge;
+import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.map.Path;
+import edu.wpi.cs3733.D21.teamE.pathfinding.constraints.SearchConstraint;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
@@ -13,7 +13,7 @@ import edu.wpi.cs3733.D21.teamE.database.makeConnection;
  * Abstract Searcher Class for Pathfinding API
  * On creation can be initialized to A* or DFS (already implemented) or others that can be added later
  */
-class Searcher {
+public class Searcher {
 
     private SearchConstraint type;
 

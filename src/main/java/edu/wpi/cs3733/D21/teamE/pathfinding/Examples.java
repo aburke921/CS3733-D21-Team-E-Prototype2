@@ -1,7 +1,7 @@
-package edu.wpi.cs3733.D21.teamE.algorithms.pathfinding;
+package edu.wpi.cs3733.D21.teamE.pathfinding;
 
-import edu.wpi.cs3733.D21.teamE.algorithms.Node;
-import edu.wpi.cs3733.D21.teamE.algorithms.Path;
+import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.map.Path;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 

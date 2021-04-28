@@ -1,7 +1,8 @@
-package edu.wpi.cs3733.D21.teamE.algorithms.pathfinding;
+package edu.wpi.cs3733.D21.teamE.pathfinding.algorithms;
 
-import edu.wpi.cs3733.D21.teamE.algorithms.Node;
-import edu.wpi.cs3733.D21.teamE.algorithms.Path;
+import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.map.Path;
+import edu.wpi.cs3733.D21.teamE.pathfinding.algorithms.Searcher;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,7 +13,7 @@ import java.util.List;
  * DF Search Implementation
  * Contains specific implementation of DFS
  */
-class XFirstSearcher extends Searcher {
+public class XFirstSearcher extends Searcher {
 
     private String type;
 

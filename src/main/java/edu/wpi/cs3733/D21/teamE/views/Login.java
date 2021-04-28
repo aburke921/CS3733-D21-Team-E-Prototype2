@@ -110,7 +110,7 @@ public class Login {
 //            userID = connection.userLogin(emailInput.getText(), passwordInput.getText());
 //        } if(userID != 0) {
 //            try {
-//                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+//                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
 //                App.getPrimaryStage().getScene().setRoot(root);
 //            } catch (IOException ex) {
 //                ex.printStackTrace();

@@ -51,7 +51,7 @@ public class MenuPage {
             //Establishing some columns that are consistent throughout all the service requests
             //Column 1 - ID
             TreeTableColumn<AubonPainItem, String> itemColumn = new TreeTableColumn<>("Menu Item");
-            itemColumn.setPrefWidth(400);
+            itemColumn.setPrefWidth(550);
 
 
 

@@ -231,11 +231,10 @@ public class App extends Application {
 			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
 			Scene scene = new Scene(root); //init
 			primaryStage.setScene(scene);
-			primaryStage.setWidth(1050);
-			primaryStage.setHeight(675);
-			root.minWidth(576);
+			primaryStage.setWidth(1200);
+			primaryStage.setHeight(785);
 			primaryStage.show();
-			ResizeHelper.addResizeListener(primaryStage, 950, 640, Double.MAX_VALUE, Double.MAX_VALUE);
+			ResizeHelper.addResizeListener(primaryStage, 1120, 775, Double.MAX_VALUE, Double.MAX_VALUE);
 		} catch (IOException e) {
 			e.printStackTrace();
 			Platform.exit();

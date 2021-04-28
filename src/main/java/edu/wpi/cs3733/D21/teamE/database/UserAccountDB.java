@@ -1,6 +1,10 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
 import java.sql.*;
+import java.util.ArrayList;
+
+import edu.wpi.TeamE.algorithms.Node;
+import edu.wpi.TeamE.views.UserManagement.*;
 
 public class UserAccountDB {
 
@@ -154,31 +158,32 @@ public class UserAccountDB {
 	 * @param userType  this is the type of account that the individual is being assigned to
 	 * @param firstName this is the user's first name that is associated with the account
 	 * @param lastName  this is the user's last name that is associated with the account
+	 * @// TODO: 4/27/21 JavaDoc return explanation, also, consider bool return?
 	 */
 	public static int editUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
 		boolean added = false;
 		String query = "Update userAccount Set ";
 
-		if (email != null) {
+		if (email != null && !email.equals("")) {
 			query = query + " email = '" + email + "'";
 
 			added = true;
 		}
-		if (password != null) {
+		if (password != null && !password.equals("")) {
 			if (added) {
 				query = query + ", ";
 			}
 			query = query + "password = '" + password + "'";
 			added = true;
 		}
-		if (userType != null) {
+		if (userType != null && !userType.equals("")) {
 			if (added) {
 				query = query + ", ";
 			}
 			query = query + "userType = '" + userType + "'";
 			added = true;
 		}
-		if (firstName != null) {
+		if (firstName != null && !firstName.equals("")) {
 			if (added) {
 				query = query + ", ";
 			}
@@ -186,7 +191,7 @@ public class UserAccountDB {
 
 			added = true;
 		}
-		if (lastName != null) {
+		if (lastName != null && !lastName.equals("")) {
 			if (added) {
 				query = query + ", ";
 			}
@@ -291,6 +296,33 @@ public class UserAccountDB {
 		}
 
 		return null;
+	}
+
+	public static ArrayList<User> getAllUsers() {
+		ArrayList<User> listOfUsers = new ArrayList<>();
+
+		String query = "Select * From userAccount";
+
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+
+			ResultSet rset = prepStat.executeQuery();
+
+			while (rset.next()) {
+				int userID = rset.getInt("userID");
+				String email = rset.getString("email");
+				String userType = rset.getString("userType");
+				String firstName = rset.getString("firstName");
+				String lastName = rset.getString("lastName");
+
+				listOfUsers.add(new User(userType, userID, firstName, lastName, email));
+			}
+
+			rset.close();
+
+		} catch (SQLException e) {
+			System.err.println("getAllUsers Error : " + e);
+		}
+		return listOfUsers;
 	}
 
 }

@@ -42,6 +42,9 @@ public class Default {
     @FXML // fx:id="serviceRequestButton"
     private JFXButton serviceRequestButton;
 
+    @FXML // fx:id="userManagementButton"
+    private JFXButton userManagementButton;
+
     @FXML // fx:id="algo"
     private JFXComboBox algo;
 
@@ -138,6 +141,20 @@ public class Default {
         }
     }
 
+    @FXML
+    private void toUserManagement(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/UserManagement.fxml"));
+            App.getPrimaryStage().getScene().setRoot(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void getHelpDefault(ActionEvent actionEvent) {
+    }
+
     public void initialize() {
 
         //init appBar
@@ -172,10 +189,12 @@ public class Default {
             algoTextBottom.setVisible(false);
             algo.setVisible(false);
             applyChange.setVisible(false);
+            userManagementButton.setVisible(false);
         }
 
         if(App.userID == 0) {
             serviceRequestButton.setVisible(false);
+            userManagementButton.setVisible(false);
         }
     }
 

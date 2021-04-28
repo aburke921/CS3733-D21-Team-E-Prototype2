@@ -49,7 +49,7 @@ public class RequestsDB {
 				"requestType   varchar(31), " +
 				"requestStatus varchar(10), " +
 				"assigneeID    int References useraccount On Delete Cascade," +
-				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'internalPatientRequest', 'languageRequest', 'laundryRequest', 'maintenanceRequest', 'foodDelivery', 'religiousRequest')), " +
+				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'internalPatientRequest', 'languageRequest', 'laundryRequest', 'maintenanceRequest', 'foodDeliveryRequest', 'religiousRequest')), " +
 				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -341,13 +341,12 @@ public class RequestsDB {
 	 */
 	public static void createFoodDeliveryTable(){
 
-		String query = "Create Table foodDelivery (\n" +
-				"    requestID int Primary Key References requests (requestID) On Delete Cascade,\n" +
-				"    roomID varchar(31) Not Null References node (nodeID) On Delete Cascade,\n" +
-				"    allergy varchar(50),\n" +
-				"    dietRestriction varchar(50),\n" +
-				"    beverage varchar(50),\n" +
-				"    description varchar(3000)\n" +
+		String query = "Create Table foodDeliveryRequest ( " +
+				"    requestID int Primary Key References requests (requestID) On Delete Cascade, " +
+				"    roomID varchar(31) Not Null References node (nodeID) On Delete Cascade, " +
+				"    restaurant varchar(50), " +
+				"    orderNumber varchar(50), " +
+				"    description varchar(3000) " +
 				")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -772,35 +771,34 @@ public class RequestsDB {
 		}
 	}
 
-	//TODO: Not tested
+
 	/**
 	 * adds a request for food delivery
 	 * @param userID ID of the user
 	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
-	 * @param dietRestrictions any restrictions the user has diet wise
-	 * @param allergies any allergies the user has
-	 * @param foodItem the food item choice made by the user
-	 * @param foodQuantity the quantity of the food item the user wants
-	 * @param beverageItem the beverage item choice made by the user
-	 * @param beverageQuantity the quantity of the beverage item the user wants
+	 * @param assigneeID ID of the assigned user who will complete this tast
+	 * @param restaurant this is the name of the restraunt or food delivery service that the user has ordered food from
+	 * @param orderNumber this is the order number
+	 * @param description this is any description the user wants to give to to person getting their food for them.
 	 */
-	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
+	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID, String restaurant, String orderNumber, String description) {
 		addRequest(userID, assigneeID, "foodDeliveryRequest");
 
+		int requestID = getMaxRequestID() + 1;
 
-		int requestID = getMaxRequestID();
-
-		String insertFoodDeliveryReq = "Insert Into foodDelivery Values (?, ?, ?, ?, ?, ?, ?)";
+		String insertFoodDeliveryReq = "Insert Into foodDeliveryRequest Values (?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFoodDeliveryReq)) {
 			prepState.setInt(1, requestID);
 			prepState.setString(2, roomID);
-			prepState.setString(3, allergies);
-			prepState.setString(4, dietRestrictions);
+			prepState.setString(3, restaurant);
+			prepState.setString(4, orderNumber);
+			prepState.setString(5, description);
+
+
 			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error inserting into foodDeliveryRequest inside function addFoodDeliveryRequest()");
 		}
 	}
@@ -815,7 +813,7 @@ public class RequestsDB {
 	public static int getMaxRequestID(){
 		int maxID = 0;
 
-		String query = "Select Max(requestID) As maxRequestID From food";
+		String query = "Select Max(requestID) As maxRequestID From foodDeliveryRequest";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
@@ -827,7 +825,7 @@ public class RequestsDB {
 			prepState.close();
 			return maxID;
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error in getMaxRequestID()");
 			return 0;
 		}
@@ -1467,71 +1465,55 @@ public class RequestsDB {
 		}
 	}
 
-	//TODO: ASHLEY review this please (i didn't take your Food table into account)
+
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
-	 * @param dietRestrictions is the edited restrictions of the user in terms of diet
-	 * @param allergies is the edited allergies the user has
-	 * @param food is the new food the user requests
-	 * @param beverage is the new beverage the user requests
-	 * @param description is an edited detailed description
-	 * @return 1 if the update was successful, 0 if it failed
+	 * adds a request for food delivery
+	 * @param roomID nodeID of the user
+	 * @param restaurant this is the name of the restraunt or food delivery service that the user has ordered food from
+	 * @param orderNumber this is the order number
+	 * @param description this is any description the user wants to give to to person getting their food for them.
 	 */
-	public static int editFoodDeliveryRequest(int requestID, String roomID, String dietRestrictions, String allergies, String food, String beverage, String description) {
+	public static void editFoodDeliveryRequest(int requestID, String roomID, String restaurant, String orderNumber, String description){
 		boolean added = false;
 		String query = "Update foodDeliveryRequest Set ";
 
 		if (roomID != null) {
+			if (added) {
+				query = query + ", ";
+			}
 			query = query + " roomID = '" + roomID + "'";
 			added = true;
 		}
-		if (dietRestrictions != null) {
+		if (restaurant != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "dietRestrictions = '" + dietRestrictions + "'";
+			query = query + " restaurant = '" + restaurant + "'";
 			added = true;
 		}
-		if (allergies != null) {
+		if (orderNumber != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "allergies = '" + allergies + "'";
-			added = true;
-		}
-		if (food != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "food = '" + food + "'";
-			added = true;
-		}
-		if (beverage != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "beverage = '" + beverage + "'";
+			query = query + " orderNumber = '" + orderNumber + "'";
 			added = true;
 		}
 		if (description != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "description = '" + description + "'";
+			query = query + " description = '" + description + "'";
 			added = true;
 		}
 
 		query = query + " where requestID = " + requestID;
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.executeUpdate();
-			prepState.close();
-			return 1;
+
+
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error in updating foodDeliveryRequest");
-			return 0;
 		}
 	}
 

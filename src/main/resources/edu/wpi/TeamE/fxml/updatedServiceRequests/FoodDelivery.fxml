@@ -131,7 +131,11 @@
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXTextArea>
-                                                <JFXButton fx:id="AubonPainButton" onAction="#toAubonPainMenu" text="Au bon Pain" />
+                                                <JFXButton fx:id="AubonPainButton" alignment="CENTER" onAction="#toAubonPainMenu" styleClass="submit-button" text="Au Bon Pain Menu">
+                                                   <VBox.margin>
+                                                      <Insets top="10.5" />
+                                                   </VBox.margin>
+                                                </JFXButton>
                                                                 <GridPane>
                                                                     <columnConstraints>
                                                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />

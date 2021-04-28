@@ -29,7 +29,7 @@ public class UserAccountDB {
 				"creationTime Timestamp, " +
 				"Constraint userIDLimit Check ( userID != 0 )," +
 				// "Constraint passwordLimit Check (Length(password) >= 8 )," +
-				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian', 'interpreter', 'religiousPerson')))";
+				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian', 'interpreter', 'religiousPerson', 'foodDelivery')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 

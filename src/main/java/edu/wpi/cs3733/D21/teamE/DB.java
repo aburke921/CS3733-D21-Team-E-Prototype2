@@ -427,16 +427,13 @@ public class DB {
 	 * adds a request for food delivery
 	 * @param userID ID of the user
 	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
-	 * @param dietRestrictions any restrictions the user has diet wise
-	 * @param allergies any allergies the user has
-	 * @param foodItem the food item choice made by the user
-	 * @param foodQuantity the quantity of the food item the user wants
-	 * @param beverageItem the beverage item choice made by the user
-	 * @param beverageQuantity the quantity of the beverage item the user wants
+	 * @param assigneeID ID of the assigned user who will complete this tast
+	 * @param restaurant this is the name of the restraunt or food delivery service that the user has ordered food from
+	 * @param orderNumber this is the order number
+	 * @param description this is any description the user wants to give to to person getting their food for them.
 	 */
-	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
-		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, allergies, foodItem, foodQuantity, beverageItem, beverageQuantity);
+	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID, String restaurant, String orderNumber, String description){
+		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, restaurant, orderNumber, description);
 	}
 
 	public static void addInternalPatientRequest(int userID, String pickUpLocation, String dropOffLocation, int assigneeID, int patientID, String department, String severity, String description) {
@@ -589,18 +586,14 @@ public class DB {
 	}
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
-	 * @param dietRestrictions is the edited restrictions of the user in terms of diet
-	 * @param allergies is the edited allergies the user has
-	 * @param food is the new food the user requests
-	 * @param beverage is the new beverage the user requests
-	 * @param description is an edited detailed description
-	 * @return 1 if the update was successful, 0 if it failed
+	 * adds a request for food delivery
+	 * @param roomID nodeID of the user
+	 * @param restaurant this is the name of the restraunt or food delivery service that the user has ordered food from
+	 * @param orderNumber this is the order number
+	 * @param description this is any description the user wants to give to to person getting their food for them.
 	 */
-	public static int editFoodDeliveryRequest(int requestID, String roomID, String dietRestrictions, String allergies, String food, String beverage, String description) {
-		return RequestsDB.editFoodDeliveryRequest(requestID, roomID, dietRestrictions, allergies, food, beverage, description);
+	public static void editFoodDeliveryRequest(int requestID, String roomID, String restaurant, String orderNumber, String description){
+		RequestsDB.editFoodDeliveryRequest(requestID, roomID, restaurant, orderNumber, description);
 	}
 
 	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {

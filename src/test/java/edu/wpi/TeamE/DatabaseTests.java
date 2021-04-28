@@ -1615,4 +1615,17 @@ public class DatabaseTests {
 		assertEquals(assigneeIDsFloral, returnedFloralIDs);
 	}
 
+	@Test
+	@DisplayName("testAddFoodDeliveryRequest")
+	public void testAddFoodDeliveryRequest(){
+		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
+		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
+		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "foodDelivery", "drew", "Shukla");
+
+
+//		addFoodDeliveryRequest(int userID, String roomID, int assigneeID, String restaurant, String orderNumber, String description)
+		DB.addFoodDeliveryRequest(1, "test", 2, "pizzaria", "12344556", "description" );
+
+	}
+
 }

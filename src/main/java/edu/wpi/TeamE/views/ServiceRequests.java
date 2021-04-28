@@ -7,6 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -28,12 +30,24 @@ public class ServiceRequests {
     @FXML // fx:id="adminServices"
     private VBox visitorServices;
 
+    @FXML //anchorPane for the appBar
+    private AnchorPane appBarAnchorPane;
+
+//    @FXML //stackPane for DialogBoxes
+//    private StackPane stackPane;
+
     public void initialize() {
-        //If exit button is clicked, exit app
-        exit.setOnMouseClicked(event -> {
-            App app = new App();
-            app.stop();
-        });
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setShowHelp(false); // show help or not
+            App.setShowLogin(true); // show login or not
+            App.setPageTitle("Select A Service"); //set AppBar title
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         String userType = UserAccountDB.getUserType(App.userID);
         if(userType.equals("visitor")) {
@@ -149,6 +163,16 @@ public class ServiceRequests {
     }
 
     @FXML
+    private void toInternalPatient(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/InternalPatient.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
     private void toSecurity(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/SecurityV2.fxml"));
@@ -166,10 +190,6 @@ public class ServiceRequests {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
-
-    @FXML
-    public void getHelpDefault(ActionEvent actionEvent) {
     }
 }
 

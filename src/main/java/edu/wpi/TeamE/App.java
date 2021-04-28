@@ -1,6 +1,8 @@
 package edu.wpi.TeamE;
 
+import com.github.sarxos.webcam.Webcam;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.QRCode;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
 import com.jfoenix.controls.JFXButton;
@@ -30,14 +32,100 @@ import java.io.IOException;
 
 public class App extends Application {
 
-	public static int userID = 0; //todo assuming 0 means guest user? - cole
-	public static boolean showLogin;
+	/**
+	 * Value of currently logged in user.
+	 * 0 Indicates no user logged in.
+	 */
+	public static int userID = 0;
+
+	/**The JavaFX application's primary stage. All Scenes are built upon this stage*/
 	private static Stage primaryStage;
-	private static String pageTitle; //Title for the currently displayed page, set by AppBarComponent
-	private static String helpText; //help text for current page
-	private static StackPane stackPane; //main stack page of current page
-	private static boolean showHelp = false; //should help button be shown (false by default)
-	private static int searchAlgo = 0; //search algo should be A* by defualt
+
+	//setter for primaryStage
+	public static void setPrimaryStage(Stage primaryStage) {
+		App.primaryStage = primaryStage;
+	}
+
+	//getter for primaryStage
+	public static Stage getPrimaryStage() {
+		return primaryStage;
+	}
+
+	/*-------------------------------------
+	* 	APPBAR VARIABLES/SETTERS/GETTERS
+	*------------------------------------*/
+
+	/**Sets the visibility of the login button.
+	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
+	public static boolean showLogin;
+
+	/**Sets the page title.
+	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
+	private static String pageTitle;
+
+	/**Sets the help dialog contents.
+	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
+	private static String helpText;
+
+	/**Sets the stackPane used by appBar for {@link #newJFXDialogPopUp(String, String, String, StackPane)} calls.
+	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
+	private static StackPane stackPane;
+
+	/**Sets the visibility of the help button
+	 * See {@link edu.wpi.TeamE.views.AppBarComponent} for further information.*/
+	private static boolean showHelp = false;
+
+	//getter for showLogin
+	public static boolean isShowLogin() {
+		return showLogin;
+	}
+
+	//setter for showLogin
+	public static void setShowLogin(boolean showLogin) {
+		App.showLogin = showLogin;
+	}
+
+	//getter for helpText
+	public static String getHelpText() {
+		return helpText;
+	}
+
+	//setter for helpText
+	public static void setHelpText(String helpText) {
+		App.helpText = helpText;
+	}
+
+	//getter for pageTitle
+	public static String getPageTitle() {
+		return pageTitle;
+	}
+
+	//setter for pageTitle
+	public static void setPageTitle(String pageTitle) {
+		App.pageTitle = pageTitle;
+	}
+
+	//getter for stackPane
+	public static StackPane getStackPane() {
+		return stackPane;
+	}
+
+	//setter for stackPane
+	public static void setStackPane(StackPane stackPane) {
+		App.stackPane = stackPane;
+	}
+
+	//getter for showHelp
+	public static boolean isShowHelp() {
+		return showHelp;
+	}
+
+	//setter for showHelp
+	public static void setShowHelp(boolean showHelp) {
+		App.showHelp = showHelp;
+	}
+  
+  private static int searchAlgo = 0; //search algo should be A* by defualt
 
 	public static int getSearchAlgo() {
 		return searchAlgo;
@@ -47,49 +135,12 @@ public class App extends Application {
 		App.searchAlgo = searchAlgo;
 	}
 
-	//todo
-	public static boolean isShowLogin() {
-		return showLogin;
-	}
+	/*-------------------------------------*/
 
-	//todo
-	public static void setShowLogin(boolean showLogin) {
-		App.showLogin = showLogin;
-	}
 
 	/**
-	 * @return String used by {@link edu.wpi.TeamE.views.AppBarComponent} to decide what to put in Help Dialog.
-	 */
-	public static String getHelpText() {
-		return helpText;
-	}
-
-	/**
-	 * Set's help text, used by pages to set help button content.
-	 * @param helpText Paragraph for help text dialog.
-	 */
-	public static void setHelpText(String helpText) {
-		App.helpText = helpText;
-	}
-
-	/**
-	 * @return Gets the current page's app title, for use by {@link edu.wpi.TeamE.views.AppBarComponent}
-	 */
-	public static String getPageTitle() {
-		return pageTitle;
-	}
-
-	/**
-	 * Sets the page title for app bar
-	 * @param pageTitle Short string for page title
-	 */
-	public static void setPageTitle(String pageTitle) {
-		App.pageTitle = pageTitle;
-	}
-
-	/**
-	 *
-	 * @param message Message to display in the dialog box
+	 * Creates a new JFX Dialog on the current page.
+	 * @param message Message to display in the dialog box.
 	 * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
 	 */
 	public static void newJFXDialogPopUp(String heading, String button, String message, StackPane stackPane) {
@@ -111,38 +162,11 @@ public class App extends Application {
 	}
 
 
-
-	private double x, y;
-
-	public static void setPrimaryStage(Stage primaryStage) {
-		App.primaryStage = primaryStage;
-	}
-
 	/**
-	 * @return Gets the main stack page of current page
+	 * Runs on Application (pre)startup
+	 * Typically not run by the user, but rather automatically by the JavaFX application.
+	 * @// TODO: 4/27/2021 document this function's tasks
 	 */
-	public static StackPane getStackPane() {
-		return stackPane;
-	}
-
-	/**
-	 * @param stackPane Sets the main stack pane of the current page
-	 */
-	public static void setStackPane(StackPane stackPane) {
-		App.stackPane = stackPane;
-	}
-
-	//getter for showHelp
-	public static boolean isShowHelp() {
-		return showHelp;
-	}
-
-	//setter for showHelp
-	public static void setShowHelp(boolean showHelp) {
-		App.showHelp = showHelp;
-	}
-
-
 	@Override
 	public void init() {
 		System.out.println("STARTING UP!!!");
@@ -153,27 +177,11 @@ public class App extends Application {
 	    boolean tablesExist = connection.allTablesThere();
 		if(!tablesExist){
 			try {
-				DB.createNodeTable();
-				DB.createEdgeTable();
-				DB.createUserAccountTable();
-				DB.createRequestsTable();
-				DB.createFloralRequestsTable();
-				DB.createSanitationTable();
-				DB.createExtTransportTable();
-				DB.createMedDeliveryTable();
-				DB.createSecurityServTable();
-				DB.createAppointmentTable();
-				DB.createLanguageRequestTable();
-				DB.createLaundryRequestTable();
-				DB.createMaintenanceRequestTable();
-				DB.createFoodDeliveryTable();
-				DB.createFoodTable();
-				DB.createFoodOrderedInRequestTable();
-				DB.createBeverageTable();
-				DB.createBeverageOrderedInRequestTable();
+				DB.createAllTables();
 				DB.populateTable("node", nodes);
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
+				DB.populateAbonPainTable();
 				System.out.println("Tables were created");
 			} catch (Exception e) {
 				System.out.println("Tables already there");
@@ -185,18 +193,36 @@ public class App extends Application {
 		}
 	}
 
+	/**
+	 * @// TODO: 4/27/2021 this function requires some looking at, the original way it was used has been changed
+	 * @// TODO:			 at minimum its name should be changed, as it no longer applies the resizeListener.
+	 * @param root
+	 */
 	public static void setDraggableAndChangeScene(Parent root) {
 //		ResizeHelper.addResizeListener(App.getPrimaryStage()); //todo this is no longer necessary, making pretty much this whole fcn unnecessary?
 //		ResizeHelper.addResizeListener(primaryStage,435,325,Double.MAX_VALUE,Double.MAX_VALUE);
 		App.getPrimaryStage().getScene().setRoot(root);
 	}
 
+	/**
+	 * @// TODO: 4/27/2021 similar todo as above
+	 * @param root
+	 */
 	public static void setDraggableAndChangeScene(Parent root, double minWidth, double minHeight, double maxWidth, double maxHeight) {
 		ResizeHelper.addResizeListener(App.getPrimaryStage(),minWidth,minHeight,maxWidth,maxHeight);
 		App.getPrimaryStage().getScene().setRoot(root);
 	}
 
 
+	/**
+	 * Runs on Application startup, post-{@link #init()}.
+	 * Sets up the window starting/default size and size constraints.
+	 * Adds the {@link ResizeHelper} listener to the application.
+	 *
+	 * Typically not run by the user, but rather automatically by the JavaFX application.
+	 * @param primaryStage primaryStage of the application. Will set App's {@link #primaryStage} to this value.
+	 * @throws IOException thrown when the specified FXML cannot be found.
+	 */
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		App.primaryStage = primaryStage;
@@ -216,10 +242,9 @@ public class App extends Application {
 		}
 	}
 
-	public static Stage getPrimaryStage() {
-		return primaryStage;
-	}
-
+	/**
+	 * Stops the application safely.
+	 */
 	@Override
 	public void stop() {
 		System.out.println("Shutting Down");

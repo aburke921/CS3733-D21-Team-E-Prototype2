@@ -110,6 +110,16 @@ public class Default {
     }
 
     @FXML
+    private void toMenu(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/MenuPage.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
     private void toServiceRequestStatus(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/ServiceRequestStatus.fxml"));
@@ -128,16 +138,12 @@ public class Default {
         }
     }
 
-    @FXML
-    public void getHelpDefault(ActionEvent actionEvent) {
-    }
-
     public void initialize() {
 
         //init appBar
         javafx.scene.Node appBarComponent = null;
         try {
-            App.setShowHelp(true);
+            App.setShowHelp(false);
             App.setShowLogin(true);
             App.setStackPane(stackPane);
             App.setPageTitle("Home");

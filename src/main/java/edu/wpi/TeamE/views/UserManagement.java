@@ -197,7 +197,7 @@ public class UserManagement {
 
     @FXML
     void startTableButton(ActionEvent event) {
-        //todo refresh table?
+        prepareUsers(treeTableView);
     }
 
     /**
@@ -233,7 +233,7 @@ public class UserManagement {
         }
 
         //fill Table with user data
-        prepareUsers(treeTableView, UserAccountDB.getAllUsers());
+        prepareUsers(treeTableView);
 
         //hide form values until editing or adding
         showFields(false);
@@ -326,7 +326,8 @@ public class UserManagement {
         }
     }
 
-    public void prepareUsers(TreeTableView<User> table, ArrayList<User> array) {
+    public void prepareUsers(TreeTableView<User> table) {
+        ArrayList<User> array = UserAccountDB.getAllUsers();
         if (table.getRoot() == null) {
             User user0 = new User("", 0, "", "", "");
             final TreeItem<User> rootUser = new TreeItem<>(user0);

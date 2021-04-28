@@ -160,9 +160,10 @@ public class MenuPage {
     @FXML
     private void toFoodDelivery(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/UpdatedServiceRequests/FoodDelivery.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/FoodDelivery.fxml"));
             App.setDraggableAndChangeScene(root);
         } catch (IOException ex) {
+            System.out.println("Hi");
             ex.printStackTrace();
         }
     }

@@ -124,12 +124,12 @@ public class App extends Application {
 	public static void setShowHelp(boolean showHelp) {
 		App.showHelp = showHelp;
 	}
-  
-  private static int searchAlgo = 0; //search algo should be A* by defualt
 
 	public static int getSearchAlgo() {
 		return searchAlgo;
 	}
+
+	private static int searchAlgo = 0; //search algo should be A* by default
 
 	public static void setSearchAlgo(int searchAlgo) {
 		App.searchAlgo = searchAlgo;

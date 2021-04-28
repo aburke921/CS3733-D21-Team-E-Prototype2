@@ -357,7 +357,7 @@ public class PathFinder {
     }
 
     /**
-     * Uses {@link Searcher}'s search() function to find the best path,
+     * Uses {@link SearchContext}'s search() function to find the best path,
      * given the two current start and end positions ({@link #selectedStartNodeID} and {@link #selectedEndNodeID}).
      * Then calls {@link #drawMap(Path, String)}.
      * Sets {@link #currentFoundPath}. Returns a SnackBar when path is null.

@@ -12,10 +12,16 @@ import java.util.List;
  * DF Search Implementation
  * Contains specific implementation of DFS
  */
-public class DFSSearcher extends Searcher {
+class XFirstSearcher extends Searcher {
 
-    public DFSSearcher(){
+    private String type;
+
+    /**
+     * @param _type has to equal "DFS" or "BFS"
+     */
+    public XFirstSearcher(String _type){
         super();
+        type = _type;
     }
 
     /**
@@ -47,7 +53,15 @@ public class DFSSearcher extends Searcher {
 
         //while there are still potential nodes to search
         while(!potentials.isEmpty()){
-            Node current = potentials.peek();
+
+            Node current;
+            if(type.equalsIgnoreCase("BFS")){
+                //this will make it do BFS
+                current = potentials.removeFirst();
+            } else {
+                //this will make it do DFS (i think)
+                current = potentials.removeLast();
+            }
 
             if(current.equals(end)){
                 //success case
@@ -60,7 +74,6 @@ public class DFSSearcher extends Searcher {
             }
 
             //move to current (pop off stack and add to visited)
-            current = potentials.pop();
             visited.add(current);
 
             List<String> neighbors = getNeighbors(current.get("id"));

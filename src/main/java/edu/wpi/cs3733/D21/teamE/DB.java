@@ -35,6 +35,10 @@ public class DB {
 		RequestsDB.createReligionRequestTable();
 	}
 
+	public static void createNodeTable() {
+		NodeDB.createNodeTable();
+	}
+
 	/**
 	 * creates an appointment and adds to the appointmentDB table
 	 * @param patientID is the ID of the patient making the appointment

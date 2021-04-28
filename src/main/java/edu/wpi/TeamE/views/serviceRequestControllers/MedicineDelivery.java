@@ -68,6 +68,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
 
     }
 
+    @FXML
     private void saveData(ActionEvent e) {
 
         int index = locationInput.getSelectionModel().getSelectedIndex();

@@ -2,16 +2,23 @@ package edu.wpi.TeamE.views;
 import com.jfoenix.controls.*;
 import edu.wpi.TeamE.App;
 
+import edu.wpi.TeamE.algorithms.Path;
 import javafx.event.ActionEvent;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 
 
 import java.io.IOException;
+import java.util.List;
+
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class CovidSurvey extends ServiceRequests  {
 
@@ -23,22 +30,106 @@ public class CovidSurvey extends ServiceRequests  {
     @FXML JFXCheckBox quarantine;
     @FXML JFXCheckBox noSymptoms;
 
+    /**
+     * Creates a popup if the user indicates any symptoms.
+     *
+     */
+    @FXML
+    void popUp() {
+
+        JFXDialogLayout error = new JFXDialogLayout();
+        error.setHeading(new Text("Based on your response you should go home"));
+
+        error.setPrefHeight(USE_COMPUTED_SIZE);
+        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+        dialog.setMaxWidth(350);
+        JFXButton okay = new JFXButton("Exit");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+                    App.setDraggableAndChangeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
+        error.setActions(okay);
+        dialog.show();
+    }
+    /**
+     *
+     *
+     *
+     * Detects if the user has entered all required fields
+     *
+     */
+    private void validateInput(){
+        JFXDialogLayout error = new JFXDialogLayout();
+        error.setHeading(new Text("Please select at least one checkbox"));
+
+        error.setPrefHeight(USE_COMPUTED_SIZE);
+        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+        dialog.setMaxWidth(350);
+        JFXButton okay = new JFXButton("done");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
 
 
+            }
+        });
+        error.setActions(okay);
+        dialog.show();
+
+    }
     @FXML
     void submitButton(ActionEvent actionEvent){
-        boolean safe = !(positiveTest.isSelected() || symptoms.isSelected() || closeContact.isSelected() || quarantine.isSelected()) && noSymptoms.isSelected();
-        if(safe){
-
-            System.out.println("Yay no COVID");
+        int rating = 0;
+        if(noSymptoms.isSelected()){
+            rating = 1;
+        }else {
+            if(symptoms.isSelected()){
+            rating = 2;
+            }if(closeContact.isSelected()){
+                rating = 3;
+            }if(quarantine.isSelected()){
+                rating = 4;
+            }if(positiveTest.isSelected()){
+                rating = 5;
+            }
+        }
+        if(rating == 0){
+            validateInput();
+        }
+        else if(rating > 1){
+            popUp();
+        }
+        else{
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
                 App.setDraggableAndChangeScene(root);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        }else{
-            System.out.println("Oh no maybe COVID so sad =(");
+        }
+        System.out.print(rating);
+    }
+    /**
+     * Returns to the service request page
+     * @param event {@link ActionEvent} info for the cancel button call, passed automatically by system.
+     */
+    @FXML
+    void handleButtonCancel(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/Default.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 

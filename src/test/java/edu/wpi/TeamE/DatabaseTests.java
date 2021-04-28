@@ -1334,6 +1334,16 @@ public class DatabaseTests {
 		assertEquals(10000, DB.userLogin("guest", "guest"));
 	}
 
+
+	@Test
+	@DisplayName("testGetUserType")
+	public void testGetUserType(){
+		DB.addSpecialUserType("email@gmail.com", "12345678", "admin", "firstName", "lastName");
+		String returnedUserType = UserAccountDB.getUserType(1);
+		assertEquals("admin", returnedUserType);
+	}
+
+
 	@Test
 	@DisplayName("testAddLanguageRequest")
 	public void testAddLanguageRequest() {

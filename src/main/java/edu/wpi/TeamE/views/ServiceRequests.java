@@ -42,7 +42,7 @@ public class ServiceRequests {
         try {
             App.setShowHelp(false); // show help or not
             App.setShowLogin(true); // show login or not
-            App.setPageTitle("Select A Service"); //set AppBar title
+            App.setPageTitle("Service Request System"); //set AppBar title
             appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/AppBarComponent.fxml"));
             appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
         } catch (IOException e) {

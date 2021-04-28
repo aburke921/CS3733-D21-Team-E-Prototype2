@@ -116,7 +116,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <Label text="Estimated Time of Arrival" textFill="#295ac3" underline="true">
+                        <Label text="Estimated Time to Arrival" textFill="#295ac3" underline="true">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>

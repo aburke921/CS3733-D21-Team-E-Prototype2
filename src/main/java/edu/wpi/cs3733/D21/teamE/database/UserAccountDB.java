@@ -3,8 +3,8 @@ package edu.wpi.cs3733.D21.teamE.database;
 import java.sql.*;
 import java.util.ArrayList;
 
-import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.views.UserManagement.*;
+import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.views.UserManagement.*;
 
 public class UserAccountDB {
 

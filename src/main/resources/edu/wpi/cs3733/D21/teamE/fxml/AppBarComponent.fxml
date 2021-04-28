@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import java.lang.Double?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<VBox id="app-bar-top" fx:id="mainVBox" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.AppBarComponent">
+   <children>
+      <HBox id="app-bar-top-upper" maxHeight="25.0" minHeight="25.0" prefHeight="25.0">
+         <children>
+            <FlowPane id="app-bar-top-upper" alignment="CENTER_RIGHT" columnHalignment="RIGHT" HBox.hgrow="ALWAYS">
+               <children>
+                  <Rectangle fx:id="fullscreen" arcHeight="5.0" arcWidth="5.0" height="13.0" onMouseClicked="#fullscreenApplication" stroke="#00000004" strokeType="INSIDE" styleClass="app-bar-button" width="13.0" />
+                  <Circle fx:id="hide" onMouseClicked="#hideApplication" radius="7.0" stroke="#00000004" strokeType="INSIDE" styleClass="app-bar-button">
+                     <FlowPane.margin>
+                        <Insets bottom="5.0" left="10.0" top="5.0" />
+                     </FlowPane.margin>
+                  </Circle>
+                  <Polygon fx:id="exit" onMouseClicked="#exitApplication" rotate="180.0" stroke="#00000001" strokeType="INSIDE" styleClass="app-bar-button">
+                     <points>
+                        <Double fx:value="-7.0" />
+                        <Double fx:value="7.0" />
+                        <Double fx:value="7.0" />
+                        <Double fx:value="7.0" />
+                        <Double fx:value="0.0" />
+                        <Double fx:value="-7.0" />
+                     </points>
+                     <FlowPane.margin>
+                        <Insets left="10.0" />
+                     </FlowPane.margin>
+                  </Polygon>
+               </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </FlowPane>
+         </children>
+      </HBox>
+      <HBox id="app-bar-top-main" maxHeight="40.0" minHeight="40.0" prefHeight="40.0">
+         <children>
+            <FlowPane style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label fx:id="appBarTitleLabel" prefHeight="38.0" prefWidth="486.0" textFill="WHITE">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <FlowPane.margin>
+                        <Insets left="10.0" />
+                     </FlowPane.margin>
+                  </Label>
+               </children>
+            </FlowPane>
+            <FlowPane alignment="CENTER_RIGHT" columnHalignment="RIGHT" style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets right="30.0" />
+               </padding>
+               <children>
+                  <StackPane alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="308.0">
+                     <children>
+                        <HBox alignment="CENTER_RIGHT">
+                           <children>
+                              <JFXButton fx:id="appLoginButtonLeft" onAction="#getLoginAppBar" style="-fx-background-color: -fx--primary-dark;" text="Login" textFill="WHITE">
+                                 <HBox.margin>
+                                    <Insets right="20.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton fx:id="appBarHelpButton" onAction="#getHelpAppBar" style="-fx-background-color: -fx--primary-dark;" text="Help" textFill="WHITE" />
+                           </children>
+                        </HBox>
+                        <JFXButton fx:id="appLoginButton" onAction="#getLoginAppBar" style="-fx-background-color: -fx--primary-dark;" text="Login" textFill="WHITE" />
+                     </children>
+                  </StackPane>
+               </children>
+            </FlowPane>
+         </children>
+      </HBox>
+   </children>
+</VBox>

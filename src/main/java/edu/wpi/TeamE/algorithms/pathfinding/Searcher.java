@@ -4,13 +4,14 @@ import java.util.*;
 
 import edu.wpi.TeamE.algorithms.*;
 import edu.wpi.TeamE.algorithms.pathfinding.constraints.SearchConstraint;
-import edu.wpi.TeamE.databases.makeConnection;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 
 /**
  * Abstract Searcher Class for Pathfinding API
  * On creation can be initialized to A* or DFS (already implemented) or others that can be added later
  */
-public class Searcher {
+class Searcher {
 
     private SearchConstraint type;
 
@@ -38,8 +39,8 @@ public class Searcher {
     }
 
     public void refreshGraph(){
-        ArrayList<Edge> edges = con.getAllEdges();
-        ArrayList<Node> nodes = con.getAllNodes();
+        ArrayList<Edge> edges = DB.getAllEdges();
+        ArrayList<Node> nodes = DB.getAllNodes();
 
         for(Node node : nodes){
             graph.put(node.get("id"), node);
@@ -159,25 +160,39 @@ public class Searcher {
     }
 
     public Path searchAlongPath(Path route, String stopType){
-        List<Node> stops = con.getAllNodesByType(stopType);
+        List<Node> stops = DB.getAllNodesByType(stopType);
         Node start = route.getStart();
         Node end = route.getEnd();
 
-        PriorityQueue<Path> paths = new PriorityQueue<>();
-
+        Path shortestSF = new Path();
         for(Node stop : stops){
-            Path leg1 = search(start.get("id"), stop.get("id"));
+            Path path = search(start.get("id"), stop.get("id"));
             Path leg2 = search(stop.get("id"), end.get("id"));
             leg2.pop();
-            leg1.add(leg2);
+            path.add(leg2);
 
-            paths.add(leg1);
+            if(shortestSF.isEmpty() || path.getPathLength() < shortestSF.getPathLength()){
+                shortestSF = path;
+            }
         }
 
-        Path shortestDetour = paths.poll();
-        System.out.printf("Added %f length\n", shortestDetour.getPathLength() - route.getPathLength());
+        System.out.printf("Added %f length\n", shortestSF.getPathLength() - route.getPathLength());
 
-        return shortestDetour;
+        return shortestSF;
+    }
+
+    public Node findNearest(Node location, String stopType){
+        List<Node> stops = DB.getAllNodesByType(stopType);
+        Node nearestSF = null;
+        Path shortestSF = new Path();
+        for(Node stop : stops){
+            Path p = search(location, stop);
+            if(shortestSF.isEmpty() || p.getPathLength() < shortestSF.getPathLength()){
+                shortestSF = p;
+                nearestSF = stop;
+            }
+        }
+        return nearestSF;
     }
 
 

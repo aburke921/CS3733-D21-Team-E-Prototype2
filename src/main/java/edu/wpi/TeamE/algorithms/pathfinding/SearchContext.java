@@ -63,6 +63,10 @@ public class SearchContext {
         return save(search.searchAlongPath(route, stopType));
     }
 
+    public Node findNearest(Node location, String nearestType){
+        return search.findNearest(location, nearestType);
+    }
+
     private SearchConstraint translateConstraint(String type){
         if(type.equalsIgnoreCase("SAFE")){
             return new SafeSearch();
@@ -79,7 +83,9 @@ public class SearchContext {
         if(algo.equalsIgnoreCase("A*")){
             return new Searcher();
         } else if(algo.equalsIgnoreCase("DFS")){
-            return new DFSSearcher();
+            return new XFirstSearcher("DFS");
+        } else if(algo.equalsIgnoreCase("BFS")){
+            return new XFirstSearcher("BFS");
         } else {
             return null;
         }

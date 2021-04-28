@@ -62,7 +62,7 @@
                             <children>
                                 <FlowPane style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <Label prefHeight="38.0" prefWidth="486.0" text="Map Editor" textFill="WHITE">
+                                        <Label fx:id="editorTitle" prefHeight="38.0" prefWidth="486.0" text="Map Editor" textFill="WHITE">
                                             <font>
                                                 <Font size="20.0" />
                                             </font>
@@ -88,30 +88,34 @@
         </AnchorPane>
         <AnchorPane>
             <children>
-                <HBox layoutY="1.0" prefHeight="58.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
-                    <children>
-                  <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
+            <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
+               <children>
+                      <HBox prefHeight="37.0" prefWidth="687.0">
+                          <children>
+                        <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
+                           <HBox.margin>
+                              <Insets left="20.0" top="15.0" />
+                           </HBox.margin>
+                        </JFXSlider>
+                        <JFXComboBox fx:id="floorSelector" onAction="#selectFloor" prefHeight="27.0" prefWidth="147.0" promptText="Select Floor">
+                           <HBox.margin>
+                              <Insets left="40.0" top="10.0" />
+                           </HBox.margin>
+                        </JFXComboBox>
+                          </children>
+                      </HBox>
+                  <JFXButton fx:id="edgeMode" onAction="#toEdgeMode" prefHeight="44.0" prefWidth="104.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Edge Editor">
                      <HBox.margin>
-                        <Insets left="20.0" top="15.0" />
-                     </HBox.margin>
-                  </JFXSlider>
-                        <JFXButton fx:id="floorChanger" onAction="#nextFloor" styleClass="submit-button" text="Change Floor">
-                            <HBox.margin>
-                                <Insets left="20.0" top="10.0" />
-                            </HBox.margin>
-                        </JFXButton>
-                  <JFXButton fx:id="edgeMode" onAction="#toEdgeMode" styleClass="submit-button" text="Edit Edges">
-                     <HBox.margin>
-                        <Insets left="100.0" top="10.0" />
+                        <Insets left="30.0" top="2.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="nodeMode" onAction="#toNodeMode" styleClass="submit-button" text="Edit Nodes">
+                  <JFXButton fx:id="nodeMode" onAction="#toNodeMode" prefHeight="44.0" prefWidth="97.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Node Editor">
                      <HBox.margin>
-                        <Insets left="20.0" top="10.0" />
+                        <Insets left="20.0" top="2.0" />
                      </HBox.margin>
                   </JFXButton>
-                    </children>
-                </HBox>
+               </children>
+            </HBox>
             </children>
         </AnchorPane>
         <AnchorPane prefHeight="723.0" VBox.vgrow="ALWAYS">
@@ -142,98 +146,21 @@
                       </StackPane>
                   <StackPane>
                      <children>
-                        <VBox fx:id="nodeVBox" prefHeight="628.0" prefWidth="459.0">
-                           <children>
-                              <JFXTextField fx:id="longNameInput" promptText="Long Name">
-                                 <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="30.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
-                              <JFXTextField fx:id="shortNameInput" promptText="Short Name">
-                                 <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="20.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
-                              <JFXTextField promptText="X Coordinate" fx:id="xCordInput">
-                                 <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="20.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
-                              <JFXTextField fx:id="yCordInput" promptText="Y Coordinate">
-                                 <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="20.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
-                              <JFXComboBox fx:id="idInput" prefHeight="27.0" prefWidth="153.0" promptText="ID">
-                                 <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="20.0" />
-                                 </VBox.margin>
-                              </JFXComboBox>
-                              <JFXComboBox fx:id="typeInput" prefHeight="27.0" prefWidth="153.0" promptText="Type">
-                                 <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="20.0" />
-                                 </VBox.margin>
-                              </JFXComboBox>
-                              <JFXComboBox fx:id="floorInput" prefHeight="27.0" prefWidth="153.0" promptText="Floor">
-                                 <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="20.0" />
-                                 </VBox.margin>
-                              </JFXComboBox>
-                              <JFXComboBox fx:id="buildingInput" prefHeight="27.0" prefWidth="153.0" promptText="Building">
-                                 <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="20.0" />
-                                 </VBox.margin>
-                              </JFXComboBox>
-                              <GridPane>
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <JFXButton fx:id="editNode" onAction="#editNodeButton" styleClass="submit-button" text="Edit Node" GridPane.rowIndex="1">
-                                       <GridPane.margin>
-                                          <Insets left="20.0" />
-                                       </GridPane.margin>
-                                    </JFXButton>
-                                    <JFXButton fx:id="deleteNode" onAction="#deleteNodeButton" styleClass="submit-button" text="Delete Node" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                       <GridPane.margin>
-                                          <Insets left="10.0" />
-                                       </GridPane.margin>
-                                    </JFXButton>
-                                    <JFXButton fx:id="addNode" onAction="#addNodeButton" styleClass="submit-button" text="Add Node" GridPane.rowIndex="2">
-                                       <GridPane.margin>
-                                          <Insets left="20.0" top="20.0" />
-                                       </GridPane.margin>
-                                    </JFXButton>
-                                 </children>
-                              </GridPane>
-                              <JFXButton fx:id="refresh" onAction="#refreshButton" styleClass="submit-button" text="Refresh All">
-                                 <VBox.margin>
-                                    <Insets left="70.0" top="100.0" />
-                                 </VBox.margin>
-                              </JFXButton>
-                           </children>
-                        </VBox>
                         <VBox fx:id="edgeVBox" prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <JFXComboBox fx:id="edgeID" prefHeight="27.0" prefWidth="221.0" promptText="Edge ID">
+                              <JFXComboBox fx:id="edgeID" prefHeight="27.0" prefWidth="205.0" promptText="Edge ID">
                                  <VBox.margin>
-                                    <Insets top="30.0" />
+                                    <Insets left="10.0" right="10.0" top="30.0" />
                                  </VBox.margin>
                               </JFXComboBox>
-                              <JFXComboBox fx:id="startLocation" prefHeight="27.0" prefWidth="150.0" promptText="Start Location">
+                              <JFXComboBox fx:id="startLocation" prefHeight="27.0" prefWidth="205.0" promptText="Start Location">
                                  <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="20.0" />
+                                    <Insets left="10.0" right="10.0" top="20.0" />
                                  </VBox.margin>
                               </JFXComboBox>
-                              <JFXComboBox fx:id="endLocation" prefHeight="27.0" prefWidth="149.0" promptText="End Location">
+                              <JFXComboBox fx:id="endLocation" prefHeight="27.0" prefWidth="205.0" promptText="End Location">
                                  <VBox.margin>
-                                    <Insets left="40.0" right="40.0" top="20.0" />
+                                    <Insets left="10.0" right="10.0" top="20.0" />
                                  </VBox.margin>
                               </JFXComboBox>
                               <GridPane>
@@ -248,26 +175,156 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
-                                    <JFXButton fx:id="editEdge" onAction="#editEdgeButton" styleClass="submit-button" text="Edit Edge" GridPane.rowIndex="1">
+                                    <JFXButton fx:id="deleteEdge" onAction="#deleteEdgeButton" prefHeight="27.0" prefWidth="95.0" styleClass="submit-button" text="Delete Edge" GridPane.rowIndex="1">
                                        <GridPane.margin>
                                           <Insets left="20.0" />
                                        </GridPane.margin>
                                     </JFXButton>
-                                    <JFXButton fx:id="deleteEdge" onAction="#deleteEdgeButton" styleClass="submit-button" text="Delete Edge" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <JFXButton fx:id="addEdge" onAction="#addEdgeButton" prefHeight="27.0" prefWidth="95.0" styleClass="submit-button" text="Add Edge" GridPane.rowIndex="2">
                                        <GridPane.margin>
-                                          <Insets left="20.0" />
+                                          <Insets left="20.0" top="20.0" />
                                        </GridPane.margin>
                                     </JFXButton>
-                                    <JFXButton fx:id="addEdge" onAction="#addEdgeButton" styleClass="submit-button" text="Add Edge" GridPane.rowIndex="2">
+                                    <JFXButton fx:id="addEdge1" onAction="#cancelButton" styleClass="submit-button" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                        <GridPane.margin>
                                           <Insets left="20.0" top="20.0" />
                                        </GridPane.margin>
                                     </JFXButton>
                                  </children>
-                              </GridPane>
-                              <JFXButton fx:id="refresh2" onAction="#refreshButton" styleClass="submit-button" text="Refresh All">
                                  <VBox.margin>
-                                    <Insets left="80.0" top="40.0" />
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </GridPane>
+                              <GridPane>
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <JFXButton onAction="#openFileNode" prefHeight="40.0" prefWidth="99.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Retrieve CSV">
+                                       <GridPane.margin>
+                                          <Insets left="10.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
+                                    <JFXButton fx:id="nodeCSV" onAction="#fileOpenerNode" prefHeight="40.0" prefWidth="99.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Upload CSV" GridPane.columnIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="10.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="219.0" />
+                                 </VBox.margin>
+                              </GridPane>
+                              <JFXButton fx:id="refresh2" onAction="#refreshButton" prefHeight="48.0" prefWidth="99.0" styleClass="submit-button" text="Refresh All">
+                                 <VBox.margin>
+                                    <Insets left="70.0" top="22.0" />
+                                 </VBox.margin>
+                              </JFXButton>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="nodeVBox" prefHeight="628.0" prefWidth="459.0">
+                           <children>
+                              <JFXTextField fx:id="longNameInput" prefWidth="205.0" promptText="Long Name">
+                                 <VBox.margin>
+                                    <Insets left="10.0" right="10.0" top="30.0" />
+                                 </VBox.margin>
+                              </JFXTextField>
+                              <JFXTextField fx:id="shortNameInput" prefWidth="205.0" promptText="Short Name">
+                                 <VBox.margin>
+                                    <Insets left="10.0" right="10.0" top="20.0" />
+                                 </VBox.margin>
+                              </JFXTextField>
+                              <JFXTextField prefWidth="205.0" promptText="X Coordinate" fx:id="xCordInput">
+                                 <VBox.margin>
+                                    <Insets left="10.0" right="10.0" top="20.0" />
+                                 </VBox.margin>
+                              </JFXTextField>
+                              <JFXTextField fx:id="yCordInput" prefWidth="205.0" promptText="Y Coordinate">
+                                 <VBox.margin>
+                                    <Insets left="10.0" right="10.0" top="20.0" />
+                                 </VBox.margin>
+                              </JFXTextField>
+                              <JFXComboBox fx:id="idInput" prefHeight="27.0" prefWidth="210.0" promptText="ID">
+                                 <VBox.margin>
+                                    <Insets left="10.0" right="10.0" top="20.0" />
+                                 </VBox.margin>
+                              </JFXComboBox>
+                              <JFXComboBox fx:id="typeInput" prefHeight="27.0" prefWidth="210.0" promptText="Type">
+                                 <VBox.margin>
+                                    <Insets left="10.0" right="10.0" top="20.0" />
+                                 </VBox.margin>
+                              </JFXComboBox>
+                              <JFXComboBox fx:id="floorInput" prefHeight="27.0" prefWidth="210.0" promptText="Floor">
+                                 <VBox.margin>
+                                    <Insets left="10.0" right="10.0" top="20.0" />
+                                 </VBox.margin>
+                              </JFXComboBox>
+                              <JFXComboBox fx:id="buildingInput" prefHeight="27.0" prefWidth="210.0" promptText="Building">
+                                 <VBox.margin>
+                                    <Insets left="10.0" right="10.0" top="20.0" />
+                                 </VBox.margin>
+                              </JFXComboBox>
+                              <GridPane prefHeight="84.0" prefWidth="230.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <JFXButton fx:id="editNode" onAction="#editNodeButton" styleClass="submit-button" text="Edit Node">
+                                       <GridPane.margin>
+                                          <Insets left="20.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
+                                    <JFXButton fx:id="deleteNode" onAction="#deleteNodeButton" styleClass="submit-button" text="Delete Node" GridPane.columnIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="10.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
+                                    <JFXButton fx:id="addNode" onAction="#addNodeButton" styleClass="submit-button" text="Add Node" GridPane.rowIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="20.0" top="20.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </GridPane>
+                              <GridPane prefHeight="39.0" prefWidth="230.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <JFXButton fx:id="nodeCSV1" onAction="#fileOpenerNode" prefHeight="40.0" prefWidth="99.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Upload CSV" GridPane.columnIndex="1">
+                                       <GridPane.margin>
+                                          <Insets left="10.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
+                                    <JFXButton fx:id="nodeCSV2" onAction="#openFileNode" prefHeight="40.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Retrieve CSV">
+                                       <GridPane.margin>
+                                          <Insets left="10.0" />
+                                       </GridPane.margin>
+                                    </JFXButton>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </GridPane>
+                              <JFXButton fx:id="refresh" onAction="#refreshButton" prefHeight="48.0" prefWidth="99.0" styleClass="submit-button" text="Refresh All">
+                                 <VBox.margin>
+                                    <Insets left="70.0" top="22.0" />
                                  </VBox.margin>
                               </JFXButton>
                            </children>
@@ -281,9 +338,9 @@
         <AnchorPane fx:id="lowerAnchorPane" prefHeight="59.0" prefWidth="1244.0">
             <children>
                 <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" onAction="#toDefault" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
-            <JFXButton layoutX="256.0" layoutY="16.0" onAction="#toNodeTable" text="Nodes" />
-            <JFXButton layoutX="129.0" layoutY="17.0" onAction="#toMap" text="Map" />
-            <JFXButton layoutX="373.0" layoutY="17.0" onAction="#toEdgeTable" text="Edges" />
+            <JFXButton layoutX="498.0" layoutY="10.0" onAction="#toNodeTable" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Node Table" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="10.0" />
+            <JFXButton layoutX="363.0" layoutY="10.0" onAction="#toMap" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Display Map" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="10.0" />
+            <JFXButton layoutX="633.0" layoutY="10.0" onAction="#toEdgeTable" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Edge Table" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="10.0" />
             </children>
         </AnchorPane>
     </children>

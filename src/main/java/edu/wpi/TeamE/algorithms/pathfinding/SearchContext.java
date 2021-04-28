@@ -55,12 +55,17 @@ public class SearchContext {
         return save(search.search(startNode, endNode));
     }
 
-    public Path search(Collection<String> stopIds){
+    public Path search(List stopIds){
         return save(search.search(stopIds));
     }
 
+
     public Path searchAlongPath(Path route, String stopType){
         return save(search.searchAlongPath(route, stopType));
+    }
+
+    public Node findNearest(Node location, String nearestType){
+        return search.findNearest(location, nearestType);
     }
 
     private SearchConstraint translateConstraint(String type){

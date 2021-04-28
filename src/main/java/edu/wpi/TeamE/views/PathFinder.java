@@ -16,8 +16,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.TeamE.algorithms.Node;
 import edu.wpi.TeamE.algorithms.Path;
+
 import edu.wpi.TeamE.algorithms.pathfinding.*;
 
 import edu.wpi.TeamE.App;
@@ -137,6 +139,20 @@ public class PathFinder {
     private HBox ETA;
     @FXML // fx:id="clearPath"
     private Button clearPath;
+    @FXML private RequiredFieldValidator validator = new RequiredFieldValidator();
+
+    @FXML // fx:id="floorL2"
+    private Button floorL2;
+    @FXML // fx:id="floorL1"
+    private Button floorL1;
+    @FXML // fx:id="floorG"
+    private Button floorG;
+    @FXML // fx:id="floor1"
+    private Button floor1;
+    @FXML // fx:id="floor2"
+    private Button floor2;
+    @FXML // fx:id="floor3"
+    private Button floor3;
 
     /*
      * Additional Variables
@@ -263,19 +279,24 @@ public class PathFinder {
         error.setActions(okay);
         dialog.show();
     }
+    /**
+     * finds path between a selected start and end location, or finds path to nearest bathroom from start location.
+     * @param index index of the clicked on node
+     */
     @FXML
-    void clickOnNode( String longName){
+    void clickOnNode(int index){
         JFXDialogLayout error = new JFXDialogLayout();
         error.setHeading(new Text("Location selection"));
         JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
         JFXButton start = new JFXButton("Start");
         JFXButton destination = new JFXButton("Destination");
+        JFXButton bathroom = new JFXButton("Nearest Bathroom");
 
 
        start.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                startLocationComboBox.setValue(longName);
+                startLocationComboBox.getSelectionModel().select(index);
                 dialog.close();
 
             }
@@ -283,12 +304,33 @@ public class PathFinder {
         destination.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                endLocationComboBox.setValue(longName);
+                endLocationComboBox.getSelectionModel().select(index);;
+
                 dialog.close();
 
             }
         });
-        error.setActions(start,destination);
+        bathroom.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                SearchContext search = new SearchContext();
+                startLocationComboBox.getSelectionModel().select(index);
+                Node bathroom = search.findNearest(nodeArrayList.get(index),"REST");
+                int endIndex = 0;
+                for(int i = 0; i < nodeArrayList.size();i++){
+                    if(nodeArrayList.get(i).get("id").equals(bathroom.get("id"))){
+                        endIndex = i;
+                    }
+
+                }
+                endLocationComboBox.getSelectionModel().select(endIndex);
+
+                dialog.close();
+
+
+            }
+        });
+        error.setActions(start,bathroom,destination);
 
 
 
@@ -340,16 +382,29 @@ public class PathFinder {
 
         //Define A* Search
         System.out.println("A* Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
-        SearchContext aStar = new SearchContext();
+        SearchContext search = new SearchContext();
+        String algoType = null;
+        switch (App.getSearchAlgo()) {
+            case 1:
+                algoType = "DFS";
+                break;
+            case 2:
+                algoType = "BFS";
+                break;
+            default:
+                algoType = "A*";
+                break;
+        }
+        search.setAlgo(algoType);
 
         //set constrains
         if (handicap.isSelected()) {
             System.out.println("Yay Handicap");
-            aStar.addConstraint("HANDICAP");
+            search.addConstraint("HANDICAP");
         }
-        if (safe.isSelected()) {
+        if (!safe.isSelected()) {
             System.out.println("Yay Safe =)");
-            aStar.addConstraint("SAFE");
+            search.addConstraint("SAFE");
         }
 
         //Check if starting and ending node are the same
@@ -363,12 +418,7 @@ public class PathFinder {
             findPathButton.setDisable(true);
         } else { // run search
             //Call the path search function
-            //String stop = "FEXIT00201";
-            List<String> stops = new ArrayList<>();
-            stops.add(selectedStartNodeID);
-            //stops.add(stop);
-            stops.add(selectedEndNodeID);
-            Path foundPath = aStar.search(stops);
+            Path foundPath = search.search(selectedStartNodeID, selectedEndNodeID);
 
             //draw map, unless path is null
             if (foundPath == null) { //path is null
@@ -751,17 +801,22 @@ public class PathFinder {
             /*System.out.println(xInt);
             System.out.println(yInt);*/
 
-//            for(int i = 0; i < array.size(); i++) {
-//                double nodeX = array.get(i).getX() / scale;
-//                int nodeXInt = (int)nodeX;
-//                double nodeY = array.get(i).getY() / scale;
-//                int nodeYInt = (int)nodeY;
-//                System.out.println(nodeXInt);
-//
-//                if(Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2){
-//                    clickOnNode(array.get(i).get("longName"));
-//                    //selection++;
-//                    /*if(selection == 1) {
+            for(int i = 0; i < array.size(); i++) {
+                Node node = array.get(i);
+                double nodeX = node.getX() / scale;
+                int nodeXInt = (int) nodeX;
+                double nodeY = node.getY() / scale;
+                int nodeYInt = (int) nodeY;
+                System.out.println(nodeXInt);
+                if ((Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) && (node.get("floor").equalsIgnoreCase(currentFloor))) {
+
+                    System.out.println(array.get(i).get("longName"));
+                    clickOnNode(i);
+
+                }
+            }
+
+                    /*if(selection == 1) {
 //                        startLocationComboBox.setValue(array.get(i).get("longName"));
 //                    }else if(selection == 2){
 //                        endLocationComboBox.setValue(array.get(i).get("longName"));
@@ -774,21 +829,16 @@ public class PathFinder {
         });
     }
 
-    public void nextFloor(ActionEvent event) {
+    public void chooseFloor(ActionEvent e) {
         //clear current floor of markers
         for (Node node : currentMarkers) {
             NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
             nM.getRectangle().setVisible(false);
         }
         currentMarkers.clear();
-        //set current floor to one after current
-        setCurrentFloor(floorNames[currentFloorNamesIndex]);
-
-        //increment unless at max, then back to 0
-        if (currentFloorNamesIndex == 5) {
-            currentFloorNamesIndex = 0;
-        } else currentFloorNamesIndex++;
-        currFloor.setText(currentFloor);
+        String floor = ((Button) e.getSource()).getText();
+        currFloor.setText(floor);
+        setCurrentFloor(floor);
     }
 
     public void sortNodesByType(ActionEvent event) {
@@ -806,7 +856,7 @@ public class PathFinder {
                 NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
                 Rectangle r = nM.getRectangle();
                 r.setVisible(true);
-                r.setFill(marker.getTypeColor().get(currentType));
+                //r.setFill(marker.getTypeColor().get(currentType));
                 currentMarkers.add(node);
             }
         } else {

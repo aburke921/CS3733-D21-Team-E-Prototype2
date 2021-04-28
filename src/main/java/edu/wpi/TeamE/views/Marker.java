@@ -68,17 +68,17 @@ public class Marker {
         checkBoxSelected.put("WALK", 0);
 
         typeColor.put("HALL", Color.web("#7c7c7c"));
-        typeColor.put("CONF", Color.ORANGE);
-        typeColor.put("DEPT", Color.web("#690080"));
+        typeColor.put("CONF", Color.web("#7f5124"));
+        typeColor.put("DEPT", Color.web("#74058c"));
         typeColor.put("ELEV", Color.web("#769557"));
-        typeColor.put("INFO", Color.web("#b46e25"));
-        typeColor.put("LABS", Color.web("#a40289"));
+        typeColor.put("INFO", Color.web("#dc721c"));
+        typeColor.put("LABS", Color.web("#c900ae"));
         typeColor.put("REST", Color.web("#b00404"));
         typeColor.put("RETL", Color.web("#3d4f9d"));
         typeColor.put("STAI", Color.web("#007f52"));
-        typeColor.put("SERV", Color.web("#4800ff"));
-        typeColor.put("EXIT", Color.YELLOWGREEN);
-        typeColor.put("PARK", Color.web("#159bd2"));
+        typeColor.put("SERV", Color.web("#005cff"));
+        typeColor.put("EXIT", Color.web("#90e430"));
+        typeColor.put("PARK", Color.web("#1299d2"));
         typeColor.put("WALK", Color.BLACK);
     }
 
@@ -87,11 +87,13 @@ public class Marker {
         ArrayList<Node> nodeArrayList = NodeDB.getAllNodes();
 
         for (int i = 0; i < nodeArrayList.size(); i++) {
-            Double xCoord = nodeArrayList.get(i).getX() / scale - sideLength * 0.5;
-            Double yCoord = nodeArrayList.get(i).getY() / scale - sideLength * 0.5;
+            Double xCoord = nodeArrayList.get(i).getX() / scale - (sideLength * 0.5);
+            Double yCoord = nodeArrayList.get(i).getY() / scale - (sideLength * 0.5);
             Rectangle rectangle = new Rectangle(xCoord, yCoord, sideLength, sideLength);
             rectangle.setStroke(Color.BLACK);
+            rectangle.setFill(typeColor.get(nodeArrayList.get(i).get("type")));
             rectangle.setVisible(false);
+            //rectangle.setOpacity(0.25);
 
             NodeMarker nodeMarker = new NodeMarker(nodeArrayList.get(i), rectangle);
 

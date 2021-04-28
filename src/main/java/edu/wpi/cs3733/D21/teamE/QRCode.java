@@ -20,14 +20,16 @@ public class QRCode {
 
 	public static String scanQR() {
 		Webcam webcam = Webcam.getDefault();
-//		webcam.open();
-//		WebcamPanel panel = new WebcamPanel(webcam);
-//		panel.setMirrored(true);
-//
-//		JFrame window = new JFrame("Scan QR Code");
-//		window.add(panel);
-//		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		window.setVisible(true);
+
+		webcam.open();
+		WebcamPanel panel = new WebcamPanel(webcam);
+		panel.setMirrored(false);
+
+		JFrame window = new JFrame("QR Scanner");
+		window.add(panel);
+		window.pack();
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setVisible(true);
 
 		String result = null;
 
@@ -39,8 +41,10 @@ public class QRCode {
 				e.printStackTrace();
 			}
 		}
+		window.setVisible(false);
+		window.dispose();
+		webcam.close();
 		return result;
-		//webcam.close();
 		//return result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
 	}
 

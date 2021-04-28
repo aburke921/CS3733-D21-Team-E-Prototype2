@@ -236,9 +236,8 @@ public class newMapEditor {
                     Line line = new Line(startX, startY, endX, endY);
                     line.setStrokeLineCap(StrokeLineCap.ROUND);
                     line.setStrokeWidth(1);
-                    line.setStroke(Color.RED);
-
                     g.getChildren().add(line);
+
                 }
             }
         }
@@ -973,6 +972,7 @@ public class newMapEditor {
 
         //Creating Floor Dropdown
         ArrayList<String> nodeFloorArrayList = new ArrayList<String>();
+        nodeFloorArrayList.add("G");
         nodeFloorArrayList.add("L1");
         nodeFloorArrayList.add("L2");
         nodeFloorArrayList.add("1");

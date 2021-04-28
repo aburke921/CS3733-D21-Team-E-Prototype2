@@ -107,7 +107,7 @@ public class UserManagement {
             addUser.setText("Add User");
             showFields(false);
             clearFieldContent();
-            //todo refresh
+            prepareUsers(treeTableView);
 
         } else { //admin would like to start adding user
             addingUser = true;
@@ -171,7 +171,7 @@ public class UserManagement {
             editUser.setText("Edit User");
             currentlyEditing = null;
             clearFieldContent();
-            //todo refresh
+            prepareUsers(treeTableView);
         } else { //no edit is in progress
 
             if (treeTableView.getSelectionModel().getSelectedItem() != null) {

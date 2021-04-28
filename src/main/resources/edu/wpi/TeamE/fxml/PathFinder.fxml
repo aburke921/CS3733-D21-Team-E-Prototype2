@@ -72,6 +72,14 @@
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
+                       <JFXButton fx:id="qrButton" onAction="#startQRScanning" style="-fx-text-fill: -fx--primary;" styleClass="cancel-button" text="QR Code">
+                          <graphic>
+                             <MaterialDesignIconView glyphName="QRCODE" size="18" />
+                          </graphic>
+                          <HBox.margin>
+                             <Insets left="15.0" top="10.0" />
+                          </HBox.margin>
+                       </JFXButton>
                     </children>
                 </HBox>
          </children>

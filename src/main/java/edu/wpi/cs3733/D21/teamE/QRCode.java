@@ -27,6 +27,9 @@ public class QRCode {
 
 		JFrame window = new JFrame("QR Scanner");
 		window.add(panel);
+		window.pack();
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setVisible(true);
 
 		String result = null;
 
@@ -38,9 +41,10 @@ public class QRCode {
 				e.printStackTrace();
 			}
 		}
+		window.setVisible(false);
+		window.dispose();
 		webcam.close();
 		return result;
-		//webcam.close();
 		//return result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
 	}
 

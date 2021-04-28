@@ -122,7 +122,7 @@
                                                       <Font size="15.0" />
                                                    </font>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="closeContact" checkedColor="#007cf8" text="I have been in close contact with someone diagnosed with COVID-19 in the last 14 days?" unCheckedColor="BLACK">
+                                                <JFXCheckBox fx:id="closeContact" checkedColor="#007cf8" text="I have been in close contact with someone diagnosed with COVID-19 in the last 14 days." unCheckedColor="BLACK">
                                                    <padding>
                                                       <Insets top="30.0" />
                                                    </padding>
@@ -130,7 +130,7 @@
                                                       <Font size="15.0" />
                                                    </font>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="quarantine" checkedColor="#007cf8" text="I have been ask to self-isolate or quarantine by a doctor or local health official in the last 14 days?" unCheckedColor="BLACK">
+                                                <JFXCheckBox fx:id="quarantine" checkedColor="#007cf8" text="I have been ask to self-isolate or quarantine by a doctor or local health official in the last 14 days." unCheckedColor="BLACK">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>

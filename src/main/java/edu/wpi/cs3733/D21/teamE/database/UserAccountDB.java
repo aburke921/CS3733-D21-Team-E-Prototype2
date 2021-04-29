@@ -1,10 +1,9 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.views.UserManagement.User;
+
 import java.sql.*;
 import java.util.ArrayList;
-
-import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.views.UserManagement.*;
 
 public class UserAccountDB {
 

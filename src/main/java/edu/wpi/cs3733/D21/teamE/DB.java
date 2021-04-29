@@ -1,8 +1,8 @@
 package edu.wpi.cs3733.D21.teamE;
 
-import edu.wpi.TeamE.algorithms.Edge;
-import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.views.serviceRequestObjects.AubonPainItem;
+import edu.wpi.cs3733.D21.teamE.map.Edge;
+import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;

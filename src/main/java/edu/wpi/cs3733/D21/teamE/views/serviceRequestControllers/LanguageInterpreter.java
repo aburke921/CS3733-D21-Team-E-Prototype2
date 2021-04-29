@@ -1,0 +1,72 @@
+package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextArea;
+import edu.wpi.cs3733.D21.teamE.DB;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+
+import java.util.ArrayList;
+
+public class LanguageInterpreter extends ServiceRequestFormComponents {
+
+	ObservableList<String> locations;
+	ArrayList<String> nodeID;
+
+	@FXML
+	private Rectangle fullscreen;
+
+	@FXML
+	private Circle hide;
+
+	@FXML
+	private Polygon exit;
+
+	@FXML
+	private JFXComboBox<String> locationInput;
+
+	@FXML
+	private JFXComboBox<String> languageSelection;
+
+	@FXML
+	private JFXComboBox<String> assignedPersonnel;
+
+	@FXML
+	private JFXTextArea descriptionInput;
+
+	@FXML
+	private JFXButton cancel;
+
+	@FXML
+	private JFXButton submit;
+
+	@FXML
+	void handleButtonCancel(ActionEvent event) {
+		super.handleButtonSubmit(event);
+	}
+
+	@FXML
+	void saveData(ActionEvent event) {
+		int index = locationInput.getSelectionModel().getSelectedIndex();
+		String node = nodeID.get(index);
+		String assignee = assignedPersonnel.getSelectionModel().getSelectedItem();
+		String descrip = descriptionInput.getText();
+		String language = languageSelection.getSelectionModel().getSelectedItem();
+
+		super.handleButtonSubmit(event);
+	}
+
+	@FXML
+	void initialize() { ;
+//		ObservableList<String> employees = DB.getAllEmployeeNames();
+//		assignedPersonnel.setItems(employees);
+		locations = DB.getAllNodeLongNames();
+		locationInput.setItems(locations);
+	}
+
+}

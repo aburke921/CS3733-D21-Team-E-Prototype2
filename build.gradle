@@ -45,7 +45,10 @@ dependencies {
             'org.slf4j:slf4j-api:1.7.30',
             'org.slf4j:slf4j-simple:1.7.30',
 
-            'com.github.sarxos:webcam-capture:0.3.12'
+            'com.github.sarxos:webcam-capture:0.3.12',
+
+            'com.google.maps:google-maps-services:0.18.0',
+            'org.slf4j:slf4j-simple:1.7.25'
     )
 //These are test dependencies. These are only used for running verification tasks via Gradle.
     testCompile(

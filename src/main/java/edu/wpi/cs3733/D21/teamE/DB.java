@@ -1,15 +1,13 @@
 package edu.wpi.cs3733.D21.teamE;
 
-import edu.wpi.TeamE.algorithms.Edge;
-import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.TeamE.views.serviceRequestObjects.AubonPainItem;
+import edu.wpi.cs3733.D21.teamE.map.Edge;
+import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.io.File;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,6 +33,10 @@ public class DB {
 		RequestsDB.createInternalPatientRequest();
 		RequestsDB.createAubonPainMenuTable();
 		RequestsDB.createReligionRequestTable();
+	}
+
+	public static void createNodeTable() {
+		NodeDB.createNodeTable();
 	}
 
 	/**
@@ -683,6 +685,7 @@ public class DB {
 	 * @param password  this is a password that the user will use to log into the account
 	 * @param firstName this is the user's first name that is associated with the account
 	 * @param lastName  this is the user's last name that is associated with the account
+	 * @// TODO: 4/27/21 Return success or fail status?
 	 */
 	public static void addUserAccount(String email, String password, String firstName, String lastName) {
 		UserAccountDB.addUserAccount(email, password, firstName, lastName);
@@ -711,6 +714,7 @@ public class DB {
 	 * @param userType  this is the type of account that the individual is being assigned to
 	 * @param firstName this is the user's first name that is associated with the account
 	 * @param lastName  this is the user's last name that is associated with the account
+	 * @// TODO: 4/27/21 JavaDoc return explanation, also, consider bool return?
 	 */
 	public static int editUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
 		return UserAccountDB.editUserAccount(userID, email, password, userType, firstName, lastName);

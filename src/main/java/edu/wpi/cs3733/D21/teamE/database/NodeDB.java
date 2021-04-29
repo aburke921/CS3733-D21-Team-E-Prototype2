@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
-import edu.wpi.TeamE.algorithms.Node;
-import edu.wpi.cs3733.D21.teamE.database.makeConnection;
+import edu.wpi.cs3733.D21.teamE.map.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -42,7 +41,7 @@ public class NodeDB {
 				"longName  varchar(100), " +
 				"shortName varchar(100), " +
 				"Unique (xCoord, yCoord, floor), " +
-				"Constraint floorLimit Check (floor In ('1', '2', '3', 'L1', 'L2')), " +
+				"Constraint floorLimit Check (floor In ('1', '2', '3', 'L1', 'L2', 'G')), " +
 				"Constraint buildingLimit Check (building In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')), " +
 				"Constraint nodeTypeLimit Check (nodeType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', " +
 				"                                             'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH')) " +

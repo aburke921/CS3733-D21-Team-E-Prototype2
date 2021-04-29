@@ -197,15 +197,9 @@ public class newMapEditor {
         ArrayList<Edge> edgeArray = new ArrayList<Edge>();
         edgeArray = DB.getAllEdges();
 
-        //display all nodes
+        //display all edges
         scale = imageWidth / imageView.getFitWidth();
-        for (int i = 0; i < nodeArray.size(); i++) {
-            double xCoord = nodeArray.get(i).getX() / scale;
-            double yCoord = nodeArray.get(i).getY() / scale;
-            Circle circle = new Circle(xCoord, yCoord, 2, Color.GREEN);
-            g.getChildren().add(circle);
-
-        }
+        ArrayList<String> lineList = new ArrayList<String>();
         //display all edges
         for(int i = 0; i < edgeArray.size(); i++) {
             double startX = -1;
@@ -231,12 +225,25 @@ public class newMapEditor {
                 //if you've retrieved the edge, create a line
                 if (startX != -1 && startY != -1 && endX != -1 && endY != -1) {
                     Line line = new Line(startX, startY, endX, endY);
-                    line.setStrokeLineCap(StrokeLineCap.ROUND);
-                    line.setStrokeWidth(1);
-                    g.getChildren().add(line);
+                    line.setStroke(Color.color(1,0,0,0.4));
+                    //don't add same edge twice
+                    if(!lineList.contains(line.toString())) {
+                        line.setStrokeLineCap(StrokeLineCap.ROUND);
+                        line.setStrokeWidth(1);
+                        g.getChildren().add(line);
+                        lineList.add(line.toString());
+                    }
 
                 }
             }
+        }
+        //display all nodes
+        for (int i = 0; i < nodeArray.size(); i++) {
+            double xCoord = nodeArray.get(i).getX() / scale;
+            double yCoord = nodeArray.get(i).getY() / scale;
+            Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+            g.getChildren().add(circle);
+
         }
         pane.getChildren().add(g);
     }
@@ -1124,7 +1131,7 @@ public class newMapEditor {
                 //ints for placing circle
                 double xCoord = e.getX();
                 double yCoord = e.getY();
-                Circle circle = new Circle(xCoord, yCoord, 2, Color.GREEN);
+                Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
                 g.getChildren().add(circle);
                 pane.getChildren().add(g);
                 //clears fields, populates X, Y coordinates of created node in fields

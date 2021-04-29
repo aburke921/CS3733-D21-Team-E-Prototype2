@@ -20,27 +20,31 @@ public class QRCode {
 
 	public static String scanQR() {
 		Webcam webcam = Webcam.getDefault();
-//		webcam.open();
-//		WebcamPanel panel = new WebcamPanel(webcam);
-//		panel.setMirrored(true);
-//
-//		JFrame window = new JFrame("Scan QR Code");
-//		window.add(panel);
-//		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		window.setVisible(true);
+
+		webcam.open();
+		WebcamPanel panel = new WebcamPanel(webcam);
+		panel.setMirrored(false);
+
+		JFrame window = new JFrame("QR Scanner");
+		window.add(panel);
+		window.pack();
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setVisible(true);
 
 		String result = null;
 
 		while (result == null) {
-			WebcamUtils.capture(webcam, "src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/temp", ImageUtils.FORMAT_PNG);
+			WebcamUtils.capture(webcam, "/edu/wpi/cs3733/D21/teamE/QRcode/temp", ImageUtils.FORMAT_PNG);
 			try {
-				result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/temp.png");
+				result = QRCode.readQR("/edu/wpi/cs3733/D21/teamE/QRcode/temp.png");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+		window.setVisible(false);
+		window.dispose();
+		webcam.close();
 		return result;
-		//webcam.close();
 		//return result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
 	}
 

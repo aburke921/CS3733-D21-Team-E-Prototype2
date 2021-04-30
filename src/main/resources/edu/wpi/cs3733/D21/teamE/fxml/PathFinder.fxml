@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXSlider?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.PathFinder">
+   <children>
+      <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefWidth="1012.0" />
+      <AnchorPane>
+         <children>
+                <HBox layoutY="1.0" prefHeight="58.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
+                    <children>
+                  <JFXComboBox fx:id="startLocationComboBox" onAction="#selectStartNode" prefHeight="25.0" prefWidth="150.0" promptText="Start Location">
+                     <HBox.margin>
+                        <Insets left="20.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXComboBox>
+                  <JFXComboBox fx:id="endLocationComboBox" onAction="#selectEndNode" prefHeight="25.0" prefWidth="150.0" promptText="End Location">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXComboBox>
+                  <JFXButton fx:id="findPathButton" disable="true" onAction="#findPath" styleClass="submit-button" text="Find Path">
+                     <HBox.margin>
+                        <Insets left="15.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
+                     <HBox.margin>
+                        <Insets left="20.0" top="17.0" />
+                     </HBox.margin>
+                  </JFXSlider>
+                  <JFXButton fx:id="floorL2" onAction="#chooseFloor" styleClass="submit-button" text="L2">
+                     <HBox.margin>
+                        <Insets left="20.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="floorL1" onAction="#chooseFloor" styleClass="submit-button" text="L1">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="floorG" onAction="#chooseFloor" styleClass="submit-button" text="G">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="floor1" minWidth="26.0" onAction="#chooseFloor" styleClass="submit-button" text="1">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="floor2" onAction="#chooseFloor" styleClass="submit-button" text="2">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="floor3" onAction="#chooseFloor" styleClass="submit-button" text="3">
+                     <HBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                       <JFXButton fx:id="qrButton" onAction="#startQRScanning" style="-fx-text-fill: -fx--primary;" styleClass="cancel-button" text="QR Code">
+                          <graphic>
+                             <MaterialDesignIconView glyphName="QRCODE" size="18" />
+                          </graphic>
+                          <HBox.margin>
+                             <Insets left="15.0" top="10.0" />
+                          </HBox.margin>
+                       </JFXButton>
+                    </children>
+                </HBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="723.0" VBox.vgrow="ALWAYS">
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+         <children>
+            <HBox alignment="TOP_RIGHT" prefHeight="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <StackPane fx:id="stackPane" HBox.hgrow="ALWAYS">
+                     <children>
+                        <BorderPane fx:id="rootBorderPane" />
+                     </children>
+                  </StackPane>
+                  <VBox fx:id="sideBar" alignment="TOP_CENTER" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" HBox.hgrow="NEVER">
+                     <children>
+                        <JFXButton fx:id="directionsButton" onAction="#showDirections" styleClass="submit-button" text="Detailed Directions">
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </JFXButton>
+                        <Label alignment="CENTER" text="Current Floor" textFill="#295ac3" underline="true">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label fx:id="currFloor" alignment="CENTER">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label text="Estimated Time to Arrival" textFill="#295ac3" underline="true">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <HBox fx:id="ETA" alignment="CENTER" prefHeight="27.0" prefWidth="150.0">
+                           <VBox.margin>
+                              <Insets bottom="3.0" top="10.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label fx:id="minETA" alignment="CENTER_RIGHT" maxWidth="18.0" minWidth="18.0" prefWidth="18.0" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="6.0" minWidth="6.0" prefWidth="6.0" text=" : " HBox.hgrow="NEVER" />
+                              <Label fx:id="secETA" alignment="CENTER_LEFT" maxWidth="18.0" minWidth="18.0" prefWidth="18.0" />
+                           </children>
+                        </HBox>
+                        <Label alignment="CENTER" text="Distance" textFill="#295ac3" underline="true">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label fx:id="dist" alignment="CENTER">
+                           <VBox.margin>
+                              <Insets bottom="3.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <AnchorPane prefWidth="150.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label alignment="CENTER" text="Categories" textFill="#295ac3" underline="true">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <AnchorPane>
+                                       <children>
+                                          <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <JFXCheckBox fx:id="rest" checkedColor="#b00404" onAction="#sortNodesByType" text="Restrooms">
+                                                   <VBox.margin>
+                                                      <Insets top="12.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="info" checkedColor="#dc721c" onAction="#sortNodesByType" text="Information Desk">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="dept" checkedColor="#74058c" onAction="#sortNodesByType" text="Departments">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="labs" checkedColor="#c900ae" onAction="#sortNodesByType" text="Laboratories">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="retl" checkedColor="#3d4f9d" onAction="#sortNodesByType" text="Retail">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="serv" checkedColor="#005cff" onAction="#sortNodesByType" text="Services">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="conf" checkedColor="#7f5124" onAction="#sortNodesByType" text="Conferences">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="EXIT" checkedColor="#90e430" onAction="#sortNodesByType" text="Exits/Entrances">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="elev" checkedColor="#769557" onAction="#sortNodesByType" text="Elevators">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="stai" checkedColor="#007f52" onAction="#sortNodesByType" text="Stairs">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="park" checkedColor="#1299d2" onAction="#sortNodesByType" text="Parking">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="walk" checkedColor="BLACK" onAction="#sortNodesByType" text="Walkways">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                                <JFXCheckBox fx:id="hall" checkedColor="#7c7c7c" onAction="#sortNodesByType" text="Hallways">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin></AnchorPane>
+                        <JFXButton fx:id="clearPath" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="100.0" onAction="#pathClear" prefWidth="100.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Clear Path">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin></JFXButton>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="lowerAnchorPane" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="1200.0">
+         <children>
+            <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" maxHeight="29.0" maxWidth="60.0" onAction="#toDefault" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="15.0" />
+            <JFXToggleButton fx:id="handicap" layoutX="96.0" text="Handicap" />
+            <JFXToggleButton fx:id="safe" layoutX="250.0" text="Emergency" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

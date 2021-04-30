@@ -4,14 +4,15 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.QRCode;
+import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
-import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -129,6 +130,13 @@ public class Default {
                 ex.printStackTrace();
             }
         }
+    }
+
+    @FXML
+    private void toScanQRCode(ActionEvent e) {
+	    String result = QRCode.scanQR();
+	    String pure = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
+	    System.out.println("Scanned String: " + pure);
     }
 
     @FXML

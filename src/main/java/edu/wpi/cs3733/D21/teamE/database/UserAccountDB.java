@@ -20,19 +20,23 @@ public class UserAccountDB {
 	 * - lastName: the user's last name.
 	 * - creationTime: a time stamp that is added to the table when an account is created
 	 */
-	public static void createUserAccountTable() {
+	public static int createUserAccountTable() {
 
-		String query = "Create Table userAccount (" +
-				"userID    Int Primary Key," +
-				"email     Varchar(31) Unique Not Null," +
-				"password  Varchar(31)        Not Null," +
-				"userType  Varchar(31)," +
-				"firstName Varchar(31)," +
-				"lastName  Varchar(31)," +
-				"creationTime Timestamp, " +
-				"Constraint userIDLimit Check ( userID != 0 )," +
-				// "Constraint passwordLimit Check (Length(password) >= 8 )," +
-				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian', 'interpreter', 'religiousPerson', 'foodDelivery')))";
+		String query = "Create Table userAccount " +
+				"( " +
+				"userID              Int Primary Key, " +
+				"email               Varchar(31) Unique Not Null, " +
+				"password            Varchar(31)        Not Null, " +
+				"userType            Varchar(31)        Not Null, " +
+				"firstName           Varchar(31)        Not Null, " +
+				"lastName            Varchar(31)        Not Null, " +
+				"creationTime        Timestamp          Not Null, " +
+				"lastCovidSurvey     Int, " +
+				"lastCovidSurveyDate Date, " +
+				"lastParkedNodeID    Varchar(31) References node, " +
+				"Constraint userIDLimit Check ( userID != 0 ), " +
+				"Constraint passwordLimit Check ( Length(password) >= 5 ) " +
+				")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 
@@ -42,8 +46,10 @@ public class UserAccountDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating userAccount table");
+			System.out.println("|--- Failed to create userAccount table");
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
@@ -108,7 +114,7 @@ public class UserAccountDB {
 	 * @param lastName  this is the user's last name that is associated with the account
 	 */
 	public static void addUserAccount(String email, String password, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp)";
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp, 0, Null, Null)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
 			prepState.setString(2, password);
@@ -133,7 +139,7 @@ public class UserAccountDB {
 	 * @param lastName  this is the user's last name that is associated with the account
 	 */
 	public static void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp)";
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp, 0, Null, Null)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
 			prepState.setString(2, password);
@@ -276,25 +282,29 @@ public class UserAccountDB {
 		return 0;
 	}
 
-	public static String getUserType(int userID){
-		String insertUser = "Select userType From userAccount Where userID = ?";
-		try (PreparedStatement prepState = connection.prepareStatement(insertUser)){
-			prepState.setInt(1, userID);
+	public static String getUserType(int userID) {
+		if (userID == 0) {
+			return "guest";
+		} else {
+			String insertUser = "Select usertype From userAccount Where userID = ?";
+			try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
+				prepState.setInt(1, userID);
 
-			ResultSet rset = prepState.executeQuery();
+				ResultSet rset = prepState.executeQuery();
 
-			String userType = null;
-			if(rset.next()){
-				userType = rset.getString("userType");
+				String userType = null;
+				if (rset.next()) {
+					userType = rset.getString("userType");
+				}
+
+				return userType;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.err.println("error in getUserType()");
 			}
-
-			return userType;
-		}catch(SQLException e){
-			e.printStackTrace();
-			System.err.println("error in getUserType()");
 		}
 
-		return null;
+		return "guest";
 	}
 
 	public static ArrayList<User> getAllUsers() {
@@ -324,4 +334,70 @@ public class UserAccountDB {
 		return listOfUsers;
 	}
 
+	/**
+	 * Submits a Covid Survey to the server
+	 * @param surveyResults is the result int that we are submitting
+	 * @param userID        is the user's ID that we are submitting
+	 * @return true if successfully changed one row, false otherwise
+	 */
+	public static boolean submitCovidSurvey(int surveyResults, int userID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"Update userAccount " +
+						"Set lastCovidSurvey = ?, lastCovidSurveyDate = Current Date " +
+						"Where userID = ?")) {
+			preparedStatement.setInt(1, surveyResults);
+			preparedStatement.setInt(2, userID);
+			if (preparedStatement.executeUpdate() == 1) return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Error in submitCovidSurvey() from UserAccountDB");
+		return false;
+	}
+
+	/**
+	 * Checks if a user have a unsafe Covid survey
+	 * @param userID is the user's ID that we are checking
+	 * @return true if user has a safe survey, false if user has a dangerous survey
+	 */
+	public static boolean isUserCovidSafe(int userID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"Select Count(lastCovidSurvey) As isSafe " +
+						"From userAccount " +
+						"Where userID = ? " +
+						"  And lastCovidSurvey < 10")) {
+			preparedStatement.setInt(1, userID);
+			ResultSet rset = preparedStatement.executeQuery();
+			if (rset.next()) {
+				return rset.getInt("isSafe") != 0;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Error in isUserCovidSafe() from UserAccountDB");
+		return false;
+	}
+
+	/**
+	 * Checks if a user have filled their COVID survey today
+	 * @param userID is the user's ID that we are checking
+	 * @return true if user has filled a survey today, false if user did not fill a survey today
+	 */
+	public static boolean filledCovidSurveyToday(int userID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"Select Count(lastCovidSurveyDate) As filledToday " +
+						"From userAccount " +
+						"Where userID = ? " +
+						"  And lastCovidSurveyDate = current date")) {
+			preparedStatement.setInt(1, userID);
+			ResultSet rset = preparedStatement.executeQuery();
+			if (rset.next()) {
+				return rset.getInt("filledToday") != 0;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Error in filledCovidSurveyToday() from UserAccountDB");
+		return false;
+	}
 }

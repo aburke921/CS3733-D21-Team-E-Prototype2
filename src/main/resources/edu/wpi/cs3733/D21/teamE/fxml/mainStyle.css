@@ -50,6 +50,12 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 
 }
 
+.normal-button {
+    -jfx-button-type: RAISED;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
 /*Toggle buttons*/
 JFXToggleButton  {
     -jfx-toggle-color: -fx--primary;
@@ -185,4 +191,10 @@ JFXButton:hover FontAwesomeIconView {
 
 .table-row-cell{
     -fx-cell-size: 200;
+}
+
+/*Tree Table View styles*/
+.jfx-tree-table-view {
+    -fx-tree-table-color: rgba(3, 155, 229, 0.4);
+    -jfx-header-color: -fx--primary-dark; /*header text color*/
 }

@@ -32,21 +32,21 @@
                                  <children>
                                     <FlowPane prefHeight="41.0" prefWidth="297.0">
                                        <children>
-                                          <Button fx:id="addUser" mnemonicParsing="false" onAction="#addUserButton" text="Add User">
+                                          <JFXButton fx:id="addUser" onAction="#addUserButton" ripplerFill="#0090ff" styleClass="normal-button" text="Add User">
                                              <FlowPane.margin>
-                                                <Insets right="10.0" top="15.0" />
+                                                <Insets right="10.0" top="10.0" />
                                              </FlowPane.margin>
-                                          </Button>
-                                          <Button fx:id="editUser" mnemonicParsing="false" onAction="#editUserButton" text="Edit User">
+                                          </JFXButton>
+                                          <JFXButton fx:id="editUser" onAction="#editUserButton" ripplerFill="#0090ff" styleClass="normal-button" text="Edit User">
                                              <FlowPane.margin>
-                                                <Insets right="10.0" top="15.0" />
+                                                <Insets right="10.0" top="10.0" />
                                              </FlowPane.margin>
-                                          </Button>
-                                          <Button mnemonicParsing="false" onAction="#deleteUserButton" text="Delete User">
+                                          </JFXButton>
+                                          <JFXButton onAction="#deleteUserButton" ripplerFill="#0090ff" styleClass="normal-button" text="Delete user">
                                              <FlowPane.margin>
-                                                <Insets top="15.0" />
+                                                <Insets right="10.0" top="10.0" />
                                              </FlowPane.margin>
-                                          </Button>
+                                          </JFXButton>
                                        </children>
                                        <VBox.margin>
                                           <Insets top="10.0" />

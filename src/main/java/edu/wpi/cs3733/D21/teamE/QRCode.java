@@ -45,7 +45,6 @@ public class QRCode {
 		window.dispose();
 		webcam.close();
 		return result;
-		//return result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
 	}
 
 	public static String readQR(String path) throws IOException {
@@ -61,6 +60,16 @@ public class QRCode {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(scanQR());
+		//System.out.println(scanQR());                                             // comment out to enable debug mode
+
+		String result = "https://anrong.online/emeraldemus/n/EEXIT00101.html";
+		//result = QRCode.scanQR();                                             // uncomment to enable camera debug mode
+		System.out.println("Scanned String: " + result);
+		String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
+		System.out.println("Scanned pure: " + pure);
+		String lable = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('/'));
+		System.out.println("Scanned lable: " + lable);
+		String code = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
+		System.out.println("Scanned code: " + code);
 	}
 }

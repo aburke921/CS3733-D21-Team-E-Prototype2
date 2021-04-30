@@ -50,6 +50,12 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 
 }
 
+.normal-button {
+    -jfx-button-type: RAISED;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
 /*Toggle buttons*/
 JFXToggleButton  {
     -jfx-toggle-color: -fx--primary;

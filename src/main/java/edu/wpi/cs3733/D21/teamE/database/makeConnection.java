@@ -96,7 +96,7 @@ public class makeConnection {
 	}
 
 
-	public boolean allTablesThere() { //todo will probably cause a merge conflict at somepoint, accept DB version
+	public boolean allTablesThere() {
 		ArrayList<String> tablesInDB = new ArrayList<String>();
 		String[] names = {"TABLE"};
 		ResultSet result;

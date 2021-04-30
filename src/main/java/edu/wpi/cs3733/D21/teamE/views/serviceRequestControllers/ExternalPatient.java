@@ -80,15 +80,6 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	private StackPane stackPane;
 
 	/**
-	 * todo This function will cause a pop-up modal to appear with help information for this form's fields
-	 * @param event {@link ActionEvent} info for the help button call, passed automatically by system.
-	 */
-	@FXML
-	void getHelpExternalPatient(ActionEvent event) {
-
-	}
-
-	/**
 	 * Detects if the user has entered all required fields
 	 */
 	private boolean validateInput() {

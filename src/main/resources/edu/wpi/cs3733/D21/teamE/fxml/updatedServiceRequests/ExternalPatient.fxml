@@ -108,9 +108,9 @@
                                                    </VBox.margin>
                                                    <items>
                                                       <FXCollections fx:factory="observableArrayList">
-                                                         <String fx:id="ambulance" fx:value="Ambulance" />
-                                                         <String fx:id="helicopter" fx:value="Helicopter" />
-                                                         <String fx:id="plane" fx:value="Plane" />
+                                                         <String fx:value="Ambulance" />
+                                                         <String fx:value="Helicopter" />
+                                                         <String fx:value="Plane" />
                                                       </FXCollections>
                                                    </items>
                                                 </JFXComboBox>
@@ -120,9 +120,9 @@
                                                    </VBox.margin>
                                                    <items>
                                                       <FXCollections fx:factory="observableArrayList">
-                                                         <String fx:id="high_severity" fx:value="High Severity" />
-                                                         <String fx:id="medium_severity" fx:value="Medium Severity" />
-                                                         <String fx:id="low_severity" fx:value="Low Severity" />
+                                                         <String fx:value="High Severity" />
+                                                         <String fx:value="Medium Severity" />
+                                                         <String fx:value="Low Severity" />
                                                       </FXCollections>
                                                    </items>
                                                 </JFXComboBox>

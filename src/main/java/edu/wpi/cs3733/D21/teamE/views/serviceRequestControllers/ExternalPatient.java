@@ -25,26 +25,15 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	ArrayList<Integer> userID = new ArrayList<>();
 
 	RequiredFieldValidator validator = new RequiredFieldValidator();
+
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
 	@FXML // fx:id="locationInput"
 	private JFXComboBox<String> locationInput; // Value injected by FXMLLoader
 	@FXML // fx:id="requestTypeInput"
 	private JFXComboBox<String> requestTypeInput; // Value injected by FXMLLoader
-	@FXML // fx:id="ambulance"
-	private String ambulance; // Value injected by FXMLLoader
-	@FXML // fx:id="helicopter"
-	private String helicopter; // Value injected by FXMLLoader
-	@FXML // fx:id="plane"
-	private String plane; // Value injected by FXMLLoader
 	@FXML // fx:id="severityInput"
 	private JFXComboBox<String> severityInput; // Value injected by FXMLLoader
-	@FXML // fx:id="high_severity"
-	private String high_severity; // Value injected by FXMLLoader
-	@FXML // fx:id="medium_severity"
-	private String medium_severity; // Value injected by FXMLLoader
-	@FXML // fx:id="low_severity"
-	private String low_severity; // Value injected by FXMLLoader
 	@FXML // fx:id="patientIdInput"
 	private JFXTextField patientIdInput; // Value injected by FXMLLoader
 	@FXML // fx:id="assignedPersonnel"
@@ -148,13 +137,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 		locationInput.setItems(locations);
 		assignedPersonnel.setItems(userNames);
 		assert requestTypeInput != null : "fx:id=\"requestTypeInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
-		assert ambulance != null : "fx:id=\"ambulance\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
-		assert helicopter != null : "fx:id=\"helicopter\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
-		assert plane != null : "fx:id=\"plane\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert severityInput != null : "fx:id=\"severityInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
-		assert high_severity != null : "fx:id=\"high_severity\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
-		assert medium_severity != null : "fx:id=\"medium_severity\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
-		assert low_severity != null : "fx:id=\"low_severity\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert patientIdInput != null : "fx:id=\"patientIdInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert descriptionInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert ETAInput != null : "fx:id=\"ETAInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";

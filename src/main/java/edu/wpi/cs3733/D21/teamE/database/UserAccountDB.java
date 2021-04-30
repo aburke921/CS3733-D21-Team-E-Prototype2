@@ -350,12 +350,32 @@ public class UserAccountDB {
 	}
 
 	/**
+	 * Checks if a user have a unsafe Covid survey
+	 * @param userID is the user's ID that we are checking
+	 * @return true if user has a safe survey, false if user has a dangerous survey
+	 */
+	public static boolean isUserCovidSafe(int userID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"Select Count(lastCovidSurvey) As isSafe " +
+						"From userAccount " +
+						"Where userID = ? " +
+						"  And lastCovidSurvey < 100")) {
+			preparedStatement.setInt(1, userID);
+			ResultSet rset = preparedStatement.executeQuery();
+			return rset.getInt("isSafe") != 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Error in isUserCovidSafe() from UserAccountDB");
+		return false;
+	}
+
+	/**
 	 * Checks if a user have filled their COVID survey today
 	 * @param userID is the user's ID that we are checking
 	 * @return true if user has filled a survey today, false if user did not fill a survey today
 	 */
 	public static boolean filledCovidSurveyToday(int userID) {
-		boolean filledToday = false;
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
 				"Select Count(lastCovidSurveyDate) As filledToday " +
 						"From userAccount " +
@@ -363,11 +383,11 @@ public class UserAccountDB {
 						"  And lastCovidSurveyDate = current date")) {
 			preparedStatement.setInt(1, userID);
 			ResultSet rset = preparedStatement.executeQuery();
-			filledToday = rset.getInt("filledToday") != 0;
+			return rset.getInt("filledToday") != 0;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("Error in filledCovidSurveyToday() from UserAccountDB");
 		}
-		return filledToday;
+		System.err.println("Error in filledCovidSurveyToday() from UserAccountDB");
+		return false;
 	}
 }

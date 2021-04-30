@@ -22,8 +22,11 @@ import javafx.scene.shape.Polygon;
 
 public class SecurityService extends ServiceRequestFormComponents {
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
+
+    ObservableList<String> locations;
+    ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> names;
+    ArrayList<Integer> userID = new ArrayList<>();
 
     @FXML // fx:id = "locationInput"
     private JFXComboBox<String> locationInput;
@@ -115,8 +118,11 @@ public class SecurityService extends ServiceRequestFormComponents {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        ObservableList<String> locations = DB.getAllNodeLongNames();
-        locationInput.setItems(locations);
+        locations = DB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
+        //TODO add user type
+        names = DB.getAssigneeNames("Add user type here");
+        userID = DB.getAssigneeIDs("Add user type here");
         assert helpSecurityService != null : "fx:id=\"helpSecurityService\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert locationInput != null : "fx:id=\"locationOfDelivery\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert levelOfSecurity != null : "fx:id=\"levelOfSecurity\" was not injected: check your FXML file 'SecurityService.fxml'.";

@@ -18,8 +18,11 @@ import java.util.ArrayList;
 
 public class MedicineDelivery extends ServiceRequestFormComponents {
 
+
     ObservableList<String> locations;
-    ArrayList<String> nodeIDs;
+    ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> names;
+    ArrayList<Integer> userID = new ArrayList<>();
 
     @FXML
     private JFXComboBox<String> locationInput;
@@ -71,7 +74,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
 
         int index = locationInput.getSelectionModel().getSelectedIndex();
 
-        String location = nodeIDs.get(index);
+        String location = nodeID.get(index);
         String name = medicineNameInput.getText();
         String doseMeasure = doseMeasureInput.getText();
         int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
@@ -98,11 +101,11 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
 
     @FXML
     void initialize() {
-
         locations = DB.getAllNodeLongNames();
-        nodeIDs = DB.getListOfNodeIDS();
-
-        locationInput.setItems(locations);
+        nodeID = DB.getListOfNodeIDS();
+        //TODO add user type
+        names = DB.getAssigneeNames("Add user type here");
+        userID = DB.getAssigneeIDs("Add user type here");
 
         assert locationInput != null;
         assert medicineNameInput != null;

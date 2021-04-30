@@ -62,7 +62,6 @@ public class Floral extends ServiceRequestFormComponents {
 
         validator.setMessage("Input required");
 
-
         locationInput.getValidators().add(validator);
         flowerType.getValidators().add(validator);
         flowerCount.getValidators().add(validator);
@@ -76,8 +75,6 @@ public class Floral extends ServiceRequestFormComponents {
         return  locationInput.validate() && flowerType.validate() && flowerCount.validate() &&
                 vaseType.validate() && assignee.validate() && message.validate() && chocolate.validate()
                 && teddyBear.validate() && arrangementStyle.validate();
-
-
     }
 
     @FXML
@@ -97,7 +94,7 @@ public class Floral extends ServiceRequestFormComponents {
             String arrangement = arrangementStyle.getText();
             String teddy = teddyBear.getSelectionModel().getSelectedItem();
             String choc = chocolate.getSelectionModel().getSelectedItem();
-           // assigned is now an integer (userID) so must be changed
+
             DB.addFloralRequest(App.userID, assigned, nodeInfo, receiver, type, count, vase, arrangement, teddy, choc, mess);
         }
     }

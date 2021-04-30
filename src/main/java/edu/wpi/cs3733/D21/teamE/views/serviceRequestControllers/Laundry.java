@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.lang.String;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import edu.wpi.cs3733.D21.teamE.DB;
@@ -21,6 +22,12 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 public class Laundry extends ServiceRequestFormComponents {
+
+
+    ObservableList<String> locations;
+    ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> names;
+    ArrayList<Integer> userID = new ArrayList<>();
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -70,6 +77,11 @@ public class Laundry extends ServiceRequestFormComponents {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
+        locations = DB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
+        //TODO add user type
+        names = DB.getAssigneeNames("Add user type here");
+        userID = DB.getAssigneeIDs("Add user type here");
 
         assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'Laundry.fxml'.";

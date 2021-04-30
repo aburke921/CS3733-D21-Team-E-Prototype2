@@ -74,7 +74,6 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 
 		validator.setMessage("Input required");
 
-
 		locationInput.getValidators().add(validator);
 		requestTypeInput.getValidators().add(validator);
 		severityInput.getValidators().add(validator);
@@ -96,8 +95,8 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 
 		if (validateInput()) {
 
-			String type = requestTypeInput.getSelectionModel().getSelectedItem().toString();
-			String severity = severityInput.getSelectionModel().getSelectedItem().toString();
+			String type = requestTypeInput.getSelectionModel().getSelectedItem();
+			String severity = severityInput.getSelectionModel().getSelectedItem();
 			String patientID = patientIdInput.getText();
 			String ETA = ETAInput.getText();
 			String bloodPressure = bloodPressureInput.getText();
@@ -111,7 +110,6 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 			DB.addExternalPatientRequest(App.userID, assigneeID, id, type, severity, patientID, ETA, bloodPressure, temperature, oxygenLevel, details);
 
 			super.handleButtonSubmit(event);
-
 		}
 	}
 

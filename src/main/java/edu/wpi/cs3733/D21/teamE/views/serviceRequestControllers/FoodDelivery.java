@@ -16,6 +16,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.lang.String;
+import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,6 +31,11 @@ import javafx.scene.shape.Rectangle;
 
 
 public class FoodDelivery extends ServiceRequestFormComponents {
+
+	ObservableList<String> locations;
+	ArrayList<String> nodeIDs = new ArrayList<>();
+	ObservableList<String> names;
+	ArrayList<Integer> userID = new ArrayList<>();
 
 	@FXML // fx:id="fullscreen"
 	private Rectangle fullscreen; // Value injected by FXMLLoader
@@ -73,7 +79,13 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
 	void initialize() {
-		ObservableList<String> locations  = DB.getAllNodeLongNames();
+
+		locations = DB.getAllNodeLongNames();
+		nodeIDs = DB. getListOfNodeIDS();
+		//todo add proper types here
+		names = DB.getAssigneeNames("Add user type");
+		userID = DB.getAssigneeIDs("Add user type");
+
 		locationInput.setItems(locations);
 
 		assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
@@ -82,6 +94,8 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert assigneeInput != null : "fx:id=\"assigneeInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert descriptionInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
+		assert deliveryService != null;
+		assert orderNumber != null;
 		assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 

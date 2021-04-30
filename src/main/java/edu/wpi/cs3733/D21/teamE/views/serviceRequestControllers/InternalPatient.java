@@ -9,7 +9,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import java.util.ArrayList;
+
 public class InternalPatient extends ServiceRequestFormComponents{
+
+    ObservableList<String> locations;
+    ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> names;
+    ArrayList<Integer> userID = new ArrayList<>();
+
     @FXML
     private JFXComboBox<String> pickupInput;
     @FXML
@@ -21,7 +29,7 @@ public class InternalPatient extends ServiceRequestFormComponents{
     @FXML
     private JFXTextField patientIdInput;
     @FXML
-    private JFXTextField assignedPersonnel;
+    private JFXComboBox<String> assignedPersonnel;
     @FXML
     private JFXTextArea descriptionInput;
     @FXML
@@ -36,7 +44,12 @@ public class InternalPatient extends ServiceRequestFormComponents{
 
     @FXML
     void initialize() {
-        ObservableList<String> locations = DB.getAllNodeLongNames();
+        locations = DB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
+        //TODO add user type
+        names = DB.getAssigneeNames("Add user type here");
+        userID = DB.getAssigneeIDs("Add user type here");
+
         pickupInput.setItems(locations);
         dropoffInput.setItems(locations);
     }

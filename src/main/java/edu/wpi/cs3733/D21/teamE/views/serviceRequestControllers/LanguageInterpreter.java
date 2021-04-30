@@ -16,7 +16,9 @@ import java.util.ArrayList;
 public class LanguageInterpreter extends ServiceRequestFormComponents {
 
 	ObservableList<String> locations;
-	ArrayList<String> nodeID;
+	ArrayList<String> nodeID = new ArrayList<>();
+	ObservableList<String> names;
+	ArrayList<Integer> userID = new ArrayList<>();
 
 	@FXML
 	private Rectangle fullscreen;
@@ -62,11 +64,13 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 	}
 
 	@FXML
-	void initialize() { ;
-//		ObservableList<String> employees = DB.getAllEmployeeNames();
-//		assignedPersonnel.setItems(employees);
+	void initialize() {
 		locations = DB.getAllNodeLongNames();
-		locationInput.setItems(locations);
+		nodeID = DB.getListOfNodeIDS();
+		//TODO add user type
+		names = DB.getAssigneeNames("Add user type here");
+		userID = DB.getAssigneeIDs("Add user type here");
+
 	}
 
 }

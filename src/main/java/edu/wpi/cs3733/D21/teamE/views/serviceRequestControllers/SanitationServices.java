@@ -14,6 +14,12 @@ import java.util.ArrayList;
 public class SanitationServices extends ServiceRequestFormComponents {
 
 
+  ObservableList<String> locations;
+  ArrayList<String> nodeID = new ArrayList<>();
+  ObservableList<String> names;
+  ArrayList<Integer> userID = new ArrayList<>();
+
+
   @FXML private JFXTextField assignedIndividual;
   @FXML private JFXTextField Signature;
   @FXML private JFXTextArea detailedInstructionsInput;
@@ -100,6 +106,12 @@ public class SanitationServices extends ServiceRequestFormComponents {
   @FXML
   void initialize(){
 
+    locations = DB.getAllNodeLongNames();
+    nodeID = DB.getListOfNodeIDS();
+    //TODO add user type
+    names = DB.getAssigneeNames("Add user type here");
+    userID = DB.getAssigneeIDs("Add user type here");
+
     assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
 
     ObservableList<String> Services  = FXCollections.observableArrayList();
@@ -108,9 +120,6 @@ public class SanitationServices extends ServiceRequestFormComponents {
     //ServiceTypeinput.setItems(Services);
 
     assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-    ObservableList<String> locations  = DB.getAllNodeLongNames();
-
-    locationInput.setItems(locations);
     assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
     ObservableList<String> rating  = FXCollections.observableArrayList();
     rating.setAll("Low","Medium","High","Critical");

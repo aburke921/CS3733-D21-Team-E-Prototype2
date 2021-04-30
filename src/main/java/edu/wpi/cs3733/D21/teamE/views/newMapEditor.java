@@ -1169,9 +1169,9 @@ public class newMapEditor {
                 }
                 if (finishAligning) {
                     int modifyInt = -1;
-                    double X = e.getX();
+                    double X = e.getX() * scale;
                     int xInt = (int) X;
-                    double Y = e.getY();
+                    double Y = e.getY() * scale;
                     int yInt = (int) Y;
                     for (int i = 0; i < nodeArrayListToBeAligned.size(); i++) {
                         Node currentNode = nodeArrayListToBeAligned.get(i);
@@ -1212,48 +1212,49 @@ public class newMapEditor {
                     typeInput.setValue(null);
                     xCordInput.setText(Integer.toString(xCordIntScale));
                     yCordInput.setText(Integer.toString(yCordIntScale));
-                } else {
-                    //single click
-                    if (e.getClickCount() == 1) {
-                        //coordinates of click
-                        double X = e.getX();
-                        int xInt = (int) X;
-                        double Y = e.getY();
-                        int yInt = (int) Y;
-                        for (int i = 0; i < array.size(); i++) {
-                            if (array.get(i).get("floor").equals(currentFloor)) {
-                                //coordinates of current node
-                                double nodeX = array.get(i).getX() / scale;
-                                int nodeXInt = (int) nodeX;
-                                double nodeY = array.get(i).getY() / scale;
-                                int nodeYInt = (int) nodeY;
+                }
+            }
+            else {
+                //single click
+                if (e.getClickCount() == 1) {
+                    //coordinates of click
+                    double X = e.getX();
+                    int xInt = (int) X;
+                    double Y = e.getY();
+                    int yInt = (int) Y;
+                    for (int i = 0; i < array.size(); i++) {
+                        if (array.get(i).get("floor").equals(currentFloor)) {
+                            //coordinates of current node
+                            double nodeX = array.get(i).getX() / scale;
+                            int nodeXInt = (int) nodeX;
+                            double nodeY = array.get(i).getY() / scale;
+                            int nodeYInt = (int) nodeY;
 
-                                //if node coordinates match click coordinates +- 1, autofill fields with node info
-                                if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
-                                    idInput.setValue(array.get(i).get("id"));
-                                    floorInput.setValue(array.get(i).get("floor"));
-                                    longNameInput.setText(array.get(i).get("longName"));
-                                    shortNameInput.setText(array.get(i).get("shortName"));
-                                    xCordInput.setText(Integer.toString(array.get(i).getX()));
-                                    yCordInput.setText(Integer.toString(array.get(i).getY()));
-                                    typeInput.setValue(array.get(i).get("type"));
-                                    buildingInput.setValue(array.get(i).get("building"));
+                            //if node coordinates match click coordinates +- 1, autofill fields with node info
+                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
+                                idInput.setValue(array.get(i).get("id"));
+                                floorInput.setValue(array.get(i).get("floor"));
+                                longNameInput.setText(array.get(i).get("longName"));
+                                shortNameInput.setText(array.get(i).get("shortName"));
+                                xCordInput.setText(Integer.toString(array.get(i).getX()));
+                                yCordInput.setText(Integer.toString(array.get(i).getY()));
+                                typeInput.setValue(array.get(i).get("type"));
+                                buildingInput.setValue(array.get(i).get("building"));
 
-                                    //for edges, use counter to determine if it is first or second node selected
-                                    //populate edge fields with information
-                                    selection++;
-                                    if (selection == 1) {
-                                        startID = array.get(i).get("id");
-                                        startLocation.setValue(array.get(i).get("longName"));
-                                    }
-                                    if (selection == 2) {
-                                        endLocation.setValue(array.get(i).get("longName"));
-                                        endID = array.get(i).get("id");
-                                        edgeIDArrayList.add(startID + "_" + endID);
-                                        edgeID.setItems(edgeIDArrayList);
-                                        edgeID.setValue(startID + "_" + endID);
-                                        selection = 0;
-                                    }
+                                //for edges, use counter to determine if it is first or second node selected
+                                //populate edge fields with information
+                                selection++;
+                                if (selection == 1) {
+                                    startID = array.get(i).get("id");
+                                    startLocation.setValue(array.get(i).get("longName"));
+                                }
+                                if (selection == 2) {
+                                    endLocation.setValue(array.get(i).get("longName"));
+                                    endID = array.get(i).get("id");
+                                    edgeIDArrayList.add(startID + "_" + endID);
+                                    edgeID.setItems(edgeIDArrayList);
+                                    edgeID.setValue(startID + "_" + endID);
+                                    selection = 0;
                                 }
                             }
                         }

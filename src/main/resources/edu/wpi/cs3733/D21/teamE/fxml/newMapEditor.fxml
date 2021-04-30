@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -351,6 +352,7 @@
             <JFXButton layoutX="498.0" layoutY="10.0" onAction="#toNodeTable" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Node Table" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="10.0" />
             <JFXButton layoutX="363.0" layoutY="10.0" onAction="#toMap" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Display Map" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="10.0" />
             <JFXButton layoutX="633.0" layoutY="10.0" onAction="#toEdgeTable" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Edge Table" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="10.0" />
+            <JFXToggleButton fx:id="drag" layoutX="794.0" text="Drag and Drop" />
             </children>
         </AnchorPane>
     </children>

@@ -114,6 +114,8 @@ public class newMapEditor {
     private JFXComboBox edgeID;
     @FXML
     private JFXComboBox floorSelector;
+    @FXML private JFXToggleButton drag;
+
     @FXML
     private JFXButton verticalButton;
     @FXML
@@ -126,7 +128,6 @@ public class newMapEditor {
      * Additional Variables
      */
     private static boolean isVertical = false;
-
     private String startID = "test";
 
     private String endID = "test";
@@ -154,10 +155,20 @@ public class newMapEditor {
 
     private double scale;
     private int selection = 0;
+    //variables for storing x and y of cliced node
+    private int clickedX;
+    private int clickedY = 0;
+    private String clickedID;
+    private String clickedType;
+    private String clickedBuilding;
+    private String clickedLongName;
+    private String clickedShortname;
+
 
     private static boolean isAligning = false;
     private static boolean finishAligning = false;
     private ArrayList<Node> nodeArrayListToBeAligned = new ArrayList<Node>();
+
 
 
     /**
@@ -888,7 +899,6 @@ public class newMapEditor {
 
     /**
      * resets tables and map after edits made
-     * @// TODO: 4/29/2021 dont use initialize function
      */
     public void refresh() {
         initialize();
@@ -905,7 +915,6 @@ public class newMapEditor {
 
     /**
      * brings up error popup
-     * @// TODO: 4/29/2021 use app.newJFXDialog.....
      * @param errorMessage what the popup will say
      */
     @FXML
@@ -972,7 +981,6 @@ public class newMapEditor {
     /**
      * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
      * Namely, adds FloorMap PNG and fills dropdowns with DB data, sets default floor.
-     * @// TODO: 4/29/2021 refactor out some functions!
      */
     @FXML
     void initialize() {
@@ -1223,7 +1231,7 @@ public class newMapEditor {
                     double Y = e.getY();
                     int yInt = (int) Y;
                     for (int i = 0; i < array.size(); i++) {
-                        if (array.get(i).get("floor").equals(currentFloor)) {
+                        if(array.get(i).get("floor").equals(currentFloor)) {
                             //coordinates of current node
                             double nodeX = array.get(i).getX() / scale;
                             int nodeXInt = (int) nodeX;
@@ -1241,12 +1249,25 @@ public class newMapEditor {
                                 typeInput.setValue(array.get(i).get("type"));
                                 buildingInput.setValue(array.get(i).get("building"));
 
+
                                 //for edges, use counter to determine if it is first or second node selected
                                 //populate edge fields with information
                                 selection++;
                                 if (selection == 1) {
                                     startID = array.get(i).get("id");
                                     startLocation.setValue(array.get(i).get("longName"));
+                                    xCordInput.setText(Integer.toString(array.get(i).getX()));
+                                    yCordInput.setText(Integer.toString(array.get(i).getY()));
+                                    clickedX = nodeXInt;
+                                    clickedY = nodeYInt;
+                                    clickedID = array.get(i).get("id");
+                                    clickedBuilding = array.get(i).get("building");
+                                    clickedLongName = array.get(i).get("longName");
+                                    clickedType = array.get(i).get("type");
+                                    clickedShortname = array.get(i).get("shortName");
+
+
+
                                 }
                                 if (selection == 2) {
                                     endLocation.setValue(array.get(i).get("longName"));
@@ -1255,13 +1276,58 @@ public class newMapEditor {
                                     edgeID.setItems(edgeIDArrayList);
                                     edgeID.setValue(startID + "_" + endID);
                                     selection = 0;
+
                                 }
                             }
+
                         }
                     }
                 }
             }
         });
+//draging nodes
+        drag.setOnAction(e -> {
+            if (drag.isSelected()) {
+                System.out.println("No drag");
+                scrollPane.setPannable(false);
+                ObservableList groups = pane.getChildren();
+
+                ObservableList shapes = FXCollections.observableArrayList();
+                if(groups.get(0) instanceof Group){
+                    shapes = ((Group) groups.get(0)).getChildren();
+
+                }
+
+                System.out.println(clickedX);
+
+                for(int i = 0; i < shapes.size();i++){
+                    if(shapes.get(i) instanceof Circle){
+                        if((int)((Circle) shapes.get(i)).getCenterX() == clickedX && (int)((Circle) shapes.get(i)).getCenterY() == clickedY){
+                            Circle circle = ((Circle) shapes.get(i));
+                            System.out.println("Yay");
+                            circle.setOnMouseDragged(event ->{
+                                circle.setCenterX((int)event.getX());
+                                circle.setCenterY((int)event.getY());
+                                DB.modifyNode(clickedID,(int)(circle.getCenterX() * scale),(int)(circle.getCenterY()*scale),currentFloor,clickedBuilding,clickedType,clickedLongName, clickedShortname);
+
+
+                            });
+                        }
+                    }
+
+                }
+
+
+
+
+
+            } else {
+                System.out.println("no");
+                scrollPane.setPannable(true);
+
+            }
+        });
+
 
     }
     /**

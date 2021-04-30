@@ -266,6 +266,17 @@ public class PathFinder {
         error.setActions(okay);
         dialog.show();
     }
+
+    @FXML
+    void nextFloor(String startFloor, String EndFloor){
+        if(EndFloor.equals(startFloor)){
+            System.out.println("Same floor");
+        }else{
+            JFXSnackbar bar = new JFXSnackbar(lowerAnchorPane);
+            bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Your destination is on floor " + EndFloor)));
+        }
+
+    }
     /**
      * finds path between a selected start and end location, or finds path to nearest bathroom from start location.
      * @param index index of the clicked on node
@@ -440,6 +451,7 @@ public class PathFinder {
                 for (String dir : directions) {
                     System.out.println(dir);
                 }
+                nextFloor(foundPath.getStart().get("floor"), foundPath.getEnd().get("floor"));
 
             }
         }
@@ -799,17 +811,9 @@ public class PathFinder {
                 }
             }
 
-                    /*if(selection == 1) {
-//                        startLocationComboBox.setValue(array.get(i).get("longName"));
-//                    }else if(selection == 2){
-//                        endLocationComboBox.setValue(array.get(i).get("longName"));
-//                        selection = 0;
-//                    }*/
-//                    System.out.println(array.get(i).get("longName"));
-//
-//                }
-//            }
+
         });
+
     }
 
     public void chooseFloor(ActionEvent e) {

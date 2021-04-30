@@ -362,7 +362,9 @@ public class UserAccountDB {
 						"  And lastCovidSurvey < 100")) {
 			preparedStatement.setInt(1, userID);
 			ResultSet rset = preparedStatement.executeQuery();
-			return rset.getInt("isSafe") != 0;
+			if (rset.next()) {
+				return rset.getInt("isSafe") != 0;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -383,7 +385,9 @@ public class UserAccountDB {
 						"  And lastCovidSurveyDate = current date")) {
 			preparedStatement.setInt(1, userID);
 			ResultSet rset = preparedStatement.executeQuery();
-			return rset.getInt("filledToday") != 0;
+			if (rset.next()) {
+				return rset.getInt("filledToday") != 0;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

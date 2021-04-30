@@ -1887,7 +1887,22 @@ public class RequestsDB {
 		return listOfAssigneesIDs;
 	}
 
+	public static String getEmail(int userID) {
+		String query = "Select email From userAccount Where userID = " + userID;
 
+		String email = "";
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while (rset.next()) {
+				email = rset.getString("email");
+			}
+			rset.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getEmail() got a SQLException");
+		}
+		return email;
+	}
 
 
 }

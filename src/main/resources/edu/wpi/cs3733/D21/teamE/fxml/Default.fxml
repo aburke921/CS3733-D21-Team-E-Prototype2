@@ -2,12 +2,16 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -16,106 +20,139 @@
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefHeight="65.0" prefWidth="1012.0" />
       <AnchorPane prefHeight="733.0" prefWidth="1200.0">
          <children>
-            <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <BorderPane>
-                     <center>
-                        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+                  <AnchorPane fx:id="imageAnchorPane">
+                     <children>
+                        <ImageView fx:id="hospitalImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+                  <VBox alignment="TOP_CENTER" minWidth="600.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <ImageView fx:id="logoImageView" fitHeight="200.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                           <VBox.margin>
+                              <Insets top="35.0" />
+                           </VBox.margin>
+                        </ImageView>
+                        <GridPane alignment="CENTER" prefHeight="300.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS" />
-                              <JFXButton fx:id="covidSurvey" onAction="#toCovidSurvey" prefWidth="200.0" styleClass="default-button" text="COVID Survey">
+                              <JFXButton fx:id="covidSurvey" alignment="CENTER" minWidth="200.0" onAction="#toCovidSurvey" prefWidth="200.0" styleClass="default-button" text="COVID Survey" textFill="#039be5" wrapText="true" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="LAPTOP" size="40" />
+                                 </graphic>
+                                 <GridPane.margin>
+                                    <Insets left="25.0" right="20.0" />
+                                 </GridPane.margin>
                               </JFXButton>
-                              <JFXButton fx:id="pathFinderButton" onAction="#toPathFinder" prefWidth="200.0" styleClass="default-button" text="Path Finder">
+                              <JFXButton fx:id="pathFinderButton" alignment="CENTER" minWidth="200.0" onAction="#toPathFinder" prefWidth="200.0" styleClass="default-button" text="Path Finder" textFill="#039be5" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
+                                 <graphic>
+                                    <MaterialDesignIconView glyphName="MAGNIFY" size="40" />
+                                 </graphic>
+                                 <GridPane.margin>
+                                    <Insets left="20.0" right="50.0" />
+                                 </GridPane.margin>
                               </JFXButton>
-                              <JFXButton fx:id="ScanQRCodeButton" onAction="#toScanQRCode" prefWidth="200.0" styleClass="default-button" text="Scan QR Code">
+                              <JFXButton fx:id="ScanQRCodeButton" alignment="CENTER" minWidth="200.0" onAction="#toScanQRCode" prefWidth="200.0" styleClass="default-button" text="Scan QR Code" textFill="#039be5" wrapText="true" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
+                                 <graphic>
+                                    <MaterialDesignIconView glyphName="QRCODE" size="40" />
+                                 </graphic>
+                                 <GridPane.margin>
+                                    <Insets left="25.0" right="20.0" />
+                                 </GridPane.margin>
                               </JFXButton>
-                              <JFXButton fx:id="serviceRequestButton" onAction="#toServiceRequests" prefWidth="200.0" styleClass="default-button" text="Service Requests">
+                              <JFXButton fx:id="serviceRequestButton" alignment="CENTER" minWidth="200.0" onAction="#toServiceRequests" prefWidth="200.0" styleClass="default-button" text="Service Requests" textFill="#039be5" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
+                                 <graphic>
+                                    <MaterialDesignIconView glyphName="CLIPBOARD_OUTLINE" size="40" />
+                                 </graphic>
+                                 <GridPane.margin>
+                                    <Insets left="20.0" right="50.0" />
+                                 </GridPane.margin>
                               </JFXButton>
-                              <JFXButton fx:id="mapEditorButton" onAction="#toMapEditor" prefWidth="200.0" styleClass="default-button" text="Map Editor">
+                              <JFXButton fx:id="mapEditorButton" alignment="CENTER" minWidth="200.0" onAction="#toMapEditor" prefWidth="200.0" styleClass="default-button" text="Map Editor" textFill="#039be5" wrapText="true" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="EDIT" size="40" />
+                                 </graphic>
+                                 <GridPane.margin>
+                                    <Insets left="25.0" right="20.0" />
+                                 </GridPane.margin>
                               </JFXButton>
-                              <JFXButton fx:id="userManagementButton" onAction="#toUserManagement" prefWidth="200.0" styleClass="default-button" text="User Management">
+                              <JFXButton fx:id="userManagementButton" alignment="CENTER" minWidth="200.0" onAction="#toUserManagement" prefWidth="200.0" styleClass="default-button" text="User Management" textFill="#039be5" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="USERS" size="30" />
+                                 </graphic>
+                                 <GridPane.margin>
+                                    <Insets left="20.0" right="50.0" />
+                                 </GridPane.margin>
+                              </JFXButton>
+                           </children>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </GridPane>
+                        <VBox alignment="TOP_CENTER" prefWidth="300.0">
+                           <children>
+                              <Label fx:id="algoTextTop" text="Change Path Finding" textFill="006db3">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="algoTextBottom" text="Algorithm" textFill="006db3">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Label>
+                              <JFXComboBox fx:id="algo" minWidth="150.0" promptText="Select Algorithm">
+                                 <VBox.margin>
+                                    <Insets top="15.0" />
+                                 </VBox.margin>
+                              </JFXComboBox>
+                              <JFXButton fx:id="applyChange" onAction="#changeAlgo" prefWidth="100.0" styleClass="submit-button" text="Apply">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                                  <VBox.margin>
-                                    <Insets top="20.0" />
+                                    <Insets top="10.0" />
                                  </VBox.margin>
                               </JFXButton>
                            </children>
-                           <BorderPane.margin>
-                              <Insets bottom="40.0" />
-                           </BorderPane.margin>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
                         </VBox>
-                     </center>
-                     <left>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-                     </left>
-                     <right>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0">
-                                 <children>
-                                    <Label fx:id="algoTextTop" text="Change Path Finding" textFill="006db3">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="algoTextBottom" text="Algorithm" textFill="006db3">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <JFXComboBox fx:id="algo" minWidth="150.0" promptText="Select Algorithm">
-                                       <VBox.margin>
-                                          <Insets top="15.0" />
-                                       </VBox.margin>
-                                    </JFXComboBox>
-                                    <JFXButton fx:id="applyChange" onAction="#changeAlgo" prefWidth="100.0" styleClass="submit-button" text="Apply">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets top="10.0" />
-                                       </VBox.margin>
-                                    </JFXButton>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                     </right>
-                  </BorderPane>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
                </children>
-            </StackPane>
+            </HBox>
          </children>
       </AnchorPane>
    </children>

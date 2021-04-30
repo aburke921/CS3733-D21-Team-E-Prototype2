@@ -12,12 +12,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +30,13 @@ public class Default {
     private AnchorPane appBarAnchorPane;
 
     @FXML // fx:id="imageView"
-    private ImageView imageView;
+    private ImageView hospitalImageView;
+
+    @FXML // fx:id="imageView"
+    private ImageView logoImageView;
+
+    @FXML // fx:id="imageAnchorPane"
+    private AnchorPane imageAnchorPane;
 
     @FXML // fx:id="stackPane"
     private StackPane stackPane; //main stack pane used for JFXDialog popups
@@ -53,6 +61,9 @@ public class Default {
 
     @FXML // fx:id="algoTextBottom"
     private Label algoTextBottom;
+
+    @FXML // fx:id="imageStackPane"
+    private StackPane imageStackPane;
 
     private ObservableList<String> algoNames;
 
@@ -229,8 +240,24 @@ public class Default {
             e.printStackTrace();
         }
 
-        Image image = new Image("edu/wpi/cs3733/D21/teamE/logo.png");
-        imageView.setImage(image);
+        Stage primaryStage = App.getPrimaryStage();
+
+        Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        hospitalImageView.setImage(hospital);
+        hospitalImageView.setPreserveRatio(true);
+        hospitalImageView.setFitWidth(imageAnchorPane.getWidth());
+        hospitalImageView.setFitHeight(primaryStage.getHeight());
+        //hospitalImageView.fitWidthProperty().bind(imageAnchorPane.widthProperty());
+        hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
+        imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+        imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+
+        Rectangle2D viewport = new Rectangle2D(200, 0, 500, hospital.getHeight());
+        hospitalImageView.setViewport(viewport);
+
+
+        Image logo = new Image("edu/wpi/cs3733/D21/teamE/logo.png");
+        logoImageView.setImage(logo);
 
         algoNames = FXCollections.observableArrayList();
         algoNames.add("A* Search");

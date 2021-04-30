@@ -44,10 +44,13 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 
 .default-button {
     -jfx-button-type: FLAT;
-    -fx-text-fill: WHITE;
-    -fx-background-color: -fx--primary-dark;
+    -fx-text-fill: -fx--primary;
     -fx-border-color:  -fx--primary-light;
+}
 
+.default-button:hover {
+    -fx-text-fill: -fx--primary-dark;
+    -fx-background-color: #a2dcfd;
 }
 
 .normal-button {

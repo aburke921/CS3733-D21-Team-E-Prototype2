@@ -114,7 +114,7 @@ public class UserAccountDB {
 	 * @param lastName  this is the user's last name that is associated with the account
 	 */
 	public static void addUserAccount(String email, String password, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp, Null, Null, Null)";
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp, 0, Null, Null)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
 			prepState.setString(2, password);
@@ -139,7 +139,7 @@ public class UserAccountDB {
 	 * @param lastName  this is the user's last name that is associated with the account
 	 */
 	public static void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp, Null, Null, Null)";
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp, 0, Null, Null)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
 			prepState.setString(2, password);
@@ -359,7 +359,7 @@ public class UserAccountDB {
 				"Select Count(lastCovidSurvey) As isSafe " +
 						"From userAccount " +
 						"Where userID = ? " +
-						"  And lastCovidSurvey < 100")) {
+						"  And lastCovidSurvey < 10")) {
 			preparedStatement.setInt(1, userID);
 			ResultSet rset = preparedStatement.executeQuery();
 			if (rset.next()) {

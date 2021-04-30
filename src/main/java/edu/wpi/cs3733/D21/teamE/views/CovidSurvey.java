@@ -21,6 +21,8 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class CovidSurvey extends ServiceRequests {
 
+	public static boolean plzGoToPathFinder = false;
+
 	@FXML
 	JFXCheckBox positiveTest;
 	@FXML
@@ -119,11 +121,21 @@ public class CovidSurvey extends ServiceRequests {
 				popUp();
 			}
 			if (DB.isUserCovidSafe(App.userID)) {
-				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-					App.setDraggableAndChangeScene(root);
-				} catch (IOException ex) {
-					ex.printStackTrace();
+				if (plzGoToPathFinder){
+					plzGoToPathFinder = false;
+					try {
+						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+						App.setDraggableAndChangeScene(root);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				}else {
+					try {
+						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
+						App.setDraggableAndChangeScene(root);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
 				}
 			} else {
 				popUp();
@@ -131,11 +143,21 @@ public class CovidSurvey extends ServiceRequests {
 		} else {
 			if (rating < 10) {
 				App.noCleanSurveyYet = false;
-				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-					App.setDraggableAndChangeScene(root);
-				} catch (IOException ex) {
-					ex.printStackTrace();
+				if (plzGoToPathFinder) {
+					plzGoToPathFinder = false;
+					try {
+						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+						App.setDraggableAndChangeScene(root);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				} else {
+					try {
+						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
+						App.setDraggableAndChangeScene(root);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
 				}
 			} else {
 				App.noCleanSurveyYet = true;

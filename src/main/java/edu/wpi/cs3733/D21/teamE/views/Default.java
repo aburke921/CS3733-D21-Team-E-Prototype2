@@ -110,6 +110,7 @@ public class Default {
                     ex.printStackTrace();
                 }
             } else { // go to covid survey
+                CovidSurvey.plzGoToPathFinder = true;
                 try {
                     Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
                     App.getPrimaryStage().getScene().setRoot(root);
@@ -118,6 +119,7 @@ public class Default {
                 }
             }
         } else if (App.noCleanSurveyYet) { // go to covid survey
+            CovidSurvey.plzGoToPathFinder = true;
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
                 App.getPrimaryStage().getScene().setRoot(root);
@@ -154,7 +156,7 @@ public class Default {
                         index = i;
                     }
                 }
-                App.startNodeIndex = index;
+                PathFinder.startNodeIndex = index;
                 toPathFinder(e);
                 break;
             case "p":

@@ -15,51 +15,29 @@ public class email{
 
 	public static void main(String args[]) throws MessagingException {
 
-		String email = DB.getEmail(App.userID);
-		String password;
+//		String email = DB.getEmail(App.userID);
+		sendAppointmentRemind("aburke@wpi.edu", "May 5th 2021");
 
-		System.out.println(System.getProperty("os.name"));
-		if(System.getProperty("os.name").equals("Mac OS X")){
-			password = "olpqmnwwpkhihwjs";
-		}
-		else{
-			password = "bwpeledauxsuxqja";
-		}
-
-		Properties props = System.getProperties();
-		props.put("mail.smtps.host","smtp.gmail.com");
-		props.put("mail.smtps.auth","true");
-		Session session = Session.getInstance(props, null);
-		Message msg = new MimeMessage(session);
-		msg.setFrom(new InternetAddress("engineeringsoftware3733@gmail.com"));;
-		msg.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse("email", false));
-		msg.setSubject("Test "+System.currentTimeMillis());
-		msg.setText("Hello World!");
-
-		msg.setSentDate(new Date());
-		SMTPTransport t =
-				(SMTPTransport)session.getTransport("smtps");
-		t.connect("smtp.gmail.com", "engineeringsoftware3733@gmail.com", password);
-		t.sendMessage(msg, msg.getAllRecipients());
-
-		System.out.println("Response: " + t.getLastServerResponse());
-		t.close();
 
 	}
 
+
 	public static void sendAppointmentRemind(String email, String time) throws MessagingException {
 
-
-
 		String subject = "BWH Appointment Reminder!!";
-		String emailMessage = "Hello " + email + " \n\n"
+		String emailMessage = "Hello " + email + ", \n\n"
 				+ "This is a reminder that you have an appointment scheduled for "
 				+ time + " at Brigham & Women's hospital. If you have any issues with your "
 				+ "appointment please log into the application and edit your appointment information. \n\n"
-				+ "We look forward to seeing you soon, ";
+				+ "We look forward to seeing you soon, \n"
+				+ "Emerald Emus BWH";
+
+		sendEmail(email, subject, emailMessage);
+
+	}
 
 
+	public static void sendEmail(String email, String subject, String emailBody) throws MessagingException{
 		//Sets up getting permission to send email
 		String password;
 
@@ -82,7 +60,7 @@ public class email{
 		msg.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(email, false));
 		msg.setSubject(subject);
-		msg.setText(emailMessage);
+		msg.setText(emailBody);
 		msg.setSentDate(new Date());
 
 
@@ -94,7 +72,6 @@ public class email{
 
 		System.out.println("Response: " + t.getLastServerResponse());
 		t.close();
-
 	}
 
 

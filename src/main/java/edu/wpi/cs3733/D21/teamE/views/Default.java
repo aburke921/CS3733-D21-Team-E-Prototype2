@@ -137,18 +137,32 @@ public class Default {
     @FXML
     private void toScanQRCode(ActionEvent e) {
 	    String result = QRCode.scanQR();
-	    String pure = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
-	    System.out.println("Scanned String: " + pure);
+        System.out.println("Scanned String: " + result);
+        String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
+        System.out.println("Scanned pure: " + pure);
+        String lable = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('/'));
+        System.out.println("Scanned lable: " + lable);
+        String code = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
+        System.out.println("Scanned code: " + code);
 
-        ArrayList<Node> nodeArrayList = DB.getAllNodes();
-        int index = 0;
-        for(int i = 0; i < nodeArrayList.size();i++){
-            if(nodeArrayList.get(i).get("id").equals(pure)){
-                index = i;
-            }
+        switch (lable) {
+            case "n":
+                ArrayList<Node> nodeArrayList = DB.getAllNodes();
+                int index = 0;
+                for (int i = 0; i < nodeArrayList.size(); i++) {
+                    if (nodeArrayList.get(i).get("id").equals(code)) {
+                        index = i;
+                    }
+                }
+                App.startNodeIndex = index;
+                toPathFinder(e);
+                break;
+            case "p":
+                // get popup to say ur parking slot saved
+                break;
+            default:
+                break;
         }
-        App.startNodeIndex = index;
-        toPathFinder(e);
     }
 
     @FXML

@@ -102,6 +102,16 @@
                               <Insets left="40.0" top="10.0" />
                            </HBox.margin>
                         </JFXComboBox>
+                        <JFXButton onAction="#alignSelectedNodes" text="Align Nodes">
+                           <HBox.margin>
+                              <Insets left="30.0" top="10.0" />
+                           </HBox.margin>
+                        </JFXButton>
+                        <JFXButton onAction="#finishAligning" text="Finish Aligning">
+                           <HBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </HBox.margin>
+                        </JFXButton>
                           </children>
                       </HBox>
                   <JFXButton fx:id="edgeMode" onAction="#toEdgeMode" prefHeight="44.0" prefWidth="104.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Edge Editor">

@@ -125,7 +125,7 @@ public class newMapEditor {
     /*
      * Additional Variables
      */
-    private boolean isVertical;
+    private static boolean isVertical = false;
 
     private String startID = "test";
 
@@ -155,8 +155,8 @@ public class newMapEditor {
     private double scale;
     private int selection = 0;
 
-    private boolean isAligning = false;
-    private boolean finishAligning = false;
+    private static boolean isAligning = false;
+    private static boolean finishAligning = false;
     private ArrayList<Node> nodeArrayListToBeAligned = new ArrayList<Node>();
 
 
@@ -1167,7 +1167,7 @@ public class newMapEditor {
                         }
                     }
                 }
-                if(finishAligning) {
+                if (finishAligning) {
                     int modifyInt = -1;
                     double X = e.getX();
                     int xInt = (int) X;
@@ -1176,81 +1176,84 @@ public class newMapEditor {
                     for (int i = 0; i < nodeArrayListToBeAligned.size(); i++) {
                         Node currentNode = nodeArrayListToBeAligned.get(i);
                         if (isVertical) {
-                           modifyInt = DB.modifyNode(currentNode.get("id"), xInt, currentNode.getX(), currentNode.get("floor"),currentNode.get("building"),
+                            modifyInt = DB.modifyNode(currentNode.get("id"), xInt, currentNode.getY(), currentNode.get("floor"), currentNode.get("building"),
                                     currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
                         } else {
-                            modifyInt = DB.modifyNode(currentNode.get("id"), currentNode.getX(), yInt, currentNode.get("floor"),currentNode.get("building"),
+                            modifyInt = DB.modifyNode(currentNode.get("id"), currentNode.getX(), yInt, currentNode.get("floor"), currentNode.get("building"),
                                     currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
                         }
                     }
+                    System.out.println(modifyInt);
                 }
-                //ints for displaying
-                double xCoordScale = e.getX();
-                xCoordScale = xCoordScale * scale;
-                int xCordIntScale = (int) xCoordScale;
-                double yCoordScale = e.getY();
-                yCoordScale = yCoordScale * scale;
-                int yCordIntScale = (int) yCoordScale;
-                //ints for placing circle
-                double xCoord = e.getX();
-                double yCoord = e.getY();
-                Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
-                g.getChildren().add(circle);
-                pane.getChildren().add(g);
-                //clears fields, populates X, Y coordinates of created node in fields
-                longNameInput.clear();
-                shortNameInput.clear();
-                floorInput.getSelectionModel().clearSelection();
-                floorInput.setValue(null);
-                idInput.getSelectionModel().clearSelection();
-                idInput.setValue(null);
-                buildingInput.getSelectionModel().clearSelection();
-                buildingInput.setValue(null);
-                typeInput.getSelectionModel().clearSelection();
-                typeInput.setValue(null);
-                xCordInput.setText(Integer.toString(xCordIntScale));
-                yCordInput.setText(Integer.toString(yCordIntScale));
-            } else {
-                //single click
-                if (e.getClickCount() == 1) {
-                    //coordinates of click
-                    double X = e.getX();
-                    int xInt = (int) X;
-                    double Y = e.getY();
-                    int yInt = (int) Y;
-                    for (int i = 0; i < array.size(); i++) {
-                        if(array.get(i).get("floor").equals(currentFloor)) {
-                            //coordinates of current node
-                            double nodeX = array.get(i).getX() / scale;
-                            int nodeXInt = (int) nodeX;
-                            double nodeY = array.get(i).getY() / scale;
-                            int nodeYInt = (int) nodeY;
+                if (!isAligning && !finishAligning) {
+                    //ints for displaying
+                    double xCoordScale = e.getX();
+                    xCoordScale = xCoordScale * scale;
+                    int xCordIntScale = (int) xCoordScale;
+                    double yCoordScale = e.getY();
+                    yCoordScale = yCoordScale * scale;
+                    int yCordIntScale = (int) yCoordScale;
+                    //ints for placing circle
+                    double xCoord = e.getX();
+                    double yCoord = e.getY();
+                    Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+                    g.getChildren().add(circle);
+                    pane.getChildren().add(g);
+                    //clears fields, populates X, Y coordinates of created node in fields
+                    longNameInput.clear();
+                    shortNameInput.clear();
+                    floorInput.getSelectionModel().clearSelection();
+                    floorInput.setValue(null);
+                    idInput.getSelectionModel().clearSelection();
+                    idInput.setValue(null);
+                    buildingInput.getSelectionModel().clearSelection();
+                    buildingInput.setValue(null);
+                    typeInput.getSelectionModel().clearSelection();
+                    typeInput.setValue(null);
+                    xCordInput.setText(Integer.toString(xCordIntScale));
+                    yCordInput.setText(Integer.toString(yCordIntScale));
+                } else {
+                    //single click
+                    if (e.getClickCount() == 1) {
+                        //coordinates of click
+                        double X = e.getX();
+                        int xInt = (int) X;
+                        double Y = e.getY();
+                        int yInt = (int) Y;
+                        for (int i = 0; i < array.size(); i++) {
+                            if (array.get(i).get("floor").equals(currentFloor)) {
+                                //coordinates of current node
+                                double nodeX = array.get(i).getX() / scale;
+                                int nodeXInt = (int) nodeX;
+                                double nodeY = array.get(i).getY() / scale;
+                                int nodeYInt = (int) nodeY;
 
-                            //if node coordinates match click coordinates +- 1, autofill fields with node info
-                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
-                                idInput.setValue(array.get(i).get("id"));
-                                floorInput.setValue(array.get(i).get("floor"));
-                                longNameInput.setText(array.get(i).get("longName"));
-                                shortNameInput.setText(array.get(i).get("shortName"));
-                                xCordInput.setText(Integer.toString(array.get(i).getX()));
-                                yCordInput.setText(Integer.toString(array.get(i).getY()));
-                                typeInput.setValue(array.get(i).get("type"));
-                                buildingInput.setValue(array.get(i).get("building"));
+                                //if node coordinates match click coordinates +- 1, autofill fields with node info
+                                if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
+                                    idInput.setValue(array.get(i).get("id"));
+                                    floorInput.setValue(array.get(i).get("floor"));
+                                    longNameInput.setText(array.get(i).get("longName"));
+                                    shortNameInput.setText(array.get(i).get("shortName"));
+                                    xCordInput.setText(Integer.toString(array.get(i).getX()));
+                                    yCordInput.setText(Integer.toString(array.get(i).getY()));
+                                    typeInput.setValue(array.get(i).get("type"));
+                                    buildingInput.setValue(array.get(i).get("building"));
 
-                                //for edges, use counter to determine if it is first or second node selected
-                                //populate edge fields with information
-                                selection++;
-                                if (selection == 1) {
-                                    startID = array.get(i).get("id");
-                                    startLocation.setValue(array.get(i).get("longName"));
-                                }
-                                if (selection == 2) {
-                                    endLocation.setValue(array.get(i).get("longName"));
-                                    endID = array.get(i).get("id");
-                                    edgeIDArrayList.add(startID + "_" + endID);
-                                    edgeID.setItems(edgeIDArrayList);
-                                    edgeID.setValue(startID + "_" + endID);
-                                    selection = 0;
+                                    //for edges, use counter to determine if it is first or second node selected
+                                    //populate edge fields with information
+                                    selection++;
+                                    if (selection == 1) {
+                                        startID = array.get(i).get("id");
+                                        startLocation.setValue(array.get(i).get("longName"));
+                                    }
+                                    if (selection == 2) {
+                                        endLocation.setValue(array.get(i).get("longName"));
+                                        endID = array.get(i).get("id");
+                                        edgeIDArrayList.add(startID + "_" + endID);
+                                        edgeID.setItems(edgeIDArrayList);
+                                        edgeID.setValue(startID + "_" + endID);
+                                        selection = 0;
+                                    }
                                 }
                             }
                         }
@@ -1260,25 +1263,60 @@ public class newMapEditor {
         });
 
     }
+    /**
+     * Creates a new JFX Dialog on the current page.
+     * @param message Message to display in the dialog box.
+     * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
+     */
+    public static void newJFXDialogPopUp(String heading, String button1, String button2, String beginButton, String message, StackPane stackPane) {
+        System.out.println("DialogBox Posted");
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setHeading(new Text(heading));
+        jfxDialogLayout.setBody(new Text(message));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton(beginButton);
+        JFXButton opt1 = new JFXButton(button1);
+        JFXButton opt2 = new JFXButton(button2);
+        opt1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                isVertical = true;
+                dialog.close();
+
+            }
+        });
+        opt2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                isVertical = false;
+                dialog.close();
+
+            }
+        });
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, opt1, opt2);
+        dialog.show();
+    }
+
+    public void finishAligning(ActionEvent e) {
+        isAligning = false;
+        finishAligning = true;
+    }
 
     /**
      * @// TODO: 4/29/2021 called when align button is pressed while isAligning is true
      */
-    private void alignSelectedNodes() {
+    @FXML
+    public void alignSelectedNodes(ActionEvent e) {
         isAligning = true;
+        newJFXDialogPopUp("Align Nodes", "Vertical", "Horizontal", "Cancel", "Select the nodes you would like to align", stackPane);
         //todo align nodes in nodeArrayListToBeAligned
-
-        if(verticalButton.isPressed()) {
-            isVertical = true;
-            isAligning = false;
-        }
-        if(horizontalButton.isPressed()) {
-            isVertical = false;
-            isAligning = false;
-        }
-        if(isVertical) {
-            finishAligning = true;
-        }
 
         //todo show additional alignment buttons: horizontal/vertical, finish alignment button
         //  buttons will set horizontal vs vert... global vars.
@@ -1290,7 +1328,6 @@ public class newMapEditor {
 
 
         //todo when done, add old double-click handler back
-        isAligning = false;
     }
 
 

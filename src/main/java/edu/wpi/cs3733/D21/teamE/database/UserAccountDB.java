@@ -331,6 +331,25 @@ public class UserAccountDB {
 	}
 
 	/**
+	 * Submits a Covid Survey to the server
+	 * @param surveyResults is the result int that we are submitting
+	 * @param userID        is the user's ID that we are submitting
+	 * @return true if successfully changed one row, false otherwise
+	 */
+	public static boolean submitCovidSurvey(int surveyResults, int userID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"Update userAccount Set lastCovidSurvey = ? Where userID = ?")) {
+			preparedStatement.setInt(1, surveyResults);
+			preparedStatement.setInt(2, userID);
+			if (preparedStatement.executeUpdate() == 1) return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Error in submitCovidSurvey() from UserAccountDB");
+		return false;
+	}
+
+	/**
 	 * Checks if a user have filled their COVID survey today
 	 * @param userID is the user's ID that we are checking
 	 * @return true if user has filled a survey today, false if user did not fill a survey today

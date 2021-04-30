@@ -330,10 +330,10 @@ public class makeConnection {
 
 
 		//Real Admins:
-		String insertUser1 = "Insert Into useraccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP)";
-		String insertUser2 = "Insert Into useraccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', CURRENT TIMESTAMP)";
-		String insertUser3 = "Insert Into useraccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', CURRENT TIMESTAMP)";
-		String insertUser4 = "Insert Into useraccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', CURRENT TIMESTAMP)";
+		String insertUser1 = "Insert Into useraccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', Current Timestamp, 0, Null, Null)";
+		String insertUser2 = "Insert Into useraccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', Current Timestamp, 0, Null, Null)";
+		String insertUser3 = "Insert Into useraccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', Current Timestamp, 0, Null, Null)";
+		String insertUser4 = "Insert Into useraccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', Current Timestamp, 0, Null, Null)";
 		try {
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(insertUser1);

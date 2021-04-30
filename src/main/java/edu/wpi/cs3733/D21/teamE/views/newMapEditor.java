@@ -114,6 +114,10 @@ public class newMapEditor {
     private JFXComboBox edgeID;
     @FXML
     private JFXComboBox floorSelector;
+    @FXML
+    private JFXButton verticalButton;
+    @FXML
+    private JFXButton horizontalButton;
 
 
 
@@ -121,6 +125,7 @@ public class newMapEditor {
     /*
      * Additional Variables
      */
+    private boolean isVertical;
 
     private String startID = "test";
 
@@ -151,6 +156,7 @@ public class newMapEditor {
     private int selection = 0;
 
     private boolean isAligning = false;
+    private boolean finishAligning = false;
     private ArrayList<Node> nodeArrayListToBeAligned = new ArrayList<Node>();
 
 
@@ -249,6 +255,20 @@ public class newMapEditor {
 
         }
         pane.getChildren().add(g);
+    }
+
+    /**
+     * allows user to align selected nodes
+     */
+    public void alignNodes(ArrayList<Node> array) {
+
+    }
+
+    /**
+     * function for button to align nodes
+     */
+    public void alignNodesButton(ActionEvent e) {
+        //alignNodes();
     }
 
     /**
@@ -1128,9 +1148,41 @@ public class newMapEditor {
             //double click
             if (e.getClickCount() == 2) {
                 if (isAligning) {
-                    //if user is looking to align nodes
-                    //todo get node clicked on
-                    //todo add to list of node to be aligned
+                    //coordinates of click
+                    double X = e.getX();
+                    int xInt = (int) X;
+                    double Y = e.getY();
+                    int yInt = (int) Y;
+                    for (int i = 0; i < array.size(); i++) {
+                        if (array.get(i).get("floor").equals(currentFloor)) {
+                            //coordinates of current node
+                            double nodeX = array.get(i).getX() / scale;
+                            int nodeXInt = (int) nodeX;
+                            double nodeY = array.get(i).getY() / scale;
+                            int nodeYInt = (int) nodeY;
+                            //if node coordinates match click coordinates +- 1, autofill fields with node info
+                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
+                                nodeArrayListToBeAligned.add(array.get(i));
+                            }
+                        }
+                    }
+                }
+                if(finishAligning) {
+                    int modifyInt = -1;
+                    double X = e.getX();
+                    int xInt = (int) X;
+                    double Y = e.getY();
+                    int yInt = (int) Y;
+                    for (int i = 0; i < nodeArrayListToBeAligned.size(); i++) {
+                        Node currentNode = nodeArrayListToBeAligned.get(i);
+                        if (isVertical) {
+                           modifyInt = DB.modifyNode(currentNode.get("id"), xInt, currentNode.getX(), currentNode.get("floor"),currentNode.get("building"),
+                                    currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
+                        } else {
+                            modifyInt = DB.modifyNode(currentNode.get("id"), currentNode.getX(), yInt, currentNode.get("floor"),currentNode.get("building"),
+                                    currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
+                        }
+                    }
                 }
                 //ints for displaying
                 double xCoordScale = e.getX();
@@ -1213,8 +1265,20 @@ public class newMapEditor {
      * @// TODO: 4/29/2021 called when align button is pressed while isAligning is true
      */
     private void alignSelectedNodes() {
+        isAligning = true;
         //todo align nodes in nodeArrayListToBeAligned
 
+        if(verticalButton.isPressed()) {
+            isVertical = true;
+            isAligning = false;
+        }
+        if(horizontalButton.isPressed()) {
+            isVertical = false;
+            isAligning = false;
+        }
+        if(isVertical) {
+            finishAligning = true;
+        }
 
         //todo show additional alignment buttons: horizontal/vertical, finish alignment button
         //  buttons will set horizontal vs vert... global vars.
@@ -1226,6 +1290,7 @@ public class newMapEditor {
 
 
         //todo when done, add old double-click handler back
+        isAligning = false;
     }
 
 

@@ -147,6 +147,9 @@ public class Default {
         String code = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
         System.out.println("Scanned code: " + code);
 
+        // this magic line adds backward compatibility to our old code which used a different method to create...!
+        if (lable.equals("s")) lable = "n";
+
         switch (lable) {
             case "n":
                 ArrayList<Node> nodeArrayList = DB.getAllNodes();

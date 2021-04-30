@@ -236,17 +236,15 @@ public class Default {
         algo.setValue(algoNames.get(App.getSearchAlgo()));
 
         String userType = UserAccountDB.getUserType(App.userID);
-        if(App.userID == 0 || userType.equals("doctor") || userType.equals("patient") || userType.equals("visitor")) {
+        if(App.userID == 0) {
+            serviceRequestButton.setVisible(false);
+        }
+        if(!userType.equals("admin")) {
             mapEditorButton.setVisible(false);
             algoTextTop.setVisible(false);
             algoTextBottom.setVisible(false);
             algo.setVisible(false);
             applyChange.setVisible(false);
-            userManagementButton.setVisible(false);
-        }
-
-        if(App.userID == 0) {
-            serviceRequestButton.setVisible(false);
             userManagementButton.setVisible(false);
         }
     }

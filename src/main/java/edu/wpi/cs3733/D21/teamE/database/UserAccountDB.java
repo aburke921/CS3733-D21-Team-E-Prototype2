@@ -283,24 +283,28 @@ public class UserAccountDB {
 	}
 
 	public static String getUserType(int userID) {
-		String insertUser = "Select usertype From userAccount Where userID = ?";
-		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
-			prepState.setInt(1, userID);
+		if (userID == 0) {
+			return "guest";
+		} else {
+			String insertUser = "Select usertype From userAccount Where userID = ?";
+			try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
+				prepState.setInt(1, userID);
 
-			ResultSet rset = prepState.executeQuery();
+				ResultSet rset = prepState.executeQuery();
 
-			String userType = null;
-			if (rset.next()) {
-				userType = rset.getString("userType");
+				String userType = null;
+				if (rset.next()) {
+					userType = rset.getString("userType");
+				}
+
+				return userType;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.err.println("error in getUserType()");
 			}
-
-			return userType;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("error in getUserType()");
 		}
 
-		return null;
+		return "guest";
 	}
 
 	public static ArrayList<User> getAllUsers() {

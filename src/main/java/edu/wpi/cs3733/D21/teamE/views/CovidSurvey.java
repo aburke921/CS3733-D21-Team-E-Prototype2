@@ -96,13 +96,13 @@ public class CovidSurvey extends ServiceRequests {
 		if (noSymptoms.isSelected()) {
 			rating += 1;
 		}
-		if (symptoms.isSelected()) {
+		if (quarantine.isSelected()) {
 			rating += 10;
 		}
 		if (closeContact.isSelected()) {
 			rating += 100;
 		}
-		if (quarantine.isSelected()) {
+		if (symptoms.isSelected()) {
 			rating += 1000;
 		}
 		if (positiveTest.isSelected()) {
@@ -112,20 +112,20 @@ public class CovidSurvey extends ServiceRequests {
 		if (rating == 0) {
 			validateInput();
 		} else {
-			DB.submitCovidSurvey(rating, App.userID);
+			if (DB.submitCovidSurvey(rating, App.userID)) {
+				System.out.println("user's covid survey of " + rating + " was submitted");
+			} else System.err.println("user's covid survey of " + rating + " was not submitted");
 		}
-
-		if (!DB.isUserCovidSafe(App.userID)) {
-			popUp();
-		} else {
+		if (DB.isUserCovidSafe(App.userID)) {
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
 				App.setDraggableAndChangeScene(root);
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
+		} else {
+			popUp();
 		}
-		System.out.print("user's covid rating is " + rating);
 	}
 
 	/**

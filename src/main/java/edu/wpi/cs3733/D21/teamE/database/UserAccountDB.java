@@ -20,19 +20,21 @@ public class UserAccountDB {
 	 * - lastName: the user's last name.
 	 * - creationTime: a time stamp that is added to the table when an account is created
 	 */
-	public static void createUserAccountTable() {
+	public static int createUserAccountTable() {
 
-		String query = "Create Table userAccount (" +
-				"userID    Int Primary Key," +
-				"email     Varchar(31) Unique Not Null," +
-				"password  Varchar(31)        Not Null," +
-				"userType  Varchar(31)," +
-				"firstName Varchar(31)," +
-				"lastName  Varchar(31)," +
-				"creationTime Timestamp, " +
-				"Constraint userIDLimit Check ( userID != 0 )," +
-				// "Constraint passwordLimit Check (Length(password) >= 8 )," +
-				"Constraint userTypeLimit Check (userType In ('visitor', 'patient', 'doctor', 'admin', 'nurse', 'EMT', 'floralPerson', 'pharmacist', 'security', 'electrician', 'custodian', 'interpreter', 'religiousPerson')))";
+		String query = "Create Table userAccount " +
+				"( " +
+				"userID           Int Primary Key, " +
+				"email            Varchar(31) Unique Not Null, " +
+				"password         Varchar(31)        Not Null, " +
+				"userType         Varchar(31), " +
+				"firstName        Varchar(31), " +
+				"lastName         Varchar(31), " +
+				"lastCovidSurvey  timestamp, " +
+				"lastParkedNodeID varchar(31) References node, " +
+				"Constraint userIDLimit Check ( userID != 0 ), " +
+				"Constraint passwordLimit Check ( Length(password) >= 5 ) " +
+				")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 
@@ -42,8 +44,10 @@ public class UserAccountDB {
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating userAccount table");
+			System.out.println("|--- Failed to create userAccount table");
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
@@ -276,20 +280,20 @@ public class UserAccountDB {
 		return 0;
 	}
 
-	public static String getUserType(int userID){
-		String insertUser = "Select userType From userAccount Where userID = ?";
-		try (PreparedStatement prepState = connection.prepareStatement(insertUser)){
+	public static String getUserType(int userID) {
+		String insertUser = "Select usertype From userAccount Where userID = ?";
+		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setInt(1, userID);
 
 			ResultSet rset = prepState.executeQuery();
 
 			String userType = null;
-			if(rset.next()){
+			if (rset.next()) {
 				userType = rset.getString("userType");
 			}
 
 			return userType;
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("error in getUserType()");
 		}

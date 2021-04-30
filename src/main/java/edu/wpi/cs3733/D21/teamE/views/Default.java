@@ -6,6 +6,7 @@ import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.QRCode;
 import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
+import edu.wpi.cs3733.D21.teamE.map.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Default {
 
@@ -137,6 +139,16 @@ public class Default {
 	    String result = QRCode.scanQR();
 	    String pure = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
 	    System.out.println("Scanned String: " + pure);
+
+        ArrayList<Node> nodeArrayList = DB.getAllNodes();
+        int index = 0;
+        for(int i = 0; i < nodeArrayList.size();i++){
+            if(nodeArrayList.get(i).get("id").equals(pure)){
+                index = i;
+            }
+        }
+        App.startNodeIndex = index;
+        toPathFinder(e);
     }
 
     @FXML

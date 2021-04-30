@@ -768,6 +768,18 @@ public class PathFinder {
         marker.populateLocationMarkerMarkerGroup(scale);
         markerPane.getChildren().add(marker.getMarkerGroup());
 
+        //Check if startNodeIndex has a value, if yes fill startLocationComboBox
+        if (App.startNodeIndex != -1) {
+            startLocationComboBox.getSelectionModel().select(App.startNodeIndex);
+            App.startNodeIndex = -1;
+        }
+
+        //Check if startNodeIndex has a value, if yes fill startLocationComboBox
+        if (App.endNodeIndex != -1) {
+            endLocationComboBox.getSelectionModel().select(App.startNodeIndex);
+            App.endNodeIndex = -1;
+        }
+
         System.out.println("Finish PathFinder Init.");
         pane.setOnMouseClicked(e -> {
             /*double xCoord = e.getX();

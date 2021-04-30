@@ -28,7 +28,7 @@ public class ReligiousRequest extends ServiceRequestFormComponents {
     private JFXComboBox<String> religionInput;
 
     @FXML
-    private JFXTextField assignedPersonnel;
+    private JFXComboBox<String> assignedPersonnel;
 
     @FXML
     private JFXTextArea description;
@@ -56,6 +56,9 @@ public class ReligiousRequest extends ServiceRequestFormComponents {
         //TODO add user type
         names = DB.getAssigneeNames("Add user type here");
         userID = DB.getAssigneeIDs("Add user type here");
+
+        locationInput.setItems(locations);
+        assignedPersonnel.setItems(names);
     }
 
 }

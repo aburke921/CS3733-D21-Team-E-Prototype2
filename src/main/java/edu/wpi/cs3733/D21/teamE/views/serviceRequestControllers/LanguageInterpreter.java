@@ -71,6 +71,9 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 		names = DB.getAssigneeNames("Add user type here");
 		userID = DB.getAssigneeIDs("Add user type here");
 
+		locationInput.setItems(locations);
+		assignedPersonnel.setItems(names);
+
 	}
 
 }

@@ -54,7 +54,7 @@ public class Laundry extends ServiceRequestFormComponents {
     private JFXComboBox<String> dryLoadAmountInput; // Value injected by FXMLLoader
 
     @FXML // fx:id="assignedPersonnel"
-    private JFXTextField assignedPersonnel; // Value injected by FXMLLoader
+    private JFXComboBox<String> assignedPersonnel; // Value injected by FXMLLoader
 
     @FXML // fx:id="descriptionInput"
     private JFXTextArea descriptionInput; // Value injected by FXMLLoader

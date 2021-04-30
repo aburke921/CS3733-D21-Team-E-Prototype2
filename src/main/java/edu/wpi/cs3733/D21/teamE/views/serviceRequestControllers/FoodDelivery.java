@@ -87,6 +87,7 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		userID = DB.getAssigneeIDs("Add user type");
 
 		locationInput.setItems(locations);
+		assigneeInput.setItems(names);
 
 		assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'FoodDelivery.fxml'.";

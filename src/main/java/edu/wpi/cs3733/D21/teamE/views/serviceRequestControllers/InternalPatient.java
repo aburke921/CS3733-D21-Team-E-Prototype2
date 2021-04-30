@@ -52,5 +52,6 @@ public class InternalPatient extends ServiceRequestFormComponents{
 
         pickupInput.setItems(locations);
         dropoffInput.setItems(locations);
+        assignedPersonnel.setItems(names);
     }
 }

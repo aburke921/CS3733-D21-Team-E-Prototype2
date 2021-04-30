@@ -134,11 +134,11 @@
                                                                         </FXCollections>
                                                                     </items>
                                                                 </JFXComboBox>
-                                                                <JFXTextField fx:id="assignedPersonnelInput" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
+                                                                <JFXComboBox fx:id="assignedPersonnelInput" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
                                                                     <VBox.margin>
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
-                                                                </JFXTextField>
+                                                                </JFXComboBox>
                                                                 <JFXTextField fx:id="authorInput" prefHeight="27.0" prefWidth="280.0" promptText="Author">
                                                                     <VBox.margin>
                                                                         <Insets top="20.0" />

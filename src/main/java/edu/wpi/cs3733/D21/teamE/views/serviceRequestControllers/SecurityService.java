@@ -123,6 +123,10 @@ public class SecurityService extends ServiceRequestFormComponents {
         //TODO add user type
         names = DB.getAssigneeNames("Add user type here");
         userID = DB.getAssigneeIDs("Add user type here");
+
+        locationInput.setItems(locations);
+        assignedPersonnel.setItems(names);
+
         assert helpSecurityService != null : "fx:id=\"helpSecurityService\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert locationInput != null : "fx:id=\"locationOfDelivery\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert levelOfSecurity != null : "fx:id=\"levelOfSecurity\" was not injected: check your FXML file 'SecurityService.fxml'.";

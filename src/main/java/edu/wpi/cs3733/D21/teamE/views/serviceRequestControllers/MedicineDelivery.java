@@ -37,7 +37,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     private JFXTextField doseMeasureInput;
 
     @FXML
-    private JFXTextField assignee;
+    private JFXComboBox<String> assignee;
 
     @FXML
     private JFXTextArea specialInstructInput;
@@ -72,13 +72,13 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     @FXML
     private void saveData(ActionEvent e) {
 
-        int index = locationInput.getSelectionModel().getSelectedIndex();
+        int locIndex = locationInput.getSelectionModel().getSelectedIndex();
 
-        String location = nodeID.get(index);
+        String location = nodeID.get(locIndex);
         String name = medicineNameInput.getText();
         String doseMeasure = doseMeasureInput.getText();
         int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
-        int assigned = Integer.parseInt( assignee.getText());
+        int assigned = 0; //TODO update this
         String specialInstructions = specialInstructInput.getText();
         String signature = signatureInput.getText();
 
@@ -106,6 +106,10 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         //TODO add user type
         names = DB.getAssigneeNames("Add user type here");
         userID = DB.getAssigneeIDs("Add user type here");
+
+        locationInput.setItems(locations);
+        assignee.setItems(names);
+
 
         assert locationInput != null;
         assert medicineNameInput != null;

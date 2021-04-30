@@ -20,7 +20,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
   ArrayList<Integer> userID = new ArrayList<>();
 
 
-  @FXML private JFXTextField assignedIndividual;
+  @FXML private JFXComboBox<String> assignedIndividual;
   @FXML private JFXTextField Signature;
   @FXML private JFXTextArea detailedInstructionsInput;
 
@@ -111,6 +111,9 @@ public class SanitationServices extends ServiceRequestFormComponents {
     //TODO add user type
     names = DB.getAssigneeNames("Add user type here");
     userID = DB.getAssigneeIDs("Add user type here");
+
+    locationInput.setItems(locations);
+    assignedIndividual.setItems(names);
 
     assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
 

@@ -1,23 +1,16 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 
 import java.io.IOException;
-
-import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class CovidSurvey extends ServiceRequests {
 
@@ -86,14 +79,14 @@ public class CovidSurvey extends ServiceRequests {
 					plzGoToPathFinder = false;
 					try {
 						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-						App.setDraggableAndChangeScene(root);
+						App.changeScene(root);
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
 				}else {
 					try {
 						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-						App.setDraggableAndChangeScene(root);
+						App.changeScene(root);
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
@@ -108,14 +101,14 @@ public class CovidSurvey extends ServiceRequests {
 					plzGoToPathFinder = false;
 					try {
 						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-						App.setDraggableAndChangeScene(root);
+						App.changeScene(root);
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
 				} else {
 					try {
 						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-						App.setDraggableAndChangeScene(root);
+						App.changeScene(root);
 					} catch (IOException ex) {
 						ex.printStackTrace();
 					}
@@ -135,7 +128,7 @@ public class CovidSurvey extends ServiceRequests {
 	void handleButtonCancel(ActionEvent event) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-			App.setDraggableAndChangeScene(root);
+			App.changeScene(root);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

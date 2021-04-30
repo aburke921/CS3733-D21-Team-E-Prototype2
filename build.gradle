@@ -28,11 +28,18 @@ repositories {
 //This is where you declare your dependencies and their version.s
 //You will almost DEFINITELY add more here
 dependencies {
+    //Email Stuff:
+//    compile 'javax.mail:mail:1.4.7'
+
     implementation(
             'com.jfoenix:jfoenix:8.0.10',
             'com.google.zxing:javase:3.4.1',
             'com.google.zxing:core:3.4.1',
             'org.jsoup:jsoup:1.13.1',
+
+            'org.simplejavamail:simple-java-mail:6.5.2',
+
+
 
             // https://mvnrepository.com/artifact/de.jensd/fontawesomefx
             group: 'de.jensd', name: 'fontawesomefx', version: '8.9',
@@ -47,6 +54,7 @@ dependencies {
 
             'com.github.sarxos:webcam-capture:0.3.12'
     )
+    implementation (group: 'javax.activation', name: 'activation', version: '1.1')
 //These are test dependencies. These are only used for running verification tasks via Gradle.
     testCompile(
             "org.testfx:testfx-core:4.0.16-alpha",

@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
@@ -97,11 +98,36 @@ public class Default {
      */
     @FXML
     private void toPathFinder(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-            App.setDraggableAndChangeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        if (App.userID != 0){
+            if (DB.filledCovidSurveyToday(App.userID) && DB.isUserCovidSafe(App.userID)) { // go to pathfinder
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+                    App.setDraggableAndChangeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            } else { // go to covid survey
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
+                    App.getPrimaryStage().getScene().setRoot(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } else if (App.noCleanSurveyYet) { // go to covid survey
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
+                App.getPrimaryStage().getScene().setRoot(root);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } else { // go to pathfinder
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+                App.setDraggableAndChangeScene(root);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 

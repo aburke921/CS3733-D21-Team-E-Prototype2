@@ -111,20 +111,36 @@ public class CovidSurvey extends ServiceRequests {
 
 		if (rating == 0) {
 			validateInput();
-		} else {
+		} else if (App.userID != 0) {
 			if (DB.submitCovidSurvey(rating, App.userID)) {
 				System.out.println("user's covid survey of " + rating + " was submitted");
-			} else System.err.println("user's covid survey of " + rating + " was not submitted");
-		}
-		if (DB.isUserCovidSafe(App.userID)) {
-			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-				App.setDraggableAndChangeScene(root);
-			} catch (IOException ex) {
-				ex.printStackTrace();
+			} else {
+				System.err.println("user's covid survey of " + rating + " was not submitted");
+				popUp();
+			}
+			if (DB.isUserCovidSafe(App.userID)) {
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
+					App.setDraggableAndChangeScene(root);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			} else {
+				popUp();
 			}
 		} else {
-			popUp();
+			if (rating < 10) {
+				App.noCleanSurveyYet = false;
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
+					App.setDraggableAndChangeScene(root);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			} else {
+				App.noCleanSurveyYet = true;
+				popUp();
+			}
 		}
 	}
 

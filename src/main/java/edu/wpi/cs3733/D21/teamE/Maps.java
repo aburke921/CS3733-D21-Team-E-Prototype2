@@ -54,14 +54,29 @@ public class Maps {
 
         DirectionsApiRequest request = new DirectionsApiRequest(geoContext);
         request.mode(mode).departureTimeNow();
+        DirectionsResult result;
 
         request.origin(origin);
-        request.destination(MAIN);
+        if (mode == TravelMode.DRIVING) {
+            request.destination(LEFT);
+            DirectionsResult left = request.await();
 
-        // TODO: If transit method is not driving, use main entrance as the destination
-        // TODO: If transit is driving, use the closer parking lot
+            request = new DirectionsApiRequest(geoContext);
+            request.origin(origin);
+            request.mode(mode).departureTimeNow();
+            request.destination(RIGHT);
+            DirectionsResult right = request.await();
 
-        DirectionsResult result = request.await();
+            long leftDur = left.routes[0].legs[0].duration.inSeconds;
+            long rightDur = right.routes[0].legs[0].duration.inSeconds;
+
+            result = ( leftDur < rightDur) ? (left) : (right);
+        } else {
+            request.destination(MAIN);
+            result = request.await();
+        }
+
+        System.out.println("Origin: " + result.routes[0].legs[0].startAddress + "\t Destination: " + result.routes[0].legs[0].endAddress);
         System.out.println("Distance: " + result.routes[0].legs[0].distance + "\t Duration: " + result.routes[0].legs[0].duration);
         System.out.println();
         for (DirectionsStep step : result.routes[0].legs[0].steps) {

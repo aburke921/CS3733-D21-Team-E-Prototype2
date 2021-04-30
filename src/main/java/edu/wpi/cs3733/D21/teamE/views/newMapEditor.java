@@ -150,6 +150,9 @@ public class newMapEditor {
     private double scale;
     private int selection = 0;
 
+    private boolean isAligning = false;
+    private ArrayList<Node> nodeArrayListToBeAligned = new ArrayList<Node>();
+
 
     /**
      * Returns to {@link Default} page.
@@ -865,6 +868,7 @@ public class newMapEditor {
 
     /**
      * resets tables and map after edits made
+     * @// TODO: 4/29/2021 dont use initialize function
      */
     public void refresh() {
         initialize();
@@ -881,6 +885,7 @@ public class newMapEditor {
 
     /**
      * brings up error popup
+     * @// TODO: 4/29/2021 use app.newJFXDialog.....
      * @param errorMessage what the popup will say
      */
     @FXML
@@ -947,6 +952,7 @@ public class newMapEditor {
     /**
      * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
      * Namely, adds FloorMap PNG and fills dropdowns with DB data, sets default floor.
+     * @// TODO: 4/29/2021 refactor out some functions!
      */
     @FXML
     void initialize() {
@@ -1121,6 +1127,11 @@ public class newMapEditor {
         pane.setOnMouseClicked(e -> {
             //double click
             if (e.getClickCount() == 2) {
+                if (isAligning) {
+                    //if user is looking to align nodes
+                    //todo get node clicked on
+                    //todo add to list of node to be aligned
+                }
                 //ints for displaying
                 double xCoordScale = e.getX();
                 xCoordScale = xCoordScale * scale;
@@ -1196,6 +1207,25 @@ public class newMapEditor {
             }
         });
 
+    }
+
+    /**
+     * @// TODO: 4/29/2021 called when align button is pressed while isAligning is true
+     */
+    private void alignSelectedNodes() {
+        //todo align nodes in nodeArrayListToBeAligned
+
+
+        //todo show additional alignment buttons: horizontal/vertical, finish alignment button
+        //  buttons will set horizontal vs vert... global vars.
+
+        //todo set new doubleClick eventHandler (? maybe remove old?) check to see if we are at this fcn
+        //      when user double-clicks, align nodes at the right position.
+
+
+
+
+        //todo when done, add old double-click handler back
     }
 
 

@@ -1,59 +1,42 @@
 package edu.wpi.cs3733.D21.teamE;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 import com.google.maps.*;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
 import io.github.cdimascio.dotenv.Dotenv;
-
 import java.io.IOException;
-import java.util.Arrays;
+import java.time.Instant;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 
-public class Maps {
-    private static String API_KEY = ""; //Loaded on INIT
+public class DirectionsController {
+    // API Key, loaded from .env on init
+    private static String API_KEY = "";
 
+    // API Context
+    private static GeoApiContext geoContext;
+
+    // Travel Mode, default is driving
+    private static TravelMode mode = TravelMode.DRIVING;
+
+    // Time Instance (can be departure or arrival time)
+    private static Instant time;
+
+    // Destinations
     private static final String MAIN = "Brigham and Womens'";
     private static final String LEFT = "80 Francis St, Boston, MA 02115";
     private static final String RIGHT = "15-51 New Whitney St, Boston, MA 02115";
-    private static GeoApiContext geoContext;
 
-    public static void main(String[] args) throws IOException, InterruptedException, ApiException {
-        init();
-        Scanner io = new Scanner(System.in);
-        System.out.println("Enter Origin Location");
-        String origin = io.nextLine();
-        System.out.println("\nEnter Transit Method");
-        String method = io.nextLine();
-        System.out.println();
+    public static void setMode(TravelMode mode) {
+        DirectionsController.mode = mode;
+    }
 
-        method.toUpperCase();
-
-        TravelMode mode = TravelMode.DRIVING;
-
-        switch (method) {
-            case "WALKING":
-                mode = TravelMode.WALKING;
-                break;
-
-            case "BICYCLING":
-                mode = TravelMode.BICYCLING;
-                break;
-
-            case "TRANSIT":
-                mode = TravelMode.TRANSIT;
-                break;
-
-            default:
-                mode = TravelMode.DRIVING;
-                break;
-        }
-
+    public static DirectionsResult getDirections(String origin) throws IOException, InterruptedException, ApiException {
         DirectionsApiRequest request = new DirectionsApiRequest(geoContext);
         request.mode(mode).departureTimeNow();
+        //request.arrivalTime(Instant.parse("10:00 pm"));
         DirectionsResult result;
 
         request.origin(origin);
@@ -70,29 +53,27 @@ public class Maps {
             long leftDur = left.routes[0].legs[0].duration.inSeconds;
             long rightDur = right.routes[0].legs[0].duration.inSeconds;
 
+            System.out.println("Left Dur: " + leftDur + "\tRight Dur: " + rightDur + "\tBest Dur: " + Math.min(leftDur, rightDur));
+
             result = ( leftDur < rightDur) ? (left) : (right);
         } else {
             request.destination(MAIN);
             result = request.await();
         }
 
-        System.out.println("Origin: " + result.routes[0].legs[0].startAddress + "\t Destination: " + result.routes[0].legs[0].endAddress);
-        System.out.println("Distance: " + result.routes[0].legs[0].distance + "\t Duration: " + result.routes[0].legs[0].duration);
-        System.out.println();
-        for (DirectionsStep step : result.routes[0].legs[0].steps) {
-            System.out.println(step.toString());
-        }
-
+        // TODO: add close method that is called when page is switched
         geoContext.shutdown();
+
+        return result;
     }
 
-    private static void init(){
+    public static void init(){
         Dotenv dotenv = Dotenv.load();
         API_KEY = dotenv.get("MAPS_API_KEY");
         getGeoContext();
     }
 
-    private static GeoApiContext getGeoContext() {
+    private static void getGeoContext() {
         if(geoContext == null) {
             geoContext = new GeoApiContext.Builder()
                     .apiKey(API_KEY)
@@ -101,6 +82,5 @@ public class Maps {
                     .connectTimeout(1, TimeUnit.SECONDS)
                     .build();
         }
-        return geoContext;
     }
 }

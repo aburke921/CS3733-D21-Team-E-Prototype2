@@ -338,7 +338,9 @@ public class UserAccountDB {
 	 */
 	public static boolean submitCovidSurvey(int surveyResults, int userID) {
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
-				"Update userAccount Set lastCovidSurvey = ? Where userID = ?")) {
+				"Update userAccount " +
+						"Set lastCovidSurvey = ?, lastCovidSurveyDate = Current Date " +
+						"Where userID = ?")) {
 			preparedStatement.setInt(1, surveyResults);
 			preparedStatement.setInt(2, userID);
 			if (preparedStatement.executeUpdate() == 1) return true;

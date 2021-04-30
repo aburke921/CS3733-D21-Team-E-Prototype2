@@ -186,3 +186,9 @@ JFXButton:hover FontAwesomeIconView {
 .table-row-cell{
     -fx-cell-size: 200;
 }
+
+/*Tree Table View styles*/
+.jfx-tree-table-view {
+    -fx-tree-table-color: rgba(3, 155, 229, 0.4);
+    -jfx-header-color: -fx--primary-dark; /*header text color*/
+}

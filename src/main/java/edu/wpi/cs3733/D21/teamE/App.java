@@ -161,34 +161,35 @@ public class App extends Application {
 
 
 	/**
-	 * Runs on Application (pre)startup
+	 * Runs on Application (pre)startup and sets up the DB/
 	 * Typically not run by the user, but rather automatically by the JavaFX application.
-	 * @// TODO: 4/27/2021 document this function's tasks
+	 *
+	 * Makes a connection to the DB to check if the proper tables exist in the right places.
+	 * If not, it will repopulate the DB with data from {@link makeConnection#addDataForPresentation()}.
+	 *
 	 */
 	@Override
 	public void init() {
-		System.out.println("STARTING UP!!!");
+		System.out.println("Starting App Init...");
 		makeConnection connection = makeConnection.makeConnection();
-		System.out.println("Connected to the DB");
+		System.out.println("...Connected to the DB");
 		File nodes = new File("CSVs/MapEAllnodes.csv");
 		File edges = new File("CSVs/MapEAlledges.csv");
 	    boolean tablesExist = connection.allTablesThere();
 		if(!tablesExist){
+			System.out.print("...DB missing, repopulating...");
 			try {
 				DB.createAllTables();
 				DB.populateTable("node", nodes);
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
 				DB.populateAbonPainTable();
-				System.out.println("Tables were created");
+				System.out.println("Done");
 			} catch (Exception e) {
-				System.out.println("Tables already there");
-         /*connection.createTables();
-         connection.populateTable("node", nodes);
-         connection.populateTable("hasEdge", edges);*/
-				System.out.println("Tables were created and populated");
+				System.out.println("...Tables already there");
 			}
 		}
+		System.out.println("App Initialized.");
 	}
 
 	/**

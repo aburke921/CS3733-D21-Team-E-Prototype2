@@ -43,53 +43,14 @@ public class CovidSurvey extends ServiceRequests {
 	 */
 	@FXML
 	void popUp() {
-
-		JFXDialogLayout error = new JFXDialogLayout();
-		error.setHeading(new Text("Based on your response you should go home"));
-
-		error.setPrefHeight(USE_COMPUTED_SIZE);
-		JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
-		dialog.setMaxWidth(350);
-		JFXButton okay = new JFXButton("Exit");
-		okay.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				dialog.close();
-				try {
-					Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-					App.setDraggableAndChangeScene(root);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
-
-			}
-		});
-		error.setActions(okay);
-		dialog.show();
+		App.newJFXDialogPopUp("","Exit","Based on your response you should go home.",stackPane);
 	}
 
 	/**
 	 * Detects if the user has entered all required fields
 	 */
 	private void validateInput() {
-		JFXDialogLayout error = new JFXDialogLayout();
-		error.setHeading(new Text("Please select at least one checkbox"));
-
-		error.setPrefHeight(USE_COMPUTED_SIZE);
-		JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
-		dialog.setMaxWidth(350);
-		JFXButton okay = new JFXButton("done");
-		okay.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				dialog.close();
-
-
-			}
-		});
-		error.setActions(okay);
-		dialog.show();
-
+		App.newJFXDialogPopUp("","Done","Please select at least one checkbox.",stackPane);
 	}
 
 	@FXML

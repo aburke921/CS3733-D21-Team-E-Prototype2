@@ -27,11 +27,13 @@ public class UserAccountDB {
 				"userID              Int Primary Key, " +
 				"email               Varchar(31) Unique Not Null, " +
 				"password            Varchar(31)        Not Null, " +
-				"userType            Varchar(31), " +
-				"firstName           Varchar(31), " +
-				"lastName            Varchar(31), " +
+				"userType            Varchar(31)        Not Null, " +
+				"firstName           Varchar(31)        Not Null, " +
+				"lastName            Varchar(31)        Not Null, " +
+				"creationTime        Timestamp          Not Null, " +
+				"lastCovidSurvey     Int, " +
 				"lastCovidSurveyDate Date, " +
-				"lastParkedNodeID    varchar(31) References node, " +
+				"lastParkedNodeID    Varchar(31) References node, " +
 				"Constraint userIDLimit Check ( userID != 0 ), " +
 				"Constraint passwordLimit Check ( Length(password) >= 5 ) " +
 				")";
@@ -112,7 +114,7 @@ public class UserAccountDB {
 	 * @param lastName  this is the user's last name that is associated with the account
 	 */
 	public static void addUserAccount(String email, String password, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp)";
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp, Null, Null, Null)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
 			prepState.setString(2, password);
@@ -137,7 +139,7 @@ public class UserAccountDB {
 	 * @param lastName  this is the user's last name that is associated with the account
 	 */
 	public static void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp)";
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp, Null, Null, Null)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
 			prepState.setString(2, password);
@@ -344,7 +346,7 @@ public class UserAccountDB {
 			ResultSet rset = preparedStatement.executeQuery();
 			filledToday = rset.getInt("filledToday") != 0;
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error in filledCovidSurveyToday() from UserAccountDB");
 		}
 		return filledToday;

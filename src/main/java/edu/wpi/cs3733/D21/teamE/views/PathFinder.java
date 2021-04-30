@@ -52,6 +52,9 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class PathFinder {
 
+    public static int startNodeIndex = -1;
+    public static int endNodeIndex = -1;
+
     /*
      * FXML Values
      */
@@ -767,6 +770,18 @@ public class PathFinder {
         //Set up location categories
         marker.populateLocationMarkerMarkerGroup(scale);
         markerPane.getChildren().add(marker.getMarkerGroup());
+
+        //Check if startNodeIndex has a value, if yes fill startLocationComboBox
+        if (startNodeIndex != -1) {
+            startLocationComboBox.getSelectionModel().select(startNodeIndex);
+            startNodeIndex = -1;
+        }
+
+        //Check if startNodeIndex has a value, if yes fill startLocationComboBox
+        if (endNodeIndex != -1) {
+            endLocationComboBox.getSelectionModel().select(startNodeIndex);
+            endNodeIndex = -1;
+        }
 
         System.out.println("Finish PathFinder Init.");
         pane.setOnMouseClicked(e -> {

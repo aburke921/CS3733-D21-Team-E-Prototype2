@@ -33,6 +33,8 @@ public class App extends Application {
 	 */
 	public static int userID = 0;
 
+	public static boolean noCleanSurveyYet = true;
+
 	/**The JavaFX application's primary stage. All Scenes are built upon this stage*/
 	private static Stage primaryStage;
 

@@ -44,14 +44,16 @@ Create Table hasEdge
 
 Create Table userAccount
 (
-	userID           Int Primary Key,
-	email            Varchar(31) Unique Not Null,
-	password         Varchar(31)        Not Null,
-	userType         Varchar(31),
-	firstName        Varchar(31),
-	lastName         Varchar(31),
-	lastCovidSurvey  timestamp,
-	lastParkedNodeID varchar(31) References node,
+	userID              Int Primary Key,
+	email               Varchar(31) Unique Not Null,
+	password            Varchar(31)        Not Null,
+	userType            Varchar(31)        Not Null,
+	firstName           Varchar(31)        Not Null,
+	lastName            Varchar(31)        Not Null,
+	creationTime        Timestamp          Not Null,
+	lastCovidSurvey     Int,
+	lastCovidSurveyDate Date,
+	lastParkedNodeID    Varchar(31) References node,
 	Constraint userIDLimit Check ( userID != 0 ),
 	Constraint passwordLimit Check ( Length(password) >= 5 )
 );

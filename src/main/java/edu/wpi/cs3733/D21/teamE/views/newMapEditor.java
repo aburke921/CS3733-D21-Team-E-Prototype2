@@ -127,7 +127,10 @@ public class newMapEditor {
     /*
      * Additional Variables
      */
+    private Stage primaryStage = App.getPrimaryStage();
+
     private static boolean isVertical = false;
+
     private String startID = "test";
 
     private String endID = "test";
@@ -169,7 +172,9 @@ public class newMapEditor {
     private static boolean finishAligning = false;
     private ArrayList<Node> nodeArrayListToBeAligned = new ArrayList<Node>();
 
-
+    private ArrayList<Node> array = DB.getAllNodes();
+    private Group g = new Group();
+    private ArrayList<Edge> edgeArray = DB.getAllEdges();
 
     /**
      * Returns to {@link Default} page.
@@ -269,25 +274,11 @@ public class newMapEditor {
     }
 
     /**
-     * allows user to align selected nodes
-     */
-    public void alignNodes(ArrayList<Node> array) {
-
-    }
-
-    /**
-     * function for button to align nodes
-     */
-    public void alignNodesButton(ActionEvent e) {
-        //alignNodes();
-    }
-
-    /**
      * creates node table
      * @param table
      */
     public void prepareNodes(TreeTableView<Node> table) {
-        ArrayList<Node> array = DB.getAllNodes();
+        refreshNodes();
         //create columns only the first time the table is created
         if (table.getRoot() == null) {
             //Column 1 - Location
@@ -613,7 +604,7 @@ public class newMapEditor {
      * @param table
      */
     public void prepareEdges(TreeTableView<Edge> table) {
-        ArrayList<Edge> array = DB.getAllEdges();
+        refreshEdges();
         //make columns only first time table is created
         if (table.getRoot() == null) {
             Edge edge0 = new
@@ -642,8 +633,8 @@ public class newMapEditor {
         //gets rid of dropdown
         table.setShowRoot(false);
         //iterate over edge list from DB, add to table
-        for (int i = 0; i < array.size(); i++) {
-            Edge s = array.get(i);
+        for (int i = 0; i < edgeArray.size(); i++) {
+            Edge s = edgeArray.get(i);
             final TreeItem<Edge> edge = new TreeItem<>(s);
             table.getRoot().getChildren().add(edge);
         }
@@ -742,7 +733,7 @@ public class newMapEditor {
      */
     public int deleteNode(TreeTableView<Node> table) {
         int s = -1;
-        ArrayList<Node> array = DB.getAllNodes();
+        refreshNodes();
         //for using tree table
         if (table.getSelectionModel().getSelectedItem() != null) {
             for (int i = 0; i < array.size(); i++) {
@@ -985,59 +976,7 @@ public class newMapEditor {
     @FXML
     void initialize() {
 
-        //Creating ID dropdown
-        ArrayList<String> idList = DB.getListOfNodeIDS();
-        ObservableList<String> listOfIDS = FXCollections.observableArrayList();
-        listOfIDS.addAll(idList);
-
-        //Creating Type dropdown
-        ArrayList<String> nodeTypeArrayList = new ArrayList<String>();
-        nodeTypeArrayList.add("HALL");
-        nodeTypeArrayList.add("CONF");
-        nodeTypeArrayList.add("DEPT");
-        nodeTypeArrayList.add("HALL");
-        nodeTypeArrayList.add("ELEV");
-        nodeTypeArrayList.add("INFO");
-        nodeTypeArrayList.add("LABS");
-        nodeTypeArrayList.add("REST");
-        nodeTypeArrayList.add("RETL");
-        nodeTypeArrayList.add("STAI");
-        nodeTypeArrayList.add("SERV");
-        nodeTypeArrayList.add("EXIT");
-        nodeTypeArrayList.add("BATH");
-        ObservableList<String> listOfType = FXCollections.observableArrayList();
-        listOfType.addAll(nodeTypeArrayList);
-
-        //Creating Floor Dropdown
-        ArrayList<String> nodeFloorArrayList = new ArrayList<String>();
-        nodeFloorArrayList.add("G");
-        nodeFloorArrayList.add("L1");
-        nodeFloorArrayList.add("L2");
-        nodeFloorArrayList.add("1");
-        nodeFloorArrayList.add("2");
-        nodeFloorArrayList.add("3");
-        ObservableList<String> listOfFloors = FXCollections.observableArrayList();
-        listOfFloors.addAll(nodeFloorArrayList);
-
-        //Creating Building Dropdown
-        ArrayList<String> nodeBuildingArrayList = new ArrayList<String>();
-        nodeBuildingArrayList.add("BTM");
-        nodeBuildingArrayList.add("45 Francis");
-        nodeBuildingArrayList.add("15 Francis");
-        nodeBuildingArrayList.add("Tower");
-        nodeBuildingArrayList.add("Shapiro");
-        ObservableList<String> listOfBuildings = FXCollections.observableArrayList();
-        listOfBuildings.addAll(nodeBuildingArrayList);
-
-        //add ObservableLists to dropdowns
-        typeInput.setItems(listOfType);
-        floorInput.setItems(listOfFloors);
-        buildingInput.setItems(listOfBuildings);
-        idInput.setItems(listOfIDS);
-        floorSelector.setItems(listOfFloors);
-
-        //get primaryStage
-        Stage primaryStage = App.getPrimaryStage();
+        dropDownSetUp();
 
         //If exit button is clicked, exit app
         exit.setOnMouseClicked(event -> {
@@ -1045,111 +984,23 @@ public class newMapEditor {
             app.stop();
         });
 
-        //get dimensions of stage
-        stageWidth = primaryStage.getWidth();
-        stageHeight = primaryStage.getHeight();
-
         assert startLocation != null : "fx:id=\"startLocation\" was not injected: check your FXML file 'PathFinder.fxml'.";
         assert endLocation != null : "fx:id=\"endLocation\" was not injected: check your FXML file 'PathFinder.fxml'.";
-
-        //Get longNames & IDs
-        longNameArrayList = FXCollections.observableArrayList();
-
-        //nodes and longnames
-        nodeIDArrayList = new ArrayList<String>();
-        nodeArrayList = DB.getAllNodes();
-        for (int i = 0; i < nodeArrayList.size(); i++) {
-            longNameArrayList.add(nodeArrayList.get(i).get("longName"));
-            nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
-        }
-
-        //edges
-        edgeIDArrayList = FXCollections.observableArrayList();
-        edgeArrayList = DB.getAllEdges();
-        for(int i = 0; i < edgeArrayList.size(); i++) {
-            edgeIDArrayList.add(edgeArrayList.get(i).getId());
-
-        }
-
-
-        //add ObservableLists to dropdowns
-        edgeID.setItems(edgeIDArrayList);
-        startLocation.setItems(longNameArrayList);
-        endLocation.setItems(longNameArrayList);
-        System.out.println("done");
-
-        new AutoCompleteComboBoxListener<>(startLocation);
-        new AutoCompleteComboBoxListener<>(endLocation);
-
-        //Set up zoomable and pannable panes
-        BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(pane);
-
-        //set default/initial floor for map
-        Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/1.png");
-        imageWidth = image.getWidth();
-        imageHeight = image.getHeight();
-        imageView.setImage(image);
-
-        imageView.setPreserveRatio(true);
-        imageView.setFitWidth(primaryStage.getWidth());
-
-        StackPane stackPane = new StackPane(imageView, borderPane);
-        ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
-
-        //make scroll pane pannable
-        scrollPane.setPannable(true);
-
-        //get rid of side scroll bars
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
-        //bind the zoom slider to the map
-        stackPane.scaleXProperty().bind(zoomSlider.valueProperty());
-        stackPane.scaleYProperty().bind(zoomSlider.valueProperty());
-
-        rootBorderPane.setCenter(scrollPane);
-        rootBorderPane.setPrefWidth(stageWidth);
-        rootBorderPane.setPrefHeight(stageHeight);
-
-        System.out.println("Finish PathFinder Init.");
 
         drawMap(currentFloor);
         prepareNodes(nodeTreeTable);
         prepareEdges(edgeTreeTable);
         edgeVBox.setVisible(false);
 
-        //populates fields with information of selected node in table
-        nodeTreeTable.setOnMouseClicked(e -> {
-            if (nodeTreeTable.getSelectionModel().getSelectedItem() != null) {
-                System.out.println("in!");
-                longNameInput.setText(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("longName"));
-                shortNameInput.setText(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("shortName"));
-                xCordInput.setText(Integer.toString(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().getX()));
-                yCordInput.setText(Integer.toString(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().getY()));
-                floorInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("floor"));
-                typeInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("type"));
-                buildingInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("building"));
-                idInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("id"));
+        ScrollPane scrollPane = getScrollPane(primaryStage);
 
-            }
-        });
-
-        //populates fields with information of selected edge in table
-        edgeTreeTable.setOnMouseClicked(e -> {
-            if(edgeTreeTable.getSelectionModel().getSelectedItem() != null) {
-                edgeID.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getId());
-                startLocation.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getStartNodeId());
-                endLocation.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getEndNodeId());
-
-            }
-        });
+        autoFillTable();
 
         //retrieving nodes
-        ArrayList<Node> array = DB.getAllNodes();
+        refreshNodes();
 
         //creating group for adding nodes/edges
-        Group g = new Group();
+        refreshGroup();
 
         //for clicks interacting with map
         pane.setOnMouseClicked(e -> {
@@ -1317,10 +1168,6 @@ public class newMapEditor {
 
                 }
 
-
-
-
-
             } else {
                 System.out.println("no");
                 scrollPane.setPannable(true);
@@ -1330,6 +1177,169 @@ public class newMapEditor {
 
 
     }
+
+    private void autoFillTable() {
+        //populates fields with information of selected node in table
+        nodeTreeTable.setOnMouseClicked(e -> {
+            if (nodeTreeTable.getSelectionModel().getSelectedItem() != null) {
+                System.out.println("in!");
+                longNameInput.setText(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("longName"));
+                shortNameInput.setText(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("shortName"));
+                xCordInput.setText(Integer.toString(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().getX()));
+                yCordInput.setText(Integer.toString(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().getY()));
+                floorInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("floor"));
+                typeInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("type"));
+                buildingInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("building"));
+                idInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("id"));
+
+            }
+        });
+
+        //populates fields with information of selected edge in table
+        edgeTreeTable.setOnMouseClicked(e -> {
+            if(edgeTreeTable.getSelectionModel().getSelectedItem() != null) {
+                edgeID.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getId());
+                startLocation.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getStartNodeId());
+                endLocation.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getEndNodeId());
+
+            }
+        });
+    }
+
+    private void refreshNodes() {
+        array = DB.getAllNodes();
+    }
+
+    private void refreshGroup() {
+        g = new Group();
+    }
+
+    private void refreshEdges() {
+        edgeArray = DB.getAllEdges();
+    }
+
+    private void dropDownSetUp() {
+        //Creating ID dropdown
+        ArrayList<String> idList = DB.getListOfNodeIDS();
+        ObservableList<String> listOfIDS = FXCollections.observableArrayList();
+        listOfIDS.addAll(idList);
+
+        //Creating Type dropdown
+        ArrayList<String> nodeTypeArrayList = new ArrayList<String>();
+        nodeTypeArrayList.add("HALL");
+        nodeTypeArrayList.add("CONF");
+        nodeTypeArrayList.add("DEPT");
+        nodeTypeArrayList.add("HALL");
+        nodeTypeArrayList.add("ELEV");
+        nodeTypeArrayList.add("INFO");
+        nodeTypeArrayList.add("LABS");
+        nodeTypeArrayList.add("REST");
+        nodeTypeArrayList.add("RETL");
+        nodeTypeArrayList.add("STAI");
+        nodeTypeArrayList.add("SERV");
+        nodeTypeArrayList.add("EXIT");
+        nodeTypeArrayList.add("BATH");
+        ObservableList<String> listOfType = FXCollections.observableArrayList();
+        listOfType.addAll(nodeTypeArrayList);
+
+        //Creating Floor Dropdown
+        ArrayList<String> nodeFloorArrayList = new ArrayList<String>();
+        nodeFloorArrayList.add("G");
+        nodeFloorArrayList.add("L1");
+        nodeFloorArrayList.add("L2");
+        nodeFloorArrayList.add("1");
+        nodeFloorArrayList.add("2");
+        nodeFloorArrayList.add("3");
+        ObservableList<String> listOfFloors = FXCollections.observableArrayList();
+        listOfFloors.addAll(nodeFloorArrayList);
+
+        //Creating Building Dropdown
+        ArrayList<String> nodeBuildingArrayList = new ArrayList<String>();
+        nodeBuildingArrayList.add("BTM");
+        nodeBuildingArrayList.add("45 Francis");
+        nodeBuildingArrayList.add("15 Francis");
+        nodeBuildingArrayList.add("Tower");
+        nodeBuildingArrayList.add("Shapiro");
+        ObservableList<String> listOfBuildings = FXCollections.observableArrayList();
+        listOfBuildings.addAll(nodeBuildingArrayList);
+
+        //add ObservableLists to dropdowns
+        typeInput.setItems(listOfType);
+        floorInput.setItems(listOfFloors);
+        buildingInput.setItems(listOfBuildings);
+        idInput.setItems(listOfIDS);
+        floorSelector.setItems(listOfFloors);
+
+        //Get longNames & IDs
+        longNameArrayList = FXCollections.observableArrayList();
+
+        //nodes and longnames
+        nodeIDArrayList = new ArrayList<String>();
+        nodeArrayList = DB.getAllNodes();
+        for (int i = 0; i < nodeArrayList.size(); i++) {
+            longNameArrayList.add(nodeArrayList.get(i).get("longName"));
+            nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
+        }
+
+        //edges
+        edgeIDArrayList = FXCollections.observableArrayList();
+        edgeArrayList = DB.getAllEdges();
+        for(int i = 0; i < edgeArrayList.size(); i++) {
+            edgeIDArrayList.add(edgeArrayList.get(i).getId());
+
+        }
+        //add ObservableLists to dropdowns
+        edgeID.setItems(edgeIDArrayList);
+        startLocation.setItems(longNameArrayList);
+        endLocation.setItems(longNameArrayList);
+        System.out.println("done");
+
+        new AutoCompleteComboBoxListener<>(startLocation);
+        new AutoCompleteComboBoxListener<>(endLocation);
+
+    }
+
+    private ScrollPane getScrollPane(Stage primaryStage) {
+
+        //get dimensions of stage
+        stageWidth = primaryStage.getWidth();
+        stageHeight = primaryStage.getHeight();
+
+        //Set up zoomable and pannable panes
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(pane);
+
+        //set default/initial floor for map
+        Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/1.png");
+        imageWidth = image.getWidth();
+        imageHeight = image.getHeight();
+        imageView.setImage(image);
+
+        imageView.setPreserveRatio(true);
+        imageView.setFitWidth(primaryStage.getWidth());
+
+        StackPane stackPane = new StackPane(imageView, borderPane);
+        ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
+
+        //make scroll pane pannable
+        scrollPane.setPannable(true);
+
+        //get rid of side scroll bars
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        //bind the zoom slider to the map
+        stackPane.scaleXProperty().bind(zoomSlider.valueProperty());
+        stackPane.scaleYProperty().bind(zoomSlider.valueProperty());
+
+        rootBorderPane.setCenter(scrollPane);
+        rootBorderPane.setPrefWidth(stageWidth);
+        rootBorderPane.setPrefHeight(stageHeight);
+
+        System.out.println("Finish PathFinder Init.");
+        return scrollPane;
+    }
+
     /**
      * Creates a new JFX Dialog on the current page.
      * @param message Message to display in the dialog box.
@@ -1377,30 +1387,19 @@ public class newMapEditor {
     }
 
     /**
-     * @// TODO: 4/29/2021 called when align button is pressed while isAligning is true
+     * align nodes button function
+     * @param e action event
      */
     @FXML
     public void alignSelectedNodes(ActionEvent e) {
         isAligning = true;
         newJFXDialogPopUp("Align Nodes", "Vertical", "Horizontal", "Cancel", "Select the nodes you would like to align", stackPane);
-        //todo align nodes in nodeArrayListToBeAligned
-
-        //todo show additional alignment buttons: horizontal/vertical, finish alignment button
-        //  buttons will set horizontal vs vert... global vars.
-
-        //todo set new doubleClick eventHandler (? maybe remove old?) check to see if we are at this fcn
-        //      when user double-clicks, align nodes at the right position.
-
-
-
-
-        //todo when done, add old double-click handler back
     }
 
 
     /**
      * cancel button function
-     * @param e
+     * @param e action event
      */
     public void cancelButton(ActionEvent e) {
         cancelEdge();
@@ -1428,12 +1427,12 @@ public class newMapEditor {
      * deletes edge if ID in the dropdown matches ID of an edge in DB
      */
     public void deleteEdge() {
-        ArrayList<Edge> array = DB.getAllEdges();
+        refreshEdges();
         if(edgeID.getValue() != null && startLocation.getValue() != null && endLocation.getValue() != null) {
             for(int i = 0; i < array.size(); i++) {
-                if(array.get(i).getId().equals(edgeID.getValue().toString())) {
+                if(edgeArray.get(i).getId().equals(edgeID.getValue().toString())) {
                     System.out.println("This lies between " + startLocation.getValue() + " and " + endLocation.getValue());
-                    DB.deleteEdge(array.get(i).getStartNodeId(), array.get(i).getEndNodeId());
+                    DB.deleteEdge(edgeArray.get(i).getStartNodeId(), edgeArray.get(i).getEndNodeId());
                 }
             }
         }
@@ -1451,7 +1450,7 @@ public class newMapEditor {
      * creates an edge using information taken from fields
      */
     public void addEdge() {
-        ArrayList<Node> array = DB.getAllNodes();
+        refreshEdges();
         String startInput = null;
         String endInput = null;
         if(startLocation.getValue() != null && endLocation.getValue() != null) {

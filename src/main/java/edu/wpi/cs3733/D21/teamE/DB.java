@@ -312,8 +312,6 @@ public class DB {
 	// Creating Tables:
 
 
-
-
 	/**
 	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
 	 * description to the aubonPainMenu table
@@ -748,7 +746,6 @@ public class DB {
 		return UserAccountDB.userLogin(email, password);
 	}
 
-
 	public static ObservableList<String> getAssigneeNames(String givenUserType) {
 		return RequestsDB.getAssigneeNames(givenUserType);
 	}
@@ -757,6 +754,8 @@ public class DB {
 		return RequestsDB.getAssigneeIDs(givenUserType);
 	}
 
-
+	public static String getEmail(int userID) {
+		return RequestsDB.getEmail(userID);
+	}
 
 }

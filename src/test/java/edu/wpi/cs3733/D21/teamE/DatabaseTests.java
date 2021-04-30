@@ -1693,4 +1693,15 @@ public class DatabaseTests {
 		assertEquals(assigneeIDsFloral, returnedFloralIDs);
 	}
 
+	@Test
+	@DisplayName("testGetEmail")
+	public void testGetEmail() {
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+
+		String email = DB.getEmail(1);
+
+		assertTrue(email.equals("bellag@gmail.com"));
+
+	}
+
 }

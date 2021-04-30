@@ -1284,16 +1284,17 @@ public class DatabaseTests {
 		String insertUser4 = "Insert Into useraccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', Current Timestamp, Null, Null, Null)";
 
 		ArrayList<String> insertUsers = new ArrayList<String>();
-		insertUsers.add(insertUser1);
-		insertUsers.add(insertUser2);
-		insertUsers.add(insertUser3);
-		insertUsers.add(insertUser4);
+		insertUsers.add("Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', Current Timestamp, 0, Null, Null)");
+		insertUsers.add("Insert Into userAccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', Current Timestamp, 0, Null, Null)");
+		insertUsers.add("Insert Into userAccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', Current Timestamp, 0, Null, Null)");
+		insertUsers.add("Insert Into userAccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', Current Timestamp, 0, Null, Null)");
+
 		for(String insertUser : insertUsers) {
 			try (PreparedStatement prepState = makeConnection.makeConnection().connection.prepareStatement(insertUser)) {
 				prepState.execute();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				//showError("This email all ready has an account");
+				//showError("This email already has an account");
 				System.err.println("Error inserting into userAccount inside function userLoginTest()");
 			}
 		}
@@ -1691,6 +1692,27 @@ public class DatabaseTests {
 		assertEquals(assigneeIDsPatient, returnedPatientIDs);
 		assertEquals(assigneeIDsDoctor, returnedDoctorIDs);
 		assertEquals(assigneeIDsFloral, returnedFloralIDs);
+	}
+
+	@Test
+	@DisplayName("COVIDTests")
+	public void COVIDTests() {
+		System.out.println("This is where all the COVID related database tests are");
+
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		DB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
+
+		assertTrue(DB.isUserCovidSafe(1));
+		assertTrue(DB.isUserCovidSafe(2));
+
+		assertFalse(DB.filledCovidSurveyToday(1));
+		assertFalse(DB.filledCovidSurveyToday(2));
+
+		assertTrue(DB.submitCovidSurvey(10101, 1));
+		assertTrue(DB.submitCovidSurvey(1, 2));
+
+		assertFalse(DB.isUserCovidSafe(1));
+		assertTrue(DB.isUserCovidSafe(2));
 	}
 
 }

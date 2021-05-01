@@ -381,6 +381,9 @@ public class PathFinder {
             case 2:
                 algoType = "BFS";
                 break;
+            case 3:
+                algoType = "Dijkstra";
+                break;
             default:
                 algoType = "A*";
                 break;

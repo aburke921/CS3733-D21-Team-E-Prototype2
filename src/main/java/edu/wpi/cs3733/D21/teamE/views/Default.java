@@ -237,6 +237,7 @@ public class Default {
         algoNames.add("Depth First Search");
         algoNames.add("Breadth First Search");
         algoNames.add("Dijkstra Search");
+        algoNames.add("Best First");
 
         algo.setItems(algoNames);
         algo.setValue(algoNames.get(App.getSearchAlgo()));

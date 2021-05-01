@@ -85,11 +85,13 @@ public class SearchContext {
             return new Searcher();
         } else if(algo.equalsIgnoreCase("DFS")){
             return new XFirstSearcher("DFS");
-        } else if(algo.equalsIgnoreCase("BFS")){
+        } else if(algo.equalsIgnoreCase("BFS")) {
+            return new XFirstSearcher("BFS");
+        } else if(algo.equalsIgnoreCase("Best")){
             return new BestFirstSearcher();
         } else if(algo.equalsIgnoreCase("Dijkstra")){
             return new DijkstraSearcher();
-        } else {
+        } else{
             return null;
         }
     }

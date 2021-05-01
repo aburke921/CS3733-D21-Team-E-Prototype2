@@ -1,4 +1,4 @@
-apackage edu.wpi.cs3733.D21.teamE.pathfinding.algorithms;
+package edu.wpi.cs3733.D21.teamE.pathfinding.algorithms;
 
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;

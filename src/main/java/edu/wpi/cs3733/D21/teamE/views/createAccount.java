@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
@@ -29,6 +30,8 @@ public class createAccount {
 	private JFXTextField password;
 	@FXML
 	private StackPane stackPane;
+	@FXML
+	private AnchorPane appBarAnchorPane;
 
 	@FXML // fx:id="exit"
 	private Polygon exit;
@@ -54,11 +57,19 @@ public class createAccount {
 	}
 
 	public void initialize() {
-		//If exit button is clicked, exit app
-		exit.setOnMouseClicked(event -> {
-			App app = new App();
-			app.stop();
-		});
+		//init appBar
+		javafx.scene.Node appBarComponent = null;
+		try {
+			App.setShowHelp(false); // show help or not
+			App.setShowLogin(false); // show login or not
+			App.setPageTitle(""); //set AppBar title
+			App.setHelpText(""); //set help text
+			App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
+			appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+			appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void createAccountButton() {

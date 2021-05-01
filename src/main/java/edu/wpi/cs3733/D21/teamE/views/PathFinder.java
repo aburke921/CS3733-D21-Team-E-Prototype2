@@ -182,6 +182,7 @@ public class PathFinder {
 
     private ArrayList<Node> currentMarkers = new ArrayList<Node>();
 
+
     /**
      * Returns to {@link Default} page.
      * @param event calling event info.
@@ -421,6 +422,24 @@ public class PathFinder {
                 bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Sorry, something has gone wrong. Please try again.")));
 
             } else { //path is not null
+                /*
+                currentFoundPath = null;
+
+                minETA.setText(Integer.toString(foundPath.getETA().getMin()));
+                secETA.setText(String.format("%02d", (foundPath.getETA().getSec())));
+                int len = (int) Math.round(foundPath.getPathLengthFeet());
+                dist.setText(Integer.toString(len) + " Feet");
+
+                //save found path for when floors are switched
+                currentFoundPath = foundPath;
+
+                // Set map image to starting floor
+                String startFloor = foundPath.getStart().get("floor");
+                currentFloor = startFloor;
+                currFloor.setText("");
+
+                currFloor.setText(currentFloor);
+                 */
 
                 currentFoundPath = null;
                 // Set map image to starting floor
@@ -455,6 +474,7 @@ public class PathFinder {
      * BLACK - end node of entire path.
      * @param fullPath the path to be drawn on the map.
      */
+
     public void drawMap(Path fullPath, String floorNum) {
 
         //clear map
@@ -615,50 +635,17 @@ public class PathFinder {
         return finalNodeList;
     }
 
-    /**
-     * Changes the displayed map, and path; sets {@link #currentFloor}.
-     * @param floorNum floor to change to
-     */
     public void setCurrentFloor(String floorNum) {
-
-        //set image
         currentFloor = floorNum;
-        Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/" + floorNum + ".png");
-        imageView.setImage(image);
+        currFloor.setText("");
         currFloor.setText(currentFloor);
-
-
-        //Get a list of types that are currently selected
-        ArrayList<String> currentlyViewableTypes = new ArrayList<String>();
-        for (String key : marker.getSelectedCheckBox().keySet()) {
-            if (marker.getSelectedCheckBox().get(key) == 1) {
-                currentlyViewableTypes.add(key);
-            }
-        }
-
-        ArrayList<Node> currentlyViewableNodes = new ArrayList<Node>();
-
-        //Iterate through all the types that are currently selected
-        for (String currViewType : currentlyViewableTypes) {
-            String typeAndFloorString = currViewType + currentFloor;
-            //Get the nodes with the current floor and type
-            currentlyViewableNodes = marker.getTypeAndFloorNode().get(typeAndFloorString);
-
-            //For every node, set it to visible
-            for (Node node : currentlyViewableNodes) {
-                NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
-                Rectangle r = nM.getRectangle();
-                r.setVisible(true);
-                r.setFill(marker.getTypeColor().get(currViewType));
-                currentMarkers.add(node);
-            }
-        }
 
         //draw path for new floor
         drawMap(currentFoundPath,currentFloor);
 
         System.out.println("Current floor set to " + floorNum);
     }
+
 
     /**
      * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
@@ -814,6 +801,8 @@ public class PathFinder {
                 }
             }
 
+
+
                     /*if(selection == 1) {
 //                        startLocationComboBox.setValue(array.get(i).get("longName"));
 //                    }else if(selection == 2){
@@ -824,6 +813,17 @@ public class PathFinder {
 //
 //                }
 //            }
+        });
+
+        //Observer Design Pattern: update page based on floor change
+        Subject subject = new Subject();
+
+        new MarkerObserver(subject, markerPane, marker, currentMarkers);
+        new ImageObserver(subject, imageView);
+        //new PathObserver(subject, pane, currentFoundPath, scale, selectedStartNodeID, selectedEndNodeID);
+
+        currFloor.textProperty().addListener(observable -> {
+            subject.setState(currFloor.getText());
         });
     }
 
@@ -836,7 +836,11 @@ public class PathFinder {
         currentMarkers.clear();
         String floor = ((Button) e.getSource()).getText();
         currFloor.setText(floor);
+
         setCurrentFloor(floor);
+        //drawMap(currentFoundPath, currentFloor);
+
+        System.out.println("Current floor set to " + floor);
     }
 
     public void sortNodesByType(ActionEvent event) {
@@ -868,6 +872,7 @@ public class PathFinder {
             }
         }
     }
+
 
     public void startQRScanning(ActionEvent event) {
         String result = QRCode.scanQR();

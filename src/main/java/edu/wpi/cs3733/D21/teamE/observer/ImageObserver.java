@@ -1,10 +1,9 @@
-package edu.wpi.cs3733.D21.teamE.views;
+package edu.wpi.cs3733.D21.teamE.observer;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 
-public class ImageObserver extends Observer{
+public class ImageObserver extends Observer {
 
     private ImageView imageView;
 

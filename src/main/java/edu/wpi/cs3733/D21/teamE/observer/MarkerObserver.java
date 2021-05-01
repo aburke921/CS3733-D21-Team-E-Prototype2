@@ -1,12 +1,14 @@
-package edu.wpi.cs3733.D21.teamE.views;
+package edu.wpi.cs3733.D21.teamE.observer;
 
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.views.Marker;
+import edu.wpi.cs3733.D21.teamE.views.NodeMarker;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
-public class MarkerObserver extends Observer{
+public class MarkerObserver extends Observer {
 
     private Pane pane;
     private Marker marker;

@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.states.CovidSurveyState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -91,12 +92,8 @@ public class CovidSurvey extends ServiceRequests {
 						ex.printStackTrace();
 					}
 				}else {
-					try {
-						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-						App.setDraggableAndChangeScene(root);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
+					CovidSurveyState covidSurveyState = new CovidSurveyState();
+					covidSurveyState.switchScene(actionEvent);
 				}
 			} else {
 				popUp();
@@ -113,12 +110,8 @@ public class CovidSurvey extends ServiceRequests {
 						ex.printStackTrace();
 					}
 				} else {
-					try {
-						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-						App.setDraggableAndChangeScene(root);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
+					CovidSurveyState covidSurveyState = new CovidSurveyState();
+					covidSurveyState.switchScene(actionEvent);
 				}
 			} else {
 				App.noCleanSurveyYet = true;
@@ -133,12 +126,8 @@ public class CovidSurvey extends ServiceRequests {
 	 */
 	@FXML
 	void handleButtonCancel(ActionEvent event) {
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-			App.setDraggableAndChangeScene(root);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+		CovidSurveyState covidSurveyState = new CovidSurveyState();
+		covidSurveyState.switchScene(event);
 	}
 
 	@FXML

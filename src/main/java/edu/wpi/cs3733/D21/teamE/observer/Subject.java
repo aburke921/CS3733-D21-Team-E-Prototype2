@@ -1,4 +1,6 @@
-package edu.wpi.cs3733.D21.teamE.views;
+package edu.wpi.cs3733.D21.teamE.observer;
+
+import edu.wpi.cs3733.D21.teamE.observer.Observer;
 
 import java.util.ArrayList;
 import java.util.List;

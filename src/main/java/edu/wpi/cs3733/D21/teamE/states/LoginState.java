@@ -8,22 +8,32 @@ import javafx.scene.control.Button;
 
 import java.io.IOException;
 
-public class SubmissionState {
+public class LoginState {
 
     public void switchScene(ActionEvent event) {
 
-        String buttonName = ((Button) event.getSource()).getText();
+        String buttonName = ((Button) event.getSource()).getId();
+        System.out.println(buttonName);
 
-        if(buttonName.equals("Back")){
+        if(buttonName.equals("createAccountButton")){
             try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/createAccount.fxml"));
                 App.getPrimaryStage().getScene().setRoot(root);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
 
-        else if(buttonName.equals("Submit")){
+        else if(buttonName.equals("submitLoginButton")){
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
+                App.getPrimaryStage().getScene().setRoot(root);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        else if(buttonName.equals("guestLoginButton")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
                 App.getPrimaryStage().getScene().setRoot(root);

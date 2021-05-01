@@ -6,6 +6,8 @@ import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.states.CovidSurveyState;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -61,7 +63,7 @@ public class createAccount {
 		});
 	}
 
-	public void createAccountButton() {
+	public void createAccountButton(ActionEvent event) {
 		int userID = 0;
 
 		if (email.getText().isEmpty()) {
@@ -103,27 +105,13 @@ public class createAccount {
 			userID = DB.userLogin(email.getText(), password.getText());
 		}
 		if (userID != 0) {
-			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-				App.getPrimaryStage().getScene().setRoot(root);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+			CreateAccountState createAccountState = new CreateAccountState();
+			createAccountState.switchScene(event);
 		}
 	}
 
 	@FXML
 	public void getHelpDefault(ActionEvent actionEvent) {
-	}
-
-	/**
-	 * Terminate application
-	 * @param e
-	 */
-	@FXML
-	private void shutdown(ActionEvent e) {
-		App app = new App();
-		app.stop();
 	}
 
 	@FXML
@@ -146,12 +134,8 @@ public class createAccount {
 
 	@FXML
 	public void toLogin(ActionEvent e) {
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
-			App.getPrimaryStage().getScene().setRoot(root);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+		CreateAccountState createAccountState = new CreateAccountState();
+		createAccountState.switchScene(e);
 	}
 
 

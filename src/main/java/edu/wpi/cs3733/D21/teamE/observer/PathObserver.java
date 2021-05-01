@@ -1,4 +1,4 @@
-package edu.wpi.cs3733.D21.teamE.views;
+package edu.wpi.cs3733.D21.teamE.observer;
 
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
@@ -12,7 +12,7 @@ import javafx.scene.shape.StrokeLineCap;
 import java.util.Iterator;
 import java.util.List;
 
-public class PathObserver extends Observer{
+public class PathObserver extends Observer {
 
     private double radius = 6;
     private double strokeWidth = 3;

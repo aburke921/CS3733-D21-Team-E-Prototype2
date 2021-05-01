@@ -17,8 +17,13 @@ import edu.wpi.cs3733.D21.teamE.map.Path;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.QRCode;
+import edu.wpi.cs3733.D21.teamE.observer.ImageObserver;
+import edu.wpi.cs3733.D21.teamE.observer.MarkerObserver;
+import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -189,12 +194,8 @@ public class PathFinder {
      */
     @FXML
     private void toDefault(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-            App.setDraggableAndChangeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        PathFinderState pathFinderState = new PathFinderState();
+        pathFinderState.switchScene(event);
     }
 
     @FXML

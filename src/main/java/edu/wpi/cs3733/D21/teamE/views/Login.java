@@ -3,6 +3,8 @@ package edu.wpi.cs3733.D21.teamE.views;
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.states.LoginState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -76,7 +78,7 @@ public class Login {
 		submitLoginButton.setDefaultButton(true);
 	}
 
-	public void submitLogin() {
+	public void submitLogin(ActionEvent actionEvent) {
 		int userID = 0;
 
 		if (emailInput != null && passwordInput != null) {
@@ -84,12 +86,8 @@ public class Login {
 			App.userID = userID; // app will be logged in as guest if userID = 0
 		}
 		if (userID != 0) {
-			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-				App.getPrimaryStage().getScene().setRoot(root);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+			LoginState loginState = new LoginState();
+			loginState.switchScene(actionEvent);
 		} else {
 		    App.newJFXDialogPopUp("User Not Found", "Try Again","This user cannot be found in the system.",stackPane);
 			System.out.println("User not in System");
@@ -122,12 +120,8 @@ public class Login {
 	}
 
 	public void toNewAccount(ActionEvent actionEvent) {
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/createAccount.fxml"));
-			App.getPrimaryStage().getScene().setRoot(root);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+		LoginState loginState = new LoginState();
+		loginState.switchScene(actionEvent);
 	}
 
 	@FXML
@@ -137,12 +131,8 @@ public class Login {
 	@FXML
 	public void guestLogin(ActionEvent e) {
     	App.noCleanSurveyYet = true;
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-			App.getPrimaryStage().getScene().setRoot(root);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+		LoginState loginState = new LoginState();
+		loginState.switchScene(e);
 	}
 
 	@FXML

@@ -1,10 +1,12 @@
 
 package edu.wpi.cs3733.D21.teamE.email;
 
-import com.sun.mail.smtp.SMTPTransport;
-import edu.wpi.cs3733.D21.teamE.App;
-import edu.wpi.cs3733.D21.teamE.DB;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 
+import com.sun.mail.smtp.SMTPTransport;
+
+import java.sql.Timestamp;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -13,11 +15,16 @@ import javax.mail.internet.*;
 
 public class email{
 
+	//Timestamp startTime = new Timestamp(121, 3, 30, 21, 18, 30, 0);
+
 	public static void main(String args[]) throws MessagingException {
+		Date startTime = new Date();
+		startTime.setTime(startTime.getTime() + 60000);
 
 //		String email = DB.getEmail(App.userID);
-		sendAppointmentRemind("aburke@wpi.edu", "May 5th 2021");
+		//sendAppointmentRemind("aburke@wpi.edu", "May 5th 2021");
 
+		confirmationEmail(startTime);
 
 	}
 
@@ -74,8 +81,36 @@ public class email{
 		t.close();
 	}
 
+	public static void confirmationEmail(Date startTime) {
+
+		try {
+			JobDetail job = JobBuilder.newJob(AppointmentJob.class)
+					.withIdentity("AppointmentJob", "group1").build();
+
+			SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
+					.withIdentity("trigger1", "group1")
+					.startAt(startTime)
+					.forJob("AppointmentJob", "group1")
+					.build();
 
 
+			Scheduler scheduler1 = new StdSchedulerFactory().getScheduler();
+			scheduler1.start();
+			scheduler1.scheduleJob(job, trigger);
+
+			Thread.sleep(100000);
+
+			scheduler1.shutdown();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
+
+
+
+
+
 
 

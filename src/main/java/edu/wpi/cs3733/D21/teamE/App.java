@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -222,6 +223,7 @@ public class App extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) throws IOException {
+		primaryStage.setTitle("BWH Application - D21 Team E"); //todo, come up with final title for app
 		App.primaryStage = primaryStage;
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("fxml/Default.fxml"));

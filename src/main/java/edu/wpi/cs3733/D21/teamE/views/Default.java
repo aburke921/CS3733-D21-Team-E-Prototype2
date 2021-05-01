@@ -170,7 +170,16 @@ public class Default {
                 toPathFinder(e);
                 break;
             case "p":
-                // get popup to say ur parking slot saved
+                if (App.userID == 0) {
+                    if (DB.submitParkingSlot(code, App.userID)) {
+                        carParkedText.setVisible(true);
+                        LinkToParking.setVisible(true);
+                        // TODO get popup to say ur parking slot saved
+                    } else {
+                        break;
+                        // TODO get popup to say ur parking slot was not saved
+                    }
+                }
                 break;
             default:
                 break;
@@ -258,6 +267,11 @@ public class Default {
             algo.setVisible(false);
             applyChange.setVisible(false);
             userManagementButton.setVisible(false);
+        }
+
+        if (App.userID == 0 || DB.whereDidIPark(App.userID) == null){
+            carParkedText.setVisible(false);
+            LinkToParking.setVisible(false);
         }
     }
 

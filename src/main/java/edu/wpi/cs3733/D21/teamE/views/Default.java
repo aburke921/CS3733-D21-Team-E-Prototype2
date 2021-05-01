@@ -171,6 +171,13 @@ public class Default {
                 break;
             case "p":
                 if (App.userID == 0) {
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
+                        App.getPrimaryStage().getScene().setRoot(root);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
                     if (DB.submitParkingSlot(code, App.userID)) {
                         carParkedText.setVisible(true);
                         LinkToParking.setVisible(true);

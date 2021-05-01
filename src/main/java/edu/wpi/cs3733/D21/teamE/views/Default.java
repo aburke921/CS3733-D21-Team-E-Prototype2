@@ -25,6 +25,8 @@ import java.util.ArrayList;
 
 public class Default {
 
+    public static String previousScannedResult = null;
+
     @FXML
     private AnchorPane appBarAnchorPane;
 
@@ -171,6 +173,7 @@ public class Default {
                 break;
             case "p":
                 if (App.userID == 0) {
+                    previousScannedResult = code;
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
                         App.getPrimaryStage().getScene().setRoot(root);
@@ -279,6 +282,26 @@ public class Default {
         if (App.userID == 0 || DB.whereDidIPark(App.userID) == null){
             carParkedText.setVisible(false);
             LinkToParking.setVisible(false);
+        }
+
+        if (previousScannedResult != null) {
+            if (App.userID == 0) {
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
+                    App.getPrimaryStage().getScene().setRoot(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                if (DB.submitParkingSlot(previousScannedResult, App.userID)) {
+                    previousScannedResult = null;
+                    carParkedText.setVisible(true);
+                    LinkToParking.setVisible(true);
+                    // TODO get popup to say ur parking slot saved
+                } else {
+                    // TODO get popup to say ur parking slot was not saved
+                }
+            }
         }
     }
 

@@ -98,7 +98,7 @@ public class Default {
             if (DB.filledCovidSurveyToday(App.userID) && DB.isUserCovidSafe(App.userID)) { // go to pathfinder
                 try {
                     Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                    App.setDraggableAndChangeScene(root);
+                    App.changeScene(root);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -122,7 +122,7 @@ public class Default {
         } else { // go to pathfinder
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                App.setDraggableAndChangeScene(root);
+                App.changeScene(root);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

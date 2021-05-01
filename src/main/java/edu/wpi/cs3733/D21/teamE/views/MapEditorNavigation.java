@@ -26,7 +26,7 @@ public class MapEditorNavigation {
     private void toDefault(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -36,7 +36,7 @@ public class MapEditorNavigation {
     private void toNodeMapEditor(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/newMapEditor.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -46,7 +46,7 @@ public class MapEditorNavigation {
     private void toNodeFileUpload(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/MapFileUpload.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -56,7 +56,7 @@ public class MapEditorNavigation {
     private void toEdgeMapEditor(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/EdgeMapEditor.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -66,7 +66,7 @@ public class MapEditorNavigation {
     private void toEdgeFileUpload(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/EdgeFileUpload.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

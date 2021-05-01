@@ -475,7 +475,6 @@ public class PathFinder {
      * BLACK - end node of entire path.
      * @param fullPath the path to be drawn on the map.
      */
-
     public void drawMap(Path fullPath, String floorNum) {
 
         //clear map
@@ -636,6 +635,10 @@ public class PathFinder {
         return finalNodeList;
     }
 
+    /**
+     * Changes the displayed map, and path; sets {@link #currentFloor}.
+     * @param floorNum floor to change to
+     */
     public void setCurrentFloor(String floorNum) {
         currentFloor = floorNum;
         currFloor.setText("");
@@ -646,7 +649,6 @@ public class PathFinder {
 
         System.out.println("Current floor set to " + floorNum);
     }
-
 
     /**
      * Method called by FXMLLoader when initialization is complete. Propagates initial fields in FXML:
@@ -802,8 +804,6 @@ public class PathFinder {
                 }
             }
 
-
-
                     /*if(selection == 1) {
 //                        startLocationComboBox.setValue(array.get(i).get("longName"));
 //                    }else if(selection == 2){
@@ -873,7 +873,6 @@ public class PathFinder {
             }
         }
     }
-
 
     public void startQRScanning(ActionEvent event) {
         String result = QRCode.scanQR();

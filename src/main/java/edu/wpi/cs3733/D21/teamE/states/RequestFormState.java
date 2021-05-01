@@ -8,20 +8,19 @@ import javafx.scene.control.Button;
 
 import java.io.IOException;
 
-public class UserManagementState {
+public class RequestFormState {
 
     public void switchScene(ActionEvent event) {
 
         String buttonName = ((Button) event.getSource()).getText();
 
-        if(buttonName.equals("Back")){
+        if (buttonName.equals("Cancel")) {
             try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequests.fxml"));
                 App.setDraggableAndChangeScene(root);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
-
     }
 }

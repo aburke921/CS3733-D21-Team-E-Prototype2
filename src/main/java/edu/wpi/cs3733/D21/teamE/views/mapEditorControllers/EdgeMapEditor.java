@@ -47,7 +47,7 @@ public class EdgeMapEditor {
     private void toNavigation(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/MapEditorNavigation.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

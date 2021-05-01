@@ -31,7 +31,7 @@ public class NodeDB {
 	 */
 	public static int createNodeTable() {
 		String nodeTableCreateS = "Create Table node " +
-				"(" +
+				"( " +
 				"nodeID    varchar(31) Primary Key, " +
 				"xCoord    int        Not Null, " +
 				"yCoord    int        Not Null, " +
@@ -43,19 +43,18 @@ public class NodeDB {
 				"Unique (xCoord, yCoord, floor), " +
 				"Constraint floorLimit Check (floor In ('1', '2', '3', 'L1', 'L2', 'G')), " +
 				"Constraint buildingLimit Check (building In ('BTM', '45 Francis', 'Tower', '15 Francis', 'Shapiro', 'Parking')), " +
-				"Constraint nodeTypeLimit Check (nodeType In ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', " +
-				"                                             'LABS', 'REST', 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH')) " +
+				"Constraint nodeTypeLimit Check (nodeType In " +
+				"                                ('PARK', 'EXIT', 'WALK', 'HALL', 'CONF', 'DEPT', 'ELEV', 'INFO', 'LABS', 'REST', " +
+				"                                 'RETL', 'STAI', 'SERV', 'ELEV', 'BATH')) " +
 				")";
 		try (PreparedStatement nodeTableCreatePS = connection.prepareStatement(nodeTableCreateS)) {
 			nodeTableCreatePS.execute();
-			//TODO if (nodeTableCreatePS.execute()) return 1;
-			//TODO else return 0;
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.out.println("|--- Failed to create node table");
 			return 0;
 		}
-		return 1; //TODO
+		return 1;
 	}
 
 
@@ -329,7 +328,7 @@ public class NodeDB {
 			deleteNodePS.close();
 
 			return listOfNodeLongNames;
-		}catch(SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("getListofNodeIDS error try/catch");
 			return listOfNodeLongNames;
@@ -394,8 +393,6 @@ public class NodeDB {
 		}
 
 	}
-
-
 
 
 	// previously deleted but they are back!:
@@ -533,13 +530,6 @@ public class NodeDB {
 		}
 		return nodesArray;
 	}
-
-
-
-
-
-
-
 
 
 }

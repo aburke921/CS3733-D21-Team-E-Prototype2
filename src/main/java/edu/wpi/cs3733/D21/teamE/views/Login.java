@@ -136,6 +136,7 @@ public class Login {
 
 	@FXML
 	public void guestLogin(ActionEvent e) {
+    	App.noCleanSurveyYet = true;
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
 			App.getPrimaryStage().getScene().setRoot(root);

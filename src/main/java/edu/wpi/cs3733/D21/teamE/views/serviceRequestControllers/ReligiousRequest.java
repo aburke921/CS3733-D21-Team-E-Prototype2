@@ -4,6 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -39,9 +41,35 @@ public class ReligiousRequest extends ServiceRequestFormComponents {
     @FXML
     private JFXButton cancel;
 
+    private boolean validateInput() {
+        RequiredFieldValidator validator = new RequiredFieldValidator();
+        validator.setMessage("Input Required");
+
+        locationInput.getValidators().add(validator);
+        religionInput.getValidators().add(validator);
+        assignedPersonnel.getValidators().add(validator);
+        description.getValidators().add(validator);
+
+        return locationInput.validate() && religionInput.validate()
+                && assignedPersonnel.validate() && description.validate();
+    }
+
     @FXML
-    void handleButtonSubmit(ActionEvent event) {
-        super.handleButtonSubmit(event);
+    void saveData(ActionEvent event) {
+
+        if(validateInput()) {
+            int locIndex = locationInput.getSelectionModel().getSelectedIndex();
+            int userIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
+
+            String node = nodeID.get(locIndex);
+            int user = userID.get(userIndex);
+            String religion = religionInput.getSelectionModel().getSelectedItem();
+            String desc = description.getText();
+
+            DB.addReligiousRequest(App.userID, node, user, religion, desc);
+            super.handleButtonSubmit(event);
+        }
+
     }
 
     @FXML

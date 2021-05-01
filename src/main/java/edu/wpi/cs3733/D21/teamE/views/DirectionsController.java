@@ -1,4 +1,4 @@
-package edu.wpi.cs3733.D21.teamE;
+package edu.wpi.cs3733.D21.teamE.views;
 
 
 import com.google.maps.*;
@@ -7,7 +7,6 @@ import com.google.maps.model.*;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 
@@ -33,33 +32,42 @@ public class DirectionsController {
         DirectionsController.mode = mode;
     }
 
-    public static DirectionsResult getDirections(String origin) throws IOException, InterruptedException, ApiException {
+    public static DirectionsResult getDirections(String origin, Boolean toBWH) throws IOException, InterruptedException, ApiException {
         DirectionsApiRequest request = new DirectionsApiRequest(geoContext);
         request.mode(mode).departureTimeNow();
         //request.arrivalTime(Instant.parse("10:00 pm"));
         DirectionsResult result;
 
-        request.origin(origin);
-        if (mode == TravelMode.DRIVING) {
-            request.destination(LEFT);
-            DirectionsResult left = request.await();
-
-            request = new DirectionsApiRequest(geoContext);
+        if (toBWH) {
             request.origin(origin);
-            request.mode(mode).departureTimeNow();
-            request.destination(RIGHT);
-            DirectionsResult right = request.await();
+            if (mode == TravelMode.DRIVING) {
+                request.destination(LEFT);
+                DirectionsResult left = request.await();
 
-            long leftDur = left.routes[0].legs[0].duration.inSeconds;
-            long rightDur = right.routes[0].legs[0].duration.inSeconds;
+                request = new DirectionsApiRequest(geoContext);
+                request.origin(origin);
+                request.mode(mode).departureTimeNow();
+                request.destination(RIGHT);
+                DirectionsResult right = request.await();
 
-            System.out.println("Left Dur: " + leftDur + "\tRight Dur: " + rightDur + "\tBest Dur: " + Math.min(leftDur, rightDur));
+                long leftDur = left.routes[0].legs[0].duration.inSeconds;
+                long rightDur = right.routes[0].legs[0].duration.inSeconds;
 
-            result = ( leftDur < rightDur) ? (left) : (right);
+                System.out.println("Left Dur: " + leftDur + "\tRight Dur: " + rightDur + "\tBest Dur: " + Math.min(leftDur, rightDur));
+
+                result = ( leftDur < rightDur) ? (left) : (right);
+            } else {
+                request.destination(MAIN);
+                result = request.await();
+            }
         } else {
-            request.destination(MAIN);
+            request.origin(MAIN);
+            request.destination(origin);
+            request.mode(mode);
             result = request.await();
         }
+
+
 
         return result;
     }
@@ -82,6 +90,8 @@ public class DirectionsController {
     }
 
     public static void close() {
-        geoContext.shutdown();
+        if(geoContext != null) {
+            geoContext.shutdown();
+        }
     }
 }

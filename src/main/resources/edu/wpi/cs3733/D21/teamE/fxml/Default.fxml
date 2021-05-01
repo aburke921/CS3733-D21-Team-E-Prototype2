@@ -25,7 +25,7 @@
                         <VBox alignment="CENTER" BorderPane.alignment="CENTER">
                            <children>
                               <ImageView fx:id="imageView" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS" />
-                              <JFXButton fx:id="directionsButton" onAction="#toDirections" prefWidth="200.0" styleClass="default-button" text="Direction to BWH">
+                              <JFXButton fx:id="directionsButton" onAction="#toDirections" prefWidth="200.0" styleClass="default-button" text="Directions to BWH">
                                  <font>
                                     <Font size="18.0" />
                                  </font>

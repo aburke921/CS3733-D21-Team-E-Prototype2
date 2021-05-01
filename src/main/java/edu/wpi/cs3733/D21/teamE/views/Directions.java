@@ -1,4 +1,4 @@
-package edu.wpi.cs3733.D21.teamE;
+package edu.wpi.cs3733.D21.teamE.views;
 
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.DirectionsLeg;
@@ -8,6 +8,7 @@ import com.google.maps.model.TravelMode;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import edu.wpi.cs3733.D21.teamE.App;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,7 +18,6 @@ import javafx.scene.layout.StackPane;
 import javafx.event.ActionEvent;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 
 public class Directions {
@@ -72,7 +72,7 @@ public class Directions {
     }
 
     @FXML
-    private void getDirections(ActionEvent e) {
+    private void getDirections(Boolean toBWH) {
         StringBuilder origin = new StringBuilder();
         origin.append(address.textProperty().get()).append(" ");
         origin.append(city.textProperty().get()).append(", ");
@@ -84,15 +84,17 @@ public class Directions {
         // TODO: Figure out time scheduler
 
         try {
-            DirectionsResult result = DirectionsController.getDirections(origin.toString());
+            DirectionsResult result = DirectionsController.getDirections(origin.toString(), toBWH);
             DirectionsLeg trip = result.routes[0].legs[0];
             System.out.println("\nFrom: " + trip.startAddress + " to " + trip.endAddress);
             System.out.println("Distance: " + trip.distance + "\tDuration: " + trip.duration + "\tDuration with Traffic: " + trip.durationInTraffic);
             // TODO: Figure out directions listing
+
             System.out.println();
             for (DirectionsStep step: trip.steps) {
                 System.out.println(step.toString());
             }
+
         } catch (IOException exception) {
             System.err.println("IO Exception: " + exception.getMessage());
         } catch (InterruptedException exception) {
@@ -100,6 +102,14 @@ public class Directions {
         } catch (ApiException exception) {
             System.err.println("API Exception: " + exception.getMessage());
         }
+    }
+
+    public void toBWH(ActionEvent actionEvent) {
+        getDirections(true);
+    }
+
+    public void awayBWH(ActionEvent actionEvent) {
+        getDirections(false);
     }
 
     @FXML
@@ -126,7 +136,7 @@ public class Directions {
 
     @FXML
     private void toDefault(ActionEvent event) {
-        DirectionsController.close();
+        //DirectionsController.close();
         // TODO: Fix exit and reload
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));

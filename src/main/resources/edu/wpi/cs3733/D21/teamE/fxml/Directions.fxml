@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.Directions">
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.Directions">
     <children>
         <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefHeight="65.0" prefWidth="1012.0" />
         <AnchorPane prefHeight="733.0" prefWidth="1200.0">
@@ -63,14 +63,27 @@
                                     <Insets top="25.0" />
                                  </VBox.margin>
                               </HBox>
-                               <JFXButton fx:id="getDir" minWidth="135.0" onAction="#getDirections" prefHeight="35.0" prefWidth="135.0" styleClass="submit-button" text="Get Directions">
-                                   <font>
-                                       <Font size="18.0" />
-                                   </font>
+                               <HBox alignment="CENTER">
+                                   <JFXButton fx:id="toBWH" minWidth="145.0" onAction="#toBWH" prefHeight="35.0" prefWidth="135.0" styleClass="submit-button" text="Take me to BWH">
+                                       <font>
+                                           <Font size="15" />
+                                       </font>
+                                   </JFXButton>
+                                   <JFXButton fx:id="awayBWH" minWidth="145.0" onAction="#awayBWH" prefHeight="35.0" prefWidth="135.0" styleClass="submit-button" text="Take me from BWH">
+                                       <font>
+                                           <Font size="15.0" />
+                                       </font>
+                                       <VBox.margin>
+                                           <Insets left="25" />
+                                       </VBox.margin>
+                                    <HBox.margin>
+                                       <Insets left="25.0" />
+                                    </HBox.margin>
+                                   </JFXButton>
                                    <VBox.margin>
-                                       <Insets top="20.0" />
+                                       <Insets top="25.0" />
                                    </VBox.margin>
-                               </JFXButton>
+                               </HBox>
                            </children></VBox>
                             </center>
                         </BorderPane>

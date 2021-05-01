@@ -38,6 +38,9 @@ public class Default {
     @FXML // fx:id="imageAnchorPane"
     private AnchorPane imageAnchorPane;
 
+    @FXML // fx:id="rightAnchorPane"
+    private AnchorPane rightAnchorPane;
+
     @FXML // fx:id="stackPane"
     private StackPane stackPane; //main stack pane used for JFXDialog popups
 
@@ -240,25 +243,28 @@ public class Default {
             e.printStackTrace();
         }
 
+        //Set up images
         Stage primaryStage = App.getPrimaryStage();
 
         Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
         hospitalImageView.setImage(hospital);
         hospitalImageView.setPreserveRatio(true);
-        hospitalImageView.setFitWidth(imageAnchorPane.getWidth());
         hospitalImageView.setFitHeight(primaryStage.getHeight());
         //hospitalImageView.fitWidthProperty().bind(imageAnchorPane.widthProperty());
         hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
         imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
         imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
-        Rectangle2D viewport = new Rectangle2D(200, 0, 500, hospital.getHeight());
+        Rectangle2D viewport = new Rectangle2D(200, 0, hospital.getWidth(), hospital.getHeight());
         hospitalImageView.setViewport(viewport);
-
 
         Image logo = new Image("edu/wpi/cs3733/D21/teamE/logo.png");
         logoImageView.setImage(logo);
+        logoImageView.setPreserveRatio(true);
+        rightAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+        rightAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
+        //Set up algorithm choices
         algoNames = FXCollections.observableArrayList();
         algoNames.add("A* Search");
         algoNames.add("Depth First Search");

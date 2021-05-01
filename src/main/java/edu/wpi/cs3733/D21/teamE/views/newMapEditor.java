@@ -169,6 +169,8 @@ public class newMapEditor {
     private static boolean finishAligning = false;
     private ArrayList<Node> nodeArrayListToBeAligned = new ArrayList<Node>();
 
+    private ArrayList<Node> currentArrayOfAllNodes = DB.getAllNodes();
+
 
 
     /**
@@ -348,207 +350,13 @@ public class newMapEditor {
                 "Node Type", "Long Name", "Short Name");
         final TreeItem<Node> rootNode = new TreeItem<Node>(node0);
         table.setRoot(rootNode);
-        /*
-        //Setting up sub-root nodes
-        Node l1Node = new Node("", 0, 0 , "", "", "", "L1", "");
-        Node l2Node = new Node("", 0, 0 , "", "", "", "L2", "");
-        Node f1Node = new Node("", 0, 0 , "", "", "", "Floor 1", "");
-        Node f2Node = new Node("", 0, 0 , "", "", "", "Floor 2", "");
-        Node f3Node = new Node("", 0, 0 , "", "", "", "Floor 3", "");
-        TreeItem<Node> l1Item = new TreeItem<>(l1Node);
-        TreeItem<Node> l2Item = new TreeItem<>(l2Node);
-        TreeItem<Node> f1Item = new TreeItem<>(f1Node);
-        TreeItem<Node> f2Item = new TreeItem<>(f2Node);
-        TreeItem<Node> f3Item = new TreeItem<>(f3Node);
 
-        rootNode.getChildren().addAll(l1Item,l2Item,f1Item,f2Item,f3Item);
-
-
-//        nodeTypeArrayList.add("HALL");
-//        nodeTypeArrayList.add("CONF");
-//        nodeTypeArrayList.add("DEPT");
-//        nodeTypeArrayList.add("ELEV");
-//        nodeTypeArrayList.add("INFO");
-//        nodeTypeArrayList.add("LABS");
-//        nodeTypeArrayList.add("REST");
-//        nodeTypeArrayList.add("RETL");
-//        nodeTypeArrayList.add("STAI");
-//        nodeTypeArrayList.add("SERV");
-//        nodeTypeArrayList.add("EXIT");
-//        nodeTypeArrayList.add("BATH");
-
-        //Setting up the children for these
-        Node l1Hall = new Node("", 0, 0, "", "", "", "Hall","");
-        Node l1Conf = new Node("", 0, 0, "", "", "", "Conf","");
-        Node l1Dept = new Node("", 0, 0, "", "", "", "Dept","");
-        Node l1Elev = new Node("", 0, 0, "", "", "", "Elev","");
-        Node l1Info = new Node("", 0, 0, "", "", "", "Info","");
-        Node l1Labs = new Node("", 0, 0, "", "", "", "Labs","");
-        Node l1Rest = new Node("", 0, 0, "", "", "", "Rest","");
-        Node l1Retl = new Node("", 0, 0, "", "", "", "Retl","");
-        Node l1Stai = new Node("", 0, 0, "", "", "", "Stai","");
-        Node l1Serv = new Node("", 0, 0, "", "", "", "Serv","");
-        Node l1Exit = new Node("", 0, 0, "", "", "", "Exit","");
-        Node l1Bath = new Node("", 0, 0, "", "", "", "Bath","");
-        TreeItem<Node> l1HallItem = new TreeItem<>(l1Hall);
-        TreeItem<Node> l1ConfItem = new TreeItem<>(l1Conf);
-        TreeItem<Node> l1DeptItem = new TreeItem<>(l1Dept);
-        TreeItem<Node> l1ElevItem = new TreeItem<>(l1Elev);
-        TreeItem<Node> l1InfoItem = new TreeItem<>(l1Info);
-        TreeItem<Node> l1LabsItem = new TreeItem<>(l1Labs);
-        TreeItem<Node> l1RestItem = new TreeItem<>(l1Rest);
-        TreeItem<Node> l1RetlItem = new TreeItem<>(l1Retl);
-        TreeItem<Node> l1StaiItem = new TreeItem<>(l1Stai);
-        TreeItem<Node> l1ServItem = new TreeItem<>(l1Serv);
-        TreeItem<Node> l1ExitItem = new TreeItem<>(l1Exit);
-        TreeItem<Node> l1BathItem = new TreeItem<>(l1Bath);
-        l1Item.getChildren().addAll(l1HallItem,l1ConfItem,l1DeptItem,l1ElevItem,l1InfoItem,l1LabsItem,l1RestItem,l1RetlItem,
-                l1StaiItem,l1ServItem,l1ExitItem,l1BathItem);
-
-        Node l2Hall = new Node("", 0, 0, "", "", "", "Hall","");
-        Node l2Conf = new Node("", 0, 0, "", "", "", "Conf","");
-        Node l2Dept = new Node("", 0, 0, "", "", "", "Dept","");
-        Node l2Elev = new Node("", 0, 0, "", "", "", "Elev","");
-        Node l2Info = new Node("", 0, 0, "", "", "", "Info","");
-        Node l2Labs = new Node("", 0, 0, "", "", "", "Labs","");
-        Node l2Rest = new Node("", 0, 0, "", "", "", "Rest","");
-        Node l2Retl = new Node("", 0, 0, "", "", "", "Retl","");
-        Node l2Stai = new Node("", 0, 0, "", "", "", "Stai","");
-        Node l2Serv = new Node("", 0, 0, "", "", "", "Serv","");
-        Node l2Exit = new Node("", 0, 0, "", "", "", "Exit","");
-        Node l2Bath = new Node("", 0, 0, "", "", "", "Bath","");
-        TreeItem<Node> l2HallItem = new TreeItem<>(l2Hall);
-        TreeItem<Node> l2ConfItem = new TreeItem<>(l2Conf);
-        TreeItem<Node> l2DeptItem = new TreeItem<>(l2Dept);
-        TreeItem<Node> l2ElevItem = new TreeItem<>(l2Elev);
-        TreeItem<Node> l2InfoItem = new TreeItem<>(l2Info);
-        TreeItem<Node> l2LabsItem = new TreeItem<>(l2Labs);
-        TreeItem<Node> l2RestItem = new TreeItem<>(l2Rest);
-        TreeItem<Node> l2RetlItem = new TreeItem<>(l2Retl);
-        TreeItem<Node> l2StaiItem = new TreeItem<>(l2Stai);
-        TreeItem<Node> l2ServItem = new TreeItem<>(l2Serv);
-        TreeItem<Node> l2ExitItem = new TreeItem<>(l2Exit);
-        TreeItem<Node> l2BathItem = new TreeItem<>(l2Bath);
-        l2Item.getChildren().addAll(l2HallItem,l2ConfItem,l2DeptItem,l2ElevItem,l2InfoItem,l2LabsItem,l2RestItem,l2RetlItem,
-                l2StaiItem,l2ServItem,l2ExitItem,l2BathItem);
-
-        Node f1Hall = new Node("", 0, 0, "", "", "", "Hall","");
-        Node f1Conf = new Node("", 0, 0, "", "", "", "Conf","");
-        Node f1Dept = new Node("", 0, 0, "", "", "", "Dept","");
-        Node f1Elev = new Node("", 0, 0, "", "", "", "Elev","");
-        Node f1Info = new Node("", 0, 0, "", "", "", "Info","");
-        Node f1Labs = new Node("", 0, 0, "", "", "", "Labs","");
-        Node f1Rest = new Node("", 0, 0, "", "", "", "Rest","");
-        Node f1Retl = new Node("", 0, 0, "", "", "", "Retl","");
-        Node f1Stai = new Node("", 0, 0, "", "", "", "Stai","");
-        Node f1Serv = new Node("", 0, 0, "", "", "", "Serv","");
-        Node f1Exit = new Node("", 0, 0, "", "", "", "Exit","");
-        Node f1Bath = new Node("", 0, 0, "", "", "", "Bath","");
-        TreeItem<Node> f1HallItem = new TreeItem<>(f1Hall);
-        TreeItem<Node> f1ConfItem = new TreeItem<>(f1Conf);
-        TreeItem<Node> f1DeptItem = new TreeItem<>(f1Dept);
-        TreeItem<Node> f1ElevItem = new TreeItem<>(f1Elev);
-        TreeItem<Node> f1InfoItem = new TreeItem<>(f1Info);
-        TreeItem<Node> f1LabsItem = new TreeItem<>(f1Labs);
-        TreeItem<Node> f1RestItem = new TreeItem<>(f1Rest);
-        TreeItem<Node> f1RetlItem = new TreeItem<>(f1Retl);
-        TreeItem<Node> f1StaiItem = new TreeItem<>(f1Stai);
-        TreeItem<Node> f1ServItem = new TreeItem<>(f1Serv);
-        TreeItem<Node> f1ExitItem = new TreeItem<>(f1Exit);
-        TreeItem<Node> f1BathItem = new TreeItem<>(f1Bath);
-        f1Item.getChildren().addAll(f1HallItem,f1ConfItem,f1DeptItem,f1ElevItem,f1InfoItem,f1LabsItem,f1RestItem,f1RetlItem,
-                f1StaiItem,f1ServItem,f1ExitItem,f1BathItem);
-
-        Node f2Hall = new Node("", 0, 0, "", "", "", "Hall","");
-        Node f2Conf = new Node("", 0, 0, "", "", "", "Conf","");
-        Node f2Dept = new Node("", 0, 0, "", "", "", "Dept","");
-        Node f2Elev = new Node("", 0, 0, "", "", "", "Elev","");
-        Node f2Info = new Node("", 0, 0, "", "", "", "Info","");
-        Node f2Labs = new Node("", 0, 0, "", "", "", "Labs","");
-        Node f2Rest = new Node("", 0, 0, "", "", "", "Rest","");
-        Node f2Retl = new Node("", 0, 0, "", "", "", "Retl","");
-        Node f2Stai = new Node("", 0, 0, "", "", "", "Stai","");
-        Node f2Serv = new Node("", 0, 0, "", "", "", "Serv","");
-        Node f2Exit = new Node("", 0, 0, "", "", "", "Exit","");
-        Node f2Bath = new Node("", 0, 0, "", "", "", "Bath","");
-        TreeItem<Node> f2HallItem = new TreeItem<>(f2Hall);
-        TreeItem<Node> f2ConfItem = new TreeItem<>(f2Conf);
-        TreeItem<Node> f2DeptItem = new TreeItem<>(f2Dept);
-        TreeItem<Node> f2ElevItem = new TreeItem<>(f2Elev);
-        TreeItem<Node> f2InfoItem = new TreeItem<>(f2Info);
-        TreeItem<Node> f2LabsItem = new TreeItem<>(f2Labs);
-        TreeItem<Node> f2RestItem = new TreeItem<>(f2Rest);
-        TreeItem<Node> f2RetlItem = new TreeItem<>(f2Retl);
-        TreeItem<Node> f2StaiItem = new TreeItem<>(f2Stai);
-        TreeItem<Node> f2ServItem = new TreeItem<>(f2Serv);
-        TreeItem<Node> f2ExitItem = new TreeItem<>(f2Exit);
-        TreeItem<Node> f2BathItem = new TreeItem<>(f2Bath);
-        f2Item.getChildren().addAll(f2HallItem,f2ConfItem,f2DeptItem,f2ElevItem,f2InfoItem,f2LabsItem,f2RestItem,f2RetlItem,
-                f2StaiItem,f2ServItem,f2ExitItem,f2BathItem);
-
-        Node f3Hall = new Node("", 0, 0, "", "", "", "Hall","");
-        Node f3Conf = new Node("", 0, 0, "", "", "", "Conf","");
-        Node f3Dept = new Node("", 0, 0, "", "", "", "Dept","");
-        Node f3Elev = new Node("", 0, 0, "", "", "", "Elev","");
-        Node f3Info = new Node("", 0, 0, "", "", "", "Info","");
-        Node f3Labs = new Node("", 0, 0, "", "", "", "Labs","");
-        Node f3Rest = new Node("", 0, 0, "", "", "", "Rest","");
-        Node f3Retl = new Node("", 0, 0, "", "", "", "Retl","");
-        Node f3Stai = new Node("", 0, 0, "", "", "", "Stai","");
-        Node f3Serv = new Node("", 0, 0, "", "", "", "Serv","");
-        Node f3Exit = new Node("", 0, 0, "", "", "", "Exit","");
-        Node f3Bath = new Node("", 0, 0, "", "", "", "Bath","");
-        TreeItem<Node> f3HallItem = new TreeItem<>(f3Hall);
-        TreeItem<Node> f3ConfItem = new TreeItem<>(f3Conf);
-        TreeItem<Node> f3DeptItem = new TreeItem<>(f3Dept);
-        TreeItem<Node> f3ElevItem = new TreeItem<>(f3Elev);
-        TreeItem<Node> f3InfoItem = new TreeItem<>(f3Info);
-        TreeItem<Node> f3LabsItem = new TreeItem<>(f3Labs);
-        TreeItem<Node> f3RestItem = new TreeItem<>(f3Rest);
-        TreeItem<Node> f3RetlItem = new TreeItem<>(f3Retl);
-        TreeItem<Node> f3StaiItem = new TreeItem<>(f3Stai);
-        TreeItem<Node> f3ServItem = new TreeItem<>(f3Serv);
-        TreeItem<Node> f3ExitItem = new TreeItem<>(f3Exit);
-        TreeItem<Node> f3BathItem = new TreeItem<>(f3Bath);
-        f3Item.getChildren().addAll(f3HallItem,f3ConfItem,f3DeptItem,f3ElevItem,f3InfoItem,f3LabsItem,f3RestItem,f3RetlItem,
-                f3StaiItem,f3ServItem,f3ExitItem,f3BathItem);
-        */
-
-
-//        if (table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
-//            table.getRoot().getChildren().remove(0, array.size() - 1);
-//        }
         //iterate over list of nodes from DB, add to table
         for (int i = 0; i < array.size(); i++) {
             Node s = array.get(i);
             final TreeItem<Node> node = new TreeItem<Node>(s);
             table.getRoot().getChildren().add(node);
         }
-            /*
-
-            if(s.get("floor").equals("L1")) {
-                addToTable(node, l1HallItem,l1ConfItem,l1DeptItem,l1ElevItem,l1InfoItem,l1LabsItem,l1RestItem,l1RetlItem,
-                        l1StaiItem,l1ServItem,l1ExitItem,l1BathItem);
-            }
-            if(s.get("floor").equals("L2")) {
-                addToTable(node, l2HallItem,l2ConfItem,l2DeptItem,l2ElevItem,l2InfoItem,l2LabsItem,l2RestItem,l2RetlItem,
-                        l2StaiItem,l2ServItem,l2ExitItem,l2BathItem);
-            }
-            if(s.get("floor").equals("1")) {
-                addToTable(node, f1HallItem,f1ConfItem,f1DeptItem,f1ElevItem,f1InfoItem,f1LabsItem,f1RestItem,f1RetlItem,
-                        f1StaiItem,f1ServItem,f1ExitItem,f1BathItem);
-            }
-            if(s.get("floor").equals("2")) {
-                addToTable(node, f2HallItem,f2ConfItem,f2DeptItem,f2ElevItem,f2InfoItem,f2LabsItem,f2RestItem,f2RetlItem,
-                        f2StaiItem,f2ServItem,f2ExitItem,f2BathItem);
-            }
-            if(s.get("floor").equals("3")) {
-                addToTable(node, f3HallItem,f3ConfItem,f3DeptItem,f3ElevItem,f3InfoItem,f3LabsItem,f3RestItem,f3RetlItem,
-                        f3StaiItem,f3ServItem,f3ExitItem,f3BathItem);
-            }
-            //int n = array.get(i).getX();
-            //table.getRoot().getChildren().add(node);
-        }*/
     }
 
     /**
@@ -904,6 +712,9 @@ public class newMapEditor {
      */
     public void refresh() {
 
+        //update array or nodes, todo are there any other times when this array should be updated? Any other times when the nodes get changed?
+        currentArrayOfAllNodes = DB.getAllNodes();
+
         //refresh map
         drawMap(currentFloor);
 
@@ -1120,179 +931,23 @@ public class newMapEditor {
         rootBorderPane.setPrefWidth(stageWidth);
         rootBorderPane.setPrefHeight(stageHeight);
 
-        System.out.println("Finish PathFinder Init.");
+        //propagate tables and map
+        refresh();
 
-        drawMap(currentFloor);
-        prepareNodes(nodeTreeTable);
-        prepareEdges(edgeTreeTable);
+        //hide edge vBox by default
         edgeVBox.setVisible(false);
 
-        //populates fields with information of selected node in table
-        nodeTreeTable.setOnMouseClicked(e -> {
-            if (nodeTreeTable.getSelectionModel().getSelectedItem() != null) {
-                System.out.println("in!");
-                longNameInput.setText(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("longName"));
-                shortNameInput.setText(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("shortName"));
-                xCordInput.setText(Integer.toString(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().getX()));
-                yCordInput.setText(Integer.toString(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().getY()));
-                floorInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("floor"));
-                typeInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("type"));
-                buildingInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("building"));
-                idInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("id"));
-
-            }
-        });
-
-        //populates fields with information of selected edge in table
-        edgeTreeTable.setOnMouseClicked(e -> {
-            if(edgeTreeTable.getSelectionModel().getSelectedItem() != null) {
-                edgeID.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getId());
-                startLocation.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getStartNodeId());
-                endLocation.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getEndNodeId());
-
-            }
-        });
-
         //retrieving nodes
-        ArrayList<Node> array = DB.getAllNodes();
+        currentArrayOfAllNodes = DB.getAllNodes();
 
         //creating group for adding nodes/edges
-        Group g = new Group();
+//        Group g = new Group();
+
+        //populates fields with information of selected node or edge in table
+        startTableClickHandlers();
 
         //for clicks interacting with map
-        pane.setOnMouseClicked(e -> {
-            //double click
-            if (e.getClickCount() == 2) {
-                if (isAligning) {
-                    //coordinates of click
-                    double X = e.getX();
-                    int xInt = (int) X;
-                    double Y = e.getY();
-                    int yInt = (int) Y;
-                    for (int i = 0; i < array.size(); i++) {
-                        if (array.get(i).get("floor").equals(currentFloor)) {
-                            //coordinates of current node
-                            double nodeX = array.get(i).getX() / scale;
-                            int nodeXInt = (int) nodeX;
-                            double nodeY = array.get(i).getY() / scale;
-                            int nodeYInt = (int) nodeY;
-                            //if node coordinates match click coordinates +- 1, autofill fields with node info
-                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
-                                nodeArrayListToBeAligned.add(array.get(i));
-                            }
-                        }
-                    }
-                }
-                if (finishAligning) {
-                    int modifyInt = -1;
-                    double X = e.getX() * scale;
-                    int xInt = (int) X;
-                    double Y = e.getY() * scale;
-                    int yInt = (int) Y;
-                    for (int i = 0; i < nodeArrayListToBeAligned.size(); i++) {
-                        Node currentNode = nodeArrayListToBeAligned.get(i);
-                        if (isVertical) {
-                            modifyInt = DB.modifyNode(currentNode.get("id"), xInt, currentNode.getY(), currentNode.get("floor"), currentNode.get("building"),
-                                    currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
-                        } else {
-                            modifyInt = DB.modifyNode(currentNode.get("id"), currentNode.getX(), yInt, currentNode.get("floor"), currentNode.get("building"),
-                                    currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
-                        }
-                    }
-                    System.out.println(modifyInt);
-                }
-                if (!isAligning && !finishAligning) {
-                    //ints for displaying
-                    double xCoordScale = e.getX();
-                    xCoordScale = xCoordScale * scale;
-                    int xCordIntScale = (int) xCoordScale;
-                    double yCoordScale = e.getY();
-                    yCoordScale = yCoordScale * scale;
-                    int yCordIntScale = (int) yCoordScale;
-                    //ints for placing circle
-                    double xCoord = e.getX();
-                    double yCoord = e.getY();
-                    Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
-                    g.getChildren().add(circle);
-                    pane.getChildren().add(g);
-                    //clears fields, populates X, Y coordinates of created node in fields
-                    longNameInput.clear();
-                    shortNameInput.clear();
-                    floorInput.getSelectionModel().clearSelection();
-                    floorInput.setValue(null);
-                    idInput.getSelectionModel().clearSelection();
-                    idInput.setValue(null);
-                    buildingInput.getSelectionModel().clearSelection();
-                    buildingInput.setValue(null);
-                    typeInput.getSelectionModel().clearSelection();
-                    typeInput.setValue(null);
-                    xCordInput.setText(Integer.toString(xCordIntScale));
-                    yCordInput.setText(Integer.toString(yCordIntScale));
-                }
-            }
-            else {
-                //single click
-                if (e.getClickCount() == 1) {
-                    //coordinates of click
-                    double X = e.getX();
-                    int xInt = (int) X;
-                    double Y = e.getY();
-                    int yInt = (int) Y;
-                    for (int i = 0; i < array.size(); i++) {
-                        if(array.get(i).get("floor").equals(currentFloor)) {
-                            //coordinates of current node
-                            double nodeX = array.get(i).getX() / scale;
-                            int nodeXInt = (int) nodeX;
-                            double nodeY = array.get(i).getY() / scale;
-                            int nodeYInt = (int) nodeY;
-
-                            //if node coordinates match click coordinates +- 1, autofill fields with node info
-                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
-                                idInput.setValue(array.get(i).get("id"));
-                                floorInput.setValue(array.get(i).get("floor"));
-                                longNameInput.setText(array.get(i).get("longName"));
-                                shortNameInput.setText(array.get(i).get("shortName"));
-                                xCordInput.setText(Integer.toString(array.get(i).getX()));
-                                yCordInput.setText(Integer.toString(array.get(i).getY()));
-                                typeInput.setValue(array.get(i).get("type"));
-                                buildingInput.setValue(array.get(i).get("building"));
-
-
-                                //for edges, use counter to determine if it is first or second node selected
-                                //populate edge fields with information
-                                selection++;
-                                if (selection == 1) {
-                                    startID = array.get(i).get("id");
-                                    startLocation.setValue(array.get(i).get("longName"));
-                                    xCordInput.setText(Integer.toString(array.get(i).getX()));
-                                    yCordInput.setText(Integer.toString(array.get(i).getY()));
-                                    clickedX = nodeXInt;
-                                    clickedY = nodeYInt;
-                                    clickedID = array.get(i).get("id");
-                                    clickedBuilding = array.get(i).get("building");
-                                    clickedLongName = array.get(i).get("longName");
-                                    clickedType = array.get(i).get("type");
-                                    clickedShortname = array.get(i).get("shortName");
-
-
-
-                                }
-                                if (selection == 2) {
-                                    endLocation.setValue(array.get(i).get("longName"));
-                                    endID = array.get(i).get("id");
-                                    edgeIDArrayList.add(startID + "_" + endID);
-                                    edgeID.setItems(edgeIDArrayList);
-                                    edgeID.setValue(startID + "_" + endID);
-                                    selection = 0;
-
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-        });
+        startMapClickHandler();
 
         //dragging nodes
         drag.setOnAction(e -> {
@@ -1334,6 +989,175 @@ public class newMapEditor {
                 System.out.println("no");
                 scrollPane.setPannable(true);
 
+            }
+        });
+    }
+
+    private void startMapClickHandler() {
+
+        //create image group
+        Group g = new Group();
+
+        pane.setOnMouseClicked(e -> {
+            //double click
+            if (e.getClickCount() == 2) {
+                if (isAligning) {
+                    //coordinates of click
+                    double X = e.getX();
+                    int xInt = (int) X;
+                    double Y = e.getY();
+                    int yInt = (int) Y;
+                    for (int i = 0; i < currentArrayOfAllNodes.size(); i++) {
+                        if (currentArrayOfAllNodes.get(i).get("floor").equals(currentFloor)) {
+                            //coordinates of current node
+                            double nodeX = currentArrayOfAllNodes.get(i).getX() / scale;
+                            int nodeXInt = (int) nodeX;
+                            double nodeY = currentArrayOfAllNodes.get(i).getY() / scale;
+                            int nodeYInt = (int) nodeY;
+                            //if node coordinates match click coordinates +- 1, autofill fields with node info
+                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
+                                nodeArrayListToBeAligned.add(currentArrayOfAllNodes.get(i));
+                            }
+                        }
+                    }
+                }
+                if (finishAligning) {
+                    int modifyInt = -1;
+                    double X = e.getX() * scale;
+                    int xInt = (int) X;
+                    double Y = e.getY() * scale;
+                    int yInt = (int) Y;
+                    for (int i = 0; i < nodeArrayListToBeAligned.size(); i++) {
+                        Node currentNode = nodeArrayListToBeAligned.get(i);
+                        if (isVertical) {
+                            modifyInt = DB.modifyNode(currentNode.get("id"), xInt, currentNode.getY(), currentNode.get("floor"), currentNode.get("building"),
+                                    currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
+                        } else {
+                            modifyInt = DB.modifyNode(currentNode.get("id"), currentNode.getX(), yInt, currentNode.get("floor"), currentNode.get("building"),
+                                    currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
+                        }
+                    }
+                    System.out.println(modifyInt);
+                }
+                if (!isAligning && !finishAligning) {
+                    //ints for displaying
+                    double xCoordScale = e.getX();
+                    xCoordScale = xCoordScale * scale;
+                    int xCordIntScale = (int) xCoordScale;
+                    double yCoordScale = e.getY();
+                    yCoordScale = yCoordScale * scale;
+                    int yCordIntScale = (int) yCoordScale;
+                    //ints for placing circle
+                    double xCoord = e.getX();
+                    double yCoord = e.getY();
+                    Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+                    //todo do the following 3 lines do the same as `pane.getChildren().add(circle);` ?
+                    g.getChildren().add(circle);
+                    pane.getChildren().add(g);
+                    //clears fields, populates X, Y coordinates of created node in fields
+                    longNameInput.clear();
+                    shortNameInput.clear();
+                    floorInput.getSelectionModel().clearSelection();
+                    floorInput.setValue(null);
+                    idInput.getSelectionModel().clearSelection();
+                    idInput.setValue(null);
+                    buildingInput.getSelectionModel().clearSelection();
+                    buildingInput.setValue(null);
+                    typeInput.getSelectionModel().clearSelection();
+                    typeInput.setValue(null);
+                    xCordInput.setText(Integer.toString(xCordIntScale));
+                    yCordInput.setText(Integer.toString(yCordIntScale));
+                }
+            }
+            else if (e.getClickCount() == 1) {
+                    //coordinates of click
+                    double X = e.getX();
+                    int xInt = (int) X;
+                    double Y = e.getY();
+                    int yInt = (int) Y;
+                    for (int i = 0; i < currentArrayOfAllNodes.size(); i++) {
+                        if(currentArrayOfAllNodes.get(i).get("floor").equals(currentFloor)) {
+                            //coordinates of current node
+                            double nodeX = currentArrayOfAllNodes.get(i).getX() / scale;
+                            int nodeXInt = (int) nodeX;
+                            double nodeY = currentArrayOfAllNodes.get(i).getY() / scale;
+                            int nodeYInt = (int) nodeY;
+
+                            //if node coordinates match click coordinates +- 1, autofill fields with node info
+                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
+                                idInput.setValue(currentArrayOfAllNodes.get(i).get("id"));
+                                floorInput.setValue(currentArrayOfAllNodes.get(i).get("floor"));
+                                longNameInput.setText(currentArrayOfAllNodes.get(i).get("longName"));
+                                shortNameInput.setText(currentArrayOfAllNodes.get(i).get("shortName"));
+                                xCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getX()));
+                                yCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getY()));
+                                typeInput.setValue(currentArrayOfAllNodes.get(i).get("type"));
+                                buildingInput.setValue(currentArrayOfAllNodes.get(i).get("building"));
+
+
+                                //for edges, use counter to determine if it is first or second node selected
+                                //populate edge fields with information
+                                selection++;
+                                if (selection == 1) {
+                                    startID = currentArrayOfAllNodes.get(i).get("id");
+                                    startLocation.setValue(currentArrayOfAllNodes.get(i).get("longName"));
+                                    xCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getX()));
+                                    yCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getY()));
+                                    clickedX = nodeXInt;
+                                    clickedY = nodeYInt;
+                                    clickedID = currentArrayOfAllNodes.get(i).get("id");
+                                    clickedBuilding = currentArrayOfAllNodes.get(i).get("building");
+                                    clickedLongName = currentArrayOfAllNodes.get(i).get("longName");
+                                    clickedType = currentArrayOfAllNodes.get(i).get("type");
+                                    clickedShortname = currentArrayOfAllNodes.get(i).get("shortName");
+
+
+
+                                }
+                                if (selection == 2) {
+                                    endLocation.setValue(currentArrayOfAllNodes.get(i).get("longName"));
+                                    endID = currentArrayOfAllNodes.get(i).get("id");
+                                    edgeIDArrayList.add(startID + "_" + endID);
+                                    edgeID.setItems(edgeIDArrayList);
+                                    edgeID.setValue(startID + "_" + endID);
+                                    selection = 0;
+
+                                }
+                            }
+
+                        }
+                    }
+                }
+        });
+    }
+
+    /**
+     * Adds event handlers to populate the form fields when a table row is clicked
+     */
+    private void startTableClickHandlers() {
+
+        //populates fields with information of selected node in table
+        nodeTreeTable.setOnMouseClicked(e -> {
+            if (nodeTreeTable.getSelectionModel().getSelectedItem() != null) {
+                System.out.println("in!");
+                longNameInput.setText(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("longName"));
+                shortNameInput.setText(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("shortName"));
+                xCordInput.setText(Integer.toString(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().getX()));
+                yCordInput.setText(Integer.toString(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().getY()));
+                floorInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("floor"));
+                typeInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("type"));
+                buildingInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("building"));
+                idInput.setValue(nodeTreeTable.getSelectionModel().getSelectedItem().getValue().get("id"));
+
+            }
+        });
+
+        //populates fields with information of selected edge in table
+        edgeTreeTable.setOnMouseClicked(e -> {
+            if(edgeTreeTable.getSelectionModel().getSelectedItem() != null) {
+                edgeID.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getId());
+                startLocation.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getStartNodeId());
+                endLocation.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getEndNodeId());
             }
         });
     }

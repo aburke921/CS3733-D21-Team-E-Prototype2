@@ -113,7 +113,6 @@ public class createAccount {
 			CreateAccountState createAccountState = new CreateAccountState();
 			createAccountState.switchScene(event);
 		}
-		}
 	}
 
 	@FXML

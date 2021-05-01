@@ -16,7 +16,7 @@ public class ChangeScene {
     private void toServiceRequests(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequests.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -25,7 +25,7 @@ public class ChangeScene {
     private void toMapEditor(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/newMapEditor.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -34,7 +34,7 @@ public class ChangeScene {
     private void toPathFinder(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -43,7 +43,7 @@ public class ChangeScene {
     private void toDefault(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -52,7 +52,7 @@ public class ChangeScene {
     private void toServiceRequestStatus(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequestStatus.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -61,7 +61,7 @@ public class ChangeScene {
     private void toCovidSurvey(ActionEvent e){
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -70,7 +70,7 @@ public class ChangeScene {
     private void toUserManagement(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/UserManagement.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -79,7 +79,7 @@ public class ChangeScene {
     private void toCreateNewAccount(ActionEvent actionEvent) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/createAccount.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -92,7 +92,7 @@ public class ChangeScene {
     private void toFloralDelivery(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/FloralV2.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -101,7 +101,7 @@ public class ChangeScene {
     private void toExternalPatient(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ExternalPatient.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -110,7 +110,7 @@ public class ChangeScene {
     private void toLanguageInterpreter(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/LanguageInterpreter.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -119,7 +119,7 @@ public class ChangeScene {
     private void toMedicineDelivery(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/MedicineDeliveryV2.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -128,7 +128,7 @@ public class ChangeScene {
     private void toSanitation(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SanitationV2.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -137,7 +137,7 @@ public class ChangeScene {
     private void toFoodDelivery(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/FoodDelivery.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -146,7 +146,7 @@ public class ChangeScene {
     private void toMenu(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/MenuPage.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -155,7 +155,7 @@ public class ChangeScene {
     private void toLaundryRequest(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Laundry.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -164,7 +164,7 @@ public class ChangeScene {
     private void toMaintenanceRequest(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/MaintenanceRequest.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -173,7 +173,7 @@ public class ChangeScene {
     private void toInternalPatient(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/InternalPatient.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -182,7 +182,7 @@ public class ChangeScene {
     private void toSecurity(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SecurityV2.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -191,7 +191,7 @@ public class ChangeScene {
     private void toReligious(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ReligiousRequests.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

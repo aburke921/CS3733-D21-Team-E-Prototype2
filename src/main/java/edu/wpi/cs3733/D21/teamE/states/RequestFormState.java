@@ -17,7 +17,7 @@ public class RequestFormState {
         if (buttonName.equals("Cancel")) {
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequests.fxml"));
-                App.setDraggableAndChangeScene(root);
+                App.changeScene(root);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

@@ -61,13 +61,10 @@ public class DirectionsController {
             result = request.await();
         }
 
-        // TODO: add close method that is called when page is switched
-        geoContext.shutdown();
-
         return result;
     }
 
-    public static void init(){
+    public static void init() {
         Dotenv dotenv = Dotenv.load();
         API_KEY = dotenv.get("MAPS_API_KEY");
         getGeoContext();
@@ -82,5 +79,9 @@ public class DirectionsController {
                     .connectTimeout(1, TimeUnit.SECONDS)
                     .build();
         }
+    }
+
+    public static void close() {
+        geoContext.shutdown();
     }
 }

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.Directions">
+    <children>
+        <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefHeight="65.0" prefWidth="1012.0" />
+        <AnchorPane prefHeight="733.0" prefWidth="1200.0">
+            <children>
+                <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <BorderPane>
+                            <center>
+                                <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+                           <children>
+                              <JFXTextField fx:id="address" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="435.0" promptText="Address" />
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <JFXTextField fx:id="city" promptText="City" />
+                                    <JFXTextField fx:id="state" maxWidth="-Infinity" prefWidth="95.0" promptText="State">
+                                       <HBox.margin>
+                                          <Insets left="25.0" right="25.0" />
+                                       </HBox.margin>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="zip" promptText="Zip Code" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="25.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <HBox alignment="TOP_CENTER">
+                                 <children>
+                                     <JFXButton fx:id="walking" minWidth="26.0" onAction="#chooseMode" styleClass="submit-button" text="Walking">
+                                       <HBox.margin>
+                                          <Insets right="15.0" />
+                                       </HBox.margin>
+                                     </JFXButton>
+                                     <JFXButton fx:id="transit" onAction="#chooseMode" styleClass="submit-button" text="Train">
+                                       <HBox.margin>
+                                          <Insets right="7.5" />
+                                       </HBox.margin>
+                                     </JFXButton>
+                                     <JFXButton fx:id="bike" onAction="#chooseMode" styleClass="submit-button" text="Bike">
+                                       <HBox.margin>
+                                          <Insets left="7.5" />
+                                       </HBox.margin>
+                                     </JFXButton>
+                                     <JFXButton fx:id="car" onAction="#chooseMode" styleClass="submit-button" text="Car">
+                                       <HBox.margin>
+                                          <Insets left="15.0" />
+                                       </HBox.margin>
+                                     </JFXButton>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="25.0" />
+                                 </VBox.margin>
+                              </HBox>
+                               <JFXButton fx:id="getDir" minWidth="135.0" onAction="#getDirections" prefHeight="35.0" prefWidth="135.0" styleClass="submit-button" text="Get Directions">
+                                   <font>
+                                       <Font size="18.0" />
+                                   </font>
+                                   <VBox.margin>
+                                       <Insets top="20.0" />
+                                   </VBox.margin>
+                               </JFXButton>
+                           </children></VBox>
+                            </center>
+                        </BorderPane>
+                    </children>
+                </StackPane>
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="lowerAnchorPane" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="1200.0">
+            <children>
+                <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" maxHeight="29.0" maxWidth="60.0" onAction="#toDefault" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="15.0" />
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

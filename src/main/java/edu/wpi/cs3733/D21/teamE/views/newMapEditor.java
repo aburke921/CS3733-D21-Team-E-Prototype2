@@ -204,12 +204,6 @@ public class newMapEditor {
         pane.getChildren().clear();
         System.out.println(" DONE");
 
-
-        //if path is null
-        if (DB.getAllNodes() == null) {
-            //todo snackbar to say error
-            return;
-        }
         //create group to contain all the shapes before we add them to the scene
         Group g = new Group();
 
@@ -738,20 +732,7 @@ public class newMapEditor {
      */
     @FXML
     private void errorPopup(String errorMessage) {
-        JFXDialogLayout error = new JFXDialogLayout();
-        error.setHeading(new Text("Error!"));
-        error.setBody(new Text(errorMessage));
-        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
-        JFXButton okay = new JFXButton("Okay");
-        okay.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
-
-            }
-        });
-        error.setActions(okay);
-        dialog.show();
+        App.newJFXDialogPopUp("Error!","Okay",errorMessage,stackPane);
     }
 
 
@@ -996,7 +977,7 @@ public class newMapEditor {
     private void startMapClickHandler() {
 
         //create image group
-        Group g = new Group();
+        Group g = new Group(); //todo see below todo.
 
         pane.setOnMouseClicked(e -> {
             //double click

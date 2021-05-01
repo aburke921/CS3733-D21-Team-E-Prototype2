@@ -72,20 +72,19 @@ public class SanitationServices extends ServiceRequestFormComponents {
   private void saveData(ActionEvent event){
 
     if(validateInput()){
-      ArrayList<String> nodeIDS = DB.getListOfNodeIDS();
+      int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
+      int userIndex = assignedIndividual.getSelectionModel().getSelectedIndex();
+
       String serviceKind = ServiceTypeinput.getValue();
-      int assigneeID = 99999;
+      int assigneeID = userID.get(userIndex);
       String details = detailedInstructionsInput.getText();
       String severity = Severity.getValue();
       String signature = Signature.getText();
-      int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
-      String nodeID = nodeIDS.get(nodeIDIndex);
-      DB.addSanitationRequest(App.userID,assigneeID,nodeID, serviceKind,details,severity,signature);
-      //DB changed the assignee in the function call to an int (not string) --> we need the assignee's userID
-      System.out.println(serviceKind);
+      String node = nodeID.get(nodeIDIndex);
+      DB.addSanitationRequest(App.userID,assigneeID,node, serviceKind,details,severity,signature);
 
       super.handleButtonSubmit(event);
-      //Setting up all variables to be entered
+
     }
 
   }
@@ -104,20 +103,9 @@ public class SanitationServices extends ServiceRequestFormComponents {
     assignedIndividual.setItems(names);
 
     assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-    //TODO clean these up
-    ObservableList<String> Services  = FXCollections.observableArrayList();
-    Services.setAll("Urine Cleanup","Feces Cleanup","Trash Removal");
-
-    //ServiceTypeinput.setItems(Services);
-
     assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
     assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-    ObservableList<String> rating  = FXCollections.observableArrayList();
-    rating.setAll("Low","Medium","High","Critical");
-    Severity.setItems(rating);
-
     assert assignedIndividual != null : "fx:id=\"assignedIndividual\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-
 
   }
 }

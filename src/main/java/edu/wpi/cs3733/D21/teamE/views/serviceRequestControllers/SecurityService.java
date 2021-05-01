@@ -92,16 +92,16 @@ public class SecurityService extends ServiceRequestFormComponents {
     @FXML
     private void saveData(ActionEvent actionEvent){
         if(validateInput()){
-
-            ArrayList<String> nodeIDS = DB.getListOfNodeIDS();
-            String securityLevel = levelOfSecurity.getSelectionModel().getSelectedItem().toString();
-            String urgencyLevel = levelOfUrgency.getSelectionModel().getSelectedItem().toString();
-            int assignee = Integer.parseInt(assignedPersonnel.getSelectionModel().getSelectedItem());
-            String reason = reasonForRequest.getText();
             int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
-            String nodeID = nodeIDS.get(nodeIDIndex);
-            System.out.println(securityLevel + "" + urgencyLevel + "" + assignee + "" + nodeID);
-            DB.addSecurityRequest(App.userID, assignee, nodeID, securityLevel, urgencyLevel);
+            int userIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
+
+            String securityLevel = levelOfSecurity.getSelectionModel().getSelectedItem();
+            String urgencyLevel = levelOfUrgency.getSelectionModel().getSelectedItem();
+            int assignee = userID.get(userIndex);
+            String reason = reasonForRequest.getText();
+            String node = nodeID.get(nodeIDIndex);
+
+            DB.addSecurityRequest(App.userID, assignee, node, securityLevel, urgencyLevel);
             super.handleButtonSubmit(actionEvent);
         }
     }

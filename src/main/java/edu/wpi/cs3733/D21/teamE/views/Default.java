@@ -197,6 +197,20 @@ public class Default {
     }
 
     @FXML
+    private void toParking(ActionEvent e) {
+
+        ArrayList<Node> nodeArrayList = DB.getAllNodes();
+        int index = 0;
+        for (int i = 0; i < nodeArrayList.size(); i++) {
+            if (nodeArrayList.get(i).get("id").equals(DB.whereDidIPark(App.userID))) {
+                index = i;
+            }
+        }
+        PathFinder.endNodeIndex = index;
+        toPathFinder(e);
+    }
+
+    @FXML
     private void toMenu(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/MenuPage.fxml"));

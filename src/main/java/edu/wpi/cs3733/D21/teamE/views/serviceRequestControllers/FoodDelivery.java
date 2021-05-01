@@ -6,6 +6,7 @@ package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 
 import java.io.IOException;
 
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.fxml.FXMLLoader;
@@ -24,11 +25,6 @@ import javafx.fxml.FXML;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-
-
-
-
-
 
 public class FoodDelivery extends ServiceRequestFormComponents {
 
@@ -72,9 +68,36 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		super.handleButtonCancel(event);
 	}
 
+	private boolean validateInput() {
+		RequiredFieldValidator validator = new RequiredFieldValidator();
+		validator.setMessage("Input required");
+
+		locationInput.getValidators().add(validator);
+		assigneeInput.getValidators().add(validator);
+		deliveryService.getValidators().add(validator);
+		orderNumber.getValidators().add(validator);
+		descriptionInput.getValidators().add(validator);
+
+		return locationInput.validate() && assigneeInput.validate() && deliveryService.validate()
+				&& orderNumber.validate() && descriptionInput.validate();
+	}
+
+
 	@FXML
 	void saveData(ActionEvent event) {
-		super.handleButtonSubmit(event);
+		if(validateInput()) {
+			int locationIndex = locationInput.getSelectionModel().getSelectedIndex();
+			int userIndex = assigneeInput.getSelectionModel().getSelectedIndex();
+
+			String loc = nodeIDs.get(locationIndex);
+			int user = userID.get(userIndex);
+			String rest = deliveryService.getText();
+			String number = orderNumber.getText();
+			String desc = descriptionInput.getText();
+
+			DB.addFoodDeliveryRequest(App.userID, loc, user, rest, number, desc);
+			super.handleButtonSubmit(event);
+		}
 	}
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
@@ -102,6 +125,7 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 
 	}
 
+	//TODO move this to the state stuff
 	/**
 	 * Move to Service Request page
 	 * @param e

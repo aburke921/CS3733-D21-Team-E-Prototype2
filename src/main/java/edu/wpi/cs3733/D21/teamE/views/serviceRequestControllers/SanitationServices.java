@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 import com.jfoenix.controls.*;
 import com.jfoenix.validation.RequiredFieldValidator;
 
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -54,33 +55,23 @@ public class SanitationServices extends ServiceRequestFormComponents {
     ServiceTypeinput.getValidators().add(validator);
     assignedIndividual.getValidators().add(validator);
     locationInput.getValidators().add(validator);
-
     detailedInstructionsInput.getValidators().add(validator);
     Signature.getValidators().add(validator);
     Severity.getValidators().add(validator);
 
     return locationInput.validate() && ServiceTypeinput.validate() && assignedIndividual.validate() && detailedInstructionsInput.validate() && Severity.validate() && Signature.validate();
 
-
   }
 
 
   /**
    * records inputs from user into a series of String variables and returns to the main page
-   * @param actionEvent
+   * @param event
    */
   @FXML
-  private void saveData(ActionEvent actionEvent){
-
+  private void saveData(ActionEvent event){
 
     if(validateInput()){
-      //String detailedInstructions = sdetailedInstructionsInput.getText();
-      //creating the service request
-
-      //System.out.println(request.getAssignmentField());
-      //Adding service request to table
-      //makeConnection connection = makeConnection.makeConnection();
-      //connection.addRequest("sanitationServices", request);
       ArrayList<String> nodeIDS = DB.getListOfNodeIDS();
       String serviceKind = ServiceTypeinput.getValue();
       int assigneeID = 99999;
@@ -89,16 +80,13 @@ public class SanitationServices extends ServiceRequestFormComponents {
       String signature = Signature.getText();
       int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
       String nodeID = nodeIDS.get(nodeIDIndex);
-      DB.addSanitationRequest(15,assigneeID,nodeID, serviceKind,details,severity,signature);
+      DB.addSanitationRequest(App.userID,assigneeID,nodeID, serviceKind,details,severity,signature);
       //DB changed the assignee in the function call to an int (not string) --> we need the assignee's userID
       System.out.println(serviceKind);
 
-      super.handleButtonSubmit(actionEvent);
+      super.handleButtonSubmit(event);
       //Setting up all variables to be entered
     }
-
-
-
 
   }
 
@@ -116,7 +104,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
     assignedIndividual.setItems(names);
 
     assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-
+    //TODO clean these up
     ObservableList<String> Services  = FXCollections.observableArrayList();
     Services.setAll("Urine Cleanup","Feces Cleanup","Trash Removal");
 

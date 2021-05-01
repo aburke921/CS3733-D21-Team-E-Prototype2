@@ -79,7 +79,6 @@ public class SecurityService extends ServiceRequestFormComponents {
 
         validator.setMessage("Input required");
 
-
         locationInput.getValidators().add(validator);
         levelOfSecurity.getValidators().add(validator);
         levelOfUrgency.getValidators().add(validator);

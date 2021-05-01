@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -74,6 +75,19 @@ public class Maintenance extends ServiceRequestFormComponents {
 
     @FXML
     void saveData(ActionEvent event) {
+        int userIndex = assignedPersonnelInput.getSelectionModel().getSelectedIndex();
+        int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+
+        String node = nodeID.get(nodeIndex);
+        int user = userID.get(userIndex);
+        String type = requestTypeInput.getSelectionModel().getSelectedItem();
+        String severity = severityInput.getSelectionModel().getSelectedItem();
+        String author = authorInput.getText();
+        String description = descriptionInput.getText();
+        String eta = ETAInput.getText();
+
+        DB.addMaintenanceRequest(App.userID, node, user, type, severity, eta, description);
+
         super.handleButtonSubmit(event);
     }
 

@@ -70,33 +70,24 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     }
 
     @FXML
-    private void saveData(ActionEvent e) {
+    private void saveData(ActionEvent event) {
 
-        int locIndex = locationInput.getSelectionModel().getSelectedIndex();
+        if(validateInput()) {
+            int locIndex = locationInput.getSelectionModel().getSelectedIndex();
+            int userIndex = assignee.getSelectionModel().getSelectedIndex();
 
-        String location = nodeID.get(locIndex);
-        String name = medicineNameInput.getText();
-        String doseMeasure = doseMeasureInput.getText();
-        int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
-        int assigned = 0; //TODO update this
-        String specialInstructions = specialInstructInput.getText();
-        String signature = signatureInput.getText();
+            String location = nodeID.get(locIndex);
+            String name = medicineNameInput.getText();
+            String doseMeasure = doseMeasureInput.getText();
+            int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
+            int assigned = userID.get(userIndex);
+            String specialInstructions = specialInstructInput.getText();
+            String signature = signatureInput.getText();
 
-        DB.addMedicineRequest(App.userID, assigned, location, name, doseQuantity, doseMeasure, specialInstructions, signature);
-    }
-
-    @FXML
-    void handleButtonSubmit(ActionEvent event) {
-        if (validateInput()) {
-            try {
-                saveData(event);
-                System.out.println(event); //Print the ActionEvent to console
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-                App.getPrimaryStage().getScene().setRoot(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            DB.addMedicineRequest(App.userID, assigned, location, name, doseQuantity, doseMeasure, specialInstructions, signature);
+            super.handleButtonSubmit(event);
         }
+
     }
 
     @FXML

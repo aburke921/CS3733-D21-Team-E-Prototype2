@@ -53,6 +53,19 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
     -fx-background-color: #a2dcfd;
 }
 
+.login-button {
+    -fx-background-color: -fx--primary-dark;
+    -fx-border-color: -fx--primary-light;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+    -fx-font-family: 'Arial Black';
+    -fx-font-size: 14px;
+}
+
+.login-button:hover {
+    -fx-background-color: -fx--primary;
+}
+
 .normal-button {
     -jfx-button-type: RAISED;
     -fx-background-color: white;
@@ -176,6 +189,9 @@ JFXToggleButton  {
 /*    -fx-background-color: red;*/
 /*}*/
 
+/*------------------------
+    Icon STYLES
+--------------------------*/
 MaterialDesignIconView {
     -fx-fill: -fx--primary;
 }
@@ -200,4 +216,11 @@ JFXButton:hover FontAwesomeIconView {
 .jfx-tree-table-view {
     -fx-tree-table-color: rgba(3, 155, 229, 0.4);
     -jfx-header-color: -fx--primary-dark; /*header text color*/
+}
+
+/*------------------------
+    LABEL STYLES
+-------------------------*/
+.create-account-label:hover {
+    -fx-text-fill: -fx--primary-dark;
 }

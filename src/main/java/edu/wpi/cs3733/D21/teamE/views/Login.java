@@ -7,11 +7,17 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -55,6 +61,20 @@ public class Login {
     @FXML
     private AnchorPane appBarAnchorPane;
 
+	@FXML // fx:id="imageView"
+	private ImageView hospitalImageView;
+
+	@FXML // fx:id="imageView"
+	private ImageView logoImageView;
+
+	@FXML // fx:id="imageAnchorPane"
+	private AnchorPane imageAnchorPane;
+
+	@FXML // fx:id="rightAnchorPane"
+	private AnchorPane rightAnchorPane;
+
+	@FXML // fx:id="createAccountLabel"
+	private Label createAccountLabel;
 
     public void initialize() {
 
@@ -71,6 +91,40 @@ public class Login {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+		//Set up images
+		Stage primaryStage = App.getPrimaryStage();
+
+		Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+		hospitalImageView.setImage(hospital);
+		hospitalImageView.setPreserveRatio(true);
+		hospitalImageView.setFitHeight(primaryStage.getHeight());
+		hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
+
+		imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+		imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+
+		Rectangle2D viewport = new Rectangle2D(100, 0, hospital.getWidth(), hospital.getHeight());
+		hospitalImageView.setViewport(viewport);
+
+		Image logo = new Image("edu/wpi/cs3733/D21/teamE/logo.png");
+		logoImageView.setImage(logo);
+		logoImageView.setPreserveRatio(true);
+		rightAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+		rightAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+
+		createAccountLabel.setOnMousePressed(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/createAccount.fxml"));
+					App.getPrimaryStage().getScene().setRoot(root);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+
 
 		//set submit as default (will submit on an "ENTER" keypress)
 		submitLoginButton.setDefaultButton(true);

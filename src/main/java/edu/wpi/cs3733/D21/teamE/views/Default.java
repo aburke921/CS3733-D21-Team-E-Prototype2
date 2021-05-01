@@ -255,7 +255,7 @@ public class Default {
         imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
         imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
-        Rectangle2D viewport = new Rectangle2D(200, 0, hospital.getWidth(), hospital.getHeight());
+        Rectangle2D viewport = new Rectangle2D(100, 0, hospital.getWidth(), hospital.getHeight());
         hospitalImageView.setViewport(viewport);
 
         Image logo = new Image("edu/wpi/cs3733/D21/teamE/logo.png");

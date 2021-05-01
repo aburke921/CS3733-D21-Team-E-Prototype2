@@ -739,6 +739,7 @@ public class newMapEditor {
     /**
      * retrieves the ID of the selected item in the table, passes that into deleteNode fcn from database
      * @param table
+     * @// TODO: 4/30/2021 what does this return?
      */
     public int deleteNode(TreeTableView<Node> table) {
         int s = -1;
@@ -761,6 +762,7 @@ public class newMapEditor {
 
             }
         }
+        refresh();
         return s;
     }
 
@@ -901,7 +903,13 @@ public class newMapEditor {
      * resets tables and map after edits made
      */
     public void refresh() {
-        initialize();
+
+        //refresh map
+        drawMap(currentFloor);
+
+        //refresh tables
+        prepareNodes(nodeTreeTable);
+        prepareEdges(edgeTreeTable);
     }
 
     /**
@@ -1285,7 +1293,8 @@ public class newMapEditor {
                 }
             }
         });
-//draging nodes
+
+        //dragging nodes
         drag.setOnAction(e -> {
             if (drag.isSelected()) {
                 System.out.println("No drag");
@@ -1327,9 +1336,8 @@ public class newMapEditor {
 
             }
         });
-
-
     }
+
     /**
      * Creates a new JFX Dialog on the current page.
      * @param message Message to display in the dialog box.
@@ -1437,6 +1445,7 @@ public class newMapEditor {
                 }
             }
         }
+        refresh();
     }
 
     /**

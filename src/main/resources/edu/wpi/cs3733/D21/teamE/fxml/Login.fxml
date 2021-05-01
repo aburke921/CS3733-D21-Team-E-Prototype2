@@ -18,7 +18,7 @@
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefHeight="65.0" prefWidth="1012.0" />
       <AnchorPane prefHeight="733.0" prefWidth="1200.0">
          <children>
-            <StackPane alignment="TOP_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <StackPane fx:id="stackPane" alignment="TOP_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <ImageView fx:id="hospitalImageView" fitHeight="800.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true" />
                   <HBox alignment="CENTER">

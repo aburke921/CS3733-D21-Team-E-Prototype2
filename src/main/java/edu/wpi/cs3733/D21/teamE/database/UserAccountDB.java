@@ -424,4 +424,26 @@ public class UserAccountDB {
 		System.err.println("Error in submitParkingSlot() from UserAccountDB");
 		return false;
 	}
+
+	/**
+	 * Get where the user parked
+	 * @param userID is the user's ID that we are checking
+	 * @return the node where the user parked, null if not exist
+	 */
+	public static String whereDidIPark(int userID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"Select lastParkedNodeID " +
+						"From userAccount " +
+						"Where userID = ? ")) {
+			preparedStatement.setInt(1, userID);
+			ResultSet rset = preparedStatement.executeQuery();
+			if (rset.next()) {
+				return rset.getString("lastParkedNodeID");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Error in isUserCovidSafe() from UserAccountDB");
+		return null;
+	}
 }

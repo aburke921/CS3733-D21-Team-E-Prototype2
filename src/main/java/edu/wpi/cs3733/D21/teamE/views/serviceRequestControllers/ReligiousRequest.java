@@ -82,8 +82,8 @@ public class ReligiousRequest extends ServiceRequestFormComponents {
         locations = DB.getAllNodeLongNames();
         nodeID = DB.getListOfNodeIDS();
         //TODO add user type
-        names = DB.getAssigneeNames("Add user type here");
-        userID = DB.getAssigneeIDs("Add user type here");
+        names = DB.getAssigneeNames("religiousPerson");
+        userID = DB.getAssigneeIDs("religiousPerson");
 
         locationInput.setItems(locations);
         assignedPersonnel.setItems(names);

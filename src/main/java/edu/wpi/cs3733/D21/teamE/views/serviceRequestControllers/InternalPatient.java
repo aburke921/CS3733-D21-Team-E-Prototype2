@@ -82,8 +82,8 @@ public class InternalPatient extends ServiceRequestFormComponents{
         locations = DB.getAllNodeLongNames();
         nodeID = DB.getListOfNodeIDS();
         //TODO add user type
-        names = DB.getAssigneeNames("Add user type here");
-        userID = DB.getAssigneeIDs("Add user type here");
+        names = DB.getAssigneeNames("nurse");
+        userID = DB.getAssigneeIDs("nurse");
 
         pickupInput.setItems(locations);
         dropoffInput.setItems(locations);

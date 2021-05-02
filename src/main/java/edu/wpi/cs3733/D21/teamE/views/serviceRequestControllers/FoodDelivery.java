@@ -114,8 +114,8 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		locations = DB.getAllNodeLongNames();
 		nodeIDs = DB. getListOfNodeIDS();
 		//todo add proper types here
-		names = DB.getAssigneeNames("Add user type");
-		userID = DB.getAssigneeIDs("Add user type");
+		names = DB.getAssigneeNames("nurse");
+		userID = DB.getAssigneeIDs("nurse");
 
 		locationInput.setItems(locations);
 		assigneeInput.setItems(names);

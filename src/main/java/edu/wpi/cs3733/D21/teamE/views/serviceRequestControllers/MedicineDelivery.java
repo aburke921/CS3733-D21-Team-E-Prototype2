@@ -103,8 +103,8 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         locations = DB.getAllNodeLongNames();
         nodeID = DB.getListOfNodeIDS();
         //TODO add user type
-        names = DB.getAssigneeNames("Add user type here");
-        userID = DB.getAssigneeIDs("Add user type here");
+        names = DB.getAssigneeNames("pharmacist");
+        userID = DB.getAssigneeIDs("pharmacist");
 
         locationInput.setItems(locations);
         assignee.setItems(names);

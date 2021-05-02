@@ -201,7 +201,6 @@ JFXListView {
 }
 
 .floor-change-label {
-    -fx-font-style: ARIAL;
     -fx-font-size: 10px;
     -fx-background-color: WHITE;
     -fx-background-radius: 5px;

@@ -294,6 +294,12 @@ public class PathFinder {
                     error.setHeading(new Text("Error when trying to add parking slot"));
                     JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
                     JFXButton dismiss = new JFXButton("Dismiss");
+                    dismiss.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            dialog.close();
+                        }
+                    });
                     error.setActions(dismiss);
                     dialog.show();
                 }

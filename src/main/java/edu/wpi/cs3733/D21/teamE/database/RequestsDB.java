@@ -563,7 +563,7 @@ public class RequestsDB {
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertSanitationRequest)) {
 			prepState.setString(1, roomID);
-			prepState.setString(2, signature);
+
 			prepState.setString(3, description);
 			prepState.setString(4, sanitationType);
 			prepState.setString(5, urgency);

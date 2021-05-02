@@ -156,7 +156,7 @@ public class MenuPage {
     }
 
     @FXML
-    private void toFoodDelivery(ActionEvent e) {
+    private void switchScene(ActionEvent e) {
         MenuPageState menuPageState = new MenuPageState();
         menuPageState.switchScene(e);
     }

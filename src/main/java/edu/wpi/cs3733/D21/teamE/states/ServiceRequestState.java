@@ -12,9 +12,9 @@ public class ServiceRequestState {
 
     public void switchScene(ActionEvent event) {
 
-        String buttonName = ((Button) event.getSource()).getId();
+        String buttonName = ((Button) event.getSource()).getText();
 
-        if(buttonName.equals("backButton")){
+        if(buttonName.equals("Back")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
                 App.changeScene(root);
@@ -23,7 +23,7 @@ public class ServiceRequestState {
             }
         }
 
-        else if(buttonName.equals("floralGoButton")){
+        else if(buttonName.equals("Floral Delivery")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/FloralV2.fxml"));
                 App.changeScene(root);
@@ -32,7 +32,7 @@ public class ServiceRequestState {
             }
         }
 
-        else if(buttonName.equals("foodDeliveryButton")){
+        else if(buttonName.equals("Food Delivery")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/FoodDelivery.fxml"));
                 App.changeScene(root);
@@ -41,7 +41,7 @@ public class ServiceRequestState {
             }
         }
 
-        else if(buttonName.equals("languageInterpreterButton")){
+        else if(buttonName.equals("Language Interpreter")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/LanguageInterpreter.fxml"));
                 App.changeScene(root);
@@ -50,7 +50,7 @@ public class ServiceRequestState {
             }
         }
 
-        else if(buttonName.equals("religionButton")){
+        else if(buttonName.equals("Religious Requests")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ReligiousRequests.fxml"));
                 App.changeScene(root);
@@ -59,7 +59,7 @@ public class ServiceRequestState {
             }
         }
 
-        else if(buttonName.equals("laundryRequestButton")){
+        else if(buttonName.equals("Laundry")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Laundry.fxml"));
                 App.changeScene(root);
@@ -68,7 +68,7 @@ public class ServiceRequestState {
             }
         }
 
-        else if(buttonName.equals("sanitationGoButton")){
+        else if(buttonName.equals("Sanitation Services")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SanitationV2.fxml"));
                 App.changeScene(root);
@@ -77,7 +77,7 @@ public class ServiceRequestState {
             }
         }
 
-        else if(buttonName.equals("medicineGoButton")){
+        else if(buttonName.equals("Medicine Delivery")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/MedicineDeliveryV2.fxml"));
                 App.changeScene(root);
@@ -86,7 +86,7 @@ public class ServiceRequestState {
             }
         }
 
-        else if(buttonName.equals("securityGoButton")){
+        else if(buttonName.equals("Security Services")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SecurityV2.fxml"));
                 App.changeScene(root);
@@ -95,7 +95,7 @@ public class ServiceRequestState {
             }
         }
 
-        else if(buttonName.equals("maintenanceRequestButton")){
+        else if(buttonName.equals("Facilities Maintenance")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/MaintenanceRequest.fxml"));
                 App.changeScene(root);
@@ -104,7 +104,7 @@ public class ServiceRequestState {
             }
         }
 
-        else if(buttonName.equals("internalGoButton")){
+        else if(buttonName.equals("Internal Patient Transport")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/InternalPatient.fxml"));
                 App.changeScene(root);
@@ -113,7 +113,7 @@ public class ServiceRequestState {
             }
         }
 
-        else if(buttonName.equals("externalGoButton")){
+        else if(buttonName.equals("External Patient Transport")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ExternalPatient.fxml"));
                 App.changeScene(root);
@@ -122,7 +122,7 @@ public class ServiceRequestState {
             }
         }
 
-        else if(buttonName.equals("serviceRequestStatus")){
+        else if(buttonName.equals("Service Request Status")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequestStatus.fxml"));
                 App.changeScene(root);

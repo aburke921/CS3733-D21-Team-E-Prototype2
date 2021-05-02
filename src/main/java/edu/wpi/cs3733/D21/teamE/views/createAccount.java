@@ -120,8 +120,12 @@ public class createAccount {
 		App.newJFXDialogPopUp("Error!", "Okay", errorMessage, stackPane);
 	}
 
+	/**
+	 * Switch to a different scene
+	 * @param e tells which button was pressed
+	 */
 	@FXML
-	public void toLogin(ActionEvent e) {
+	public void switchScene(ActionEvent e) {
 		CreateAccountState createAccountState = new CreateAccountState();
 		createAccountState.switchScene(e);
 	}

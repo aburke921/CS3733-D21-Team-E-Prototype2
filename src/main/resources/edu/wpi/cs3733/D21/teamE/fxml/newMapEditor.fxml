@@ -337,7 +337,7 @@
         </AnchorPane>
         <AnchorPane fx:id="lowerAnchorPane" prefHeight="59.0" prefWidth="1244.0">
             <children>
-                <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" onAction="#toDefault" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
+                <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" onAction="#switchScene" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
             <JFXButton layoutX="498.0" layoutY="10.0" onAction="#toNodeTable" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Node Table" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="10.0" />
             <JFXButton layoutX="363.0" layoutY="10.0" onAction="#toMap" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Display Map" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="10.0" />
             <JFXButton layoutX="633.0" layoutY="10.0" onAction="#toEdgeTable" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Edge Table" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="10.0" />

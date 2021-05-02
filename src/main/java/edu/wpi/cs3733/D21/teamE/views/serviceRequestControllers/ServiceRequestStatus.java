@@ -36,8 +36,12 @@ public class ServiceRequestStatus {
     @FXML
     JFXButton refreshButton;
 
+    /**
+     * Switch to a different scene
+     * @param e tells which button was pressed
+     */
     @FXML
-    private void back(ActionEvent e) {
+    private void switchScene(ActionEvent e) {
         ServiceRequestStatusState serviceRequestStatusState = new ServiceRequestStatusState();
         serviceRequestStatusState.switchScene(e);
     }

@@ -43,12 +43,11 @@ public class DB {
 	 * creates an appointment and adds to the appointmentDB table
 	 * @param patientID is the ID of the patient making the appointment
 	 * @param startTime is when the appointment starts
-	 * @param endTime   is when the appointment ends
 	 * @param doctorID  is the doctor assigned to the appointment
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int addAppointment(int patientID, long startTime, long endTime, int doctorID) {
-		return appointmentDB.addAppointment(patientID, startTime, endTime, doctorID);
+	public static int addAppointment(int patientID, String startTime, int doctorID) {
+		return appointmentDB.addAppointment(patientID, startTime, doctorID);
 	}
 
 	/**
@@ -67,8 +66,8 @@ public class DB {
 	 * @param newDoctorID   is the new doctor assigned
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int editAppointment(int appointmentID, int newStartTime, int newEndTime, Integer newDoctorID) {
-		return appointmentDB.editAppointment(appointmentID, newStartTime, newEndTime, newDoctorID);
+	public static int editAppointment(int appointmentID, String newStartTime, String newEndTime, Integer newDoctorID) {
+		return appointmentDB.editAppointment(appointmentID, newStartTime, newDoctorID);
 	}
 
 	/**

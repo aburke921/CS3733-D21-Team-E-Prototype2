@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
 
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -55,8 +56,7 @@ public class Appointment extends ServiceRequestFormComponents{
 	private JFXDatePicker dateInput; // Value injected by FXMLLoader
 	@FXML // fx:id="startTimeInput"
 	private JFXTimePicker startTimeInput; // Value injected by FXMLLoader
-	@FXML // fx:id="endTimeInput"
-	private JFXTimePicker endTimeInput; // Value injected by FXMLLoader
+
 	@FXML // fx:id="doctorInput"
 	private JFXComboBox<String> doctorInput; // Value injected by FXMLLoader
 	@FXML // fx:id="additionalNotesInput"
@@ -123,13 +123,11 @@ public class Appointment extends ServiceRequestFormComponents{
 
 			LocalDate date = dateInput.getValue();
 			System.out.println("date " + date);
-			LocalTime startTime = startTimeInput.getValue();
+			String startTime = startTimeInput.getValue().toString();
 			System.out.println("startTime " + startTime);
-			LocalTime endTime = endTimeInput.getValue();
-			System.out.println("endTime" +endTime);
+
 			int doctorIndex = doctorInput.getSelectionModel().getSelectedIndex();
 			System.out.println("doctorIndex " + doctorIndex);
-//			String doctor = doctorArray.get(doctorIndex);
 			String additionalNotes = additionalNotesInput.getText();
 			System.out.println("additionalNotes " + additionalNotes);
 			boolean oneMonthPrior = oneMonthPriorInput.isSelected();
@@ -142,6 +140,8 @@ public class Appointment extends ServiceRequestFormComponents{
 			System.out.println("twoDaysPrior " + twoDaysPrior);
 			boolean oneDayPrior = oneDayPriorInput.isSelected();
 			System.out.println("oneDayPrior " + oneDayPrior);
+
+			DB.addAppointment(App.userID, startTime, doctorIndex);
 
 //			String details = descriptionInput.getText();
 //			int assigneeIDIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
@@ -166,12 +166,11 @@ public class Appointment extends ServiceRequestFormComponents{
 
 		dateInput.getValidators().add(validator);
 		startTimeInput.getValidators().add(validator);
-		endTimeInput.getValidators().add(validator);
 		doctorInput.getValidators().add(validator);
 		additionalNotesInput.getValidators().add(validator);
 
 
-		return dateInput.validate() && startTimeInput.validate() && endTimeInput.validate() &&
+		return dateInput.validate() && startTimeInput.validate() &&
 				doctorInput.validate() && additionalNotesInput.validate();
 	}
 

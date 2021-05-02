@@ -1128,8 +1128,8 @@ public class DatabaseTests {
 
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
-		int rowsAffected1 = DB.addAppointment(1, 400, 400, 2);
-		int rowsAffected2 = DB.addAppointment(2, 400, 400, 2);
+		int rowsAffected1 = DB.addAppointment(1, "4:00", 2);
+		int rowsAffected2 = DB.addAppointment(2, "8:00",  2);
 
 		int totalRowsAffected = rowsAffected1 + rowsAffected2;
 		assertEquals(2, totalRowsAffected);
@@ -1146,12 +1146,12 @@ public class DatabaseTests {
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 		DB.addSpecialUserType("ameliak@yahoo.com", "doctor02", "doctor", "Amelia", "Knight");
 
-		DB.addAppointment(1, 400, 400, 2);
-		DB.addAppointment(2, 400, 400, 2);
+		DB.addAppointment(1, "4:00",  2);
+		DB.addAppointment(2, "8:00", 2);
 
 
-		int rowAffected = DB.editAppointment(1, 700, 700, null);
-		int rowAffected2 = DB.editAppointment(2, 500, 500, 3);
+		int rowAffected = DB.editAppointment(1, "6:00", "7:00", null);
+		int rowAffected2 = DB.editAppointment(2, "9:00", "10:00", 3);
 
 		int totalRowAffected = rowAffected + rowAffected2;
 
@@ -1167,8 +1167,8 @@ public class DatabaseTests {
 
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
-		DB.addAppointment(1, 400, 400, 2);
-		DB.addAppointment(2, 400, 400, 2);
+		DB.addAppointment(1, "8:00", 2);
+		DB.addAppointment(2, "8:00",  2);
 
 		DB.addRemovedPatientAppointmentHistory(1);
 
@@ -1182,7 +1182,7 @@ public class DatabaseTests {
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 
-		DB.addAppointment(1, 400, 400, 2);
+		DB.addAppointment(1, "8:00",  2);
 
 		int rowsAffected = DB.cancelAppointment(1);
 
@@ -1198,9 +1198,9 @@ public class DatabaseTests {
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 
-		DB.addAppointment(1, 400, 400, 2);
-		DB.addAppointment(1, 500, 500, 2);
-		DB.addAppointment(1, 600, 600, 2);
+		DB.addAppointment(1, "8:00", 2);
+		DB.addAppointment(1, "8:00",  2);
+		DB.addAppointment(1, "8:00",  2);
 
 		int rowsAffected = DB.cancelAppointment(1);
 

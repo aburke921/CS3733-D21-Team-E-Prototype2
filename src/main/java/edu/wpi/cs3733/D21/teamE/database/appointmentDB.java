@@ -12,10 +12,8 @@ public class appointmentDB {
 				"    appointmentID Int Primary Key, " +
 				"    patientID Int References useraccount (userid) On Delete Cascade , " +
 				"    doctorID Int References useraccount (userid) On Delete Cascade, " +
-				"    nodeID varchar(31) References node (nodeid) On Delete Cascade,  " +
-				"    startTime timeStamp, " +
-				"    endTime timestamp, " +
-				"    Constraint appointmentUnique Unique(patientID, startTime, endTime) " +
+				"    startTime varchar(31), " +
+				"    Constraint appointmentUnique Unique(patientID, startTime) " +
 				")";
 
 
@@ -33,21 +31,17 @@ public class appointmentDB {
 	 * creates an appointment and adds to the appointmentDB table
 	 * @param patientID is the ID of the patient making the appointment
 	 * @param startTime is when the appointment starts
-	 * @param endTime   is when the appointment ends
 	 * @param doctorID  is the doctor assigned to the appointment
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int addAppointment(int patientID, long startTime, long endTime, int doctorID) {
-		Timestamp sTime = new Timestamp(startTime);
-		Timestamp eTime = new Timestamp(endTime);
-		String insertAddApt = "insert into appointment values(" + (getMaxAppointmentID() + 1) + ",?, ?, null, ? , ?)";
+	public static int addAppointment(int patientID, String startTime, int doctorID) {
+
+		String insertAddApt = "insert into appointment values(" + (getMaxAppointmentID() + 1) + ",?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertAddApt)) {
 			prepState.setInt(1, patientID);
 			prepState.setInt(2, doctorID);
-			prepState.setTimestamp(3, sTime);
-			prepState.setTimestamp(4, eTime);
-
+			prepState.setString(3, startTime);
 
 			prepState.executeUpdate();
 			prepState.close();
@@ -88,39 +82,19 @@ public class appointmentDB {
 	 * edits an appointment
 	 * @param appointmentID is the ID of the appointment
 	 * @param newStartTime  is the new start time of the appointment
-	 * @param newEndTime    is the new end time of the appointment
 	 * @param newDoctorID   is the new doctor assigned
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int editAppointment(int appointmentID, int newStartTime, int newEndTime, Integer newDoctorID) {
+	public static int editAppointment(int appointmentID, String newStartTime, Integer newDoctorID) {
 
 		boolean added = false;
 
 		String query = "update appointment set ";
 
-		Integer newStartTimeI = newStartTime;
-		Integer newEndTimeI = newStartTime;
 
-		if (newStartTimeI != null) {
+		if (newStartTime != null) {
+			query = query + "startTime = '" + newStartTime + "'";
 
-			long newStartTimelong = (long) newStartTime;
-			Long newStartTimeL = newStartTimelong;
-			Timestamp sTime = new Timestamp(newStartTimeL);
-
-			query = query + "startTime = '" + sTime + "'";
-
-			added = true;
-		}
-		if (newEndTimeI != null) {
-
-			long newEndTimelong = (long) newEndTime;
-			Long newEndTimeL = newEndTimelong;
-			Timestamp eTime = new Timestamp(newEndTimeL);
-
-			if (added == true) {
-				query = query + ", ";
-			}
-			query = query + "endTime = '" + eTime + "'";
 			added = true;
 		}
 		if (newDoctorID != null) {

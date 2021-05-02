@@ -1,29 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXTextArea?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import java.lang.Double?>
-<?import java.lang.String?>
+<?import com.jfoenix.controls.*?>
 <?import javafx.collections.FXCollections?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Polygon?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-
-<?import javafx.scene.layout.StackPane?>
-<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.MedicineDelivery">
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.ReligiousRequest">
     <children>
         <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
         <AnchorPane prefHeight="687.0" prefWidth="1199.0">
@@ -43,25 +25,27 @@
                                                             <children>
                                                                 <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
                                                                     <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
+                                                                        <Insets top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXComboBox>
-                                                                <JFXTextField fx:id="medicineNameInput" prefHeight="27.0" prefWidth="280.0" promptText="Medicine">
+                                                                <JFXComboBox fx:id="religionInput" prefHeight="27.0" prefWidth="295.0" promptText="Religion">
                                                                     <VBox.margin>
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
-                                                                </JFXTextField>
-                                                                <JFXTextField fx:id="doseQuantityInput" prefHeight="27.0" prefWidth="280.0" promptText="Quantity">
+                                                                    <items>
+                                                                        <FXCollections fx:factory="observableArrayList">
+                                                                            <String fx:value="Christian" />
+                                                                            <String fx:value="Jewish" />
+                                                                            <String fx:value="Islamic" />
+                                                                        </FXCollections>
+                                                                    </items>
+                                                                </JFXComboBox>
+                                                                <JFXComboBox fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
                                                                     <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
-                                                                    </VBox.margin>
-                                                                </JFXTextField>
-                                                                <JFXTextField fx:id="doseMeasureInput" promptText="Dosage" />
-                                                                <JFXComboBox fx:id="assignee" prefHeight="27.0" prefWidth="280.0" promptText="Assignee">
-                                                                    <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
+                                                                        <Insets top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXComboBox>
+
                                                             </children>
                                                             <FlowPane.margin>
                                                                 <Insets left="10.0" />
@@ -73,11 +57,12 @@
                                                     <children>
                                                         <VBox prefHeight="363.0" prefWidth="259.0">
                                                             <children>
-                                                                <JFXTextArea fx:id="specialInstructInput" prefHeight="141.0" prefWidth="259.0" promptText="Special Instructions">
+                                                                <JFXTextArea fx:id="description" prefHeight="141.0" prefWidth="259.0" promptText="Reason for Religious Request">
                                                                     <VBox.margin>
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXTextArea>
+
                                                                 <GridPane>
                                                                     <columnConstraints>
                                                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />
@@ -120,3 +105,4 @@
         </AnchorPane>
     </children>
 </VBox>
+

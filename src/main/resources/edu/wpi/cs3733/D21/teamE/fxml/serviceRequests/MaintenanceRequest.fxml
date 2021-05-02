@@ -1,29 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXTextArea?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import java.lang.Double?>
-<?import java.lang.String?>
+<?import com.jfoenix.controls.*?>
 <?import javafx.collections.FXCollections?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Polygon?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-
-<?import javafx.scene.layout.StackPane?>
-<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.SecurityService">
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.Maintenance">
     <children>
         <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
         <AnchorPane prefHeight="687.0" prefWidth="1199.0">
@@ -42,42 +24,52 @@
                                                         <VBox prefHeight="349.0" prefWidth="264.0">
                                                             <children>
                                                                 <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
-                                                                    <items>
-                                                                    </items>
                                                                     <VBox.margin>
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXComboBox>
-                                                                <JFXComboBox fx:id="levelOfSecurity" prefHeight="27.0" prefWidth="295.0" promptText="Level Of Security">
-                                                                    <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
-                                                                    </VBox.margin>
-                                                                    <items>
-                                                                        <FXCollections fx:factory="observableArrayList">
-                                                                            <String fx:value="Critical" />
-                                                                            <String fx:value="High" />
-                                                                            <String fx:value="Medium" />
-                                                                            <String fx:value="Low"/>
-                                                                        </FXCollections>
-                                                                    </items>
-                                                                </JFXComboBox>
-                                                                <JFXComboBox fx:id="levelOfUrgency" prefHeight="27.0" prefWidth="291.0" promptText="Level of Urgency">
+                                                                <JFXComboBox fx:id="requestTypeInput" prefHeight="27.0" prefWidth="295.0" promptText="Request Type">
                                                                     <VBox.margin>
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
                                                                     <items>
                                                                         <FXCollections fx:factory="observableArrayList">
-                                                                            <String fx:value="High" />
-                                                                            <String fx:value="Medium" />
-                                                                            <String fx:value="Low" />
+                                                                            <String fx:id="power" fx:value="Power Issue" />
+                                                                            <String fx:id="lights" fx:value="Lights Issue" />
+                                                                            <String fx:id="plumbing" fx:value="Plumbing Issue" />
+                                                                            <String fx:id="gas" fx:value="Gas Leak" />
+                                                                            <String fx:id="equipment" fx:value="Equipment Issue" />
+                                                                            <String fx:id="window" fx:value="Broken Window" />
+                                                                            <String fx:id="door" fx:value="Broken Door" />
+                                                                            <String fx:id="ceiling" fx:value="Broken Ceiling Tile" />
+                                                                            <String fx:id="elev" fx:value="Elevator Issue" />
+                                                                            <String fx:id="esc" fx:value="Escalator Issue" />
+                                                                            <!-- more? -->
                                                                         </FXCollections>
                                                                     </items>
                                                                 </JFXComboBox>
-                                                                <JFXComboBox fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
+                                                                <JFXComboBox fx:id="severityInput" prefHeight="27.0" prefWidth="291.0" promptText="Issue Severity">
+                                                                    <VBox.margin>
+                                                                        <Insets bottom="10.0" top="20.0" />
+                                                                    </VBox.margin>
+                                                                    <items>
+                                                                        <FXCollections fx:factory="observableArrayList">
+                                                                            <String fx:id="high_severity" fx:value="High Severity" />
+                                                                            <String fx:id="medium_severity" fx:value="Medium Severity" />
+                                                                            <String fx:id="low_severity" fx:value="Low Severity" />
+                                                                        </FXCollections>
+                                                                    </items>
+                                                                </JFXComboBox>
+                                                                <JFXComboBox fx:id="assignedPersonnelInput" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
                                                                     <VBox.margin>
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXComboBox>
+                                                                <JFXTextField fx:id="authorInput" prefHeight="27.0" prefWidth="280.0" promptText="Author">
+                                                                    <VBox.margin>
+                                                                        <Insets top="20.0" />
+                                                                    </VBox.margin>
+                                                                </JFXTextField>
                                                             </children>
                                                             <FlowPane.margin>
                                                                 <Insets left="10.0" />
@@ -89,11 +81,16 @@
                                                     <children>
                                                         <VBox prefHeight="363.0" prefWidth="259.0">
                                                             <children>
-                                                                <JFXTextArea fx:id="reasonForRequest" prefHeight="141.0" prefWidth="259.0" promptText="Reason For Request">
+                                                                <JFXTextArea fx:id="descriptionInput" prefHeight="141.0" prefWidth="259.0" promptText="Detailed Description">
                                                                     <VBox.margin>
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXTextArea>
+                                                                <JFXTextField fx:id="ETAInput" promptText="ETA">
+                                                                    <VBox.margin>
+                                                                        <Insets top="20.0" />
+                                                                    </VBox.margin>
+                                                                </JFXTextField>
                                                                 <GridPane>
                                                                     <columnConstraints>
                                                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />
@@ -119,8 +116,8 @@
                                             <children>
                                                 <AnchorPane prefHeight="71.0" prefWidth="1200.0">
                                                     <children>
-                                                        <JFXButton fx:id="cancel" layoutX="455.0" layoutY="45.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" />
-                                                        <JFXButton fx:id="submit" layoutX="532.0" layoutY="46.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
+                                                        <JFXButton fx:id="cancel" layoutX="452.0" layoutY="1.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" />
+                                                        <JFXButton fx:id="submit" layoutX="532.0" layoutY="2.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
                                                     </children>
                                                 </AnchorPane>
                                             </children>

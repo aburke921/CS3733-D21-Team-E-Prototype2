@@ -27,15 +27,6 @@ public class Login {
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
-//    @FXML // fx:id="fullscreen"
-//    private Rectangle fullscreen; // Value injected by FXMLLoader
-//
-//    @FXML // fx:id="hide"
-//    private Circle hide; // Value injected by FXMLLoader
-//
-//    @FXML // fx:id="exit"
-//    private Polygon exit; // Value injected by FXMLLoader
-
     @FXML // fx:id="emailInput"
     private JFXTextField emailInput; // Value injected by FXMLLoader
 
@@ -46,18 +37,19 @@ public class Login {
     private Button createAccountButton; // Value injected by FXMLLoader
 
     @FXML // fx:id="submitLoginButton"
-//    private Button submitLoginButton; // Value injected by FXMLLoader
-    public Button submitLoginButton; //todo is this intentionally public?
+    private Button submitLoginButton; // Value injected by FXMLLoader
 
     @FXML // fx:id="guestLoginButton"
     private Button guestLoginButton; // Value injected by FXMLLoader
 
-    @FXML private StackPane stackPane;
+    @FXML
+	private StackPane stackPane;
 
     @FXML
     private AnchorPane appBarAnchorPane;
 
 
+    @FXML
     public void initialize() {
 
         //init appBar
@@ -78,6 +70,7 @@ public class Login {
 		submitLoginButton.setDefaultButton(true);
 	}
 
+	@FXML
 	public void submitLogin(ActionEvent actionEvent) {
 		int userID = 0;
 
@@ -92,40 +85,12 @@ public class Login {
 		    App.newJFXDialogPopUp("User Not Found", "Try Again","This user cannot be found in the system.",stackPane);
 			System.out.println("User not in System");
 		}
-
-//    public void submitLogin() {
-//        int userID = 0;
-//        makeConnection connection = makeConnection.makeConnection();
-//        if(emailInput.getText().isEmpty()) {
-//            errorPopup("Must input an email");
-//            return;
-//        }
-//        if(passwordInput.getText().isEmpty()) {
-//            errorPopup("Must input password");
-//            return;
-//        }
-//        if(emailInput != null && passwordInput != null) {
-//            userID = connection.userLogin(emailInput.getText(), passwordInput.getText());
-//        } if(userID != 0) {
-//            try {
-//                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-//                App.getPrimaryStage().getScene().setRoot(root);
-//            } catch (IOException ex) {
-//                ex.printStackTrace();
-//            }
-//        } else {
-//            errorPopup("Incorrect Email or Password");
-//        }
-
-	}
-
-	public void toNewAccount(ActionEvent actionEvent) {
-		LoginState loginState = new LoginState();
-		loginState.switchScene(actionEvent);
 	}
 
 	@FXML
-	public void getHelpDefault(ActionEvent actionEvent) {
+	public void toNewAccount(ActionEvent actionEvent) {
+		LoginState loginState = new LoginState();
+		loginState.switchScene(actionEvent);
 	}
 
 	@FXML
@@ -133,25 +98,6 @@ public class Login {
     	App.noCleanSurveyYet = true;
 		LoginState loginState = new LoginState();
 		loginState.switchScene(e);
-	}
-
-	@FXML
-	private void errorPopup(String errorMessage) {
-		System.out.println("errorMessage: " + errorMessage);
-		JFXDialogLayout error = new JFXDialogLayout();
-		error.setHeading(new Text("Error!"));
-		error.setBody(new Text(errorMessage));
-		JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
-		JFXButton okay = new JFXButton("Okay");
-		okay.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				dialog.close();
-
-			}
-		});
-		error.setActions(okay);
-		dialog.show();
 	}
 }
 

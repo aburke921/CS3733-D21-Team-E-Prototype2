@@ -198,11 +198,6 @@ public class PathFinder {
         pathFinderState.switchScene(event);
     }
 
-    @FXML
-    void getHelpDefault(ActionEvent event) {
-        //todo, create help modal (refactor name, this was taken from Default page, hence the name)
-    }
-
     /**
      * Gets the currently selected item from {@link #startLocationComboBox} dropdown.
      * @param event calling event info.

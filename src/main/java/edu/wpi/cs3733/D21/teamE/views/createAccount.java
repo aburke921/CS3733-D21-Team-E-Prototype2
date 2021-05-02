@@ -116,10 +116,6 @@ public class createAccount {
 	}
 
 	@FXML
-	public void getHelpDefault(ActionEvent actionEvent) {
-	}
-
-	@FXML
 	private void errorPopup(String errorMessage) {
 		App.newJFXDialogPopUp("Error!", "Okay", errorMessage, stackPane);
 	}

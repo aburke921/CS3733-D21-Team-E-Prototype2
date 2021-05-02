@@ -118,7 +118,7 @@
                                           <Insets />
                                        </HBox.margin>
                                        <graphic>
-                                          <MaterialDesignIconView fill="WHITE" glyphName="SHIELD" size="100" />
+                                          <MaterialDesignIconView fill="WHITE" glyphName="SHIELD" size="100" text="" />
                                        </graphic>
                                     </JFXButton>
                                     <JFXButton fx:id="maintenanceRequestButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Facilities Maintenance" textAlignment="CENTER" textFill="#039be5" wrapText="true">

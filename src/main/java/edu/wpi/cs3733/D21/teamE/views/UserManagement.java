@@ -199,11 +199,11 @@ public class UserManagement {
     }
 
     /**
-     * Returns to {@link Default} page.
-     * @param event calling event info.
+     * Switch to a different scene
+     * @param event tells which button was pressed
      */
     @FXML
-    void toDefault(ActionEvent event) {
+    void switchScene(ActionEvent event) {
         UserManagementState userManagementState = new UserManagementState();
         userManagementState.switchScene(event);
     }

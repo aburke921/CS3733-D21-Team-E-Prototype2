@@ -1,12 +1,8 @@
 
 package edu.wpi.cs3733.D21.teamE.email;
-
-import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
-
 import com.sun.mail.smtp.SMTPTransport;
 
-import java.sql.Timestamp;
+
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;

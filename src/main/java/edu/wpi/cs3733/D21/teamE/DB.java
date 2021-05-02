@@ -678,7 +678,7 @@ public class DB {
 	 * @param password  this is a password that the user will use to log into the account
 	 * @param firstName this is the user's first name that is associated with the account
 	 * @param lastName  this is the user's last name that is associated with the account
-	 * // TODO: 4/27/21 Return success or fail status?
+	 *                  // TODO: 4/27/21 Return success or fail status?
 	 */
 	public static void addUserAccount(String email, String password, String firstName, String lastName) {
 		UserAccountDB.addUserAccount(email, password, firstName, lastName);
@@ -707,7 +707,7 @@ public class DB {
 	 * @param userType  this is the type of account that the individual is being assigned to
 	 * @param firstName this is the user's first name that is associated with the account
 	 * @param lastName  this is the user's last name that is associated with the account
-	 * // TODO: 4/27/21 JavaDoc return explanation, also, consider bool return?
+	 *                  // TODO: 4/27/21 JavaDoc return explanation, also, consider bool return?
 	 */
 	public static int editUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
 		return UserAccountDB.editUserAccount(userID, email, password, userType, firstName, lastName);
@@ -784,5 +784,13 @@ public class DB {
 
 	public static String getUserName(int userID) {
 		return UserAccountDB.getUserName(userID);
+	}
+
+
+	// ToDoDB:
+
+
+	public static void createToDoTable() {
+		ToDoDB.createToDoTable();
 	}
 }

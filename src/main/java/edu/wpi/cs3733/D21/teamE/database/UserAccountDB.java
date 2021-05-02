@@ -1,6 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
-import edu.wpi.cs3733.D21.teamE.views.UserManagement.User;
+import edu.wpi.cs3733.D21.teamE.user.User;
 
 import java.sql.*;
 import java.util.ArrayList;

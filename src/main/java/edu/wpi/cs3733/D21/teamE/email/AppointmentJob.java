@@ -16,7 +16,7 @@ public class AppointmentJob implements Job{
             String emailMessage = "Hello, \n\n" + "Your appointment with us has been confirmed. We look forward to seeing you soon!\n";
             System.out.println("Job1 --->>> Time is " + new Date());
             try {
-                email.sendEmail("nupi.shukla@gmail.com","Brigham & Women's Appointment Confirmation", emailMessage);
+                sendEmail.sendEmail("nupi.shukla@gmail.com","Brigham & Women's Appointment Confirmation", emailMessage);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }

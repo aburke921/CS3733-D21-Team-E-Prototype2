@@ -34,7 +34,7 @@ public class appointmentDB {
 	 * @param doctorID  is the doctor assigned to the appointment
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int addAppointment(int patientID, String startTime, int doctorID) {
+	public static int addAppointment(int patientID, String startTime, Integer doctorID) {
 
 		String insertAddApt = "insert into appointment values(" + (getMaxAppointmentID() + 1) + ",?, ?, ?)";
 

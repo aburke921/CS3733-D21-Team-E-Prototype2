@@ -46,7 +46,7 @@ public class DB {
 	 * @param doctorID  is the doctor assigned to the appointment
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int addAppointment(int patientID, String startTime, int doctorID) {
+	public static int addAppointment(int patientID, String startTime, Integer doctorID) {
 		return appointmentDB.addAppointment(patientID, startTime, doctorID);
 	}
 
@@ -755,6 +755,10 @@ public class DB {
 
 	public static String getEmail(int userID) {
 		return RequestsDB.getEmail(userID);
+	}
+
+	public static String getUserName(int userID) {
+		return UserAccountDB.getUserName(userID);
 	}
 
 }

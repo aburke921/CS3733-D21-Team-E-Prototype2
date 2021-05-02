@@ -324,4 +324,21 @@ public class UserAccountDB {
 		return listOfUsers;
 	}
 
+	public static String getUserName(int userID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"Select firstName, lastName " +
+						"From userAccount " +
+						"Where userID = ?")) {
+			preparedStatement.setInt(1, userID);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				String name = resultSet.getString("firstName") + " ";
+				return name += resultSet.getString("lastName");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Error in getUserName() from UserAccountDB");
+		return null;
+	}
 }

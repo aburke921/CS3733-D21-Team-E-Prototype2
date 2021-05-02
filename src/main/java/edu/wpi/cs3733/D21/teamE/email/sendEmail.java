@@ -9,24 +9,23 @@ import javax.mail.internet.*;
 
 
 
-public class email {
+public class sendEmail {
+
+//	public static void main(String args[]) throws MessagingException {
+//
+//
+////		String email = DB.getEmail(App.userID);
+//		//sendAppointmentRemind("aburke@wpi.edu", "May 5th 2021");
+//
+//
+//	}
 
 
-	public static void main(String args[]) throws MessagingException {
+	public static void sendAppointmentConfirmation(String email, String time, String fullName) throws MessagingException {
 
-
-//		String email = DB.getEmail(App.userID);
-		//sendAppointmentRemind("aburke@wpi.edu", "May 5th 2021");
-
-
-	}
-
-
-	public static void sendAppointmentRemind(String email, String time) throws MessagingException {
-
-		String subject = "BWH Appointment Reminder!!";
-		String emailMessage = "Hello " + email + ", \n\n"
-				+ "This is a reminder that you have an appointment scheduled for "
+		String subject = "BWH Appointment Confirmation!!";
+		String emailMessage = "Hello " + fullName + ", \n\n"
+				+ "We are confirming your appointment scheduled with us at "
 				+ time + " at Brigham & Women's hospital. If you have any issues with your "
 				+ "appointment please log into the application and edit your appointment information. \n\n"
 				+ "We look forward to seeing you soon, \n"

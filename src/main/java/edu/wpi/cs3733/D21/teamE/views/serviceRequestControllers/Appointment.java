@@ -6,10 +6,8 @@ package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 
 import com.jfoenix.controls.*;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -17,6 +15,7 @@ import com.jfoenix.validation.RequiredFieldValidator;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 
@@ -25,6 +24,8 @@ import javafx.fxml.FXML;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+
+import javax.mail.MessagingException;
 
 public class Appointment extends ServiceRequestFormComponents{
 
@@ -116,7 +117,7 @@ public class Appointment extends ServiceRequestFormComponents{
 	 * @param actionEvent
 	 */
 	@FXML
-	private void saveData(ActionEvent actionEvent) {
+	private void saveData(ActionEvent actionEvent) throws MessagingException {
 
 
 		if (validateInput()) {
@@ -128,8 +129,11 @@ public class Appointment extends ServiceRequestFormComponents{
 
 			int doctorIndex = doctorInput.getSelectionModel().getSelectedIndex();
 			System.out.println("doctorIndex " + doctorIndex);
+			Integer doctorID = userID.get(doctorIndex);
+
 			String additionalNotes = additionalNotesInput.getText();
 			System.out.println("additionalNotes " + additionalNotes);
+
 			boolean oneMonthPrior = oneMonthPriorInput.isSelected();
 			System.out.println("oneMonthPrior " + oneMonthPrior);
 			boolean twoWeeksPrior = twoWeeksPriorInput.isSelected();
@@ -141,7 +145,12 @@ public class Appointment extends ServiceRequestFormComponents{
 			boolean oneDayPrior = oneDayPriorInput.isSelected();
 			System.out.println("oneDayPrior " + oneDayPrior);
 
-			DB.addAppointment(App.userID, startTime, doctorIndex);
+			DB.addAppointment(App.userID, startTime, doctorID);
+			String email = DB.getEmail(App.userID);
+			String fullName = DB.getUserName(App.userID);
+
+			sendEmail.sendAppointmentConfirmation(email, startTime, fullName);
+
 
 //			String details = descriptionInput.getText();
 //			int assigneeIDIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();

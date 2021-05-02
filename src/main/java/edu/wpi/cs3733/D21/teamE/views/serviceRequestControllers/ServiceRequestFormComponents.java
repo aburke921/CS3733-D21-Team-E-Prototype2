@@ -1,6 +1,8 @@
 package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 
 import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.states.RequestFormState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,12 +18,8 @@ public abstract class ServiceRequestFormComponents {
      */
     @FXML
     void handleButtonCancel(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequests.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        RequestFormState requestFormState = new RequestFormState();
+        requestFormState.switchScene(event);
     }
 
     /**
@@ -31,11 +29,7 @@ public abstract class ServiceRequestFormComponents {
      */
     @FXML
     void handleButtonSubmit(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        RequestFormState requestFormState = new RequestFormState();
+        requestFormState.switchScene(event);
     }
 }

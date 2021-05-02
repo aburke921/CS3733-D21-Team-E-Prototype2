@@ -32,6 +32,21 @@ public class DirectionsController {
         DirectionsController.mode = mode;
     }
 
+    public static String getMode() {
+        switch (mode) {
+            case DRIVING:
+                return "Driving";
+            case WALKING:
+                return "Walking";
+            case TRANSIT:
+                return "Public Transit";
+            case BICYCLING:
+                return "Bicycling";
+            default:
+                return "ERROR";
+        }
+    }
+
     public static DirectionsResult getDirections(String origin, Boolean toBWH) throws IOException, InterruptedException, ApiException {
         DirectionsApiRequest request = new DirectionsApiRequest(geoContext);
         request.mode(mode).departureTimeNow();
@@ -52,8 +67,6 @@ public class DirectionsController {
 
                 long leftDur = left.routes[0].legs[0].duration.inSeconds;
                 long rightDur = right.routes[0].legs[0].duration.inSeconds;
-
-                System.out.println("Left Dur: " + leftDur + "\tRight Dur: " + rightDur + "\tBest Dur: " + Math.min(leftDur, rightDur));
 
                 result = ( leftDur < rightDur) ? (left) : (right);
             } else {

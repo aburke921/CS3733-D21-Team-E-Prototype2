@@ -7,17 +7,26 @@ import com.google.maps.model.DirectionsStep;
 import com.google.maps.model.TravelMode;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamE.App;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.event.ActionEvent;
+import javafx.scene.text.Text;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.*;
+
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 
 public class Directions {
@@ -86,14 +95,50 @@ public class Directions {
         try {
             DirectionsResult result = DirectionsController.getDirections(origin.toString(), toBWH);
             DirectionsLeg trip = result.routes[0].legs[0];
-            System.out.println("\nFrom: " + trip.startAddress + " to " + trip.endAddress);
-            System.out.println("Distance: " + trip.distance + "\tDuration: " + trip.duration + "\tDuration with Traffic: " + trip.durationInTraffic);
+            //System.out.println("\nFrom: " + trip.startAddress + " to " + trip.endAddress);
+            //System.out.println("Distance: " + trip.distance + "\tDuration: " + trip.duration + "\tDuration with Traffic: " + trip.durationInTraffic);
             // TODO: Figure out directions listing
 
             System.out.println();
+            ArrayList<String> directions = new ArrayList<>();
             for (DirectionsStep step: trip.steps) {
-                System.out.println(step.toString());
+                String str = step.toString();
+                str = str.replaceAll("\\<.*?\\>", "");
+                str = str.substring(str.indexOf("\"")+1);
+                String dir = str.substring(0, str.indexOf("\""));
+                directions.add(dir);
             }
+            ListView<String> listView = new ListView<>();
+            listView.getItems().addAll(directions);
+            listView.setPrefHeight(USE_COMPUTED_SIZE);
+
+            JFXDialogLayout error = new JFXDialogLayout();
+            error.setHeading(new Text("Directions " + (toBWH ? "To" : "From") + " Brigham and Women's Hospital " + (toBWH ? ("From " + trip.startAddress) : ("To " + trip.endAddress)) + "\nBy " + DirectionsController.getMode() + "\tDistance: " + trip.distance + "\tDuration: " + trip.duration));
+            error.setBody(listView);
+            error.setPrefHeight(USE_COMPUTED_SIZE);
+            JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+
+            dialog.setMaxWidth(800);
+            dialog.setPrefWidth(800);
+            error.setMaxWidth(800);
+            error.setPrefWidth(800);
+
+            int fullSize = listView.getItems().size() * 35 + 120;
+            if (fullSize > 500) {
+                dialog.setMaxHeight(500);
+            } else {
+                dialog.setMaxHeight(fullSize);
+            }
+            JFXButton okay = new JFXButton("Done");
+            okay.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    dialog.close();
+
+                }
+            });
+            error.setActions(okay);
+            dialog.show();
 
         } catch (IOException exception) {
             System.err.println("IO Exception: " + exception.getMessage());

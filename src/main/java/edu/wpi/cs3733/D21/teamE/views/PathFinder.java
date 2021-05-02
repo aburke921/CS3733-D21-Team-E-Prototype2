@@ -192,8 +192,6 @@ public class PathFinder {
 
     private ArrayList<Node> currentMarkers = new ArrayList<Node>();
 
-    private Label floorLabel = null;
-
     /**
      * Switch to a different scene
      * @param event tells which button was pressed
@@ -506,7 +504,6 @@ public class PathFinder {
         //clear map
         System.out.print("\nCLEARING MAP...");
         pane.getChildren().clear();
-        floorLabel = null;
         System.out.println(" DONE");
 
         System.out.println("drawMap() is Finding path for floor " + floorNum);
@@ -607,6 +604,9 @@ public class PathFinder {
                         line.setStrokeWidth(strokeWidth);
                         line.setStroke(Color.RED);
 
+                        Label floorLabel = null;
+                        FlowPane flowPane = new FlowPane();
+
                         if (node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV")) {
 
                             Iterator<Node> fullItr = fullPath.iterator();
@@ -623,12 +623,6 @@ public class PathFinder {
                                         String toFloor = "Go to Floor " + nextNode.get("floor");
 
                                         floorLabel = new Label(toFloor);
-                                        floorLabel.getStyleClass().add("floor-change-label");
-
-                                        double xCoordLabel = (nextNode.getX() / scale) + 2;
-                                        double yCoordLabel = (nextNode.getY() / scale) - 2;
-                                        floorLabel.setLayoutX(xCoordLabel);
-                                        floorLabel.setLayoutY(yCoordLabel);
 
                                         if (Node.calculateZ(node.get("floor")) > Node.calculateZ(nextNode.get("floor"))) {
                                             FontAwesomeIconView iconDown = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_DOWN);
@@ -639,6 +633,15 @@ public class PathFinder {
                                             iconUP.setSize("15");
                                             floorLabel.setGraphic(iconUP);
                                         }
+
+                                        flowPane.getChildren().add(floorLabel);
+
+                                        double xCoordLabel = (nextNode.getX() / scale) + 4;
+                                        double yCoordLabel = (nextNode.getY() / scale) - 4;
+                                        flowPane.setLayoutX(xCoordLabel);
+                                        flowPane.setLayoutY(yCoordLabel);
+
+                                        flowPane.getStyleClass().add("floor-change");
                                     }
 
                                 }
@@ -646,7 +649,7 @@ public class PathFinder {
                         }
 
                     if(floorLabel != null) {
-                        g.getChildren().addAll(line, circle, floorLabel);
+                        g.getChildren().addAll(line, circle, flowPane);
                     } else {
                         g.getChildren().addAll(line, circle);
                     }

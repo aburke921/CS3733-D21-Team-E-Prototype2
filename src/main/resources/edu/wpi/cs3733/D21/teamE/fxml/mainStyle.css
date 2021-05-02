@@ -203,3 +203,17 @@ JFXButton:hover FontAwesomeIconView {
 JFXListView {
 
 }
+
+.icon-button {
+    -fx-fill: WHITE;
+}
+
+.transit-button-selected {
+    -jfx-button-type: RAISED;
+    -fx-background-color: -fx--primary;
+}
+
+.transit-button-unselected {
+    -jfx-button-type: RAISED;
+    -fx-background-color: -fx--primary-light;
+}

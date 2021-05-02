@@ -23,6 +23,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
+import javax.sound.midi.SysexMessage;
 import java.io.IOException;
 import java.util.*;
 
@@ -53,6 +54,7 @@ public class Directions {
     private JFXButton bike;
     @FXML // fx:id="walking"
     private JFXButton walking;
+    private JFXButton currentlySelected;
 
     // TODO: make `modes` a toggle group
 
@@ -77,6 +79,9 @@ public class Directions {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        currentlySelected = car;
+        currentlySelected.getStyleClass().remove("transit-button-unselected");
+        currentlySelected.getStyleClass().add("transit-button-selected");
         DirectionsController.init();
     }
 
@@ -95,9 +100,6 @@ public class Directions {
         try {
             DirectionsResult result = DirectionsController.getDirections(origin.toString(), toBWH);
             DirectionsLeg trip = result.routes[0].legs[0];
-            //System.out.println("\nFrom: " + trip.startAddress + " to " + trip.endAddress);
-            //System.out.println("Distance: " + trip.distance + "\tDuration: " + trip.duration + "\tDuration with Traffic: " + trip.durationInTraffic);
-            // TODO: Figure out directions listing
 
             System.out.println();
             ArrayList<String> directions = new ArrayList<>();
@@ -163,18 +165,38 @@ public class Directions {
         switch (mode) {
             case "walking":
                 DirectionsController.setMode(TravelMode.WALKING);
+                currentlySelected.getStyleClass().remove("transit-button-selected");
+                currentlySelected.getStyleClass().add("transit-button-unselected");
+                currentlySelected = walking;
+                currentlySelected.getStyleClass().remove("transit-button-unselected");
+                currentlySelected.getStyleClass().add("transit-button-selected");
                 break;
 
             case "bike":
                 DirectionsController.setMode(TravelMode.BICYCLING);
+                currentlySelected.getStyleClass().remove("transit-button-selected");
+                currentlySelected.getStyleClass().add("transit-button-unselected");
+                currentlySelected = bike;
+                currentlySelected.getStyleClass().remove("transit-button-unselected");
+                currentlySelected.getStyleClass().add("transit-button-selected");
                 break;
 
             case "transit":
                 DirectionsController.setMode(TravelMode.TRANSIT);
+                currentlySelected.getStyleClass().remove("transit-button-selected");
+                currentlySelected.getStyleClass().add("transit-button-unselected");
+                currentlySelected = transit;
+                currentlySelected.getStyleClass().remove("transit-button-unselected");
+                currentlySelected.getStyleClass().add("transit-button-selected");
                 break;
 
             default:
                 DirectionsController.setMode(TravelMode.DRIVING);
+                currentlySelected.getStyleClass().remove("transit-button-selected");
+                currentlySelected.getStyleClass().add("transit-button-unselected");
+                currentlySelected = car;
+                currentlySelected.getStyleClass().remove("transit-button-unselected");
+                currentlySelected.getStyleClass().add("transit-button-selected");
                 break;
         }
     }

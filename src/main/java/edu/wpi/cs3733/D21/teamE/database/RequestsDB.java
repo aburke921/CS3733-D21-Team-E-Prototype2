@@ -519,7 +519,7 @@ public class RequestsDB {
 
 
 		}catch(IOException e){
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.out.println("error reading in Aubon Pain website in addAbonPainTable()");
 		}
 
@@ -1634,7 +1634,7 @@ public class RequestsDB {
 		ArrayList<String> listOfInfo = new ArrayList<>();
 
 		String query;
-		if (userID > -1) {
+		if (!UserAccountDB.getUserType(userID).equals("admin")) {
 			query = "Select " + infoType + " From requests Join " + tableName + " Using (requestID) Where creatorID = " + userID;
 		} else {
 			query = "Select " + infoType + " From requests Join " + tableName + " Using (requestID)";
@@ -1673,7 +1673,7 @@ public class RequestsDB {
 		ArrayList<String> listOfInfo = new ArrayList<>();
 
 		String query;
-		if (userID > -1) {
+		if (!UserAccountDB.getUserType(userID).equals("admin")) {
 			query = "Select " + infoType + " From requests Join " + tableName + " Using (requestID) Where assigneeID = " + userID;
 		} else {
 			query = "Select " + infoType + " From requests Join " + tableName + " Using (requestID)";
@@ -1724,7 +1724,7 @@ public class RequestsDB {
 
 		String query;
 
-		if (userID > -1) {
+		if (!UserAccountDB.getUserType(userID).equals("admin")) {
 			query = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
 		} else {
 			query = "Select requestid, longname From node,(Select requestid, roomid From " + tableName + ") correctTable Where node.nodeid = correctTable.roomid Order By requestid";

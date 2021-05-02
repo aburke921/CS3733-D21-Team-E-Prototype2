@@ -4,6 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+
+import java.io.IOException;
 import java.lang.String;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,6 +16,9 @@ import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -69,6 +74,13 @@ public class Maintenance extends ServiceRequestFormComponents {
     private JFXButton submit; // Value injected by FXMLLoader
 
     @FXML
+    public AnchorPane appBarAnchorPane;
+
+    @FXML
+    private StackPane stackPane;
+
+
+    @FXML
     void handleButtonCancel(ActionEvent event) {
         super.handleButtonCancel(event);
     }
@@ -114,6 +126,20 @@ public class Maintenance extends ServiceRequestFormComponents {
         assert ETAInput != null : "fx:id=\"ETAInput\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
+
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setShowHelp(false); // show help or not
+            App.setShowLogin(true); // show login or not
+            App.setPageTitle("Facilities Maintenance (Matthew Haahr)"); //set AppBar title
+            App.setHelpText(""); //set help text
+            App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

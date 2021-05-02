@@ -3,6 +3,8 @@ package edu.wpi.cs3733.D21.teamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableView;
 import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.states.MenuPageState;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -13,13 +15,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -158,13 +157,8 @@ public class MenuPage {
 
     @FXML
     private void toFoodDelivery(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/FoodDelivery.fxml"));
-            App.setDraggableAndChangeScene(root);
-        } catch (IOException ex) {
-            System.out.println("Hi");
-            ex.printStackTrace();
-        }
+        MenuPageState menuPageState = new MenuPageState();
+        menuPageState.switchScene(e);
     }
 
 }

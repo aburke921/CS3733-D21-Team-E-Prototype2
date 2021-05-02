@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -62,6 +64,12 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 
 	@FXML // fx:id="submit"
 	private JFXButton submit; // Value injected by FXMLLoader
+
+	@FXML
+	public AnchorPane appBarAnchorPane;
+
+	@FXML
+	private StackPane stackPane;
 
 	@FXML
 	void handleButtonCancel(ActionEvent event) {
@@ -123,6 +131,19 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 
+		//init appBar
+		javafx.scene.Node appBarComponent = null;
+		try {
+			App.setShowHelp(false); // show help or not
+			App.setShowLogin(true); // show login or not
+			App.setPageTitle("Food Delivery Request (Ashley Burke)"); //set AppBar title
+			App.setHelpText(""); //set help text
+			App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
+			appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+			appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//TODO move this to the state stuff
@@ -134,7 +155,7 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 	private void toAubonPainMenu(ActionEvent e) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/MenuPage.fxml"));
-			App.setDraggableAndChangeScene(root);
+			App.changeScene(root);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

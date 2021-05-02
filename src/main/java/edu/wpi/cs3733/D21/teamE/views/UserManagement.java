@@ -16,6 +16,8 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.states.UserManagementState;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -202,12 +204,8 @@ public class UserManagement {
      */
     @FXML
     void toDefault(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-            App.setDraggableAndChangeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        UserManagementState userManagementState = new UserManagementState();
+        userManagementState.switchScene(event);
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

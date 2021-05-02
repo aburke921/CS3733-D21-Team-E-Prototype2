@@ -7,6 +7,7 @@ import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.QRCode;
 import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.states.DefaultState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -82,12 +83,8 @@ public class Default {
      */
     @FXML
     private void toServiceRequests(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequests.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        DefaultState defaultState = new DefaultState();
+        defaultState.switchScene(e);
     }
 
     /**
@@ -96,12 +93,8 @@ public class Default {
      */
     @FXML
     private void toMapEditor(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/newMapEditor.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        DefaultState defaultState = new DefaultState();
+        defaultState.switchScene(e);
     }
 
     /**
@@ -212,41 +205,26 @@ public class Default {
 
     @FXML
     private void toMenu(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/MenuPage.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        DefaultState defaultState = new DefaultState();
+        defaultState.switchScene(e);
     }
 
     @FXML
     private void toServiceRequestStatus(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequestStatus.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        DefaultState defaultState = new DefaultState();
+        defaultState.switchScene(e);
     }
+
     @FXML
     private void toCovidSurvey(ActionEvent e){
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        DefaultState defaultState = new DefaultState();
+        defaultState.switchScene(e);
     }
 
     @FXML
     private void toUserManagement(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/UserManagement.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        DefaultState defaultState = new DefaultState();
+        defaultState.switchScene(e);
     }
 
     @FXML

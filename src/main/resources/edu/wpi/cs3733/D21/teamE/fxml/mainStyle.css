@@ -159,10 +159,7 @@ JFXToggleButton  {
     -fx-stroke: white;
 }
 
-.list-view .scroll-bar:vertical {
-    -fx-scale-x: 0;
-}
-
+/*remove horizontal scrollbar*/
 .list-view .scroll-bar:horizontal {
     -fx-scale-x: 0;
 }
@@ -197,4 +194,8 @@ JFXButton:hover FontAwesomeIconView {
 .jfx-tree-table-view {
     -fx-tree-table-color: rgba(3, 155, 229, 0.4);
     -jfx-header-color: -fx--primary-dark; /*header text color*/
+}
+
+JFXListView {
+
 }

@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamE.views;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -90,7 +91,7 @@ public class ChangeScene {
 
     private void toFloralDelivery(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/serviceRequests/FloralV2.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/FloralV2.fxml"));
             App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -99,7 +100,7 @@ public class ChangeScene {
 
     private void toExternalPatient(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/serviceRequests/ExternalPatient.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ExternalPatient.fxml"));
             App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -108,7 +109,7 @@ public class ChangeScene {
 
     private void toLanguageInterpreter(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/serviceRequests/LanguageInterpreter.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/LanguageInterpreter.fxml"));
             App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -117,7 +118,7 @@ public class ChangeScene {
 
     private void toMedicineDelivery(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/serviceRequests/MedicineDeliveryV2.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/MedicineDeliveryV2.fxml"));
             App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -126,7 +127,7 @@ public class ChangeScene {
 
     private void toSanitation(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/serviceRequests/SanitationV2.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SanitationV2.fxml"));
             App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -135,7 +136,7 @@ public class ChangeScene {
 
     private void toFoodDelivery(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/serviceRequests/FoodDelivery.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/FoodDelivery.fxml"));
             App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -153,7 +154,7 @@ public class ChangeScene {
 
     private void toLaundryRequest(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/serviceRequests/Laundry.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Laundry.fxml"));
             App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -162,7 +163,7 @@ public class ChangeScene {
 
     private void toMaintenanceRequest(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/serviceRequests/MaintenanceRequest.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/MaintenanceRequest.fxml"));
             App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -171,7 +172,7 @@ public class ChangeScene {
 
     private void toInternalPatient(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/serviceRequests/InternalPatient.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/InternalPatient.fxml"));
             App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -180,7 +181,7 @@ public class ChangeScene {
 
     private void toSecurity(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/serviceRequests/SecurityV2.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SecurityV2.fxml"));
             App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -189,7 +190,7 @@ public class ChangeScene {
 
     private void toReligious(ActionEvent e) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/serviceRequests/ReligiousRequests.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ReligiousRequests.fxml"));
             App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();

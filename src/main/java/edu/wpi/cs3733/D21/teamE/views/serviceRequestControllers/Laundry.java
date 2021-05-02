@@ -12,7 +12,6 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.lang.String;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import edu.wpi.cs3733.D21.teamE.App;
@@ -28,12 +27,6 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 public class Laundry extends ServiceRequestFormComponents {
-
-
-    ObservableList<String> locations;
-    ArrayList<String> nodeID = new ArrayList<>();
-    ObservableList<String> names;
-    ArrayList<Integer> userID = new ArrayList<>();
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -60,7 +53,7 @@ public class Laundry extends ServiceRequestFormComponents {
     private JFXComboBox<String> dryLoadAmountInput; // Value injected by FXMLLoader
 
     @FXML // fx:id="assignedPersonnel"
-    private JFXComboBox<String> assignedPersonnel; // Value injected by FXMLLoader
+    private JFXTextField assignedPersonnel; // Value injected by FXMLLoader
 
     @FXML // fx:id="descriptionInput"
     private JFXTextArea descriptionInput; // Value injected by FXMLLoader
@@ -89,11 +82,6 @@ public class Laundry extends ServiceRequestFormComponents {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        locations = DB.getAllNodeLongNames();
-        nodeID = DB.getListOfNodeIDS();
-        //TODO add user type
-        names = DB.getAssigneeNames("nurse");
-        userID = DB.getAssigneeIDs("nurse");
 
         assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'Laundry.fxml'.";

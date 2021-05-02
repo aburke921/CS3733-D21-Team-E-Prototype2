@@ -1,11 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTimePicker?>
+<?import java.lang.Double?>
 <?import java.lang.String?>
-<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.InternalPatient">
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.layout.StackPane?>
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.LanguageInterpreter">
    <children>
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
       <AnchorPane prefHeight="687.0" prefWidth="1199.0">
@@ -23,41 +42,36 @@
                                        <children>
                                           <VBox prefHeight="349.0" prefWidth="264.0">
                                              <children>
-                                                <JFXComboBox fx:id="pickupInput" prefHeight="27.0" prefWidth="295.0" promptText="Pick-Up Location">
+                                                <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
+                                                   <items>
+                                                      <FXCollections fx:factory="observableArrayList">
+
+                                                      </FXCollections>
+                                                   </items>
                                                    <VBox.margin>
                                                       <Insets top="20.0" />
                                                    </VBox.margin>
                                                 </JFXComboBox>
-                                                <JFXComboBox fx:id="dropoffInput" prefHeight="27.0" prefWidth="295.0" promptText="Drop-off Location">
-                                                <VBox.margin>
-                                                   <Insets top="20.0" />
-                                                </VBox.margin>
-                                                </JFXComboBox>
-                                                <JFXTextField fx:id="departmentInput" prefHeight="27.0" prefWidth="295.0" promptText="Transfer to Department">
+                                                <JFXTimePicker prefHeight="25.0" prefWidth="295.0">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
-                                                </JFXTextField>
-                                                <JFXComboBox fx:id="severityInput" prefHeight="27.0" prefWidth="291.0" promptText="Severity">
+                                                </JFXTimePicker>
+                                                <JFXComboBox fx:id="languageSelection" prefHeight="27.0" prefWidth="295.0" promptText="Language">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                    <items>
                                                       <FXCollections fx:factory="observableArrayList">
-                                                         <String fx:value="High Severity" />
-                                                         <String fx:value="Medium Severity" />
-                                                         <String fx:value="Low Severity" />
+                                                         <String fx:value="Chinese" />
+                                                         <String fx:value="Spanish" />
+                                                         <String fx:value="Japanese" />
                                                       </FXCollections>
                                                    </items>
                                                 </JFXComboBox>
-                                                <JFXTextField fx:id="patientIdInput" prefHeight="27.0" prefWidth="280.0" promptText="Patient ID #">
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" top="20.0" />
-                                                   </VBox.margin>
-                                                </JFXTextField>
                                                 <JFXComboBox fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
                                                    <VBox.margin>
-                                                      <Insets top="20.0" />
+                                                      <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                 </JFXComboBox>
                                              </children>
@@ -71,7 +85,7 @@
                                        <children>
                                           <VBox prefHeight="363.0" prefWidth="259.0">
                                              <children>
-                                                <JFXTextArea fx:id="descriptionInput" prefHeight="141.0" prefWidth="259.0" promptText="Reason for Transportation">
+                                                <JFXTextArea fx:id="descriptionInput" prefHeight="141.0" prefWidth="259.0" promptText="Detailed Description">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
@@ -101,8 +115,8 @@
                                  <children>
                                     <AnchorPane prefHeight="71.0" prefWidth="1200.0">
                                        <children>
-                                          <JFXButton fx:id="cancel" layoutX="455.0" layoutY="45.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" />
-                                          <JFXButton fx:id="submit" layoutX="532.0" layoutY="46.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
+                                          <JFXButton fx:id="cancel" layoutX="452.0" layoutY="1.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" />
+                                          <JFXButton fx:id="submit" layoutX="532.0" layoutY="2.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
                                        </children>
                                     </AnchorPane>
                                  </children>

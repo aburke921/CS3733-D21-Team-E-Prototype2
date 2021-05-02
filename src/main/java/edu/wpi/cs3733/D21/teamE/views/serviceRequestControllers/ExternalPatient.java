@@ -4,6 +4,12 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+
+import java.io.IOException;
+import java.lang.String;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
@@ -15,10 +21,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
 public class ExternalPatient extends ServiceRequestFormComponents {
 
 	ObservableList<String> locations;
@@ -27,15 +29,26 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	ArrayList<Integer> userID = new ArrayList<>();
 
 	RequiredFieldValidator validator = new RequiredFieldValidator();
-
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
 	@FXML // fx:id="locationInput"
 	private JFXComboBox<String> locationInput; // Value injected by FXMLLoader
 	@FXML // fx:id="requestTypeInput"
 	private JFXComboBox<String> requestTypeInput; // Value injected by FXMLLoader
+	@FXML // fx:id="ambulance"
+	private String ambulance; // Value injected by FXMLLoader
+	@FXML // fx:id="helicopter"
+	private String helicopter; // Value injected by FXMLLoader
+	@FXML // fx:id="plane"
+	private String plane; // Value injected by FXMLLoader
 	@FXML // fx:id="severityInput"
 	private JFXComboBox<String> severityInput; // Value injected by FXMLLoader
+	@FXML // fx:id="high_severity"
+	private String high_severity; // Value injected by FXMLLoader
+	@FXML // fx:id="medium_severity"
+	private String medium_severity; // Value injected by FXMLLoader
+	@FXML // fx:id="low_severity"
+	private String low_severity; // Value injected by FXMLLoader
 	@FXML // fx:id="patientIdInput"
 	private JFXTextField patientIdInput; // Value injected by FXMLLoader
 	@FXML // fx:id="assignedPersonnel"
@@ -73,6 +86,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 
 		validator.setMessage("Input required");
 
+
 		locationInput.getValidators().add(validator);
 		requestTypeInput.getValidators().add(validator);
 		severityInput.getValidators().add(validator);
@@ -89,13 +103,19 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 				ETAInput.validate() && oxygenInput.validate() && bloodPressureInput.validate() && temperatureInput.validate();
 	}
 
+	/**
+	 * records inputs from user into a series of String variables and returns to the main page
+	 * @param actionEvent
+	 */
 	@FXML
-	private void saveData(ActionEvent event) {
+	private void saveData(ActionEvent actionEvent) {
+
 
 		if (validateInput()) {
 
-			String type = requestTypeInput.getSelectionModel().getSelectedItem();
-			String severity = severityInput.getSelectionModel().getSelectedItem();
+
+			String type = requestTypeInput.getSelectionModel().getSelectedItem().toString();
+			String severity = severityInput.getSelectionModel().getSelectedItem().toString();
 			String patientID = patientIdInput.getText();
 			String ETA = ETAInput.getText();
 			String bloodPressure = bloodPressureInput.getText();
@@ -106,9 +126,11 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 			int assigneeID = userID.get(assigneeIDIndex);
 			int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
 			String id = nodeID.get(nodeIDIndex);
+			System.out.println(nodeID + " " + type + " " + severity + " " + patientID + " " + ETA + " " + details + " " + assigneeID);
 			DB.addExternalPatientRequest(App.userID, assigneeID, id, type, severity, patientID, ETA, bloodPressure, temperature, oxygenLevel, details);
 
-			super.handleButtonSubmit(event);
+			super.handleButtonSubmit(actionEvent);
+
 		}
 	}
 
@@ -123,10 +145,17 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 		userNames = DB.getAssigneeNames("EMT");
 
 		assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
+
 		locationInput.setItems(locations);
 		assignedPersonnel.setItems(userNames);
 		assert requestTypeInput != null : "fx:id=\"requestTypeInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
+		assert ambulance != null : "fx:id=\"ambulance\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
+		assert helicopter != null : "fx:id=\"helicopter\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
+		assert plane != null : "fx:id=\"plane\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert severityInput != null : "fx:id=\"severityInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
+		assert high_severity != null : "fx:id=\"high_severity\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
+		assert medium_severity != null : "fx:id=\"medium_severity\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
+		assert low_severity != null : "fx:id=\"low_severity\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert patientIdInput != null : "fx:id=\"patientIdInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert descriptionInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert ETAInput != null : "fx:id=\"ETAInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";

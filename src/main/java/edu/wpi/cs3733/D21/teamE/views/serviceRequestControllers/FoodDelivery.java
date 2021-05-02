@@ -6,6 +6,7 @@ package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 
 import java.io.IOException;
 
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +17,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.lang.String;
+import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,12 +28,12 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
-
-
-
-
-
 public class FoodDelivery extends ServiceRequestFormComponents {
+
+	ObservableList<String> locations;
+	ArrayList<String> nodeIDs = new ArrayList<>();
+	ObservableList<String> names;
+	ArrayList<Integer> userID = new ArrayList<>();
 
 	@FXML // fx:id="fullscreen"
 	private Rectangle fullscreen; // Value injected by FXMLLoader
@@ -74,15 +76,49 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		super.handleButtonCancel(event);
 	}
 
+	private boolean validateInput() {
+		RequiredFieldValidator validator = new RequiredFieldValidator();
+		validator.setMessage("Input required");
+
+		locationInput.getValidators().add(validator);
+		assigneeInput.getValidators().add(validator);
+		deliveryService.getValidators().add(validator);
+		orderNumber.getValidators().add(validator);
+		descriptionInput.getValidators().add(validator);
+
+		return locationInput.validate() && assigneeInput.validate() && deliveryService.validate()
+				&& orderNumber.validate() && descriptionInput.validate();
+	}
+
+
 	@FXML
 	void saveData(ActionEvent event) {
-		super.handleButtonSubmit(event);
+		if(validateInput()) {
+			int locationIndex = locationInput.getSelectionModel().getSelectedIndex();
+			int userIndex = assigneeInput.getSelectionModel().getSelectedIndex();
+
+			String loc = nodeIDs.get(locationIndex);
+			int user = userID.get(userIndex);
+			String rest = deliveryService.getText();
+			String number = orderNumber.getText();
+			String desc = descriptionInput.getText();
+
+			DB.addFoodDeliveryRequest(App.userID, loc, user, rest, number, desc);
+			super.handleButtonSubmit(event);
+		}
 	}
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
 	void initialize() {
-		ObservableList<String> locations  = DB.getAllNodeLongNames();
+
+		locations = DB.getAllNodeLongNames();
+		nodeIDs = DB. getListOfNodeIDS();
+		//todo add proper types here
+		names = DB.getAssigneeNames("nurse");
+		userID = DB.getAssigneeIDs("nurse");
+
 		locationInput.setItems(locations);
+		assigneeInput.setItems(names);
 
 		assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
@@ -90,6 +126,8 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert assigneeInput != null : "fx:id=\"assigneeInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert descriptionInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
+		assert deliveryService != null : "fx:id=\"deliveryService\" was not injected:check over your FXML file 'FoodDelivery.fxml'.";
+		assert orderNumber != null : "fx:id=\"orderNumber\" was not injected: check over your FXML file 'FoodDelivery.fxml'.";
 		assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 
@@ -108,6 +146,7 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		}
 	}
 
+	//TODO move this to the state stuff
 	/**
 	 * Move to Service Request page
 	 * @param e

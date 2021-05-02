@@ -1,11 +1,12 @@
 package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
-
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,27 +20,34 @@ import java.util.ArrayList;
 public class SanitationServices extends ServiceRequestFormComponents {
 
 
-  @FXML private JFXTextField assignedIndividual;
-  @FXML private JFXTextField Signature;
-  @FXML private JFXTextArea detailedInstructionsInput;
-  @FXML private JFXComboBox<String> locationInput;
-  @FXML private JFXComboBox<String> ServiceTypeinput;
-  @FXML private JFXComboBox<String> Severity;
-  @FXML private JFXButton cancel;
-  @FXML private JFXButton submit;
-  @FXML public AnchorPane appBarAnchorPane;
-  @FXML private StackPane stackPane;
+  ObservableList<String> locations;
+  ArrayList<String> nodeID = new ArrayList<>();
+  ObservableList<String> names;
+  ArrayList<Integer> userID = new ArrayList<>();
 
 
-  @FXML private RequiredFieldValidator validator = new RequiredFieldValidator();
-
-
-
-
-  /**
-   * Sets value of drop down list to the selected value(departments)
-   * @param actionEvent
-   */
+  @FXML
+  private JFXComboBox<String> assignee;
+  @FXML
+  private JFXTextField Signature;
+  @FXML
+  private JFXTextArea detailedInstructionsInput;
+  @FXML
+  private JFXComboBox<String> locationInput;
+  @FXML
+  private JFXComboBox<String> requestTypeInput;
+  @FXML
+  private JFXComboBox<String> Severity;
+  @FXML
+  private JFXButton cancel;
+  @FXML
+  private JFXButton submit;
+  @FXML
+  private final RequiredFieldValidator validator = new RequiredFieldValidator();
+  @FXML
+  public AnchorPane appBarAnchorPane;
+  @FXML
+  private StackPane stackPane;
 
   /**
    * Detects if the user has entered all required fields
@@ -49,64 +57,45 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
     validator.setMessage("Input required");
 
-    ServiceTypeinput.getValidators().add(validator);
-    assignedIndividual.getValidators().add(validator);
+    requestTypeInput.getValidators().add(validator);
+    assignee.getValidators().add(validator);
     locationInput.getValidators().add(validator);
-
     detailedInstructionsInput.getValidators().add(validator);
     Signature.getValidators().add(validator);
     Severity.getValidators().add(validator);
 
-    return locationInput.validate() && ServiceTypeinput.validate() && assignedIndividual.validate() && detailedInstructionsInput.validate() && Severity.validate() && Signature.validate();
-
+    return locationInput.validate() && requestTypeInput.validate() && assignee.validate() && detailedInstructionsInput.validate() && Severity.validate() && Signature.validate();
 
   }
 
 
   /**
    * records inputs from user into a series of String variables and returns to the main page
-   * @param actionEvent
+   * @param event
    */
   @FXML
-  private void saveData(ActionEvent actionEvent){
-
+  private void saveData(ActionEvent event){
 
     if(validateInput()){
-      //String detailedInstructions = sdetailedInstructionsInput.getText();
-      //creating the service request
+      int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
+      int userIndex = assignee.getSelectionModel().getSelectedIndex();
 
-      //System.out.println(request.getAssignmentField());
-      //Adding service request to table
-      //makeConnection connection = makeConnection.makeConnection();
-      //connection.addRequest("sanitationServices", request);
-      ArrayList<String> nodeIDS = DB.getListOfNodeIDS();
-      String serviceKind = ServiceTypeinput.getValue();
-      int assigneeID = 99999;
+      String serviceKind = requestTypeInput.getValue();
+      int assigneeID = userID.get(userIndex);
       String details = detailedInstructionsInput.getText();
       String severity = Severity.getValue();
       String signature = Signature.getText();
-      int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
-      String nodeID = nodeIDS.get(nodeIDIndex);
-      DB.addSanitationRequest(15,assigneeID,nodeID, serviceKind,details,severity,signature);
-      //DB changed the assignee in the function call to an int (not string) --> we need the assignee's userID
-      System.out.println(serviceKind);
+      String node = nodeID.get(nodeIDIndex);
+      DB.addSanitationRequest(App.userID,assigneeID,node, serviceKind,details,severity,signature);
 
-      super.handleButtonSubmit(actionEvent);
-      //Setting up all variables to be entered
+      super.handleButtonSubmit(event);
+
     }
-
-
-
 
   }
 
-
   @FXML
-  void initialize(){
-    assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-    assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-    assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-    assert assignedIndividual != null : "fx:id=\"assignedIndividual\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
+  void initialize() {
 
     //init appBar
     javafx.scene.Node appBarComponent = null;
@@ -123,19 +112,19 @@ public class SanitationServices extends ServiceRequestFormComponents {
     }
 
 
-    ObservableList<String> Services  = FXCollections.observableArrayList();
-    Services.setAll("Urine Cleanup","Feces Cleanup","Trash Removal");
-
-    //ServiceTypeinput.setItems(Services);
-
-    ObservableList<String> locations  = DB.getAllNodeLongNames();
+    locations = DB.getAllNodeLongNames();
+    nodeID = DB.getListOfNodeIDS();
+    //TODO add user type
+    names = DB.getAssigneeNames("custodian");
+    userID = DB.getAssigneeIDs("custodian");
 
     locationInput.setItems(locations);
-    ObservableList<String> rating  = FXCollections.observableArrayList();
-    rating.setAll("Low","Medium","High","Critical");
-    Severity.setItems(rating);
+    assignee.setItems(names);
 
-
+    assert requestTypeInput != null : "fx:id=\"requestTypeInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
+    assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
+    assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
+    assert assignee != null : "fx:id=\"assignee\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
 
   }
 }

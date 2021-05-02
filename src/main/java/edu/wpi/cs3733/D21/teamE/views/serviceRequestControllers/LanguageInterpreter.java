@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
@@ -21,7 +22,9 @@ import java.util.ArrayList;
 public class LanguageInterpreter extends ServiceRequestFormComponents {
 
 	ObservableList<String> locations;
-	ArrayList<String> nodeID;
+	ArrayList<String> nodeID = new ArrayList<>();
+	ObservableList<String> names;
+	ArrayList<Integer> userID = new ArrayList<>();
 
 	@FXML
 	private Rectangle fullscreen;
@@ -51,26 +54,41 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 	private JFXButton submit;
 
 	@FXML
-	public AnchorPane appBarAnchorPane;
-
-	@FXML
 	private StackPane stackPane;
 
+	@FXML
+	private AnchorPane appBarAnchorPane;
 
 	@FXML
 	void handleButtonCancel(ActionEvent event) {
-		super.handleButtonCancel(event);
+		super.handleButtonSubmit(event);
+	}
+
+	private boolean validateInput() {
+		RequiredFieldValidator validator = new RequiredFieldValidator();
+
+		locationInput.getValidators().add(validator);
+		languageSelection.getValidators().add(validator);
+		assignedPersonnel.getValidators().add(validator);
+		descriptionInput.getValidators().add(validator);
+
+		return  locationInput.validate() && languageSelection.validate()
+				&& assignedPersonnel.validate() && descriptionInput.validate();
 	}
 
 	@FXML
 	void saveData(ActionEvent event) {
-		int index = locationInput.getSelectionModel().getSelectedIndex();
-		String node = nodeID.get(index);
-		String assignee = assignedPersonnel.getSelectionModel().getSelectedItem();
-		String descrip = descriptionInput.getText();
-		String language = languageSelection.getSelectionModel().getSelectedItem();
+		if(validateInput()) {
+			int userIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
+			int index = locationInput.getSelectionModel().getSelectedIndex();
+			int assignee = userID.get(userIndex);
+			String node = nodeID.get(index);
+			String descrip = descriptionInput.getText();
+			String language = languageSelection.getSelectionModel().getSelectedItem();
 
-		super.handleButtonSubmit(event);
+			DB.addLanguageRequest(App.userID, assignee, node, language, descrip);
+			super.handleButtonSubmit(event);
+		}
 	}
 
 	@FXML
@@ -90,8 +108,16 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 			e.printStackTrace();
 		}
 
+
 		locations = DB.getAllNodeLongNames();
+		nodeID = DB.getListOfNodeIDS();
+		//TODO add user type
+		names = DB.getAssigneeNames("interpreter");
+		userID = DB.getAssigneeIDs("interpreter");
+
 		locationInput.setItems(locations);
+		assignedPersonnel.setItems(names);
+
 	}
 
 }

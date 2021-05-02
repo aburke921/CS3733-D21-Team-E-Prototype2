@@ -20,7 +20,11 @@
          <children>
             <StackPane alignment="TOP_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <ImageView fx:id="hospitalImageView" fitHeight="800.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true" />
+                  <AnchorPane>
+                     <children>
+                        <ImageView fx:id="hospitalImageView" fitHeight="800.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
                   <HBox alignment="CENTER">
                      <children>
                         <AnchorPane fx:id="imageAnchorPane" minWidth="500.0" HBox.hgrow="ALWAYS" />

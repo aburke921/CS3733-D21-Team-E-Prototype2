@@ -171,6 +171,10 @@ MaterialDesignIconView {
     -fx-fill: -fx--primary;
 }
 
+MaterialDesignIconViewAlt {
+    -fx-fill: WHITE;
+}
+
 FontAwesomeIconView {
     -fx-fill: -fx--primary;
 }

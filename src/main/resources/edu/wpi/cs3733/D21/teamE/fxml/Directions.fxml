@@ -2,9 +2,8 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -40,26 +39,38 @@
                               </HBox>
                               <HBox alignment="TOP_CENTER">
                                  <children>
-                                     <JFXButton fx:id="walking" minWidth="26.0" onAction="#chooseMode" styleClass="submit-button" text="Walking">
+                                    <JFXButton fx:id="car" alignment="CENTER" onAction="#chooseMode" styleClass="submit-button" text="">
+                                       <graphic>
+                                          <MaterialDesignIconView glyphName="CAR" size="24" style="-fx-fill: WHITE;" />
+                                       </graphic>
                                        <HBox.margin>
-                                          <Insets right="15.0" />
+                                          <Insets left="7.5" right="7.5" />
                                        </HBox.margin>
-                                     </JFXButton>
-                                     <JFXButton fx:id="transit" onAction="#chooseMode" styleClass="submit-button" text="Train">
+                                    </JFXButton>
+                                    <JFXButton fx:id="transit" alignment="CENTER" onAction="#chooseMode" styleClass="submit-button" text="">
+                                       <graphic>
+                                          <MaterialDesignIconView glyphName="TRAIN" size="24" style="-fx-fill: WHITE;" />
+                                       </graphic>
                                        <HBox.margin>
-                                          <Insets right="7.5" />
+                                          <Insets left="7.5" right="7.5" />
                                        </HBox.margin>
-                                     </JFXButton>
-                                     <JFXButton fx:id="bike" onAction="#chooseMode" styleClass="submit-button" text="Bike">
+                                    </JFXButton>
+                                    <JFXButton fx:id="walking" alignment="CENTER" onAction="#chooseMode" styleClass="submit-button" text="">
+                                       <graphic>
+                                          <MaterialDesignIconView glyphName="WALK" size="24" style="-fx-fill: WHITE;" textAlignment="CENTER" />
+                                       </graphic>
                                        <HBox.margin>
-                                          <Insets left="7.5" />
+                                          <Insets left="7.5" right="7.5" />
                                        </HBox.margin>
-                                     </JFXButton>
-                                     <JFXButton fx:id="car" onAction="#chooseMode" styleClass="submit-button" text="Car">
+                                    </JFXButton>
+                                    <JFXButton fx:id="bike" alignment="CENTER" onAction="#chooseMode" styleClass="submit-button" text="">
+                                       <graphic>
+                                          <MaterialDesignIconView glyphName="BIKE" size="24" style="-fx-fill: WHITE;" />
+                                       </graphic>
                                        <HBox.margin>
-                                          <Insets left="15.0" />
+                                          <Insets left="7.5" right="7.5" />
                                        </HBox.margin>
-                                     </JFXButton>
+                                    </JFXButton>
                                  </children>
                                  <VBox.margin>
                                     <Insets top="25.0" />

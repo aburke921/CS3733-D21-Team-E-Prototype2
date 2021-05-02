@@ -16,7 +16,7 @@
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.Default">
    <children>
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefHeight="65.0" prefWidth="1012.0" />
-      <AnchorPane prefHeight="733.0" prefWidth="1200.0">
+      <AnchorPane prefHeight="733.0" prefWidth="1200.0" VBox.vgrow="ALWAYS">
          <children>
             <StackPane alignment="TOP_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>

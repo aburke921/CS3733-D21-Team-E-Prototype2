@@ -147,7 +147,7 @@ public class SheetsAndJava {
 //                .execute();
     }
 
-    public static void addAppointmenttoSheet(int appointmentID, String email, String firstName, String lastName, String doctor, String date, String sheetName) throws IOException, GeneralSecurityException {
+    public static void addAppointmentToSheet(int appointmentID, String email, String firstName, String lastName, String doctor, String date, String sheetName) throws IOException, GeneralSecurityException {
 
         sheetsService = getSheetService();
 
@@ -165,6 +165,8 @@ public class SheetsAndJava {
 
     }
 
+    // TODO: need a function to delete all rows of a given spreadsheet (will call in init in App.java)
+
 
 
     public static void main(String[] args) throws IOException, GeneralSecurityException {
@@ -173,7 +175,7 @@ public class SheetsAndJava {
 
         //deleteRow(rowNum);
 
-        addAppointmenttoSheet(3,"nupi.shukla@gmail.com", "me", "test me", "me", "05/01/21 6:00", "1 Month Prior");
+        addAppointmentToSheet(3,"nupi.shukla@gmail.com", "me", "test me", "me", "05/01/21 6:00", "1 Month Prior");
     }
 
 

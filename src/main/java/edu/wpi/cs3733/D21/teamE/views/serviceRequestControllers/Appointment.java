@@ -6,7 +6,9 @@ package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 
 import com.jfoenix.controls.*;
 
+import java.io.IOException;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -15,6 +17,7 @@ import com.jfoenix.validation.RequiredFieldValidator;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -117,18 +120,19 @@ public class Appointment extends ServiceRequestFormComponents{
 	 * @param actionEvent
 	 */
 	@FXML
-	private void saveData(ActionEvent actionEvent) throws MessagingException {
+	private void saveData(ActionEvent actionEvent) throws MessagingException, IOException, GeneralSecurityException {
 
 
 		if (validateInput()) {
 
-			LocalDate date = dateInput.getValue();
+			String date = dateInput.getValue().toString();
 			System.out.println("date " + date);
 			String startTime = startTimeInput.getValue().toString();
 			System.out.println("startTime " + startTime);
 
 			int doctorIndex = doctorInput.getSelectionModel().getSelectedIndex();
 			System.out.println("doctorIndex " + doctorIndex);
+
 			Integer doctorID = userID.get(doctorIndex);
 
 			String additionalNotes = additionalNotesInput.getText();
@@ -145,22 +149,34 @@ public class Appointment extends ServiceRequestFormComponents{
 			boolean oneDayPrior = oneDayPriorInput.isSelected();
 			System.out.println("oneDayPrior " + oneDayPrior);
 
+			super.handleButtonSubmit(actionEvent);
+
 			DB.addAppointment(App.userID, startTime, doctorID);
+
 			String email = DB.getEmail(App.userID);
 			String fullName = DB.getUserName(App.userID);
-
 			sendEmail.sendAppointmentConfirmation(email, startTime, fullName);
+			int position = fullName.indexOf(" ");
 
+			String firstName = fullName.substring(0, position);
+			String lastName = fullName.substring(position);
+			String dateAndTime = date + " " + startTime;
 
-//			String details = descriptionInput.getText();
-//			int assigneeIDIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
-//			int assigneeID = userID.get(assigneeIDIndex);
-//			int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
-//			String id = nodeID.get(nodeIDIndex);
-//			System.out.println(nodeID + " " + type + " " + severity + " " + patientID + " " + ETA + " " + details + " " + assigneeID);
-//			DB.addExternalPatientRequest(App.userID, assigneeID, id, type, severity, patientID, ETA, bloodPressure, temperature, oxygenLevel, details);
-
-//			super.handleButtonSubmit(actionEvent);
+			if (oneMonthPrior == true) {
+				SheetsAndJava.addAppointmentToSheet(1, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "1 Month Prior");
+			}
+			if (twoWeeksPrior == true) {
+				SheetsAndJava.addAppointmentToSheet(1, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "2 Weeks Prior");
+			}
+			if (oneWeekPrior == true) {
+				SheetsAndJava.addAppointmentToSheet(1, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "1 Week Prior");
+			}
+			if (twoDaysPrior == true) {
+				SheetsAndJava.addAppointmentToSheet(1, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "48 Hours Prior");
+			}
+			if (oneDayPrior == true) {
+				SheetsAndJava.addAppointmentToSheet(1, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "24 Hours Prior");
+			}
 
 		}
 	}

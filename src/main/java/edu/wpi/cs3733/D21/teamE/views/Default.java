@@ -89,7 +89,7 @@ public class Default {
     private void toServiceRequests(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequests.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -103,7 +103,7 @@ public class Default {
     private void toMapEditor(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/newMapEditor.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -119,7 +119,7 @@ public class Default {
             if (DB.filledCovidSurveyToday(App.userID) && DB.isUserCovidSafe(App.userID)) { // go to pathfinder
                 try {
                     Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                    App.setDraggableAndChangeScene(root);
+                    App.changeScene(root);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -143,7 +143,7 @@ public class Default {
         } else { // go to pathfinder
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                App.setDraggableAndChangeScene(root);
+                App.changeScene(root);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -188,7 +188,7 @@ public class Default {
     private void toMenu(ActionEvent e) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/MenuPage.fxml"));
-            App.setDraggableAndChangeScene(root);
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

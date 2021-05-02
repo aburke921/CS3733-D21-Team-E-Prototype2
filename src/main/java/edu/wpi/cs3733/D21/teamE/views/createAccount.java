@@ -1,24 +1,22 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Polygon;
-import javafx.scene.text.Text;
 
 import java.io.IOException;
 
 public class createAccount {
 
+	@FXML
+	public Button submitAccountButton;
 	@FXML
 	private JFXTextField firstName;
 	@FXML
@@ -29,9 +27,8 @@ public class createAccount {
 	private JFXTextField password;
 	@FXML
 	private StackPane stackPane;
-
-	@FXML // fx:id="exit"
-	private Polygon exit;
+	@FXML
+	private AnchorPane appBarAnchorPane;
 
 	private static boolean checkString(String str) {
 		char ch;
@@ -54,15 +51,23 @@ public class createAccount {
 	}
 
 	public void initialize() {
-		//If exit button is clicked, exit app
-		exit.setOnMouseClicked(event -> {
-			App app = new App();
-			app.stop();
-		});
+		//init appBar
+		javafx.scene.Node appBarComponent = null;
+		try {
+			App.setShowHelp(false); // show help or not
+			App.setShowLogin(false); // show login or not
+			App.setPageTitle("Create Account"); //set AppBar title
+			App.setHelpText(""); //set help text
+			App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
+			appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+			appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void createAccountButton() {
-		int userID = 0;
+		App.userID = 0;
 
 		if (email.getText().isEmpty()) {
 			errorPopup("Must input an email");
@@ -100,9 +105,9 @@ public class createAccount {
 		}
 		if (firstName != null && lastName != null && email != null && password != null) {
 			DB.addUserAccount(email.getText(), password.getText(), firstName.getText(), lastName.getText());
-			userID = DB.userLogin(email.getText(), password.getText());
+			App.userID = DB.userLogin(email.getText(), password.getText());
 		}
-		if (userID != 0) {
+		if (App.userID != 0) {
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
 				App.getPrimaryStage().getScene().setRoot(root);
@@ -112,36 +117,10 @@ public class createAccount {
 		}
 	}
 
-	@FXML
-	public void getHelpDefault(ActionEvent actionEvent) {
-	}
-
-	/**
-	 * Terminate application
-	 * @param e
-	 */
-	@FXML
-	private void shutdown(ActionEvent e) {
-		App app = new App();
-		app.stop();
-	}
 
 	@FXML
 	private void errorPopup(String errorMessage) {
-		JFXDialogLayout error = new JFXDialogLayout();
-		error.setHeading(new Text("Error!"));
-		error.setBody(new Text(errorMessage));
-		JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
-		JFXButton okay = new JFXButton("Okay");
-		okay.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				dialog.close();
-
-			}
-		});
-		error.setActions(okay);
-		dialog.show();
+		App.newJFXDialogPopUp("Error!", "Okay", errorMessage, stackPane);
 	}
 
 	@FXML

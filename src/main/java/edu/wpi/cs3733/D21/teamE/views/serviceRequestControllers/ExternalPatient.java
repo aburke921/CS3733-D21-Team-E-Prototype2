@@ -145,7 +145,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 			App.setHelpText(""); //set help text
 			App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
 			appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
-			appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+//			appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -669,9 +669,6 @@ public class DB {
 		return RequestsDB.getAssigneeIDs(givenUserType);
 	}
 
-	public static User getLoggedInUser(){
-		return UserAccountDB.getUser(App.userID)
-	}
 
 	// UserAccountDB:
 

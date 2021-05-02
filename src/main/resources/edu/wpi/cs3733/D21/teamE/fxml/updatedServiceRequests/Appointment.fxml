@@ -95,22 +95,22 @@
                                                     <children>
                                                         <VBox prefHeight="349.0" prefWidth="264.0">
                                                             <children>
-                                                <JFXDatePicker defaultColor="#13a5ed" prefHeight="27.0" prefWidth="278.0" promptText="Date">
+                                                <JFXDatePicker fx:id="dateInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="278.0" promptText="Date">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                 </JFXDatePicker>
-                                                <JFXTimePicker defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="Start Time">
+                                                <JFXTimePicker fx:id="startTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="Start Time">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                 </JFXTimePicker>
-                                                <JFXTimePicker defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="End Time">
+                                                <JFXTimePicker fx:id="endTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="End Time">
                                                    <VBox.margin>
                                                       <Insets bottom="10.0" top="20.0" />
                                                    </VBox.margin>
                                                 </JFXTimePicker>
-                                                                <JFXComboBox fx:id="DoctorInput" prefHeight="27.0" prefWidth="295.0" promptText="Doctor">
+                                                                <JFXComboBox fx:id="doctorInput" prefHeight="27.0" prefWidth="295.0" promptText="Doctor">
                                                                     <VBox.margin>
                                                                         <Insets bottom="10.0" top="20.0" />
                                                                     </VBox.margin>
@@ -126,7 +126,7 @@
                                                     <children>
                                                         <VBox prefHeight="363.0" prefWidth="259.0">
                                                             <children>
-                                                                <JFXTextArea fx:id="descriptionInput" prefHeight="141.0" prefWidth="259.0" promptText="Additional notes for doctor...">
+                                                                <JFXTextArea fx:id="additionalNotesInput" prefHeight="141.0" prefWidth="259.0" promptText="Additional notes for doctor...">
                                                                     <VBox.margin>
                                                                         <Insets bottom="10.0" top="30.0" />
                                                                     </VBox.margin>
@@ -152,17 +152,17 @@
                                     </Text>
                                     <HBox prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <JFXCheckBox text="1 Month Prior">
+                                          <JFXCheckBox fx:id="oneMonthPriorInput" text="1 Month Prior">
                                              <HBox.margin>
                                                 <Insets bottom="10.0" right="88.0" top="10.0" />
                                              </HBox.margin>
                                           </JFXCheckBox>
-                                          <JFXCheckBox text="2 Weeks Prior">
+                                          <JFXCheckBox fx:id="twoWeeksPriorInput" text="2 Weeks Prior">
                                              <HBox.margin>
                                                 <Insets bottom="10.0" right="82.0" top="10.0" />
                                              </HBox.margin>
                                           </JFXCheckBox>
-                                          <JFXCheckBox text="1 Week Prior">
+                                          <JFXCheckBox fx:id="oneWeekPriorInput" text="1 Week Prior">
                                              <HBox.margin>
                                                 <Insets bottom="10.0" right="20.0" top="10.0" />
                                              </HBox.margin>
@@ -171,12 +171,12 @@
                                     </HBox>
                                     <HBox prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <JFXCheckBox text="48 Hours Prior">
+                                          <JFXCheckBox fx:id="twoDaysPriorInput" text="48 Hours Prior">
                                              <HBox.margin>
                                                 <Insets bottom="10.0" right="81.0" top="10.0" />
                                              </HBox.margin>
                                           </JFXCheckBox>
-                                          <JFXCheckBox text="24 Hours Prior">
+                                          <JFXCheckBox fx:id="oneDayPriorInput" text="24 Hours Prior">
                                              <HBox.margin>
                                                 <Insets bottom="10.0" right="20.0" top="10.0" />
                                              </HBox.margin>

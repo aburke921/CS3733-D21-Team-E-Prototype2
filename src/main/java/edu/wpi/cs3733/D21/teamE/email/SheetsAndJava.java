@@ -57,10 +57,10 @@ public class SheetsAndJava {
     }
 
 
-    public static int getRow(int appointmentID) throws IOException, GeneralSecurityException {
+    public static int getRow(int appointmentID, String sheetName) throws IOException, GeneralSecurityException {
         sheetsService = getSheetService();
         int rowCounter = 0;
-        String range = "Sheet1";
+        String range = sheetName;
 
         ValueRange response = sheetsService.spreadsheets().values()
                 .get(SPREADSHEET_ID, range)
@@ -116,14 +116,14 @@ public class SheetsAndJava {
 //                .execute();
 //    }
 
-    public static void deleteRow(int row) throws IOException, GeneralSecurityException {
+    public static void deleteRow(int row, int sheetID) throws IOException, GeneralSecurityException {
 
         sheetsService = getSheetService();
 
         DeleteDimensionRequest deleteDateCell = new DeleteDimensionRequest()
                 .setRange(
                         new DimensionRange()
-                        .setSheetId(0)
+                        .setSheetId(sheetID)
                         .setDimension("ROWS")
                         .setStartIndex(row-1)
                         .setEndIndex(row)
@@ -147,7 +147,7 @@ public class SheetsAndJava {
 //                .execute();
     }
 
-    public static void addAppointmenttoSheet(int appointmentID, String email, String firstName, String lastName, String doctor, String date) throws IOException, GeneralSecurityException {
+    public static void addAppointmenttoSheet(int appointmentID, String email, String firstName, String lastName, String doctor, String date, String sheetName) throws IOException, GeneralSecurityException {
 
         sheetsService = getSheetService();
 
@@ -157,7 +157,7 @@ public class SheetsAndJava {
                 ));
 
         AppendValuesResponse appendResult = sheetsService.spreadsheets().values()
-                .append((SPREADSHEET_ID), "Sheet1", appendBody)
+                .append((SPREADSHEET_ID), sheetName, appendBody)
                 .setValueInputOption("USER_ENTERED")
                 .setInsertDataOption("INSERT_ROWS")
                 .setIncludeValuesInResponse(true)
@@ -169,11 +169,11 @@ public class SheetsAndJava {
 
     public static void main(String[] args) throws IOException, GeneralSecurityException {
         //editSheet();
-        int rowNum = getRow(2);
+        int rowNum = getRow(2, "1 Month Prior");
 
         //deleteRow(rowNum);
 
-        addAppointmenttoSheet(3,"nupi.shukla@gmail.com", "me", "test me", "me", "05/01/21 6:00");
+        addAppointmenttoSheet(3,"nupi.shukla@gmail.com", "me", "test me", "me", "05/01/21 6:00", "1 Month Prior");
     }
 
 

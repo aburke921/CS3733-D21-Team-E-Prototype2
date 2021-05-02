@@ -38,6 +38,9 @@ public class Default {
     @FXML // fx:id="userManagementButton"
     private JFXButton userManagementButton;
 
+    @FXML // fx:id="scheduleAppointmentButton"
+    private JFXButton scheduleAppointmentButton;
+
     @FXML // fx:id="algo"
     private JFXComboBox algo;
 
@@ -145,6 +148,17 @@ public class Default {
     }
 
     @FXML
+    private void toAppointmentPage(ActionEvent e) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Appointment.fxml"));
+            App.setDraggableAndChangeScene(root);
+        } catch (IOException ex) {
+            System.out.println("Hi");
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
     public void getHelpDefault(ActionEvent actionEvent) {
     }
 
@@ -183,11 +197,13 @@ public class Default {
             algo.setVisible(false);
             applyChange.setVisible(false);
             userManagementButton.setVisible(false);
+
         }
 
         if(App.userID == 0) {
             serviceRequestButton.setVisible(false);
             userManagementButton.setVisible(false);
+            scheduleAppointmentButton.setVisible(false);
         }
     }
 

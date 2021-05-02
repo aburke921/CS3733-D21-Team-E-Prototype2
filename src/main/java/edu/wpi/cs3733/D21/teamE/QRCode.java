@@ -32,14 +32,9 @@ public class QRCode {
 		window.setVisible(true);
 
 		String result = null;
-
 		while (result == null) {
 			WebcamUtils.capture(webcam, "src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/temp", ImageUtils.FORMAT_PNG);
-			try {
-				result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/temp.png");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/temp.png");
 		}
 		window.setVisible(false);
 		window.dispose();
@@ -47,8 +42,13 @@ public class QRCode {
 		return result;
 	}
 
-	public static String readQR(String path) throws IOException {
-		BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(ImageIO.read(new FileInputStream(path)))));
+	public static String readQR(String path){
+		BinaryBitmap binaryBitmap = null;
+		try {
+			binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(ImageIO.read(new FileInputStream(path)))));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Result result;
 		try {
 			result = new MultiFormatReader().decode(binaryBitmap);

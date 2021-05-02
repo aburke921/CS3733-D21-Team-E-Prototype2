@@ -119,7 +119,7 @@ public class Default {
 
     @FXML
     private void toScanQRCode(ActionEvent e) {
-	    String result = QRCode.scanQR();
+	    String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
         System.out.println("Scanned String: " + result);
         String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
         System.out.println("Scanned pure: " + pure);

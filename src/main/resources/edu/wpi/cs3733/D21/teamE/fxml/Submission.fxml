@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.CovidSurvey">
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.Submission">
    <children>
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefHeight="65.0" prefWidth="1012.0" />
       <AnchorPane prefHeight="687.0" prefWidth="1199.0" VBox.vgrow="ALWAYS">
@@ -60,7 +60,7 @@
                                     </VBox>
                                     <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <JFXButton prefWidth="300.0" styleClass="back-button" text="Service Request Status Page">
+                                          <JFXButton fx:id="statusButton" onAction="#switchScene" prefWidth="300.0" styleClass="back-button" text="Service Request Status Page">
                                              <VBox.margin>
                                                 <Insets left="40.0" top="20.0" />
                                              </VBox.margin>
@@ -68,7 +68,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </JFXButton>
-                                          <JFXButton prefWidth="300.0" styleClass="back-button" text="Submit Another Request">
+                                          <JFXButton fx:id="requestButton" onAction="#switchScene" prefWidth="300.0" styleClass="back-button" text="Submit Another Request">
                                              <VBox.margin>
                                                 <Insets left="40.0" top="20.0" />
                                              </VBox.margin>
@@ -76,7 +76,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </JFXButton>
-                                          <JFXButton prefWidth="300.0" styleClass="back-button" text="Return to Main Menu">
+                                          <JFXButton fx:id="defaultButton" onAction="#switchScene" prefWidth="300.0" styleClass="back-button" text="Return to Main Menu">
                                              <VBox.margin>
                                                 <Insets left="40.0" top="20.0" />
                                              </VBox.margin>
@@ -84,7 +84,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                              <graphic>
-                                                <MaterialDesignIconView id="white-icon" glyphName="KEYBOARD_RETURN" size="]" />
+                                                <MaterialDesignIconView id="white-icon" glyphName="KEYBOARD_RETURN" size="25" />
                                              </graphic>
                                           </JFXButton>
                                        </children>

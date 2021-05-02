@@ -40,7 +40,7 @@ public class InternalPatient extends ServiceRequestFormComponents{
     private StackPane stackPane;
 
     public void saveData(ActionEvent actionEvent) {
-
+        super.handleButtonSubmit(actionEvent);
 
     }
 

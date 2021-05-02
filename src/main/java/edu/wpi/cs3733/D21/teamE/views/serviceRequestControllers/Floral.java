@@ -85,6 +85,7 @@ public class Floral extends ServiceRequestFormComponents {
 
     }
 
+    @FXML
     private void saveData(ActionEvent e) {
 
         if(validateInput()) {
@@ -103,6 +104,8 @@ public class Floral extends ServiceRequestFormComponents {
             String choc = chocolate.getSelectionModel().getSelectedItem();
            // assigned is now an integer (userID) so must be changed
             DB.addFloralRequest(App.userID, assigned, nodeInfo, receiver, type, count, vase, arrangement, teddy, choc, mess);
+
+            super.handleButtonSubmit(e);
         }
     }
 

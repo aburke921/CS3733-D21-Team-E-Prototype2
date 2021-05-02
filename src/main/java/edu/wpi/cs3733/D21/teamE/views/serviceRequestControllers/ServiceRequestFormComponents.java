@@ -32,7 +32,7 @@ public abstract class ServiceRequestFormComponents {
     @FXML
     void handleButtonSubmit(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Submission.fxml"));
             App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();

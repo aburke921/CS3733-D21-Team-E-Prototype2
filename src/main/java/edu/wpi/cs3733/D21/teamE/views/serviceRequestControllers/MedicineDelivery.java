@@ -88,6 +88,8 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         String signature = signatureInput.getText();
 
         DB.addMedicineRequest(App.userID, assigned, location, name, doseQuantity, doseMeasure, specialInstructions, signature);
+
+        super.handleButtonSubmit(e);
     }
 
     @FXML

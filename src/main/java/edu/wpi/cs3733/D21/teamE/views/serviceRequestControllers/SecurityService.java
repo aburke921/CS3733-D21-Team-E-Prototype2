@@ -108,6 +108,7 @@ public class SecurityService extends ServiceRequestFormComponents {
             String nodeID = nodeIDS.get(nodeIDIndex);
             System.out.println(securityLevel + "" + urgencyLevel + "" + assignee + "" + nodeID);
             DB.addSecurityRequest(App.userID, assignee, nodeID, securityLevel, urgencyLevel);
+
             super.handleButtonSubmit(actionEvent);
         }
     }

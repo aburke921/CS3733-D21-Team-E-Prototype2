@@ -24,11 +24,8 @@ import javafx.scene.shape.Polygon;
 
 public class SecurityService extends ServiceRequestFormComponents {
 
-
-    ObservableList<String> locations;
-    ArrayList<String> nodeID = new ArrayList<>();
-    ObservableList<String> names;
-    ArrayList<Integer> userID = new ArrayList<>();
+    @FXML // ResourceBundle that was given to the FXMLLoader
+    private ResourceBundle resources;
 
     @FXML // fx:id = "locationInput"
     private JFXComboBox<String> locationInput;
@@ -87,6 +84,7 @@ public class SecurityService extends ServiceRequestFormComponents {
 
         validator.setMessage("Input required");
 
+
         locationInput.getValidators().add(validator);
         levelOfSecurity.getValidators().add(validator);
         levelOfUrgency.getValidators().add(validator);
@@ -100,16 +98,16 @@ public class SecurityService extends ServiceRequestFormComponents {
     @FXML
     private void saveData(ActionEvent actionEvent){
         if(validateInput()){
-            int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
-            int userIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
 
-            String securityLevel = levelOfSecurity.getSelectionModel().getSelectedItem();
-            String urgencyLevel = levelOfUrgency.getSelectionModel().getSelectedItem();
-            int assignee = userID.get(userIndex);
+            ArrayList<String> nodeIDS = DB.getListOfNodeIDS();
+            String securityLevel = levelOfSecurity.getSelectionModel().getSelectedItem().toString();
+            String urgencyLevel = levelOfUrgency.getSelectionModel().getSelectedItem().toString();
+            int assignee = Integer.parseInt(assignedPersonnel.getSelectionModel().getSelectedItem());
             String reason = reasonForRequest.getText();
-            String node = nodeID.get(nodeIDIndex);
-
-            DB.addSecurityRequest(App.userID, assignee, node, securityLevel, urgencyLevel);
+            int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
+            String nodeID = nodeIDS.get(nodeIDIndex);
+            System.out.println(securityLevel + "" + urgencyLevel + "" + assignee + "" + nodeID);
+            DB.addSecurityRequest(App.userID, assignee, nodeID, securityLevel, urgencyLevel);
             super.handleButtonSubmit(actionEvent);
         }
     }
@@ -125,15 +123,8 @@ public class SecurityService extends ServiceRequestFormComponents {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        locations = DB.getAllNodeLongNames();
-        nodeID = DB.getListOfNodeIDS();
-        //TODO add user type
-        names = DB.getAssigneeNames("security");
-        userID = DB.getAssigneeIDs("security");
-
+        ObservableList<String> locations = DB.getAllNodeLongNames();
         locationInput.setItems(locations);
-        assignedPersonnel.setItems(names);
-
         assert helpSecurityService != null : "fx:id=\"helpSecurityService\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert locationInput != null : "fx:id=\"locationOfDelivery\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert levelOfSecurity != null : "fx:id=\"levelOfSecurity\" was not injected: check your FXML file 'SecurityService.fxml'.";

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.Double?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.SecurityService">
+      <children>
+      <AnchorPane id="app-bar-top" prefWidth="1012.0">
+         <children>
+            <VBox id="app-bar-top" layoutX="-10.0" layoutY="-10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox id="app-bar-top-upper" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" stylesheets="@mainStyle.css">
+                     <children>
+                        <FlowPane id="app-bar-top-upper" alignment="CENTER_RIGHT" columnHalignment="RIGHT" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Rectangle fx:id="fullscreen" arcHeight="5.0" arcWidth="5.0" height="13.0" stroke="#00000004" strokeType="INSIDE" styleClass="app-bar-button" width="13.0" />
+                              <Circle fx:id="hide" radius="7.0" stroke="#00000004" strokeType="INSIDE" styleClass="app-bar-button">
+                                 <FlowPane.margin>
+                                    <Insets bottom="5.0" left="10.0" top="5.0" />
+                                 </FlowPane.margin>
+                              </Circle>
+                              <Polygon fx:id="exit" rotate="180.0" stroke="#00000001" strokeType="INSIDE" styleClass="app-bar-button">
+                                 <points>
+                                    <Double fx:value="-7.0" />
+                                    <Double fx:value="7.0" />
+                                    <Double fx:value="7.0" />
+                                    <Double fx:value="7.0" />
+                                    <Double fx:value="0.0" />
+                                    <Double fx:value="-7.0" />
+                                 </points>
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" />
+                                 </FlowPane.margin>
+                              </Polygon>
+                           </children>
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </FlowPane>
+                     </children>
+                  </HBox>
+                  <HBox id="app-bar-top-main" maxHeight="40.0" minHeight="40.0" prefHeight="40.0">
+                     <children>
+                        <FlowPane style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label prefHeight="38.0" prefWidth="486.0" text="Security Service" textFill="WHITE">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                 <FlowPane.margin>
+                                    <Insets left="10.0" />
+                                 </FlowPane.margin>
+                              </Label>
+                           </children>
+                        </FlowPane>
+                        <FlowPane alignment="CENTER_RIGHT" columnHalignment="RIGHT" style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
+                           <padding>
+                              <Insets right="30.0" />
+                           </padding>
+                        </FlowPane>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="676.0" prefWidth="1198.0">
+         <children>
+                <HBox prefHeight="467.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <FlowPane prefHeight="437.0" prefWidth="272.0">
+                            <children>
+                                <VBox prefHeight="155.0" prefWidth="264.0">
+                                    <children>
+                              <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
+                                 <items>
+
+                                 </items>
+                              </JFXComboBox>
+                                        <JFXComboBox fx:id="levelOfSecurity" prefHeight="27.0" prefWidth="268.0" promptText="Level of Security Required">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" top="20.0" />
+                                            </VBox.margin>
+                                            <items>
+                                                <FXCollections fx:factory="observableArrayList">
+                                                    <String fx:id="low" fx:value="Low" />
+                                                    <String fx:id="medium" fx:value="Medium" />
+                                                    <String fx:id="high" fx:value="High" />
+                                                </FXCollections>
+                                            </items>
+                                        </JFXComboBox>
+                                        <JFXComboBox fx:id="levelOfUrgency" prefHeight="27.0" prefWidth="274.0" promptText="Level of Urgency">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" top="20.0" />
+                                            </VBox.margin>
+                                            <items>
+                                                <FXCollections fx:factory="observableArrayList">
+                                                    <String fx:id="lowUrgency" fx:value="Low" />
+                                                    <String fx:id="mediumUrgency" fx:value="Medium" />
+                                                    <String fx:id="highUrgency" fx:value="High" />
+                                                    <String fx:id="criticalUrgency" fx:value="Critical" />
+                                                </FXCollections>
+                                            </items>
+                                        </JFXComboBox>
+                              <JFXTextField fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel" />
+                                    </children>
+                                    <FlowPane.margin>
+                                        <Insets left="10.0" />
+                                    </FlowPane.margin>
+                                </VBox>
+                                <HBox prefHeight="58.0" prefWidth="264.0">
+                                    <children>
+                                        <VBox prefHeight="137.0" prefWidth="160.0" />
+                                        <VBox prefHeight="137.0" prefWidth="138.0" />
+                                    </children>
+                                </HBox>
+                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                    <children>
+                                        <VBox prefHeight="119.0" prefWidth="169.0" />
+                                        <VBox prefHeight="119.0" prefWidth="84.0" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </FlowPane>
+                        <FlowPane prefHeight="361.0" prefWidth="329.0">
+                            <children>
+                                <VBox prefHeight="397.0" prefWidth="259.0">
+                                    <children>
+                                        <JFXTextArea fx:id="reasonForRequest" prefHeight="85.0" prefWidth="259.0" promptText="Reason for Request">
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" top="20.0" />
+                                            </VBox.margin>
+                                        </JFXTextArea>
+                                        <GridPane>
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="69.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <VBox.margin>
+                                                <Insets top="20.0" />
+                                            </VBox.margin>
+                                        </GridPane>
+                                    </children>
+                                    <FlowPane.margin>
+                                        <Insets left="20.0" />
+                                    </FlowPane.margin>
+                                </VBox>
+                            </children>
+                        </FlowPane>
+                    </children>
+                </HBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="71.0" prefWidth="1200.0">
+         <children>
+            <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <JFXButton fx:id="submitSecurityRequest" onAction="#handleButtonSubmit" styleClass="submit-button" text="Submit" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+                     <GridPane.margin>
+                        <Insets bottom="20.0" right="20.0" />
+                     </GridPane.margin>
+                  </JFXButton>
+                              <JFXButton fx:id="cancelSecurityRequest" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" GridPane.halignment="LEFT">
+                     <GridPane.margin>
+                        <Insets bottom="20.0" left="20.0" />
+                     </GridPane.margin>
+                  </JFXButton>
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+      </children>
+  </VBox>

@@ -13,7 +13,12 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-
+import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
+import edu.wpi.cs3733.D21.teamE.user.User;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.states.UserManagementState;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,11 +30,6 @@ import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-
-import edu.wpi.cs3733.D21.teamE.App;
-import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
-import edu.wpi.cs3733.D21.teamE.user.User;
 
 public class UserManagement {
 
@@ -89,7 +89,7 @@ public class UserManagement {
                         "\n...first: " + firstAndLast[0] +
                         "\n...last: " + firstAndLast[1]);
                 DB.addUserAccount(userEmail.getText(),userPassword.getText(),firstAndLast[0],firstAndLast[1]); //add to DB
-//                DB.addUserAccount("cmanning@wpi.edu","aConformingPassword$#1","First","Last"); //add to DB
+//            DB.addUserAccount("cmanning@wpi.edu","aConformingPassword$#1","First","Last"); //add to DB
 
                 //confirmation popup
                 // TODO: 4/27/21 get addUserAccount to return a success or failure status, and make separate pop-ups for each
@@ -200,17 +200,13 @@ public class UserManagement {
     }
 
     /**
-     * Returns to {@link Default} page.
-     * @param event calling event info.
+     * Switch to a different scene
+     * @param event tells which button was pressed
      */
     @FXML
-    void toDefault(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-            App.setDraggableAndChangeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    void switchScene(ActionEvent event) {
+        UserManagementState userManagementState = new UserManagementState();
+        userManagementState.switchScene(event);
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

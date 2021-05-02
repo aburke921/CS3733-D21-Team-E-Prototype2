@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 
+import java.io.IOException;
 import java.lang.String;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -15,6 +16,9 @@ import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 
 public class ExternalPatient extends ServiceRequestFormComponents {
@@ -69,14 +73,11 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	@FXML
 	private JFXTextField temperatureInput;
 
-	/**
-	 * todo This function will cause a pop-up modal to appear with help information for this form's fields
-	 * @param event {@link ActionEvent} info for the help button call, passed automatically by system.
-	 */
 	@FXML
-	void getHelpExternalPatient(ActionEvent event) {
+	public AnchorPane appBarAnchorPane;
 
-	}
+	@FXML
+	private StackPane stackPane;
 
 	/**
 	 * Detects if the user has entered all required fields
@@ -162,10 +163,19 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 		assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert assignedPersonnel != null : "fx:id=\"assignedPersonnel\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 
-		exit.setOnMouseClicked(event -> {
-			App app = new App();
-			app.stop();
-		});
+		//init appBar
+		javafx.scene.Node appBarComponent = null;
+		try {
+			App.setShowHelp(false); // show help or not
+			App.setShowLogin(true); // show login or not
+			App.setPageTitle("External Patient Request (Cole Manning)"); //set AppBar title
+			App.setHelpText(""); //set help text
+			App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
+			appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+			appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 }

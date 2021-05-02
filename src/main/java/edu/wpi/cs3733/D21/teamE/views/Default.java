@@ -7,12 +7,14 @@ import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.QRCode;
 import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.states.DefaultState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,6 +25,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Default {
+
+    public static String previousScannedResult = null;
 
     @FXML
     private AnchorPane appBarAnchorPane;
@@ -54,6 +58,12 @@ public class Default {
     @FXML // fx:id="algoTextBottom"
     private Label algoTextBottom;
 
+    @FXML // fx:id="carParkedText"
+    private Label carParkedText;
+
+    @FXML // fx:id="LinkToParking"
+    private Hyperlink LinkToParking;
+
     private ObservableList<String> algoNames;
 
     /**
@@ -66,35 +76,6 @@ public class Default {
         App.setSearchAlgo(algoIndex);
     }
 
-
-    /**
-     * Move to Service Request page
-     * @param e
-     */
-    @FXML
-    private void toServiceRequests(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequests.fxml"));
-            App.setDraggableAndChangeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * Move to Map Editor page
-     * @param e
-     */
-    @FXML
-    private void toMapEditor(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/newMapEditor.fxml"));
-            App.setDraggableAndChangeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
     /**
      * Move to Path Finder page
      * @param e
@@ -105,7 +86,7 @@ public class Default {
             if (DB.filledCovidSurveyToday(App.userID) && DB.isUserCovidSafe(App.userID)) { // go to pathfinder
                 try {
                     Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                    App.setDraggableAndChangeScene(root);
+                    App.changeScene(root);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -113,7 +94,7 @@ public class Default {
                 CovidSurvey.plzGoToPathFinder = true;
                 try {
                     Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-                    App.getPrimaryStage().getScene().setRoot(root);
+                    App.changeScene(root);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -122,14 +103,14 @@ public class Default {
             CovidSurvey.plzGoToPathFinder = true;
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-                App.getPrimaryStage().getScene().setRoot(root);
+                App.changeScene(root);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         } else { // go to pathfinder
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                App.setDraggableAndChangeScene(root);
+                App.changeScene(root);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -138,7 +119,7 @@ public class Default {
 
     @FXML
     private void toScanQRCode(ActionEvent e) {
-	    String result = QRCode.scanQR();
+	    String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
         System.out.println("Scanned String: " + result);
         String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
         System.out.println("Scanned pure: " + pure);
@@ -163,7 +144,24 @@ public class Default {
                 toPathFinder(e);
                 break;
             case "p":
-                // get popup to say ur parking slot saved
+                if (App.userID == 0) {
+                    previousScannedResult = code;
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
+                        App.getPrimaryStage().getScene().setRoot(root);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    if (DB.submitParkingSlot(code, App.userID)) {
+                        carParkedText.setVisible(true);
+                        LinkToParking.setVisible(true);
+                        // TODO get popup to say ur parking slot saved
+                    } else {
+                        break;
+                        // TODO get popup to say ur parking slot was not saved
+                    }
+                }
                 break;
             default:
                 break;
@@ -171,42 +169,27 @@ public class Default {
     }
 
     @FXML
-    private void toMenu(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/MenuPage.fxml"));
-            App.setDraggableAndChangeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
+    private void toParking(ActionEvent e) {
+
+        ArrayList<Node> nodeArrayList = DB.getAllNodes();
+        int index = 0;
+        for (int i = 0; i < nodeArrayList.size(); i++) {
+            if (nodeArrayList.get(i).get("id").equals(DB.whereDidIPark(App.userID))) {
+                index = i;
+            }
         }
+        PathFinder.endNodeIndex = index;
+        toPathFinder(e);
     }
 
+    /**
+     * Switch to a different scene
+     * @param e tells which button was pressed
+     */
     @FXML
-    private void toServiceRequestStatus(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequestStatus.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-    @FXML
-    private void toCovidSurvey(ActionEvent e){
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void toUserManagement(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/UserManagement.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    private void switchScene(ActionEvent e) {
+        DefaultState defaultState = new DefaultState();
+        defaultState.switchScene(e);
     }
 
     @FXML
@@ -251,6 +234,31 @@ public class Default {
             algo.setVisible(false);
             applyChange.setVisible(false);
             userManagementButton.setVisible(false);
+        }
+
+        if (App.userID == 0 || DB.whereDidIPark(App.userID) == null){
+            carParkedText.setVisible(false);
+            LinkToParking.setVisible(false);
+        }
+
+        if (previousScannedResult != null) {
+            if (App.userID == 0) {
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
+                    App.getPrimaryStage().getScene().setRoot(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                if (DB.submitParkingSlot(previousScannedResult, App.userID)) {
+                    previousScannedResult = null;
+                    carParkedText.setVisible(true);
+                    LinkToParking.setVisible(true);
+                    // TODO get popup to say ur parking slot saved
+                } else {
+                    // TODO get popup to say ur parking slot was not saved
+                }
+            }
         }
     }
 

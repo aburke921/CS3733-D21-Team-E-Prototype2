@@ -1709,4 +1709,23 @@ public class DatabaseTests {
 		assertTrue(DB.isUserCovidSafe(2));
 	}
 
+	@Test
+	@DisplayName("ParkingTests")
+	public void ParkingTests() {
+		System.out.println("This is where all the Parking related database tests are");
+
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		DB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
+		DB.addNode("ePARK00101", 381, 1725, "1", "Parking", "PARK", "Left Parking Lot Spot 001", "Parking Left 001");
+		DB.addNode("test233", 22, 33, "1", "BTM", "WALK", "long", "short");
+
+		assertNull(DB.whereDidIPark(1));
+		assertNull(DB.whereDidIPark(2));
+
+		assertTrue(DB.submitParkingSlot("ePARK00101", 1));
+		assertTrue(DB.submitParkingSlot("test233", 2));   // node is not of type PARK, stores null in table
+
+		assertEquals("ePARK00101", DB.whereDidIPark(1));
+		assertNull(DB.whereDidIPark(2));
+	}
 }

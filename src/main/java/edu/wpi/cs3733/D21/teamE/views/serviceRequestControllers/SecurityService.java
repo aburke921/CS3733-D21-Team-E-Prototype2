@@ -18,6 +18,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 
 public class SecurityService extends ServiceRequestFormComponents {
@@ -51,6 +53,12 @@ public class SecurityService extends ServiceRequestFormComponents {
 
     @FXML // fx:id="exit"
     private Polygon exit;
+
+    @FXML
+    public AnchorPane appBarAnchorPane;
+
+    @FXML
+    private StackPane stackPane;
 
     /**
      * Returns to default page
@@ -125,9 +133,18 @@ public class SecurityService extends ServiceRequestFormComponents {
         assert cancelSecurityRequest != null : "fx:id=\"cancelSecurityRequest\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert submitSecurityRequest != null : "fx:id=\"submitSecurityRequest\" was not injected: check your FXML file 'SecurityService.fxml'.";
 
-        exit.setOnMouseClicked(event -> {
-            App app = new App();
-            app.stop();
-        });
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setShowHelp(false); // show help or not
+            App.setShowLogin(true); // show login or not
+            App.setPageTitle("Security Service (Seamus Sullivan)"); //set AppBar title
+            App.setHelpText(""); //set help text
+            App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

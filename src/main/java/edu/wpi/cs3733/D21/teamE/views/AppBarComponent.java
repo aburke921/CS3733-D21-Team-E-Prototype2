@@ -131,13 +131,13 @@ public class AppBarComponent {
             appLoginButtonLeft.setVisible(false); //remove left login button
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButton.setVisible(true); //double check visibility (will be overridden by isShowLogin())
-                appLoginButton.setText("Logged in As " + DB.getUserName(App.userID));
+                appLoginButton.setText("Hello, " + DB.getUserName(App.userID));
             }
         } else {
             appLoginButton.setVisible(false); //remove right login button
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButtonLeft.setVisible(true); //double check it is visible
-                appLoginButtonLeft.setText("Logged in As " + DB.getUserName(App.userID));
+                appLoginButtonLeft.setText("Hello, " + DB.getUserName(App.userID));
 
             }
         }

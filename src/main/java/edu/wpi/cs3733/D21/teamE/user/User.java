@@ -3,97 +3,94 @@ package edu.wpi.cs3733.D21.teamE.user;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
 import edu.wpi.cs3733.D21.teamE.Time;
-import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
-import edu.wpi.cs3733.D21.teamE.scheduler.DailySchedule;
-import edu.wpi.cs3733.D21.teamE.scheduler.Event;
+import edu.wpi.cs3733.D21.teamE.scheduler.Appointment;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ServiceRequestObjs;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
+
 public class User {
+    private String userType;
+    private int userID;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private List<Appointment> schedule;
 
-    private DailySchedule schedule;
-    private String id;
-    private String type;
+    public User(String _userType, int _userID, String _firstName, String _lastName, String _email) {
 
-    public User(){
-        schedule = new DailySchedule();
+        this.userType = _userType;
+        this.userID = _userID;
+        this.firstName = _firstName;
+        this.lastName = _lastName;
+        this.email = _email;
+
+        this.schedule = new LinkedList<>();
     }
 
-    public User(String _id, String _type){
-        this();
-        id = _id;
-        type = _type;
-    }
-
-    public boolean bookAppointment(Event newAppointment) {
-        return schedule.add(newAppointment);
-    }
-
-    public void removeAppointment(Event appointment){
-        schedule.remove(appointment);
-    }
-
-    public Path drawSchedule(SearchContext search){
-        return search.search(getLocations());
-    }
-
-    public Path drawSchedule(SearchContext search, int startTime, int endTime){
-        return search.search(getLocations(startTime, endTime));
-    }
-
-    public List<String> listSchedule(int startTime, int endTime){
-        List<String> nodes = new ArrayList<>(schedule.size());
-        Iterator<Event> itr = schedule.iterator(startTime, endTime);
-        while(itr.hasNext()){
-            nodes.add(itr.next().toString());
+    public StringProperty getProperty(String field) {
+        String fieldData;
+        if(field.equalsIgnoreCase("userType")){
+            fieldData = userType;
+        } else if(field.equalsIgnoreCase("firstName")){
+            fieldData = firstName;
+        } else if(field.equalsIgnoreCase("lastName")){
+            fieldData = lastName;
+        } else if(field.equalsIgnoreCase("email")){
+            fieldData = email;
+        } else {
+            return null;
         }
-        return nodes;
+        return new SimpleStringProperty(fieldData);
     }
 
-    public List<String> listSchedule(){
-        return listSchedule(Time.DAY_START, Time.DAY_END);
+    public IntegerProperty getIdProperty(){
+        return new SimpleIntegerProperty(userID);
     }
 
-    public List<Node> getLocations(int startTime, int endTime){
-        List<Node> nodes = new ArrayList<>(schedule.size());
-        Iterator<Event> itr = schedule.iterator(startTime, endTime);
-        while(itr.hasNext()){
-            nodes.add(itr.next().getLocation());
-        }
-        return nodes;
+    public String getUserType() {
+        return userType;
     }
 
-    public List<Node> getLocations(){
-        return getLocations(Time.DAY_START, Time.DAY_END);
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
-    public List<Time> getArrivalTimes(int startTime, int endTime){
-        List<Time> nodes = new ArrayList<>(schedule.size());
-        Iterator<Event> itr = schedule.iterator(startTime, endTime);
-        while(itr.hasNext()){
-            nodes.add(new Time(itr.next().getArrivalTime()));
-        }
-        return nodes;
+    public int getUserID() {
+        return userID;
     }
 
-    public List<Time> getArrivalTimes(){
-        return getArrivalTimes(Time.DAY_START, Time.DAY_END);
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
-    public List<Event> getEvents(){
-        return schedule.getAgenda();
+    public String getFirstName() {
+        return firstName;
     }
 
-    public Path whereToNext(SearchContext search, int currentTime){
-        Iterator<Event> itr = schedule.iterator();
-        while(itr.hasNext()){
-            Event event = itr.next();
-            if(itr.hasNext() && event.getArrivalTime() < currentTime && event.getEndTime() < currentTime){
-                return search.search(event.getLocation(), itr.next().getLocation());
-            }
-        }
-        return null;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -4,12 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
-
-import java.io.IOException;
-import java.lang.String;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
@@ -20,6 +14,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class ExternalPatient extends ServiceRequestFormComponents {
 
@@ -145,7 +143,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 			App.setHelpText(""); //set help text
 			App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
 			appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
-//			appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+			appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

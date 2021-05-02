@@ -66,6 +66,18 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
     -fx-background-color: -fx--primary;
 }
 
+.back-button {
+    -fx-background-color: -fx--primary-dark;
+    -fx-border-color: -fx--primary-light;
+    -fx-text-fill: WHITE;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.back-button:hover {
+    -fx-background-color: -fx--primary;
+}
+
 .normal-button {
     -jfx-button-type: RAISED;
     -fx-background-color: white;
@@ -195,6 +207,14 @@ MaterialDesignIconView {
 
 FontAwesomeIconView {
     -fx-fill: -fx--primary;
+}
+
+#submission-icon {
+    -fx-fill: #82cd58;
+}
+
+#white-icon {
+    -fx-fill: WHITE;
 }
 
 JFXButton:hover MaterialDesignIconView {

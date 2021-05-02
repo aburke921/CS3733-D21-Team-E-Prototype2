@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamE;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.user.User;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
@@ -668,6 +669,9 @@ public class DB {
 		return RequestsDB.getAssigneeIDs(givenUserType);
 	}
 
+	public static User getLoggedInUser(){
+		return UserAccountDB.getUser(App.userID)
+	}
 
 	// UserAccountDB:
 

@@ -12,9 +12,9 @@ public class CovidSurveyState implements State{
 
     public void switchScene(ActionEvent event) {
 
-        String buttonName = ((Button) event.getSource()).getText();
+        String buttonName = ((Button) event.getSource()).getId();
 
-        if(buttonName.equals("Cancel")){
+        if(buttonName.equals("cancel")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
                 App.changeScene(root);
@@ -23,7 +23,7 @@ public class CovidSurveyState implements State{
             }
         }
 
-        else if(buttonName.equals("Submit")){
+        else if(buttonName.equals("submitButton")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
                 App.changeScene(root);

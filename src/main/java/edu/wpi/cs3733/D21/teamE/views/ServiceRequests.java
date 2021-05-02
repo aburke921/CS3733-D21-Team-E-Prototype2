@@ -61,80 +61,12 @@ public class ServiceRequests {
 
     }
 
+    /**
+     * Switch to a different scene
+     * @param e tells which button was pressed
+     */
     @FXML
-    private void toDefault(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
-    }
-
-    @FXML
-    private void toStatus(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
-    }
-
-    @FXML
-    private void toFloralDelivery(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
-    }
-
-    @FXML
-    private void toExternalPatient(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
-    }
-
-    @FXML
-    private void toLanguageInterpreter(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
-    }
-
-    @FXML
-    private void toMedicineDelivery(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
-    }
-
-    @FXML
-    private void toSanitation(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
-    }
-
-    @FXML
-    private void toFoodDelivery(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
-    }
-
-    @FXML
-    private void toLaundryRequest(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
-    }
-
-    @FXML
-    private void toMaintenanceRequest(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
-    }
-
-    @FXML
-    private void toInternalPatient(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
-    }
-
-    @FXML
-    private void toSecurity(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
-    }
-
-    @FXML
-    private void toReligous(ActionEvent e) {
+    private void switchScene(ActionEvent e) {
         ServiceRequestState serviceRequestState = new ServiceRequestState();
         serviceRequestState.switchScene(e);
     }

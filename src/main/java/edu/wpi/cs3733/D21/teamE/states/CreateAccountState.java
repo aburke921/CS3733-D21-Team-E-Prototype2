@@ -12,9 +12,9 @@ public class CreateAccountState {
 
     public void switchScene(ActionEvent event) {
 
-        String buttonName = ((Button) event.getSource()).getText();
+        String buttonName = ((Button) event.getSource()).getId();
 
-        if(buttonName.equals("Back")){
+        if(buttonName.equals("back")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
                 App.getPrimaryStage().getScene().setRoot(root);
@@ -23,7 +23,7 @@ public class CreateAccountState {
             }
         }
 
-        else if(buttonName.equals("Submit")){
+        else if(buttonName.equals("submitAccountButton")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
                 App.getPrimaryStage().getScene().setRoot(root);

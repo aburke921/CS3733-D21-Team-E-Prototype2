@@ -114,11 +114,11 @@ public class CovidSurvey extends ServiceRequests {
 	}
 
 	/**
-	 * Returns to the service request page
-	 * @param event {@link ActionEvent} info for the cancel button call, passed automatically by system.
+	 * Switch to a different scene
+	 * @param event tells which button was pressed
 	 */
 	@FXML
-	void handleButtonCancel(ActionEvent event) {
+	void switchScene(ActionEvent event) {
 		CovidSurveyState covidSurveyState = new CovidSurveyState();
 		covidSurveyState.switchScene(event);
 	}

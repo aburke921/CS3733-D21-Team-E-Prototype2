@@ -189,11 +189,11 @@ public class PathFinder {
 
 
     /**
-     * Returns to {@link Default} page.
-     * @param event calling event info.
+     * Switch to a different scene
+     * @param event tells which button was pressed
      */
     @FXML
-    private void toDefault(ActionEvent event) {
+    private void switchScene(ActionEvent event) {
         PathFinderState pathFinderState = new PathFinderState();
         pathFinderState.switchScene(event);
     }

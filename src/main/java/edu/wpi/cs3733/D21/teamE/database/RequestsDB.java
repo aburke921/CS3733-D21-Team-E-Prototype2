@@ -520,7 +520,7 @@ public class RequestsDB {
 
 
 		}catch(IOException e){
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.out.println("error reading in Aubon Pain website in addAbonPainTable()");
 		}
 

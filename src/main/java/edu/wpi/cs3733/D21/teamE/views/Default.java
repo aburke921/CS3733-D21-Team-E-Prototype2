@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,6 +25,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Default {
+
+    public static String previousScannedResult = null;
 
     @FXML
     private AnchorPane appBarAnchorPane;
@@ -54,6 +57,12 @@ public class Default {
 
     @FXML // fx:id="algoTextBottom"
     private Label algoTextBottom;
+
+    @FXML // fx:id="carParkedText"
+    private Label carParkedText;
+
+    @FXML // fx:id="LinkToParking"
+    private Hyperlink LinkToParking;
 
     private ObservableList<String> algoNames;
 
@@ -156,11 +165,42 @@ public class Default {
                 toPathFinder(e);
                 break;
             case "p":
-                // get popup to say ur parking slot saved
+                if (App.userID == 0) {
+                    previousScannedResult = code;
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
+                        App.getPrimaryStage().getScene().setRoot(root);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    if (DB.submitParkingSlot(code, App.userID)) {
+                        carParkedText.setVisible(true);
+                        LinkToParking.setVisible(true);
+                        // TODO get popup to say ur parking slot saved
+                    } else {
+                        break;
+                        // TODO get popup to say ur parking slot was not saved
+                    }
+                }
                 break;
             default:
                 break;
         }
+    }
+
+    @FXML
+    private void toParking(ActionEvent e) {
+
+        ArrayList<Node> nodeArrayList = DB.getAllNodes();
+        int index = 0;
+        for (int i = 0; i < nodeArrayList.size(); i++) {
+            if (nodeArrayList.get(i).get("id").equals(DB.whereDidIPark(App.userID))) {
+                index = i;
+            }
+        }
+        PathFinder.endNodeIndex = index;
+        toPathFinder(e);
     }
 
     @FXML
@@ -229,6 +269,31 @@ public class Default {
             algo.setVisible(false);
             applyChange.setVisible(false);
             userManagementButton.setVisible(false);
+        }
+
+        if (App.userID == 0 || DB.whereDidIPark(App.userID) == null){
+            carParkedText.setVisible(false);
+            LinkToParking.setVisible(false);
+        }
+
+        if (previousScannedResult != null) {
+            if (App.userID == 0) {
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
+                    App.getPrimaryStage().getScene().setRoot(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                if (DB.submitParkingSlot(previousScannedResult, App.userID)) {
+                    previousScannedResult = null;
+                    carParkedText.setVisible(true);
+                    LinkToParking.setVisible(true);
+                    // TODO get popup to say ur parking slot saved
+                } else {
+                    // TODO get popup to say ur parking slot was not saved
+                }
+            }
         }
     }
 

@@ -68,7 +68,7 @@ public class AppBarComponent {
         //if user is logged in - button will log out, otherwise, will take to login page. No...? either way... set userID = 0, and direct to main page
         System.out.println("Login Button Clicked!");
         try {
-            App.userID = 0; //todo, double check that this is all you need to do to log a user out
+            App.userID = 0; //todo, double check that this is all you need to do to log a user out (From Yihong: Yes it is lol)
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {

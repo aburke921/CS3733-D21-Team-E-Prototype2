@@ -400,4 +400,50 @@ public class UserAccountDB {
 		System.err.println("Error in filledCovidSurveyToday() from UserAccountDB");
 		return false;
 	}
+
+	/**
+	 * Submits a Parking Slot to the server, the nodeID will have to be of type PARK or lastParkedNodeID will be replaced with null
+	 * @param nodeID is the result nodeID that we are submitting
+	 * @param userID is the user's ID that we are submitting
+	 * @return true if successfully changed one row, false otherwise
+	 */
+	public static boolean submitParkingSlot(String nodeID, int userID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"Update userAccount " +
+						"Set lastParkedNodeID = (Select nodeID " +
+						"From node " +
+						"Where nodeID = ? " +
+						"And nodeType = 'PARK') " +
+						"Where userID = ?")) {
+			preparedStatement.setString(1, nodeID);
+			preparedStatement.setInt(2, userID);
+			if (preparedStatement.executeUpdate() == 1) return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Error in submitParkingSlot() from UserAccountDB");
+		return false;
+	}
+
+	/**
+	 * Get where the user parked
+	 * @param userID is the user's ID that we are checking
+	 * @return the node where the user parked, null if not exist
+	 */
+	public static String whereDidIPark(int userID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"Select lastParkedNodeID " +
+						"From userAccount " +
+						"Where userID = ? ")) {
+			preparedStatement.setInt(1, userID);
+			ResultSet rset = preparedStatement.executeQuery();
+			if (rset.next()) {
+				return rset.getString("lastParkedNodeID");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Error in isUserCovidSafe() from UserAccountDB");
+		return null;
+	}
 }

@@ -764,7 +764,7 @@ public class PathFinder {
 
         //Check if startNodeIndex has a value, if yes fill startLocationComboBox
         if (endNodeIndex != -1) {
-            endLocationComboBox.getSelectionModel().select(startNodeIndex);
+            endLocationComboBox.getSelectionModel().select(endNodeIndex);
             endNodeIndex = -1;
         }
 

@@ -782,4 +782,7 @@ public class DB {
 		return UserAccountDB.whereDidIPark(userID);
 	}
 
+	public static String getUserName(int userID) {
+		return UserAccountDB.getUserName(userID);
+	}
 }

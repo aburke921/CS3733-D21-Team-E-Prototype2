@@ -28,30 +28,12 @@ import java.io.IOException;
 
 public class App extends Application {
 
-	/**
-	 * Value of currently logged in user.
-	 * 0 Indicates no user logged in.
-	 */
-	public static int userID = 0;
-
-	public static boolean noCleanSurveyYet = true;
+	/*-------------------------------------
+	* 	   VARIABLES/SETTERS/GETTERS
+	*------------------------------------*/
 
 	/**The JavaFX application's primary stage. All Scenes are built upon this stage*/
 	private static Stage primaryStage;
-
-	//setter for primaryStage
-	public static void setPrimaryStage(Stage primaryStage) {
-		App.primaryStage = primaryStage;
-	}
-
-	//getter for primaryStage
-	public static Stage getPrimaryStage() {
-		return primaryStage;
-	}
-
-	/*-------------------------------------
-	* 	APPBAR VARIABLES/SETTERS/GETTERS
-	*------------------------------------*/
 
 	/**Sets the visibility of the login button.
 	 * See {@link AppBarComponent} for further information.*/
@@ -73,68 +55,121 @@ public class App extends Application {
 	 * See {@link AppBarComponent} for further information.*/
 	private static boolean showHelp = false;
 
-	//getter for showLogin
-	public static boolean isShowLogin() {
-		return showLogin;
+	/**Sets the current searchAlgorithm for the PathFinder page.
+	 * Is set to A* by default (0)*/
+	private static int searchAlgo = 0;
+
+	/**Value of currently logged in user.
+	 * 0 Indicates no user logged in.*/
+	public static int userID = 0;
+
+	/**@// todo document this*/
+	public static boolean noCleanSurveyYet = true;
+
+
+	//setters and getters for above variables
+	public static boolean isShowLogin() { return showLogin; }
+	public static void setShowLogin(boolean showLogin) { App.showLogin = showLogin; }
+	public static String getHelpText() { return helpText; }
+	public static void setHelpText(String helpText) { App.helpText = helpText; }
+	public static String getPageTitle() { return pageTitle; }
+	public static void setPageTitle(String pageTitle) { App.pageTitle = pageTitle; }
+	public static StackPane getStackPane() { return stackPane; }
+	public static void setStackPane(StackPane stackPane) { App.stackPane = stackPane; }
+	public static boolean isShowHelp() { return showHelp; }
+	public static void setShowHelp(boolean showHelp) { App.showHelp = showHelp; }
+	public static int getSearchAlgo() { return searchAlgo; }
+	public static void setSearchAlgo(int searchAlgo) { App.searchAlgo = searchAlgo; }
+	public static void setPrimaryStage(Stage primaryStage) { App.primaryStage = primaryStage; }
+	public static Stage getPrimaryStage() { return primaryStage; }
+
+
+	/*---------------------------------
+	 *		JAVAFX APP FUNCTIONS
+	 *--------------------------------*/
+
+	/**
+	 * Runs on Application (pre)startup and sets up the DB.
+	 *
+	 * Makes a connection to the DB to check if the proper tables exist in the right places.
+	 * If not, it will repopulate the DB with data from {@link makeConnection#addDataForPresentation()}.
+	 *
+	 */
+	@Override
+	public void init() {
+		System.out.println("Starting App Init...");
+		makeConnection connection = makeConnection.makeConnection();
+		System.out.println("...Connected to the DB");
+		File nodes = new File("CSVs/MapEAllnodes.csv");
+		File edges = new File("CSVs/MapEAlledges.csv");
+		boolean tablesExist = connection.allTablesThere();
+		if(!tablesExist){
+			System.out.print("...DB missing, repopulating...");
+			try {
+				DB.createAllTables();
+				DB.populateTable("node", nodes);
+				DB.populateTable("hasEdge", edges);
+				connection.addDataForPresentation();
+				DB.populateAbonPainTable();
+				System.out.println("Done");
+			} catch (Exception e) {
+				System.out.println("...Tables already there");
+			}
+		}
+		System.out.println("App Initialized.");
 	}
 
-	//setter for showLogin
-	public static void setShowLogin(boolean showLogin) {
-		App.showLogin = showLogin;
+	/**
+	 * Runs on Application startup, post-{@link #init()}.
+	 * Sets up the window starting/default size and size constraints.
+	 * Adds the {@link ResizeHelper} listener to the application.
+	 *
+	 * @param primaryStage primaryStage of the application. Will set App's {@link #primaryStage} to this value.
+	 * @throws IOException thrown when the specified FXML cannot be found.
+	 */
+	@Override
+	public void start(Stage primaryStage) throws IOException {
+		//set app title
+		primaryStage.setTitle("BWH Application - D21 Team E"); //todo, come up with final title for app
+
+		//Grab FXML for and set primary stage properties.
+		App.primaryStage = primaryStage;
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("fxml/Default.fxml")); //get the Default FXMl
+			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
+
+			//set scene for primaryStage
+			Scene scene = new Scene(root);
+			primaryStage.setScene(scene);
+
+			//set default sizes
+			primaryStage.setWidth(1200);
+			primaryStage.setHeight(785);
+
+			//add ResizeListener
+			ResizeHelper.addResizeListener(primaryStage, 1120, 775, Double.MAX_VALUE, Double.MAX_VALUE);
+
+			//show stage
+			primaryStage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+			Platform.exit();
+		}
 	}
 
-	//getter for helpText
-	public static String getHelpText() {
-		return helpText;
+	/**
+	 * Stops the application safely.
+	 */
+	@Override
+	public void stop() {
+		System.out.println("Shutting Down");
+		System.exit(0);
 	}
 
-	//setter for helpText
-	public static void setHelpText(String helpText) {
-		App.helpText = helpText;
-	}
 
-	//getter for pageTitle
-	public static String getPageTitle() {
-		return pageTitle;
-	}
-
-	//setter for pageTitle
-	public static void setPageTitle(String pageTitle) {
-		App.pageTitle = pageTitle;
-	}
-
-	//getter for stackPane
-	public static StackPane getStackPane() {
-		return stackPane;
-	}
-
-	//setter for stackPane
-	public static void setStackPane(StackPane stackPane) {
-		App.stackPane = stackPane;
-	}
-
-	//getter for showHelp
-	public static boolean isShowHelp() {
-		return showHelp;
-	}
-
-	//setter for showHelp
-	public static void setShowHelp(boolean showHelp) {
-		App.showHelp = showHelp;
-	}
-
-	public static int getSearchAlgo() {
-		return searchAlgo;
-	}
-
-	private static int searchAlgo = 0; //search algo should be A* by default
-
-	public static void setSearchAlgo(int searchAlgo) {
-		App.searchAlgo = searchAlgo;
-	}
-
-	/*-------------------------------------*/
-
+	/*-------------------------------------
+	 * 	   APP-WIDE CALLABLE FUNCTIONS
+	 *------------------------------------*/
 
 	/**
 	 * Creates a new JFX Dialog on the current page.
@@ -161,91 +196,13 @@ public class App extends Application {
 
 
 	/**
-	 * Runs on Application (pre)startup
-	 * Typically not run by the user, but rather automatically by the JavaFX application.
-	 * @// TODO: 4/27/2021 document this function's tasks
-	 */
-	@Override
-	public void init() {
-		System.out.println("STARTING UP!!!");
-		makeConnection connection = makeConnection.makeConnection();
-		System.out.println("Connected to the DB");
-		File nodes = new File("CSVs/MapEAllnodes.csv");
-		File edges = new File("CSVs/MapEAlledges.csv");
-	    boolean tablesExist = connection.allTablesThere();
-		if(!tablesExist){
-			try {
-				DB.createAllTables();
-				DB.populateTable("node", nodes);
-				DB.populateTable("hasEdge", edges);
-				connection.addDataForPresentation();
-				DB.populateAbonPainTable();
-				System.out.println("Tables were created");
-			} catch (Exception e) {
-				System.out.println("Tables already there");
-         /*connection.createTables();
-         connection.populateTable("node", nodes);
-         connection.populateTable("hasEdge", edges);*/
-				System.out.println("Tables were created and populated");
-			}
-		}
-	}
-
-	/**
-	 * @// TODO: 4/27/2021 this function requires some looking at, the original way it was used has been changed
-	 * @// TODO:			 at minimum its name should be changed, as it no longer applies the resizeListener.
-	 * @param root
-	 */
-	public static void setDraggableAndChangeScene(Parent root) {
-//		ResizeHelper.addResizeListener(App.getPrimaryStage()); //todo this is no longer necessary, making pretty much this whole fcn unnecessary?
-//		ResizeHelper.addResizeListener(primaryStage,435,325,Double.MAX_VALUE,Double.MAX_VALUE);
-		App.getPrimaryStage().getScene().setRoot(root);
-	}
-
-	/**
-	 * @// TODO: 4/27/2021 similar todo as above
-	 * @param root
-	 */
-	public static void setDraggableAndChangeScene(Parent root, double minWidth, double minHeight, double maxWidth, double maxHeight) {
-		ResizeHelper.addResizeListener(App.getPrimaryStage(),minWidth,minHeight,maxWidth,maxHeight);
-		App.getPrimaryStage().getScene().setRoot(root);
-	}
-
-
-	/**
-	 * Runs on Application startup, post-{@link #init()}.
-	 * Sets up the window starting/default size and size constraints.
-	 * Adds the {@link ResizeHelper} listener to the application.
+	 * Changes the currently displayed scene.
+	 * i.e. in the case of changing the "page" in the UI.
 	 *
-	 * Typically not run by the user, but rather automatically by the JavaFX application.
-	 * @param primaryStage primaryStage of the application. Will set App's {@link #primaryStage} to this value.
-	 * @throws IOException thrown when the specified FXML cannot be found.
+	 * @param root Typically a value retrived via an {@link FXMLLoader}, pointing to new FXML.
 	 */
-	@Override
-	public void start(Stage primaryStage) throws IOException {
-		primaryStage.setTitle("BWH Application - D21 Team E"); //todo, come up with final title for app
-		App.primaryStage = primaryStage;
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("fxml/Default.fxml"));
-			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
-			Scene scene = new Scene(root); //init
-			primaryStage.setScene(scene);
-			primaryStage.setWidth(1200);
-			primaryStage.setHeight(785);
-			primaryStage.show();
-			ResizeHelper.addResizeListener(primaryStage, 1120, 775, Double.MAX_VALUE, Double.MAX_VALUE);
-		} catch (IOException e) {
-			e.printStackTrace();
-			Platform.exit();
-		}
+	public static void changeScene(Parent root) {
+		primaryStage.getScene().setRoot(root);
 	}
 
-	/**
-	 * Stops the application safely.
-	 */
-	@Override
-	public void stop() {
-		System.out.println("Shutting Down");
-		System.exit(0);
-	}
 }

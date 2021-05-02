@@ -12,6 +12,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,6 +49,12 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
 
     @FXML
     private JFXButton submit;
+
+    @FXML
+    public AnchorPane appBarAnchorPane;
+
+    @FXML
+    private StackPane stackPane;
 
     private boolean validateInput() {
 
@@ -112,5 +120,20 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         assert signatureInput != null;
         assert submit != null;
         assert cancel != null;
+
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setShowHelp(false); // show help or not
+            App.setShowLogin(true); // show login or not
+            App.setPageTitle("Medicine Delivery (Shannen Lin)"); //set AppBar title
+            App.setHelpText(""); //set help text
+            App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

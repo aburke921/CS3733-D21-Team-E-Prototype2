@@ -22,7 +22,7 @@
                      <bottom>
                         <AnchorPane prefHeight="45.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                            <children>
-                              <JFXButton fx:id="back" layoutX="20.0" onAction="#toLogin" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
+                              <JFXButton fx:id="back" layoutX="20.0" onAction="#switchScene" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" />
                            </children>
                         </AnchorPane>
                      </bottom>

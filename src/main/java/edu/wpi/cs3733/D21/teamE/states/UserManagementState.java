@@ -12,9 +12,9 @@ public class UserManagementState {
 
     public void switchScene(ActionEvent event) {
 
-        String buttonName = ((Button) event.getSource()).getText();
+        String buttonName = ((Button) event.getSource()).getId();
 
-        if(buttonName.equals("Back")){
+        if(buttonName.equals("backButton")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
                 App.changeScene(root);

@@ -76,27 +76,6 @@ public class Default {
         App.setSearchAlgo(algoIndex);
     }
 
-
-    /**
-     * Move to Service Request page
-     * @param e
-     */
-    @FXML
-    private void toServiceRequests(ActionEvent e) {
-        DefaultState defaultState = new DefaultState();
-        defaultState.switchScene(e);
-    }
-
-    /**
-     * Move to Map Editor page
-     * @param e
-     */
-    @FXML
-    private void toMapEditor(ActionEvent e) {
-        DefaultState defaultState = new DefaultState();
-        defaultState.switchScene(e);
-    }
-
     /**
      * Move to Path Finder page
      * @param e
@@ -115,7 +94,7 @@ public class Default {
                 CovidSurvey.plzGoToPathFinder = true;
                 try {
                     Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-                    App.getPrimaryStage().getScene().setRoot(root);
+                    App.changeScene(root);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -124,7 +103,7 @@ public class Default {
             CovidSurvey.plzGoToPathFinder = true;
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-                App.getPrimaryStage().getScene().setRoot(root);
+                App.changeScene(root);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -140,7 +119,7 @@ public class Default {
 
     @FXML
     private void toScanQRCode(ActionEvent e) {
-	    String result = QRCode.scanQR();
+	    String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
         System.out.println("Scanned String: " + result);
         String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
         System.out.println("Scanned pure: " + pure);
@@ -203,26 +182,12 @@ public class Default {
         toPathFinder(e);
     }
 
+    /**
+     * Switch to a different scene
+     * @param e tells which button was pressed
+     */
     @FXML
-    private void toMenu(ActionEvent e) {
-        DefaultState defaultState = new DefaultState();
-        defaultState.switchScene(e);
-    }
-
-    @FXML
-    private void toServiceRequestStatus(ActionEvent e) {
-        DefaultState defaultState = new DefaultState();
-        defaultState.switchScene(e);
-    }
-
-    @FXML
-    private void toCovidSurvey(ActionEvent e){
-        DefaultState defaultState = new DefaultState();
-        defaultState.switchScene(e);
-    }
-
-    @FXML
-    private void toUserManagement(ActionEvent e) {
+    private void switchScene(ActionEvent e) {
         DefaultState defaultState = new DefaultState();
         defaultState.switchScene(e);
     }

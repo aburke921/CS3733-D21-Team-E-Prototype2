@@ -49,12 +49,6 @@ public class SanitationServices extends ServiceRequestFormComponents {
   @FXML
   private StackPane stackPane;
 
-
-  /**
-   * Sets value of drop down list to the selected value(departments)
-   * @param actionEvent
-   */
-
   /**
    * Detects if the user has entered all required fields
    *
@@ -108,7 +102,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
     try {
       App.setShowHelp(false); // show help or not
       App.setShowLogin(true); // show login or not
-      App.setPageTitle("Sanitation Request ()"); //set AppBar title todo persons name
+      App.setPageTitle("Sanitation Request (Yveder Joseph)"); //set AppBar title
       App.setHelpText(""); //set help text
       App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
       appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));

@@ -17,6 +17,8 @@ import com.jfoenix.validation.RequiredFieldValidator;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
+import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import javafx.collections.ObservableList;
@@ -151,7 +153,7 @@ public class Appointment extends ServiceRequestFormComponents{
 
 			super.handleButtonSubmit(actionEvent);
 
-			DB.addAppointment(App.userID, startTime, doctorID);
+			DB.addAppointment(App.userID, startTime, date, doctorID);
 
 			String email = DB.getEmail(App.userID);
 			String fullName = DB.getUserName(App.userID);
@@ -161,21 +163,22 @@ public class Appointment extends ServiceRequestFormComponents{
 			String firstName = fullName.substring(0, position);
 			String lastName = fullName.substring(position);
 			String dateAndTime = date + " " + startTime;
+			int appointmentID = appointmentDB.getAppointmentID(App.userID, startTime, date);
 
 			if (oneMonthPrior == true) {
-				SheetsAndJava.addAppointmentToSheet(1, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "1 Month Prior");
+				SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "1 Month Prior");
 			}
 			if (twoWeeksPrior == true) {
-				SheetsAndJava.addAppointmentToSheet(1, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "2 Weeks Prior");
+				SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "2 Weeks Prior");
 			}
 			if (oneWeekPrior == true) {
-				SheetsAndJava.addAppointmentToSheet(1, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "1 Week Prior");
+				SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "1 Week Prior");
 			}
 			if (twoDaysPrior == true) {
-				SheetsAndJava.addAppointmentToSheet(1, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "48 Hours Prior");
+				SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "48 Hours Prior");
 			}
 			if (oneDayPrior == true) {
-				SheetsAndJava.addAppointmentToSheet(1, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "24 Hours Prior");
+				SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "24 Hours Prior");
 			}
 
 		}

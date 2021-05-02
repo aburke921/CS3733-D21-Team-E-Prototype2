@@ -1,9 +1,9 @@
 package edu.wpi.cs3733.D21.teamE;
 
+import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
-import edu.wpi.cs3733.D21.teamE.database.*;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
@@ -15,7 +15,7 @@ public class DB {
 
 	// AppointmentDB:
 
-	public static void createAllTables(){
+	public static void createAllTables() {
 		NodeDB.createNodeTable();
 		EdgeDB.createEdgeTable();
 		UserAccountDB.createUserAccountTable();
@@ -265,7 +265,7 @@ public class DB {
 		return NodeDB.getListOfNodeIDS();
 	}
 
-	public static void deleteNodeTable(){
+	public static void deleteNodeTable() {
 		NodeDB.deleteNodeTable();
 	}
 
@@ -275,7 +275,7 @@ public class DB {
 	 * @param nodeID is the nodeID of the nodes you want info from
 	 * @return a Node with only xCoord, yCoord, floor and nodeType not null
 	 */
-	public static Node getNodeLite(String nodeID){
+	public static Node getNodeLite(String nodeID) {
 		return NodeDB.getNodeLite(nodeID);
 	}
 
@@ -284,16 +284,15 @@ public class DB {
 	 * @param floorName the value to check for in FLOOR column
 	 * @return ObservableList of node long names.
 	 */
-	public static ObservableList<String> getAllNodeLongNamesByFloor(String floorName){
+	public static ObservableList<String> getAllNodeLongNamesByFloor(String floorName) {
 		return NodeDB.getAllNodeLongNamesByFloor(floorName);
 	}
 
 	/**
 	 * Gets a list of the nodeIDs of all of the nodes that are on the given floor
 	 * @param floorName the name of the floor that the nodes will be selected on
-	 * @return
 	 */
-	public static ArrayList<String> getListOfNodeIDSByFloor(String floorName){
+	public static ArrayList<String> getListOfNodeIDSByFloor(String floorName) {
 		return NodeDB.getListOfNodeIDSByFloor(floorName);
 	}
 
@@ -302,7 +301,7 @@ public class DB {
 	 * @param floorName the value to check for in FLOOR column
 	 * @return ArrayList of Node objects
 	 */
-	public static ArrayList<Node> getAllNodesByFloor(String floorName){
+	public static ArrayList<Node> getAllNodesByFloor(String floorName) {
 		return NodeDB.getAllNodesByFloor(floorName);
 	}
 
@@ -312,25 +311,14 @@ public class DB {
 	// Creating Tables:
 
 
-
-
 	/**
 	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
 	 * description to the aubonPainMenu table
 	 * The link to the website being read is: https://order.aubonpain.com/menu/brigham-womens-hospital
 	 */
-	public static void populateAbonPainTable(){
+	public static void populateAbonPainTable() {
 		RequestsDB.populateAbonPainTable();
 	}
-
-
-
-
-
-
-
-
-
 
 
 	// Adding To Tables:
@@ -387,57 +375,54 @@ public class DB {
 	}
 
 	/**
-	 *
-	 * @param userID ID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
-	 * @param roomID nodeID of the user
+	 * @param userID       ID of the user
+	 * @param assigneeID   ID of the assigned user who will complete this task
+	 * @param roomID       nodeID of the user
 	 * @param languageType type of language being requested
-	 * @param description detailed description of request
+	 * @param description  detailed description of request
 	 */
-	public static void addLanguageRequest(int userID, int assigneeID,  String roomID, String languageType, String description) {
+	public static void addLanguageRequest(int userID, int assigneeID, String roomID, String languageType, String description) {
 		RequestsDB.addLanguageRequest(userID, assigneeID, roomID, languageType, description);
 	}
 
 	/**
-	 *
-	 * @param userID ID of the user
-	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param userID         ID of the user
+	 * @param roomID         nodeID of the user
+	 * @param assigneeID     ID of the assigned user who will complete this task
 	 * @param washLoadAmount amount of loads needed to wash
-	 * @param dryLoadAmount amount of loads needed to dry
-	 * @param description detailed description of request
+	 * @param dryLoadAmount  amount of loads needed to dry
+	 * @param description    detailed description of request
 	 */
-	public static void addLaundryRequest(int userID, String roomID,  int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
+	public static void addLaundryRequest(int userID, String roomID, int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
 		RequestsDB.addLaundryRequest(userID, roomID, assigneeID, washLoadAmount, dryLoadAmount, description);
 	}
 
 	/**
-	 *
-	 * @param userID ID of the user
-	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
-	 * @param type is the type of maintenance required
-	 * @param severity is how severe the situation is
-	 * @param ETA time taken to complete the request
+	 * @param userID      ID of the user
+	 * @param roomID      nodeID of the user
+	 * @param assigneeID  ID of the assigned user who will complete this task
+	 * @param type        is the type of maintenance required
+	 * @param severity    is how severe the situation is
+	 * @param ETA         time taken to complete the request
 	 * @param description detailed description of request
 	 */
-	public static void addMaintenanceRequest(int userID, String roomID,  int assigneeID,  String type, String severity, String ETA, String description) {
+	public static void addMaintenanceRequest(int userID, String roomID, int assigneeID, String type, String severity, String ETA, String description) {
 		RequestsDB.addMaintenanceRequest(userID, roomID, assigneeID, type, severity, ETA, description);
 	}
 
 	/**
 	 * adds a request for food delivery
-	 * @param userID ID of the user
-	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param userID           ID of the user
+	 * @param roomID           nodeID of the user
+	 * @param assigneeID       ID of the assigned user who will complete this task
 	 * @param dietRestrictions any restrictions the user has diet wise
-	 * @param allergies any allergies the user has
-	 * @param foodItem the food item choice made by the user
-	 * @param foodQuantity the quantity of the food item the user wants
-	 * @param beverageItem the beverage item choice made by the user
+	 * @param allergies        any allergies the user has
+	 * @param foodItem         the food item choice made by the user
+	 * @param foodQuantity     the quantity of the food item the user wants
+	 * @param beverageItem     the beverage item choice made by the user
 	 * @param beverageQuantity the quantity of the beverage item the user wants
 	 */
-	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
+	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID, String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
 		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, allergies, foodItem, foodQuantity, beverageItem, beverageQuantity);
 	}
 
@@ -447,13 +432,13 @@ public class DB {
 
 	/**
 	 * adds a menuItem to the aubonPainMenu database table
-	 * @param foodImage this is the url to an image of the item
-	 * @param foodItem this is the item itself (this is unique and is used as an identifier)
-	 * @param foodPrice this is the price of the foodItem
-	 * @param foodCalories this is the number of calories the food item has
+	 * @param foodImage       this is the url to an image of the item
+	 * @param foodItem        this is the item itself (this is unique and is used as an identifier)
+	 * @param foodPrice       this is the price of the foodItem
+	 * @param foodCalories    this is the number of calories the food item has
 	 * @param foodDescription this is a description of the food item
 	 */
-	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription){
+	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription) {
 		RequestsDB.addAubonPainMenuItem(foodImage, foodItem, foodPrice, foodCalories, foodDescription);
 	}
 
@@ -552,11 +537,10 @@ public class DB {
 	}
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param requestID    is the generated ID of the request
+	 * @param roomID       the new node/room/location the user is assigning this request to
 	 * @param languageType is the new language type being requested by the user
-	 * @param description is an edited detailed description
+	 * @param description  is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description) {
@@ -564,12 +548,11 @@ public class DB {
 	}
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param requestID      is the generated ID of the request
+	 * @param roomID         the new node/room/location the user is assigning this request to
 	 * @param washLoadAmount is new amount of loads to be washed
-	 * @param dryLoadAmount is new amount of loads to be dried
-	 * @param description is an edited detailed description
+	 * @param dryLoadAmount  is new amount of loads to be dried
+	 * @param description    is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editLaundryRequest(int requestID, String roomID, String washLoadAmount, String dryLoadAmount, String description) {
@@ -577,12 +560,11 @@ public class DB {
 	}
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
-	 * @param type is the new type of maintenance request
-	 * @param severity is the new severity of the situation
-	 * @param ETA is the new estimated time
+	 * @param requestID   is the generated ID of the request
+	 * @param roomID      the new node/room/location the user is assigning this request to
+	 * @param type        is the new type of maintenance request
+	 * @param severity    is the new severity of the situation
+	 * @param ETA         is the new estimated time
 	 * @param description is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
@@ -591,14 +573,13 @@ public class DB {
 	}
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param requestID        is the generated ID of the request
+	 * @param roomID           the new node/room/location the user is assigning this request to
 	 * @param dietRestrictions is the edited restrictions of the user in terms of diet
-	 * @param allergies is the edited allergies the user has
-	 * @param food is the new food the user requests
-	 * @param beverage is the new beverage the user requests
-	 * @param description is an edited detailed description
+	 * @param allergies        is the edited allergies the user has
+	 * @param food             is the new food the user requests
+	 * @param beverage         is the new beverage the user requests
+	 * @param description      is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editFoodDeliveryRequest(int requestID, String roomID, String dietRestrictions, String allergies, String food, String beverage, String description) {
@@ -606,7 +587,7 @@ public class DB {
 	}
 
 	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
-		return RequestsDB.editInternalPatientRequest(requestID, pickUpLocation, dropOffLocation,patientID, department, severity, description);
+		return RequestsDB.editInternalPatientRequest(requestID, pickUpLocation, dropOffLocation, patientID, department, severity, description);
 	}
 
 	/**
@@ -616,7 +597,7 @@ public class DB {
 	 * @param description  some text to further describe the request
 	 */
 	public static int editReligiousRequest(int requestID, String roomID, String religionType, String description) {
-		return RequestsDB.editReligiousRequest(requestID, roomID, religionType,description);
+		return RequestsDB.editReligiousRequest(requestID, roomID, religionType, description);
 	}
 
 
@@ -666,7 +647,7 @@ public class DB {
 	 * Gets a lits of all the menu items from aubon pain
 	 * @return list of AubonPainItem that are in the aubonPainMenu database table
 	 */
-	public static ArrayList<AubonPainItem> getAubonPanItems(){
+	public static ArrayList<AubonPainItem> getAubonPanItems() {
 		return RequestsDB.getAubonPanItems();
 	}
 
@@ -675,12 +656,17 @@ public class DB {
 	 * @param column this is the name of the column the information is extracted from
 	 * @return a list of the given information
 	 */
-	public static ArrayList<String> getAubonPainFeild(String column){
+	public static ArrayList<String> getAubonPainFeild(String column) {
 		return RequestsDB.getAubonPainFeild(column);
 	}
 
+	public static ObservableList<String> getAssigneeNames(String givenUserType) {
+		return RequestsDB.getAssigneeNames(givenUserType);
+	}
 
-
+	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
+		return RequestsDB.getAssigneeIDs(givenUserType);
+	}
 
 
 	// UserAccountDB:
@@ -692,7 +678,7 @@ public class DB {
 	 * @param password  this is a password that the user will use to log into the account
 	 * @param firstName this is the user's first name that is associated with the account
 	 * @param lastName  this is the user's last name that is associated with the account
-	 * @// TODO: 4/27/21 Return success or fail status?
+	 * // TODO: 4/27/21 Return success or fail status?
 	 */
 	public static void addUserAccount(String email, String password, String firstName, String lastName) {
 		UserAccountDB.addUserAccount(email, password, firstName, lastName);
@@ -721,7 +707,7 @@ public class DB {
 	 * @param userType  this is the type of account that the individual is being assigned to
 	 * @param firstName this is the user's first name that is associated with the account
 	 * @param lastName  this is the user's last name that is associated with the account
-	 * @// TODO: 4/27/21 JavaDoc return explanation, also, consider bool return?
+	 * // TODO: 4/27/21 JavaDoc return explanation, also, consider bool return?
 	 */
 	public static int editUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
 		return UserAccountDB.editUserAccount(userID, email, password, userType, firstName, lastName);
@@ -749,14 +735,54 @@ public class DB {
 	}
 
 
-	public static ObservableList<String> getAssigneeNames(String givenUserType) {
-		return RequestsDB.getAssigneeNames(givenUserType);
+	/**
+	 * Submits a Covid Survey to the server
+	 * @param surveyResults is the result int that we are submitting
+	 * @param userID        is the user's ID that we are submitting
+	 * @return true if successfully changed one row, false otherwise
+	 */
+	public static boolean submitCovidSurvey(int surveyResults, int userID) {
+		return UserAccountDB.submitCovidSurvey(surveyResults, userID);
 	}
 
-	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
-		return RequestsDB.getAssigneeIDs(givenUserType);
+	/**
+	 * Checks if a user have a unsafe Covid survey
+	 * @param userID is the user's ID that we are checking
+	 * @return true if user has a safe survey, false if user has a dangerous survey
+	 */
+	public static boolean isUserCovidSafe(int userID) {
+		return UserAccountDB.isUserCovidSafe(userID);
 	}
 
+	/**
+	 * Checks if a user have filled their COVID survey today
+	 * @param userID is the user's ID that we are checking
+	 * @return true if user has filled a survey today, false if user did not fill a survey today
+	 */
+	public static boolean filledCovidSurveyToday(int userID) {
+		return UserAccountDB.filledCovidSurveyToday(userID);
+	}
 
+	/**
+	 * Submits a Parking Slot to the server
+	 * @param nodeID is the result nodeID that we are submitting
+	 * @param userID is the user's ID that we are submitting
+	 * @return true if successfully changed one row, false otherwise
+	 */
+	public static boolean submitParkingSlot(String nodeID, int userID) {
+		return UserAccountDB.submitParkingSlot(nodeID, userID);
+	}
 
+	/**
+	 * Get where the user parked
+	 * @param userID is the user's ID that we are checking
+	 * @return the node where the user parked, null if not exist
+	 */
+	public static String whereDidIPark(int userID) {
+		return UserAccountDB.whereDidIPark(userID);
+	}
+
+	public static String getUserName(int userID) {
+		return UserAccountDB.getUserName(userID);
+	}
 }

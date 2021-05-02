@@ -32,24 +32,23 @@ public class QRCode {
 		window.setVisible(true);
 
 		String result = null;
-
 		while (result == null) {
-			WebcamUtils.capture(webcam, "/edu/wpi/cs3733/D21/teamE/QRcode/temp", ImageUtils.FORMAT_PNG);
-			try {
-				result = QRCode.readQR("/edu/wpi/cs3733/D21/teamE/QRcode/temp.png");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			WebcamUtils.capture(webcam, "src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/temp", ImageUtils.FORMAT_PNG);
+			result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/temp.png");
 		}
 		window.setVisible(false);
 		window.dispose();
 		webcam.close();
 		return result;
-		//return result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
 	}
 
-	public static String readQR(String path) throws IOException {
-		BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(ImageIO.read(new FileInputStream(path)))));
+	public static String readQR(String path){
+		BinaryBitmap binaryBitmap = null;
+		try {
+			binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(ImageIO.read(new FileInputStream(path)))));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Result result;
 		try {
 			result = new MultiFormatReader().decode(binaryBitmap);
@@ -61,6 +60,16 @@ public class QRCode {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(scanQR());
+		//System.out.println(scanQR());                                             // comment out to enable debug mode
+
+		String result = "https://anrong.online/emeraldemus/n/EEXIT00101.html";
+		//result = QRCode.scanQR();                                             // uncomment to enable camera debug mode
+		System.out.println("Scanned String: " + result);
+		String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
+		System.out.println("Scanned pure: " + pure);
+		String lable = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('/'));
+		System.out.println("Scanned lable: " + lable);
+		String code = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
+		System.out.println("Scanned code: " + code);
 	}
 }

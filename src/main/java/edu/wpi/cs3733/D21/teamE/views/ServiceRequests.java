@@ -2,6 +2,9 @@ package edu.wpi.cs3733.D21.teamE.views;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.states.ServiceRequestState;
+import edu.wpi.cs3733.D21.teamE.states.ServiceRequestStatusState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,132 +63,80 @@ public class ServiceRequests {
 
     @FXML
     private void toDefault(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 
     @FXML
     private void toStatus(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequestStatus.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 
     @FXML
     private void toFloralDelivery(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/FloralV2.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 
     @FXML
     private void toExternalPatient(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ExternalPatient.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 
     @FXML
     private void toLanguageInterpreter(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/LanguageInterpreter.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 
     @FXML
     private void toMedicineDelivery(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/MedicineDeliveryV2.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 
     @FXML
     private void toSanitation(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SanitationV2.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 
     @FXML
     private void toFoodDelivery(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/FoodDelivery.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 
     @FXML
     private void toLaundryRequest(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Laundry.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 
     @FXML
     private void toMaintenanceRequest(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/MaintenanceRequest.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 
     @FXML
     private void toInternalPatient(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/InternalPatient.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 
     @FXML
     private void toSecurity(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SecurityV2.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 
     @FXML
     private void toReligous(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ReligiousRequests.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        ServiceRequestState serviceRequestState = new ServiceRequestState();
+        serviceRequestState.switchScene(e);
     }
 }
 

@@ -4,6 +4,8 @@ import com.jfoenix.controls.JFXTreeTableView;
 //import edu.wpi.cs3733.D21.teamE.map.Node;
 
 
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.states.ServiceRequestStatusState;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ServiceRequestForm;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
@@ -35,13 +37,9 @@ public class ServiceRequestStatus {
     JFXButton refreshButton;
 
     @FXML
-    private void toDefault(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-            App.getPrimaryStage().getScene().setRoot(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    private void back(ActionEvent e) {
+        ServiceRequestStatusState serviceRequestStatusState = new ServiceRequestStatusState();
+        serviceRequestStatusState.switchScene(e);
     }
 
     @FXML

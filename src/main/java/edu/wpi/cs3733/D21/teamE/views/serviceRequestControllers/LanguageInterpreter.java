@@ -59,7 +59,7 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 
 	@FXML
 	void handleButtonCancel(ActionEvent event) {
-		super.handleButtonSubmit(event);
+		super.handleButtonCancel(event);
 	}
 
 	@FXML

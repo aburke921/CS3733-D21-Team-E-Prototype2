@@ -17,8 +17,13 @@ import edu.wpi.cs3733.D21.teamE.map.Path;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.QRCode;
+import edu.wpi.cs3733.D21.teamE.observer.ImageObserver;
+import edu.wpi.cs3733.D21.teamE.observer.MarkerObserver;
+import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -182,23 +187,15 @@ public class PathFinder {
 
     private ArrayList<Node> currentMarkers = new ArrayList<Node>();
 
+
     /**
      * Returns to {@link Default} page.
      * @param event calling event info.
      */
     @FXML
     private void toDefault(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @FXML
-    void getHelpDefault(ActionEvent event) {
-        //todo, create help modal (refactor name, this was taken from Default page, hence the name)
+        PathFinderState pathFinderState = new PathFinderState();
+        pathFinderState.switchScene(event);
     }
 
     /**
@@ -421,6 +418,24 @@ public class PathFinder {
                 bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Sorry, something has gone wrong. Please try again.")));
 
             } else { //path is not null
+                /*
+                currentFoundPath = null;
+
+                minETA.setText(Integer.toString(foundPath.getETA().getMin()));
+                secETA.setText(String.format("%02d", (foundPath.getETA().getSec())));
+                int len = (int) Math.round(foundPath.getPathLengthFeet());
+                dist.setText(Integer.toString(len) + " Feet");
+
+                //save found path for when floors are switched
+                currentFoundPath = foundPath;
+
+                // Set map image to starting floor
+                String startFloor = foundPath.getStart().get("floor");
+                currentFloor = startFloor;
+                currFloor.setText("");
+
+                currFloor.setText(currentFloor);
+                 */
 
                 currentFoundPath = null;
                 // Set map image to starting floor
@@ -620,39 +635,9 @@ public class PathFinder {
      * @param floorNum floor to change to
      */
     public void setCurrentFloor(String floorNum) {
-
-        //set image
         currentFloor = floorNum;
-        Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/" + floorNum + ".png");
-        imageView.setImage(image);
+        currFloor.setText("");
         currFloor.setText(currentFloor);
-
-
-        //Get a list of types that are currently selected
-        ArrayList<String> currentlyViewableTypes = new ArrayList<String>();
-        for (String key : marker.getSelectedCheckBox().keySet()) {
-            if (marker.getSelectedCheckBox().get(key) == 1) {
-                currentlyViewableTypes.add(key);
-            }
-        }
-
-        ArrayList<Node> currentlyViewableNodes = new ArrayList<Node>();
-
-        //Iterate through all the types that are currently selected
-        for (String currViewType : currentlyViewableTypes) {
-            String typeAndFloorString = currViewType + currentFloor;
-            //Get the nodes with the current floor and type
-            currentlyViewableNodes = marker.getTypeAndFloorNode().get(typeAndFloorString);
-
-            //For every node, set it to visible
-            for (Node node : currentlyViewableNodes) {
-                NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
-                Rectangle r = nM.getRectangle();
-                r.setVisible(true);
-                r.setFill(marker.getTypeColor().get(currViewType));
-                currentMarkers.add(node);
-            }
-        }
 
         //draw path for new floor
         drawMap(currentFoundPath,currentFloor);
@@ -825,6 +810,17 @@ public class PathFinder {
 //                }
 //            }
         });
+
+        //Observer Design Pattern: update page based on floor change
+        Subject subject = new Subject();
+
+        new MarkerObserver(subject, markerPane, marker, currentMarkers);
+        new ImageObserver(subject, imageView);
+        //new PathObserver(subject, pane, currentFoundPath, scale, selectedStartNodeID, selectedEndNodeID);
+
+        currFloor.textProperty().addListener(observable -> {
+            subject.setState(currFloor.getText());
+        });
     }
 
     public void chooseFloor(ActionEvent e) {
@@ -836,7 +832,11 @@ public class PathFinder {
         currentMarkers.clear();
         String floor = ((Button) e.getSource()).getText();
         currFloor.setText(floor);
+
         setCurrentFloor(floor);
+        //drawMap(currentFoundPath, currentFloor);
+
+        System.out.println("Current floor set to " + floor);
     }
 
     public void sortNodesByType(ActionEvent event) {

@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
 
@@ -31,6 +33,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 
@@ -40,6 +43,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -47,6 +51,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Line;
 
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
@@ -187,6 +192,7 @@ public class PathFinder {
 
     private ArrayList<Node> currentMarkers = new ArrayList<Node>();
 
+    private Label floorLabel = null;
 
     /**
      * Switch to a different scene
@@ -500,6 +506,7 @@ public class PathFinder {
         //clear map
         System.out.print("\nCLEARING MAP...");
         pane.getChildren().clear();
+        floorLabel = null;
         System.out.println(" DONE");
 
         System.out.println("drawMap() is Finding path for floor " + floorNum);
@@ -514,6 +521,8 @@ public class PathFinder {
         List<Path> paths = fullPath.splitByFloor();
         for(Path path : paths){
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
+
+                Node prevNode = new Node();
 
                 Iterator<Node> legItr = path.iterator();
                 Group g = new Group(); //create group to contain all the shapes before we add them to the scene
@@ -598,7 +607,49 @@ public class PathFinder {
                         line.setStrokeWidth(strokeWidth);
                         line.setStroke(Color.RED);
 
+                        if (node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV")) {
+
+                            Iterator<Node> fullItr = fullPath.iterator();
+
+                            while(fullItr.hasNext()) {
+
+                                Node nodeCopy = fullItr.next();
+
+                                if(node.equals(nodeCopy) && fullItr.hasNext()) {
+
+                                    Node nextNode = fullItr.next();
+
+                                    if(nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV")) {
+                                        String toFloor = "Go to Floor " + nextNode.get("floor");
+
+                                        floorLabel = new Label(toFloor);
+                                        floorLabel.getStyleClass().add("floor-change-label");
+
+                                        double xCoordLabel = (nextNode.getX() / scale) + 2;
+                                        double yCoordLabel = (nextNode.getY() / scale) - 2;
+                                        floorLabel.setLayoutX(xCoordLabel);
+                                        floorLabel.setLayoutY(yCoordLabel);
+
+                                        if (Node.calculateZ(node.get("floor")) > Node.calculateZ(nextNode.get("floor"))) {
+                                            FontAwesomeIconView iconDown = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_DOWN);
+                                            iconDown.setSize("15");
+                                            floorLabel.setGraphic(iconDown);
+                                        } else {
+                                            FontAwesomeIconView iconUP = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_UP);
+                                            iconUP.setSize("15");
+                                            floorLabel.setGraphic(iconUP);
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+
+                    if(floorLabel != null) {
+                        g.getChildren().addAll(line, circle, floorLabel);
+                    } else {
                         g.getChildren().addAll(line, circle);
+                    }
                     } else {
                         //create a line between this node and the previous node
                         Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
@@ -612,6 +663,8 @@ public class PathFinder {
                         prevXCoord = xCoord;
                         prevYCoord = yCoord;
                     }
+
+                    prevNode = node;
                 }
                 //add all objects to the scene
                 pane.getChildren().add(g);

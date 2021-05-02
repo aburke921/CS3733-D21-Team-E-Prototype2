@@ -18,15 +18,10 @@
             <children>
                 <StackPane fx:id="stackPane" alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <AnchorPane>
-                            <children>
-                                <ImageView fx:id="hospitalImageView" fitHeight="800.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                            </children>
-                        </AnchorPane>
-                        <HBox alignment="CENTER">
-                            <children>
-                                <AnchorPane fx:id="leftAnchorPane" minWidth="329.0" prefHeight="800.0" prefWidth="329.0" HBox.hgrow="ALWAYS">
-                                      <VBox alignment="CENTER" prefHeight="800.0" prefWidth="445.0">
+                  <HBox alignment="CENTER">
+                     <children>
+                                <AnchorPane fx:id="leftAnchorPane" minWidth="-Infinity" prefHeight="800.0" prefWidth="524.0">
+                                      <VBox alignment="CENTER" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                           <JFXTextField fx:id="address" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="325.0" promptText="Address" />
                                           <HBox alignment="CENTER">
                                               <children>
@@ -42,7 +37,7 @@
                                                   <Insets top="25.0" />
                                               </VBox.margin>
                                           </HBox>
-                                          <HBox alignment="CENTER">
+                                          <HBox alignment="CENTER" prefWidth="437.0">
                                               <children>
                                                   <JFXButton fx:id="car" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
                                                       <graphic>
@@ -109,8 +104,13 @@
                                         </children>
                                     </AnchorPane>
                                 </AnchorPane>
-                            </children>
-                        </HBox>
+                              <AnchorPane>
+                                  <children>
+                                      <ImageView fx:id="hospitalImageView" fitHeight="800.0" fitWidth="682.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                  </children>
+                              </AnchorPane>
+                     </children>
+                  </HBox>
                     </children>
                 </StackPane>
             </children>

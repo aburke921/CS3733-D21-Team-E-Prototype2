@@ -5,6 +5,7 @@ import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.user.User;
 import edu.wpi.cs3733.D21.teamE.views.UserManagement;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import javafx.collections.FXCollections;
@@ -31,7 +32,6 @@ public class DatabaseTests {
 
 	@BeforeEach
 	public void setupTables() {
-
 
 		try {
 			connection.deleteAllTables();
@@ -1544,21 +1544,21 @@ public class DatabaseTests {
 		DB.addSpecialUserType("gabriellar@gmail.com", "patient5", "patient", "Gabriella", "Reyes");
 
 
-		UserManagement.User u1 = new UserManagement.User("patient", 1, "Adam", "Jenkins", "adamj@gmail.com");
-		UserManagement.User u2 = new UserManagement.User("patient", 2, "Abby", "Mohamed", "abbym@yahoo.com");
-		UserManagement.User u3 = new UserManagement.User("patient", 3, "Wesley", "Armstrong", "wesleya@gmail.com");
-		UserManagement.User u4 = new UserManagement.User("patient", 4, "Travis", "Cook", "travisc@yahoo.com");
-		UserManagement.User u5 = new UserManagement.User("patient", 5, "Gabriella", "Reyes", "gabriellar@gmail.com");
+		User u1 = new User("patient", 1, "Adam", "Jenkins", "adamj@gmail.com");
+		User u2 = new User("patient", 2, "Abby", "Mohamed", "abbym@yahoo.com");
+		User u3 = new User("patient", 3, "Wesley", "Armstrong", "wesleya@gmail.com");
+		User u4 = new User("patient", 4, "Travis", "Cook", "travisc@yahoo.com");
+		User u5 = new User("patient", 5, "Gabriella", "Reyes", "gabriellar@gmail.com");
 
 
-		ArrayList<UserManagement.User> testUserArray = new ArrayList<>();
+		ArrayList<User> testUserArray = new ArrayList<>();
 		testUserArray.add(u1);
 		testUserArray.add(u2);
 		testUserArray.add(u3);
 		testUserArray.add(u4);
 		testUserArray.add(u5);
 
-		ArrayList<UserManagement.User> userArray = UserAccountDB.getAllUsers();
+		ArrayList<User> userArray = UserAccountDB.getAllUsers();
 
 		boolean allCorrect = true;
 		boolean firstName = false;
@@ -1570,8 +1570,8 @@ public class DatabaseTests {
 
 		if (testUserArray.size() == userArray.size()) {
 			for (int user = 0; user < userArray.size(); user++) {
-				UserManagement.User returnedUser = userArray.get(user);
-				UserManagement.User correctUser = testUserArray.get(user);
+				User returnedUser = userArray.get(user);
+				User correctUser = testUserArray.get(user);
 				if (returnedUser.getUserType().equals(correctUser.getUserType())) {
 					userType = true;
 				}

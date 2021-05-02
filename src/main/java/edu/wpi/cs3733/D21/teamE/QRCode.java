@@ -47,6 +47,16 @@ public class QRCode {
 		return result;
 	}
 
+	public static String scanQRFromDir() {
+		String result = null;
+		try {
+			result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	public static String readQR(String path) throws IOException {
 		BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(ImageIO.read(new FileInputStream(path)))));
 		Result result;

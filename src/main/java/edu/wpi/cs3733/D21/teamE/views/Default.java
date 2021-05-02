@@ -140,7 +140,7 @@ public class Default {
 
     @FXML
     private void toScanQRCode(ActionEvent e) {
-	    String result = QRCode.scanQR();
+	    String result = QRCode.scanQRFromDir();
         System.out.println("Scanned String: " + result);
         String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
         System.out.println("Scanned pure: " + pure);

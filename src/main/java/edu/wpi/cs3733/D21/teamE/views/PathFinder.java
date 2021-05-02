@@ -287,8 +287,16 @@ public class PathFinder {
         parking.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DB.submitParkingSlot(nodeArrayList.get(index).get("id"), App.userID);
-                dialog.close();
+                if (DB.submitParkingSlot(nodeArrayList.get(index).get("id"), App.userID)) {
+                    dialog.close();
+                } else {
+                    JFXDialogLayout error = new JFXDialogLayout();
+                    error.setHeading(new Text("Error when trying to add parking slot"));
+                    JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
+                    JFXButton dismiss = new JFXButton("Dismiss");
+                    error.setActions(dismiss);
+                    dialog.show();
+                }
             }
         });
         start.setOnAction(new EventHandler<ActionEvent>() {

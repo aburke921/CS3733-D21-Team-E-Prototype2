@@ -275,12 +275,23 @@ public class PathFinder {
         JFXDialogLayout error = new JFXDialogLayout();
         error.setHeading(new Text("Location selection"));
         JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
+        JFXButton parking = new JFXButton("Set Parking");
+        if (App.userID == 0 || !nodeArrayList.get(index).get("type").equals("PARK")) {
+            parking.setVisible(false);
+        }
         JFXButton start = new JFXButton("Start");
         JFXButton destination = new JFXButton("Destination");
         JFXButton bathroom = new JFXButton("Nearest Bathroom");
 
 
-       start.setOnAction(new EventHandler<ActionEvent>() {
+        parking.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                DB.submitParkingSlot(nodeArrayList.get(index).get("id"), App.userID);
+                dialog.close();
+            }
+        });
+        start.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 startLocationComboBox.getSelectionModel().select(index);
@@ -317,7 +328,7 @@ public class PathFinder {
 
             }
         });
-        error.setActions(start,bathroom,destination);
+        error.setActions(parking,start,bathroom,destination);
 
 
 

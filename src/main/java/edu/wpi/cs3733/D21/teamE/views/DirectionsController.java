@@ -107,6 +107,7 @@ public class DirectionsController {
         // First String is header
         for (DirectionsStep step: trip.steps) {
             String str = step.toString();
+            str = str.replaceAll("<div style=\"font-size:0.9em\">", " "); // linebreak comp
             str = str.replaceAll("\\<.*?\\>", "");
             str = str.substring(str.indexOf("\"")+1);
             String dir = str.substring(0, str.indexOf("\""));

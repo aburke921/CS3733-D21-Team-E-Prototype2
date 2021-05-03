@@ -310,7 +310,6 @@ public class Path implements Comparable<Path>, Iterable<Node>{
 
                     switch (floorChangeState){
                         case 1:
-                            directions.add("Enter Elevator " + node2.get("longName").charAt(9));
                             break;
                         case 2:
                             len = node3.dist(node2);

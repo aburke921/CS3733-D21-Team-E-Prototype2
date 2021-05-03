@@ -243,7 +243,7 @@ transit-button{
 }
 
 /* The increment and decrement button CSS class of scrollbar */
-.directions .increment-button ,.mylistview .decrement-button {
+.directions .increment-button ,.directions .decrement-button {
     -fx-background-color:transparent;
     -fx-border-color:derive(gray,80%);
 }
@@ -265,4 +265,20 @@ transit-button{
 
 .jfx-dialog-overlay-pane > StackPane{
     -fx-effect: null;
+}
+
+.iconTable {
+    -fx-font-family:"Material Design Icons";
+    -fx-font-size: 2em;
+    -fx-text-fill: -fx--primary-dark;
+}
+
+.noheader .column-header-background {
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+}
+
+.table-row-cell {
+    -fx-cell-size: 2.1em;
 }

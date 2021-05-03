@@ -11,8 +11,9 @@ public class DijkstraSearcher extends Searcher {
      * constructor
      */
     public DijkstraSearcher(){
-
+        super();
     }
+
     @Override
     public Path search(Node start, Node end){
 

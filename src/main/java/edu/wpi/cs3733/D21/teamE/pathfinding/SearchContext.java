@@ -81,6 +81,10 @@ public class SearchContext {
     }
 
     private Searcher translateAlgo(String algo){
+
+
+        System.out.println("DEBUG:   alg: " + algo);
+
         if(algo.equalsIgnoreCase("A*")){
             return new Searcher();
         } else if(algo.equalsIgnoreCase("DFS")){

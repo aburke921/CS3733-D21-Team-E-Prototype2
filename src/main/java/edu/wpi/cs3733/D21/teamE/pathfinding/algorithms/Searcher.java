@@ -210,7 +210,8 @@ public class Searcher {
     protected Path reconstructPath(HashMap<Node, Node> cameFrom, Node end) {
         LinkedList<Node> stack = new LinkedList<>();
         //push onto stack
-        for(Node current = end; cameFrom.containsKey(current); current = cameFrom.get(current)){
+        for(Node current = end; current != null &&  cameFrom.containsKey(current);
+                current = cameFrom.get(current)){
             stack.push(current);
         }
 

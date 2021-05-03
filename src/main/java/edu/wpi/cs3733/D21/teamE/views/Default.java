@@ -239,9 +239,10 @@ public class Default {
         imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
 
-        Image logo = new Image("edu/wpi/cs3733/D21/teamE/logo.png");
+        Image logo = new Image("edu/wpi/cs3733/D21/teamE/fullLogo.png");
         logoImageView.setImage(logo);
         logoImageView.setPreserveRatio(true);
+        //logoImageView.fitWidthProperty().bind(rightAnchorPane.widthProperty());
         rightAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
         rightAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
 

@@ -98,7 +98,7 @@ public class Login {
 		imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
 		imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
-		Image logo = new Image("edu/wpi/cs3733/D21/teamE/logo.png");
+		Image logo = new Image("edu/wpi/cs3733/D21/teamE/fullLogo.png");
 		logoImageView.setImage(logo);
 		logoImageView.setPreserveRatio(true);
 		rightAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());

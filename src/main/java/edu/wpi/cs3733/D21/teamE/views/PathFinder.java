@@ -240,7 +240,7 @@ public class PathFinder {
 
         List<String> directions = currentFoundPath.makeDirectionsWithDist();
         // Include Icon next to direction
-        ListView<String> listView = new ListView<>();
+        JFXListView<String> listView = new JFXListView<>();
         listView.getItems().addAll(directions);
         listView.setPrefHeight(USE_COMPUTED_SIZE);
 

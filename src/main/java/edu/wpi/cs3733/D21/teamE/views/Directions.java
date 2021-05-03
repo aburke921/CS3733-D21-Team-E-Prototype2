@@ -6,10 +6,7 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsStep;
 import com.google.maps.model.TravelMode;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamE.App;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -105,7 +102,7 @@ public class Directions {
                 String dir = str.substring(0, str.indexOf("\""));
                 directions.add(dir);
             }
-            ListView<String> listView = new ListView<>();
+            JFXListView<String> listView = new JFXListView<>();
             listView.getItems().addAll(directions);
             listView.setPrefHeight(USE_COMPUTED_SIZE);
 
@@ -154,44 +151,36 @@ public class Directions {
         getDirections(false);
     }
 
+    private void switchFocusButton(JFXButton button) {
+        currentlySelected.getStyleClass().remove("transit-button-selected");
+        currentlySelected.getStyleClass().add("transit-button-unselected");
+        currentlySelected = button;
+        currentlySelected.getStyleClass().remove("transit-button-unselected");
+        currentlySelected.getStyleClass().add("transit-button-selected");
+    }
+
     @FXML
     private void chooseMode(ActionEvent e) {
         String mode = ((Button) e.getSource()).getId();
         switch (mode) {
             case "walking":
                 DirectionsController.setMode(TravelMode.WALKING);
-                currentlySelected.getStyleClass().remove("transit-button-selected");
-                currentlySelected.getStyleClass().add("transit-button-unselected");
-                currentlySelected = walking;
-                currentlySelected.getStyleClass().remove("transit-button-unselected");
-                currentlySelected.getStyleClass().add("transit-button-selected");
+                switchFocusButton(walking);
                 break;
 
             case "bike":
                 DirectionsController.setMode(TravelMode.BICYCLING);
-                currentlySelected.getStyleClass().remove("transit-button-selected");
-                currentlySelected.getStyleClass().add("transit-button-unselected");
-                currentlySelected = bike;
-                currentlySelected.getStyleClass().remove("transit-button-unselected");
-                currentlySelected.getStyleClass().add("transit-button-selected");
+                switchFocusButton(bike);
                 break;
 
             case "transit":
                 DirectionsController.setMode(TravelMode.TRANSIT);
-                currentlySelected.getStyleClass().remove("transit-button-selected");
-                currentlySelected.getStyleClass().add("transit-button-unselected");
-                currentlySelected = transit;
-                currentlySelected.getStyleClass().remove("transit-button-unselected");
-                currentlySelected.getStyleClass().add("transit-button-selected");
+                switchFocusButton(transit);
                 break;
 
             default:
                 DirectionsController.setMode(TravelMode.DRIVING);
-                currentlySelected.getStyleClass().remove("transit-button-selected");
-                currentlySelected.getStyleClass().add("transit-button-unselected");
-                currentlySelected = car;
-                currentlySelected.getStyleClass().remove("transit-button-unselected");
-                currentlySelected.getStyleClass().add("transit-button-selected");
+                switchFocusButton(car);
                 break;
         }
     }

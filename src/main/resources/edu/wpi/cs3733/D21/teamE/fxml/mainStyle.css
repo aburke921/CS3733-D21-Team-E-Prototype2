@@ -194,6 +194,10 @@ MaterialDesignIconView {
     -fx-fill: -fx--primary;
 }
 
+MaterialDesignIconViewAlt {
+    -fx-fill: WHITE;
+}
+
 FontAwesomeIconView {
     -fx-fill: -fx--primary;
 }
@@ -216,8 +220,12 @@ JFXButton:hover FontAwesomeIconView {
     -jfx-header-color: -fx--primary-dark; /*header text color*/
 }
 
-JFXListView {
+.icon-button {
+    -fx-fill: WHITE;
+}
 
+transit-button{
+    -jfx-button-type: RAISED;
 }
 
 .floor-change Label{
@@ -231,4 +239,71 @@ JFXListView {
 
 .floor-change:hover Label{
     visibility: false;
+}
+
+/* ListView CSS from: https://blog.ngopal.com.np/2012/07/11/customize-scrollbar-via-css/*/
+
+.directions .jfx-rippler{
+    -jfx-rippler-fill: rgba(255,255,255,0);
+}
+
+.directions{
+    -fx-border-color: rgba(255,255,255,0);
+}
+
+/* The main scrollbar CSS class of ListView */
+.directions .scroll-bar:horizontal {
+    -fx-pref-width: 0;
+}
+
+.directions  .scroll-bar:vertical{
+    -fx-pref-width: 12;
+    -fx-background-color:transparent;
+
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+.directions .increment-button ,.directions .decrement-button {
+    -fx-background-color:transparent;
+    -fx-border-color:derive(gray,80%);
+}
+
+/* The main scrollbar **track** CSS class  */
+.directions .scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color:derive(gray,80%);
+    -fx-background-radius: 0em;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.directions .scroll-bar:vertical .thumb {
+    -fx-background-color: -fx--primary;
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+
+}
+
+.jfx-dialog-overlay-pane > StackPane{
+    -fx-effect: null;
+}
+
+.iconTable {
+    -fx-font-family:"Material Design Icons";
+    -fx-font-size: 2em;
+    -fx-text-fill: -fx--primary-dark;
+}
+
+.noheader .column-header-background {
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+}
+
+.table-row-cell {
+    -fx-cell-size: 2.1em;
+}
+
+.custom-jfx-check-box {
+    -jfx-checked-color: -fx--primary;
+    -jfx-unchecked-color: BLACK;
 }

@@ -113,7 +113,6 @@ public class DirectionsController {
             str = str.substring(str.indexOf("\"")+1);
             String dir = str.substring(0, str.indexOf("\""));
             dir = dir.replaceAll("&nbsp;", " ");
-            dir = wrap(dir, 100, null, false);
             directions.add(dir);
         }
 

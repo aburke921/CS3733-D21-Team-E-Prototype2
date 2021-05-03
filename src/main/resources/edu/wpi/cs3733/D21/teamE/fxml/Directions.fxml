@@ -11,106 +11,110 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.Directions">
+<VBox stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.Directions">
     <children>
-        <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefHeight="65.0" prefWidth="1012.0" />
-        <AnchorPane prefHeight="733.0" prefWidth="1200.0" VBox.vgrow="ALWAYS">
+        <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" />
+        <AnchorPane VBox.vgrow="ALWAYS">
             <children>
                 <StackPane fx:id="stackPane" alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                  <HBox alignment="CENTER">
-                     <children>
-                                <AnchorPane fx:id="leftAnchorPane" minWidth="-Infinity"  prefWidth="524.0">
-                                      <VBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="55.0">
-                                          <JFXTextField fx:id="address" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="325.0" promptText="Address" />
-                                          <HBox alignment="CENTER">
-                                              <children>
-                                                  <JFXTextField fx:id="city" prefWidth="125.0" promptText="City" />
-                                                  <JFXTextField fx:id="state" maxWidth="-Infinity" prefWidth="60.0" promptText="State">
-                                                      <HBox.margin>
-                                                          <Insets left="25.0" right="25.0" />
-                                                      </HBox.margin>
-                                                  </JFXTextField>
-                                                  <JFXTextField fx:id="zip" prefWidth="90.0" promptText="Zip Code" />
-                                              </children>
-                                              <VBox.margin>
-                                                  <Insets top="25.0" />
-                                              </VBox.margin>
-                                          </HBox>
-                                          <HBox alignment="CENTER" prefWidth="437.0">
-                                              <children>
-                                                  <JFXButton fx:id="car" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
-                                                      <graphic>
-                                                          <MaterialDesignIconView glyphName="CAR" size="24" styleClass="icon-button" />
-                                                      </graphic>
-                                                      <HBox.margin>
-                                                          <Insets left="7.5" right="7.5" />
-                                                      </HBox.margin>
-                                                  </JFXButton>
-                                                  <JFXButton fx:id="transit" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
-                                                      <graphic>
-                                                          <MaterialDesignIconView glyphName="TRAIN" size="24" styleClass="icon-button" />
-                                                      </graphic>
-                                                      <HBox.margin>
-                                                          <Insets left="7.5" right="7.5" />
-                                                      </HBox.margin>
-                                                  </JFXButton>
-                                                  <JFXButton fx:id="walking" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
-                                                      <graphic>
-                                                          <MaterialDesignIconView glyphName="WALK" size="24" styleClass="icon-button" textAlignment="CENTER" />
-                                                      </graphic>
-                                                      <HBox.margin>
-                                                          <Insets left="7.5" right="7.5" />
-                                                      </HBox.margin>
-                                                  </JFXButton>
-                                                  <JFXButton fx:id="bike" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
-                                                      <graphic>
-                                                          <MaterialDesignIconView glyphName="BIKE" size="24" styleClass="icon-button" />
-                                                      </graphic>
-                                                      <HBox.margin>
-                                                          <Insets left="7.5" right="7.5" />
-                                                      </HBox.margin>
-                                                  </JFXButton>
-                                              </children>
-                                              <VBox.margin>
-                                                  <Insets top="25.0" />
-                                              </VBox.margin>
-                                          </HBox>
-                                          <HBox alignment="CENTER">
-                                              <JFXButton fx:id="toBWH" minWidth="145.0" onAction="#toBWH" prefHeight="35.0" prefWidth="135.0" styleClass="submit-button" text="To BWH">
-                                                  <font>
-                                                      <Font size="15" />
-                                                  </font>
-                                              </JFXButton>
-                                              <JFXButton fx:id="awayBWH" minWidth="145.0" onAction="#awayBWH" prefHeight="35.0" prefWidth="135.0" styleClass="submit-button" text="Away From BWH">
-                                                  <font>
-                                                      <Font size="15.0" />
-                                                  </font>
-                                                  <VBox.margin>
-                                                      <Insets left="25" />
-                                                  </VBox.margin>
-                                                  <HBox.margin>
-                                                      <Insets left="25.0" />
-                                                  </HBox.margin>
-                                              </JFXButton>
-                                              <VBox.margin>
-                                                  <Insets top="25.0" />
-                                              </VBox.margin>
-                                          </HBox>
-                                      </VBox>
+                        <HBox alignment="CENTER">
+                            <children>
+                                <AnchorPane fx:id="leftAnchorPane" minWidth="-Infinity" prefWidth="451.0">
+                                    <VBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="55.0">
+                                        <JFXTextField fx:id="address" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="325.0" promptText="Address" />
+                                        <HBox alignment="CENTER">
+                                            <children>
+                                                <JFXTextField fx:id="city" prefWidth="125.0" promptText="City" />
+                                                <JFXTextField fx:id="state" maxWidth="-Infinity" prefWidth="60.0" promptText="State">
+                                                    <HBox.margin>
+                                                        <Insets left="25.0" right="25.0" />
+                                                    </HBox.margin>
+                                                </JFXTextField>
+                                                <JFXTextField fx:id="zip" prefWidth="90.0" promptText="Zip Code" />
+                                            </children>
+                                            <VBox.margin>
+                                                <Insets top="25.0" />
+                                            </VBox.margin>
+                                        </HBox>
+                                        <HBox alignment="CENTER" prefWidth="437.0">
+                                            <children>
+                                                <JFXButton fx:id="car" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
+                                                    <graphic>
+                                                        <MaterialDesignIconView glyphName="CAR" size="24" styleClass="icon-button" />
+                                                    </graphic>
+                                                    <HBox.margin>
+                                                        <Insets left="7.5" right="7.5" />
+                                                    </HBox.margin>
+                                                </JFXButton>
+                                                <JFXButton fx:id="transit" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
+                                                    <graphic>
+                                                        <MaterialDesignIconView glyphName="TRAIN" size="24" styleClass="icon-button" />
+                                                    </graphic>
+                                                    <HBox.margin>
+                                                        <Insets left="7.5" right="7.5" />
+                                                    </HBox.margin>
+                                                </JFXButton>
+                                                <JFXButton fx:id="walking" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
+                                                    <graphic>
+                                                        <MaterialDesignIconView glyphName="WALK" size="24" styleClass="icon-button" textAlignment="CENTER" />
+                                                    </graphic>
+                                                    <HBox.margin>
+                                                        <Insets left="7.5" right="7.5" />
+                                                    </HBox.margin>
+                                                </JFXButton>
+                                                <JFXButton fx:id="bike" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
+                                                    <graphic>
+                                                        <MaterialDesignIconView glyphName="BIKE" size="24" styleClass="icon-button" />
+                                                    </graphic>
+                                                    <HBox.margin>
+                                                        <Insets left="7.5" right="7.5" />
+                                                    </HBox.margin>
+                                                </JFXButton>
+                                            </children>
+                                            <VBox.margin>
+                                                <Insets top="25.0" />
+                                            </VBox.margin>
+                                        </HBox>
+                                        <HBox alignment="CENTER">
+                                            <JFXButton fx:id="toBWH" minWidth="145.0" onAction="#toBWH" prefHeight="35.0" prefWidth="135.0" styleClass="submit-button" text="To BWH">
+                                                <font>
+                                                    <Font size="15" />
+                                                </font>
+                                            </JFXButton>
+                                            <JFXButton fx:id="awayBWH" minWidth="145.0" onAction="#awayBWH" prefHeight="35.0" prefWidth="135.0" styleClass="submit-button" text="Away From BWH">
+                                                <font>
+                                                    <Font size="15.0" />
+                                                </font>
+                                                <VBox.margin>
+                                                    <Insets left="25" />
+                                                </VBox.margin>
+                                                <HBox.margin>
+                                                    <Insets left="25.0" />
+                                                </HBox.margin>
+                                            </JFXButton>
+                                            <VBox.margin>
+                                                <Insets top="25.0" />
+                                            </VBox.margin>
+                                        </HBox>
+                                    </VBox>
                                     <AnchorPane fx:id="lowerAnchorPane" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0">
                                         <children>
                                             <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" maxHeight="29.0" maxWidth="60.0" onAction="#toDefault" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="15.0" />
                                         </children>
                                     </AnchorPane>
                                 </AnchorPane>
-                              <AnchorPane>
-                                  <children>
-                                      <ImageView fx:id="hospitalImageView" fitHeight="800.0" fitWidth="682.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                  </children>
-                              </AnchorPane>
-                     </children>
-                  </HBox>
+                                <AnchorPane fx:id="imageAnchorPane" minWidth="500.0" HBox.hgrow="ALWAYS" >
+                                    <children>
+                                        <StackPane fx:id="imageStackPane" alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" >
+                                            <children>
+                                                <ImageView fx:id="hospitalImageView" fitHeight="800.0" fitWidth="682.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                            </children>
+                                        </StackPane>
+                                    </children>
+                                </AnchorPane>
+                            </children>
+                        </HBox>
                     </children>
                 </StackPane>
             </children>

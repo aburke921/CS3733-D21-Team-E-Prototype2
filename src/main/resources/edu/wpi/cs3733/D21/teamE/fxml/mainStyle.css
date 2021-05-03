@@ -234,7 +234,7 @@ JFXButton:hover FontAwesomeIconView {
 }
 
 .directions{
-    -fx-border-color:derive(gray,80%);
+    -fx-border-color: rgba(255,255,255,0);
 }
 
 /* The main scrollbar CSS class of ListView */
@@ -267,4 +267,8 @@ JFXButton:hover FontAwesomeIconView {
     -fx-background-insets: 2, 0, 0;
     -fx-background-radius: 2em;
 
+}
+
+.jfx-dialog-overlay-pane > StackPane{
+    -fx-effect: null;
 }

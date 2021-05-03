@@ -8,16 +8,22 @@ import com.google.maps.model.TravelMode;
 
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamE.App;
+import javafx.beans.binding.DoubleBinding;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.event.ActionEvent;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.*;
@@ -32,6 +38,15 @@ public class Directions {
     private AnchorPane appBarAnchorPane;
     @FXML // fx:id="stackPane"
     private StackPane stackPane; //main stack pane used for JFXDialog popups
+    @FXML // fx:id="leftAnchorPane"
+    private AnchorPane leftAnchorPane;
+
+    @FXML // fx:id="imageView"
+    private ImageView hospitalImageView;
+    @FXML // fx:id="imageAnchorPane"
+    private AnchorPane imageAnchorPane;
+    @FXML // fx:id="imageStackPane"
+    private StackPane imageStackPane;
 
     @FXML // fx:id="address"
     private JFXTextField address;
@@ -74,6 +89,31 @@ public class Directions {
         currentlySelected.getStyleClass().remove("transit-button-unselected");
         currentlySelected.getStyleClass().add("transit-button-selected");
         DirectionsController.init();
+
+        Stage primaryStage = App.getPrimaryStage();
+
+        leftAnchorPane.prefWidthProperty().bind(new DoubleBinding() {
+            {
+                super.bind( primaryStage.widthProperty() );
+            }
+            @Override
+            protected double computeValue() {
+                return primaryStage.widthProperty().getValue() * 2 / 5;
+            }
+        });
+
+        Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        hospitalImageView.setImage(hospital);
+        hospitalImageView.setPreserveRatio(true);
+        hospitalImageView.setFitHeight(primaryStage.getHeight());
+        //hospitalImageView.fitWidthProperty().bind(imageAnchorPane.widthProperty());
+        hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
+        imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+        imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+
+        Rectangle2D viewport = new Rectangle2D(100, 0, hospital.getWidth(), hospital.getHeight());
+        hospitalImageView.setViewport(viewport);
+
     }
 
     @FXML
@@ -83,10 +123,6 @@ public class Directions {
         origin.append(city.textProperty().get()).append(", ");
         origin.append(state.textProperty().get()).append(" ");
         origin.append(zip.textProperty().get());
-
-        //System.out.println("\nEnter Desired Time of Arrival");
-        //String arrivalTime = io.nextLine();
-        // TODO: Figure out time scheduler
 
         List<String> directions = DirectionsController.getDirections(origin.toString(), toBWH);
         if (directions == null) {
@@ -105,21 +141,35 @@ public class Directions {
         popup.setHeading(new Text(header));
         popup.setBody(listView);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
-        JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
-        dialog.getStyleClass().add("directionsDialog");
+        JFXDialog dialog = new JFXDialog(imageStackPane, popup, JFXDialog.DialogTransition.CENTER);
+        dialog.getStyleClass().add("jfx-dialog-overlay-pane");
 
-        dialog.setMaxWidth(800);
-        dialog.setPrefWidth(800);
-        popup.setMaxWidth(800);
-        popup.setPrefWidth(800);
+        dialog.prefWidthProperty().bind(new DoubleBinding() {
+            {
+                super.bind(imageStackPane.widthProperty());
+            }
+            @Override
+            protected double computeValue() {
+                return imageStackPane.widthProperty().getValue() - 100;
+            }
+        });
+        popup.prefWidthProperty().bind(new DoubleBinding() {
+            {
+                super.bind(imageStackPane.widthProperty());
+            }
+            @Override
+            protected double computeValue() {
+                return imageStackPane.widthProperty().getValue() - 100;
+            }
+        });
 
         int fullSize = listView.getItems().size() * 45 + 120;
-        if (fullSize > 500) {
-            dialog.setMaxHeight(500);
+        if (fullSize > 600) {
+            dialog.setMaxHeight(600);
         } else {
             dialog.setMaxHeight(fullSize);
         }
-        JFXButton okay = new JFXButton("Done");
+        JFXButton okay = new JFXButton("Close");
         okay.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

@@ -1010,6 +1010,45 @@ public class RequestsDB {
 
 	}
 
+
+	/**
+	 * This edits a entry request form that is already in the database
+	 * @param requestID    the ID that specifies which sanitation form that is being edited
+	 * @param surveyResult the new surveyResult that the user is getting to update their form
+	 * @param decision     the new decision the user is assigned to
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editEntryRequest(int requestID, int surveyResult, int decision) {
+
+		boolean added = false;
+		String query = "Update entryRequest Set";
+
+		if (surveyResult != 0) {
+			query = query + " surveyResult = '" + surveyResult + "'";
+			added = true;
+		}
+		if (decision != 0) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " decision = " + decision;
+		}
+
+		query = query + " Where requestID = " + requestID;
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating entry request");
+			return 0;
+		}
+
+
+	}
+
 	/**
 	 * This edits a External Transport Services form that is already in the database
 	 * @param requestID   the ID that specifies which external transfer form that is being edited

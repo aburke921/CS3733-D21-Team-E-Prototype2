@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
 
@@ -31,6 +33,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 
@@ -40,6 +43,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -47,6 +51,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Line;
 
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
@@ -186,7 +191,6 @@ public class PathFinder {
     private Marker marker = new Marker();
 
     private ArrayList<Node> currentMarkers = new ArrayList<Node>();
-
 
     /**
      * Switch to a different scene
@@ -516,6 +520,8 @@ public class PathFinder {
         for(Path path : paths){
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
 
+                Node prevNode = new Node();
+
                 Iterator<Node> legItr = path.iterator();
                 Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
@@ -599,7 +605,68 @@ public class PathFinder {
                         line.setStrokeWidth(strokeWidth);
                         line.setStroke(Color.RED);
 
+                        Label floorLabel = null;
+                        FlowPane flowPane = new FlowPane();
+
+                        //if the current node is a stair or an elevator, add a label
+                        if (node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV")) {
+
+                            //iterate through the path
+                            Iterator<Node> fullItr = fullPath.iterator();
+                            while(fullItr.hasNext()) {
+
+                                Node nodeCopy = fullItr.next();
+
+                                if(node.equals(nodeCopy) && fullItr.hasNext()) {
+
+                                    Node nextNode = fullItr.next();
+
+                                    if(nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV")) {
+                                        //create string for label
+                                        String toFloor = "Go to Floor " + nextNode.get("floor");
+
+                                        //add string to label
+                                        floorLabel = new Label(toFloor);
+
+                                        //if current node is on a greater floor than the next
+                                        if (Node.calculateZ(node.get("floor")) > Node.calculateZ(nextNode.get("floor"))) {
+                                            //add down icon
+                                            FontAwesomeIconView iconDown = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_DOWN);
+                                            iconDown.setSize("15");
+                                            floorLabel.setGraphic(iconDown);
+                                        } else { //current node is on a lower floor than next node
+                                            //add up icon
+                                            FontAwesomeIconView iconUP = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_UP);
+                                            iconUP.setSize("15");
+                                            floorLabel.setGraphic(iconUP);
+                                        }
+
+                                        //put the label inside the flowPane
+                                        flowPane.getChildren().add(floorLabel);
+
+                                        //position the flowPane next to the node
+                                        double xCoordLabel = (nextNode.getX() / scale) + 4;
+                                        double yCoordLabel = (nextNode.getY() / scale) - 4;
+                                        flowPane.setLayoutX(xCoordLabel);
+                                        flowPane.setLayoutY(yCoordLabel);
+
+                                        flowPane.getStyleClass().add("floor-change"); //add floor-change css so the child label disappears on hover
+                                        flowPane.setPrefWrapLength(0); //shrink flowPane to be as small as child
+                                    }
+
+                                }
+                            }
+                        }
+
+                    if(floorLabel != null) {
+                        //if a floor label was made, line and node circle along with the label and its parent flowPane
+                        g.getChildren().addAll(line, circle, flowPane);
+                    } else {
+                        //otherwise, only add the line and node circle
                         g.getChildren().addAll(line, circle);
+                    }
+
+                    //else, if current node is not this floors ending node, i.e., path continues
                     } else {
                         //create a line between this node and the previous node
                         Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
@@ -613,12 +680,14 @@ public class PathFinder {
                         prevXCoord = xCoord;
                         prevYCoord = yCoord;
                     }
+
+                    prevNode = node;
                 }
                 //add all objects to the scene
                 pane.getChildren().add(g);
             } else {
                 System.out.println("No path on this floor");
-                //todo snackback to say no nodes on this floor?
+                //todo snackbar to say no nodes on this floor?
             }
         }
     }

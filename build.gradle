@@ -28,6 +28,11 @@ repositories {
 //This is where you declare your dependencies and their version.s
 //You will almost DEFINITELY add more here
 dependencies {
+
+//    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
+//    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.1'
+//    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.14.1'
+
     implementation(
             'com.jfoenix:jfoenix:8.0.10',
             'com.google.zxing:javase:3.4.1',
@@ -42,8 +47,8 @@ dependencies {
             'org.apache.derby:derby:10.14.2.0',
             'org.apache.derby:derbytools:10.14.2.0',
 
-            'org.slf4j:slf4j-api:1.7.30',
-            'org.slf4j:slf4j-simple:1.7.30',
+//            'org.slf4j:slf4j-api:1.7.30',
+//            'org.slf4j:slf4j-simple:1.7.30',
 
             'com.github.sarxos:webcam-capture:0.3.12'
     )

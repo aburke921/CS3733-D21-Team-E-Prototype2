@@ -12,8 +12,12 @@ import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +28,9 @@ public class Floral extends ServiceRequestFormComponents {
     ArrayList<String> nodeID = new ArrayList<>();
     ObservableList<String> userNames;
     ArrayList<Integer> userID = new ArrayList<>();
+
+    @FXML // fx:id="background"
+    private ImageView background;
 
     @FXML
     private JFXComboBox<String> locationInput;
@@ -125,6 +132,13 @@ public class Floral extends ServiceRequestFormComponents {
 
     @FXML
     void initialize() {
+
+        Stage primaryStage = App.getPrimaryStage();
+        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        Image backgroundImage = backgroundImg;
+        background.setImage(backgroundImage);
+        background.setEffect(new GaussianBlur());
+
         nodeID = DB.getListOfNodeIDS();
         locations = DB.getAllNodeLongNames();
         userID = DB.getAssigneeIDs("floralPerson");

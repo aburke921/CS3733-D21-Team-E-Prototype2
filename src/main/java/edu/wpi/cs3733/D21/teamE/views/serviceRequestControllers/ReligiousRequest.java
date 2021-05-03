@@ -10,12 +10,19 @@ import javafx.fxml.FXML;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class ReligiousRequest extends ServiceRequestFormComponents {
+
+    @FXML // fx:id="background"
+    private ImageView background;
 
     @FXML
     private JFXComboBox<String> locationInput;
@@ -53,6 +60,14 @@ public class ReligiousRequest extends ServiceRequestFormComponents {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
+
+        Stage primaryStage = App.getPrimaryStage();
+        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        Image backgroundImage = backgroundImg;
+        background.setImage(backgroundImage);
+        background.setEffect(new GaussianBlur());
+
+
         //init appBar
         javafx.scene.Node appBarComponent = null;
         try {

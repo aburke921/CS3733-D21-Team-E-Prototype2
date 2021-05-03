@@ -18,11 +18,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
+import javafx.stage.Stage;
 
 public class SecurityService extends ServiceRequestFormComponents {
+
+    @FXML // fx:id="background"
+    private ImageView background;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -124,6 +131,13 @@ public class SecurityService extends ServiceRequestFormComponents {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
+
+        Stage primaryStage = App.getPrimaryStage();
+        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        Image backgroundImage = backgroundImg;
+        background.setImage(backgroundImage);
+        background.setEffect(new GaussianBlur());
+
         ObservableList<String> locations = DB.getAllNodeLongNames();
         locationInput.setItems(locations);
         assert helpSecurityService != null : "fx:id=\"helpSecurityService\" was not injected: check your FXML file 'SecurityService.fxml'.";

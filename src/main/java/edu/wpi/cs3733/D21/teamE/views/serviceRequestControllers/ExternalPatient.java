@@ -17,9 +17,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
+import javafx.stage.Stage;
 
 public class ExternalPatient extends ServiceRequestFormComponents {
 
@@ -27,6 +31,9 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	ArrayList<String> nodeID = new ArrayList<>();
 	ObservableList<String> userNames;
 	ArrayList<Integer> userID = new ArrayList<>();
+
+	@FXML // fx:id="background"
+	private ImageView background;
 
 	RequiredFieldValidator validator = new RequiredFieldValidator();
 	@FXML // ResourceBundle that was given to the FXMLLoader
@@ -138,6 +145,16 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 		// This method is called by the FXMLLoader when initialization is complete
 
 	void initialize() {
+
+		Stage primaryStage = App.getPrimaryStage();
+		Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+		Image backgroundImage = backgroundImg;
+		background.setImage(backgroundImage);
+		background.setEffect(new GaussianBlur());
+
+		//background.setPreserveRatio(true);
+		background.fitWidthProperty().bind(primaryStage.widthProperty());
+		//background.fitHeightProperty().bind(primaryStage.heightProperty());
 
 		nodeID = DB.getListOfNodeIDS();
 		locations = DB.getAllNodeLongNames();

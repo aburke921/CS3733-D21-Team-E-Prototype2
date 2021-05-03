@@ -7,6 +7,7 @@
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -24,13 +25,18 @@
          <children>
             <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
+                  <FlowPane StackPane.alignment="TOP_LEFT">
+                     <children>
+                        <ImageView fx:id="background" fitHeight="1080.0" fitWidth="2000.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </FlowPane>
                   <BorderPane>
                      <center>
                         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="785.0" BorderPane.alignment="CENTER">
                            <children>
                               <VBox maxWidth="600.0" prefHeight="582.0" prefWidth="1200.0">
                                  <children>
-                                    <HBox maxWidth="600.0" prefHeight="501.0" prefWidth="600.0" styleClass="centerPane">
+                                    <HBox maxWidth="600.0" prefHeight="501.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-radius: 25px; -fx-background-radius: 25px;" styleClass="centerPane">
                                        <children>
                                           <FlowPane prefHeight="361.0" prefWidth="299.0">
                                              <children>

@@ -43,7 +43,7 @@
                                                       <Insets bottom="20.0" />
                                                    </VBox.margin>
                                                 </Text>
-                                                <JFXCheckBox fx:id="positiveTest" checkedColor="#007cf8" stylesheets="@mainStyle.css" text="I have had a symptomatic COVID-19 test or I have recieved  a positive test result in the lat 14 days." unCheckedColor="BLACK">
+                                                <JFXCheckBox fx:id="positiveTest" checkedColor="#007cf8" styleClass="custom-jfx-check-box" stylesheets="@mainStyle.css" text="I have had a symptomatic COVID-19 test or I have recieved  a positive test result in the lat 14 days." unCheckedColor="BLACK">
                                                    <padding>
                                                       <Insets top="30.0" />
                                                    </padding>
@@ -51,7 +51,7 @@
                                                       <Font size="15.0" />
                                                    </font>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="symptoms" checkedColor="#007cf8" text="I am experiencing COVID-19 like symptoms." unCheckedColor="BLACK">
+                                                <JFXCheckBox fx:id="symptoms" checkedColor="#007cf8" styleClass="custom-jfx-check-box" text="I am experiencing COVID-19 like symptoms." unCheckedColor="BLACK">
                                                    <padding>
                                                       <Insets top="30.0" />
                                                    </padding>
@@ -59,7 +59,7 @@
                                                       <Font size="15.0" />
                                                    </font>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="closeContact" checkedColor="#007cf8" text="I have been in close contact with someone diagnosed with COVID-19 in the last 14 days." unCheckedColor="BLACK">
+                                                <JFXCheckBox fx:id="closeContact" checkedColor="#007cf8" styleClass="custom-jfx-check-box" text="I have been in close contact with someone diagnosed with COVID-19 in the last 14 days." unCheckedColor="BLACK">
                                                    <padding>
                                                       <Insets top="30.0" />
                                                    </padding>
@@ -67,12 +67,12 @@
                                                       <Font size="15.0" />
                                                    </font>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="quarantine" checkedColor="#007cf8" text="I have been ask to self-isolate or quarantine by a doctor or local health official in the last 14 days." unCheckedColor="BLACK">
+                                                <JFXCheckBox fx:id="quarantine" checkedColor="#007cf8" styleClass="custom-jfx-check-box" text="I have been ask to self-isolate or quarantine by a doctor or local health official in the last 14 days." unCheckedColor="BLACK">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="noSymptoms" checkedColor="#007cf8" text="I feel good(No COVID/No Symptoms)." unCheckedColor="BLACK">
+                                                <JFXCheckBox fx:id="noSymptoms" checkedColor="#007cf8" styleClass="custom-jfx-check-box" text="I feel good(No COVID/No Symptoms)." unCheckedColor="BLACK">
                                                    <VBox.margin>
                                                       <Insets top="30.0" />
                                                    </VBox.margin>

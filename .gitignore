@@ -162,3 +162,4 @@ gradle-app.setting
 
 /BWDB/
 src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/temp.png
+tokens/StoredCredential

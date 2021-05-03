@@ -253,10 +253,13 @@ public class Default {
 
         }
 
+        if (App.userID == 0) {
+            scheduleAppointmentButton.setVisible(false);
+        }
+
         if (App.userID == 0 || DB.whereDidIPark(App.userID) == null){
             carParkedText.setVisible(false);
             LinkToParking.setVisible(false);
-            scheduleAppointmentButton.setVisible(false);
         }
 
         if (previousScannedResult != null) {

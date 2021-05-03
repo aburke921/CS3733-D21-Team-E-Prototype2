@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
 
@@ -44,6 +45,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -57,6 +59,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.swing.event.ChangeListener;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -243,17 +246,83 @@ public class PathFinder {
         if (currentFoundPath == null) return;
 
         List<String> directions = currentFoundPath.makeDirectionsWithDist();
-        ListView<String> listView = new ListView<>();
+        // Include Icon next to direction
+        JFXListView<String> listView = new JFXListView<>();
         listView.getItems().addAll(directions);
         listView.setPrefHeight(USE_COMPUTED_SIZE);
+        listView.setSelectionModel(new NoSelectionModel<String>());
+        listView.getStyleClass().add("directions");
 
-        JFXDialogLayout error = new JFXDialogLayout();
-        error.setHeading(new Text("Detailed Path Directions"));
-        error.setBody(listView);
-        error.setPrefHeight(USE_COMPUTED_SIZE);
-        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
-        dialog.setMaxWidth(350);
-        int fullSize = listView.getItems().size() * 35 + 120;
+        TableView tableView = new TableView();
+
+        TableColumn<TextualDirectionStep, FontAwesomeIconView> column1 = new TableColumn<>();
+        column1.setCellValueFactory(new PropertyValueFactory<>("icon"));
+        column1.getStyleClass().add("iconTable");
+        column1.setStyle("-fx-alignment: CENTER-LEFT");
+        column1.setPrefWidth(40);
+        column1.setMinWidth(40);
+        column1.setMaxWidth(40);
+
+        TableColumn<TextualDirectionStep, String> column2 = new TableColumn<>();
+        column2.setCellValueFactory(new PropertyValueFactory<>("direction"));
+        column2.setStyle("-fx-alignment: CENTER-LEFT");
+
+        tableView.getStyleClass().add("directions");
+        tableView.getStyleClass().add("noheader");
+        tableView.getStyleClass().add("table-row-cell");
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        tableView.getColumns().add(column1);
+        tableView.getColumns().add(column2);
+
+
+
+        for (String dir : directions) {
+            char step;
+            Text text;
+            int rotate = 0;
+            step = MaterialDesignIcon.ARROW_UP_BOLD_CIRCLE_OUTLINE.getChar();
+            if (dir.contains("straight")) {
+                // no change, but needs to be here for elevator checks
+            } else if (dir.contains("Stairs")) {
+                step = MaterialDesignIcon.STAIRS.getChar();
+            } else if (dir.contains("left")) {
+                if (dir.contains("sharp")) {
+                    rotate = -135;
+                } else if (dir.contains("shallow")){
+                    rotate = -45;
+                } else if (dir.contains("Bend")){
+                    rotate = -25;
+                } else {
+                    rotate = -90;
+                }
+            } else if (dir.contains("right")) {
+                if (dir.contains("sharp")) {
+                    rotate = 135;
+                } else if (dir.contains("shallow")){
+                    rotate = 45;
+                } else if (dir.contains("Bend")){
+                    rotate = 25;
+                } else {
+                    rotate = 90;
+                }
+            } else { // else is elevator
+                step = MaterialDesignIcon.ELEVATOR.getChar();
+            }
+            text = new Text(Character.toString(step));
+            text.setRotate(rotate);
+            text.setStyle("-fx-fill: -fx--primary-dark");
+            tableView.getItems().add(new TextualDirectionStep(text, dir));
+        }
+
+
+        JFXDialogLayout popup = new JFXDialogLayout();
+        popup.setHeading(new Text("Detailed Path Directions"));
+        popup.setBody(tableView);
+        popup.setPrefHeight(USE_COMPUTED_SIZE);
+        JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
+        dialog.setMaxWidth(375);
+        int fullSize = listView.getItems().size() * 41 + 120;
         if (fullSize > 425) {
             dialog.setMaxHeight(425);
         } else {
@@ -267,7 +336,7 @@ public class PathFinder {
 
             }
         });
-        error.setActions(okay);
+        popup.setActions(okay);
         dialog.show();
     }
     /**

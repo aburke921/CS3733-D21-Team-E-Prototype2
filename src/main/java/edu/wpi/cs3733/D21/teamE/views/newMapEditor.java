@@ -258,8 +258,46 @@ public class newMapEditor {
             double xCoord = nodeArray.get(i).getX() / scale;
             double yCoord = nodeArray.get(i).getY() / scale;
             Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+            if(nodeArray.get(i).get("type").equals("HALL")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#7c7c7c"));
+            }
+            if(nodeArray.get(i).get("type").equals("CONF")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#7f5124"));
+            }
+            if(nodeArray.get(i).get("type").equals("DEPT")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#74058c"));
+            }
+            if(nodeArray.get(i).get("type").equals("ELEV")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#769557"));
+            }
+            if(nodeArray.get(i).get("type").equals("INFO")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#dc721c"));
+            }
+            if(nodeArray.get(i).get("type").equals("LABS")) {
+                 circle = new Circle(xCoord, yCoord, 2, Color.web("#c900ae"));
+            }
+            if(nodeArray.get(i).get("type").equals("REST")) {
+                 circle = new Circle(xCoord, yCoord, 2, Color.web("#b00404"));
+            }
+            if(nodeArray.get(i).get("type").equals("RETL")) {
+                 circle = new Circle(xCoord, yCoord, 2, Color.web("#3d4f9d"));
+            }
+            if(nodeArray.get(i).get("type").equals("STAI")) {
+                 circle = new Circle(xCoord, yCoord, 2, Color.web("#007f52"));
+            }
+            if(nodeArray.get(i).get("type").equals("SERV")) {
+                 circle = new Circle(xCoord, yCoord, 2, Color.web("#005cff"));
+            }
+            if(nodeArray.get(i).get("type").equals("EXIT")) {
+                 circle = new Circle(xCoord, yCoord, 2, Color.web("#90e430"));
+            }
+            if(nodeArray.get(i).get("type").equals("PARK")) {
+                 circle = new Circle(xCoord, yCoord, 2, Color.web("#1299d2"));
+            }
+            if(nodeArray.get(i).get("type").equals("WALK")) {
+                 circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+            }
             g.getChildren().add(circle);
-
         }
         pane.getChildren().add(g);
     }
@@ -1196,18 +1234,6 @@ public class newMapEditor {
     public void alignSelectedNodes(ActionEvent e) {
         isAligning = true;
         newJFXDialogPopUp("Align Nodes", "Vertical", "Horizontal", "Cancel", "Select the nodes you would like to align", stackPane);
-        //todo align nodes in nodeArrayListToBeAligned
-
-        //todo show additional alignment buttons: horizontal/vertical, finish alignment button
-        //  buttons will set horizontal vs vert... global vars.
-
-        //todo set new doubleClick eventHandler (? maybe remove old?) check to see if we are at this fcn
-        //      when user double-clicks, align nodes at the right position.
-
-
-
-
-        //todo when done, add old double-click handler back
     }
 
 

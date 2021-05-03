@@ -1200,8 +1200,8 @@ public class DatabaseTests {
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 
 		DB.addAppointment(1, "8:00", "02/12/21",2);
-		DB.addAppointment(1, "8:00",  "02/12/21",2);
-		DB.addAppointment(1, "8:00",  "02/12/21",2);
+		DB.addAppointment(1, "8:00",  "02/13/21",2);
+		DB.addAppointment(1, "8:00",  "02/14/21",2);
 
 		int rowsAffected = DB.cancelAppointment(1);
 

@@ -229,17 +229,15 @@ public class Default {
         //Set up images
         Stage primaryStage = App.getPrimaryStage();
 
-        Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospitalCropped.jpg");
         hospitalImageView.setImage(hospital);
-        hospitalImageView.setPreserveRatio(true);
-        hospitalImageView.setFitHeight(primaryStage.getHeight());
-        //hospitalImageView.fitWidthProperty().bind(imageAnchorPane.widthProperty());
+        hospitalImageView.setPreserveRatio(false);
+        //hospitalImageView.setFitHeight(primaryStage.getHeight());
         hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
+        hospitalImageView.fitWidthProperty().bind(primaryStage.widthProperty());
         imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
         imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
-        Rectangle2D viewport = new Rectangle2D(100, 0, hospital.getWidth(), hospital.getHeight());
-        hospitalImageView.setViewport(viewport);
 
         Image logo = new Image("edu/wpi/cs3733/D21/teamE/logo.png");
         logoImageView.setImage(logo);

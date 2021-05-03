@@ -33,6 +33,7 @@ public class DB {
 		RequestsDB.createInternalPatientRequest();
 		RequestsDB.createAubonPainMenuTable();
 		RequestsDB.createReligionRequestTable();
+		RequestsDB.createEntryRequestTable();
 	}
 
 	public static void createNodeTable() {

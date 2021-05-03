@@ -56,22 +56,22 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </Text>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Atleast 8 characters long" wrappingWidth="299.130859375">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- At least 8 characters long" wrappingWidth="299.130859375">
                                  <VBox.margin>
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </Text>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Atleast 1 lower case" wrappingWidth="299.130859375">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- At least 1 lower case" wrappingWidth="299.130859375">
                                  <VBox.margin>
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </Text>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Atleast 1  upper case" wrappingWidth="299.130859375">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- At least 1  upper case" wrappingWidth="299.130859375">
                                  <VBox.margin>
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </Text>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- Atleast 1 special character ($ @ ! # %)" wrappingWidth="299.130859375">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- At least 1 special character ($ @ ! # %)" wrappingWidth="299.130859375">
                                  <VBox.margin>
                                     <Insets top="5.0" />
                                  </VBox.margin>

@@ -20,7 +20,7 @@ public class CovidSurveyObj {
     private String noSymptomsDisplay;
     private String status;
 
-    public CovidSurveyObj(Integer user, Integer formNumber, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms) {
+    public CovidSurveyObj(Integer user, Integer formNumber, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms, String status) {
         this.user = user;
         this.userDisplay = user.toString();
         this.formNumber = formNumber;
@@ -35,7 +35,7 @@ public class CovidSurveyObj {
         this.quarantineDisplay = quarantine.toString();
         this.noSymptoms = noSymptoms;
         this.noSymptomsDisplay = noSymptoms.toString();
-        this.status = "Needs to be reviewed";
+        this.status = status;
     }
 
     public CovidSurveyObj(String userDisplay) {

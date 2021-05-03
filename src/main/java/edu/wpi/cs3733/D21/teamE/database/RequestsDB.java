@@ -1,5 +1,8 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -417,12 +420,17 @@ public class RequestsDB {
 	 * decision: 0 for not filled, 1 for allow, 2 for ER, 3 for block
 	 */
 	public static void createEntryRequestTable() {
+		// CovidSurveyObject has the following fields:
+			// Integer user, Integer formNumber, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms
 		String query = "Create Table entryRequest " +
 				"( " +
 				"requestID     int Primary Key References requests (requestID) On Delete Cascade, " +
-				"surveyResult int, " +
-				"decision     int, " +
-				"Constraint decisionLimit Check (decision In (0, 1, 2, 3)) " +
+				"positiveTest boolean Not Null, " +
+				"symptoms     boolean Not Null, " +
+				"closeContact     boolean Not Null, " +
+				"quarantine     boolean Not Null, " +
+				"noSymptoms     boolean Not Null, " +
+				"status varchar(31) Not Null" +
 				")";
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.execute();
@@ -708,19 +716,25 @@ public class RequestsDB {
 
 	/**
 	 * This adds a entry request form to the table
+	 * each time a new entry is added, status is automatically set as "Needs to be reviewed"
 	 */
-	public static void addEntryRequest(int userID, int assigneeID, int surveyResult, int decision) {
+	public static void addEntryRequest(int userID, int assigneeID, boolean positiveTest, boolean symptoms, boolean closeContact, boolean quarantine, boolean noSymptoms) {
+
 		addRequest(userID, assigneeID, "entryRequest");
 
-		String insertEntryRequest = "Insert Into entryRequest Values ((Select Count(*) From requests), ?, ?)";
+		String insertEntryRequest = "Insert Into entryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, 'Needs to be reviewed')";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertEntryRequest)) {
-			prepState.setInt(1, surveyResult);
-			prepState.setInt(2, decision);
+			prepState.setBoolean(1, positiveTest);
+			prepState.setBoolean(2, symptoms);
+			prepState.setBoolean(3, closeContact);
+			prepState.setBoolean(4, quarantine);
+			prepState.setBoolean(5, noSymptoms);
+
 			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into entryRequest inside function addSecurityRequest()");
+			e.printStackTrace();
+			System.err.println("Error inserting into entryRequest inside function addEntryRequest()");
 		}
 	}
 
@@ -1012,26 +1026,65 @@ public class RequestsDB {
 
 
 	/**
-	 * This edits a entry request form that is already in the database
-	 * @param requestID    the ID that specifies which sanitation form that is being edited
-	 * @param surveyResult the new surveyResult that the user is getting to update their form
-	 * @param decision     the new decision the user is assigned to
+	 *
+	 * @param requestID the ID that specifies which sanitation form that is being edited
+	 * @param positiveTest is whether the user has had a positive test
+	 * @param symptoms  is whether the user has had symptoms
+	 * @param closeContact is whether the user has had close contact with someone who has COVID
+	 * @param quarantine is whether the user has been in quarantine
+	 * @param noSymptoms is whether the user has no symptoms or not
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editEntryRequest(int requestID, int surveyResult, int decision) {
+	public static int editEntryRequest(int requestID, boolean positiveTest, boolean symptoms, boolean closeContact, boolean quarantine, boolean noSymptoms, String status) {
+
+		// have to convert booleans to Boolean obj to check if they are null
+		Boolean positiveTestB = positiveTest;
+		Boolean symptomsB = symptoms;
+		Boolean closeContactB = closeContact;
+		Boolean quarantineB = quarantine;
+		Boolean noSymptomsB = noSymptoms;
 
 		boolean added = false;
 		String query = "Update entryRequest Set";
 
-		if (surveyResult != 0) {
-			query = query + " surveyResult = '" + surveyResult + "'";
+		if (positiveTestB != null) {
+			query = query + " positiveTest = " + positiveTest;
 			added = true;
 		}
-		if (decision != 0) {
+		if (symptomsB != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + " decision = " + decision;
+			query = query + " symptoms = " + symptoms;
+			added = true;
+		}
+		if (closeContactB != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " closeContact = " + closeContact;
+			added = true;
+		}
+		if (quarantineB != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " quarantine = " + quarantine;
+			added = true;
+		}
+		if (noSymptomsB != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " noSymptoms = " + noSymptoms;
+			added = true;
+		}
+		if (status != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " status = '" + status + "'";
+			added = true;
 		}
 
 		query = query + " Where requestID = " + requestID;
@@ -1042,7 +1095,7 @@ public class RequestsDB {
 			return 1;
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("Error in updating entry request");
+			System.err.println("Error in updating entryRequest");
 			return 0;
 		}
 
@@ -1951,6 +2004,71 @@ public class RequestsDB {
 			System.err.println("getAssigneeIDs() got a SQLException");
 		}
 		return listOfAssigneesIDs;
+	}
+
+	public static ArrayList<CovidSurveyObj> getCovidSurveys() {
+
+	ArrayList<CovidSurveyObj> covidSurveys = new ArrayList<>();
+
+	String query = "Select * From entryRequest";
+
+	try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+
+		ResultSet rset = prepStat.executeQuery();
+
+		while (rset.next()) {
+
+			int requestID = rset.getInt("requestID");
+			boolean positiveTest = rset.getBoolean("positiveTest");
+			boolean symptoms = rset.getBoolean("symptoms");
+			boolean closeContact = rset.getBoolean("closeContact");
+			boolean quarantine = rset.getBoolean("quarantine");
+			boolean noSymptoms = rset.getBoolean("noSymptoms");
+			String status = rset.getString("status");
+			covidSurveys.add(new CovidSurveyObj(App.userID, requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms, status));
+		}
+
+		rset.close();
+
+	} catch (SQLException e) {
+		System.err.println("getCovidSurveys Error : " + e);
+	}
+		return covidSurveys;
+
+	}
+
+	public static int markAsCovidSafe(int formNumber) {
+		String query = "Update entryRequest set positiveTest = false, symptoms = false, closeContact = false, quarantine = false, noSymptoms = true, status = 'Safe' where requestID = " + formNumber;
+
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating markAsCovidSafe");
+			return 0;
+		}
+
+
+	}
+
+	public static int markAsCovidRisk(int formNumber) {
+		String query = "Update entryRequest set positiveTest = true, symptoms = true, closeContact = true, quarantine = true, noSymptoms = false, status = 'Unsafe' where requestID = " + formNumber;
+
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating markAsCovidRisk");
+			return 0;
+		}
+
+
 	}
 
 

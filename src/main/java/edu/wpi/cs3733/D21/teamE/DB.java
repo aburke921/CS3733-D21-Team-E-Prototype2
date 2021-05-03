@@ -9,6 +9,9 @@ import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -457,8 +460,8 @@ public class DB {
 	/**
 	 * This adds a entry request form to the table
 	 */
-	public static void addEntryRequest(int userID, int assigneeID, int surveyResult, int decision) {
-		RequestsDB.addEntryRequest(userID, assigneeID, surveyResult, decision);
+	public static void addEntryRequest(int userID, int assigneeID, boolean positiveTest, boolean symptoms, boolean closeContact, boolean quarantine, boolean noSymptoms) {
+		RequestsDB.addEntryRequest(userID, assigneeID, positiveTest, symptoms, closeContact, quarantine, noSymptoms);
 	}
 
 	// Editing Tables:
@@ -609,14 +612,17 @@ public class DB {
 	}
 
 	/**
-	 * This edits a entry request form that is already in the database
-	 * @param requestID    the ID that specifies which sanitation form that is being edited
-	 * @param surveyResult the new surveyResult that the user is getting to update their form
-	 * @param decision     the new decision the user is assigned to
+	 *
+	 * @param requestID the ID that specifies which sanitation form that is being edited
+	 * @param positiveTest is whether the user has had a positive test
+	 * @param symptoms  is whether the user has had symptoms
+	 * @param closeContact is whether the user has had close contact with someone who has COVID
+	 * @param quarantine is whether the user has been in quarantine
+	 * @param noSymptoms is whether the user has no symptoms or not
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editEntryRequest(int requestID, int surveyResult, int decision) {
-		return RequestsDB.editEntryRequest(requestID, surveyResult, decision);
+	public static int editEntryRequest(int requestID, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms, String status) {
+		return RequestsDB.editEntryRequest(requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms, status);
 	}
 
 		// Querying Tables:
@@ -755,12 +761,12 @@ public class DB {
 
 	/**
 	 * Submits a Covid Survey to the server
-	 * @param surveyResults is the result int that we are submitting
+	 * @param covidSurveyObj is the result int that we are submitting
 	 * @param userID        is the user's ID that we are submitting
 	 * @return true if successfully changed one row, false otherwise
 	 */
-	public static boolean submitCovidSurvey(int surveyResults, int userID) {
-		return UserAccountDB.submitCovidSurvey(surveyResults, userID);
+	public static boolean submitCovidSurvey(CovidSurveyObj covidSurveyObj, int userID) {
+		return UserAccountDB.submitCovidSurvey(covidSurveyObj, userID);
 	}
 
 	/**
@@ -805,18 +811,18 @@ public class DB {
 	}
 
 	//This should return the list of information within the table for covid surveys as a list of covid survey objects
-	public ArrayList<CovidSurveyObj> getCovidSurveys() {
-
+	public static ArrayList<CovidSurveyObj> getCovidSurveys() {
+		return RequestsDB.getCovidSurveys();
 	}
 
 	//This should mark a survey within the table as safe for entry
-	public void markAsCovidSafe(int formNumber) {
-
+	public static int markAsCovidSafe(int formNumber) {
+		return RequestsDB.markAsCovidSafe(formNumber);
 	}
 
 	//This should mark a survey within the table as unsafe for entry
-	public void markAsCovidRisk(int formNumber) {
-
+	public static int markAsCovidRisk(int formNumber) {
+		return RequestsDB.markAsCovidRisk(formNumber);
 	}
 
 }

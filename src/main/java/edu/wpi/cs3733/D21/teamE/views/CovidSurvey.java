@@ -49,6 +49,7 @@ public class CovidSurvey extends ServiceRequests {
 
 	@FXML
 	void submitButton(ActionEvent actionEvent) {
+		//TODO: make a covidSurveyObject and instead of ratings, set the parameters to true or false given user's selection
 		int rating = 0;
 		if (noSymptoms.isSelected()) {
 			rating += 1;
@@ -69,7 +70,9 @@ public class CovidSurvey extends ServiceRequests {
 		if (rating == 0) {
 			validateInput();
 		} else if (App.userID != 0) {
-			if (DB.submitCovidSurvey(rating, App.userID)) {
+			//TODO: pass that covidSurveyObject here! and delete the one below
+			CovidSurveyObj cv = null;
+			if (DB.submitCovidSurvey(cv, App.userID)) {
 				System.out.println("user's covid survey of " + rating + " was submitted");
 			} else {
 				System.err.println("user's covid survey of " + rating + " was not submitted");

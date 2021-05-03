@@ -105,6 +105,7 @@ public class DirectionsController {
         ArrayList<String> directions = new ArrayList<>();
         directions.add(getHeader(trip, toBWH));
         // First String is header
+        int stepNum = 1;
         for (DirectionsStep step: trip.steps) {
             String str = step.toString();
             str = str.replaceAll("<div style=\"font-size:0.9em\">", " "); // linebreak comp
@@ -112,7 +113,8 @@ public class DirectionsController {
             str = str.substring(str.indexOf("\"")+1);
             String dir = str.substring(0, str.indexOf("\""));
             dir = dir.replaceAll("&nbsp;", " ");
-            directions.add(dir);
+            String dirWithNum = (stepNum++) + ")\t " + dir;
+            directions.add(dirWithNum);
         }
 
         return directions;

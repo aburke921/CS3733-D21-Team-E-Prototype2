@@ -92,7 +92,7 @@ public class createAccount {
 		//password validator
 		RegexValidator passwordValidator = new RegexValidator();
 		passwordValidator.setMessage("Invalid Password");
-		passwordValidator.setRegexPattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
+		passwordValidator.setRegexPattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"); //todo, if a different special char is inputted, will error out. Eg: ~^-+
 
 		password.getValidators().add(passwordValidator);
 		password.focusedProperty().addListener((o, oldVal, newVal) -> {

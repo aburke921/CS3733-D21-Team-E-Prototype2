@@ -607,10 +607,11 @@ public class PathFinder {
                         Label floorLabel = null;
                         FlowPane flowPane = new FlowPane();
 
+                        //if the current node is a stair or an elevator, add a label
                         if (node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV")) {
 
+                            //iterate through the path
                             Iterator<Node> fullItr = fullPath.iterator();
-
                             while(fullItr.hasNext()) {
 
                                 Node nodeCopy = fullItr.next();
@@ -620,28 +621,36 @@ public class PathFinder {
                                     Node nextNode = fullItr.next();
 
                                     if(nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV")) {
+                                        //create string for label
                                         String toFloor = "Go to Floor " + nextNode.get("floor");
 
+                                        //add string to label
                                         floorLabel = new Label(toFloor);
 
+                                        //if current node is on a greater floor than the next
                                         if (Node.calculateZ(node.get("floor")) > Node.calculateZ(nextNode.get("floor"))) {
+                                            //add down icon
                                             FontAwesomeIconView iconDown = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_DOWN);
                                             iconDown.setSize("15");
                                             floorLabel.setGraphic(iconDown);
-                                        } else {
+                                        } else { //current node is on a lower floor than next node
+                                            //add up icon
                                             FontAwesomeIconView iconUP = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_UP);
                                             iconUP.setSize("15");
                                             floorLabel.setGraphic(iconUP);
                                         }
 
+                                        //put the label inside the flowPane
                                         flowPane.getChildren().add(floorLabel);
 
+                                        //position the flowPane next to the node
                                         double xCoordLabel = (nextNode.getX() / scale) + 4;
                                         double yCoordLabel = (nextNode.getY() / scale) - 4;
                                         flowPane.setLayoutX(xCoordLabel);
                                         flowPane.setLayoutY(yCoordLabel);
 
-                                        flowPane.getStyleClass().add("floor-change");
+                                        flowPane.getStyleClass().add("floor-change"); //add floor-change css so the child label disappears on hover
+                                        flowPane.setPrefWrapLength(0); //shrink flowPane to be as small as child
                                     }
 
                                 }
@@ -649,10 +658,14 @@ public class PathFinder {
                         }
 
                     if(floorLabel != null) {
+                        //if a floor label was made, line and node circle along with the label and its parent flowPane
                         g.getChildren().addAll(line, circle, flowPane);
                     } else {
+                        //otherwise, only add the line and node circle
                         g.getChildren().addAll(line, circle);
                     }
+
+                    //else, if current node is not this floors ending node, i.e., path continues
                     } else {
                         //create a line between this node and the previous node
                         Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
@@ -673,7 +686,7 @@ public class PathFinder {
                 pane.getChildren().add(g);
             } else {
                 System.out.println("No path on this floor");
-                //todo snackback to say no nodes on this floor?
+                //todo snackbar to say no nodes on this floor?
             }
         }
     }

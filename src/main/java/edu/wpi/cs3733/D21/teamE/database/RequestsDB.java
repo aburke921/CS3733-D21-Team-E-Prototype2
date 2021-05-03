@@ -48,7 +48,7 @@ public class RequestsDB {
 				"requestType   varchar(31), " +
 				"requestStatus varchar(10), " +
 				"assigneeID    int References useraccount On Delete Cascade," +
-				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'internalPatientRequest', 'languageRequest', 'laundryRequest', 'maintenanceRequest', 'foodDelivery', 'religiousRequest')), " +
+				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'internalPatientRequest', 'languageRequest', 'laundryRequest', 'maintenanceRequest', 'foodDelivery', 'religiousRequest', 'entryRequest')), " +
 				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -338,15 +338,15 @@ public class RequestsDB {
 	 * - beverage: the drink the user is ordering
 	 * - comments: any comments the user wants to leave for the person fulfilling the request
 	 */
-	public static void createFoodDeliveryTable(){
+	public static void createFoodDeliveryTable() {
 
-		String query = "Create Table foodDelivery (\n" +
-				"    requestID int Primary Key References requests (requestID) On Delete Cascade,\n" +
-				"    roomID varchar(31) Not Null References node (nodeID) On Delete Cascade,\n" +
-				"    allergy varchar(50),\n" +
-				"    dietRestriction varchar(50),\n" +
-				"    beverage varchar(50),\n" +
-				"    description varchar(3000)\n" +
+		String query = "Create Table foodDelivery ( " +
+				"    requestID int Primary Key References requests (requestID) On Delete Cascade, " +
+				"    roomID varchar(31) Not Null References node (nodeID) On Delete Cascade, " +
+				"    allergy varchar(50), " +
+				"    dietRestriction varchar(50), " +
+				"    beverage varchar(50), " +
+				"    description varchar(3000) " +
 				")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -366,7 +366,7 @@ public class RequestsDB {
 		String query = "Create Table internalPatientRequest " +
 				"( " +
 				"    requestID int Primary Key References requests On Delete Cascade, " +
-				"    patientID int References userAccount(userID) on Delete Cascade, " +
+				"    patientID int References userAccount(userID) On Delete Cascade, " +
 				"    pickUpLocation varchar(31) Not Null References node On Delete Cascade, " +
 				"    dropOffLocation varchar(31) Not Null References node On Delete Cascade, " +
 				"    department varchar(31), " +
@@ -412,7 +412,25 @@ public class RequestsDB {
 		}
 	}
 
-
+	/**
+	 * create the entry request table
+	 * decision: 0 for not filled, 1 for allow, 2 for ER, 3 for block
+	 */
+	public static void createEntryRequestTable() {
+		String query = "Create Table entryRequest " +
+				"( " +
+				"requestID     int Primary Key References requests (requestID) On Delete Cascade, " +
+				"surveyResult int, " +
+				"decision     int, " +
+				"Constraint decisionLimit Check (decision In (0, 1, 2, 3)) " +
+				")";
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating entryRequest table");
+		}
+	}
 
 
 	/**
@@ -424,13 +442,13 @@ public class RequestsDB {
 	 * - foodCalories: this is the number of calories the food item has
 	 * - foodDescription: this is a description of the food item
 	 */
-	public static void createAubonPainMenuTable(){
-		String query = "create Table aubonPainMenu(\n" +
-				"    foodImage varchar(600),\n" +
-				"    foodItem varchar(100) Primary Key,\n" +
-				"    foodPrice varchar(50),\n" +
-				"    foodCalories varchar(50),\n" +
-				"    foodDescription varchar(3000)\n" +
+	public static void createAubonPainMenuTable() {
+		String query = "Create Table aubonPainMenu( " +
+				"    foodImage varchar(600), " +
+				"    foodItem varchar(100) Primary Key, " +
+				"    foodPrice varchar(50), " +
+				"    foodCalories varchar(50), " +
+				"    foodDescription varchar(3000) " +
 				")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -465,34 +483,34 @@ public class RequestsDB {
 
 			int count = 0;
 			for (Element element : elements) {
-				if(element.ownText().equals("Breakfast ON THE GO")){
+				if (element.ownText().equals("Breakfast ON THE GO")) {
 					count++;
 				}
-				if(count == 2){
+				if (count == 2) {
 					if (element.normalName().equals("img")) {
 						foodImage.add(element.attr("abs:src"));
 					}
 
-					if(element.className().equals("product-name product__name")){
+					if (element.className().equals("product-name product__name")) {
 						foodItems.add(element.ownText());
 					}
-					if(element.className().equals("product__attribute product__attribute--price")){
+					if (element.className().equals("product__attribute product__attribute--price")) {
 						int numOfEmptySpacesToAdd = foodItems.size() - foodPrice.size() - 1;
-						for(int i = 0; i < numOfEmptySpacesToAdd; i++){
+						for (int i = 0; i < numOfEmptySpacesToAdd; i++) {
 							foodPrice.add(null);
 						}
 						foodPrice.add(element.ownText());
 					}
-					if(element.className().equals("product__attribute product__attribute--calorie-label")){
+					if (element.className().equals("product__attribute product__attribute--calorie-label")) {
 						int numOfEmptySpacesToAdd = foodItems.size() - foodCalories.size() - 1;
-						for(int i = 0; i < numOfEmptySpacesToAdd; i++){
+						for (int i = 0; i < numOfEmptySpacesToAdd; i++) {
 							foodCalories.add(null);
 						}
 						foodCalories.add(element.ownText());
 					}
-					if(element.className().equals("product__description")){
+					if (element.className().equals("product__description")) {
 						int numOfEmptySpacesToAdd = foodItems.size() - foodDescription.size() - 1;
-						for(int i = 0; i < numOfEmptySpacesToAdd; i++){
+						for (int i = 0; i < numOfEmptySpacesToAdd; i++) {
 							foodDescription.add(null);
 						}
 						foodDescription.add(element.ownText());
@@ -501,17 +519,17 @@ public class RequestsDB {
 
 			}
 
-			for(int i = 0; i < foodImage.size(); i++){
+			for (int i = 0; i < foodImage.size(); i++) {
 				String image = null;
 				String price = null;
 				String calories = null;
-				if(i < foodImage.size()){
+				if (i < foodImage.size()) {
 					image = foodImage.get(i);
 				}
-				if(i < foodPrice.size()){
+				if (i < foodPrice.size()) {
 					price = foodPrice.get(i);
 				}
-				if(i < foodCalories.size()){
+				if (i < foodCalories.size()) {
 					calories = foodCalories.get(i);
 				}
 
@@ -519,7 +537,7 @@ public class RequestsDB {
 			}
 
 
-		}catch(IOException e){
+		} catch (IOException e) {
 			//e.printStackTrace();
 			System.out.println("error reading in Aubon Pain website in addAbonPainTable()");
 		}
@@ -688,16 +706,33 @@ public class RequestsDB {
 		}
 	}
 
+	/**
+	 * This adds a entry request form to the table
+	 */
+	public static void addEntryRequest(int userID, int assigneeID, int surveyResult, int decision) {
+		addRequest(userID, assigneeID, "entryRequest");
+
+		String insertEntryRequest = "Insert Into entryRequest Values ((Select Count(*) From requests), ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertEntryRequest)) {
+			prepState.setInt(1, surveyResult);
+			prepState.setInt(2, decision);
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into entryRequest inside function addSecurityRequest()");
+		}
+	}
+
 
 	/**
-	 *
-	 * @param userID ID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
-	 * @param roomID nodeID of the user
+	 * @param userID       ID of the user
+	 * @param assigneeID   ID of the assigned user who will complete this task
+	 * @param roomID       nodeID of the user
 	 * @param languageType type of language being requested
-	 * @param description detailed description of request
+	 * @param description  detailed description of request
 	 */
-	public static void addLanguageRequest(int userID, int assigneeID,  String roomID, String languageType, String description) {
+	public static void addLanguageRequest(int userID, int assigneeID, String roomID, String languageType, String description) {
 		addRequest(userID, assigneeID, "languageRequest");
 
 		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, ?)";
@@ -716,15 +751,14 @@ public class RequestsDB {
 	}
 
 	/**
-	 *
-	 * @param userID ID of the user
-	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param userID         ID of the user
+	 * @param roomID         nodeID of the user
+	 * @param assigneeID     ID of the assigned user who will complete this task
 	 * @param washLoadAmount amount of loads needed to wash
-	 * @param dryLoadAmount amount of loads needed to dry
-	 * @param description detailed description of request
+	 * @param dryLoadAmount  amount of loads needed to dry
+	 * @param description    detailed description of request
 	 */
-	public static void addLaundryRequest(int userID, String roomID,  int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
+	public static void addLaundryRequest(int userID, String roomID, int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
 		addRequest(userID, assigneeID, "laundryRequest");
 
 		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?)";
@@ -743,16 +777,15 @@ public class RequestsDB {
 	}
 
 	/**
-	 *
-	 * @param userID ID of the user
-	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
-	 * @param type is the type of maintenance required
-	 * @param severity is how severe the situation is
-	 * @param ETA time taken to complete the request
+	 * @param userID      ID of the user
+	 * @param roomID      nodeID of the user
+	 * @param assigneeID  ID of the assigned user who will complete this task
+	 * @param type        is the type of maintenance required
+	 * @param severity    is how severe the situation is
+	 * @param ETA         time taken to complete the request
 	 * @param description detailed description of request
 	 */
-	public static void addMaintenanceRequest(int userID, String roomID,  int assigneeID,  String type, String severity, String ETA, String description) {
+	public static void addMaintenanceRequest(int userID, String roomID, int assigneeID, String type, String severity, String ETA, String description) {
 		addRequest(userID, assigneeID, "maintenanceRequest");
 
 		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?)";
@@ -771,20 +804,20 @@ public class RequestsDB {
 		}
 	}
 
-	//TODO: Not tested
 	/**
 	 * adds a request for food delivery
-	 * @param userID ID of the user
-	 * @param roomID nodeID of the user
-	 * @param assigneeID ID of the assigned user who will complete this task
+	 * @param userID           ID of the user
+	 * @param roomID           nodeID of the user
+	 * @param assigneeID       ID of the assigned user who will complete this task
 	 * @param dietRestrictions any restrictions the user has diet wise
-	 * @param allergies any allergies the user has
-	 * @param foodItem the food item choice made by the user
-	 * @param foodQuantity the quantity of the food item the user wants
-	 * @param beverageItem the beverage item choice made by the user
+	 * @param allergies        any allergies the user has
+	 * @param foodItem         the food item choice made by the user
+	 * @param foodQuantity     the quantity of the food item the user wants
+	 * @param beverageItem     the beverage item choice made by the user
 	 * @param beverageQuantity the quantity of the beverage item the user wants
+	 *                         TODO: Not tested
 	 */
-	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID,  String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
+	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID, String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
 		addRequest(userID, assigneeID, "foodDeliveryRequest");
 
 
@@ -805,13 +838,11 @@ public class RequestsDB {
 	}
 
 
-
-
 	/**
 	 * Gets the largest requestID, which can be used to increment and make a the next one
 	 * @return the largest requestID in the request table
 	 */
-	public static int getMaxRequestID(){
+	public static int getMaxRequestID() {
 		int maxID = 0;
 
 		String query = "Select Max(requestID) As maxRequestID From food";
@@ -834,22 +865,22 @@ public class RequestsDB {
 
 	/**
 	 * adds a menuItem to the aubonPainMenu database table
-	 * @param foodImage this is the url to an image of the item
-	 * @param foodItem this is the item itself (this is unique and is used as an identifier)
-	 * @param foodPrice this is the price of the foodItem
-	 * @param foodCalories this is the number of calories the food item has
+	 * @param foodImage       this is the url to an image of the item
+	 * @param foodItem        this is the item itself (this is unique and is used as an identifier)
+	 * @param foodPrice       this is the price of the foodItem
+	 * @param foodCalories    this is the number of calories the food item has
 	 * @param foodDescription this is a description of the food item
 	 */
-	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription){
+	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription) {
 
 		String query = "Insert Into aubonPainMenu Values(?,?,?,?,?) ";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.setString(1,foodImage);
-			prepState.setString(2,foodItem);
-			prepState.setString(3,foodPrice);
-			prepState.setString(4,foodCalories);
-			prepState.setString(5,foodDescription);
+			prepState.setString(1, foodImage);
+			prepState.setString(2, foodItem);
+			prepState.setString(3, foodPrice);
+			prepState.setString(4, foodCalories);
+			prepState.setString(5, foodDescription);
 
 			prepState.execute();
 
@@ -905,7 +936,6 @@ public class RequestsDB {
 			System.err.println("Error inserting into religiousRequest inside function addReligiousRequest()");
 		}
 	}
-
 
 
 // EDITING TABLES::::
@@ -974,6 +1004,45 @@ public class RequestsDB {
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error in updating sanitation request");
+			return 0;
+		}
+
+
+	}
+
+
+	/**
+	 * This edits a entry request form that is already in the database
+	 * @param requestID    the ID that specifies which sanitation form that is being edited
+	 * @param surveyResult the new surveyResult that the user is getting to update their form
+	 * @param decision     the new decision the user is assigned to
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editEntryRequest(int requestID, int surveyResult, int decision) {
+
+		boolean added = false;
+		String query = "Update entryRequest Set";
+
+		if (surveyResult != 0) {
+			query = query + " surveyResult = '" + surveyResult + "'";
+			added = true;
+		}
+		if (decision != 0) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " decision = " + decision;
+		}
+
+		query = query + " Where requestID = " + requestID;
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating entry request");
 			return 0;
 		}
 
@@ -1313,11 +1382,10 @@ public class RequestsDB {
 
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param requestID    is the generated ID of the request
+	 * @param roomID       the new node/room/location the user is assigning this request to
 	 * @param languageType is the new language type being requested by the user
-	 * @param description is an edited detailed description
+	 * @param description  is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description) {
@@ -1357,12 +1425,11 @@ public class RequestsDB {
 	}
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param requestID      is the generated ID of the request
+	 * @param roomID         the new node/room/location the user is assigning this request to
 	 * @param washLoadAmount is new amount of loads to be washed
-	 * @param dryLoadAmount is new amount of loads to be dried
-	 * @param description is an edited detailed description
+	 * @param dryLoadAmount  is new amount of loads to be dried
+	 * @param description    is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editLaundryRequest(int requestID, String roomID, String washLoadAmount, String dryLoadAmount, String description) {
@@ -1408,12 +1475,11 @@ public class RequestsDB {
 	}
 
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
-	 * @param type is the new type of maintenance request
-	 * @param severity is the new severity of the situation
-	 * @param ETA is the new estimated time
+	 * @param requestID   is the generated ID of the request
+	 * @param roomID      the new node/room/location the user is assigning this request to
+	 * @param type        is the new type of maintenance request
+	 * @param severity    is the new severity of the situation
+	 * @param ETA         is the new estimated time
 	 * @param description is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
@@ -1467,15 +1533,15 @@ public class RequestsDB {
 	}
 
 	//TODO: ASHLEY review this please (i didn't take your Food table into account)
+
 	/**
-	 *
-	 * @param requestID is the generated ID of the request
-	 * @param roomID  the new node/room/location the user is assigning this request to
+	 * @param requestID        is the generated ID of the request
+	 * @param roomID           the new node/room/location the user is assigning this request to
 	 * @param dietRestrictions is the edited restrictions of the user in terms of diet
-	 * @param allergies is the edited allergies the user has
-	 * @param food is the new food the user requests
-	 * @param beverage is the new beverage the user requests
-	 * @param description is an edited detailed description
+	 * @param allergies        is the edited allergies the user has
+	 * @param food             is the new food the user requests
+	 * @param beverage         is the new beverage the user requests
+	 * @param description      is an edited detailed description
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editFoodDeliveryRequest(int requestID, String roomID, String dietRestrictions, String allergies, String food, String beverage, String description) {
@@ -1662,9 +1728,9 @@ public class RequestsDB {
 			ResultSet rset = prepState.executeQuery();
 
 			while (rset.next()) {
-				if (infoType.equals("AssigneeID")) {
-					int ID = rset.getInt(infoType);
-					listOfInfo.add(String.valueOf(ID));
+				if (infoType.equals("AssigneeID") || infoType.equals("surveyResult") || infoType.equals("decision")) {
+					int theInt = rset.getInt(infoType);
+					listOfInfo.add(String.valueOf(theInt));
 				} else {
 					String ID = rset.getString(infoType); // potential issue // -TO-DO-: won't work with int AssigneeIDs? Fixed by translating IDs to String, should it return a pair of Assignee ID and name?
 					listOfInfo.add(ID);
@@ -1792,7 +1858,7 @@ public class RequestsDB {
 	 * Gets a lits of all the menu items from aubon pain
 	 * @return list of AubonPainItem that are in the aubonPainMenu database table
 	 */
-	public static ArrayList<AubonPainItem> getAubonPanItems(){
+	public static ArrayList<AubonPainItem> getAubonPanItems() {
 		String query = "Select * From aubonPainMenu";
 
 		ArrayList<AubonPainItem> menuItems = new ArrayList<>();
@@ -1823,7 +1889,7 @@ public class RequestsDB {
 	 * @param column this is the name of the column the information is extracted from
 	 * @return a list of the given information
 	 */
-	public static ArrayList<String> getAubonPainFeild(String column){
+	public static ArrayList<String> getAubonPainFeild(String column) {
 
 		String query = "Select " + column + " From aubonPainMenu";
 
@@ -1886,8 +1952,6 @@ public class RequestsDB {
 		}
 		return listOfAssigneesIDs;
 	}
-
-
 
 
 }

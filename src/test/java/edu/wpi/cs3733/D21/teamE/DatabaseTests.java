@@ -1742,4 +1742,30 @@ public class DatabaseTests {
 
 	}
 
+
+	@Test
+	@DisplayName("entryRequestTests")
+	public void entryRequestTests() {
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		DB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
+		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
+
+		DB.addEntryRequest(1, 3, 10101, 0);
+		DB.addEntryRequest(2, 3, 1, 0);
+
+		ArrayList<String> result1 = new ArrayList<>();
+		result1.add("10101");
+		result1.add("1");
+		assertEquals(result1, DB.getMyAssignedRequestInfo("entryRequest", 3, "surveyResult"));
+
+		assertEquals(1, DB.editEntryRequest(1, 0, 3));
+		assertEquals(1, DB.editEntryRequest(2, 0, 1));
+
+		ArrayList<String> result2 = new ArrayList<>();
+		ArrayList<String> result3 = new ArrayList<>();
+		result2.add("3");
+		result3.add("1");
+		assertEquals(result2, DB.getMyCreatedRequestInfo("entryRequest", 1, "decision"));
+		assertEquals(result3, DB.getMyCreatedRequestInfo("entryRequest", 2, "decision"));
+	}
 }

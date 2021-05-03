@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.createAccount">
       <children>
@@ -42,22 +43,47 @@
                                         </Label>
                                           <JFXTextField fx:id="email" maxWidth="300.0" prefColumnCount="0" prefWidth="300.0" promptText="Email">
                                  <VBox.margin>
-                                    <Insets top="20.0" />
+                                    <Insets bottom="15.0" top="20.0" />
                                  </VBox.margin>
                                           </JFXTextField>
                                           <JFXTextField fx:id="password" maxWidth="300.0" prefHeight="27.0" prefWidth="300.0" promptText="Password">
                                  <VBox.margin>
-                                    <Insets top="20.0" />
+                                    <Insets bottom="15.0" top="20.0" />
                                  </VBox.margin>
                                           </JFXTextField>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Requirements:" wrappingWidth="299.130859375">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- At least 8 characters long" wrappingWidth="299.130859375">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- At least 1 lower case" wrappingWidth="299.130859375">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- At least 1  upper case" wrappingWidth="299.130859375">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- At least 1 special character ($ @ ! # %)" wrappingWidth="299.130859375">
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
+                              </Text>
                               <JFXTextField fx:id="firstName" maxWidth="300.0" prefWidth="300.0" promptText="First Name">
                                  <VBox.margin>
-                                    <Insets top="20.0" />
+                                    <Insets bottom="15.0" top="20.0" />
                                  </VBox.margin>
                               </JFXTextField>
                               <JFXTextField fx:id="lastName" maxWidth="300.0" prefWidth="300.0" promptText="Last Name">
                                  <VBox.margin>
-                                    <Insets top="20.0" />
+                                    <Insets bottom="15.0" top="20.0" />
                                  </VBox.margin>
                               </JFXTextField>
                                           <Button fx:id="submitAccountButton" mnemonicParsing="false" onAction="#createAccountButton" prefHeight="29.0" prefWidth="66.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Submit" textFill="WHITE">

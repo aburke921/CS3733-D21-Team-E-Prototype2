@@ -279,7 +279,7 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                         }
                     }
                 } else {
-                    directions.add("Go straight ahead for " + dist + " feet");
+                    directions.add("Go straight for " + dist + " feet");
                 }
 
                 int floorChangeState = 0;
@@ -310,8 +310,6 @@ public class Path implements Comparable<Path>, Iterable<Node>{
 
                     switch (floorChangeState){
                         case 1:
-                            directions.add("Enter Elevator " + node2.get("longName").charAt(9));
-                            directions.add("Take Elevator " + node2.get("longName").charAt(9) + " to Floor " + node3.get("floor"));
                             break;
                         case 2:
                             len = node3.dist(node2);
@@ -319,6 +317,7 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                             if (dist == 0) {
                                 dist = 5;
                             }
+                            directions.add("Take Elevator " + node1.get("longName").charAt(9) + " to Floor " + node2.get("floor"));
                             directions.add("Exit the Elevator and go straight for " + dist + " feet");
                             break;
                         case 3:
@@ -394,10 +393,10 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                             if (angleComp > 10) {
                                 if (crossProduct < 0 ){
                                     directions.add(turn + " right");
-                                    directions.add("Go straight ahead for " + dist + " feet");
+                                    directions.add("Go straight for " + dist + " feet");
                                 } else {
                                     directions.add(turn + " left");
-                                    directions.add("Go straight ahead for " + dist + " feet");
+                                    directions.add("Go straight for " + dist + " feet");
                                 }
                             } else {
                                 int index = directions.size() - 1;
@@ -406,8 +405,12 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                                     directions.remove(index);
                                     String clean = lastDir.replaceAll("\\D+","");
                                     dist += Integer.parseInt(clean);
+                                    String result = lastDir.split("straight")[0];
+                                    directions.add(result + "straight for " + dist + " feet");
+                                } else {
+                                    directions.add("Go straight for " + dist + " feet");
                                 }
-                                directions.add("Go straight ahead for " + dist + " feet");
+
                             }
                             break;
                     }

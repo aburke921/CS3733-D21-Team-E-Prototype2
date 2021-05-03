@@ -197,16 +197,16 @@ public class Default {
         defaultState.switchScene(e);
     }
 
-    @FXML
-    private void toAppointmentPage(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Appointment.fxml"));
-            App.setDraggableAndChangeScene(root);
-        } catch (IOException ex) {
-            System.out.println("Hi");
-            ex.printStackTrace();
-        }
-    }
+//    @FXML
+//    private void toAppointmentPage(ActionEvent e) {
+//        try {
+//            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Appointment.fxml"));
+//            App.setDraggableAndChangeScene(root);
+//        } catch (IOException ex) {
+//            System.out.println("Hi");
+//            ex.printStackTrace();
+//        }
+//    }
 
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {

@@ -116,6 +116,10 @@ public class SanitationServices extends ServiceRequestFormComponents {
     background.setImage(backgroundImage);
     background.setEffect(new GaussianBlur());
 
+    //background.setPreserveRatio(true);
+    background.fitWidthProperty().bind(primaryStage.widthProperty());
+    //background.fitHeightProperty().bind(primaryStage.heightProperty());
+
     assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
     assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
     assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";

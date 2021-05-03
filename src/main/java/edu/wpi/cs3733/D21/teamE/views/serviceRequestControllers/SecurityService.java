@@ -138,6 +138,10 @@ public class SecurityService extends ServiceRequestFormComponents {
         background.setImage(backgroundImage);
         background.setEffect(new GaussianBlur());
 
+        //background.setPreserveRatio(true);
+        background.fitWidthProperty().bind(primaryStage.widthProperty());
+        //background.fitHeightProperty().bind(primaryStage.heightProperty());
+
         ObservableList<String> locations = DB.getAllNodeLongNames();
         locationInput.setItems(locations);
         assert helpSecurityService != null : "fx:id=\"helpSecurityService\" was not injected: check your FXML file 'SecurityService.fxml'.";

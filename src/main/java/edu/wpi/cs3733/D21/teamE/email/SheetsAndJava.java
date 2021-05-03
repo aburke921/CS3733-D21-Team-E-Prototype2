@@ -56,7 +56,6 @@ public class SheetsAndJava {
                 .build();
     }
 
-
     public static int getRow(int appointmentID, String sheetName) throws IOException, GeneralSecurityException {
         sheetsService = getSheetService();
         int rowCounter = 0;
@@ -78,44 +77,6 @@ public class SheetsAndJava {
         return rowCounter - 1;
     }
 
-
-    // get date from column Date to check if reminder has been sent
-        // if reminder has been sent
-        // update any columns user has changed (need fncs for each of these)
-        // delete Date and update it with the same date (or changed date)
-    // if reminder has NOT been sent
-        // update any columns user has changed
-//
-//    public static void updateStartTime(int row, String newStartTime) throws IOException, GeneralSecurityException {
-//
-//        sheetsService = getSheetService();
-//
-//        ValueRange body = new ValueRange()
-//                .setValues(Arrays.asList(
-//                        Arrays.asList(newStartTime)
-//                ));
-//
-//        UpdateValuesResponse result = sheetsService.spreadsheets().values()
-//                .update(SPREADSHEET_ID, "E"+row, body)
-//                .setValueInputOption("RAW")
-//                .execute();
-//    }
-//
-//    public static void updateDoctor(int row, String doctor) throws IOException, GeneralSecurityException {
-//
-//        sheetsService = getSheetService();
-//
-//        ValueRange body = new ValueRange()
-//                .setValues(Arrays.asList(
-//                        Arrays.asList(doctor)
-//                ));
-//
-//        UpdateValuesResponse result = sheetsService.spreadsheets().values()
-//                .update(SPREADSHEET_ID, "F"+row, body)
-//                .setValueInputOption("RAW")
-//                .execute();
-//    }
-
     public static void deleteRow(int row, int sheetID) throws IOException, GeneralSecurityException {
 
         sheetsService = getSheetService();
@@ -135,16 +96,6 @@ public class SheetsAndJava {
         BatchUpdateSpreadsheetRequest body = new BatchUpdateSpreadsheetRequest().setRequests(requests);
 
         sheetsService.spreadsheets().batchUpdate(SPREADSHEET_ID, body).execute();
-
-//        ValueRange body1 = new ValueRange()
-//                .setValues(Arrays.asList(
-//                        Arrays.asList(date)
-//                ));
-//
-//        UpdateValuesResponse result = sheetsService.spreadsheets().values()
-//                .update(SPREADSHEET_ID, "G"+row, body1)
-//                .setValueInputOption("RAW")
-//                .execute();
     }
 
     public static void addAppointmentToSheet(int appointmentID, String email, String firstName, String lastName, String doctor, String date, String sheetName) throws IOException, GeneralSecurityException {
@@ -165,18 +116,26 @@ public class SheetsAndJava {
 
     }
 
-    // TODO: need a function to delete all rows of a given spreadsheet (will call in init in App.java)
 
+    public static void deleteSheetData(int sheetID) throws GeneralSecurityException, IOException {
+        sheetsService = getSheetService();
 
+        DeleteDimensionRequest deleteDateCell = new DeleteDimensionRequest()
+                .setRange(
+                        new DimensionRange()
+                                .setSheetId(sheetID)
+                                .setDimension("ROWS")
+                                .setStartIndex(2)
+                );
 
-    public static void main(String[] args) throws IOException, GeneralSecurityException {
-        //editSheet();
-        int rowNum = getRow(2, "1 Month Prior");
+        List<Request> requests = new ArrayList<>();
+        requests.add(new Request().setDeleteDimension(deleteDateCell));
 
-        //deleteRow(rowNum);
+        BatchUpdateSpreadsheetRequest body = new BatchUpdateSpreadsheetRequest().setRequests(requests);
 
-        addAppointmentToSheet(3,"nupi.shukla@gmail.com", "me", "test me", "me", "05/01/21 6:00", "1 Month Prior");
+        sheetsService.spreadsheets().batchUpdate(SPREADSHEET_ID, body).execute();
     }
+
 
 
 

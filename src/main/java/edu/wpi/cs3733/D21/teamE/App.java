@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 
 
+import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.views.AppBarComponent;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -167,6 +168,7 @@ public class App extends Application {
 		System.out.println("STARTING UP!!!");
 		makeConnection connection = makeConnection.makeConnection();
 		System.out.println("Connected to the DB");
+		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");
 		File edges = new File("CSVs/MapEAlledges.csv");
 	    boolean tablesExist = connection.allTablesThere();
@@ -175,6 +177,9 @@ public class App extends Application {
 				DB.createAllTables();
 				DB.populateTable("node", nodes);
 				DB.populateTable("hasEdge", edges);
+				for(int ID : sheetIDs){
+					SheetsAndJava.deleteSheetData(ID);
+				}
 				connection.addDataForPresentation();
 				DB.populateAbonPainTable();
 				System.out.println("Tables were created");

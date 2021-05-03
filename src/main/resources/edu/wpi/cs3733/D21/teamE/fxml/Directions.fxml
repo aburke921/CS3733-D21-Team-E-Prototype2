@@ -21,7 +21,7 @@
                   <HBox alignment="CENTER">
                      <children>
                                 <AnchorPane fx:id="leftAnchorPane" minWidth="-Infinity" prefHeight="800.0" prefWidth="524.0">
-                                      <VBox alignment="CENTER" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <VBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="55.0">
                                           <JFXTextField fx:id="address" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="325.0" promptText="Address" />
                                           <HBox alignment="CENTER">
                                               <children>

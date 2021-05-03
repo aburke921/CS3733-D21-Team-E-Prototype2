@@ -55,12 +55,7 @@ public class Directions {
     @FXML // fx:id="walking"
     private JFXButton walking;
     private JFXButton currentlySelected;
-
-    // TODO: make `modes` a toggle group
-
-    @FXML // fx:id="getDir"
-    private JFXButton getDir;
-
+    
     @FXML // fix:id="backButton"
     public Button backButton; // Value injected by FXMLLoader
 

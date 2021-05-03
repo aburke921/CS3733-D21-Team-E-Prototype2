@@ -60,6 +60,8 @@ public class CovidSurveyStatus {
 
 //        ArrayList<CovidSurveyObj> allCovidSurveys = DB.getCovidSurveys();
 
+        ArrayList<CovidSurveyObj> allCovidSurveys = new ArrayList<>();
+
         if(allCovidSurveys.size() > 0) {
             if(!unchecked.getChildren().isEmpty()) {
                 removeChildren(unchecked);

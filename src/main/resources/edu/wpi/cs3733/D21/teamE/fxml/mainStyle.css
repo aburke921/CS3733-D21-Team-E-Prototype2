@@ -36,6 +36,12 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
     -fx-background-color: -fx--primary;
 }
 
+.submit-button:hover {
+    -jfx-button-type: RAISED;
+    -fx-text-fill: WHITE;
+    -fx-background-color: -fx--primary-dark;
+}
+
 .cancel-button { /*todo, a reddish color for cancel buttons?*/
     -jfx-button-type: FLAT;
     -fx-border-color: -fx--secondary-light;
@@ -44,8 +50,10 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 
 .default-button {
     -jfx-button-type: FLAT;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
     -fx-text-fill: -fx--primary;
-    -fx-border-color:  -fx--primary-light;
+    -fx-border-color:  -fx--primary;
 }
 
 .default-button:hover {
@@ -80,9 +88,16 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 
 .normal-button {
     -jfx-button-type: RAISED;
-    -fx-background-color: white;
-    -fx-text-fill: black;
+    -fx-background-color: WHITE;
+    -fx-text-fill: BLACK;
 }
+
+.normal-button:hover {
+    -jfx-button-type: RAISED;
+    -fx-background-color: -fx--primary-light;
+    -fx-text-fill: BLACK;
+}
+
 
 /*Toggle buttons*/
 JFXToggleButton  {

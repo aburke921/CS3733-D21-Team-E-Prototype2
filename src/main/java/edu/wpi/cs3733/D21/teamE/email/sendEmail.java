@@ -36,6 +36,15 @@ public class sendEmail {
 	}
 
 
+	public static void sendRequestConfirmation(String email, String body) throws MessagingException {
+
+		String subject = "BWH Request Confirmation!!";
+		String emailMessage = body;
+
+		sendEmail(email, subject, emailMessage);
+
+	}
+
 	// call this when user edits an appointment
 	public static void sendUpdatedAppointment(String email, String time) throws MessagingException {
 

@@ -453,6 +453,12 @@ public class DB {
 		RequestsDB.addReligiousRequest(userID, roomID, assigneeID, religionType, description);
 	}
 
+	/**
+	 * This adds a entry request form to the table
+	 */
+	public static void addEntryRequest(int userID, int assigneeID, int surveyResult, int decision) {
+		RequestsDB.addEntryRequest(userID, assigneeID, surveyResult, decision);
+	}
 
 	// Editing Tables:
 

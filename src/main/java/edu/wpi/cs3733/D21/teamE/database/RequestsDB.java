@@ -706,6 +706,24 @@ public class RequestsDB {
 		}
 	}
 
+	/**
+	 * This adds a entry request form to the table
+	 */
+	public static void addEntryRequest(int userID, int assigneeID, int surveyResult, int decision) {
+		addRequest(userID, assigneeID, "entryRequest");
+
+		String insertEntryRequest = "Insert Into entryRequest Values ((Select Count(*) From requests), ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertEntryRequest)) {
+			prepState.setInt(1, surveyResult);
+			prepState.setInt(2, decision);
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into entryRequest inside function addSecurityRequest()");
+		}
+	}
+
 
 	/**
 	 * @param userID       ID of the user

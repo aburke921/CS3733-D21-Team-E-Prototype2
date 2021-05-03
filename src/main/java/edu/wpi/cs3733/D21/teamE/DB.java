@@ -33,6 +33,7 @@ public class DB {
 		RequestsDB.createInternalPatientRequest();
 		RequestsDB.createAubonPainMenuTable();
 		RequestsDB.createReligionRequestTable();
+		RequestsDB.createEntryRequestTable();
 	}
 
 	public static void createNodeTable() {
@@ -452,6 +453,12 @@ public class DB {
 		RequestsDB.addReligiousRequest(userID, roomID, assigneeID, religionType, description);
 	}
 
+	/**
+	 * This adds a entry request form to the table
+	 */
+	public static void addEntryRequest(int userID, int assigneeID, int surveyResult, int decision) {
+		RequestsDB.addEntryRequest(userID, assigneeID, surveyResult, decision);
+	}
 
 	// Editing Tables:
 
@@ -600,8 +607,18 @@ public class DB {
 		return RequestsDB.editReligiousRequest(requestID, roomID, religionType, description);
 	}
 
+	/**
+	 * This edits a entry request form that is already in the database
+	 * @param requestID    the ID that specifies which sanitation form that is being edited
+	 * @param surveyResult the new surveyResult that the user is getting to update their form
+	 * @param decision     the new decision the user is assigned to
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editEntryRequest(int requestID, int surveyResult, int decision) {
+		return RequestsDB.editEntryRequest(requestID, surveyResult, decision);
+	}
 
-	// Querying Tables:
+		// Querying Tables:
 
 	/**
 	 * Gets a list of all the "assigneeIDs", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID

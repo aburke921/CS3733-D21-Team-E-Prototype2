@@ -18,15 +18,15 @@ public class CovidSurvey extends ServiceRequests {
 	public static boolean plzGoToPathFinder = false;
 
 	@FXML
-	JFXCheckBox positiveTest;
+	private JFXCheckBox positiveTest;
 	@FXML
-	JFXCheckBox symptoms;
+	private JFXCheckBox symptoms;
 	@FXML
-	JFXCheckBox closeContact;
+	private JFXCheckBox closeContact;
 	@FXML
-	JFXCheckBox quarantine;
+	private JFXCheckBox quarantine;
 	@FXML
-	JFXCheckBox noSymptoms;
+	private JFXCheckBox noSymptoms;
 	@FXML
 	private AnchorPane appBarAnchorPane;
 	@FXML

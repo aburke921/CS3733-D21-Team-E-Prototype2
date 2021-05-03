@@ -96,7 +96,7 @@ public class makeConnection {
 	}
 
 
-	public boolean allTablesThere() { //todo will probably cause a merge conflict at somepoint, accept DB version
+	public boolean allTablesThere() {
 		ArrayList<String> tablesInDB = new ArrayList<String>();
 		String[] names = {"TABLE"};
 		ResultSet result;
@@ -162,7 +162,7 @@ public class makeConnection {
 		DB.addSpecialUserType("declanp@gmail.com", "doctor07", "doctor", "Declan", "Patel");
 		DB.addSpecialUserType("laurenb@yahoo.com", "doctor08", "doctor", "Lauren", "Bolton");
 
-		//Fake Admins:
+		//Admins:
 		//28 - 30
 		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
 		DB.addSpecialUserType("andrewg@yahoo.com", "admin002", "admin", "Andrew", "Guerrero");
@@ -329,11 +329,11 @@ public class makeConnection {
 		DB.editRequests(47, 0, "complete");
 
 
-		//Real Admins:
-		String insertUser1 = "Insert Into useraccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP)";
-		String insertUser2 = "Insert Into useraccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', CURRENT TIMESTAMP)";
-		String insertUser3 = "Insert Into useraccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', CURRENT TIMESTAMP)";
-		String insertUser4 = "Insert Into useraccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', CURRENT TIMESTAMP)";
+		//Special Accounts:
+		String insertUser1 = "Insert Into useraccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', Current Timestamp, 0, Null, Null)";
+		String insertUser2 = "Insert Into useraccount Values (-99, 'admin', 'admin', 'admin', 'Admin', 'Wong', Current Timestamp, 0, Null, Null)";
+		String insertUser3 = "Insert Into useraccount Values (99999, 'staff', 'staff', 'doctor', 'Staff', 'Wong', Current Timestamp, 0, Null, Null)";
+		String insertUser4 = "Insert Into useraccount Values (10000, 'guest', 'guest', 'patient', 'Guest', 'Wong', Current Timestamp, 0, Null, Null)";
 		try {
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(insertUser1);

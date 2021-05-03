@@ -12,13 +12,20 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.QRCode;
+import edu.wpi.cs3733.D21.teamE.observer.ImageObserver;
+import edu.wpi.cs3733.D21.teamE.observer.MarkerObserver;
+import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,6 +33,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 
@@ -35,6 +43,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -42,6 +51,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Line;
 
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
@@ -51,6 +61,9 @@ import javafx.stage.Stage;
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class PathFinder {
+
+    public static int startNodeIndex = -1;
+    public static int endNodeIndex = -1;
 
     /*
      * FXML Values
@@ -180,22 +193,13 @@ public class PathFinder {
     private ArrayList<Node> currentMarkers = new ArrayList<Node>();
 
     /**
-     * Returns to {@link Default} page.
-     * @param event calling event info.
+     * Switch to a different scene
+     * @param event tells which button was pressed
      */
     @FXML
-    private void toDefault(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-            App.setDraggableAndChangeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    @FXML
-    void getHelpDefault(ActionEvent event) {
-        //todo, create help modal (refactor name, this was taken from Default page, hence the name)
+    private void switchScene(ActionEvent event) {
+        PathFinderState pathFinderState = new PathFinderState();
+        pathFinderState.switchScene(event);
     }
 
     /**
@@ -275,12 +279,37 @@ public class PathFinder {
         JFXDialogLayout error = new JFXDialogLayout();
         error.setHeading(new Text("Location selection"));
         JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
+        JFXButton parking = new JFXButton("Set Parking");
+        if (App.userID == 0 || !nodeArrayList.get(index).get("type").equals("PARK")) {
+            parking.setVisible(false);
+        }
         JFXButton start = new JFXButton("Start");
         JFXButton destination = new JFXButton("Destination");
         JFXButton bathroom = new JFXButton("Nearest Bathroom");
 
 
-       start.setOnAction(new EventHandler<ActionEvent>() {
+        parking.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (DB.submitParkingSlot(nodeArrayList.get(index).get("id"), App.userID)) {
+                    dialog.close();
+                } else {
+                    JFXDialogLayout error = new JFXDialogLayout();
+                    error.setHeading(new Text("Error when trying to add parking slot"));
+                    JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
+                    JFXButton dismiss = new JFXButton("Dismiss");
+                    dismiss.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            dialog.close();
+                        }
+                    });
+                    error.setActions(dismiss);
+                    dialog.show();
+                }
+            }
+        });
+        start.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 startLocationComboBox.getSelectionModel().select(index);
@@ -317,7 +346,7 @@ public class PathFinder {
 
             }
         });
-        error.setActions(start,bathroom,destination);
+        error.setActions(parking,start,bathroom,destination);
 
 
 
@@ -418,6 +447,24 @@ public class PathFinder {
                 bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Sorry, something has gone wrong. Please try again.")));
 
             } else { //path is not null
+                /*
+                currentFoundPath = null;
+
+                minETA.setText(Integer.toString(foundPath.getETA().getMin()));
+                secETA.setText(String.format("%02d", (foundPath.getETA().getSec())));
+                int len = (int) Math.round(foundPath.getPathLengthFeet());
+                dist.setText(Integer.toString(len) + " Feet");
+
+                //save found path for when floors are switched
+                currentFoundPath = foundPath;
+
+                // Set map image to starting floor
+                String startFloor = foundPath.getStart().get("floor");
+                currentFloor = startFloor;
+                currFloor.setText("");
+
+                currFloor.setText(currentFloor);
+                 */
 
                 currentFoundPath = null;
                 // Set map image to starting floor
@@ -471,6 +518,8 @@ public class PathFinder {
         List<Path> paths = fullPath.splitByFloor();
         for(Path path : paths){
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
+
+                Node prevNode = new Node();
 
                 Iterator<Node> legItr = path.iterator();
                 Group g = new Group(); //create group to contain all the shapes before we add them to the scene
@@ -555,7 +604,68 @@ public class PathFinder {
                         line.setStrokeWidth(strokeWidth);
                         line.setStroke(Color.RED);
 
+                        Label floorLabel = null;
+                        FlowPane flowPane = new FlowPane();
+
+                        //if the current node is a stair or an elevator, add a label
+                        if (node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV")) {
+
+                            //iterate through the path
+                            Iterator<Node> fullItr = fullPath.iterator();
+                            while(fullItr.hasNext()) {
+
+                                Node nodeCopy = fullItr.next();
+
+                                if(node.equals(nodeCopy) && fullItr.hasNext()) {
+
+                                    Node nextNode = fullItr.next();
+
+                                    if(nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV")) {
+                                        //create string for label
+                                        String toFloor = "Go to Floor " + nextNode.get("floor");
+
+                                        //add string to label
+                                        floorLabel = new Label(toFloor);
+
+                                        //if current node is on a greater floor than the next
+                                        if (Node.calculateZ(node.get("floor")) > Node.calculateZ(nextNode.get("floor"))) {
+                                            //add down icon
+                                            FontAwesomeIconView iconDown = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_DOWN);
+                                            iconDown.setSize("15");
+                                            floorLabel.setGraphic(iconDown);
+                                        } else { //current node is on a lower floor than next node
+                                            //add up icon
+                                            FontAwesomeIconView iconUP = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_UP);
+                                            iconUP.setSize("15");
+                                            floorLabel.setGraphic(iconUP);
+                                        }
+
+                                        //put the label inside the flowPane
+                                        flowPane.getChildren().add(floorLabel);
+
+                                        //position the flowPane next to the node
+                                        double xCoordLabel = (nextNode.getX() / scale) + 4;
+                                        double yCoordLabel = (nextNode.getY() / scale) - 4;
+                                        flowPane.setLayoutX(xCoordLabel);
+                                        flowPane.setLayoutY(yCoordLabel);
+
+                                        flowPane.getStyleClass().add("floor-change"); //add floor-change css so the child label disappears on hover
+                                        flowPane.setPrefWrapLength(0); //shrink flowPane to be as small as child
+                                    }
+
+                                }
+                            }
+                        }
+
+                    if(floorLabel != null) {
+                        //if a floor label was made, line and node circle along with the label and its parent flowPane
+                        g.getChildren().addAll(line, circle, flowPane);
+                    } else {
+                        //otherwise, only add the line and node circle
                         g.getChildren().addAll(line, circle);
+                    }
+
+                    //else, if current node is not this floors ending node, i.e., path continues
                     } else {
                         //create a line between this node and the previous node
                         Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
@@ -569,12 +679,14 @@ public class PathFinder {
                         prevXCoord = xCoord;
                         prevYCoord = yCoord;
                     }
+
+                    prevNode = node;
                 }
                 //add all objects to the scene
                 pane.getChildren().add(g);
             } else {
                 System.out.println("No path on this floor");
-                //todo snackback to say no nodes on this floor?
+                //todo snackbar to say no nodes on this floor?
             }
         }
     }
@@ -617,39 +729,9 @@ public class PathFinder {
      * @param floorNum floor to change to
      */
     public void setCurrentFloor(String floorNum) {
-
-        //set image
         currentFloor = floorNum;
-        Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/" + floorNum + ".png");
-        imageView.setImage(image);
+        currFloor.setText("");
         currFloor.setText(currentFloor);
-
-
-        //Get a list of types that are currently selected
-        ArrayList<String> currentlyViewableTypes = new ArrayList<String>();
-        for (String key : marker.getSelectedCheckBox().keySet()) {
-            if (marker.getSelectedCheckBox().get(key) == 1) {
-                currentlyViewableTypes.add(key);
-            }
-        }
-
-        ArrayList<Node> currentlyViewableNodes = new ArrayList<Node>();
-
-        //Iterate through all the types that are currently selected
-        for (String currViewType : currentlyViewableTypes) {
-            String typeAndFloorString = currViewType + currentFloor;
-            //Get the nodes with the current floor and type
-            currentlyViewableNodes = marker.getTypeAndFloorNode().get(typeAndFloorString);
-
-            //For every node, set it to visible
-            for (Node node : currentlyViewableNodes) {
-                NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
-                Rectangle r = nM.getRectangle();
-                r.setVisible(true);
-                r.setFill(marker.getTypeColor().get(currViewType));
-                currentMarkers.add(node);
-            }
-        }
 
         //draw path for new floor
         drawMap(currentFoundPath,currentFloor);
@@ -768,6 +850,18 @@ public class PathFinder {
         marker.populateLocationMarkerMarkerGroup(scale);
         markerPane.getChildren().add(marker.getMarkerGroup());
 
+        //Check if startNodeIndex has a value, if yes fill startLocationComboBox
+        if (startNodeIndex != -1) {
+            startLocationComboBox.getSelectionModel().select(startNodeIndex);
+            startNodeIndex = -1;
+        }
+
+        //Check if startNodeIndex has a value, if yes fill startLocationComboBox
+        if (endNodeIndex != -1) {
+            endLocationComboBox.getSelectionModel().select(endNodeIndex);
+            endNodeIndex = -1;
+        }
+
         System.out.println("Finish PathFinder Init.");
         pane.setOnMouseClicked(e -> {
             /*double xCoord = e.getX();
@@ -810,6 +904,17 @@ public class PathFinder {
 //                }
 //            }
         });
+
+        //Observer Design Pattern: update page based on floor change
+        Subject subject = new Subject();
+
+        new MarkerObserver(subject, markerPane, marker, currentMarkers);
+        new ImageObserver(subject, imageView);
+        //new PathObserver(subject, pane, currentFoundPath, scale, selectedStartNodeID, selectedEndNodeID);
+
+        currFloor.textProperty().addListener(observable -> {
+            subject.setState(currFloor.getText());
+        });
     }
 
     public void chooseFloor(ActionEvent e) {
@@ -821,7 +926,11 @@ public class PathFinder {
         currentMarkers.clear();
         String floor = ((Button) e.getSource()).getText();
         currFloor.setText(floor);
+
         setCurrentFloor(floor);
+        //drawMap(currentFoundPath, currentFloor);
+
+        System.out.println("Current floor set to " + floor);
     }
 
     public void sortNodesByType(ActionEvent event) {

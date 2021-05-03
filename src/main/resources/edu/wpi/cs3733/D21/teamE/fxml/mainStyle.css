@@ -50,6 +50,12 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 
 }
 
+.normal-button {
+    -jfx-button-type: RAISED;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
 /*Toggle buttons*/
 JFXToggleButton  {
     -jfx-toggle-color: -fx--primary;
@@ -153,10 +159,7 @@ JFXToggleButton  {
     -fx-stroke: white;
 }
 
-.list-view .scroll-bar:vertical {
-    -fx-scale-x: 0;
-}
-
+/*remove horizontal scrollbar*/
 .list-view .scroll-bar:horizontal {
     -fx-scale-x: 0;
 }
@@ -185,4 +188,27 @@ JFXButton:hover FontAwesomeIconView {
 
 .table-row-cell{
     -fx-cell-size: 200;
+}
+
+/*Tree Table View styles*/
+.jfx-tree-table-view {
+    -fx-tree-table-color: rgba(3, 155, 229, 0.4);
+    -jfx-header-color: -fx--primary-dark; /*header text color*/
+}
+
+JFXListView {
+
+}
+
+.floor-change Label{
+    -fx-font-size: 10px;
+    -fx-background-color: WHITE;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: BLACK;
+    -fx-border-width: 1px;
+}
+
+.floor-change:hover Label{
+    visibility: false;
 }

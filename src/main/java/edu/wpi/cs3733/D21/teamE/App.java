@@ -111,11 +111,11 @@ public class App extends Application {
 				DB.createAllTables();
 				DB.populateTable("node", nodes);
 				DB.populateTable("hasEdge", edges);
+				connection.addDataForPresentation();
+				DB.populateAbonPainTable();
 				for(int ID : sheetIDs){
 					SheetsAndJava.deleteSheetData(ID);
 				}
-				connection.addDataForPresentation();
-				DB.populateAbonPainTable();
 				System.out.println("Done");
 			} catch (Exception e) {
 				System.out.println("...Tables already there");

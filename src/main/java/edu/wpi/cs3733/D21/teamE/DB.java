@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamE;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
@@ -802,4 +803,20 @@ public class DB {
 	public static String getUserName(int userID) {
 		return UserAccountDB.getUserName(userID);
 	}
+
+	//This should return the list of information within the table for covid surveys as a list of covid survey objects
+	public ArrayList<CovidSurveyObj> getCovidSurveys() {
+
+	}
+
+	//This should mark a survey within the table as safe for entry
+	public void markAsCovidSafe(int formNumber) {
+
+	}
+
+	//This should mark a survey within the table as unsafe for entry
+	public void markAsCovidRisk(int formNumber) {
+
+	}
+
 }

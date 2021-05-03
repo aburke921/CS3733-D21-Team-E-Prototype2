@@ -33,12 +33,14 @@ public class CovidSurveyStatus {
 
     @FXML
     private void markAsSafe(JFXTreeTableView covidSurveyTable) {
-
+        int formNumber = ((CovidSurveyObj)(covidSurveyTable.getSelectionModel().getSelectedItem())).getFormNumber();
+//        DB.markAsCovidSafe(formNumber);
     }
 
     @FXML
-    private void markAsRisk(JFXTreeTableView covidSurveyTable) {
-
+    private void markAsRisk() {
+        int formNumber = ((CovidSurveyObj)(covidSurveyTable.getSelectionModel().getSelectedItem())).getFormNumber();
+//        DB.markAsCovidRisk(formNumber);
     }
 
     public void removeChildren(TreeItem<CovidSurveyObj> treeItem) {
@@ -155,7 +157,5 @@ public class CovidSurveyStatus {
     void initialize() {
         prepareTable(covidSurveyTable);
     }
-
-
 
 }

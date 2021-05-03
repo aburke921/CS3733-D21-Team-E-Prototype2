@@ -91,14 +91,14 @@ public class Login {
 
 		Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
 		hospitalImageView.setImage(hospital);
-		hospitalImageView.setPreserveRatio(false);
+		hospitalImageView.setPreserveRatio(true);
 
 		hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
 		hospitalImageView.fitWidthProperty().bind(primaryStage.widthProperty());
 		imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
 		imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
-		Image logo = new Image("edu/wpi/cs3733/D21/teamE/logo.png");
+		Image logo = new Image("edu/wpi/cs3733/D21/teamE/fullLogo.png");
 		logoImageView.setImage(logo);
 		logoImageView.setPreserveRatio(true);
 		rightAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());

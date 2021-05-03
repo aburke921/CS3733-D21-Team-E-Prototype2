@@ -96,6 +96,9 @@ public class AppBarComponent {
     //If exit button is clicked, exit app
     @FXML
     void exitApplication(MouseEvent event) {
+        // Close Maps API
+        DirectionsController.close();
+
         App app = new App();
         app.stop();
     }

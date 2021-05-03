@@ -231,7 +231,7 @@ public class Default {
 
         Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
         hospitalImageView.setImage(hospital);
-        hospitalImageView.setPreserveRatio(false);
+        hospitalImageView.setPreserveRatio(true);
 
         hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
         hospitalImageView.fitWidthProperty().bind(primaryStage.widthProperty());
@@ -239,9 +239,10 @@ public class Default {
         imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
 
-        Image logo = new Image("edu/wpi/cs3733/D21/teamE/logo.png");
+        Image logo = new Image("edu/wpi/cs3733/D21/teamE/fullLogo.png");
         logoImageView.setImage(logo);
         logoImageView.setPreserveRatio(true);
+        //logoImageView.fitWidthProperty().bind(rightAnchorPane.widthProperty());
         rightAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
         rightAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
@@ -293,5 +294,13 @@ public class Default {
         }
     }
 
+    public void toDirections(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Directions.fxml"));
+            App.changeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
 

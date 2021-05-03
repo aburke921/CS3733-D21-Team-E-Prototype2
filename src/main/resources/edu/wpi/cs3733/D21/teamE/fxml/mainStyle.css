@@ -204,7 +204,7 @@ JFXButton:hover FontAwesomeIconView {
     -fx-fill: WHITE;
 }
 
-transit-button{
+.transit-button{
     -jfx-button-type: RAISED;
 }
 

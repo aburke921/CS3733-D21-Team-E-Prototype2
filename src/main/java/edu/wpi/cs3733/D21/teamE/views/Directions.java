@@ -107,9 +107,8 @@ public class Directions {
         Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
         hospitalImageView.setImage(hospital);
         hospitalImageView.setPreserveRatio(true);
-        hospitalImageView.setFitHeight(primaryStage.getHeight());
-        //hospitalImageView.fitWidthProperty().bind(imageAnchorPane.widthProperty());
-        hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
+        hospitalImageView.setFitWidth(imageAnchorPane.getWidth());
+        hospitalImageView.fitWidthProperty().bind(imageAnchorPane.widthProperty());
         imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
         imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
 

@@ -246,12 +246,6 @@ public class PathFinder {
         if (currentFoundPath == null) return;
 
         List<String> directions = currentFoundPath.makeDirectionsWithDist();
-        // Include Icon next to direction
-        JFXListView<String> listView = new JFXListView<>();
-        listView.getItems().addAll(directions);
-        listView.setPrefHeight(USE_COMPUTED_SIZE);
-        listView.setSelectionModel(new NoSelectionModel<String>());
-        listView.getStyleClass().add("directions");
 
         TableView tableView = new TableView();
 
@@ -267,6 +261,8 @@ public class PathFinder {
         column2.setCellValueFactory(new PropertyValueFactory<>("direction"));
         column2.setStyle("-fx-alignment: CENTER-LEFT");
 
+        tableView.setSelectionModel(null);
+        tableView.setPrefHeight(USE_COMPUTED_SIZE);
         tableView.getStyleClass().add("directions");
         tableView.getStyleClass().add("noheader");
         tableView.getStyleClass().add("table-row-cell");
@@ -322,7 +318,7 @@ public class PathFinder {
         popup.setPrefHeight(USE_COMPUTED_SIZE);
         JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
         dialog.setMaxWidth(375);
-        int fullSize = listView.getItems().size() * 41 + 120;
+        int fullSize = tableView.getItems().size() * 41 + 120;
         if (fullSize > 425) {
             dialog.setMaxHeight(425);
         } else {

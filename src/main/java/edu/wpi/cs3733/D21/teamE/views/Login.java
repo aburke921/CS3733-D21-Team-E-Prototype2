@@ -89,10 +89,10 @@ public class Login {
 		//Set up images
 		Stage primaryStage = App.getPrimaryStage();
 
-		Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospitalCropped.jpg");
+		Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
 		hospitalImageView.setImage(hospital);
 		hospitalImageView.setPreserveRatio(false);
-		//hospitalImageView.setFitHeight(primaryStage.getHeight());
+
 		hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
 		hospitalImageView.fitWidthProperty().bind(primaryStage.widthProperty());
 		imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());

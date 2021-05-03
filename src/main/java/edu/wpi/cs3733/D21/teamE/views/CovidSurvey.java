@@ -47,74 +47,105 @@ public class CovidSurvey extends ServiceRequests {
 		App.newJFXDialogPopUp("","Done","Please select at least one checkbox.",stackPane);
 	}
 
-	@FXML
-	void submitButton(ActionEvent actionEvent) {
-		//TODO: make a covidSurveyObject and instead of ratings, set the parameters to true or false given user's selection
-		int rating = 0;
-		if (noSymptoms.isSelected()) {
-			rating += 1;
-		}
-		if (quarantine.isSelected()) {
-			rating += 10;
-		}
-		if (closeContact.isSelected()) {
-			rating += 100;
-		}
-		if (symptoms.isSelected()) {
-			rating += 1000;
-		}
-		if (positiveTest.isSelected()) {
-			rating += 10000;
-		}
+	private boolean validateInputVersion() {
+		return symptoms.isSelected() || positiveTest.isSelected() || closeContact.isSelected()
+				|| quarantine.isSelected() || noSymptoms.isSelected();
+	}
 
-		if (rating == 0) {
-			validateInput();
-		} else if (App.userID != 0) {
-			//TODO: pass that covidSurveyObject here! and delete the one below
-			CovidSurveyObj cv = null;
-			if (DB.submitCovidSurvey(cv, App.userID)) {
-				System.out.println("user's covid survey of " + rating + " was submitted");
-			} else {
-				System.err.println("user's covid survey of " + rating + " was not submitted");
-				popUp();
+	@FXML
+	private void submitButton(ActionEvent event) {
+		if(validateInputVersion()) {
+			boolean positiveTestBool = false;
+			boolean symptomsBool = false;
+			boolean closeContactBool = false;
+			boolean quarantineBool = false;
+			boolean noSymptomsBool = false;
+			if (positiveTest.isSelected()) {
+				positiveTestBool = true;
 			}
-			if (DB.isUserCovidSafe(App.userID)) {
-				if (plzGoToPathFinder){
-					plzGoToPathFinder = false;
-					try {
-						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-						App.changeScene(root);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
-				}else {
-					CovidSurveyState covidSurveyState = new CovidSurveyState();
-					covidSurveyState.switchScene(actionEvent);
-				}
-			} else {
-				popUp();
+			if (symptoms.isSelected()) {
+				symptomsBool = true;
 			}
-		} else {
-			if (rating < 10) {
-				App.noCleanSurveyYet = false;
-				if (plzGoToPathFinder) {
-					plzGoToPathFinder = false;
-					try {
-						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-						App.changeScene(root);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
-				} else {
-					CovidSurveyState covidSurveyState = new CovidSurveyState();
-					covidSurveyState.switchScene(actionEvent);
-				}
-			} else {
-				App.noCleanSurveyYet = true;
-				popUp();
+			if (closeContact.isSelected()) {
+				closeContactBool = true;
 			}
+			if (quarantine.isSelected()) {
+				quarantineBool = true;
+			}
+			if (noSymptoms.isSelected()) {
+				noSymptomsBool = true;
+			}
+			CovidSurveyObj newSurvey = new CovidSurveyObj(App.userID, 0, positiveTestBool, symptomsBool, closeContactBool, quarantineBool, noSymptomsBool);
+			DB.submitCovidSurvey(newSurvey, App.userID);
 		}
 	}
+
+
+//	@FXML
+//	void submitButton(ActionEvent actionEvent) {
+//		int rating = 0;
+//		if (noSymptoms.isSelected()) {
+//			rating += 1;
+//		}
+//		if (quarantine.isSelected()) {
+//			rating += 10;
+//		}
+//		if (closeContact.isSelected()) {
+//			rating += 100;
+//		}
+//		if (symptoms.isSelected()) {
+//			rating += 1000;
+//		}
+//		if (positiveTest.isSelected()) {
+//			rating += 10000;
+//		}
+//
+//		if (rating == 0) {
+//			validateInput();
+//		} else if (App.userID != 0) {
+//			if (DB.submitCovidSurvey(rating, App.userID)) {
+//				System.out.println("user's covid survey of " + rating + " was submitted");
+//			} else {
+//				System.err.println("user's covid survey of " + rating + " was not submitted");
+//				popUp();
+//			}
+//			if (DB.isUserCovidSafe(App.userID)) {
+//				if (plzGoToPathFinder){
+//					plzGoToPathFinder = false;
+//					try {
+//						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+//						App.changeScene(root);
+//					} catch (IOException ex) {
+//						ex.printStackTrace();
+//					}
+//				}else {
+//					CovidSurveyState covidSurveyState = new CovidSurveyState();
+//					covidSurveyState.switchScene(actionEvent);
+//				}
+//			} else {
+//				popUp();
+//			}
+//		} else {
+//			if (rating < 10) {
+//				App.noCleanSurveyYet = false;
+//				if (plzGoToPathFinder) {
+//					plzGoToPathFinder = false;
+//					try {
+//						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+//						App.changeScene(root);
+//					} catch (IOException ex) {
+//						ex.printStackTrace();
+//					}
+//				} else {
+//					CovidSurveyState covidSurveyState = new CovidSurveyState();
+//					covidSurveyState.switchScene(actionEvent);
+//				}
+//			} else {
+//				App.noCleanSurveyYet = true;
+//				popUp();
+//			}
+//		}
+//	}
 
 	/**
 	 * Switch to a different scene

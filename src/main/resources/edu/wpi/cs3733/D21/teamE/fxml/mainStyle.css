@@ -212,3 +212,8 @@ JFXListView {
 .floor-change:hover Label{
     visibility: false;
 }
+
+.custom-jfx-check-box {
+    -jfx-checked-color: -fx--primary;
+    -jfx-unchecked-color: BLACK;
+}

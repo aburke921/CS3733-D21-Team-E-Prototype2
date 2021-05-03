@@ -17,16 +17,23 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 public class Maintenance extends ServiceRequestFormComponents {
 
     ObservableList<String> locations;
     ArrayList<String> nodeID = new ArrayList<>();
+
+    @FXML // fx:id="background"
+    private ImageView background;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -119,6 +126,13 @@ public class Maintenance extends ServiceRequestFormComponents {
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
+
+        Stage primaryStage = App.getPrimaryStage();
+        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        Image backgroundImage = backgroundImg;
+        background.setImage(backgroundImage);
+        background.setEffect(new GaussianBlur());
+
         nodeID = DB.getListOfNodeIDS();
         locations = DB.getAllNodeLongNames();
         locationInput.setItems(locations);

@@ -59,7 +59,7 @@
                                                             </FXCollections>
                                                          </items>
                                                       </JFXComboBox>
-                                                      <JFXComboBox fx:id="severityInput" prefHeight="27.0" prefWidth="291.0" promptText="Severity">
+                                                      <JFXComboBox fx:id="severityInput" prefHeight="27.0" prefWidth="295.0" promptText="Severity">
                                                          <VBox.margin>
                                                             <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
@@ -71,12 +71,12 @@
                                                             </FXCollections>
                                                          </items>
                                                       </JFXComboBox>
-                                                      <JFXTextField fx:id="patientIdInput" prefHeight="27.0" prefWidth="280.0" promptText="Patient ID #">
+                                                      <JFXTextField fx:id="patientIdInput" prefHeight="27.0" prefWidth="295.0" promptText="Patient ID #">
                                                          <VBox.margin>
                                                             <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                       </JFXTextField>
-                                                      <JFXComboBox fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
+                                                      <JFXComboBox fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="295.0" promptText="Assigned Personnel">
                                                          <VBox.margin>
                                                             <Insets top="20.0" />
                                                          </VBox.margin>
@@ -97,17 +97,17 @@
                                                             <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                       </JFXTextField>
-                                                      <JFXTextField fx:id="temperatureInput" prefHeight="27.0" prefWidth="280.0" promptText="Temperature">
+                                                      <JFXTextField fx:id="temperatureInput" prefHeight="27.0" prefWidth="295.0" promptText="Temperature">
                                                          <VBox.margin>
                                                             <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                       </JFXTextField>
-                                                      <JFXTextField fx:id="oxygenInput" prefHeight="27.0" prefWidth="280.0" promptText="Oxygen">
+                                                      <JFXTextField fx:id="oxygenInput" prefHeight="27.0" prefWidth="295.0" promptText="Oxygen">
                                                          <VBox.margin>
                                                             <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                       </JFXTextField>
-                                                      <JFXTextArea fx:id="descriptionInput" prefHeight="141.0" prefWidth="259.0" promptText="Detailed Description">
+                                                      <JFXTextArea fx:id="descriptionInput" prefHeight="141.0" prefWidth="295.0" promptText="Detailed Description">
                                                          <VBox.margin>
                                                             <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>

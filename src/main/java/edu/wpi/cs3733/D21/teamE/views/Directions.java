@@ -16,6 +16,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 
+import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -107,14 +108,11 @@ public class Directions {
         Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
         hospitalImageView.setImage(hospital);
         hospitalImageView.setPreserveRatio(true);
-        hospitalImageView.setFitWidth(imageAnchorPane.getWidth());
+
+        //hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
         hospitalImageView.fitWidthProperty().bind(imageAnchorPane.widthProperty());
-        imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
-        imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
-
-        Rectangle2D viewport = new Rectangle2D(100, 0, hospital.getWidth(), hospital.getHeight());
-        hospitalImageView.setViewport(viewport);
-
+        imageAnchorPane.prefWidthProperty().bind(imageAnchorPane.widthProperty());
+        //imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
     }
 
     @FXML
@@ -138,10 +136,36 @@ public class Directions {
         listView.setSelectionModel(new NoSelectionModel<String>());
         listView.getStyleClass().add("directions");
 
+        listView.setCellFactory(param -> new ListCell<String>(){
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item==null) {
+                    setGraphic(null);
+                    setText(null);
+
+                }else{
+
+                    // set the width's
+                    setMinWidth(param.getWidth() - 10);
+                    setMaxWidth(param.getWidth() - 10);
+                    setPrefWidth(param.getWidth() - 10);
+
+                    // allow wrapping
+                    setWrapText(true);
+
+                    setText(item.toString());
+
+
+                }
+            }
+        });
+
         JFXDialogLayout popup = new JFXDialogLayout();
         popup.setHeading(new Text(header));
         popup.setBody(listView);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
+        popup.getStyleClass().add("jfx-dialog-overlay-pane");
         JFXDialog dialog = new JFXDialog(imageStackPane, popup, JFXDialog.DialogTransition.CENTER);
         dialog.getStyleClass().add("jfx-dialog-overlay-pane");
 
@@ -183,11 +207,11 @@ public class Directions {
 
     }
 
-    private void toBWH(ActionEvent actionEvent) {
+    public void toBWH(ActionEvent actionEvent) {
         getDirections(true);
     }
 
-    private void awayBWH(ActionEvent actionEvent) {
+    public void awayBWH(ActionEvent actionEvent) {
         getDirections(false);
     }
 

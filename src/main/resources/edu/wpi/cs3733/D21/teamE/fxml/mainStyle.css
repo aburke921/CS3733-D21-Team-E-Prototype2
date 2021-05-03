@@ -263,7 +263,7 @@ JFXButton:hover FontAwesomeIconView {
 
 }
 
-.jfx-dialog-overlay-pane > StackPane{
+.jfx-dialog-overlay-pane{
     -fx-effect: null;
 }
 

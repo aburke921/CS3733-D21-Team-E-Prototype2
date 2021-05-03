@@ -104,9 +104,9 @@
                                         </children>
                                     </AnchorPane>
                                 </AnchorPane>
-                                <AnchorPane fx:id="imageAnchorPane" minWidth="500.0" HBox.hgrow="ALWAYS" >
+                                <AnchorPane fx:id="imageAnchorPane" minWidth="500.0" HBox.hgrow="ALWAYS">
                                     <children>
-                                        <StackPane fx:id="imageStackPane" alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" >
+                                        <StackPane fx:id="imageStackPane" alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
                                                 <ImageView fx:id="hospitalImageView" fitHeight="800.0" fitWidth="682.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                             </children>

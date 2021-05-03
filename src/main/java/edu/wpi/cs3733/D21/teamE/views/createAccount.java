@@ -32,6 +32,25 @@ public class createAccount {
 	@FXML
 	private AnchorPane appBarAnchorPane;
 
+//	@Override
+//	protected void updateItem(Message item, boolean empty) {
+//		super.updateItem(item, empty);
+//
+//		styleProperty().unbind();
+//
+//		if (empty || item == null || item.getText() == null) {
+//			setText(null);
+//			styleProperty.set(null);
+//		} else {
+//			setText(item.getText());
+//			styleProperty().bind(
+//					Bindings.when(
+//							item.readProperty()
+//					).then("-fx-background-color: red;")
+//							.otherwise("-fx-background-color: null;")
+//			);
+//		}
+//	}
 	private static boolean checkString(String str) {
 		char ch;
 		boolean capitalFlag = false;

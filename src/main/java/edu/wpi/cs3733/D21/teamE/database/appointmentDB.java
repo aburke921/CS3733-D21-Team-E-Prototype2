@@ -103,7 +103,7 @@ public class appointmentDB {
 			if (added == true) {
 				query = query + ", ";
 			}
-			query = query + "appointmentDate = " + newDate;
+			query = query + "appointmentDate = '" + newDate + "'";
 			added = true;
 		}
 		if (newDoctorID != null) {
@@ -111,7 +111,6 @@ public class appointmentDB {
 				query = query + ", ";
 			}
 			query = query + "doctorID = " + newDoctorID;
-			added = true;
 		}
 
 		query = query + " where appointmentID = " + appointmentID;
@@ -120,7 +119,7 @@ public class appointmentDB {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error in updating appointment table");
 			return 0;
 		}

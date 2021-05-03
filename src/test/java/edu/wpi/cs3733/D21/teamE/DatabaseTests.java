@@ -1245,7 +1245,7 @@ public class DatabaseTests {
 	@DisplayName("userLoginTest")
 	public void userLoginTest() {
 
-		//Visitors:
+//Visitors:
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
 		//Patients:
@@ -1274,17 +1274,12 @@ public class DatabaseTests {
 		DB.addSpecialUserType("ciarang@gmail.com", "EMT000001", "EMT", "Ciaran", "Goodwin");
 		DB.addSpecialUserType("lolab@gmail.com", "EMT000002", "EMT", "Lola", "Bond");
 		//Real Admins:
-		String insertUser1 = "Insert Into useraccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', CURRENT TIMESTAMP)";
-		String insertUser2 = "Insert Into useraccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', CURRENT TIMESTAMP)";
-		String insertUser3 = "Insert Into useraccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', CURRENT TIMESTAMP)";
-		String insertUser4 = "Insert Into useraccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', CURRENT TIMESTAMP)";
-
 		ArrayList<String> insertUsers = new ArrayList<String>();
-		insertUsers.add(insertUser1);
-		insertUsers.add(insertUser2);
-		insertUsers.add(insertUser3);
-		insertUsers.add(insertUser4);
-		for(String insertUser : insertUsers) {
+		insertUsers.add("Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', Current Timestamp, 0, Null, Null)");
+		insertUsers.add("Insert Into userAccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', Current Timestamp, 0, Null, Null)");
+		insertUsers.add("Insert Into userAccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', Current Timestamp, 0, Null, Null)");
+		insertUsers.add("Insert Into userAccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', Current Timestamp, 0, Null, Null)");
+		for (String insertUser : insertUsers) {
 			try (PreparedStatement prepState = makeConnection.makeConnection().connection.prepareStatement(insertUser)) {
 				prepState.execute();
 			} catch (SQLException e) {
@@ -1293,7 +1288,6 @@ public class DatabaseTests {
 				System.err.println("Error inserting into userAccount inside function userLoginTest()");
 			}
 		}
-
 		//Visitors:
 		assertEquals(1, DB.userLogin("bellag@gmail.com", "visitor1"));
 		assertEquals(2, DB.userLogin("terry_reilly123@yahoo.com", "visitor2"));

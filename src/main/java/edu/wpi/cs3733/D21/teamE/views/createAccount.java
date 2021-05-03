@@ -1,6 +1,8 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RegexValidator;
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.states.CovidSurveyState;
@@ -8,6 +10,7 @@ import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -55,7 +58,7 @@ public class createAccount {
 
 	public void initialize() {
 		//init appBar
-		javafx.scene.Node appBarComponent = null;
+		Node appBarComponent = null;
 		try {
 			App.setShowHelp(false); // show help or not
 			App.setShowLogin(false); // show login or not
@@ -64,30 +67,27 @@ public class createAccount {
 			App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
 			appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
 			appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
-
-			//	@Override
-//	protected void updateItem(Message item, boolean empty) {
-//		super.updateItem(item, empty);
-//
-//		styleProperty().unbind();
-//
-//		if (empty || item == null || item.getText() == null) {
-//			setText(null);
-//			styleProperty.set(null);
-//		} else {
-//			setText(item.getText());
-//			styleProperty().bind(
-//					Bindings.when(
-//							item.readProperty()
-//					).then("-fx-background-color: red;")
-//							.otherwise("-fx-background-color: null;")
-//			);
-//		}
-//	}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		//init validators
+		RegexValidator emailValidator = new RegexValidator();
+		emailValidator.setRegexPattern("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
+		emailValidator.setMessage("Invalid Email");
+
+//		RegexValidator passwordValidator = new RegexValidator();
+//		passwordValidator.setRegexPattern();
+		/*todo add FontAwesome Icon
+			FontIcon warnIcon = new FontIcon(FontAwesomeSolid.EXCLAMATION_TRIANGLE);
+			warnIcon.getStyleClass().add(ERROR);
+			validator.setIcon(warnIcon);*/
+		email.getValidators().add(emailValidator);
+		email.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				email.validate();
+			}
+		});
 	}
 
 	public void createAccountButton(ActionEvent event) {

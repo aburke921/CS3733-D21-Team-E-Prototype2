@@ -58,7 +58,7 @@ public class CovidSurveyStatus {
 
     public void addToTable(TreeItem<CovidSurveyObj> unchecked, TreeItem<CovidSurveyObj> markedSafe, TreeItem<CovidSurveyObj> markedUnsafe) {
 
-        ArrayList<CovidSurveyObj> allCovidSurveys = DB.getCovidSurveys();
+//        ArrayList<CovidSurveyObj> allCovidSurveys = DB.getCovidSurveys();
 
         if(allCovidSurveys.size() > 0) {
             if(!unchecked.getChildren().isEmpty()) {

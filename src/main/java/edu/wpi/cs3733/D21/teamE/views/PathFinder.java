@@ -283,27 +283,28 @@ public class PathFinder {
             int rotate = 0;
             step = MaterialDesignIcon.ARROW_UP_BOLD_CIRCLE_OUTLINE.getChar();
             if (dir.contains("straight")) {
+                // no change, but needs to be here for elevator checks
             } else if (dir.contains("Stairs")) {
                 step = MaterialDesignIcon.STAIRS.getChar();
             } else if (dir.contains("left")) {
                 if (dir.contains("sharp")) {
-                    rotate = 120;
+                    rotate = -135;
                 } else if (dir.contains("shallow")){
-                    rotate = 60;
+                    rotate = -45;
                 } else if (dir.contains("Bend")){
-                    rotate = 30;
+                    rotate = -25;
                 } else {
-                    rotate = 90;
+                    rotate = -90;
                 }
             } else if (dir.contains("right")) {
                 if (dir.contains("sharp")) {
-                    rotate = -120;
+                    rotate = 135;
                 } else if (dir.contains("shallow")){
-                    rotate = -60;
+                    rotate = 45;
                 } else if (dir.contains("Bend")){
-                    rotate = -30;
+                    rotate = 25;
                 } else {
-                    rotate = -90;
+                    rotate = 90;
                 }
             } else { // else is elevator
                 step = MaterialDesignIcon.ELEVATOR.getChar();

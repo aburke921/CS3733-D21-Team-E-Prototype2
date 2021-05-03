@@ -96,6 +96,10 @@ public class Laundry extends ServiceRequestFormComponents {
         background.setImage(backgroundImage);
         background.setEffect(new GaussianBlur());
 
+        //background.setPreserveRatio(true);
+        background.fitWidthProperty().bind(primaryStage.widthProperty());
+        //background.fitHeightProperty().bind(primaryStage.heightProperty());
+
         assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'Laundry.fxml'.";

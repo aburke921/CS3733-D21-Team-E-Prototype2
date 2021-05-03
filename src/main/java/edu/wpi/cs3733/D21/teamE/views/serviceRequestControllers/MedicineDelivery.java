@@ -123,6 +123,10 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         background.setImage(backgroundImage);
         background.setEffect(new GaussianBlur());
 
+        //background.setPreserveRatio(true);
+        background.fitWidthProperty().bind(primaryStage.widthProperty());
+        //background.fitHeightProperty().bind(primaryStage.heightProperty());
+
         locations = DB.getAllNodeLongNames();
         nodeIDs = DB.getListOfNodeIDS();
 

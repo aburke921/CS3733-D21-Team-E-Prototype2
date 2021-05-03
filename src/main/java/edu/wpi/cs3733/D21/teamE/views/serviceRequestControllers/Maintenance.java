@@ -133,6 +133,10 @@ public class Maintenance extends ServiceRequestFormComponents {
         background.setImage(backgroundImage);
         background.setEffect(new GaussianBlur());
 
+        //background.setPreserveRatio(true);
+        background.fitWidthProperty().bind(primaryStage.widthProperty());
+        //background.fitHeightProperty().bind(primaryStage.heightProperty());
+
         nodeID = DB.getListOfNodeIDS();
         locations = DB.getAllNodeLongNames();
         locationInput.setItems(locations);

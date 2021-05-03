@@ -7,7 +7,11 @@ import com.google.maps.model.*;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static org.apache.commons.lang3.text.WordUtils.wrap;
 
 
 public class DirectionsController {
@@ -47,7 +51,23 @@ public class DirectionsController {
         }
     }
 
-    public static DirectionsResult getDirections(String origin, Boolean toBWH) throws IOException, InterruptedException, ApiException {
+    public static List<String> getDirections(String origin, Boolean toBWH) {
+        try {
+            DirectionsResult result = getDir(origin, toBWH);
+            DirectionsLeg trip = result.routes[0].legs[0];
+            List<String> listing = directionsListing(trip, toBWH);
+            return listing;
+        } catch (IOException exception) {
+            System.err.println("IO Exception: " + exception.getMessage());
+        } catch (InterruptedException exception) {
+            System.err.println("Interrupted Exception: " + exception.getMessage());
+        } catch (ApiException exception) {
+            System.err.println("API Exception: " + exception.getMessage());
+        }
+        return null;
+    }
+
+    public static DirectionsResult getDir(String origin, Boolean toBWH) throws IOException, InterruptedException, ApiException {
         DirectionsApiRequest request = new DirectionsApiRequest(geoContext);
         request.mode(mode).departureTimeNow();
         //request.arrivalTime(Instant.parse("10:00 pm"));
@@ -80,9 +100,34 @@ public class DirectionsController {
             result = request.await();
         }
 
-
-
         return result;
+    }
+
+    private static List<String> directionsListing(DirectionsLeg trip, boolean toBWH) {
+        ArrayList<String> directions = new ArrayList<>();
+        directions.add(getHeader(trip, toBWH));
+        // First String is header
+        for (DirectionsStep step: trip.steps) {
+            String str = step.toString();
+            str = str.replaceAll("\\<.*?\\>", "");
+            str = str.substring(str.indexOf("\"")+1);
+            String dir = str.substring(0, str.indexOf("\""));
+            dir = dir.replaceAll("&nbsp;", " ");
+            dir = wrap(dir, 100, null, false);
+            directions.add(dir);
+        }
+
+        return directions;
+    }
+
+    private static String getHeader(DirectionsLeg trip, boolean toBWH) {
+        StringBuilder SB = new StringBuilder("Directions ");
+        SB.append((toBWH ? "To" : "From")).append(" Brigham and Women's Hospital ");
+        SB.append((toBWH ? ("From " + trip.startAddress) : ("To " + trip.endAddress)));
+        SB.append("\nBy ").append(mode);
+        SB.append("\tDistance: ").append(trip.distance);
+        SB.append("\tDuration: ").append(trip.duration);
+        return SB.toString();
     }
 
     public static void init() {

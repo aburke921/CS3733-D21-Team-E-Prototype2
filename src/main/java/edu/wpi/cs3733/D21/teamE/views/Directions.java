@@ -88,63 +88,48 @@ public class Directions {
         //String arrivalTime = io.nextLine();
         // TODO: Figure out time scheduler
 
-        try {
-            DirectionsResult result = DirectionsController.getDirections(origin.toString(), toBWH);
-            DirectionsLeg trip = result.routes[0].legs[0];
-
-            System.out.println();
-            ArrayList<String> directions = new ArrayList<>();
-            for (DirectionsStep step: trip.steps) {
-                String str = step.toString();
-                str = str.replaceAll("\\<.*?\\>", "");
-                str = str.substring(str.indexOf("\"")+1);
-                String dir = str.substring(0, str.indexOf("\""));
-                dir = dir.replaceAll("&nbsp;", " ");
-                dir = wrap(dir, 100, null, false);
-                directions.add(dir);
-            }
-            JFXListView<String> listView = new JFXListView<>();
-            listView.getItems().addAll(directions);
-            listView.setPrefHeight(USE_COMPUTED_SIZE);
-            listView.setSelectionModel(new NoSelectionModel<String>());
-            listView.getStyleClass().add("directions");
-
-            JFXDialogLayout popup = new JFXDialogLayout();
-            popup.setHeading(new Text("Directions " + (toBWH ? "To" : "From") + " Brigham and Women's Hospital " + (toBWH ? ("From " + trip.startAddress) : ("To " + trip.endAddress)) + "\nBy " + DirectionsController.getMode() + "\tDistance: " + trip.distance + "\tDuration: " + trip.duration));
-            popup.setBody(listView);
-            popup.setPrefHeight(USE_COMPUTED_SIZE);
-            JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
-            dialog.getStyleClass().add("directionsDialog");
-
-            dialog.setMaxWidth(800);
-            dialog.setPrefWidth(800);
-            popup.setMaxWidth(800);
-            popup.setPrefWidth(800);
-
-            int fullSize = listView.getItems().size() * 35 + 120;
-            if (fullSize > 500) {
-                dialog.setMaxHeight(500);
-            } else {
-                dialog.setMaxHeight(fullSize);
-            }
-            JFXButton okay = new JFXButton("Done");
-            okay.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    dialog.close();
-
-                }
-            });
-            popup.setActions(okay);
-            dialog.show();
-
-        } catch (IOException exception) {
-            System.err.println("IO Exception: " + exception.getMessage());
-        } catch (InterruptedException exception) {
-            System.err.println("Interrupted Exception: " + exception.getMessage());
-        } catch (ApiException exception) {
-            System.err.println("API Exception: " + exception.getMessage());
+        List<String> directions = DirectionsController.getDirections(origin.toString(), toBWH);
+        if (directions == null) {
+            System.err.println("No Directions Found");
+            return;
         }
+
+        JFXListView<String> listView = new JFXListView<>();
+        String header = directions.remove(0);
+        listView.getItems().addAll(directions);
+        listView.setPrefHeight(USE_COMPUTED_SIZE);
+        listView.setSelectionModel(new NoSelectionModel<String>());
+        listView.getStyleClass().add("directions");
+
+        JFXDialogLayout popup = new JFXDialogLayout();
+        popup.setHeading(new Text(header));
+        popup.setBody(listView);
+        popup.setPrefHeight(USE_COMPUTED_SIZE);
+        JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
+        dialog.getStyleClass().add("directionsDialog");
+
+        dialog.setMaxWidth(800);
+        dialog.setPrefWidth(800);
+        popup.setMaxWidth(800);
+        popup.setPrefWidth(800);
+
+        int fullSize = listView.getItems().size() * 45 + 120;
+        if (fullSize > 500) {
+            dialog.setMaxHeight(500);
+        } else {
+            dialog.setMaxHeight(fullSize);
+        }
+        JFXButton okay = new JFXButton("Done");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        popup.setActions(okay);
+        dialog.show();
+
     }
 
     public void toBWH(ActionEvent actionEvent) {

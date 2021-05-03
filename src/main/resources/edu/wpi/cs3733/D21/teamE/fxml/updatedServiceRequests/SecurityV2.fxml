@@ -39,24 +39,24 @@
                     <center>
                         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="785.0" BorderPane.alignment="CENTER">
                             <children>
-                                <VBox maxWidth="600.0" prefHeight="582.0" prefWidth="1200.0" style="-fx-background-color: white; -fx-border-radius: 25px; -fx-background-radius: 25px;">
+                                <VBox  maxWidth="600.0" prefHeight="513.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-radius: 25px; -fx-background-radius: 25px;">
                                     <children>
-                                        <HBox maxWidth="600.0" prefHeight="501.0" prefWidth="600.0" styleClass="centerPane">
+                                        <HBox alignment="TOP_CENTER" maxWidth="600.0" prefHeight="433.0" prefWidth="600.0" styleClass="centerPane">
                                             <children>
-                                                <FlowPane prefHeight="361.0" prefWidth="299.0">
+                                                <FlowPane prefHeight="361.0" prefWidth="300.0">
                                                     <children>
-                                                        <VBox prefHeight="349.0" prefWidth="264.0">
+                                                        <VBox prefHeight="349.0" prefWidth="260.0">
                                                             <children>
                                                                 <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
                                                                     <items>
                                                                     </items>
                                                                     <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
+                                                                        <Insets bottom="5.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXComboBox>
                                                                 <JFXComboBox fx:id="levelOfSecurity" prefHeight="27.0" prefWidth="295.0" promptText="Level Of Security">
                                                                     <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
+                                                                        <Insets bottom="5.0" top="20.0" />
                                                                     </VBox.margin>
                                                                     <items>
                                                                         <FXCollections fx:factory="observableArrayList">
@@ -69,7 +69,7 @@
                                                                 </JFXComboBox>
                                                                 <JFXComboBox fx:id="levelOfUrgency" prefHeight="27.0" prefWidth="291.0" promptText="Level of Urgency">
                                                                     <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
+                                                                        <Insets bottom="5.0" top="20.0" />
                                                                     </VBox.margin>
                                                                     <items>
                                                                         <FXCollections fx:factory="observableArrayList">
@@ -81,7 +81,7 @@
                                                                 </JFXComboBox>
                                                                 <JFXComboBox fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
                                                                     <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
+                                                                        <Insets bottom="5.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXComboBox>
                                                             </children>
@@ -91,13 +91,13 @@
                                                         </VBox>
                                                     </children>
                                                 </FlowPane>
-                                                <FlowPane prefHeight="361.0" prefWidth="329.0">
+                                                <FlowPane prefHeight="361.0" prefWidth="300.0">
                                                     <children>
-                                                        <VBox prefHeight="363.0" prefWidth="259.0">
+                                                        <VBox prefHeight="363.0" prefWidth="260.0">
                                                             <children>
                                                                 <JFXTextArea fx:id="reasonForRequest" prefHeight="141.0" prefWidth="259.0" promptText="Reason For Request">
                                                                     <VBox.margin>
-                                                                        <Insets bottom="10.0" top="20.0" />
+                                                                        <Insets bottom="5.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXTextArea>
                                                                 <GridPane>

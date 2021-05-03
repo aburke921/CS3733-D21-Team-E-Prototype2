@@ -32,12 +32,12 @@ public class CovidSurveyStatus {
     private JFXButton backButton;
 
     @FXML
-    private void markAsSafe() {
+    private void markAsSafe(JFXTreeTableView covidSurveyTable) {
 
     }
 
     @FXML
-    private void markAsRisk() {
+    private void markAsRisk(JFXTreeTableView covidSurveyTable) {
 
     }
 

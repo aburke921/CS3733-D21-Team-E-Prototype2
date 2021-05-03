@@ -183,11 +183,11 @@ public class Directions {
 
     }
 
-    public void toBWH(ActionEvent actionEvent) {
+    private void toBWH(ActionEvent actionEvent) {
         getDirections(true);
     }
 
-    public void awayBWH(ActionEvent actionEvent) {
+    private void awayBWH(ActionEvent actionEvent) {
         getDirections(false);
     }
 

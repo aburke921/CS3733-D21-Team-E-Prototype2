@@ -38,6 +38,24 @@ public class CovidSurveyObj {
         this.status = "Needs to be reviewed";
     }
 
+    public CovidSurveyObj(String userDisplay) {
+        this.user = null;
+        this.userDisplay = userDisplay;
+        this.formNumber = null;
+        this.formNumberDisplay = null;
+        this.positiveTest = null;
+        this.positiveTestDisplay = null;
+        this.symptoms = null;
+        this.symptomsDisplay = null;
+        this.closeContact = null;
+        this.closeContactDisplay = null;
+        this.quarantine = null;
+        this.quarantineDisplay = null;
+        this.noSymptoms = null;
+        this.noSymptomsDisplay = null;
+        this.status = null;
+    }
+
     public Integer getUser() {
         return this.user;
     }

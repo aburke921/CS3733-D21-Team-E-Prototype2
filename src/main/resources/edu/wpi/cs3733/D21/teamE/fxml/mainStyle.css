@@ -237,9 +237,7 @@ transit-button{
     -fx-border-width: 1px;
 }
 
-.floor-change:hover Label{
-    visibility: false;
-}
+
 
 /* ListView CSS from: https://blog.ngopal.com.np/2012/07/11/customize-scrollbar-via-css/*/
 

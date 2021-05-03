@@ -75,7 +75,10 @@ public class CovidSurvey extends ServiceRequests {
 			if (noSymptoms.isSelected()) {
 				noSymptomsBool = true;
 			}
-			CovidSurveyObj newSurvey = new CovidSurveyObj(App.userID, 0, positiveTestBool, symptomsBool, closeContactBool, quarantineBool, noSymptomsBool);
+
+			//TODO: based on what user has selected, set the string to either "Needs to be reviewed", "Safe", "Unsafe"
+			String status = " ";
+			CovidSurveyObj newSurvey = new CovidSurveyObj(App.userID, 0, positiveTestBool, symptomsBool, closeContactBool, quarantineBool, noSymptomsBool, status);
 			DB.submitCovidSurvey(newSurvey, App.userID);
 		}
 	}

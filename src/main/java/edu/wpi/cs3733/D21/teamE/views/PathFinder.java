@@ -26,6 +26,9 @@ import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
+import javafx.animation.KeyFrame;
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -46,16 +49,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Line;
+import javafx.scene.shape.*;
 
-import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import javafx.stage.Stage;
-
+import javafx.util.Duration;
 
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
@@ -519,14 +519,16 @@ public class PathFinder {
         for(Path path : paths){
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
 
-                Node prevNode = new Node();
-
                 Iterator<Node> legItr = path.iterator();
                 Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
                 //Use these variables to keep track of the coordinates of the previous node
                 double prevXCoord = 0;
                 double prevYCoord = 0;
+
+                double distance = 0;
+
+                ObservableList<Double> coordsList = FXCollections.observableArrayList();
 
                 int firstNode = 1;
                 String firstID = null;
@@ -538,6 +540,13 @@ public class PathFinder {
                     //Resize the coordinates to match the resized image
                     double xCoord = (double) node.getX() / scale;
                     double yCoord = (double) node.getY() / scale;
+
+                    coordsList.add(xCoord);
+                    coordsList.add(yCoord);
+
+                    if(prevXCoord >= 1 && prevYCoord >= 1) {
+                        distance += Math.hypot(xCoord - prevXCoord, yCoord - prevYCoord);
+                    }
 
                     if (firstNode == 1) { //if current node is the starting node
                         if (!(prevYCoord < 1) || !(prevXCoord < 1)) {
@@ -680,10 +689,25 @@ public class PathFinder {
                         prevYCoord = yCoord;
                     }
 
-                    prevNode = node;
                 }
+
+                //Add moving ball along path
+                Circle ball = new Circle(5, Color.RED);
+                g.getChildren().add(ball);
+
+                Polyline polyline = new Polyline();
+                polyline.getPoints().addAll(coordsList);
+
+                PathTransition transition = new PathTransition();
+                transition.setNode(ball);
+                double duration = distance / 160;
+                transition.setDuration(Duration.seconds(duration));
+                transition.setPath(polyline);
+                transition.setCycleCount(PathTransition.INDEFINITE);
+                transition.play();
+
                 //add all objects to the scene
-                pane.getChildren().add(g);
+                pane.getChildren().addAll(g);
             } else {
                 System.out.println("No path on this floor");
                 //todo snackbar to say no nodes on this floor?

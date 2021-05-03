@@ -39,7 +39,7 @@
                                         </HBox>
                                         <HBox alignment="CENTER" prefWidth="437.0">
                                             <children>
-                                                <JFXButton fx:id="car" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
+                                                <JFXButton fx:id="car" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button" text="">
                                                     <graphic>
                                                         <MaterialDesignIconView glyphName="CAR" size="24" styleClass="icon-button" />
                                                     </graphic>
@@ -47,7 +47,7 @@
                                                         <Insets left="7.5" right="7.5" />
                                                     </HBox.margin>
                                                 </JFXButton>
-                                                <JFXButton fx:id="transit" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
+                                                <JFXButton fx:id="transit" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button" text="">
                                                     <graphic>
                                                         <MaterialDesignIconView glyphName="TRAIN" size="24" styleClass="icon-button" />
                                                     </graphic>
@@ -55,7 +55,7 @@
                                                         <Insets left="7.5" right="7.5" />
                                                     </HBox.margin>
                                                 </JFXButton>
-                                                <JFXButton fx:id="walking" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
+                                                <JFXButton fx:id="walking" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button" text="">
                                                     <graphic>
                                                         <MaterialDesignIconView glyphName="WALK" size="24" styleClass="icon-button" textAlignment="CENTER" />
                                                     </graphic>
@@ -63,7 +63,7 @@
                                                         <Insets left="7.5" right="7.5" />
                                                     </HBox.margin>
                                                 </JFXButton>
-                                                <JFXButton fx:id="bike" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button-unselected" text="">
+                                                <JFXButton fx:id="bike" alignment="CENTER" onAction="#chooseMode" styleClass="transit-button" text="">
                                                     <graphic>
                                                         <MaterialDesignIconView glyphName="BIKE" size="24" styleClass="icon-button" />
                                                     </graphic>

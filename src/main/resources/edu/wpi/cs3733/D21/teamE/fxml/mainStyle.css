@@ -204,14 +204,8 @@ JFXButton:hover FontAwesomeIconView {
     -fx-fill: WHITE;
 }
 
-.transit-button-selected {
+transit-button{
     -jfx-button-type: RAISED;
-    -fx-background-color: -fx--primary;
-}
-
-.transit-button-unselected {
-    -jfx-button-type: RAISED;
-    -fx-background-color: -fx--primary-light;
 }
 
 .floor-change Label{

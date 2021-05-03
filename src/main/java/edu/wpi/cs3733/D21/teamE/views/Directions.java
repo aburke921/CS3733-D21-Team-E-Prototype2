@@ -85,9 +85,11 @@ public class Directions {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        car.setStyle("-fx-background-color: -fx--primary");
+        bike.setStyle("-fx-background-color: -fx--primary-light");
+        walking.setStyle("-fx-background-color: -fx--primary-light");
+        transit.setStyle("-fx-background-color: -fx--primary-light");
         currentlySelected = car;
-        currentlySelected.getStyleClass().remove("transit-button-unselected");
-        currentlySelected.getStyleClass().add("transit-button-selected");
         DirectionsController.init();
 
         Stage primaryStage = App.getPrimaryStage();
@@ -191,11 +193,9 @@ public class Directions {
     }
 
     private void switchFocusButton(JFXButton button) {
-        currentlySelected.getStyleClass().remove("transit-button-selected");
-        currentlySelected.getStyleClass().add("transit-button-unselected");
+        currentlySelected.setStyle("-fx-background-color: -fx--primary-light");
         currentlySelected = button;
-        currentlySelected.getStyleClass().remove("transit-button-unselected");
-        currentlySelected.getStyleClass().add("transit-button-selected");
+        currentlySelected.setStyle("-fx-background-color: -fx--primary");
     }
 
     @FXML

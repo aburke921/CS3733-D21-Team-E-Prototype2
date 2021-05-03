@@ -5,6 +5,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -39,7 +40,7 @@
                                     </ImageView>
                                     <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <JFXButton fx:id="covidSurvey" alignment="CENTER" minWidth="200.0" onAction="#toCovidSurvey" prefWidth="200.0" styleClass="default-button" text="COVID Survey" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="covidSurvey" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="COVID Survey" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -76,7 +77,7 @@
                                                 <Insets right="50.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton fx:id="serviceRequestButton" alignment="CENTER" minWidth="200.0" onAction="#toServiceRequests" prefWidth="200.0" styleClass="default-button" text="Service Requests" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="serviceRequestButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Service Requests" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -91,7 +92,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <JFXButton fx:id="mapEditorButton" alignment="CENTER" minWidth="200.0" onAction="#toMapEditor" prefWidth="200.0" styleClass="default-button" text="Map Editor" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="mapEditorButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Map Editor" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -102,7 +103,7 @@
                                                 <Insets right="50.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton fx:id="userManagementButton" alignment="CENTER" minWidth="200.0" onAction="#toUserManagement" prefWidth="200.0" styleClass="default-button" text="User Management" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="userManagementButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="User Management" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -117,6 +118,16 @@
                                     </HBox>
                                     <VBox alignment="TOP_CENTER" prefWidth="300.0" VBox.vgrow="ALWAYS">
                                        <children>
+                                          <Label fx:id="carParkedText" layoutX="24.0" layoutY="79.0" text="Your car is parked" textFill="006db3">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <Hyperlink fx:id="LinkToParking" onAction="#toParking" prefWidth="110.0" text="Pathfind to Parking">
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </Hyperlink>
                                           <Label fx:id="algoTextTop" text="Change Path Finding" textFill="006db3">
                                              <font>
                                                 <Font size="16.0" />

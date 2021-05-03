@@ -763,5 +763,26 @@ public class DB {
 		return UserAccountDB.filledCovidSurveyToday(userID);
 	}
 
+	/**
+	 * Submits a Parking Slot to the server
+	 * @param nodeID is the result nodeID that we are submitting
+	 * @param userID is the user's ID that we are submitting
+	 * @return true if successfully changed one row, false otherwise
+	 */
+	public static boolean submitParkingSlot(String nodeID, int userID) {
+		return UserAccountDB.submitParkingSlot(nodeID, userID);
+	}
 
+	/**
+	 * Get where the user parked
+	 * @param userID is the user's ID that we are checking
+	 * @return the node where the user parked, null if not exist
+	 */
+	public static String whereDidIPark(int userID) {
+		return UserAccountDB.whereDidIPark(userID);
+	}
+
+	public static String getUserName(int userID) {
+		return UserAccountDB.getUserName(userID);
+	}
 }

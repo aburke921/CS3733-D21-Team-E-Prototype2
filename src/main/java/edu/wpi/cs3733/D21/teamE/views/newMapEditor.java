@@ -22,6 +22,8 @@ import edu.wpi.cs3733.D21.teamE.map.Path;
 
 
 import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.states.MapEditorState;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
@@ -152,18 +154,13 @@ public class newMapEditor {
 
 
     /**
-     * Returns to {@link Default} page.
-     *
-     * @param event calling event info.
+     * Switch to a different scene
+     * @param event tells which button was pressed
      */
     @FXML
-    private void toDefault(ActionEvent event) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    private void switchScene(ActionEvent event) {
+        MapEditorState mapEditorState = new MapEditorState();
+        mapEditorState.switchScene(event);
     }
 
     @FXML

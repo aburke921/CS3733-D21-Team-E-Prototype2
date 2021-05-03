@@ -3,6 +3,8 @@ package edu.wpi.cs3733.D21.teamE.views;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.states.CovidSurveyState;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +31,7 @@ public class createAccount {
 	private StackPane stackPane;
 	@FXML
 	private AnchorPane appBarAnchorPane;
+
 
 	private static boolean checkString(String str) {
 		char ch;
@@ -61,12 +64,33 @@ public class createAccount {
 			App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
 			appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
 			appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+
+			//	@Override
+//	protected void updateItem(Message item, boolean empty) {
+//		super.updateItem(item, empty);
+//
+//		styleProperty().unbind();
+//
+//		if (empty || item == null || item.getText() == null) {
+//			setText(null);
+//			styleProperty.set(null);
+//		} else {
+//			setText(item.getText());
+//			styleProperty().bind(
+//					Bindings.when(
+//							item.readProperty()
+//					).then("-fx-background-color: red;")
+//							.otherwise("-fx-background-color: null;")
+//			);
+//		}
+//	}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void createAccountButton() {
+	public void createAccountButton(ActionEvent event) {
 		App.userID = 0;
 
 		if (email.getText().isEmpty()) {
@@ -108,29 +132,24 @@ public class createAccount {
 			App.userID = DB.userLogin(email.getText(), password.getText());
 		}
 		if (App.userID != 0) {
-			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-				App.getPrimaryStage().getScene().setRoot(root);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+			CreateAccountState createAccountState = new CreateAccountState();
+			createAccountState.switchScene(event);
 		}
 	}
-
 
 	@FXML
 	private void errorPopup(String errorMessage) {
 		App.newJFXDialogPopUp("Error!", "Okay", errorMessage, stackPane);
 	}
 
+	/**
+	 * Switch to a different scene
+	 * @param e tells which button was pressed
+	 */
 	@FXML
-	public void toLogin(ActionEvent e) {
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
-			App.getPrimaryStage().getScene().setRoot(root);
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
+	public void switchScene(ActionEvent e) {
+		CreateAccountState createAccountState = new CreateAccountState();
+		createAccountState.switchScene(e);
 	}
 
 

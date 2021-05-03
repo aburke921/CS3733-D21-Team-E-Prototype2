@@ -241,3 +241,21 @@ JFXButton:hover FontAwesomeIconView {
 .create-account-label:hover {
     -fx-text-fill: -fx--primary-dark;
 }
+
+.floor-change Label{
+    -fx-font-size: 10px;
+    -fx-background-color: WHITE;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: BLACK;
+    -fx-border-width: 1px;
+}
+
+.floor-change:hover Label{
+    visibility: false;
+}
+
+.custom-jfx-check-box {
+    -jfx-checked-color: -fx--primary;
+    -jfx-unchecked-color: BLACK;
+}

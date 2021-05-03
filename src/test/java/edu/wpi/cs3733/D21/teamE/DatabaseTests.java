@@ -687,25 +687,25 @@ public class DatabaseTests {
 		DB.addSpecialUserType("EMT1@gmail.com", "testPass", "EMT", "bob", "Shukla");
 		DB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson", "drew", "Shukla");
 
-
 		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low", "headache");
 		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low", "migraine");
 		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low", "migraine");
 		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "feel better");
 
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
 		ArrayList<String> returnedStatus;
 		ArrayList<String> correctStatus = new ArrayList<>();
 		correctStatus.add("inProgress");
 		correctStatus.add("inProgress");
 		correctStatus.add("inProgress");
-		returnedStatus = DB.getMyCreatedRequestInfo("extTransport", -1, "requestStatus");
+		returnedStatus = DB.getMyCreatedRequestInfo("extTransport", 5, "requestStatus");
 		assertEquals(correctStatus, returnedStatus);
 	}
 
 	@Test
 	@DisplayName("testGetRequestStatus3 : No Data")
 	public void testGetRequestStatus3() {
-
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
 		ArrayList<String> returnedStatus;
 		returnedStatus = DB.getMyCreatedRequestInfo("extTransport", 1, "requestStatus");
 		assertEquals(0, returnedStatus.size());
@@ -753,20 +753,21 @@ public class DatabaseTests {
 		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low", "migraine");
 		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "High", "Low", "Low", "feel better");
 
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
 		ArrayList<String> returnedIDs;
 		ArrayList<String> correctIDs = new ArrayList<>();
 		correctIDs.add("1");
 		correctIDs.add("2");
-		returnedIDs = DB.getMyCreatedRequestInfo("extTransport", -55, "requestID");
+		returnedIDs = DB.getMyCreatedRequestInfo("extTransport", 5, "requestID");
 		assertEquals(correctIDs, returnedIDs);
 	}
 
 	@Test
 	@DisplayName("testGetRequestIDs3: No Data")
 	public void testGetRequestIDs3() {
-
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
 		ArrayList<String> returnedIDs;
-		returnedIDs = DB.getMyCreatedRequestInfo("extTransport", -99, "requestID");
+		returnedIDs = DB.getMyCreatedRequestInfo("extTransport", 1, "requestID");
 		assertEquals(0, returnedIDs.size());
 	}
 
@@ -818,7 +819,8 @@ public class DatabaseTests {
 		DB.addMedicineRequest(2, 5, "test3", "drugs3", 4, "1ml", "take once a day", "Nupur");
 
 
-		ArrayList<String> returnedAssignees = DB.getMyCreatedRequestInfo("medDelivery", -1, "assigneeID");
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
+		ArrayList<String> returnedAssignees = DB.getMyCreatedRequestInfo("medDelivery", 6, "assigneeID");
 		ArrayList<String> correctAssignees = new ArrayList<>();
 		correctAssignees.add("3");
 		correctAssignees.add("4");
@@ -829,7 +831,8 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetRequestAssignees3: no data")
 	public void testGetRequestAssignees3() {
-		ArrayList<String> returnedAssignees = DB.getMyCreatedRequestInfo("medDelivery", -1, "assigneeID");
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
+		ArrayList<String> returnedAssignees = DB.getMyCreatedRequestInfo("medDelivery", 1, "assigneeID");
 		assertEquals(0, returnedAssignees.size());
 	}
 
@@ -875,7 +878,8 @@ public class DatabaseTests {
 		DB.addMedicineRequest(1, 4, "test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
 		DB.addMedicineRequest(2, 3, "test3", "drugs3", 4, "1ml", "take once a day", "Nupur");
 
-		ArrayList<String> returnedLocations = DB.getRequestLocations("medDelivery", -50);
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
+		ArrayList<String> returnedLocations = DB.getRequestLocations("medDelivery", 5);
 		ArrayList<String> correctLocations = new ArrayList<>();
 		correctLocations.add("long name #1");
 		correctLocations.add("long name #2");
@@ -886,8 +890,8 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetRequestLocations3 : No Data")
 	public void testGetRequestLocations3() {
-
-		ArrayList<String> returnedLocations = DB.getRequestLocations("medDelivery", -1);
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
+		ArrayList<String> returnedLocations = DB.getRequestLocations("medDelivery", 1);
 		assertEquals(0, returnedLocations.size());
 	}
 
@@ -1026,8 +1030,9 @@ public class DatabaseTests {
 
 
 	@Test
-	@DisplayName("testGetRequestLocations")
+	@DisplayName("testFunction")
 	public void testFunction() {
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
 
 		//Visitors:
 		// - have access to floral Delivery
@@ -1111,7 +1116,7 @@ public class DatabaseTests {
 		correctLongNames.add("Emergency Department");
 
 
-		ArrayList<String> locationArray = DB.getRequestLocations("extTransport", -1);
+		ArrayList<String> locationArray = DB.getRequestLocations("extTransport", 1);
 
 		assertEquals(correctLongNames, locationArray);
 	}
@@ -1709,4 +1714,23 @@ public class DatabaseTests {
 		assertTrue(DB.isUserCovidSafe(2));
 	}
 
+	@Test
+	@DisplayName("ParkingTests")
+	public void ParkingTests() {
+		System.out.println("This is where all the Parking related database tests are");
+
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		DB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
+		DB.addNode("ePARK00101", 381, 1725, "1", "Parking", "PARK", "Left Parking Lot Spot 001", "Parking Left 001");
+		DB.addNode("test233", 22, 33, "1", "BTM", "WALK", "long", "short");
+
+		assertNull(DB.whereDidIPark(1));
+		assertNull(DB.whereDidIPark(2));
+
+		assertTrue(DB.submitParkingSlot("ePARK00101", 1));
+		assertTrue(DB.submitParkingSlot("test233", 2));   // node is not of type PARK, stores null in table
+
+		assertEquals("ePARK00101", DB.whereDidIPark(1));
+		assertNull(DB.whereDidIPark(2));
+	}
 }

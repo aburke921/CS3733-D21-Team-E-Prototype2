@@ -245,19 +245,19 @@ Create Table aubonPainMenu
 
 Create Table ToDo
 (
-	ToDoID int Primary Key,
-	userID varchar(31) references userAccount Not Null,
-	title varchar(31) Not Null,
-	status int Not Null, -- normal/complete/archived/deleted/...
-	priority int Not Null, -- 1/2/3/...
+	ToDoID           int Primary Key,
+	userID           varchar(31) References userAccount Not Null,
+	title            varchar(31)                        Not Null,
+	status           int                                Not Null, -- normal/complete/archived/deleted/...
+	priority         int                                Not Null, -- 1/2/3/...
 
-	scheduledTime Time, -- nullable, edited frequently
-	nodeID varchar(31) references node, -- nullable
-	requestID int references requests, -- nullable, auto-add to list when assigned
-	appointmentID int references appointment, -- nullable
-	detail varchar(255),
-	expectedTime Time, -- how long it would take
-	notificationTime Time -- eg. remind me 30 mins before this (send email)
+	scheduledTime    Time,                                        -- nullable, edited frequently
+	nodeID           varchar(31) References node,                 -- nullable
+	requestID        int References requests,                     -- nullable, auto-add to list when assigned
+	appointmentID    int References appointment,                  -- nullable
+	detail           varchar(255),
+	expectedTime     Time,                                        -- how long it would take
+	notificationTime Time                                         -- eg. remind me 30 mins before this (send email)
 );
 
 

@@ -700,14 +700,21 @@ public class PathFinder {
 
                 PathTransition transition = new PathTransition();
                 transition.setNode(ball);
-                double duration = distance / 160;
-                transition.setDuration(Duration.seconds(duration));
+
+                if(distance > 100){
+                    double duration = distance / 150;
+                    transition.setDuration(Duration.seconds(duration));
+                } else {
+                    transition.setDuration(Duration.seconds(1));
+                }
+
                 transition.setPath(polyline);
                 transition.setCycleCount(PathTransition.INDEFINITE);
                 transition.play();
 
                 //add all objects to the scene
                 pane.getChildren().addAll(g);
+
             } else {
                 System.out.println("No path on this floor");
                 //todo snackbar to say no nodes on this floor?

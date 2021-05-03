@@ -102,9 +102,8 @@ public class createAccount {
 		});
 
 		//First & last Name validators
-		RegexValidator notEmptyValidator = new RegexValidator();
+		RequiredFieldValidator notEmptyValidator = new RequiredFieldValidator();;
 		notEmptyValidator.setMessage("Input Required");
-		notEmptyValidator.setRegexPattern("^(?!\\s*$).+");
 
 		firstName.getValidators().add(notEmptyValidator);
 		firstName.focusedProperty().addListener((o, oldVal, newVal) -> {

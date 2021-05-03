@@ -94,6 +94,26 @@ public class createAccount {
 				password.validate();
 			}
 		});
+
+		//First & last Name validators
+		RegexValidator notEmptyValidator = new RegexValidator();
+		notEmptyValidator.setMessage("Input Required");
+		notEmptyValidator.setRegexPattern("^(?!\\s*$).+");
+
+		firstName.getValidators().add(notEmptyValidator);
+		firstName.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				firstName.validate();
+			}
+		});
+
+		lastName.getValidators().add(notEmptyValidator);
+		lastName.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				lastName.validate();
+			}
+		});
+
 	}
 
 	public void createAccountButton(ActionEvent event) {

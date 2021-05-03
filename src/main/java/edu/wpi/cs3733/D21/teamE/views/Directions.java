@@ -13,18 +13,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.event.ActionEvent;
 import javafx.scene.text.Text;
-import org.jetbrains.annotations.NotNull;
 
-import javax.sound.midi.SysexMessage;
 import java.io.IOException;
 import java.util.*;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
+import static org.apache.commons.lang3.text.WordUtils.wrap;
 
 
 public class Directions {
@@ -64,7 +63,7 @@ public class Directions {
             App.setShowHelp(false);
             App.setShowLogin(true);
             App.setStackPane(stackPane);
-            App.setPageTitle("Home");
+            App.setPageTitle("Directions to BWH");
             App.setHelpText(""); //todo help text
             appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
             appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
@@ -100,22 +99,27 @@ public class Directions {
                 str = str.replaceAll("\\<.*?\\>", "");
                 str = str.substring(str.indexOf("\"")+1);
                 String dir = str.substring(0, str.indexOf("\""));
+                dir = dir.replaceAll("&nbsp;", " ");
+                dir = wrap(dir, 100, null, false);
                 directions.add(dir);
             }
             JFXListView<String> listView = new JFXListView<>();
             listView.getItems().addAll(directions);
             listView.setPrefHeight(USE_COMPUTED_SIZE);
+            listView.setSelectionModel(new NoSelectionModel<String>());
+            listView.getStyleClass().add("directions");
 
-            JFXDialogLayout error = new JFXDialogLayout();
-            error.setHeading(new Text("Directions " + (toBWH ? "To" : "From") + " Brigham and Women's Hospital " + (toBWH ? ("From " + trip.startAddress) : ("To " + trip.endAddress)) + "\nBy " + DirectionsController.getMode() + "\tDistance: " + trip.distance + "\tDuration: " + trip.duration));
-            error.setBody(listView);
-            error.setPrefHeight(USE_COMPUTED_SIZE);
-            JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+            JFXDialogLayout popup = new JFXDialogLayout();
+            popup.setHeading(new Text("Directions " + (toBWH ? "To" : "From") + " Brigham and Women's Hospital " + (toBWH ? ("From " + trip.startAddress) : ("To " + trip.endAddress)) + "\nBy " + DirectionsController.getMode() + "\tDistance: " + trip.distance + "\tDuration: " + trip.duration));
+            popup.setBody(listView);
+            popup.setPrefHeight(USE_COMPUTED_SIZE);
+            JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
+            dialog.getStyleClass().add("directionsDialog");
 
             dialog.setMaxWidth(800);
             dialog.setPrefWidth(800);
-            error.setMaxWidth(800);
-            error.setPrefWidth(800);
+            popup.setMaxWidth(800);
+            popup.setPrefWidth(800);
 
             int fullSize = listView.getItems().size() * 35 + 120;
             if (fullSize > 500) {
@@ -131,7 +135,7 @@ public class Directions {
 
                 }
             });
-            error.setActions(okay);
+            popup.setActions(okay);
             dialog.show();
 
         } catch (IOException exception) {
@@ -187,8 +191,6 @@ public class Directions {
 
     @FXML
     private void toDefault(ActionEvent event) {
-        //DirectionsController.close();
-        // TODO: Fix exit and reload
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
             App.changeScene(root);

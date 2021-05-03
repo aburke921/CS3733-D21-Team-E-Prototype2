@@ -200,11 +200,6 @@ JFXButton:hover FontAwesomeIconView {
     -jfx-header-color: -fx--primary-dark; /*header text color*/
 }
 
-JFXListView {
-
-}
-
-
 .icon-button {
     -fx-fill: WHITE;
 }
@@ -217,6 +212,7 @@ JFXListView {
 .transit-button-unselected {
     -jfx-button-type: RAISED;
     -fx-background-color: -fx--primary-light;
+}
 
 .floor-change Label{
     -fx-font-size: 10px;
@@ -229,4 +225,46 @@ JFXListView {
 
 .floor-change:hover Label{
     visibility: false;
+}
+
+/* ListView CSS from: https://blog.ngopal.com.np/2012/07/11/customize-scrollbar-via-css/*/
+
+.directions .jfx-rippler{
+    -jfx-rippler-fill: rgba(255,255,255,0);
+}
+
+.directions{
+    -fx-border-color:derive(gray,80%);
+}
+
+/* The main scrollbar CSS class of ListView */
+.directions .scroll-bar:horizontal {
+    -fx-pref-width: 0;
+}
+
+.directions  .scroll-bar:vertical{
+    -fx-pref-width: 12;
+    -fx-background-color:transparent;
+
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+.directions .increment-button ,.mylistview .decrement-button {
+    -fx-background-color:transparent;
+    -fx-border-color:derive(gray,80%);
+}
+
+/* The main scrollbar **track** CSS class  */
+.directions .scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color:derive(gray,80%);
+    -fx-background-radius: 0em;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.directions .scroll-bar:vertical .thumb {
+    -fx-background-color: -fx--primary;
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+
 }

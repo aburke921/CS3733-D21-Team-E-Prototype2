@@ -247,12 +247,14 @@ public class PathFinder {
         JFXListView<String> listView = new JFXListView<>();
         listView.getItems().addAll(directions);
         listView.setPrefHeight(USE_COMPUTED_SIZE);
+        listView.setSelectionModel(new NoSelectionModel<String>());
+        listView.getStyleClass().add("directions");
 
-        JFXDialogLayout error = new JFXDialogLayout();
-        error.setHeading(new Text("Detailed Path Directions"));
-        error.setBody(listView);
-        error.setPrefHeight(USE_COMPUTED_SIZE);
-        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
+        JFXDialogLayout popup = new JFXDialogLayout();
+        popup.setHeading(new Text("Detailed Path Directions"));
+        popup.setBody(listView);
+        popup.setPrefHeight(USE_COMPUTED_SIZE);
+        JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
         dialog.setMaxWidth(350);
         int fullSize = listView.getItems().size() * 35 + 120;
         if (fullSize > 425) {
@@ -268,7 +270,7 @@ public class PathFinder {
 
             }
         });
-        error.setActions(okay);
+        popup.setActions(okay);
         dialog.show();
     }
     /**

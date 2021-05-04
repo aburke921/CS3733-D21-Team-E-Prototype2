@@ -101,7 +101,7 @@ public class ServiceRequestStatus {
 //        }
         ArrayList<String> statusArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
         ArrayList<String> locationArray = DB.getRequestLocations(tableName, App.userID);
-        ArrayList<String> assigneeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "assigneeID");
+        ArrayList<String> assigneeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "AssigneeID");
         if(idArray.size() > 0) {
             System.out.println("Array size" + idArray.size());
             if (!inProgress.getChildren().isEmpty()) {

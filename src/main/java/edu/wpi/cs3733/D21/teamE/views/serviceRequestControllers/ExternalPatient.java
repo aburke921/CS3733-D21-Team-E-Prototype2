@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,6 +25,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
+
+import javax.mail.MessagingException;
 
 public class ExternalPatient extends ServiceRequestFormComponents {
 
@@ -115,7 +118,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	 * @param actionEvent
 	 */
 	@FXML
-	private void saveData(ActionEvent actionEvent) {
+	private void saveData(ActionEvent actionEvent) throws MessagingException {
 
 
 		if (validateInput()) {
@@ -138,6 +141,26 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 
 			super.handleButtonSubmit(actionEvent);
 
+			String email = DB.getEmail(App.userID);
+			String fullName = DB.getUserName(App.userID);
+			String assigneeName = userNames.get(assigneeIDIndex);
+			String locationName = locations.get(nodeIDIndex);
+			String body = "Hello " + fullName + ", \n\n" + "Thank you for making an External Patient Transport request." +
+					"Here is the summary of your request: \n\n" +
+					" - Type: " + type + "\n" +
+					" - Severity: " + severity + "\n" +
+					" - PatientID: " + patientID + "\n" +
+					" - ETA: " + ETA + "\n" +
+					" - Blood Pressure: " + bloodPressure + "\n" +
+					" - Temperature: " + temperature + "\n" +
+					" - Oxygen Level: " + oxygenLevel + "\n" +
+					" - Details: " + details + "\n" +
+					" - Assignee Name: " + assigneeName + "\n" +
+					" - Location: " + locationName + "\n\n" +
+					"If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+					"- Emerald Emus BWH";
+
+					sendEmail.sendRequestConfirmation(email, body);
 		}
 	}
 

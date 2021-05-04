@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -70,7 +72,7 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 	}
 
 	@FXML
-	void saveData(ActionEvent event) {
+	void saveData(ActionEvent event) throws MessagingException {
 		int index = locationInput.getSelectionModel().getSelectedIndex();
 		String node = nodeID.get(index);
 		String assignee = assignedPersonnel.getSelectionModel().getSelectedItem();
@@ -78,6 +80,22 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 		String language = languageSelection.getSelectionModel().getSelectedItem();
 
 		super.handleButtonSubmit(event);
+
+		//For email implementation later
+//		String email = DB.getEmail(App.userID);
+//		String fullName = DB.getUserName(App.userID);
+////		String assigneeName = userNames.get(assigneeIDIndex);
+//		String locationName = locations.get(index);
+//		String body = "Hello " + fullName + ", \n\n" + "Thank you for making a Language Interpretation request." +
+//				"Here is the summary of your request: \n\n" +
+//				" - Location: " + locationName + "\n" +
+//				" - Assignee Name: " + assignee + "\n\n" +
+//				" - descrip: " + descrip + "\n" +
+//				" - language: " + language + "\n\n" +
+//				"If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+//				"- Emerald Emus BWH";
+//
+//		sendEmail.sendRequestConfirmation(email, body);
 	}
 
 	@FXML

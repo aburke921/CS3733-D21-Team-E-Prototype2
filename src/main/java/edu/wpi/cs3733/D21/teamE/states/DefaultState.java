@@ -66,6 +66,15 @@ public class DefaultState {
                     ex.printStackTrace();
                 }
                 break;
+            case "scheduleAppointmentButton":
+                try {
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Appointment.fxml"));
+                App.changeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
         }
+
+
     }
 }

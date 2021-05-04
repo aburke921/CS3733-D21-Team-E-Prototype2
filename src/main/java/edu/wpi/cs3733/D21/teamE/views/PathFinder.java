@@ -221,6 +221,7 @@ public class PathFinder {
         }
     }
 
+
     /**
      * Gets the currently selected item from {@link #endLocationComboBox} dropdown.
      * @param event calling event info.
@@ -685,6 +686,7 @@ public class PathFinder {
 
                         Label floorLabel = null;
                         FlowPane flowPane = new FlowPane();
+                        String destFloor = "";
 
                         //if the current node is a stair or an elevator, add a label
                         if (node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV")) {
@@ -702,6 +704,7 @@ public class PathFinder {
                                     if(nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV")) {
                                         //create string for label
                                         String toFloor = "Go to Floor " + nextNode.get("floor");
+                                        destFloor = nextNode.get("floor");
 
                                         //add string to label
                                         floorLabel = new Label(toFloor);
@@ -738,6 +741,12 @@ public class PathFinder {
 
                     if(floorLabel != null) {
                         //if a floor label was made, line and node circle along with the label and its parent flowPane
+                        String finalDestFloor = destFloor;
+
+                        floorLabel.setOnMouseClicked(e -> {
+                            setCurrentFloor(finalDestFloor);
+                        });
+
                         g.getChildren().addAll(line, circle, flowPane);
                     } else {
                         //otherwise, only add the line and node circle

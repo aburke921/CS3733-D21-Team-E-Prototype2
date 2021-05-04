@@ -8,6 +8,8 @@
     -fx--secondary: #546e7a;
     -fx--secondary-light: #819ca9;
     -fx--secondary-dark: #29434e;
+
+    -fx--error: #D34336;
 }
 
 /*--------------------------
@@ -29,6 +31,24 @@ JFXTextField:hover, JFXTextArea:hover, JFXComboBox:hover, JFXPasswordField:hover
 }
 
 JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField:pressed {}
+
+/*Error Styles*/
+.jfx-text-field:error, .jfx-password-field:error, .jfx-text-area:error {
+    -jfx-focus-color: -fx--error;
+    -jfx-unfocus-color: -fx--error;
+}
+
+/*Error Styles*/
+.jfx-text-field .error-label, .jfx-password-field .error-label, .jfx-text-area .error-label {
+    -fx-text-fill: -fx--error;
+    -fx-font-size: 0.75em;
+}
+
+/*Error Styles*/
+.jfx-text-field .error-icon, .jfx-password-field .error-icon, .jfx-text-area .error-icon {
+    -fx-text-fill: -fx--error;
+    -fx-font-size: 1em;
+}
 
 .submit-button {
     -jfx-button-type: RAISED;
@@ -278,9 +298,7 @@ transit-button{
     -fx-border-width: 1px;
 }
 
-.floor-change:hover Label{
-    visibility: false;
-}
+
 
 /* ListView CSS from: https://blog.ngopal.com.np/2012/07/11/customize-scrollbar-via-css/*/
 

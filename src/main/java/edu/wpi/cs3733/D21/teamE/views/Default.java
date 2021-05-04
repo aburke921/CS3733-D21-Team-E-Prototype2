@@ -59,6 +59,9 @@ public class Default {
     @FXML // fx:id="scheduleAppointmentButton"
     private JFXButton scheduleAppointmentButton;
 
+    @FXML // fx:id="covidSurveyStatusButton"
+    private JFXButton covidSurveyStatusButton;
+
     @FXML // fx:id="algo"
     private JFXComboBox algo;
 
@@ -291,7 +294,7 @@ public class Default {
             algo.setVisible(false);
             applyChange.setVisible(false);
             userManagementButton.setVisible(false);
-
+            covidSurveyStatusButton.setVisible(false);
         }
 
         if (App.userID == 0) {

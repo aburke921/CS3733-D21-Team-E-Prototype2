@@ -98,12 +98,12 @@
                                     </HBox>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <JFXButton fx:id="covidSurveyStatusButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Covid Survey Status" textFill="#039be5" wrapText="true">
+                                          <JFXButton fx:id="scheduleAppointmentButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Schedule Appointment" textFill="#039be5" wrapText="true">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
                                              <graphic>
-                                                <FontAwesomeIconView glyphName="CLIPBOARD" size="40" />
+                                                <FontAwesomeIconView glyphName="CALENDAR" size="30" />
                                              </graphic>
                                              <HBox.margin>
                                                 <Insets right="50.0" />
@@ -135,16 +135,13 @@
                                                 <Insets right="50.0" />
                                              </HBox.margin>
                                              <children>
-                                                <JFXButton fx:id="scheduleAppointmentButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Schedule Appointment" textFill="#039be5" wrapText="true">
+                                                <JFXButton fx:id="covidSurveyStatusButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Covid Survey Status" textFill="#039be5" wrapText="true">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
                                                    <graphic>
-                                                      <FontAwesomeIconView glyphName="CALENDAR" size="30" />
+                                                      <FontAwesomeIconView glyphName="CLIPBOARD" size="40" />
                                                    </graphic>
-                                                   <VBox.margin>
-                                                      <Insets />
-                                                   </VBox.margin>
                                                 </JFXButton>
                                                 <JFXButton fx:id="userManagementButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="User Management" textFill="#039be5" wrapText="true">
                                                    <font>

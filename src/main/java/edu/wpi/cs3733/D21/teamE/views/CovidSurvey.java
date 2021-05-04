@@ -1,15 +1,18 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
-import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.Time;
 import edu.wpi.cs3733.D21.teamE.states.CovidSurveyState;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 
@@ -32,12 +35,30 @@ public class CovidSurvey extends ServiceRequests {
 	@FXML
 	private StackPane stackPane;
 
-	/**
-	 * Creates a popup if the user indicates any symptoms.
-	 */
-	@FXML
-	void popUp() {
-		App.newJFXDialogPopUp("","Exit","Based on your response you should go home.",stackPane);
+	public static void exitPopUp(String heading, String button, String message, StackPane stackPane) {
+		System.out.println("DialogBox Posted");
+		JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+		jfxDialogLayout.setHeading(new Text(heading));
+		jfxDialogLayout.setBody(new Text(message));
+		JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+		JFXButton okay = new JFXButton(button);
+		okay.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
+					App.changeScene(root);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+		jfxDialogLayout.setActions(okay);
+		dialog.show();
+	}
+
+	private void exit() {
+		exitPopUp("","Exit","Thank you for filling out the form, please wait for it to be reviewed before entry.", stackPane);
 	}
 
 	/**
@@ -81,12 +102,9 @@ public class CovidSurvey extends ServiceRequests {
 			CovidSurveyObj newSurvey = new CovidSurveyObj(App.userID, 0, positiveTestBool, symptomsBool, closeContactBool, quarantineBool, noSymptomsBool, "");
 			DB.submitCovidSurvey(newSurvey, App.userID);
 			DB.addEntryRequest(newSurvey);
-			try {
-				Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurveyStatus.fxml"));
-				App.changeScene(root);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+			exit();
+		} else {
+			validateInput();
 		}
 	}
 

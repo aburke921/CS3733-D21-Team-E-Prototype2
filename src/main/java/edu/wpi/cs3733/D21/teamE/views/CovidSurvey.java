@@ -77,10 +77,10 @@ public class CovidSurvey extends ServiceRequests {
 			}
 
 			//TODO: based on what user has selected, set the string to either "Needs to be reviewed", "Safe", "Unsafe"
-			String status = " ";
-			CovidSurveyObj newSurvey = new CovidSurveyObj(App.userID, 0, positiveTestBool, symptomsBool, closeContactBool, quarantineBool, noSymptomsBool, status);
+
+			CovidSurveyObj newSurvey = new CovidSurveyObj(App.userID, 0, positiveTestBool, symptomsBool, closeContactBool, quarantineBool, noSymptomsBool, "");
 			DB.submitCovidSurvey(newSurvey, App.userID);
-//			DB.addEntryRequest(App.userID, newSurvey);
+			DB.addEntryRequest(newSurvey);
 			try {
 				Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurveyStatus.fxml"));
 				App.changeScene(root);

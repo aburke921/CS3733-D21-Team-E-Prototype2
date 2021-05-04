@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class CovidSurveyStatus {
 
     @FXML
-    private JFXTreeTableView covidSurveyTable;
+    private JFXTreeTableView<CovidSurveyObj> covidSurveyTable;
 
     @FXML
     private JFXButton markAsRiskButton;
@@ -39,14 +39,16 @@ public class CovidSurveyStatus {
 
     @FXML
     private void markAsSafe() {
-        int formNumber = ((CovidSurveyObj)(covidSurveyTable.getSelectionModel().getSelectedItem())).getFormNumber();
-//        DB.markAsCovidSafe(formNumber);
+        CovidSurveyObj formNumber = covidSurveyTable.getSelectionModel().getSelectedItem().getValue();
+        int formNum = formNumber.getFormNumber();
+        DB.markAsCovidSafe(formNum);
     }
 
     @FXML
     private void markAsRisk() {
-        int formNumber = ((CovidSurveyObj)(covidSurveyTable.getSelectionModel().getSelectedItem())).getFormNumber();
-//        DB.markAsCovidRisk(formNumber);
+        CovidSurveyObj formNumber = covidSurveyTable.getSelectionModel().getSelectedItem().getValue();
+        int formNum = formNumber.getFormNumber();
+        DB.markAsCovidRisk(formNum);
     }
 
     public void removeChildren(TreeItem<CovidSurveyObj> treeItem) {
@@ -78,7 +80,6 @@ public class CovidSurveyStatus {
 
        ArrayList<CovidSurveyObj> allCovidSurveys = DB.getCovidSurveys();
 
-//        ArrayList<CovidSurveyObj> allCovidSurveys = new ArrayList<>();
 
         if(allCovidSurveys.size() > 0) {
             if(!unchecked.getChildren().isEmpty()) {

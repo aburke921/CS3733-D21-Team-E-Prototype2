@@ -159,7 +159,7 @@
                                                       <Font size="18.0" />
                                                    </font>
                                                    <graphic>
-                                                      <FontAwesomeIconView glyphName="EDIT" size="40" />
+                                                      <FontAwesomeIconView glyphName="CLIPBOARD" size="40" />
                                                    </graphic>
                                                    <VBox.margin>
                                                       <Insets top="30.0" />

@@ -307,9 +307,10 @@
             <children>
                 <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" onAction="#toDefault" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
             <JFXToggleButton fx:id="drag" layoutX="794.0" text="Drag and Drop" />
-            <JFXButton fx:id="aligningButton" layoutX="684.0" layoutY="17.0" onAction="#alignSelectedNodes" styleClass="submit-button" text="Align Nodes" />
-            <JFXButton fx:id="finishAligningButton" layoutX="555.0" layoutY="16.0" onAction="#finishAligning" styleClass="submit-button" text="Finish Aligning" />
-            <JFXButton fx:id="refresh" layoutX="1018.0" layoutY="12.0" onAction="#refreshButton" styleClass="submit-button" text="Refresh All" />
+            <JFXButton fx:id="finishAligningButton" layoutX="478.0" layoutY="17.0" onAction="#finishAligning" styleClass="submit-button" text="Finish Aligning" />
+            <JFXButton fx:id="refresh" layoutX="980.0" layoutY="12.0" onAction="#refreshButton" styleClass="submit-button" text="Refresh All" />
+            <JFXButton fx:id="CSVButton" layoutX="1093.0" layoutY="12.0" onAction="#CSVPopUp" prefHeight="27.0" prefWidth="85.0" styleClass="submit-button" text="CSV" />
+            <JFXToggleButton fx:id="aligningButton" layoutX="614.0" text="Align Nodes" />
             </children>
         </AnchorPane>
     </children>

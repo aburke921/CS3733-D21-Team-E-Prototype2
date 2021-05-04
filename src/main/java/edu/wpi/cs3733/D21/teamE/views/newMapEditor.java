@@ -123,7 +123,7 @@ public class newMapEditor {
     @FXML
     private JFXButton horizontalButton;
     @FXML
-    private JFXButton aligningButton;
+    private JFXToggleButton aligningButton;
     @FXML
     private JFXButton editEdgeButton;
     @FXML
@@ -173,7 +173,7 @@ public class newMapEditor {
     private String clickedShortname;
 
 
-    private static boolean isAligning = false;
+    //private static boolean isAligning = false;
     private static boolean finishAligning = false;
     private ArrayList<Node> nodeArrayListToBeAligned = new ArrayList<Node>();
 
@@ -286,28 +286,28 @@ public class newMapEditor {
                 circle = new Circle(xCoord, yCoord, 2, Color.web("#dc721c"));
             }
             if(nodeArray.get(i).get("type").equals("LABS")) {
-                 circle = new Circle(xCoord, yCoord, 2, Color.web("#c900ae"));
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#c900ae"));
             }
             if(nodeArray.get(i).get("type").equals("REST")) {
-                 circle = new Circle(xCoord, yCoord, 2, Color.web("#b00404"));
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#b00404"));
             }
             if(nodeArray.get(i).get("type").equals("RETL")) {
-                 circle = new Circle(xCoord, yCoord, 2, Color.web("#3d4f9d"));
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#3d4f9d"));
             }
             if(nodeArray.get(i).get("type").equals("STAI")) {
-                 circle = new Circle(xCoord, yCoord, 2, Color.web("#007f52"));
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#007f52"));
             }
             if(nodeArray.get(i).get("type").equals("SERV")) {
-                 circle = new Circle(xCoord, yCoord, 2, Color.web("#005cff"));
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#005cff"));
             }
             if(nodeArray.get(i).get("type").equals("EXIT")) {
-                 circle = new Circle(xCoord, yCoord, 2, Color.web("#90e430"));
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#90e430"));
             }
             if(nodeArray.get(i).get("type").equals("PARK")) {
-                 circle = new Circle(xCoord, yCoord, 2, Color.web("#1299d2"));
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#1299d2"));
             }
             if(nodeArray.get(i).get("type").equals("WALK")) {
-                 circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+                circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
             }
             g.getChildren().add(circle);
         }
@@ -819,6 +819,7 @@ public class newMapEditor {
         //isAligning = false;
         //finishAligning = false;
         finishAligningButton.setVisible(false);
+        finishAligning = false;
     }
 
     /**
@@ -1032,12 +1033,6 @@ public class newMapEditor {
         //creating group for adding nodes/edges
 //        Group g = new Group();
 
-        //populates fields with information of selected node or edge in table
-        startTableClickHandlers();
-
-        //for clicks interacting with map
-        startMapClickHandler();
-
         //dragging nodes
         drag.setOnAction(e -> {
             if (drag.isSelected()) {
@@ -1075,18 +1070,31 @@ public class newMapEditor {
 
             }
         });
+
+
+        //populates fields with information of selected node or edge in table
+        startTableClickHandlers();
+
+        //for clicks interacting with map
+        startMapClickHandler();
+
     }
 
     private void startMapClickHandler() {
-
         //create image group
         Group g = new Group(); //todo see below todo.
-
+        //if(aligningButton.isSelected() == false) {
+        //finishAligning = false;
         pane.setOnMouseClicked(e -> {
-            //double click
-            if (e.getClickCount() == 2) {
-                if (isAligning) {
-                    finishAligningButton.setVisible(true);
+            aligningButton.setOnAction(f -> {
+                if (aligningButton.isSelected()) {
+                    newJFXDialogPopUp("Align Nodes", "Vertical", "Horizontal", "Cancel", "Which way would you like to assign your nodes?", this.stackPane);
+                }
+                finishAligningButton.setVisible(true);
+            });
+            if (aligningButton.isSelected()) {
+                //double click
+                if (e.getClickCount() == 2) {
                     //coordinates of click
                     double X = e.getX();
                     int xInt = (int) X;
@@ -1102,18 +1110,28 @@ public class newMapEditor {
                             //if node coordinates match click coordinates +- 1, autofill fields with node info
                             if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
                                 nodeArrayListToBeAligned.add(currentArrayOfAllNodes.get(i));
+                                idInput.setValue(currentArrayOfAllNodes.get(i).get("id"));
+                                floorInput.setValue(currentArrayOfAllNodes.get(i).get("floor"));
+                                longNameInput.setText(currentArrayOfAllNodes.get(i).get("longName"));
+                                shortNameInput.setText(currentArrayOfAllNodes.get(i).get("shortName"));
+                                xCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getX()));
+                                yCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getY()));
+                                typeInput.setValue(currentArrayOfAllNodes.get(i).get("type"));
+                                buildingInput.setValue(currentArrayOfAllNodes.get(i).get("building"));
                             }
                         }
                     }
+                    if (finishAligning) {
+                        //align nodes on clicked location
+                        alignNodesOnLocation(e.getX(), e.getY(), nodeArrayListToBeAligned, isVertical);
+                        //finishAligning = false;
+                        nodeArrayListToBeAligned.removeAll(nodeArrayListToBeAligned);
+                        aligningButton.setSelected(false);
+                        refresh();
+                    }
                 }
-                if (finishAligning) {
-                    //align nodes on clicked location
-                    alignNodesOnLocation(e.getX(), e.getY(), nodeArrayListToBeAligned, isVertical);
-                    //finishAligning = false;
-                    nodeArrayListToBeAligned.removeAll(nodeArrayListToBeAligned);
-                    refresh();
-                }
-                if (!isAligning && !finishAligning) {
+            } else {
+                if (e.getClickCount() == 2) {
                     //ints for displaying
                     double xCoordScale = e.getX();
                     xCoordScale = xCoordScale * scale;
@@ -1141,16 +1159,15 @@ public class newMapEditor {
                     typeInput.setValue(null);
                     xCordInput.setText(Integer.toString(xCordIntScale));
                     yCordInput.setText(Integer.toString(yCordIntScale));
-                }
-            }
-            else if (e.getClickCount() == 1) {
+                } else if (e.getClickCount() == 1) {
+                    System.out.println("inSelected");
                     //coordinates of click
                     double X = e.getX();
                     int xInt = (int) X;
                     double Y = e.getY();
                     int yInt = (int) Y;
                     for (int i = 0; i < currentArrayOfAllNodes.size(); i++) {
-                        if(currentArrayOfAllNodes.get(i).get("floor").equals(currentFloor)) {
+                        if (currentArrayOfAllNodes.get(i).get("floor").equals(currentFloor)) {
                             //coordinates of current node
                             double nodeX = currentArrayOfAllNodes.get(i).getX() / scale;
                             int nodeXInt = (int) nodeX;
@@ -1186,7 +1203,6 @@ public class newMapEditor {
                                     clickedShortname = currentArrayOfAllNodes.get(i).get("shortName");
 
 
-
                                 }
                                 if (selection == 2) {
                                     endLocation.setValue(currentArrayOfAllNodes.get(i).get("longName"));
@@ -1196,12 +1212,14 @@ public class newMapEditor {
                                     edgeID.setValue(startID + "_" + endID);
                                     selection = 0;
 
+
                                 }
                             }
 
                         }
                     }
                 }
+            }
         });
     }
 
@@ -1269,15 +1287,15 @@ public class newMapEditor {
      * @param message Message to display in the dialog box.
      * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
      */
-    public static void newJFXDialogPopUp(String heading, String button1, String button2, String beginButton, String message, StackPane stackPane) {
+    public static void newJFXDialogPopUp(String heading, String vertical, String horizontal, String cancelButton, String message, StackPane stackPane) {
         System.out.println("DialogBox Posted");
         JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
         jfxDialogLayout.setHeading(new Text(heading));
         jfxDialogLayout.setBody(new Text(message));
         JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
-        JFXButton okay = new JFXButton(beginButton);
-        JFXButton opt1 = new JFXButton(button1);
-        JFXButton opt2 = new JFXButton(button2);
+        JFXButton okay = new JFXButton(cancelButton);
+        JFXButton opt1 = new JFXButton(vertical);
+        JFXButton opt2 = new JFXButton(horizontal);
         opt1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -1306,7 +1324,7 @@ public class newMapEditor {
     }
 
     public void finishAligning(ActionEvent e) {
-        isAligning = false;
+        //isAligning = false;
         finishAligning = true;
     }
 
@@ -1315,7 +1333,7 @@ public class newMapEditor {
      */
     @FXML
     public void alignSelectedNodes(ActionEvent e) {
-        isAligning = true;
+        //isAligning = true;
         newJFXDialogPopUp("Align Nodes", "Vertical", "Horizontal", "Cancel", "Select the nodes you would like to align", stackPane);
         finishAligning = false;
 
@@ -1450,7 +1468,7 @@ public class newMapEditor {
      * @param actionEvent
      */
     public void toEdgeMode(ActionEvent actionEvent) {
-        buttonSelection = 0;
+        //edgeButtonSelection = 0;
         edgeButtonSelection++;
         if(edgeButtonSelection == 1) {
             editEdgeButton.setText("Cancel");
@@ -1468,7 +1486,10 @@ public class newMapEditor {
         } else if(edgeButtonSelection == 2) {
             editEdgeButton.setText("Edit Edges");
             editEdgeButton.setStyle("-fx-style-class: submit-button");
-            nodeVBox.setVisible(false);
+            nodeVBox.toFront();
+            if(buttonSelection == 1) {
+                nodeVBox.setVisible(true);
+            }
             edgeVBox.setVisible(false);
             edgeButtonSelection = 0;
         }
@@ -1480,7 +1501,7 @@ public class newMapEditor {
      * @param actionEvent
      */
     public void toNodeMode(ActionEvent actionEvent) {
-        edgeButtonSelection = 0;
+        //edgeButtonSelection = 0;
         buttonSelection++;
         if(buttonSelection == 1) {
             editNodeButton.setText("Cancel");
@@ -1504,9 +1525,53 @@ public class newMapEditor {
             editNodeButton.setText("Edit Nodes");
             editNodeButton.setStyle("-fx-style-class: submit-button");
             nodeVBox.setVisible(false);
-            edgeVBox.setVisible(false);
+            edgeVBox.toFront();
+            if(edgeButtonSelection == 1) {
+                edgeVBox.setVisible(true);
+            }
             buttonSelection = 0;
         }
+    }
+    /**
+     *
+     */
+    public void CSVPopUp(ActionEvent e) {
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setHeading(new Text("CSV Handler"));
+        jfxDialogLayout.setBody(new Text("What action would you like to take?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton upload = new JFXButton("Upload CSV");
+        JFXButton retrieve = new JFXButton("Retrieve CSV");
+        JFXButton cancel = new JFXButton("Cancel");
+        upload.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                fileOpenerNode(event);
+                dialog.close();
+
+            }
+        });
+        retrieve.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    openFileNode(event);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(upload, retrieve, cancel);
+        dialog.show();
     }
 
     /**
@@ -1527,7 +1592,7 @@ public class newMapEditor {
      * @param message Message to display in the dialog box.
      * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
      */
-    public static void mapPopUp(String heading, String button, String cancelButton, String message, StackPane stackPane) {
+    public static void PopUp(String heading, String button, String cancelButton, String message, StackPane stackPane) {
         System.out.println("DialogBox Posted");
         JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
         jfxDialogLayout.setHeading(new Text(heading));

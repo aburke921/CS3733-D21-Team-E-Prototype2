@@ -62,9 +62,11 @@ public class DirectionsController {
     @FXML // fx:id="walking"
     private JFXButton walking;
     private JFXButton currentlySelected; // Currently selected travel selection button
-    
+
     @FXML // fix:id="backButton"
     public Button backButton; // Value injected by FXMLLoader
+    @FXML // fx:id="lowerAnchorPane"
+    public AnchorPane lowerAnchorPane;
 
     @FXML // fx:id="toBWH"
     public JFXButton toBWH; // Get Directions to BWH button
@@ -96,12 +98,13 @@ public class DirectionsController {
 
         Stage primaryStage = App.getPrimaryStage();
 
-        leftAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+        
 
         leftAnchorPane.prefWidthProperty().bind(new DoubleBinding() {
             {
-                super.bind( primaryStage.widthProperty() );
+                super.bind(primaryStage.widthProperty());
             }
+
             @Override
             protected double computeValue() {
                 return primaryStage.widthProperty().getValue() * 2 / 5;
@@ -110,8 +113,9 @@ public class DirectionsController {
 
         imageStackPane.prefWidthProperty().bind(new DoubleBinding() {
             {
-                super.bind( primaryStage.widthProperty() );
+                super.bind(primaryStage.widthProperty());
             }
+
             @Override
             protected double computeValue() {
                 return primaryStage.widthProperty().getValue() * 3 / 5;
@@ -135,6 +139,7 @@ public class DirectionsController {
 
         imageAnchorPane.setCenterShape(true);
 
+        imageAnchorPane.minHeightProperty().bind(primaryStage.heightProperty());
         imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
         hospitalImageView.fitHeightProperty().bind(imageAnchorPane.heightProperty());
         primaryStage.setWidth(primaryStage.getWidth() + 0.0001);
@@ -144,6 +149,7 @@ public class DirectionsController {
      * Gets directions to/from BWH
      * Displays them in a dialog
      * Reads text fields
+     *
      * @param toBWH did the user request directions to or from BWH
      */
     @FXML
@@ -167,15 +173,15 @@ public class DirectionsController {
         listView.setSelectionModel(new NoSelectionModel<String>());
         listView.getStyleClass().add("directions");
 
-        listView.setCellFactory(param -> new ListCell<String>(){
+        listView.setCellFactory(param -> new ListCell<String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item==null) {
+                if (empty || item == null) {
                     setGraphic(null);
                     setText(null);
 
-                }else{
+                } else {
 
                     // set the width's
                     setMinWidth(param.getWidth() - 25);
@@ -204,6 +210,7 @@ public class DirectionsController {
             {
                 super.bind(imageStackPane.widthProperty());
             }
+
             @Override
             protected double computeValue() {
                 return imageStackPane.widthProperty().getValue() - 150;
@@ -213,6 +220,7 @@ public class DirectionsController {
             {
                 super.bind(imageStackPane.widthProperty());
             }
+
             @Override
             protected double computeValue() {
                 return imageStackPane.widthProperty().getValue() - 150;
@@ -240,6 +248,7 @@ public class DirectionsController {
 
     /**
      * Button handler for directions to BWH
+     *
      * @param actionEvent Button click action
      */
     public void toBWH(ActionEvent actionEvent) {
@@ -248,6 +257,7 @@ public class DirectionsController {
 
     /**
      * Button handler for directions from BWH
+     *
      * @param actionEvent Button click action
      */
     public void awayBWH(ActionEvent actionEvent) {
@@ -256,6 +266,7 @@ public class DirectionsController {
 
     /**
      * Switches which travel method button is being focused
+     *
      * @param button The button to change the highlight to
      */
     private void switchFocusButton(JFXButton button) {
@@ -266,6 +277,7 @@ public class DirectionsController {
 
     /**
      * Switches the travel mode
+     *
      * @param e Button click action
      */
     @FXML
@@ -296,6 +308,7 @@ public class DirectionsController {
 
     /**
      * Switches scene back to default page
+     *
      * @param event Button click event
      */
     @FXML
@@ -306,14 +319,5 @@ public class DirectionsController {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
-
-    /**
-     * Enables the get directions buttons if the address field is filled. Disables it if empty
-     */
-    @FXML
-    private void validateButton() {
-        toBWH.setDisable(address.getText().isEmpty());
-        awayBWH.setDisable(address.getText().isEmpty());
     }
 }

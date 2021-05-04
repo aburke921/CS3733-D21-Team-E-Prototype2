@@ -22,12 +22,12 @@
                      <children>
                                 <AnchorPane fx:id="imageAnchorPane" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
-                                        <ImageView fx:id="hospitalImageView" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                        <ImageView fx:id="hospitalImageView" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                         <StackPane fx:id="imageStackPane" alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane fx:id="leftAnchorPane" minWidth="-Infinity" prefWidth="451.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <VBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="55.0">
+                                    <VBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
                                         <JFXTextField fx:id="address" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="325.0" promptText="Address" />
                                         <HBox alignment="CENTER">
                                             <children>
@@ -107,9 +107,9 @@
                                             </VBox.margin>
                                         </HBox>
                                     </VBox>
-                                    <AnchorPane fx:id="lowerAnchorPane" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0">
+                                    <AnchorPane fx:id="lowerAnchorPane" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="100.0" AnchorPane.bottomAnchor="65.0">
                                         <children>
-                                            <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" maxHeight="29.0" maxWidth="60.0" onAction="#toDefault" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="15.0" />
+                                            <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" maxHeight="29.0" maxWidth="60.0" onAction="#toDefault" prefHeight="29.0" prefWidth="60.0" styleClass="back-button" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="15.0" />
                                         </children>
                                     </AnchorPane>
                                 </AnchorPane>

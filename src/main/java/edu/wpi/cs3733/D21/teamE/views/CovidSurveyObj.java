@@ -2,7 +2,9 @@ package edu.wpi.cs3733.D21.teamE.views;
 
 //import com.sun.org.apache.xml.internal.security.algorithms.implementations.IntegrityHmac;
 
-public class CovidSurveyObj {
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
+public class CovidSurveyObj extends RecursiveTreeObject<CovidSurveyObj> {
 
     private Integer user;
     private String userDisplay;
@@ -20,7 +22,7 @@ public class CovidSurveyObj {
     private String noSymptomsDisplay;
     private String status;
 
-    public CovidSurveyObj(Integer user, Integer formNumber, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms) {
+    public CovidSurveyObj(Integer user, Integer formNumber, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms, String status) {
         this.user = user;
         this.userDisplay = user.toString();
         this.formNumber = formNumber;
@@ -35,7 +37,7 @@ public class CovidSurveyObj {
         this.quarantineDisplay = quarantine.toString();
         this.noSymptoms = noSymptoms;
         this.noSymptomsDisplay = noSymptoms.toString();
-        this.status = "Needs to be reviewed";
+        this.status = status;
     }
 
     public CovidSurveyObj(String userDisplay) {

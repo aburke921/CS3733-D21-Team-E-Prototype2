@@ -3,12 +3,16 @@ package edu.wpi.cs3733.D21.teamE;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -455,8 +459,9 @@ public class DB {
 	/**
 	 * This adds a entry request form to the table
 	 */
-	public static void addEntryRequest(int userID, int assigneeID, int surveyResult, int decision) {
-		RequestsDB.addEntryRequest(userID, assigneeID, surveyResult, decision);
+	public static void addEntryRequest(CovidSurveyObj covidSurveyObj) {
+
+		RequestsDB.addEntryRequest(covidSurveyObj);
 	}
 
 	// Editing Tables:
@@ -606,15 +611,9 @@ public class DB {
 		return RequestsDB.editReligiousRequest(requestID, roomID, religionType, description);
 	}
 
-	/**
-	 * This edits a entry request form that is already in the database
-	 * @param requestID    the ID that specifies which sanitation form that is being edited
-	 * @param surveyResult the new surveyResult that the user is getting to update their form
-	 * @param decision     the new decision the user is assigned to
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editEntryRequest(int requestID, int surveyResult, int decision) {
-		return RequestsDB.editEntryRequest(requestID, surveyResult, decision);
+
+	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {
+		return RequestsDB.editEntryRequest(covidSurveyObj);
 	}
 
 		// Querying Tables:
@@ -752,12 +751,12 @@ public class DB {
 
 	/**
 	 * Submits a Covid Survey to the server
-	 * @param surveyResults is the result int that we are submitting
+	 * @param covidSurveyObj is the result int that we are submitting
 	 * @param userID        is the user's ID that we are submitting
 	 * @return true if successfully changed one row, false otherwise
 	 */
-	public static boolean submitCovidSurvey(int surveyResults, int userID) {
-		return UserAccountDB.submitCovidSurvey(surveyResults, userID);
+	public static boolean submitCovidSurvey(CovidSurveyObj covidSurveyObj, int userID) {
+		return UserAccountDB.submitCovidSurvey(covidSurveyObj, userID);
 	}
 
 	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
@@ -806,4 +805,32 @@ public class DB {
 	public static String whereDidIPark(int userID) {
 		return UserAccountDB.whereDidIPark(userID);
 	}
+
+	//This should return the list of information within the table for covid surveys as a list of covid survey objects
+	public static ArrayList<CovidSurveyObj> getCovidSurveys() {
+		return RequestsDB.getCovidSurveys();
+	}
+
+	//This should mark a survey within the table as safe for entry
+	public static int markAsCovidSafe(int formNumber) {
+		return RequestsDB.markAsCovidSafe(formNumber);
+	}
+
+	//This should mark a survey within the table as unsafe for entry
+	public static int markAsCovidRisk(int formNumber) {
+		return RequestsDB.markAsCovidRisk(formNumber);
+	}
+
+	public static int updateUserAccountCovidStatus(int userID, String status) {
+		return RequestsDB.updateUserAccountCovidStatus(userID, status);
+	}
+
+	public static boolean isUserCovidRisk(int userID) {
+		return UserAccountDB.isUserCovidRisk(userID);
+	}
+
+	public static boolean isUserCovidUnmarked(int userID) {
+		return UserAccountDB.isUserCovidUnmarked(userID);
+	}
+
 }

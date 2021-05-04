@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.views.CovidSurvey;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import javafx.collections.FXCollections;
@@ -11,6 +12,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.swing.plaf.basic.BasicGraphicsUtils;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -718,7 +720,13 @@ public class RequestsDB {
 	 * This adds a entry request form to the table
 	 * each time a new entry is added, status is automatically set as "Needs to be reviewed"
 	 */
-	public static void addEntryRequest(int userID, int assigneeID, boolean positiveTest, boolean symptoms, boolean closeContact, boolean quarantine, boolean noSymptoms) {
+	public static void addEntryRequest(CovidSurveyObj covidSurveyObj, int assigneeID) {
+		boolean positiveTest = covidSurveyObj.getPositiveTest();
+		boolean symptoms = covidSurveyObj.getSymptoms();
+		boolean closeContact = covidSurveyObj.getCloseContact();
+		boolean quarantine = covidSurveyObj.getQuarantine();
+		boolean noSymptoms = covidSurveyObj.getNoSymptoms();
+		int userID = covidSurveyObj.getUser();
 
 		addRequest(userID, assigneeID, "entryRequest");
 

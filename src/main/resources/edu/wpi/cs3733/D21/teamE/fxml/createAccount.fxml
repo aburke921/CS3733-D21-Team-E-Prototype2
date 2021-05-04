@@ -39,7 +39,7 @@
                                     </ImageView>
                                     <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <Label alignment="CENTER" prefHeight="23.0" prefWidth="381.0" style="-fx-text-fill: -fx--primary-dark;" text="Please Enter Credentials">
+                                          <Label alignment="CENTER" prefHeight="23.0" prefWidth="381.0" style="-fx-text-fill: -fx--primary-dark;" text="Create New Account">
                                              <font>
                                                 <Font name="Arial Bold" size="18.0" />
                                              </font>

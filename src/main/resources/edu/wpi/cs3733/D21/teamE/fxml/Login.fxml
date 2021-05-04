@@ -39,7 +39,7 @@
                                     </ImageView>
                                     <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                                        <children>
-                                                    <Label alignment="CENTER" prefHeight="23.0" prefWidth="381.0" style="-fx-text-fill: -fx--primary-dark;" text="Please Enter Email and Password">
+                                                    <Label alignment="CENTER" prefHeight="23.0" prefWidth="381.0" style="-fx-text-fill: -fx--primary-dark;" text="Sign in with Email and Password">
                                                         <font>
                                                             <Font name="Arial Bold" size="18.0" />
                                                         </font>

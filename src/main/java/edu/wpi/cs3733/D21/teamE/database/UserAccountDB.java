@@ -356,8 +356,9 @@ public class UserAccountDB {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
-		System.err.println("Error in submitCovidSurvey() from UserAccountDB");
+		//System.err.println("Error in submitCovidSurvey() from UserAccountDB");
 		return false;
 	}
 

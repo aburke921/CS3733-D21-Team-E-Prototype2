@@ -3,6 +3,8 @@ package edu.wpi.cs3733.D21.teamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableView;
 import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.states.MenuPageState;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -154,14 +156,9 @@ public class MenuPage {
     }
 
     @FXML
-    private void toFoodDelivery(ActionEvent e) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/TeamE/fxml/updatedServiceRequests/FoodDelivery.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            System.out.println("Hi");
-            ex.printStackTrace();
-        }
+    private void switchScene(ActionEvent e) {
+        MenuPageState menuPageState = new MenuPageState();
+        menuPageState.switchScene(e);
     }
 
 }

@@ -305,7 +305,7 @@
         </AnchorPane>
         <AnchorPane fx:id="lowerAnchorPane" prefHeight="59.0" prefWidth="1244.0">
             <children>
-                <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" onAction="#toDefault" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
+                <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" onAction="#switchScene" prefHeight="29.0" prefWidth="60.0" styleClass="back-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
             <JFXToggleButton fx:id="drag" layoutX="794.0" text="Drag and Drop" />
             <JFXButton fx:id="finishAligningButton" layoutX="478.0" layoutY="17.0" onAction="#finishAligning" styleClass="submit-button" text="Finish Aligning" />
             <JFXButton fx:id="refresh" layoutX="980.0" layoutY="12.0" onAction="#refreshButton" styleClass="submit-button" text="Refresh All" />

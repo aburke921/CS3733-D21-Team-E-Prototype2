@@ -7,6 +7,7 @@
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -24,26 +25,31 @@
          <children>
             <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
+                  <FlowPane StackPane.alignment="TOP_LEFT">
+                     <children>
+                        <ImageView fx:id="background" fitHeight="1080.0" fitWidth="2000.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </FlowPane>
                   <BorderPane>
                      <center>
                         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="785.0" BorderPane.alignment="CENTER">
                            <children>
-                              <VBox maxWidth="600.0" prefHeight="582.0" prefWidth="1200.0">
+                              <VBox maxWidth="600.0" prefHeight="513.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-radius: 25px; -fx-background-radius: 25px;">
                                  <children>
-                                    <HBox maxWidth="600.0" prefHeight="501.0" prefWidth="600.0" styleClass="centerPane">
+                                    <HBox alignment="TOP_CENTER" maxWidth="600.0" prefHeight="433.0" prefWidth="600.0" styleClass="centerPane">
                                        <children>
-                                          <FlowPane prefHeight="361.0" prefWidth="299.0">
+                                          <FlowPane prefHeight="361.0" prefWidth="300.0">
                                              <children>
-                                                <VBox prefHeight="349.0" prefWidth="264.0">
+                                                <VBox prefHeight="349.0" prefWidth="260.0">
                                                    <children>
                                                       <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
                                                          <VBox.margin>
-                                                            <Insets top="20.0" />
+                                                            <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                       </JFXComboBox>
                                                       <JFXComboBox fx:id="requestTypeInput" prefHeight="27.0" prefWidth="295.0" promptText="Request Type">
                                                          <VBox.margin>
-                                                            <Insets bottom="10.0" top="20.0" />
+                                                            <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                          <items>
                                                             <FXCollections fx:factory="observableArrayList">
@@ -53,9 +59,9 @@
                                                             </FXCollections>
                                                          </items>
                                                       </JFXComboBox>
-                                                      <JFXComboBox fx:id="severityInput" prefHeight="27.0" prefWidth="291.0" promptText="Severity">
+                                                      <JFXComboBox fx:id="severityInput" prefHeight="27.0" prefWidth="295.0" promptText="Severity">
                                                          <VBox.margin>
-                                                            <Insets bottom="10.0" top="20.0" />
+                                                            <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                          <items>
                                                             <FXCollections fx:factory="observableArrayList">
@@ -65,12 +71,12 @@
                                                             </FXCollections>
                                                          </items>
                                                       </JFXComboBox>
-                                                      <JFXTextField fx:id="patientIdInput" prefHeight="27.0" prefWidth="280.0" promptText="Patient ID #">
+                                                      <JFXTextField fx:id="patientIdInput" prefHeight="27.0" prefWidth="295.0" promptText="Patient ID #">
                                                          <VBox.margin>
-                                                            <Insets bottom="10.0" top="20.0" />
+                                                            <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                       </JFXTextField>
-                                                      <JFXComboBox fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
+                                                      <JFXComboBox fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="295.0" promptText="Assigned Personnel">
                                                          <VBox.margin>
                                                             <Insets top="20.0" />
                                                          </VBox.margin>
@@ -82,33 +88,33 @@
                                                 </VBox>
                                              </children>
                                           </FlowPane>
-                                          <FlowPane prefHeight="361.0" prefWidth="329.0">
+                                          <FlowPane prefHeight="361.0" prefWidth="300.0">
                                              <children>
-                                                <VBox prefHeight="363.0" prefWidth="259.0">
+                                                <VBox prefHeight="363.0" prefWidth="260.0">
                                                    <children>
                                                       <JFXTextField fx:id="bloodPressureInput" prefHeight="27.0" prefWidth="280.0" promptText="Blood Pressure">
                                                          <VBox.margin>
-                                                            <Insets top="20.0" />
+                                                            <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                       </JFXTextField>
-                                                      <JFXTextField fx:id="temperatureInput" prefHeight="27.0" prefWidth="280.0" promptText="Temperature">
+                                                      <JFXTextField fx:id="temperatureInput" prefHeight="27.0" prefWidth="295.0" promptText="Temperature">
                                                          <VBox.margin>
-                                                            <Insets top="20.0" />
+                                                            <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                       </JFXTextField>
-                                                      <JFXTextField fx:id="oxygenInput" prefHeight="27.0" prefWidth="280.0" promptText="Oxygen">
+                                                      <JFXTextField fx:id="oxygenInput" prefHeight="27.0" prefWidth="295.0" promptText="Oxygen">
                                                          <VBox.margin>
-                                                            <Insets top="20.0" />
+                                                            <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                       </JFXTextField>
-                                                      <JFXTextArea fx:id="descriptionInput" prefHeight="141.0" prefWidth="259.0" promptText="Detailed Description">
+                                                      <JFXTextArea fx:id="descriptionInput" prefHeight="141.0" prefWidth="295.0" promptText="Detailed Description">
                                                          <VBox.margin>
-                                                            <Insets bottom="10.0" top="20.0" />
+                                                            <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                       </JFXTextArea>
                                                       <JFXTextField fx:id="ETAInput" promptText="ETA">
                                                          <VBox.margin>
-                                                            <Insets top="20.0" />
+                                                            <Insets bottom="5.0" top="20.0" />
                                                          </VBox.margin>
                                                       </JFXTextField>
                                                       <GridPane>

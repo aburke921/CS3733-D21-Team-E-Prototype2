@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.UserManagement.User;
 
 import java.sql.*;
@@ -25,13 +26,13 @@ public class UserAccountDB {
 		String query = "Create Table userAccount " +
 				"( " +
 				"userID              Int Primary Key, " +
-				"email               Varchar(31) Unique Not Null, " +
+				"email               Varchar(100) Unique Not Null, " +
 				"password            Varchar(31)        Not Null, " +
 				"userType            Varchar(31)        Not Null, " +
 				"firstName           Varchar(31)        Not Null, " +
 				"lastName            Varchar(31)        Not Null, " +
 				"creationTime        Timestamp          Not Null, " +
-				"lastCovidSurvey     Int, " +
+				"covidStatus     varchar(31), " +
 				"lastCovidSurveyDate Date, " +
 				"lastParkedNodeID    Varchar(31) References node, " +
 				"Constraint userIDLimit Check ( userID != 0 ), " +
@@ -114,7 +115,7 @@ public class UserAccountDB {
 	 * @param lastName  this is the user's last name that is associated with the account
 	 */
 	public static void addUserAccount(String email, String password, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp, 0, Null, Null)";
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, 'visitor', ?, ?, Current Timestamp, '', Null, Null)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
 			prepState.setString(2, password);
@@ -139,7 +140,7 @@ public class UserAccountDB {
 	 * @param lastName  this is the user's last name that is associated with the account
 	 */
 	public static void addSpecialUserType(String email, String password, String userType, String firstName, String lastName) {
-		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp, 0, Null, Null)";
+		String insertUser = "Insert Into useraccount Values ((Select Count(*) From useraccount) + 1, ?, ?, ?, ?, ?, Current Timestamp, '', Null, Null)";
 		try (PreparedStatement prepState = connection.prepareStatement(insertUser)) {
 			prepState.setString(1, email);
 			prepState.setString(2, password);
@@ -334,24 +335,30 @@ public class UserAccountDB {
 		return listOfUsers;
 	}
 
+
 	/**
-	 * Submits a Covid Survey to the server
-	 * @param surveyResults is the result int that we are submitting
-	 * @param userID        is the user's ID that we are submitting
-	 * @return true if successfully changed one row, false otherwise
+	 *
+	 * @param covidSurveyObj is the covidSurveyObject
+	 * @param userID  is the user's ID that we are submitting
+	 * @return
 	 */
-	public static boolean submitCovidSurvey(int surveyResults, int userID) {
-		try (PreparedStatement preparedStatement = connection.prepareStatement(
-				"Update userAccount " +
-						"Set lastCovidSurvey = ?, lastCovidSurveyDate = Current Date " +
-						"Where userID = ?")) {
-			preparedStatement.setInt(1, surveyResults);
+	public static boolean submitCovidSurvey(CovidSurveyObj covidSurveyObj, int userID) {
+		String status = covidSurveyObj.getStatus();
+
+		String query = "Update userAccount Set covidStatus = ?, lastCovidSurveyDate = Current Date Where userID = ?";
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+			preparedStatement.setString(1, status);
 			preparedStatement.setInt(2, userID);
-			if (preparedStatement.executeUpdate() == 1) return true;
+			if (preparedStatement.executeUpdate() == 1) {
+				return true;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
-		System.err.println("Error in submitCovidSurvey() from UserAccountDB");
+		//System.err.println("Error in submitCovidSurvey() from UserAccountDB");
 		return false;
 	}
 
@@ -361,22 +368,61 @@ public class UserAccountDB {
 	 * @return true if user has a safe survey, false if user has a dangerous survey
 	 */
 	public static boolean isUserCovidSafe(int userID) {
-		try (PreparedStatement preparedStatement = connection.prepareStatement(
-				"Select Count(lastCovidSurvey) As isSafe " +
-						"From userAccount " +
-						"Where userID = ? " +
-						"  And lastCovidSurvey < 10")) {
+
+
+		String query = "Select covidStatus From userAccount Where userID = ? ";
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			preparedStatement.setInt(1, userID);
 			ResultSet rset = preparedStatement.executeQuery();
 			if (rset.next()) {
-				return rset.getInt("isSafe") != 0;
+				System.out.println(rset.getString("covidStatus").equals("Safe"));
 			}
+			return rset.getString("covidStatus").equals("Safe");
 		} catch (SQLException e) {
+			System.err.println("Error in isUserCovidSafe() from UserAccountDB");
 			e.printStackTrace();
+			return false;
 		}
-		System.err.println("Error in isUserCovidSafe() from UserAccountDB");
-		return false;
 	}
+
+	public static boolean isUserCovidRisk(int userID) {
+
+		String query = "Select covidStatus From userAccount Where userID = ? ";
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setInt(1, userID);
+			ResultSet rset = preparedStatement.executeQuery();
+			if (rset.next()) {
+				System.out.println(rset.getString("covidStatus").equals("Unsafe"));
+			}
+			return rset.getString("covidStatus").equals("Unsafe");
+		} catch (SQLException e) {
+			System.err.println("Error in isUserCovidSafe() from UserAccountDB");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public static boolean isUserCovidUnmarked(int userID) {
+
+
+		String query = "Select covidStatus From userAccount Where userID = ? ";
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setInt(1, userID);
+			ResultSet rset = preparedStatement.executeQuery();
+			if (rset.next()) {
+				//System.out.println(rset.getString("covidStatus").equals("Needs to Be Reviewed"));
+			}
+			return rset.getString("covidStatus").equals("Needs to Be Reviewed");
+		} catch (SQLException e) {
+			System.err.println("Error in isUserCovidSafe() from UserAccountDB");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 
 	/**
 	 * Checks if a user have filled their COVID survey today
@@ -400,4 +446,69 @@ public class UserAccountDB {
 		System.err.println("Error in filledCovidSurveyToday() from UserAccountDB");
 		return false;
 	}
+
+	/**
+	 * Submits a Parking Slot to the server, the nodeID will have to be of type PARK or lastParkedNodeID will be replaced with null
+	 * @param nodeID is the result nodeID that we are submitting
+	 * @param userID is the user's ID that we are submitting
+	 * @return true if successfully changed one row, false otherwise
+	 */
+	public static boolean submitParkingSlot(String nodeID, int userID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"Update userAccount " +
+						"Set lastParkedNodeID = (Select nodeID " +
+						"From node " +
+						"Where nodeID = ? " +
+						"And nodeType = 'PARK') " +
+						"Where userID = ?")) {
+			preparedStatement.setString(1, nodeID);
+			preparedStatement.setInt(2, userID);
+			if (preparedStatement.executeUpdate() == 1) return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Error in submitParkingSlot() from UserAccountDB");
+		return false;
+	}
+
+	/**
+	 * Get where the user parked
+	 * @param userID is the user's ID that we are checking
+	 * @return the node where the user parked, null if not exist
+	 */
+	public static String whereDidIPark(int userID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"Select lastParkedNodeID " +
+						"From userAccount " +
+						"Where userID = ? ")) {
+			preparedStatement.setInt(1, userID);
+			ResultSet rset = preparedStatement.executeQuery();
+			if (rset.next()) {
+				return rset.getString("lastParkedNodeID");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Error in isUserCovidSafe() from UserAccountDB");
+		return null;
+	}
+
+	public static String getUserName(int userID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				"Select firstName, lastName " +
+				"From userAccount " +
+				"Where userID = ?")) {
+			preparedStatement.setInt(1, userID);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				String firstNameSpace = resultSet.getString("firstName") + " ";
+				return firstNameSpace + resultSet.getString("lastName");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.err.println("Error in getUserName() from UserAccountDB");
+		return null;
+	}
+
 }

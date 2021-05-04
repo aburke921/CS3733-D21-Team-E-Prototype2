@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -68,7 +69,7 @@ public class AppBarComponent {
         //if user is logged in - button will log out, otherwise, will take to login page. No...? either way... set userID = 0, and direct to main page
         System.out.println("Login Button Clicked!");
         try {
-            App.userID = 0; //todo, double check that this is all you need to do to log a user out
+            App.userID = 0;
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
             App.getPrimaryStage().getScene().setRoot(root);
         } catch (IOException ex) {
@@ -95,6 +96,9 @@ public class AppBarComponent {
     //If exit button is clicked, exit app
     @FXML
     void exitApplication(MouseEvent event) {
+        // Close Maps API
+        DirectionsEntity.close();
+
         App app = new App();
         app.stop();
     }
@@ -130,13 +134,13 @@ public class AppBarComponent {
             appLoginButtonLeft.setVisible(false); //remove left login button
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButton.setVisible(true); //double check visibility (will be overridden by isShowLogin())
-                appLoginButton.setText("Logged in As " + App.userID);
+                appLoginButton.setText("Hello, " + DB.getUserName(App.userID));
             }
         } else {
             appLoginButton.setVisible(false); //remove right login button
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButtonLeft.setVisible(true); //double check it is visible
-                appLoginButtonLeft.setText("Logged in As " + App.userID);
+                appLoginButtonLeft.setText("Hello, " + DB.getUserName(App.userID));
 
             }
         }

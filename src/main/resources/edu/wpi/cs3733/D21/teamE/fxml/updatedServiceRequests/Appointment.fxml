@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTimePicker?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.Appointment">
+    <children>
+        <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
+        <AnchorPane prefHeight="687.0" prefWidth="1199.0">
+            <children>
+                <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <FlowPane StackPane.alignment="TOP_LEFT">
+                            <children>
+                                <ImageView fx:id="background" fitHeight="1080.0" fitWidth="2000.0" pickOnBounds="true" preserveRatio="true" />
+                            </children>
+                        </FlowPane>
+                        <BorderPane>
+                            <center>
+                                <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="785.0" BorderPane.alignment="CENTER">
+                                    <children>
+                                        <VBox maxWidth="600.0" prefHeight="513.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-radius: 25px; -fx-background-radius: 25px;">
+                                            <children>
+                                                <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="600.0" prefHeight="303.0" prefWidth="600.0" styleClass="centerPane">
+                                                    <children>
+                                                        <FlowPane prefHeight="361.0" prefWidth="300.0">
+                                                            <children>
+                                                                <VBox prefHeight="306.0" prefWidth="260.0">
+                                                                    <children>
+                                                                        <JFXDatePicker fx:id="dateInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="278.0" promptText="Date">
+                                                                            <VBox.margin>
+                                                                                <Insets bottom="10.0" top="20.0" />
+                                                                            </VBox.margin>
+                                                                        </JFXDatePicker>
+                                                                        <JFXTimePicker fx:id="startTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="Start Time">
+                                                                            <VBox.margin>
+                                                                                <Insets bottom="10.0" top="20.0" />
+                                                                            </VBox.margin>
+                                                                        </JFXTimePicker>
+                                                                        <JFXComboBox fx:id="doctorInput" prefHeight="27.0" prefWidth="295.0" promptText="Doctor">
+                                                                            <VBox.margin>
+                                                                                <Insets bottom="10.0" top="20.0" />
+                                                                            </VBox.margin>
+                                                                        </JFXComboBox>
+                                                                    </children>
+                                                                    <FlowPane.margin>
+                                                                        <Insets left="10.0" />
+                                                                    </FlowPane.margin>
+                                                                </VBox>
+                                                            </children>
+                                                        </FlowPane>
+                                                        <FlowPane prefHeight="361.0" prefWidth="300.0">
+                                                            <children>
+                                                                <VBox prefHeight="221.0" prefWidth="260.0">
+                                                                    <children>
+                                                                        <JFXTextArea fx:id="additionalNotesInput" prefHeight="141.0" prefWidth="259.0" promptText="Additional notes for doctor...">
+                                                                            <VBox.margin>
+                                                                                <Insets bottom="10.0" top="30.0" />
+                                                                            </VBox.margin>
+                                                                        </JFXTextArea>
+
+                                                                        <GridPane>
+                                                                            <columnConstraints>
+                                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />
+                                                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="125.0" minWidth="10.0" prefWidth="69.0" />
+                                                                            </columnConstraints>
+                                                                            <rowConstraints>
+                                                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                                            </rowConstraints>
+                                                                            <VBox.margin>
+                                                                                <Insets top="100.0" />
+                                                                            </VBox.margin>
+                                                                        </GridPane>
+                                                                    </children>
+                                                                    <FlowPane.margin>
+                                                                        <Insets left="20.0" />
+                                                                    </FlowPane.margin>
+                                                                </VBox>
+                                                            </children>
+                                                        </FlowPane>
+                                                    </children>
+                                                </HBox>
+                                                <VBox maxHeight="-Infinity" maxWidth="600.0" prefHeight="140.0" prefWidth="590.0">
+                                                    <children>
+                                                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Email Appointment Reminder:" underline="true">
+                                                            <font>
+                                                                <Font size="15.0" />
+                                                            </font>
+                                                            <VBox.margin>
+                                                                <Insets bottom="10.0" top="20.0" />
+                                                            </VBox.margin>
+                                                        </Text>
+                                                        <HBox prefHeight="65.0" prefWidth="600.0">
+                                                            <children>
+                                                                <JFXCheckBox fx:id="oneMonthPriorInput" text="1 Month Prior">
+                                                                    <HBox.margin>
+                                                                        <Insets bottom="10.0" right="88.0" top="10.0" />
+                                                                    </HBox.margin>
+                                                                </JFXCheckBox>
+                                                                <JFXCheckBox fx:id="twoWeeksPriorInput" text="2 Weeks Prior">
+                                                                    <HBox.margin>
+                                                                        <Insets bottom="10.0" right="82.0" top="10.0" />
+                                                                    </HBox.margin>
+                                                                </JFXCheckBox>
+                                                                <JFXCheckBox fx:id="oneWeekPriorInput" text="1 Week Prior">
+                                                                    <HBox.margin>
+                                                                        <Insets bottom="10.0" right="20.0" top="10.0" />
+                                                                    </HBox.margin>
+                                                                </JFXCheckBox>
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox prefHeight="100.0" prefWidth="200.0">
+                                                            <children>
+                                                                <JFXCheckBox fx:id="twoDaysPriorInput" text="48 Hours Prior">
+                                                                    <HBox.margin>
+                                                                        <Insets bottom="10.0" right="81.0" top="10.0" />
+                                                                    </HBox.margin>
+                                                                </JFXCheckBox>
+                                                                <JFXCheckBox fx:id="oneDayPriorInput" text="24 Hours Prior">
+                                                                    <HBox.margin>
+                                                                        <Insets bottom="10.0" right="20.0" top="10.0" />
+                                                                    </HBox.margin>
+                                                                </JFXCheckBox>
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" />
+                                       </VBox.margin>
+                                                </VBox>
+                                                <HBox maxWidth="600.0" prefHeight="100.0" prefWidth="519.0" styleClass="centerPane">
+                                                    <children>
+                                                        <AnchorPane prefHeight="49.0" prefWidth="600.0">
+                                                            <children>
+                                                                <JFXButton fx:id="cancel" layoutX="459.0" layoutY="29.0" onAction="#switchScene" styleClass="cancel-button" text="Cancel" />
+                                                                <JFXButton fx:id="submit" layoutX="534.0" layoutY="29.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
+                                                            </children>
+                                                        </AnchorPane>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+                            </center>
+                        </BorderPane>
+                    </children>
+                </StackPane>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

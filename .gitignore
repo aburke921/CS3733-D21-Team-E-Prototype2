@@ -161,3 +161,8 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/java,macos,gradle,intellij+all
 
 /BWDB/
+src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/temp.png
+tokens/StoredCredential
+
+# Do Not make this public
+.env

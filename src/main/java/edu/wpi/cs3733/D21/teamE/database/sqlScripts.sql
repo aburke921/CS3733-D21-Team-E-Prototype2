@@ -88,9 +88,8 @@ Create Table requests
 --                          creationTime timestamp,
 	requestType   varchar(31),
 	requestStatus varchar(10),
-	assignee      varchar(31),
-	Constraint requestTypeLimit Check (requestType In
-	                                   ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
+	assignee      int References userAccount On Delete Cascade,
+--	Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
 	Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress'))
 );
 
@@ -155,6 +154,13 @@ Create Table securityServ
 	level     varchar(31),
 	urgency   varchar(31) Not Null,
 	Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical'))
+);
+
+Create Table entryRequest
+(
+	surveyResult int,
+	decision     int, -- 1 for allow, 2 for ER, 3 for block
+	Constraint decisionLimit Check (decision In (1, 2, 3))
 );
 
 
@@ -241,6 +247,23 @@ Create Table aubonPainMenu
 	foodPrice       varchar(10),
 	foodCalories    varchar(10),
 	foodDescription varchar(3000)
+);
+
+Create Table ToDo
+(
+	ToDoID           int Primary Key,
+	userID           varchar(31) References userAccount Not Null,
+	title            varchar(31)                        Not Null,
+	status           int                                Not Null, -- normal/complete/archived/deleted/...
+	priority         int                                Not Null, -- 1/2/3/...
+
+	scheduledTime    Time,                                        -- nullable, edited frequently
+	nodeID           varchar(31) References node,                 -- nullable
+	requestID        int References requests,                     -- nullable, auto-add to list when assigned
+	appointmentID    int References appointment,                  -- nullable
+	detail           varchar(255),
+	expectedTime     Time,                                        -- how long it would take
+	notificationTime Time                                         -- eg. remind me 30 mins before this (send email)
 );
 
 

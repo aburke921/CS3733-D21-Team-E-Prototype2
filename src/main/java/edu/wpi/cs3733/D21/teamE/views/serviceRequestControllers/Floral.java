@@ -6,15 +6,21 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -24,6 +30,9 @@ public class Floral extends ServiceRequestFormComponents {
     ArrayList<String> nodeID = new ArrayList<>();
     ObservableList<String> userNames;
     ArrayList<Integer> userID = new ArrayList<>();
+
+    @FXML // fx:id="background"
+    private ImageView background;
 
     @FXML
     private JFXComboBox<String> locationInput;
@@ -85,7 +94,8 @@ public class Floral extends ServiceRequestFormComponents {
 
     }
 
-    private void saveData(ActionEvent e) {
+    @FXML
+    private void saveData(ActionEvent e) throws MessagingException {
 
         if(validateInput()) {
             int locationIndex = locationInput.getSelectionModel().getSelectedIndex();
@@ -103,6 +113,29 @@ public class Floral extends ServiceRequestFormComponents {
             String choc = chocolate.getSelectionModel().getSelectedItem();
            // assigned is now an integer (userID) so must be changed
             DB.addFloralRequest(App.userID, assigned, nodeInfo, receiver, type, count, vase, arrangement, teddy, choc, mess);
+
+            String email = DB.getEmail(App.userID);
+            String fullName = DB.getUserName(App.userID);
+            String assigneeName = userNames.get(userIndex);
+            String locationName = locations.get(locationIndex);
+            String body = "Hello " + fullName + ", \n\n" + "Thank you for making an Floral request. " +
+                    "Here is the summary of your request: \n\n" +
+                    " - Type: " + type + "\n" +
+                    " - Flower Count: " + count + "\n" +
+                    " - Vase Type: " + vase + "\n" +
+                    " - Receiver: " + receiver + "\n" +
+                    " - Message: " + mess + "\n" +
+                    " - Floral Arrangement: " + arrangement + "\n" +
+                    " - Teddy Bear: " + teddy + "\n" +
+                    " - Chocolate: " + choc + "\n" +
+                    " - Assignee Name: " + assigneeName + "\n" +
+                    " - Location: " + locationName + "\n\n" +
+                    "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+                    "- Emerald Emus BWH";
+
+            sendEmail.sendRequestConfirmation(email, body);
+
+            super.handleButtonSubmit(e);
         }
     }
 
@@ -114,7 +147,7 @@ public class Floral extends ServiceRequestFormComponents {
                 System.out.println(event); //Print the ActionEvent to console
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
                 App.getPrimaryStage().getScene().setRoot(root);
-            } catch (IOException ex) {
+            } catch (IOException | MessagingException ex) {
                 ex.printStackTrace();
             }
         }
@@ -122,6 +155,17 @@ public class Floral extends ServiceRequestFormComponents {
 
     @FXML
     void initialize() {
+
+        Stage primaryStage = App.getPrimaryStage();
+        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        Image backgroundImage = backgroundImg;
+        background.setImage(backgroundImage);
+        background.setEffect(new GaussianBlur());
+
+        //background.setPreserveRatio(true);
+        background.fitWidthProperty().bind(primaryStage.widthProperty());
+        //background.fitHeightProperty().bind(primaryStage.heightProperty());
+
         nodeID = DB.getListOfNodeIDS();
         locations = DB.getAllNodeLongNames();
         userID = DB.getAssigneeIDs("floralPerson");

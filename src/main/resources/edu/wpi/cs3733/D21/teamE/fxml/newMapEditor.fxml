@@ -123,8 +123,8 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <JFXButton onAction="#toNodeMode" styleClass="submit-button" text="Edit Nodes" />
-                        <JFXButton onAction="#toEdgeMode" prefWidth="90.0" styleClass="submit-button" text="Edit Edges" GridPane.columnIndex="1" />
+                        <JFXButton fx:id="editNodeButton" onAction="#toNodeMode" styleClass="submit-button" text="Edit Nodes" />
+                        <JFXButton fx:id="editEdgeButton" onAction="#toEdgeMode" prefWidth="90.0" styleClass="submit-button" text="Edit Edges" GridPane.columnIndex="1" />
                      </children>
                      <HBox.margin>
                         <Insets left="30.0" />

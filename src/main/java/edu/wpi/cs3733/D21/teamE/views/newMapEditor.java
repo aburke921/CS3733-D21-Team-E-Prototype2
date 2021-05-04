@@ -124,6 +124,10 @@ public class newMapEditor {
     private JFXButton horizontalButton;
     @FXML
     private JFXButton aligningButton;
+    @FXML
+    private JFXButton editEdgeButton;
+    @FXML
+    private JFXButton editNodeButton;
 
 
 
@@ -522,6 +526,7 @@ public class newMapEditor {
         int yVal = Integer.parseInt(yCordInput.getText());
         i = DB.addNode(genNodeID(typeInput.getValue().toString(),floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
         System.out.println(i);
+        refresh();
         return i;
     }
 
@@ -531,7 +536,28 @@ public class newMapEditor {
      */
     @FXML
     public void addNodeButton(ActionEvent e) {
-        addNode();
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setBody(new Text("Are you sure you want to add node?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Yes");
+        JFXButton cancel = new JFXButton("Cancel");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                addNode();
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
     }
 
     /**
@@ -606,7 +632,28 @@ public class newMapEditor {
      */
     @FXML
     public void deleteNodeButton(ActionEvent e) {
-        deleteNode(nodeTreeTable);
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setBody(new Text("Are you sure you want to delete node?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Yes");
+        JFXButton cancel = new JFXButton("Cancel");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                deleteNode(nodeTreeTable);
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
     }
 
     public void editNode(TreeTableView<Node> table) {
@@ -672,10 +719,32 @@ public class newMapEditor {
             yVal = Integer.valueOf(yVal);
         }
         DB.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
+        refresh();
     }
 
     public void editNodeButton(ActionEvent e) {
-        editNode(nodeTreeTable);
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setBody(new Text("Are you sure you want to add node?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Yes");
+        JFXButton cancel = new JFXButton("Cancel");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                editNode(nodeTreeTable);
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
     }
 
     /**
@@ -1000,11 +1069,6 @@ public class newMapEditor {
                     }
 
                 }
-
-
-
-
-
             } else {
                 System.out.println("no");
                 scrollPane.setPannable(true);
@@ -1281,7 +1345,28 @@ public class newMapEditor {
      * @param actionEvent
      */
     public void deleteEdgeButton(ActionEvent actionEvent) {
-        deleteEdge();
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setBody(new Text("Are you sure you want to delete edge?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Yes");
+        JFXButton cancel = new JFXButton("Cancel");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                deleteEdge();
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
     }
 
     /**
@@ -1305,7 +1390,28 @@ public class newMapEditor {
      * @param actionEvent
      */
     public void addEdgeButton(ActionEvent actionEvent) {
-        addEdge();
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setBody(new Text("Are you sure you want to add edge?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Yes");
+        JFXButton cancel = new JFXButton("Cancel");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                addEdge();
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
     }
 
     /**
@@ -1334,6 +1440,7 @@ public class newMapEditor {
             //adds edge, populates edge ID field with new ID
             DB.addEdge(ID, startInput, endInput);
             edgeID.setValue(ID);
+            refresh();
         }
     }
 
@@ -1346,6 +1453,8 @@ public class newMapEditor {
         buttonSelection = 0;
         edgeButtonSelection++;
         if(edgeButtonSelection == 1) {
+            editEdgeButton.setText("Cancel");
+            editEdgeButton.setStyle("-fx-background-color: #dc143c; ");
             edgeVBox.toFront();
             edgeVBox.setVisible(true);
             nodeVBox.setVisible(false);
@@ -1357,6 +1466,8 @@ public class newMapEditor {
             endLocation.setValue(null);
             selection = 0;
         } else if(edgeButtonSelection == 2) {
+            editEdgeButton.setText("Edit Edges");
+            editEdgeButton.setStyle("-fx-style-class: submit-button");
             nodeVBox.setVisible(false);
             edgeVBox.setVisible(false);
             edgeButtonSelection = 0;
@@ -1372,6 +1483,8 @@ public class newMapEditor {
         edgeButtonSelection = 0;
         buttonSelection++;
         if(buttonSelection == 1) {
+            editNodeButton.setText("Cancel");
+            editNodeButton.setStyle("-fx-background-color: #dc143c; ");
             nodeVBox.toFront();
             nodeVBox.setVisible(true);
             edgeVBox.setVisible(false);
@@ -1388,6 +1501,8 @@ public class newMapEditor {
             xCordInput.clear();
             yCordInput.clear();
         } else if(buttonSelection == 2) {
+            editNodeButton.setText("Edit Nodes");
+            editNodeButton.setStyle("-fx-style-class: submit-button");
             nodeVBox.setVisible(false);
             edgeVBox.setVisible(false);
             buttonSelection = 0;
@@ -1406,6 +1521,36 @@ public class newMapEditor {
 
         //draw path for new floor
         drawMap(currentFloor);
+    }
+    /**
+     * Creates a new JFX Dialog on the current page.
+     * @param message Message to display in the dialog box.
+     * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
+     */
+    public static void mapPopUp(String heading, String button, String cancelButton, String message, StackPane stackPane) {
+        System.out.println("DialogBox Posted");
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setHeading(new Text(heading));
+        jfxDialogLayout.setBody(new Text(message));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton(button);
+        JFXButton cancel = new JFXButton(cancelButton);
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
     }
 }
 

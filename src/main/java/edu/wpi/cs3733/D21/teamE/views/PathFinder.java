@@ -240,6 +240,7 @@ public class PathFinder {
     /**
      * Get textual directions from {@link Path#makeDirections()}, and prints them out onto
      * a popup dialog.
+     * Populates them with icons corresponding to each step in the directions
      * @param event the calling event's info
      */
     @FXML
@@ -315,7 +316,7 @@ public class PathFinder {
 
 
         JFXDialogLayout popup = new JFXDialogLayout();
-        popup.setHeading(new Text("Detailed Path Directions"));
+        popup.setHeading(new Text("Detailed Path DirectionsController"));
         popup.setBody(tableView);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
         JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
@@ -1031,6 +1032,10 @@ public class PathFinder {
         });
     }
 
+    /**
+     * Switches visible floor
+     * @param e Button click action
+     */
     public void chooseFloor(ActionEvent e) {
         //clear current floor of markers
         for (Node node : currentMarkers) {
@@ -1049,6 +1054,10 @@ public class PathFinder {
         System.out.println("Current floor set to " + floor);
     }
 
+    /**
+     * Switch highlighted floor button
+     * @param button Floor button to switch to
+     */
     private void switchFocusButton(Button button) {
         currentlySelected.setStyle("-fx-background-color: -fx--primary-light");
         currentlySelected = button;

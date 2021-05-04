@@ -1,4 +1,8 @@
 package edu.wpi.cs3733.D21.teamE;
+
+/**
+ * Time class, mostly for ETA stuff
+ */
 public class Time {
     private int sec;
     private int min;
@@ -44,6 +48,10 @@ public class Time {
         return sec;
     }
 
+    /**
+     * Seconds setter
+     * @param sec Number of seconds
+     */
     public void setSec(int sec) {
         this.sec = sec;
     }
@@ -56,6 +64,10 @@ public class Time {
         return min;
     }
 
+    /**
+     * Minutes setter
+     * @param min Number of minutes
+     */
     public void setMin(int min) {
         this.min = min;
     }
@@ -71,6 +83,11 @@ public class Time {
         this.min = min;
     }
 
+    /**
+     * Equals method
+     * @param t The time to compare to
+     * @return True if both the minutes and seconds are equal
+     */
     public boolean equals(Time t){
         return ((t.getMin() == min) && (t.getSec() == sec));
     }

@@ -95,46 +95,61 @@ public class Default {
         App.setSearchAlgo(algoIndex);
     }
 
-    /**
-     * Move to Path Finder page
-     * @param e
-     */
     @FXML
-    private void toPathFinder(ActionEvent e) {
-        if (App.userID != 0){
-            if (DB.filledCovidSurveyToday(App.userID) && DB.isUserCovidSafe(App.userID)) { // go to pathfinder
-                try {
-                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                    App.changeScene(root);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            } else { // go to covid survey
-                CovidSurvey.plzGoToPathFinder = true;
-                try {
-                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-                    App.changeScene(root);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+    private void toPathFinder(ActionEvent event) {
+        if(App.userID != 0) {
+            if(DB.filledCovidSurveyToday(App.userID)) {
+                if(DB.isUserCovidSafe(App.userID)) {
+
+                } else {
+
                 }
             }
-        } else if (App.noCleanSurveyYet) { // go to covid survey
-            CovidSurvey.plzGoToPathFinder = true;
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-                App.changeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        } else { // go to pathfinder
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                App.changeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        } else {
+
         }
     }
+
+//    /**
+//     * Move to Path Finder page
+//     * @param e
+//     */
+//    @FXML
+//    private void toPathFinder(ActionEvent e) {
+//        if (App.userID != 0){
+//            if (DB.filledCovidSurveyToday(App.userID) && DB.isUserCovidSafe(App.userID)) { // go to pathfinder
+//                try {
+//                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+//                    App.changeScene(root);
+//                } catch (IOException ex) {
+//                    ex.printStackTrace();
+//                }
+//            } else { // go to covid survey
+//                CovidSurvey.plzGoToPathFinder = true;
+//                try {
+//                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
+//                    App.changeScene(root);
+//                } catch (IOException ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//       } //else if (App.noCleanSurveyYet) { // go to covid survey
+////            CovidSurvey.plzGoToPathFinder = true;
+////            try {
+////                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
+////                App.changeScene(root);
+////            } catch (IOException ex) {
+////                ex.printStackTrace();
+////            }
+////        } else { // go to pathfinder
+////            try {
+////                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+////                App.changeScene(root);
+////            } catch (IOException ex) {
+////                ex.printStackTrace();
+////            }
+////        }
+//    }
 
     @FXML
     private void toScanQRCode(ActionEvent e) {

@@ -2,7 +2,9 @@ package edu.wpi.cs3733.D21.teamE.views;
 
 //import com.sun.org.apache.xml.internal.security.algorithms.implementations.IntegrityHmac;
 
-public class CovidSurveyObj {
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
+public class CovidSurveyObj extends RecursiveTreeObject<CovidSurveyObj> {
 
     private Integer user;
     private String userDisplay;

@@ -460,9 +460,9 @@ public class DB {
 	/**
 	 * This adds a entry request form to the table
 	 */
-	public static void addEntryRequest(CovidSurveyObj covidSurveyObj, int assigneeID) {
+	public static void addEntryRequest(CovidSurveyObj covidSurveyObj) {
 
-		RequestsDB.addEntryRequest(covidSurveyObj, assigneeID);
+		RequestsDB.addEntryRequest(covidSurveyObj);
 	}
 
 	// Editing Tables:

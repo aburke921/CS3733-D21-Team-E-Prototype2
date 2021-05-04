@@ -426,7 +426,7 @@ public class RequestsDB {
 			// Integer user, Integer formNumber, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms
 		String query = "Create Table entryRequest " +
 				"( " +
-				"requestID     int Primary Key References requests (requestID) On Delete Cascade, " +
+				"entryrequestID     int Primary Key, " +
 				"positiveTest boolean Not Null, " +
 				"symptoms     boolean Not Null, " +
 				"closeContact     boolean Not Null, " +
@@ -720,7 +720,7 @@ public class RequestsDB {
 	 * This adds a entry request form to the table
 	 * each time a new entry is added, status is automatically set as "Needs to be reviewed"
 	 */
-	public static void addEntryRequest(CovidSurveyObj covidSurveyObj, int assigneeID) {
+	public static void addEntryRequest(CovidSurveyObj covidSurveyObj) {
 		boolean positiveTest = covidSurveyObj.getPositiveTest();
 		boolean symptoms = covidSurveyObj.getSymptoms();
 		boolean closeContact = covidSurveyObj.getCloseContact();
@@ -728,9 +728,9 @@ public class RequestsDB {
 		boolean noSymptoms = covidSurveyObj.getNoSymptoms();
 		int userID = covidSurveyObj.getUser();
 
-		addRequest(userID, assigneeID, "entryRequest");
+		//addRequest(userID, assigneeID, "entryRequest");
 
-		String insertEntryRequest = "Insert Into entryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, 'Needs to be reviewed')";
+		String insertEntryRequest = "Insert Into entryRequest Values ((Select Count(*) From entryRequest) + 1, ?, ?, ?, ?, ?, 'Needs to be reviewed')";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertEntryRequest)) {
 			prepState.setBoolean(1, positiveTest);
@@ -2026,7 +2026,7 @@ public class RequestsDB {
 
 		while (rset.next()) {
 
-			int requestID = rset.getInt("requestID");
+			int requestID = rset.getInt("entryRequestID");
 			boolean positiveTest = rset.getBoolean("positiveTest");
 			boolean symptoms = rset.getBoolean("symptoms");
 			boolean closeContact = rset.getBoolean("closeContact");
@@ -2046,7 +2046,7 @@ public class RequestsDB {
 	}
 
 	public static int markAsCovidSafe(int formNumber) {
-		String query = "Update entryRequest set positiveTest = false, symptoms = false, closeContact = false, quarantine = false, noSymptoms = true, status = 'Safe' where requestID = " + formNumber;
+		String query = "Update entryRequest set positiveTest = false, symptoms = false, closeContact = false, quarantine = false, noSymptoms = true, status = 'Safe' where entryRequestID = " + formNumber;
 
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
@@ -2063,7 +2063,7 @@ public class RequestsDB {
 	}
 
 	public static int markAsCovidRisk(int formNumber) {
-		String query = "Update entryRequest set positiveTest = true, symptoms = true, closeContact = true, quarantine = true, noSymptoms = false, status = 'Unsafe' where requestID = " + formNumber;
+		String query = "Update entryRequest set positiveTest = true, symptoms = true, closeContact = true, quarantine = true, noSymptoms = false, status = 'Unsafe' where entryRequestID = " + formNumber;
 
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {

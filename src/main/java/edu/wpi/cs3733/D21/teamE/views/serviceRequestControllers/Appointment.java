@@ -21,7 +21,6 @@ import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
-import edu.wpi.cs3733.D21.teamE.states.ServiceRequestState;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 
@@ -106,6 +105,11 @@ public class Appointment extends ServiceRequestFormComponents{
 
 	@FXML // fx:id="submit"
 	private JFXButton submit; // Value injected by FXMLLoader
+
+	@FXML
+	void handleButtonCancel(ActionEvent event) {
+
+	}
 
 
 
@@ -239,16 +243,6 @@ public class Appointment extends ServiceRequestFormComponents{
 
 		return dateInput.validate() && startTimeInput.validate() &&
 				doctorInput.validate() && additionalNotesInput.validate();
-	}
-
-	/**
-	 * Switch to a different scene
-	 * @param e tells which button was pressed
-	 */
-	@FXML
-	private void switchScene(ActionEvent e) {
-		ServiceRequestState serviceRequestState = new ServiceRequestState();
-		serviceRequestState.switchScene(e);
 	}
 
 }

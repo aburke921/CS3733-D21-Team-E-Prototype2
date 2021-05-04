@@ -132,14 +132,14 @@ public class Default {
                         ex.printStackTrace();
                     }
                 } else if(DB.isUserCovidUnmarked(App.userID)) {
-//                    App.newJFXDialogPopUp("","OK","Your covid survey still needs to be reviewed",stackPane);
+                    App.newJFXDialogPopUp("","OK","Your covid survey still needs to be reviewed",stackPane);
                     System.out.println("Covid submission needs to be reviewed first");
                 } else {
                     System.out.println("It was none of the three strings");
                 }
             }
         } else {
-            //Have to figure out how we wanna handle guests
+            App.newJFXDialogPopUp("","OK","You need to create a guest account if you wish to pathfind within the hospital",stackPane);
         }
     }
 
@@ -205,10 +205,17 @@ public class Default {
         for (int i = 0; i < nodeArrayList.size(); i++) {
             if (nodeArrayList.get(i).get("id").equals(DB.whereDidIPark(App.userID))) {
                 index = i;
+                System.out.println(DB.whereDidIPark(App.userID));
             }
         }
         PathFinder.endNodeIndex = index;
-        toPathFinder(e);
+        System.out.println(index);
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+            App.changeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**

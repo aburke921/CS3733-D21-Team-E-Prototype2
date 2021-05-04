@@ -1043,22 +1043,8 @@ public class newMapEditor {
                     }
                 }
                 if (finishAligning) {
-                    int modifyInt = -1;
-                    double X = e.getX() * scale;
-                    int xInt = (int) X;
-                    double Y = e.getY() * scale;
-                    int yInt = (int) Y;
-                    for (int i = 0; i < nodeArrayListToBeAligned.size(); i++) {
-                        Node currentNode = nodeArrayListToBeAligned.get(i);
-                        if (isVertical) {
-                            modifyInt = DB.modifyNode(currentNode.get("id"), xInt, currentNode.getY(), currentNode.get("floor"), currentNode.get("building"),
-                                    currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
-                        } else {
-                            modifyInt = DB.modifyNode(currentNode.get("id"), currentNode.getX(), yInt, currentNode.get("floor"), currentNode.get("building"),
-                                    currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
-                        }
-                    }
-                    System.out.println(modifyInt);
+                    //align nodes on clicked location
+                    alignNodesOnLocation(e.getX(), e.getY(), nodeArrayListToBeAligned, isVertical);
                     //finishAligning = false;
                     nodeArrayListToBeAligned.removeAll(nodeArrayListToBeAligned);
                     refresh();
@@ -1155,6 +1141,34 @@ public class newMapEditor {
         });
     }
 
+    /** @// TODO: 5/4/2021 edit so it only takes in one coord (dont need X & Y, only one depending on vert/horizontal)
+     * Aligns the nodes horizontally or vertically.
+     * Note: Only edits DB, does not refresh
+     * @param alignX X coord to align
+     * @param alignY Y coord to align
+     * @param toAlign Nodes that need to be aligned
+     * @param isVertical Vertical else Horizontal
+     */
+    private void alignNodesOnLocation(double alignX, double alignY, ArrayList<Node> toAlign, boolean isVertical) {
+        int modifyInt = -1;
+        double X = alignX * scale;
+        int xInt = (int) X;
+        double Y = alignY * scale;
+        int yInt = (int) Y;
+        for (int i = 0; i < toAlign.size(); i++) {
+            Node currentNode = toAlign.get(i);
+            System.out.println("Aligning " + currentNode);
+            if (isVertical) {
+                modifyInt = DB.modifyNode(currentNode.get("id"), xInt, currentNode.getY(), currentNode.get("floor"), currentNode.get("building"),
+                        currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
+            } else {
+                modifyInt = DB.modifyNode(currentNode.get("id"), currentNode.getX(), yInt, currentNode.get("floor"), currentNode.get("building"),
+                        currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
+            }
+        }
+        System.out.println(modifyInt);
+    }
+
     /**
      * Adds event handlers to populate the form fields when a table row is clicked
      */
@@ -1233,7 +1247,7 @@ public class newMapEditor {
     }
 
     /**
-     * @// TODO: 4/29/2021 called when align button is pressed while isAligning is true
+     *
      */
     @FXML
     public void alignSelectedNodes(ActionEvent e) {

@@ -13,8 +13,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -24,6 +28,9 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
 
     ObservableList<String> locations;
     ArrayList<String> nodeIDs;
+
+    @FXML // fx:id="background"
+    private ImageView background;
 
     @FXML
     private JFXComboBox<String> locationInput;
@@ -91,8 +98,6 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
 
         DB.addMedicineRequest(App.userID, assigned, location, name, doseQuantity, doseMeasure, specialInstructions, signature);
 
-        super.handleButtonSubmit(e);
-
         //For email implementation later
 //        String email = DB.getEmail(App.userID);
 //        String fullName = DB.getUserName(App.userID);
@@ -111,6 +116,8 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
 //                "- Emerald Emus BWH";
 //
 //        sendEmail.sendRequestConfirmation(email, body);
+
+        super.handleButtonSubmit(e);
     }
 
     @FXML
@@ -129,6 +136,17 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
 
     @FXML
     void initialize() {
+
+
+        Stage primaryStage = App.getPrimaryStage();
+        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        Image backgroundImage = backgroundImg;
+        background.setImage(backgroundImage);
+        background.setEffect(new GaussianBlur());
+
+        //background.setPreserveRatio(true);
+        background.fitWidthProperty().bind(primaryStage.widthProperty());
+        //background.fitHeightProperty().bind(primaryStage.heightProperty());
 
         locations = DB.getAllNodeLongNames();
         nodeIDs = DB.getListOfNodeIDS();

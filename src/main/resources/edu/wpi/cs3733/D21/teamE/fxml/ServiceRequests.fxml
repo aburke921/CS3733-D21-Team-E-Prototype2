@@ -25,7 +25,7 @@
                            <children>
                               <HBox alignment="CENTER">
                                  <children>
-                                    <JFXButton fx:id="floralGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Floral Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="floralGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Floral Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -36,7 +36,7 @@
                                           <MaterialDesignIconView fill="WHITE" glyphName="FLOWER" size="100" />
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton fx:id="foodDeliveryButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Food Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="foodDeliveryButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Food Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -47,21 +47,27 @@
                                           <MaterialDesignIconView fill="WHITE" glyphName="FOOD" size="100" />
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton fx:id="languageInterpreterButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Language Interpreter" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="languageInterpreterButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Language Interpreter" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                        <graphic>
                                           <FontAwesomeIconView fill="WHITE" glyphName="LANGUAGE" size="100" />
                                        </graphic>
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
                                     </JFXButton>
-                                    <JFXButton fx:id="religionButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Religious Requests" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="religionButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Religious Requests" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                        <graphic>
                                           <MaterialDesignIconView fill="WHITE" glyphName="CHURCH" size="100" />
                                        </graphic>
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
                                     </JFXButton>
                                  </children>
                                  <VBox.margin>
@@ -70,7 +76,7 @@
                               </HBox>
                               <HBox alignment="CENTER">
                                  <children>
-                                    <JFXButton fx:id="laundryRequestButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Laundry" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="laundryRequestButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Laundry" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -78,10 +84,10 @@
                                           <Insets left="20.0" />
                                        </HBox.margin>
                                        <graphic>
-                                          <MaterialDesignIconView fill="WHITE" glyphName="TSHIRT_CREW" size="100" />
+                                          <MaterialDesignIconView fill="WHITE" glyphName="TSHIRT_CREW" size="100" text="" />
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton fx:id="sanitationGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Sanitation Services" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="sanitationGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Sanitation Services" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -92,7 +98,7 @@
                                           <MaterialDesignIconView fill="WHITE" glyphName="DELETE" size="100" />
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton fx:id="medicineGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Medicine Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="medicineGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Medicine Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -110,7 +116,7 @@
                               </HBox>
                               <HBox alignment="CENTER">
                                  <children>
-                                    <JFXButton fx:id="securityGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Security Services" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="securityGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Security Services" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -121,7 +127,7 @@
                                           <MaterialDesignIconView fill="WHITE" glyphName="SHIELD" size="100" text="" />
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton fx:id="maintenanceRequestButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Facilities Maintenance" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="maintenanceRequestButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Facilities Maintenance" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -132,7 +138,7 @@
                                           <MaterialDesignIconView fill="WHITE" glyphName="WRENCH" size="100" />
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton fx:id="internalGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Internal Patient Transport" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="internalGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Internal Patient Transport" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -143,7 +149,7 @@
                                           <MaterialDesignIconView fill="WHITE" glyphName="WHEELCHAIR_ACCESSIBILITY" size="100" />
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton fx:id="externalGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="External Patient Transport" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="externalGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="External Patient Transport" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -165,7 +171,7 @@
                            <children>
                               <HBox alignment="CENTER">
                                  <children>
-                                    <JFXButton fx:id="floralGoButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Floral Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="floralGoButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Floral Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -176,7 +182,7 @@
                                           <MaterialDesignIconView fill="WHITE" glyphName="FLOWER" size="100" />
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton fx:id="foodDeliveryButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Food Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="foodDeliveryButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Food Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -187,13 +193,16 @@
                                           <MaterialDesignIconView fill="WHITE" glyphName="FOOD" size="100" />
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton fx:id="languageInterpreterButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Language Interpreter" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="languageInterpreterButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Language Interpreter" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                        <graphic>
                                           <FontAwesomeIconView fill="WHITE" glyphName="LANGUAGE" size="100" />
                                        </graphic>
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
                                     </JFXButton>
                                  </children>
                                  <VBox.margin>
@@ -202,7 +211,7 @@
                               </HBox>
                               <HBox alignment="CENTER">
                                  <children>
-                                    <JFXButton fx:id="religionButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Religious Requests" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="religionButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Religious Requests" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -210,7 +219,7 @@
                                           <MaterialDesignIconView fill="WHITE" glyphName="CHURCH" size="100" />
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton fx:id="laundryRequestButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Laundry" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="laundryRequestButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Laundry" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -232,7 +241,7 @@
                            <children>
                               <HBox alignment="CENTER">
                                  <children>
-                                    <JFXButton fx:id="floralGoButton2" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Floral Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="floralGoButton2" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Floral Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -243,7 +252,7 @@
                                           <MaterialDesignIconView fill="WHITE" glyphName="FLOWER" size="100" />
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton fx:id="foodDeliveryButton2" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Food Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="foodDeliveryButton2" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Food Delivery" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -254,13 +263,16 @@
                                           <MaterialDesignIconView fill="WHITE" glyphName="FOOD" size="100" />
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton fx:id="languageInterpreterButton2" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" text="Language Interpreter" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                    <JFXButton fx:id="languageInterpreterButton2" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Language Interpreter" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                        <graphic>
                                           <FontAwesomeIconView fill="WHITE" glyphName="LANGUAGE" size="100" />
                                        </graphic>
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
                                     </JFXButton>
                                  </children>
                                  <VBox.margin>
@@ -279,14 +291,14 @@
          <children>
             <BorderPane maxHeight="150.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <center>
-                  <Button fx:id="serviceRequestStatus" mnemonicParsing="false" onAction="#switchScene" prefHeight="22.0" prefWidth="300.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Service Request Status" textFill="WHITE" BorderPane.alignment="CENTER">
+                  <Button fx:id="serviceRequestStatus" mnemonicParsing="false" onAction="#switchScene" prefHeight="22.0" prefWidth="300.0" styleClass="back-button" text="Service Request Status" textFill="WHITE" BorderPane.alignment="CENTER">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Button>
                </center>
                <bottom>
-                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#switchScene" prefHeight="22.0" prefWidth="55.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" text="Back" textFill="WHITE" BorderPane.alignment="BOTTOM_LEFT">
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#switchScene" prefHeight="22.0" prefWidth="55.0" styleClass="back-button" text="Back" textFill="WHITE" BorderPane.alignment="BOTTOM_LEFT">
                      <BorderPane.margin>
                         <Insets bottom="20.0" left="20.0" />
                      </BorderPane.margin>

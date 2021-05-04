@@ -1709,6 +1709,7 @@ public class RequestsDB {
 
 	/**
 	 * Gets a list of all the "assigneeIDs", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID
+	 * Use "AssigneeID" to get the full name of the assignee, use "assigneeID" to get the ID of the assignee
 	 * @param tableName this is the name of the table that we are getting the info from
 	 * @param userID    this is the ID of the user who made the request
 	 * @param infoType  this is the type of information that is being retrieved
@@ -1729,9 +1730,12 @@ public class RequestsDB {
 			ResultSet rset = prepState.executeQuery();
 
 			while (rset.next()) {
-				if (infoType.equals("AssigneeID") || infoType.equals("surveyResult") || infoType.equals("decision")) {
+				if (infoType.equals("assigneeID") || infoType.equals("surveyResult") || infoType.equals("decision")) {
 					int theInt = rset.getInt(infoType);
 					listOfInfo.add(String.valueOf(theInt));
+				} else if (infoType.equals("AssigneeID")) {
+					int ID = rset.getInt(infoType);
+					listOfInfo.add(UserAccountDB.getUserName(ID));
 				} else {
 					String ID = rset.getString(infoType); // potential issue // -TO-DO-: won't work with int AssigneeIDs? Fixed by translating IDs to String, should it return a pair of Assignee ID and name?
 					listOfInfo.add(ID);

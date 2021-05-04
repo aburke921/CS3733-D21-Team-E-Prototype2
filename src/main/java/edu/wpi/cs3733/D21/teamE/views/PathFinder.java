@@ -156,6 +156,7 @@ public class PathFinder {
     private Button floor2;
     @FXML // fx:id="floor3"
     private Button floor3;
+    private Button currentlySelected;
 
     /*
      * Additional Variables
@@ -220,6 +221,7 @@ public class PathFinder {
         }
     }
 
+
     /**
      * Gets the currently selected item from {@link #endLocationComboBox} dropdown.
      * @param event calling event info.
@@ -246,12 +248,6 @@ public class PathFinder {
         if (currentFoundPath == null) return;
 
         List<String> directions = currentFoundPath.makeDirectionsWithDist();
-        // Include Icon next to direction
-        JFXListView<String> listView = new JFXListView<>();
-        listView.getItems().addAll(directions);
-        listView.setPrefHeight(USE_COMPUTED_SIZE);
-        listView.setSelectionModel(new NoSelectionModel<String>());
-        listView.getStyleClass().add("directions");
 
         TableView tableView = new TableView();
 
@@ -267,6 +263,8 @@ public class PathFinder {
         column2.setCellValueFactory(new PropertyValueFactory<>("direction"));
         column2.setStyle("-fx-alignment: CENTER-LEFT");
 
+        tableView.setSelectionModel(null);
+        tableView.setPrefHeight(USE_COMPUTED_SIZE);
         tableView.getStyleClass().add("directions");
         tableView.getStyleClass().add("noheader");
         tableView.getStyleClass().add("table-row-cell");
@@ -322,7 +320,7 @@ public class PathFinder {
         popup.setPrefHeight(USE_COMPUTED_SIZE);
         JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
         dialog.setMaxWidth(375);
-        int fullSize = listView.getItems().size() * 41 + 120;
+        int fullSize = tableView.getItems().size() * 41 + 120;
         if (fullSize > 425) {
             dialog.setMaxHeight(425);
         } else {
@@ -475,6 +473,12 @@ public class PathFinder {
                 break;
             case 2:
                 algoType = "BFS";
+                break;
+            case 3:
+                algoType = "Dijkstra";
+                break;
+            case 4:
+                algoType = "Best";
                 break;
             default:
                 algoType = "A*";
@@ -684,6 +688,7 @@ public class PathFinder {
 
                         Label floorLabel = null;
                         FlowPane flowPane = new FlowPane();
+                        String destFloor = "";
 
                         //if the current node is a stair or an elevator, add a label
                         if (node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV")) {
@@ -701,6 +706,7 @@ public class PathFinder {
                                     if(nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV")) {
                                         //create string for label
                                         String toFloor = "Go to Floor " + nextNode.get("floor");
+                                        destFloor = nextNode.get("floor");
 
                                         //add string to label
                                         floorLabel = new Label(toFloor);
@@ -737,6 +743,12 @@ public class PathFinder {
 
                     if(floorLabel != null) {
                         //if a floor label was made, line and node circle along with the label and its parent flowPane
+                        String finalDestFloor = destFloor;
+
+                        floorLabel.setOnMouseClicked(e -> {
+                            setCurrentFloor(finalDestFloor);
+                        });
+
                         g.getChildren().addAll(line, circle, flowPane);
                     } else {
                         //otherwise, only add the line and node circle
@@ -887,8 +899,13 @@ public class PathFinder {
 
         nodeArrayList = DB.getAllNodes();
         for (int i = 0; i < nodeArrayList.size(); i++) {
-            longNameArrayList.add(nodeArrayList.get(i).get("longName"));
-            nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
+            Node node = nodeArrayList.get(i);
+            if (node.get("type").equalsIgnoreCase("HALL") || node.get("type").equalsIgnoreCase("WALK")) {
+                nodeArrayList.remove(i--);
+            } else {
+                longNameArrayList.add(node.get("longName"));
+                nodeIDArrayList.add(node.get("id"));
+            }
         }
 //        longNameArrayList = connection.getAllNodeLongNames();
 //        nodeIDArrayList = connection.getListOfNodeIDS();
@@ -902,8 +919,6 @@ public class PathFinder {
 
         new AutoCompleteComboBoxListener<>(startLocationComboBox);
         new AutoCompleteComboBoxListener<>(endLocationComboBox);
-
-        final ArrayList<Node> array = DB.getAllNodes();
 
         //Set up zoomable and pannable panes
         BorderPane borderPane = new BorderPane();
@@ -920,6 +935,14 @@ public class PathFinder {
         imageView.setFitWidth(primaryStage.getWidth());
 
         scale = imageWidth / imageView.getFitWidth();
+
+        floor1.setStyle("-fx-background-color: -fx--primary");
+        floor2.setStyle("-fx-background-color: -fx--primary-light");
+        floor3.setStyle("-fx-background-color: -fx--primary-light");
+        floorG.setStyle("-fx-background-color: -fx--primary-light");
+        floorL1.setStyle("-fx-background-color: -fx--primary-light");
+        floorL2.setStyle("-fx-background-color: -fx--primary-light");
+        currentlySelected = floor1;
 
         //Sidebar stuff
         minETA.setText("00");
@@ -978,8 +1001,8 @@ public class PathFinder {
             /*System.out.println(xInt);
             System.out.println(yInt);*/
 
-            for(int i = 0; i < array.size(); i++) {
-                Node node = array.get(i);
+            for(int i = 0; i < nodeArrayList.size(); i++) {
+                Node node = nodeArrayList.get(i);
                 double nodeX = node.getX() / scale;
                 int nodeXInt = (int) nodeX;
                 double nodeY = node.getY() / scale;
@@ -987,7 +1010,7 @@ public class PathFinder {
                 System.out.println(nodeXInt);
                 if ((Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) && (node.get("floor").equalsIgnoreCase(currentFloor))) {
 
-                    System.out.println(array.get(i).get("longName"));
+                    System.out.println(nodeArrayList.get(i).get("longName"));
                     clickOnNode(i);
 
                 }
@@ -1023,14 +1046,22 @@ public class PathFinder {
             NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
             nM.getRectangle().setVisible(false);
         }
+        Button button = ((Button) e.getSource());
         currentMarkers.clear();
-        String floor = ((Button) e.getSource()).getText();
+        String floor = button.getText();
+        switchFocusButton(button);
         currFloor.setText(floor);
 
         setCurrentFloor(floor);
         //drawMap(currentFoundPath, currentFloor);
 
         System.out.println("Current floor set to " + floor);
+    }
+
+    private void switchFocusButton(Button button) {
+        currentlySelected.setStyle("-fx-background-color: -fx--primary-light");
+        currentlySelected = button;
+        currentlySelected.setStyle("-fx-background-color: -fx--primary");
     }
 
     public void sortNodesByType(ActionEvent event) {

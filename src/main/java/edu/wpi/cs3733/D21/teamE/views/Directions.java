@@ -16,6 +16,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 
+import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -70,6 +71,8 @@ public class Directions {
     @FXML // fix:id="backButton"
     public Button backButton; // Value injected by FXMLLoader
 
+    DirectionsController directControl = null; // Directions Controller, Maps API interface
+
 
     public void initialize() {
         //init appBar
@@ -85,12 +88,6 @@ public class Directions {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        car.setStyle("-fx-background-color: -fx--primary");
-        bike.setStyle("-fx-background-color: -fx--primary-light");
-        walking.setStyle("-fx-background-color: -fx--primary-light");
-        transit.setStyle("-fx-background-color: -fx--primary-light");
-        currentlySelected = car;
-        DirectionsController.init();
 
         Stage primaryStage = App.getPrimaryStage();
 
@@ -104,18 +101,34 @@ public class Directions {
             }
         });
 
+        imageStackPane.prefWidthProperty().bind(new DoubleBinding() {
+            {
+                super.bind( primaryStage.widthProperty() );
+            }
+            @Override
+            protected double computeValue() {
+                return primaryStage.widthProperty().getValue() * 3 / 5;
+            }
+        });
+
+        directControl = DirectionsController.getInstance();
+
+        car.setStyle("-fx-background-color: -fx--primary");
+        bike.setStyle("-fx-background-color: -fx--primary-light");
+        walking.setStyle("-fx-background-color: -fx--primary-light");
+        transit.setStyle("-fx-background-color: -fx--primary-light");
+        currentlySelected = car;
+
+
         Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
         hospitalImageView.setImage(hospital);
         hospitalImageView.setPreserveRatio(true);
-        hospitalImageView.setFitHeight(primaryStage.getHeight());
-        //hospitalImageView.fitWidthProperty().bind(imageAnchorPane.widthProperty());
-        hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
-        imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+
+        imageAnchorPane.setCenterShape(true);
+
         imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
-
-        Rectangle2D viewport = new Rectangle2D(100, 0, hospital.getWidth(), hospital.getHeight());
-        hospitalImageView.setViewport(viewport);
-
+        hospitalImageView.fitHeightProperty().bind(imageAnchorPane.heightProperty());
+        primaryStage.setWidth(primaryStage.getWidth() + 0.0001);
     }
 
     @FXML
@@ -126,7 +139,7 @@ public class Directions {
         origin.append(state.textProperty().get()).append(" ");
         origin.append(zip.textProperty().get());
 
-        List<String> directions = DirectionsController.getDirections(origin.toString(), toBWH);
+        List<String> directions = directControl.getDirections(origin.toString(), toBWH);
         if (directions == null) {
             System.err.println("No Directions Found");
             return;
@@ -139,12 +152,38 @@ public class Directions {
         listView.setSelectionModel(new NoSelectionModel<String>());
         listView.getStyleClass().add("directions");
 
+        listView.setCellFactory(param -> new ListCell<String>(){
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item==null) {
+                    setGraphic(null);
+                    setText(null);
+
+                }else{
+
+                    // set the width's
+                    setMinWidth(param.getWidth() - 25);
+                    setMaxWidth(param.getWidth() - 25);
+                    setPrefWidth(param.getWidth() - 25);
+
+                    // allow wrapping
+                    setWrapText(true);
+
+                    setText(item.toString());
+
+
+                }
+            }
+        });
+
         JFXDialogLayout popup = new JFXDialogLayout();
         popup.setHeading(new Text(header));
         popup.setBody(listView);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
+        popup.getStyleClass().add("jfx-dialog");
         JFXDialog dialog = new JFXDialog(imageStackPane, popup, JFXDialog.DialogTransition.CENTER);
-        dialog.getStyleClass().add("jfx-dialog-overlay-pane");
+        dialog.getStyleClass().add("jfx-dialog");
 
         dialog.prefWidthProperty().bind(new DoubleBinding() {
             {
@@ -152,7 +191,7 @@ public class Directions {
             }
             @Override
             protected double computeValue() {
-                return imageStackPane.widthProperty().getValue() - 100;
+                return imageStackPane.widthProperty().getValue() - 150;
             }
         });
         popup.prefWidthProperty().bind(new DoubleBinding() {
@@ -161,7 +200,7 @@ public class Directions {
             }
             @Override
             protected double computeValue() {
-                return imageStackPane.widthProperty().getValue() - 100;
+                return imageStackPane.widthProperty().getValue() - 150;
             }
         });
 
@@ -203,22 +242,22 @@ public class Directions {
         String mode = ((Button) e.getSource()).getId();
         switch (mode) {
             case "walking":
-                DirectionsController.setMode(TravelMode.WALKING);
+                directControl.setMode(TravelMode.WALKING);
                 switchFocusButton(walking);
                 break;
 
             case "bike":
-                DirectionsController.setMode(TravelMode.BICYCLING);
+                directControl.setMode(TravelMode.BICYCLING);
                 switchFocusButton(bike);
                 break;
 
             case "transit":
-                DirectionsController.setMode(TravelMode.TRANSIT);
+                directControl.setMode(TravelMode.TRANSIT);
                 switchFocusButton(transit);
                 break;
 
             default:
-                DirectionsController.setMode(TravelMode.DRIVING);
+                directControl.setMode(TravelMode.DRIVING);
                 switchFocusButton(car);
                 break;
         }

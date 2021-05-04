@@ -114,12 +114,16 @@ public class newMapEditor {
     private JFXComboBox edgeID;
     @FXML
     private JFXComboBox floorSelector;
-    @FXML private JFXToggleButton drag;
-
+    @FXML
+    private JFXToggleButton drag;
+    @FXML
+    private JFXButton finishAligningButton;
     @FXML
     private JFXButton verticalButton;
     @FXML
     private JFXButton horizontalButton;
+    @FXML
+    private JFXButton aligningButton;
 
 
 
@@ -170,6 +174,10 @@ public class newMapEditor {
     private ArrayList<Node> nodeArrayListToBeAligned = new ArrayList<Node>();
 
     private ArrayList<Node> currentArrayOfAllNodes = DB.getAllNodes();
+
+    private int edgeButtonSelection = 0;
+    private int buttonSelection = 0;
+
 
 
 
@@ -300,20 +308,6 @@ public class newMapEditor {
             g.getChildren().add(circle);
         }
         pane.getChildren().add(g);
-    }
-
-    /**
-     * allows user to align selected nodes
-     */
-    public void alignNodes(ArrayList<Node> array) {
-
-    }
-
-    /**
-     * function for button to align nodes
-     */
-    public void alignNodesButton(ActionEvent e) {
-        //alignNodes();
     }
 
     /**
@@ -753,6 +747,9 @@ public class newMapEditor {
         //refresh tables
         prepareNodes(nodeTreeTable);
         prepareEdges(edgeTreeTable);
+        //isAligning = false;
+        //finishAligning = false;
+        finishAligningButton.setVisible(false);
     }
 
     /**
@@ -760,7 +757,6 @@ public class newMapEditor {
      * @param e
      */
     public void refreshButton(ActionEvent e) {
-        toNodeMode(e);
         refresh();
     }
 
@@ -953,8 +949,10 @@ public class newMapEditor {
         //propagate tables and map
         refresh();
 
-        //hide edge vBox by default
+        //hide edge and node vBox by default, and finish aligning button
         edgeVBox.setVisible(false);
+        nodeVBox.setVisible(false);
+        finishAligningButton.setVisible(false);
 
         //retrieving nodes
         currentArrayOfAllNodes = DB.getAllNodes();
@@ -1021,6 +1019,7 @@ public class newMapEditor {
             //double click
             if (e.getClickCount() == 2) {
                 if (isAligning) {
+                    finishAligningButton.setVisible(true);
                     //coordinates of click
                     double X = e.getX();
                     int xInt = (int) X;
@@ -1057,6 +1056,9 @@ public class newMapEditor {
                         }
                     }
                     System.out.println(modifyInt);
+                    //finishAligning = false;
+                    nodeArrayListToBeAligned.removeAll(nodeArrayListToBeAligned);
+                    refresh();
                 }
                 if (!isAligning && !finishAligning) {
                     //ints for displaying
@@ -1234,6 +1236,8 @@ public class newMapEditor {
     public void alignSelectedNodes(ActionEvent e) {
         isAligning = true;
         newJFXDialogPopUp("Align Nodes", "Vertical", "Horizontal", "Cancel", "Select the nodes you would like to align", stackPane);
+        finishAligning = false;
+
     }
 
 
@@ -1322,16 +1326,24 @@ public class newMapEditor {
      * @param actionEvent
      */
     public void toEdgeMode(ActionEvent actionEvent) {
-        edgeVBox.toFront();
-        edgeVBox.setVisible(true);
-        nodeVBox.setVisible(false);
-        edgeID.getSelectionModel().clearSelection();
-        edgeID.setValue(null);
-        startLocation.getSelectionModel().clearSelection();
-        startLocation.setValue(null);
-        endLocation.getSelectionModel().clearSelection();
-        endLocation.setValue(null);
-        selection = 0;
+        buttonSelection = 0;
+        edgeButtonSelection++;
+        if(edgeButtonSelection == 1) {
+            edgeVBox.toFront();
+            edgeVBox.setVisible(true);
+            nodeVBox.setVisible(false);
+            edgeID.getSelectionModel().clearSelection();
+            edgeID.setValue(null);
+            startLocation.getSelectionModel().clearSelection();
+            startLocation.setValue(null);
+            endLocation.getSelectionModel().clearSelection();
+            endLocation.setValue(null);
+            selection = 0;
+        } else if(edgeButtonSelection == 2) {
+            nodeVBox.setVisible(false);
+            edgeVBox.setVisible(false);
+            edgeButtonSelection = 0;
+        }
     }
 
     /**
@@ -1340,21 +1352,29 @@ public class newMapEditor {
      * @param actionEvent
      */
     public void toNodeMode(ActionEvent actionEvent) {
-        nodeVBox.toFront();
-        nodeVBox.setVisible(true);
-        edgeVBox.setVisible(false);
-        longNameInput.clear();
-        shortNameInput.clear();
-        floorInput.getSelectionModel().clearSelection();
-        floorInput.setValue(null);
-        idInput.getSelectionModel().clearSelection();
-        idInput.setValue(null);
-        buildingInput.getSelectionModel().clearSelection();
-        buildingInput.setValue(null);
-        typeInput.getSelectionModel().clearSelection();
-        typeInput.setValue(null);
-        xCordInput.clear();
-        yCordInput.clear();
+        edgeButtonSelection = 0;
+        buttonSelection++;
+        if(buttonSelection == 1) {
+            nodeVBox.toFront();
+            nodeVBox.setVisible(true);
+            edgeVBox.setVisible(false);
+            longNameInput.clear();
+            shortNameInput.clear();
+            floorInput.getSelectionModel().clearSelection();
+            floorInput.setValue(null);
+            idInput.getSelectionModel().clearSelection();
+            idInput.setValue(null);
+            buildingInput.getSelectionModel().clearSelection();
+            buildingInput.setValue(null);
+            typeInput.getSelectionModel().clearSelection();
+            typeInput.setValue(null);
+            xCordInput.clear();
+            yCordInput.clear();
+        } else if(buttonSelection == 2) {
+            nodeVBox.setVisible(false);
+            edgeVBox.setVisible(false);
+            buttonSelection = 0;
+        }
     }
 
     /**

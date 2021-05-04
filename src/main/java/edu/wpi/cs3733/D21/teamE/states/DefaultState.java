@@ -36,7 +36,7 @@ public class DefaultState {
                 break;
             case "serviceRequestButton":
                 try {
-                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequest.fxml"));
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequests.fxml"));
                     App.changeScene(root);
                 } catch (IOException ex) {
                     ex.printStackTrace();

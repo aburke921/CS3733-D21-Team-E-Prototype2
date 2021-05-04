@@ -376,13 +376,14 @@ public class UserAccountDB {
 			preparedStatement.setInt(1, userID);
 			ResultSet rset = preparedStatement.executeQuery();
 			if (rset.next()) {
-				return rset.getString("covidStatus").equals("Safe");
+				System.out.println(rset.getString("covidStatus").equals("Safe"));
 			}
+			return rset.getString("covidStatus").equals("Safe");
 		} catch (SQLException e) {
+			System.err.println("Error in isUserCovidSafe() from UserAccountDB");
 			e.printStackTrace();
+			return false;
 		}
-		System.err.println("Error in isUserCovidSafe() from UserAccountDB");
-		return false;
 	}
 
 	/**

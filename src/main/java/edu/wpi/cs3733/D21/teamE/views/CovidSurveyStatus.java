@@ -42,6 +42,7 @@ public class CovidSurveyStatus {
         CovidSurveyObj formNumber = covidSurveyTable.getSelectionModel().getSelectedItem().getValue();
         int formNum = formNumber.getFormNumber();
         DB.markAsCovidSafe(formNum);
+        DB.updateUserAccountCovidStatus(App.userID, "Safe");
     }
 
     @FXML
@@ -49,6 +50,7 @@ public class CovidSurveyStatus {
         CovidSurveyObj formNumber = covidSurveyTable.getSelectionModel().getSelectedItem().getValue();
         int formNum = formNumber.getFormNumber();
         DB.markAsCovidRisk(formNum);
+        DB.updateUserAccountCovidStatus(App.userID, "Unsafe");
     }
 
     public void removeChildren(TreeItem<CovidSurveyObj> treeItem) {

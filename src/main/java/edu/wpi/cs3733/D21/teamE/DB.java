@@ -611,16 +611,7 @@ public class DB {
 		return RequestsDB.editReligiousRequest(requestID, roomID, religionType, description);
 	}
 
-	/**
-	 *
-	 * @param requestID the ID that specifies which sanitation form that is being edited
-	 * @param positiveTest is whether the user has had a positive test
-	 * @param symptoms  is whether the user has had symptoms
-	 * @param closeContact is whether the user has had close contact with someone who has COVID
-	 * @param quarantine is whether the user has been in quarantine
-	 * @param noSymptoms is whether the user has no symptoms or not
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
+
 	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {
 		return RequestsDB.editEntryRequest(covidSurveyObj);
 	}
@@ -828,6 +819,10 @@ public class DB {
 	//This should mark a survey within the table as unsafe for entry
 	public static int markAsCovidRisk(int formNumber) {
 		return RequestsDB.markAsCovidRisk(formNumber);
+	}
+
+	public static int updateUserAccountCovidStatus(int userID, String status) {
+		return RequestsDB.updateUserAccountCovidStatus(userID, status);
 	}
 
 }

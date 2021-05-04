@@ -89,7 +89,7 @@ public class sendEmail {
 
 		SMTPTransport t = (SMTPTransport) session.getTransport("smtps");
 
-		t.connect("smtp.gmail.com", "engineeringsoftware3733@gmail.com", password);
+		t.connect("smtp.gmail.com", "engineeringsoftware3733@gmail.com", "SoftEngCS3733");
 		t.sendMessage(msg, msg.getAllRecipients());
 
 		System.out.println("Response: " + t.getLastServerResponse());

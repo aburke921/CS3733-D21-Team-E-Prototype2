@@ -622,8 +622,8 @@ public class DB {
 	 * @param noSymptoms is whether the user has no symptoms or not
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editEntryRequest(int requestID, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms, String status) {
-		return RequestsDB.editEntryRequest(requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms, status);
+	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {
+		return RequestsDB.editEntryRequest(covidSurveyObj);
 	}
 
 		// Querying Tables:

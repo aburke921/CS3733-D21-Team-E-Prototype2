@@ -1757,11 +1757,12 @@ public class DatabaseTests {
 	public void testEditEntryRequest() {
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
-		CovidSurveyObj covidSurveyObjSafe = new CovidSurveyObj(1, 1, true, true, true, true, false, "Unsafe");
+		CovidSurveyObj covidSurveyObjUnsafe = new CovidSurveyObj(1, 1, true, true, true, true, false, "Unsafe");
 
-		DB.addEntryRequest(covidSurveyObjSafe);
+		DB.addEntryRequest(covidSurveyObjUnsafe);
+		covidSurveyObjUnsafe = new CovidSurveyObj(1, 1, true, true, true, true, false, "Safe");
 
-
+		DB.editEntryRequest(covidSurveyObjUnsafe);
 	}
 
 	@Test

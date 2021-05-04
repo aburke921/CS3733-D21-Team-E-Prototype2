@@ -115,7 +115,7 @@ public class Default {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
-                } else {
+                } else if(DB.isUserCovidRisk(App.userID)){
                     System.out.println("User is marked as risk");
                     ArrayList<Node> indexer = DB.getAllNodes();
                     int index = 0;
@@ -131,6 +131,10 @@ public class Default {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
+                } else if(DB.isUserCovidUnmarked(App.userID)) {
+                    //add popup
+                } else {
+                    System.out.println("It was none of the three strings");
                 }
             }
         } else {

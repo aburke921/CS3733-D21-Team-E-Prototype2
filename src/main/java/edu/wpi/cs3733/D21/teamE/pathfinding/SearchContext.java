@@ -86,7 +86,7 @@ public class SearchContext {
         System.out.println("DEBUG:   alg: " + algo);
 
         if(algo.equalsIgnoreCase("A*")){
-            return new Searcher();
+            return new AStarSearcher();
         } else if(algo.equalsIgnoreCase("DFS")){
             return new XFirstSearcher("DFS");
         } else if(algo.equalsIgnoreCase("BFS")) {

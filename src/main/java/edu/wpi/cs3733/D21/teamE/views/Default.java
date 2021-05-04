@@ -199,17 +199,16 @@ public class Default {
 
     @FXML
     private void toParking(ActionEvent e) {
-
-        ArrayList<Node> nodeArrayList = DB.getAllNodes();
+        ArrayList<Node> indexer = DB.getAllNodes();
         int index = 0;
-        for (int i = 0; i < nodeArrayList.size(); i++) {
-            if (nodeArrayList.get(i).get("id").equals(DB.whereDidIPark(App.userID))) {
+        String parked = DB.whereDidIPark(App.userID);
+        for(int i = 0; i < indexer.size(); i++) {
+            if(indexer.get(i).get("id").equals("EPARK00101")) {
                 index = i;
-                System.out.println(DB.whereDidIPark(App.userID));
+                System.out.println(index);
             }
         }
-        PathFinder.endNodeIndex = index;
-        System.out.println(index);
+        PathFinder.endNodeIndex = index; //update this with the main entrance
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
             App.changeScene(root);

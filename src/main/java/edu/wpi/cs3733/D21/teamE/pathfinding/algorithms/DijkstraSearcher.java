@@ -42,7 +42,7 @@ public class DijkstraSearcher extends Searcher {
                 continue;
             }
 
-            List<String> neighbors = getNeighbors(current.get("id"));
+            List<String> neighbors = current.getNeighbors();
 
             for(String neighborId : neighbors){
                 Node neighbor = getNode(neighborId);
@@ -50,7 +50,7 @@ public class DijkstraSearcher extends Searcher {
                 if(!prevCost.containsKey(neighbor) || neighborCost < prevCost.get(neighbor)){
                     prevCost.put(neighbor, neighborCost);
                     cameFrom.put(neighbor, current);
-                    neighbor.setCost(neighborCost + neighbor.dist(end));
+                    neighbor.setCost(neighborCost);
 
                     //remove and re insert because value has been updated
                     potentials.remove(neighbor);

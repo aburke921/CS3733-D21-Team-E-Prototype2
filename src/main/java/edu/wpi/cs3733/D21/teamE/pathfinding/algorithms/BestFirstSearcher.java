@@ -55,7 +55,7 @@ public class BestFirstSearcher extends Searcher {
                 continue;
             }
 
-            List<String> neighbors = getNeighbors(current.get("id"));
+            List<String> neighbors = current.getNeighbors();
 
             for(String neighborId : neighbors){
                 Node neighbor = getNode(neighborId);

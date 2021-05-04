@@ -128,6 +128,7 @@ public class Directions {
 
         imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
         hospitalImageView.fitHeightProperty().bind(imageAnchorPane.heightProperty());
+        primaryStage.setWidth(primaryStage.getWidth() + 0.0001);
     }
 
     @FXML
@@ -180,9 +181,9 @@ public class Directions {
         popup.setHeading(new Text(header));
         popup.setBody(listView);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
-        popup.getStyleClass().add("jfx-dialog-overlay-pane");
+        popup.getStyleClass().add("jfx-dialog");
         JFXDialog dialog = new JFXDialog(imageStackPane, popup, JFXDialog.DialogTransition.CENTER);
-        dialog.getStyleClass().add("jfx-dialog-overlay-pane");
+        dialog.getStyleClass().add("jfx-dialog");
 
         dialog.prefWidthProperty().bind(new DoubleBinding() {
             {

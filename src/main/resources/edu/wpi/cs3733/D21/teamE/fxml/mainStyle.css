@@ -281,7 +281,7 @@ JFXButton:hover FontAwesomeIconView {
 
 }
 
-.jfx-dialog-overlay-pane{
+.jfx-dialog{
     -fx-effect: null;
 }
 

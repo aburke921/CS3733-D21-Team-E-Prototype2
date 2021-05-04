@@ -46,10 +46,10 @@ public class ServiceRequests {
     public void initialize() {
 
         Stage primaryStage = App.getPrimaryStage();
-        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
-        Image backgroundImage = backgroundImg;
-        background.setImage(backgroundImage);
-        background.setEffect(new GaussianBlur());
+//        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+//        Image backgroundImage = backgroundImg;
+//        background.setImage(backgroundImage);
+//        background.setEffect(new GaussianBlur());
 
         //background.setPreserveRatio(true);
         background.fitWidthProperty().bind(primaryStage.widthProperty());

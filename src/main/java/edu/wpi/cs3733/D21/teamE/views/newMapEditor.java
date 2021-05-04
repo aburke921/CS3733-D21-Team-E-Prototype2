@@ -910,6 +910,9 @@ public class newMapEditor {
         edgeID.setItems(edgeIDArrayList);
         startLocation.setItems(longNameArrayList);
         endLocation.setItems(longNameArrayList);
+
+        //set initial combobox value
+        floorSelector.getSelectionModel().select("1"); //floor 1
         System.out.println("done");
 
         new AutoCompleteComboBoxListener<>(startLocation);

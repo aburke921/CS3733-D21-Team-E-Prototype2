@@ -13,8 +13,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -34,6 +37,18 @@ public class createAccount {
 	private StackPane stackPane;
 	@FXML
 	private AnchorPane appBarAnchorPane;
+
+	@FXML // fx:id="imageView"
+	private ImageView hospitalImageView;
+
+	@FXML // fx:id="imageView"
+	private ImageView logoImageView;
+
+	@FXML // fx:id="imageAnchorPane"
+	private AnchorPane imageAnchorPane;
+
+	@FXML // fx:id="rightAnchorPane"
+	private AnchorPane rightAnchorPane;
 
 
 	private static boolean checkString(String str) {
@@ -57,6 +72,25 @@ public class createAccount {
 	}
 
 	public void initialize() {
+
+		//Set up images
+		Stage primaryStage = App.getPrimaryStage();
+
+		Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+		hospitalImageView.setImage(hospital);
+		hospitalImageView.setPreserveRatio(true);
+
+		hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
+		hospitalImageView.fitWidthProperty().bind(primaryStage.widthProperty());
+		imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+		imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+
+		Image logo = new Image("edu/wpi/cs3733/D21/teamE/fullLogo.png");
+		logoImageView.setImage(logo);
+		logoImageView.setPreserveRatio(true);
+		rightAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+		rightAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+
 		//init appBar
 		Node appBarComponent = null;
 		try {

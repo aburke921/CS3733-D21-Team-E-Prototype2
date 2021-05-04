@@ -10,11 +10,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -24,6 +28,9 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 
 	ObservableList<String> locations;
 	ArrayList<String> nodeID;
+
+	@FXML // fx:id="background"
+	private ImageView background;
 
 	@FXML
 	private Rectangle fullscreen;
@@ -93,6 +100,16 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 
 	@FXML
 	void initialize() {
+
+		Stage primaryStage = App.getPrimaryStage();
+		Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+		Image backgroundImage = backgroundImg;
+		background.setImage(backgroundImage);
+		background.setEffect(new GaussianBlur());
+
+		//background.setPreserveRatio(true);
+		background.fitWidthProperty().bind(primaryStage.widthProperty());
+		//background.fitHeightProperty().bind(primaryStage.heightProperty());
 
 		//init appBar
 		javafx.scene.Node appBarComponent = null;

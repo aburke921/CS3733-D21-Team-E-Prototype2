@@ -1,9 +1,5 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
@@ -19,6 +15,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * AppBar Component is the component that appears on the top of most pages in the app.
@@ -125,6 +126,11 @@ public class AppBarComponent {
         assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
         assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
         assert appBarTitleLabel != null : "fx:id=\"appBarTitleLabel\" was not injected: check your FXML file 'AppBarComponent.fxml'.";
+
+        Logger.getLogger("BWH").finest("Init AppBar with parameters:" +
+                "\nShowHelp: " + App.isShowHelp() +
+                "\nShowLogin: " + App.isShowLogin() +
+                "\nPageTitle: " + App.getPageTitle());
 
         System.out.println("user ID is " + App.userID);
 

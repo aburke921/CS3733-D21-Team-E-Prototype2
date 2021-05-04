@@ -97,7 +97,7 @@ public class AppBarComponent {
     @FXML
     void exitApplication(MouseEvent event) {
         // Close Maps API
-        DirectionsController.close();
+        DirectionsEntity.close();
 
         App app = new App();
         app.stop();

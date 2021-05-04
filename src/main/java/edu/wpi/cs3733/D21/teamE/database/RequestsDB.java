@@ -2049,7 +2049,6 @@ public class RequestsDB {
 	public static int markAsCovidSafe(int formNumber) {
 		String query = "Update entryRequest set positiveTest = false, symptoms = false, closeContact = false, quarantine = false, noSymptoms = true, status = 'Safe' where entryRequestID = " + formNumber;
 
-
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.executeUpdate();
 			prepState.close();
@@ -2061,6 +2060,21 @@ public class RequestsDB {
 		}
 
 
+
+	}
+
+	public static int updateUserAccountCovidStatus(int userID, String status) {
+		String updateUserAccount = "Update userAccount set covidStatus = '" + status + "' where userID = " + userID;
+
+		try (PreparedStatement prepState = connection.prepareStatement(updateUserAccount)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating updateUserAccountCovidStatus");
+			return 0;
+		}
 	}
 
 	public static int markAsCovidRisk(int formNumber) {

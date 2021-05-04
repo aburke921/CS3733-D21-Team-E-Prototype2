@@ -99,7 +99,7 @@ public class Default {
     private void toPathFinder(ActionEvent event) {
         if(App.userID != 0) {
             if(DB.filledCovidSurveyToday(App.userID)) {
-                if(DB.isUserCovidSafe(App.userID)) {
+                if((DB.isUserCovidSafe(App.userID))) {
                     System.out.println("User is marked as safe");
                     ArrayList<Node> indexer = DB.getAllNodes();
                     int index = 0;

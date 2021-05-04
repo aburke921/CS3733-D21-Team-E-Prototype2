@@ -248,12 +248,6 @@ public class PathFinder {
         if (currentFoundPath == null) return;
 
         List<String> directions = currentFoundPath.makeDirectionsWithDist();
-        // Include Icon next to direction
-        JFXListView<String> listView = new JFXListView<>();
-        listView.getItems().addAll(directions);
-        listView.setPrefHeight(USE_COMPUTED_SIZE);
-        listView.setSelectionModel(new NoSelectionModel<String>());
-        listView.getStyleClass().add("directions");
 
         TableView tableView = new TableView();
 
@@ -269,6 +263,8 @@ public class PathFinder {
         column2.setCellValueFactory(new PropertyValueFactory<>("direction"));
         column2.setStyle("-fx-alignment: CENTER-LEFT");
 
+        tableView.setSelectionModel(null);
+        tableView.setPrefHeight(USE_COMPUTED_SIZE);
         tableView.getStyleClass().add("directions");
         tableView.getStyleClass().add("noheader");
         tableView.getStyleClass().add("table-row-cell");
@@ -324,7 +320,7 @@ public class PathFinder {
         popup.setPrefHeight(USE_COMPUTED_SIZE);
         JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
         dialog.setMaxWidth(375);
-        int fullSize = listView.getItems().size() * 41 + 120;
+        int fullSize = tableView.getItems().size() * 41 + 120;
         if (fullSize > 425) {
             dialog.setMaxHeight(425);
         } else {
@@ -477,6 +473,12 @@ public class PathFinder {
                 break;
             case 2:
                 algoType = "BFS";
+                break;
+            case 3:
+                algoType = "Dijkstra";
+                break;
+            case 4:
+                algoType = "Best";
                 break;
             default:
                 algoType = "A*";
@@ -897,8 +899,13 @@ public class PathFinder {
 
         nodeArrayList = DB.getAllNodes();
         for (int i = 0; i < nodeArrayList.size(); i++) {
-            longNameArrayList.add(nodeArrayList.get(i).get("longName"));
-            nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
+            Node node = nodeArrayList.get(i);
+            if (node.get("type").equalsIgnoreCase("HALL") || node.get("type").equalsIgnoreCase("WALK")) {
+                nodeArrayList.remove(i--);
+            } else {
+                longNameArrayList.add(node.get("longName"));
+                nodeIDArrayList.add(node.get("id"));
+            }
         }
 //        longNameArrayList = connection.getAllNodeLongNames();
 //        nodeIDArrayList = connection.getListOfNodeIDS();
@@ -912,8 +919,6 @@ public class PathFinder {
 
         new AutoCompleteComboBoxListener<>(startLocationComboBox);
         new AutoCompleteComboBoxListener<>(endLocationComboBox);
-
-        final ArrayList<Node> array = DB.getAllNodes();
 
         //Set up zoomable and pannable panes
         BorderPane borderPane = new BorderPane();
@@ -996,8 +1001,8 @@ public class PathFinder {
             /*System.out.println(xInt);
             System.out.println(yInt);*/
 
-            for(int i = 0; i < array.size(); i++) {
-                Node node = array.get(i);
+            for(int i = 0; i < nodeArrayList.size(); i++) {
+                Node node = nodeArrayList.get(i);
                 double nodeX = node.getX() / scale;
                 int nodeXInt = (int) nodeX;
                 double nodeY = node.getY() / scale;
@@ -1005,7 +1010,7 @@ public class PathFinder {
                 System.out.println(nodeXInt);
                 if ((Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) && (node.get("floor").equalsIgnoreCase(currentFloor))) {
 
-                    System.out.println(array.get(i).get("longName"));
+                    System.out.println(nodeArrayList.get(i).get("longName"));
                     clickOnNode(i);
 
                 }

@@ -215,16 +215,6 @@
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="walk" checkedColor="BLACK" onAction="#sortNodesByType" text="Walkways">
-                                                   <VBox.margin>
-                                                      <Insets top="8.0" />
-                                                   </VBox.margin>
-                                                </JFXCheckBox>
-                                                <JFXCheckBox fx:id="hall" checkedColor="#7c7c7c" onAction="#sortNodesByType" text="Hallways">
-                                                   <VBox.margin>
-                                                      <Insets top="8.0" />
-                                                   </VBox.margin>
-                                                </JFXCheckBox>
                                              </children>
                                           </VBox>
                                        </children>

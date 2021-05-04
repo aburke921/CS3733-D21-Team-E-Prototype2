@@ -285,7 +285,7 @@ JFXButton:hover FontAwesomeIconView {
     -fx-fill: WHITE;
 }
 
-transit-button{
+.transit-button{
     -jfx-button-type: RAISED;
 }
 
@@ -342,7 +342,7 @@ transit-button{
 
 }
 
-.jfx-dialog-overlay-pane > StackPane{
+.jfx-dialog{
     -fx-effect: null;
 }
 

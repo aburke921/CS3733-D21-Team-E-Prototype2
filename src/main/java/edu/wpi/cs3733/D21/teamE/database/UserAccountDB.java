@@ -455,8 +455,8 @@ public class UserAccountDB {
 			preparedStatement.setInt(1, userID);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
-				String name = resultSet.getString("firstName") + " ";
-				return name += resultSet.getString("lastName");
+				String firstNameSpace = resultSet.getString("firstName") + " ";
+				return firstNameSpace + resultSet.getString("lastName");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

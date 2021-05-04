@@ -4,6 +4,7 @@ import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
+import edu.wpi.cs3733.D21.teamE.database.*;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
@@ -33,6 +34,7 @@ public class DB {
 		RequestsDB.createInternalPatientRequest();
 		RequestsDB.createAubonPainMenuTable();
 		RequestsDB.createReligionRequestTable();
+		RequestsDB.createEntryRequestTable();
 	}
 
 	public static void createNodeTable() {
@@ -43,12 +45,11 @@ public class DB {
 	 * creates an appointment and adds to the appointmentDB table
 	 * @param patientID is the ID of the patient making the appointment
 	 * @param startTime is when the appointment starts
-	 * @param endTime   is when the appointment ends
 	 * @param doctorID  is the doctor assigned to the appointment
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int addAppointment(int patientID, long startTime, long endTime, int doctorID) {
-		return appointmentDB.addAppointment(patientID, startTime, endTime, doctorID);
+	public static int addAppointment(int patientID, String startTime, String date, Integer doctorID) {
+		return appointmentDB.addAppointment(patientID, startTime, date, doctorID);
 	}
 
 	/**
@@ -63,12 +64,11 @@ public class DB {
 	 * edits an appointment
 	 * @param appointmentID is the ID of the appointment
 	 * @param newStartTime  is the new start time of the appointment
-	 * @param newEndTime    is the new end time of the appointment
 	 * @param newDoctorID   is the new doctor assigned
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int editAppointment(int appointmentID, int newStartTime, int newEndTime, Integer newDoctorID) {
-		return appointmentDB.editAppointment(appointmentID, newStartTime, newEndTime, newDoctorID);
+	public static int editAppointment(int appointmentID, String newStartTime, String date, Integer newDoctorID) {
+		return appointmentDB.editAppointment(appointmentID, newStartTime, date, newDoctorID);
 	}
 
 	/**
@@ -452,6 +452,12 @@ public class DB {
 		RequestsDB.addReligiousRequest(userID, roomID, assigneeID, religionType, description);
 	}
 
+	/**
+	 * This adds a entry request form to the table
+	 */
+	public static void addEntryRequest(int userID, int assigneeID, int surveyResult, int decision) {
+		RequestsDB.addEntryRequest(userID, assigneeID, surveyResult, decision);
+	}
 
 	// Editing Tables:
 
@@ -600,8 +606,18 @@ public class DB {
 		return RequestsDB.editReligiousRequest(requestID, roomID, religionType, description);
 	}
 
+	/**
+	 * This edits a entry request form that is already in the database
+	 * @param requestID    the ID that specifies which sanitation form that is being edited
+	 * @param surveyResult the new surveyResult that the user is getting to update their form
+	 * @param decision     the new decision the user is assigned to
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editEntryRequest(int requestID, int surveyResult, int decision) {
+		return RequestsDB.editEntryRequest(requestID, surveyResult, decision);
+	}
 
-	// Querying Tables:
+		// Querying Tables:
 
 	/**
 	 * Gets a list of all the "assigneeIDs", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID
@@ -660,13 +676,9 @@ public class DB {
 		return RequestsDB.getAubonPainFeild(column);
 	}
 
-	public static ObservableList<String> getAssigneeNames(String givenUserType) {
-		return RequestsDB.getAssigneeNames(givenUserType);
-	}
 
-	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
-		return RequestsDB.getAssigneeIDs(givenUserType);
-	}
+
+
 
 
 	// UserAccountDB:
@@ -734,6 +746,9 @@ public class DB {
 		return UserAccountDB.userLogin(email, password);
 	}
 
+	public static ObservableList<String> getAssigneeNames(String givenUserType) {
+		return RequestsDB.getAssigneeNames(givenUserType);
+	}
 
 	/**
 	 * Submits a Covid Survey to the server
@@ -745,6 +760,10 @@ public class DB {
 		return UserAccountDB.submitCovidSurvey(surveyResults, userID);
 	}
 
+	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
+		return RequestsDB.getAssigneeIDs(givenUserType);
+	}
+
 	/**
 	 * Checks if a user have a unsafe Covid survey
 	 * @param userID is the user's ID that we are checking
@@ -754,6 +773,9 @@ public class DB {
 		return UserAccountDB.isUserCovidSafe(userID);
 	}
 
+	public static String getEmail(int userID) {
+		return RequestsDB.getEmail(userID);
+	}
 	/**
 	 * Checks if a user have filled their COVID survey today
 	 * @param userID is the user's ID that we are checking
@@ -763,6 +785,9 @@ public class DB {
 		return UserAccountDB.filledCovidSurveyToday(userID);
 	}
 
+	public static String getUserName(int userID) {
+		return UserAccountDB.getUserName(userID);
+	}
 	/**
 	 * Submits a Parking Slot to the server
 	 * @param nodeID is the result nodeID that we are submitting
@@ -780,9 +805,5 @@ public class DB {
 	 */
 	public static String whereDidIPark(int userID) {
 		return UserAccountDB.whereDidIPark(userID);
-	}
-
-	public static String getUserName(int userID) {
-		return UserAccountDB.getUserName(userID);
 	}
 }

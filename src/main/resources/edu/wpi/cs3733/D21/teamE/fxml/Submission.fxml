@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.Submission">
+   <children>
+      <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefHeight="65.0" prefWidth="1012.0" />
+      <AnchorPane prefHeight="687.0" prefWidth="1199.0" VBox.vgrow="ALWAYS">
+         <children>
+            <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fx:id="hospitalImageView1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="hospitalImageView2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <VBox>
+                                       <children>
+                                          <Label text="Request Submitted">
+                                             <graphic>
+                                                <FontAwesomeIconView id="submission-icon" glyphName="CHECK_CIRCLE" size="80" />
+                                             </graphic>
+                                             <font>
+                                                <Font name="Arial" size="36.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets left="40.0" right="40.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <Label text="Your request has been successfully submitted. To view the status of your request, head to the Service Request Status Page. " wrapText="true">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets left="40.0" right="40.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="40.0" />
+                                       </VBox.margin>
+                                    </VBox>
+                                    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <JFXButton fx:id="statusButton" onAction="#switchScene" prefWidth="300.0" styleClass="back-button" text="Service Request Status Page">
+                                             <VBox.margin>
+                                                <Insets left="40.0" top="20.0" />
+                                             </VBox.margin>
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </JFXButton>
+                                          <JFXButton fx:id="requestButton" onAction="#switchScene" prefWidth="300.0" styleClass="back-button" text="Submit Another Request">
+                                             <VBox.margin>
+                                                <Insets left="40.0" top="20.0" />
+                                             </VBox.margin>
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </JFXButton>
+                                          <JFXButton fx:id="defaultButton" onAction="#switchScene" prefWidth="300.0" styleClass="back-button" text="Return to Main Menu">
+                                             <VBox.margin>
+                                                <Insets left="40.0" top="20.0" />
+                                             </VBox.margin>
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                             <graphic>
+                                                <MaterialDesignIconView id="white-icon" glyphName="KEYBOARD_RETURN" size="25" />
+                                             </graphic>
+                                          </JFXButton>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="40.0" />
+                                       </VBox.margin>
+                                    </VBox>
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </StackPane>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

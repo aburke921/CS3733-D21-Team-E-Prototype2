@@ -12,10 +12,9 @@ public class appointmentDB {
 				"    appointmentID Int Primary Key, " +
 				"    patientID Int References useraccount (userid) On Delete Cascade , " +
 				"    doctorID Int References useraccount (userid) On Delete Cascade, " +
-				"    nodeID varchar(31) References node (nodeid) On Delete Cascade,  " +
-				"    startTime timeStamp, " +
-				"    endTime timestamp, " +
-				"    Constraint appointmentUnique Unique(patientID, startTime, endTime) " +
+				"    appointmentDate varchar(31) Not Null, " +
+				"    startTime varchar(31) Not Null, " +
+				"    Constraint appointmentUnique Unique(patientID, startTime, appointmentDate) " +
 				")";
 
 
@@ -33,21 +32,18 @@ public class appointmentDB {
 	 * creates an appointment and adds to the appointmentDB table
 	 * @param patientID is the ID of the patient making the appointment
 	 * @param startTime is when the appointment starts
-	 * @param endTime   is when the appointment ends
 	 * @param doctorID  is the doctor assigned to the appointment
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int addAppointment(int patientID, long startTime, long endTime, int doctorID) {
-		Timestamp sTime = new Timestamp(startTime);
-		Timestamp eTime = new Timestamp(endTime);
-		String insertAddApt = "insert into appointment values(" + (getMaxAppointmentID() + 1) + ",?, ?, null, ? , ?)";
+	public static int addAppointment(int patientID, String startTime, String date, Integer doctorID) {
+
+		String insertAddApt = "insert into appointment values(" + (getMaxAppointmentID() + 1) + ",?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertAddApt)) {
 			prepState.setInt(1, patientID);
 			prepState.setInt(2, doctorID);
-			prepState.setTimestamp(3, sTime);
-			prepState.setTimestamp(4, eTime);
-
+			prepState.setString(3, date);
+			prepState.setString(4, startTime);
 
 			prepState.executeUpdate();
 			prepState.close();
@@ -88,39 +84,26 @@ public class appointmentDB {
 	 * edits an appointment
 	 * @param appointmentID is the ID of the appointment
 	 * @param newStartTime  is the new start time of the appointment
-	 * @param newEndTime    is the new end time of the appointment
 	 * @param newDoctorID   is the new doctor assigned
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int editAppointment(int appointmentID, int newStartTime, int newEndTime, Integer newDoctorID) {
+	public static int editAppointment(int appointmentID, String newStartTime, String newDate, Integer newDoctorID) {
 
 		boolean added = false;
 
 		String query = "update appointment set ";
 
-		Integer newStartTimeI = newStartTime;
-		Integer newEndTimeI = newStartTime;
 
-		if (newStartTimeI != null) {
-
-			long newStartTimelong = (long) newStartTime;
-			Long newStartTimeL = newStartTimelong;
-			Timestamp sTime = new Timestamp(newStartTimeL);
-
-			query = query + "startTime = '" + sTime + "'";
+		if (newStartTime != null) {
+			query = query + "startTime = '" + newStartTime + "'";
 
 			added = true;
 		}
-		if (newEndTimeI != null) {
-
-			long newEndTimelong = (long) newEndTime;
-			Long newEndTimeL = newEndTimelong;
-			Timestamp eTime = new Timestamp(newEndTimeL);
-
+		if (newDate != null) {
 			if (added == true) {
 				query = query + ", ";
 			}
-			query = query + "endTime = '" + eTime + "'";
+			query = query + "appointmentDate = '" + newDate + "'";
 			added = true;
 		}
 		if (newDoctorID != null) {
@@ -128,7 +111,6 @@ public class appointmentDB {
 				query = query + ", ";
 			}
 			query = query + "doctorID = " + newDoctorID;
-			added = true;
 		}
 
 		query = query + " where appointmentID = " + appointmentID;
@@ -137,7 +119,7 @@ public class appointmentDB {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error in updating appointment table");
 			return 0;
 		}
@@ -160,6 +142,35 @@ public class appointmentDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error deleting from cancelAppointment inside function cancelAppointment()");
+			return 0;
+		}
+
+	}
+
+	public static int getAppointmentID(int patientID, String startTime, String date) {
+		String getAppointmentID = "select * from appointment where patientID = ? AND startTime = ? AND appointmentDate = ?";
+		int appointmentID = 0;
+		try (PreparedStatement prepState = connection.prepareStatement(getAppointmentID)) {
+
+			prepState.setInt(1, patientID);
+			prepState.setString(2, date);
+			prepState.setString(3, startTime);
+
+			ResultSet rset = prepState.executeQuery();
+
+			while(rset.next()) {
+				appointmentID =  rset.getInt("appointmentID");
+			}
+
+
+			rset.close();
+			prepState.close();
+			return appointmentID;
+
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error getting appointmentID inside function getAppointmentID()");
 			return 0;
 		}
 

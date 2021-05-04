@@ -38,11 +38,11 @@
                                     <children>
                                         <VBox maxWidth="600.0" prefHeight="513.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-radius: 25px; -fx-background-radius: 25px;">
                                             <children>
-                                                <HBox alignment="TOP_CENTER" maxWidth="600.0" prefHeight="433.0" prefWidth="600.0" styleClass="centerPane">
+                                                <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="600.0" prefHeight="303.0" prefWidth="600.0" styleClass="centerPane">
                                                     <children>
                                                         <FlowPane prefHeight="361.0" prefWidth="300.0">
                                                             <children>
-                                                                <VBox prefHeight="349.0" prefWidth="260.0">
+                                                                <VBox prefHeight="306.0" prefWidth="260.0">
                                                                     <children>
                                                                         <JFXDatePicker fx:id="dateInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="278.0" promptText="Date">
                                                                             <VBox.margin>
@@ -68,7 +68,7 @@
                                                         </FlowPane>
                                                         <FlowPane prefHeight="361.0" prefWidth="300.0">
                                                             <children>
-                                                                <VBox prefHeight="363.0" prefWidth="260.0">
+                                                                <VBox prefHeight="221.0" prefWidth="260.0">
                                                                     <children>
                                                                         <JFXTextArea fx:id="additionalNotesInput" prefHeight="141.0" prefWidth="259.0" promptText="Additional notes for doctor...">
                                                                             <VBox.margin>
@@ -147,10 +147,10 @@
                                                 </VBox>
                                                 <HBox maxWidth="600.0" prefHeight="100.0" prefWidth="519.0" styleClass="centerPane">
                                                     <children>
-                                                        <AnchorPane prefHeight="71.0" prefWidth="1200.0">
+                                                        <AnchorPane prefHeight="49.0" prefWidth="600.0">
                                                             <children>
-                                                                <JFXButton fx:id="cancel" layoutX="455.0" layoutY="45.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" />
-                                                                <JFXButton fx:id="submit" layoutX="532.0" layoutY="46.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
+                                                                <JFXButton fx:id="cancel" layoutX="459.0" layoutY="29.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" />
+                                                                <JFXButton fx:id="submit" layoutX="534.0" layoutY="29.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
                                                             </children>
                                                         </AnchorPane>
                                                     </children>

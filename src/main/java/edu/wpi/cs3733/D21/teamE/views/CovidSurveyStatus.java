@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableView;
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.states.DefaultState;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ServiceRequestForm;
@@ -10,10 +11,13 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CovidSurveyStatus {
@@ -60,11 +64,21 @@ public class CovidSurveyStatus {
         prepareTable(covidSurveyTable);
     }
 
+    @FXML
+    private void goBack() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
+            App.changeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public void addToTable(TreeItem<CovidSurveyObj> unchecked, TreeItem<CovidSurveyObj> markedSafe, TreeItem<CovidSurveyObj> markedUnsafe) {
 
-//        ArrayList<CovidSurveyObj> allCovidSurveys = DB.getCovidSurveys();
+       ArrayList<CovidSurveyObj> allCovidSurveys = DB.getCovidSurveys();
 
-        ArrayList<CovidSurveyObj> allCovidSurveys = new ArrayList<>();
+//        ArrayList<CovidSurveyObj> allCovidSurveys = new ArrayList<>();
 
         if(allCovidSurveys.size() > 0) {
             if(!unchecked.getChildren().isEmpty()) {

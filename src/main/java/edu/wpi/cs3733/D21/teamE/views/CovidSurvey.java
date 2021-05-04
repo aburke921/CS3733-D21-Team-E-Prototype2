@@ -80,6 +80,13 @@ public class CovidSurvey extends ServiceRequests {
 			String status = " ";
 			CovidSurveyObj newSurvey = new CovidSurveyObj(App.userID, 0, positiveTestBool, symptomsBool, closeContactBool, quarantineBool, noSymptomsBool, status);
 			DB.submitCovidSurvey(newSurvey, App.userID);
+//			DB.addEntryRequest(App.userID, newSurvey);
+			try {
+				Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurveyStatus.fxml"));
+				App.changeScene(root);
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 

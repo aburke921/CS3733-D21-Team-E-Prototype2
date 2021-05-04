@@ -122,12 +122,31 @@ public class DirectionsController {
 
     private static String getHeader(DirectionsLeg trip, boolean toBWH) {
         StringBuilder SB = new StringBuilder("Directions ");
-        SB.append((toBWH ? "To" : "From")).append(" Brigham and Women's Hospital ");
-        SB.append((toBWH ? ("From " + trip.startAddress) : ("To " + trip.endAddress)));
-        SB.append("\nBy ").append(mode);
-        SB.append("\tDistance: ").append(trip.distance);
-        SB.append("\tDuration: ").append(trip.duration);
+        SB.append((toBWH ? "to" : "from")).append(" Brigham and Women's Hospital ");
+        SB.append((toBWH ? ("from " + trip.startAddress) : ("to " + trip.endAddress)));
+        SB.append("\n\nBy ").append(modeName(mode));
+        SB.append("\t\tDistance: ").append(trip.distance);
+        SB.append("\t\tDuration: ").append(trip.duration);
         return SB.toString();
+    }
+
+    private static String modeName(TravelMode mode) {
+        String str;
+        switch (mode) {
+            case WALKING:
+                str =  "Walking";
+                break;
+            case BICYCLING:
+                str =  "Bicycling";
+                break;
+            case TRANSIT:
+                str =  "Public Transit";
+                break;
+            default:
+                str =  "Driving";
+                break;
+        };
+        return str;
     }
 
     public static void init() {

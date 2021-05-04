@@ -147,9 +147,9 @@ public class Directions {
                 }else{
 
                     // set the width's
-                    setMinWidth(param.getWidth() - 10);
-                    setMaxWidth(param.getWidth() - 10);
-                    setPrefWidth(param.getWidth() - 10);
+                    setMinWidth(param.getWidth() - 25);
+                    setMaxWidth(param.getWidth() - 25);
+                    setPrefWidth(param.getWidth() - 25);
 
                     // allow wrapping
                     setWrapText(true);

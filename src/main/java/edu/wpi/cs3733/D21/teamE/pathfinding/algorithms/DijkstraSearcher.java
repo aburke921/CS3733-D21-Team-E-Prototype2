@@ -7,12 +7,16 @@ import java.util.*;
 
 public class DijkstraSearcher extends Searcher {
 
+    private String type;
+
     /**
      * constructor
      */
-    public DijkstraSearcher(){
-
+    public DijkstraSearcher(String _type){
+        super();
+        this.type = _type;
     }
+
     @Override
     public Path search(Node start, Node end){
 

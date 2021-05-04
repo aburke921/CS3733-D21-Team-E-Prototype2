@@ -81,6 +81,10 @@ public class SearchContext {
     }
 
     private Searcher translateAlgo(String algo){
+
+
+        System.out.println("DEBUG:   alg: " + algo);
+
         if(algo.equalsIgnoreCase("A*")){
             return new Searcher();
         } else if(algo.equalsIgnoreCase("DFS")){
@@ -88,9 +92,9 @@ public class SearchContext {
         } else if(algo.equalsIgnoreCase("BFS")) {
             return new XFirstSearcher("BFS");
         } else if(algo.equalsIgnoreCase("Best")){
-            return new BestFirstSearcher();
+            return new BestFirstSearcher("Best");
         } else if(algo.equalsIgnoreCase("Dijkstra")){
-            return new DijkstraSearcher();
+            return new DijkstraSearcher("Dijkstra");
         } else{
             return null;
         }

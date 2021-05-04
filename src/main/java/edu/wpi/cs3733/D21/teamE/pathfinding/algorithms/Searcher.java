@@ -209,9 +209,21 @@ public class Searcher {
      */
     protected Path reconstructPath(HashMap<Node, Node> cameFrom, Node end) {
         LinkedList<Node> stack = new LinkedList<>();
+
+        //int cur = 0;
+
         //push onto stack
-        for(Node current = end; cameFrom.containsKey(current); current = cameFrom.get(current)){
+        for(Node current = end; current != null && cameFrom.containsKey(current);
+                current = cameFrom.get(current)){
             stack.push(current);
+
+            System.out.println(current.getX() + "." + current.getY());
+//
+//            cur++;
+//
+//            if (cur > 40){
+//                break;
+//            }
         }
 
         Path path = new Path();

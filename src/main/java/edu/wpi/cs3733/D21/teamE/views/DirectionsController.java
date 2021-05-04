@@ -20,36 +20,32 @@ public class DirectionsController {
     private static GeoApiContext geoContext;
 
     // Travel Mode, default is driving
-    private static TravelMode mode = TravelMode.DRIVING;
-
-    // Time Instance (can be departure or arrival time)
-    private static Instant time;
+    private TravelMode mode = TravelMode.DRIVING;
 
     // Destinations
     private static final String MAIN = "Brigham and Womens'";
     private static final String LEFT = "80 Francis St, Boston, MA 02115";
     private static final String RIGHT = "15-51 New Whitney St, Boston, MA 02115";
 
-    public static void setMode(TravelMode mode) {
-        DirectionsController.mode = mode;
+    private static DirectionsController instance = null;
+
+    public static DirectionsController getInstance()
+    {
+        if (instance == null)
+            instance = new DirectionsController();
+
+        return instance;
     }
 
-    public static String getMode() {
-        switch (mode) {
-            case DRIVING:
-                return "Driving";
-            case WALKING:
-                return "Walking";
-            case TRANSIT:
-                return "Public Transit";
-            case BICYCLING:
-                return "Bicycling";
-            default:
-                return "ERROR";
-        }
+    private DirectionsController() {
+        init();
     }
 
-    public static List<String> getDirections(String origin, Boolean toBWH) {
+    public void setMode(TravelMode mode) {
+        instance.mode = mode;
+    }
+
+    public List<String> getDirections(String origin, Boolean toBWH) {
         try {
             DirectionsResult result = getDir(origin, toBWH);
             DirectionsLeg trip = result.routes[0].legs[0];
@@ -65,10 +61,9 @@ public class DirectionsController {
         return null;
     }
 
-    public static DirectionsResult getDir(String origin, Boolean toBWH) throws IOException, InterruptedException, ApiException {
+    private DirectionsResult getDir(String origin, Boolean toBWH) throws IOException, InterruptedException, ApiException {
         DirectionsApiRequest request = new DirectionsApiRequest(geoContext);
         request.mode(mode).departureTimeNow();
-        //request.arrivalTime(Instant.parse("10:00 pm"));
         DirectionsResult result;
 
         if (toBWH) {
@@ -101,7 +96,7 @@ public class DirectionsController {
         return result;
     }
 
-    private static List<String> directionsListing(DirectionsLeg trip, boolean toBWH) {
+    private List<String> directionsListing(DirectionsLeg trip, boolean toBWH) {
         ArrayList<String> directions = new ArrayList<>();
         directions.add(getHeader(trip, toBWH));
         // First String is header
@@ -120,11 +115,11 @@ public class DirectionsController {
         return directions;
     }
 
-    private static String getHeader(DirectionsLeg trip, boolean toBWH) {
+    private String getHeader(DirectionsLeg trip, boolean toBWH) {
         StringBuilder SB = new StringBuilder("Directions ");
         SB.append((toBWH ? "to" : "from")).append(" Brigham and Women's Hospital ");
         SB.append((toBWH ? ("from " + trip.startAddress) : ("to " + trip.endAddress)));
-        SB.append("\n\nBy ").append(modeName(mode));
+        SB.append("\n\nBy ").append(modeName(instance.mode));
         SB.append("\t\tDistance: ").append(trip.distance);
         SB.append("\t\tDuration: ").append(trip.duration);
         return SB.toString();
@@ -149,7 +144,7 @@ public class DirectionsController {
         return str;
     }
 
-    public static void init() {
+    private static void init() {
         Dotenv dotenv = Dotenv.load();
         API_KEY = dotenv.get("MAPS_API_KEY");
         getGeoContext();

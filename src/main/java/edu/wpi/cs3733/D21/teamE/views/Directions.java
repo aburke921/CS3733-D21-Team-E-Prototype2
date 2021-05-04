@@ -71,6 +71,8 @@ public class Directions {
     @FXML // fix:id="backButton"
     public Button backButton; // Value injected by FXMLLoader
 
+    DirectionsController directControl = null; // Directions Controller, Maps API interface
+
 
     public void initialize() {
         //init appBar
@@ -86,12 +88,6 @@ public class Directions {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        car.setStyle("-fx-background-color: -fx--primary");
-        bike.setStyle("-fx-background-color: -fx--primary-light");
-        walking.setStyle("-fx-background-color: -fx--primary-light");
-        transit.setStyle("-fx-background-color: -fx--primary-light");
-        currentlySelected = car;
-        DirectionsController.init();
 
         Stage primaryStage = App.getPrimaryStage();
 
@@ -104,6 +100,15 @@ public class Directions {
                 return primaryStage.widthProperty().getValue() * 2 / 5;
             }
         });
+
+        directControl = DirectionsController.getInstance();
+
+        car.setStyle("-fx-background-color: -fx--primary");
+        bike.setStyle("-fx-background-color: -fx--primary-light");
+        walking.setStyle("-fx-background-color: -fx--primary-light");
+        transit.setStyle("-fx-background-color: -fx--primary-light");
+        currentlySelected = car;
+
 
         Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
         hospitalImageView.setImage(hospital);
@@ -123,7 +128,7 @@ public class Directions {
         origin.append(state.textProperty().get()).append(" ");
         origin.append(zip.textProperty().get());
 
-        List<String> directions = DirectionsController.getDirections(origin.toString(), toBWH);
+        List<String> directions = directControl.getDirections(origin.toString(), toBWH);
         if (directions == null) {
             System.err.println("No Directions Found");
             return;
@@ -175,7 +180,7 @@ public class Directions {
             }
             @Override
             protected double computeValue() {
-                return imageStackPane.widthProperty().getValue() - 100;
+                return imageStackPane.widthProperty().getValue() - 150;
             }
         });
         popup.prefWidthProperty().bind(new DoubleBinding() {
@@ -184,7 +189,7 @@ public class Directions {
             }
             @Override
             protected double computeValue() {
-                return imageStackPane.widthProperty().getValue() - 100;
+                return imageStackPane.widthProperty().getValue() - 150;
             }
         });
 
@@ -226,22 +231,22 @@ public class Directions {
         String mode = ((Button) e.getSource()).getId();
         switch (mode) {
             case "walking":
-                DirectionsController.setMode(TravelMode.WALKING);
+                directControl.setMode(TravelMode.WALKING);
                 switchFocusButton(walking);
                 break;
 
             case "bike":
-                DirectionsController.setMode(TravelMode.BICYCLING);
+                directControl.setMode(TravelMode.BICYCLING);
                 switchFocusButton(bike);
                 break;
 
             case "transit":
-                DirectionsController.setMode(TravelMode.TRANSIT);
+                directControl.setMode(TravelMode.TRANSIT);
                 switchFocusButton(transit);
                 break;
 
             default:
-                DirectionsController.setMode(TravelMode.DRIVING);
+                directControl.setMode(TravelMode.DRIVING);
                 switchFocusButton(car);
                 break;
         }

@@ -815,10 +815,6 @@ public class DB {
 		return UserAccountDB.whereDidIPark(userID);
 	}
 
-	public static String getUserName(int userID) {
-		return UserAccountDB.getUserName(userID);
-	}
-
 	//This should return the list of information within the table for covid surveys as a list of covid survey objects
 	public static ArrayList<CovidSurveyObj> getCovidSurveys() {
 		return RequestsDB.getCovidSurveys();

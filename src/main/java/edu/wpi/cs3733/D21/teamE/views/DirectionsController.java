@@ -125,7 +125,7 @@ public class DirectionsController {
         return SB.toString();
     }
 
-    private static String modeName(TravelMode mode) {
+    private String modeName(TravelMode mode) {
         String str;
         switch (mode) {
             case WALKING:

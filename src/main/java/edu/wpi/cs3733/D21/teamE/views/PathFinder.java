@@ -45,6 +45,9 @@ public class PathFinder {
     public static int startNodeIndex = -1;
     public static int endNodeIndex = -1;
 
+    public static String startNodeName = "";
+    public static String endNodeName = "";
+
     /*
      * FXML Values
      */
@@ -1018,6 +1021,11 @@ public class PathFinder {
         currFloor.textProperty().addListener(observable -> {
             subject.setState(currFloor.getText());
         });
+
+        if(!endNodeName.equals("")) {
+            endLocationComboBox.getSelectionModel().select(endNodeName);
+            endNodeName = "";
+        }
     }
 
     /**

@@ -1036,56 +1036,52 @@ public class RequestsDB {
 
 	/**
 	 *
-	 * @param requestID the ID that specifies which sanitation form that is being edited
-	 * @param positiveTest is whether the user has had a positive test
-	 * @param symptoms  is whether the user has had symptoms
-	 * @param closeContact is whether the user has had close contact with someone who has COVID
-	 * @param quarantine is whether the user has been in quarantine
-	 * @param noSymptoms is whether the user has no symptoms or not
+	 * @param covidSurveyObj
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editEntryRequest(int requestID, boolean positiveTest, boolean symptoms, boolean closeContact, boolean quarantine, boolean noSymptoms, String status) {
-
-		// have to convert booleans to Boolean obj to check if they are null
-		Boolean positiveTestB = positiveTest;
-		Boolean symptomsB = symptoms;
-		Boolean closeContactB = closeContact;
-		Boolean quarantineB = quarantine;
-		Boolean noSymptomsB = noSymptoms;
+	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {
+		//int requestID, boolean positiveTest, boolean symptoms, boolean closeContact, boolean quarantine, boolean noSymptoms, String status
+		int formNumber = covidSurveyObj.getFormNumber();
+		Boolean positiveTestB = covidSurveyObj.getPositiveTest();
+		Boolean symptomsB = covidSurveyObj.getSymptoms();
+		Boolean closeContactB = covidSurveyObj.getCloseContact();
+		Boolean quarantineB = covidSurveyObj.getQuarantine();
+		Boolean noSymptomsB = covidSurveyObj.getNoSymptoms();
+		String status = covidSurveyObj.getStatus();
 
 		boolean added = false;
 		String query = "Update entryRequest Set";
 
 		if (positiveTestB != null) {
-			query = query + " positiveTest = " + positiveTest;
+			query = query + " positiveTest = " + positiveTestB;
 			added = true;
 		}
 		if (symptomsB != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + " symptoms = " + symptoms;
+			query = query + " symptoms = " + symptomsB;
 			added = true;
 		}
 		if (closeContactB != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + " closeContact = " + closeContact;
+			query = query + " closeContact = " + closeContactB;
 			added = true;
 		}
 		if (quarantineB != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + " quarantine = " + quarantine;
+			query = query + " quarantine = " + quarantineB;
 			added = true;
 		}
 		if (noSymptomsB != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + " noSymptoms = " + noSymptoms;
+			query = query + " noSymptoms = " + noSymptomsB;
 			added = true;
 		}
 		if (status != null) {
@@ -1096,7 +1092,7 @@ public class RequestsDB {
 			added = true;
 		}
 
-		query = query + " Where requestID = " + requestID;
+		query = query + " Where entryRequestID = " + formNumber;
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.executeUpdate();

@@ -145,6 +145,8 @@ public class App extends Application {
 
 			//set scene for primaryStage
 			Scene scene = new Scene(root);
+			Image icon = new Image(getClass().getResourceAsStream("logo.png"));
+			primaryStage.getIcons().add(icon);
 			primaryStage.setScene(scene);
 
 			//set default sizes

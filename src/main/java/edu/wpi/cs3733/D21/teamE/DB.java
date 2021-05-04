@@ -460,8 +460,9 @@ public class DB {
 	/**
 	 * This adds a entry request form to the table
 	 */
-	public static void addEntryRequest(int userID, int assigneeID, boolean positiveTest, boolean symptoms, boolean closeContact, boolean quarantine, boolean noSymptoms) {
-		RequestsDB.addEntryRequest(userID, assigneeID, positiveTest, symptoms, closeContact, quarantine, noSymptoms);
+	public static void addEntryRequest(CovidSurveyObj covidSurveyObj, int assigneeID) {
+
+		RequestsDB.addEntryRequest(covidSurveyObj, assigneeID);
 	}
 
 	// Editing Tables:

@@ -67,6 +67,7 @@ public class makeConnection {
 
 		try {
 			Statement stmt = this.connection.createStatement();
+			stmt.execute("Drop Table entryRequest");
 			stmt.execute("Drop Table religiousRequest");
 			stmt.execute("Drop Table aubonPainMenu");
 			stmt.execute("Drop Table internalPatientRequest");
@@ -330,10 +331,10 @@ public class makeConnection {
 
 
 		//Special Accounts:
-		String insertUser1 = "Insert Into useraccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', Current Timestamp, 0, Null, Null)";
-		String insertUser2 = "Insert Into useraccount Values (-99, 'admin', 'admin', 'admin', 'Admin', 'Wong', Current Timestamp, 0, Null, Null)";
-		String insertUser3 = "Insert Into useraccount Values (99999, 'staff', 'staff', 'doctor', 'Staff', 'Wong', Current Timestamp, 0, Null, Null)";
-		String insertUser4 = "Insert Into useraccount Values (10000, 'guest', 'guest', 'patient', 'Guest', 'Wong', Current Timestamp, 0, Null, Null)";
+		String insertUser1 = "Insert Into useraccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', Current Timestamp, '', Null, Null)";
+		String insertUser2 = "Insert Into useraccount Values (-99, 'admin', 'admin', 'admin', 'Admin', 'Wong', Current Timestamp, '', Null, Null)";
+		String insertUser3 = "Insert Into useraccount Values (99999, 'staff', 'staff', 'doctor', 'Staff', 'Wong', Current Timestamp, '', Null, Null)";
+		String insertUser4 = "Insert Into useraccount Values (10000, 'guest', 'guest', 'patient', 'Guest', 'Wong', Current Timestamp, '', Null, Null)";
 		try {
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(insertUser1);

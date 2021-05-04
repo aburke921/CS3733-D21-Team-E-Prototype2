@@ -5,6 +5,8 @@ import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.views.CovidSurvey;
+import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.UserManagement;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import javafx.collections.FXCollections;
@@ -12,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.util.Pair;
 import org.junit.jupiter.api.*;
 
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -687,25 +690,25 @@ public class DatabaseTests {
 		DB.addSpecialUserType("EMT1@gmail.com", "testPass", "EMT", "bob", "Shukla");
 		DB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson", "drew", "Shukla");
 
-
 		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low", "headache");
 		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low", "migraine");
 		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low", "migraine");
 		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "feel better");
 
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
 		ArrayList<String> returnedStatus;
 		ArrayList<String> correctStatus = new ArrayList<>();
 		correctStatus.add("inProgress");
 		correctStatus.add("inProgress");
 		correctStatus.add("inProgress");
-		returnedStatus = DB.getMyCreatedRequestInfo("extTransport", -1, "requestStatus");
+		returnedStatus = DB.getMyCreatedRequestInfo("extTransport", 5, "requestStatus");
 		assertEquals(correctStatus, returnedStatus);
 	}
 
 	@Test
 	@DisplayName("testGetRequestStatus3 : No Data")
 	public void testGetRequestStatus3() {
-
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
 		ArrayList<String> returnedStatus;
 		returnedStatus = DB.getMyCreatedRequestInfo("extTransport", 1, "requestStatus");
 		assertEquals(0, returnedStatus.size());
@@ -753,20 +756,21 @@ public class DatabaseTests {
 		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low", "migraine");
 		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "High", "Low", "Low", "feel better");
 
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
 		ArrayList<String> returnedIDs;
 		ArrayList<String> correctIDs = new ArrayList<>();
 		correctIDs.add("1");
 		correctIDs.add("2");
-		returnedIDs = DB.getMyCreatedRequestInfo("extTransport", -55, "requestID");
+		returnedIDs = DB.getMyCreatedRequestInfo("extTransport", 5, "requestID");
 		assertEquals(correctIDs, returnedIDs);
 	}
 
 	@Test
 	@DisplayName("testGetRequestIDs3: No Data")
 	public void testGetRequestIDs3() {
-
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
 		ArrayList<String> returnedIDs;
-		returnedIDs = DB.getMyCreatedRequestInfo("extTransport", -99, "requestID");
+		returnedIDs = DB.getMyCreatedRequestInfo("extTransport", 1, "requestID");
 		assertEquals(0, returnedIDs.size());
 	}
 
@@ -818,7 +822,8 @@ public class DatabaseTests {
 		DB.addMedicineRequest(2, 5, "test3", "drugs3", 4, "1ml", "take once a day", "Nupur");
 
 
-		ArrayList<String> returnedAssignees = DB.getMyCreatedRequestInfo("medDelivery", -1, "assigneeID");
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
+		ArrayList<String> returnedAssignees = DB.getMyCreatedRequestInfo("medDelivery", 6, "assigneeID");
 		ArrayList<String> correctAssignees = new ArrayList<>();
 		correctAssignees.add("3");
 		correctAssignees.add("4");
@@ -829,7 +834,8 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetRequestAssignees3: no data")
 	public void testGetRequestAssignees3() {
-		ArrayList<String> returnedAssignees = DB.getMyCreatedRequestInfo("medDelivery", -1, "assigneeID");
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
+		ArrayList<String> returnedAssignees = DB.getMyCreatedRequestInfo("medDelivery", 1, "assigneeID");
 		assertEquals(0, returnedAssignees.size());
 	}
 
@@ -875,7 +881,8 @@ public class DatabaseTests {
 		DB.addMedicineRequest(1, 4, "test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
 		DB.addMedicineRequest(2, 3, "test3", "drugs3", 4, "1ml", "take once a day", "Nupur");
 
-		ArrayList<String> returnedLocations = DB.getRequestLocations("medDelivery", -50);
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
+		ArrayList<String> returnedLocations = DB.getRequestLocations("medDelivery", 5);
 		ArrayList<String> correctLocations = new ArrayList<>();
 		correctLocations.add("long name #1");
 		correctLocations.add("long name #2");
@@ -886,8 +893,8 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetRequestLocations3 : No Data")
 	public void testGetRequestLocations3() {
-
-		ArrayList<String> returnedLocations = DB.getRequestLocations("medDelivery", -1);
+		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
+		ArrayList<String> returnedLocations = DB.getRequestLocations("medDelivery", 1);
 		assertEquals(0, returnedLocations.size());
 	}
 
@@ -1026,8 +1033,9 @@ public class DatabaseTests {
 
 
 	@Test
-	@DisplayName("testGetRequestLocations")
+	@DisplayName("testFunction")
 	public void testFunction() {
+		//DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
 
 		//Visitors:
 		// - have access to floral Delivery
@@ -1095,7 +1103,7 @@ public class DatabaseTests {
 		DB.addExternalPatientRequest(24, 35, "EEXIT00101", "Ambulance", "Medium Severity", "417592", "10 minutes", "High", "High", "Low", "Smoke inhalation due to a fire. No burns but difficult time breathing.");
 		DB.addExternalPatientRequest(28, 36, "FDEPT00501", "Helicopter", "High Severity", "44888936", "15 minutes", "Low", "Low", "High", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition");
 		DB.addExternalPatientRequest(24, 37, "EEXIT00101", "Ambulance", "Medium Severity", "33337861", "7 minutes", "High", "Low", "Low", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out.");
-		DB.addExternalPatientRequest(27, 38, "EEXIT00101", "Ambulance", "Low Severity", "40003829", "10 minutes", "High", "Low", "Low", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
+		DB.addExternalPatientRequest(27, 38, "FDEPT00501", "Ambulance", "Low Severity", "40003829", "10 minutes", "High", "Low", "Low", "Relocating a patient with lung cancer from Mt.Auburn Hospital.");
 		DB.addExternalPatientRequest(24, 39, "FDEPT00501", "Plane", "High Severity", "38739983", "12 hours", "Low", "High", "Low", "Heart transplant organ in route");
 
 
@@ -1111,7 +1119,7 @@ public class DatabaseTests {
 		correctLongNames.add("Emergency Department");
 
 
-		ArrayList<String> locationArray = DB.getRequestLocations("extTransport", -1);
+		ArrayList<String> locationArray = DB.getRequestLocations("extTransport", 27);
 
 		assertEquals(correctLongNames, locationArray);
 	}
@@ -1124,8 +1132,8 @@ public class DatabaseTests {
 
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
-		int rowsAffected1 = DB.addAppointment(1, 400, 400, 2);
-		int rowsAffected2 = DB.addAppointment(2, 400, 400, 2);
+		int rowsAffected1 = DB.addAppointment(1, "4:00", "02/12/21", 2);
+		int rowsAffected2 = DB.addAppointment(2, "8:00",  "02/12/21",2);
 
 		int totalRowsAffected = rowsAffected1 + rowsAffected2;
 		assertEquals(2, totalRowsAffected);
@@ -1142,12 +1150,12 @@ public class DatabaseTests {
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 		DB.addSpecialUserType("ameliak@yahoo.com", "doctor02", "doctor", "Amelia", "Knight");
 
-		DB.addAppointment(1, 400, 400, 2);
-		DB.addAppointment(2, 400, 400, 2);
+		DB.addAppointment(1, "4:00",  "02/12/21",2);
+		DB.addAppointment(2, "8:00", "02/12/21",2);
 
 
-		int rowAffected = DB.editAppointment(1, 700, 700, null);
-		int rowAffected2 = DB.editAppointment(2, 500, 500, 3);
+		int rowAffected = DB.editAppointment(1, "6:00", "7:00", null);
+		int rowAffected2 = DB.editAppointment(2, "9:00", "10:00", 3);
 
 		int totalRowAffected = rowAffected + rowAffected2;
 
@@ -1163,8 +1171,8 @@ public class DatabaseTests {
 
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
-		DB.addAppointment(1, 400, 400, 2);
-		DB.addAppointment(2, 400, 400, 2);
+		DB.addAppointment(1, "8:00", "02/12/21",2);
+		DB.addAppointment(2, "8:00",  "02/12/21",2);
 
 		DB.addRemovedPatientAppointmentHistory(1);
 
@@ -1178,7 +1186,7 @@ public class DatabaseTests {
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 
-		DB.addAppointment(1, 400, 400, 2);
+		DB.addAppointment(1, "8:00",  "02/12/21",2);
 
 		int rowsAffected = DB.cancelAppointment(1);
 
@@ -1194,9 +1202,9 @@ public class DatabaseTests {
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 
-		DB.addAppointment(1, 400, 400, 2);
-		DB.addAppointment(1, 500, 500, 2);
-		DB.addAppointment(1, 600, 600, 2);
+		DB.addAppointment(1, "8:00", "02/12/21",2);
+		DB.addAppointment(1, "8:00",  "02/13/21",2);
+		DB.addAppointment(1, "8:00",  "02/14/21",2);
 
 		int rowsAffected = DB.cancelAppointment(1);
 
@@ -1224,7 +1232,7 @@ public class DatabaseTests {
 //		DB.addSecurityRequest(22, "Russell Armstrong","WELEV00E01", "Medium", "Medium");
 	}
 
-	//	@Test
+//	@Test
 //	@DisplayName("testGetTablesToThatExist")
 //	public void testGetTablesToThatExist(){
 ////		try {
@@ -1275,10 +1283,10 @@ public class DatabaseTests {
 		DB.addSpecialUserType("lolab@gmail.com", "EMT000002", "EMT", "Lola", "Bond");
 		//Real Admins:
 		ArrayList<String> insertUsers = new ArrayList<String>();
-		insertUsers.add("Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', Current Timestamp, 0, Null, Null)");
-		insertUsers.add("Insert Into userAccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', Current Timestamp, 0, Null, Null)");
-		insertUsers.add("Insert Into userAccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', Current Timestamp, 0, Null, Null)");
-		insertUsers.add("Insert Into userAccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', Current Timestamp, 0, Null, Null)");
+		insertUsers.add("Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', Current Timestamp, '', Null, Null)");
+		insertUsers.add("Insert Into userAccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', Current Timestamp, '', Null, Null)");
+		insertUsers.add("Insert Into userAccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', Current Timestamp, '', Null, Null)");
+		insertUsers.add("Insert Into userAccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', Current Timestamp, '', Null, Null)");
 
 		for (String insertUser : insertUsers) {
 			try (PreparedStatement prepState = makeConnection.makeConnection().connection.prepareStatement(insertUser)) {
@@ -1693,20 +1701,23 @@ public class DatabaseTests {
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
 
-		assertTrue(DB.isUserCovidSafe(1));
-		assertTrue(DB.isUserCovidSafe(2));
+		CovidSurveyObj covidSurveyObjSafe = new CovidSurveyObj(1, 1, false, false, false, false, true, "Safe");
+		CovidSurveyObj covidSurveyObjNotSafe = new CovidSurveyObj(2, 2, true, true, true, true, false, "Unsafe");
+
+		assertFalse(DB.isUserCovidSafe(1));
+		assertFalse(DB.isUserCovidSafe(2));
 
 		assertFalse(DB.filledCovidSurveyToday(1));
 		assertFalse(DB.filledCovidSurveyToday(2));
 
-		assertTrue(DB.submitCovidSurvey(10101, 1));
-		assertTrue(DB.submitCovidSurvey(1, 2));
+		assertTrue(DB.submitCovidSurvey(covidSurveyObjSafe, 1));
+		assertTrue(DB.submitCovidSurvey(covidSurveyObjNotSafe, 2));
 
 		assertTrue(DB.filledCovidSurveyToday(1));
 		assertTrue(DB.filledCovidSurveyToday(2));
 
-		assertFalse(DB.isUserCovidSafe(1));
-		assertTrue(DB.isUserCovidSafe(2));
+		assertTrue(DB.isUserCovidSafe(1));
+		assertFalse(DB.isUserCovidSafe(2));
 	}
 
 	@Test
@@ -1728,4 +1739,156 @@ public class DatabaseTests {
 		assertEquals("ePARK00101", DB.whereDidIPark(1));
 		assertNull(DB.whereDidIPark(2));
 	}
+	@Test
+	@DisplayName("testGetEmail")
+	public void testGetEmail() {
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+
+		String email = DB.getEmail(1);
+
+		assertTrue(email.equals("bellag@gmail.com"));
+
+	}
+
+
+	@Test
+	@DisplayName("testAddEntryRequest")
+	public void testAddEntryRequest() {
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+
+		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
+
+		CovidSurveyObj covidSurveyObjSafe = new CovidSurveyObj(1, 1, false, false, false, false, true, "Needs to be reviewed");
+
+		DB.addEntryRequest(covidSurveyObjSafe);
+
+	}
+
+	@Test
+	@DisplayName("testEditEntryRequest")
+	public void testEditEntryRequest() {
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
+		CovidSurveyObj covidSurveyObjUnsafe = new CovidSurveyObj(1, 1, true, true, true, true, false, "Unsafe");
+
+		DB.addEntryRequest(covidSurveyObjUnsafe);
+		covidSurveyObjUnsafe = new CovidSurveyObj(1, 1, true, true, true, true, false, "Safe");
+
+		DB.editEntryRequest(covidSurveyObjUnsafe);
+	}
+
+	@Test
+	@DisplayName("testMarkAsCovidSafe")
+	public void testMarkAsCovidSafe() {
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
+
+		CovidSurveyObj covidSurveyObjSafe = new CovidSurveyObj(1, 1, true, true, true, true, false, "Unsafe");
+
+		DB.addEntryRequest(covidSurveyObjSafe);
+
+		int result = DB.markAsCovidSafe(1);
+
+		assertTrue(result == 1);
+
+	}
+
+	@Test
+	@DisplayName("testMarkAsCovidRisk")
+	public void testMarkAsCovidRisk() {
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
+		CovidSurveyObj covidSurveyObjSafe = new CovidSurveyObj(1, 1, true, true, true, true, false, "Safe");
+
+		DB.addEntryRequest(covidSurveyObjSafe);
+
+
+		int result = DB.markAsCovidRisk(1);
+
+		assertTrue(result == 1);
+	}
+
+	@Test
+	@DisplayName("testGetCovidSurveys")
+	public void testGetCovidSurveys() {
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		DB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
+		DB.addUserAccount("smiddle@outlook.com", "visitor3", "Sharon", "Middleton");
+
+		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
+		DB.addSpecialUserType("ameliak@yahoo.com", "doctor02", "doctor", "Amelia", "Knight");
+		DB.addSpecialUserType("simond@gmail.com", "doctor03", "doctor", "Simon", "Daniel");
+
+		CovidSurveyObj covidSurveyObjSafe1 = new CovidSurveyObj(1, 4, false, false, false, false, true, "Needs to be reviewed");
+		CovidSurveyObj covidSurveyObjSafe2 = new CovidSurveyObj(2, 5, false, false, false, false, true, "Needs to be reviewed");
+		CovidSurveyObj covidSurveyObjSafe3 = new CovidSurveyObj(3, 6, false, false, false, false, true, "Needs to be reviewed");
+
+		DB.addEntryRequest(covidSurveyObjSafe1);
+		DB.addEntryRequest(covidSurveyObjSafe2);
+		DB.addEntryRequest(covidSurveyObjSafe3);
+
+		ArrayList<String> result1 = new ArrayList<>();
+		result1.add("10101");
+		result1.add("1");
+		assertEquals(result1, DB.getMyAssignedRequestInfo("entryRequest", 3, "surveyResult"));
+
+		ArrayList<CovidSurveyObj> resultCovidSurveys = DB.getCovidSurveys();
+
+		ArrayList<CovidSurveyObj> actualCovidSurveys = new ArrayList<>();
+
+		actualCovidSurveys.add(new CovidSurveyObj(1, 4, false, false, false, false, true, "Needs to be reviewed"));
+		actualCovidSurveys.add(new CovidSurveyObj(2, 5, false, false, false, false, true, "Needs to be reviewed"));
+		actualCovidSurveys.add(new CovidSurveyObj(3, 6, false, false, false, false, true, "Needs to be reviewed"));
+
+		boolean allCorrect = true;
+		boolean userID = false;
+		boolean formNumber = false;
+		boolean positiveTest = false;
+		boolean symptoms = false;
+		boolean closeContact = false;
+		boolean quarantine = false;
+		boolean noSymptoms = false;
+		boolean status = false;
+
+		if (resultCovidSurveys.size() == actualCovidSurveys.size()) {
+			for (int survey = 0; survey < resultCovidSurveys.size(); survey++) {
+				CovidSurveyObj returnedCovidSurveyObj = resultCovidSurveys.get(survey);
+				CovidSurveyObj correctCovidSurveyObj = actualCovidSurveys.get(survey);
+				if (returnedCovidSurveyObj.getUser() == correctCovidSurveyObj.getUser()) {
+					userID = true;
+				}
+				if (returnedCovidSurveyObj.getFormNumber() == correctCovidSurveyObj.getFormNumber()) {
+					formNumber = true;
+				}
+				if (returnedCovidSurveyObj.getPositiveTest() == correctCovidSurveyObj.getPositiveTest()) {
+					positiveTest = true;
+				}
+				if (returnedCovidSurveyObj.getSymptoms() == correctCovidSurveyObj.getSymptoms()) {
+					symptoms = true;
+				}
+				if (returnedCovidSurveyObj.getCloseContact() == correctCovidSurveyObj.getCloseContact()) {
+					closeContact = true;
+				}
+				if (returnedCovidSurveyObj.getQuarantine() == correctCovidSurveyObj.getQuarantine()) {
+					quarantine = true;
+				}
+				if (returnedCovidSurveyObj.getNoSymptoms() == correctCovidSurveyObj.getNoSymptoms()) {
+					noSymptoms = true;
+				}
+				if (returnedCovidSurveyObj.getStatus().equals(correctCovidSurveyObj.getStatus())) {
+					status = true;
+				}
+				if (userID && formNumber && positiveTest && symptoms && closeContact && quarantine && noSymptoms && !status) {
+					allCorrect = false;
+				}
+			}
+		} else {
+			allCorrect = false;
+		}
+
+		assertTrue(allCorrect);
+	}
+
+
+
 }

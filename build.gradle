@@ -28,16 +28,20 @@ repositories {
 //This is where you declare your dependencies and their version.s
 //You will almost DEFINITELY add more here
 dependencies {
-
-//    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.14.1'
-//    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.14.1'
-//    compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.14.1'
+    //Email Stuff:
+//    compile 'javax.mail:mail:1.4.7'
+    compile 'com.google.api-client:google-api-client:1.30.4'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.30.6'
+    compile 'com.google.apis:google-api-services-sheets:v4-rev581-1.25.0'
 
     implementation(
             'com.jfoenix:jfoenix:8.0.10',
             'com.google.zxing:javase:3.4.1',
             'com.google.zxing:core:3.4.1',
             'org.jsoup:jsoup:1.13.1',
+
+            'org.simplejavamail:simple-java-mail:6.5.2',
+
 
             // https://mvnrepository.com/artifact/de.jensd/fontawesomefx
             group: 'de.jensd', name: 'fontawesomefx', version: '8.9',
@@ -47,11 +51,18 @@ dependencies {
             'org.apache.derby:derby:10.14.2.0',
             'org.apache.derby:derbytools:10.14.2.0',
 
-//            'org.slf4j:slf4j-api:1.7.30',
-//            'org.slf4j:slf4j-simple:1.7.30',
+            'org.slf4j:slf4j-api:1.7.30',
+            'org.slf4j:slf4j-simple:1.7.30',
 
-            'com.github.sarxos:webcam-capture:0.3.12'
+            'com.github.sarxos:webcam-capture:0.3.12',
+
+            'com.google.maps:google-maps-services:0.18.0',
+            'io.github.cdimascio:java-dotenv:5.2.2',
+            'org.slf4j:slf4j-simple:1.7.25',
+            'org.apache.commons:commons-lang3:3.6',
     )
+    implementation (group: 'javax.activation', name: 'activation', version: '1.1')
+    implementation (group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.0')
 //These are test dependencies. These are only used for running verification tasks via Gradle.
     testCompile(
             "org.testfx:testfx-core:4.0.16-alpha",

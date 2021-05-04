@@ -1,2 +1,1 @@
 appointmentID, patientID, doctorID, nodeID, startTime, endTime
-1,1,2,null,1969-12-31 19:00:00.4,1969-12-31 19:00:00.4

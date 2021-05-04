@@ -17,33 +17,39 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.image.ImageView?>
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.Floral">
     <children>
         <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
-        <AnchorPane prefHeight="745.0" prefWidth="1200.0">
+        <AnchorPane prefHeight="687.0" prefWidth="1199.0">
             <children>
             <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                      <BorderPane prefHeight="687.0" prefWidth="1200.0">
+                   <FlowPane StackPane.alignment="TOP_LEFT">
+                       <children>
+                           <ImageView fx:id="background" fitHeight="1080.0" fitWidth="2000.0" pickOnBounds="true" preserveRatio="true" />
+                       </children>
+                   </FlowPane>
+                      <BorderPane>
                           <center>
                               <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="785.0" BorderPane.alignment="CENTER">
                                   <children>
-                                      <VBox maxWidth="600.0" prefHeight="582.0" prefWidth="1200.0">
+                                      <VBox maxWidth="600.0" prefHeight="513.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-radius: 25px; -fx-background-radius: 25px;">
                                           <children>
-                                              <HBox maxWidth="600.0" prefHeight="501.0" prefWidth="600.0" styleClass="centerPane">
+                                              <HBox alignment="TOP_CENTER" maxWidth="600.0" prefHeight="433.0" prefWidth="600.0" styleClass="centerPane">
                                                   <children>
-                                                      <FlowPane prefHeight="361.0" prefWidth="299.0">
+                                                      <FlowPane prefHeight="361.0" prefWidth="300.0">
                                                           <children>
-                                                              <VBox prefHeight="349.0" prefWidth="264.0">
+                                                              <VBox prefHeight="349.0" prefWidth="260.0">
                                                                   <children>
                                                                       <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="10.0" top="20.0" />
+                                                                              <Insets bottom="5.0" top="20.0"  />
                                                                           </VBox.margin>
                                                                       </JFXComboBox>
                                                                       <JFXComboBox fx:id="flowerType" prefHeight="27.0" prefWidth="295.0" promptText="Flower Type">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="10.0" top="20.0" />
+                                                                              <Insets bottom="5.0" top="20.0"  />
                                                                           </VBox.margin>
                                                                           <items>
                                                                               <FXCollections fx:factory="observableArrayList">
@@ -54,9 +60,9 @@
                                                                               </FXCollections>
                                                                           </items>
                                                                       </JFXComboBox>
-                                                                      <JFXComboBox fx:id="flowerCount" prefHeight="27.0" prefWidth="291.0" promptText="Flower Amount">
+                                                                      <JFXComboBox fx:id="flowerCount" prefHeight="27.0" prefWidth="295.0" promptText="Flower Amount">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="10.0" top="20.0" />
+                                                                              <Insets bottom="5.0" top="20.0"  />
                                                                           </VBox.margin>
                                                                           <items>
                                                                               <FXCollections fx:factory="observableArrayList">
@@ -66,7 +72,7 @@
                                                                               </FXCollections>
                                                                           </items>
                                                                       </JFXComboBox>
-                                                                      <JFXComboBox fx:id="vaseType" prefHeight="27.0" prefWidth="291.0" promptText="Vase Type">
+                                                                      <JFXComboBox fx:id="vaseType" prefHeight="27.0" prefWidth="295.0" promptText="Vase Type">
                                                                           <items>
                                                                               <FXCollections fx:factory="observableArrayList">
                                                                                   <String fx:value="None" />
@@ -76,17 +82,17 @@
                                                                               </FXCollections>
                                                                           </items>
                                                                           <VBox.margin>
-                                                                              <Insets bottom="10.0" top="20.0" />
+                                                                              <Insets bottom="5.0" top="20.0"  />
                                                                           </VBox.margin>
                                                                       </JFXComboBox>
-                                                                      <JFXTextField fx:id="recipient" prefHeight="27.0" prefWidth="280.0" promptText="Recipient">
+                                                                      <JFXTextField fx:id="recipient" prefHeight="27.0" prefWidth="295.0" promptText="Recipient">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="10.0" top="20.0" />
+                                                                              <Insets bottom="5.0" top="20.0"  />
                                                                           </VBox.margin>
                                                                       </JFXTextField>
-                                                                      <JFXComboBox fx:id="assignee" prefHeight="27.0" prefWidth="280.0" promptText="Assignee">
+                                                                      <JFXComboBox fx:id="assignee" prefHeight="27.0" prefWidth="295.0" promptText="Assignee">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="10.0" top="20.0" />
+                                                                              <Insets bottom="5.0" top="20.0" />
                                                                           </VBox.margin>
                                                                       </JFXComboBox>
                                                                   </children>
@@ -96,18 +102,18 @@
                                                               </VBox>
                                                           </children>
                                                       </FlowPane>
-                                                      <FlowPane prefHeight="361.0" prefWidth="329.0">
+                                                      <FlowPane prefHeight="361.0" prefWidth="300.0">
                                                           <children>
-                                                              <VBox prefHeight="363.0" prefWidth="259.0">
+                                                              <VBox prefHeight="363.0" prefWidth="260.0">
                                                                   <children>
-                                                                      <JFXTextField fx:id="arrangementStyle" prefHeight="27.0" prefWidth="280.0" promptText="Arrangement Style">
+                                                                      <JFXTextField fx:id="arrangementStyle" prefHeight="27.0" prefWidth="295.0" promptText="Arrangement Style">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="10.0" top="20.0" />
+                                                                              <Insets bottom="5.0" top="20.0" />
                                                                           </VBox.margin>
                                                                       </JFXTextField>
-                                                                      <JFXComboBox fx:id="teddyBear" prefHeight="27.0" prefWidth="280.0" promptText="Teddy Bear?">
+                                                                      <JFXComboBox fx:id="teddyBear" prefHeight="27.0" prefWidth="295.0" promptText="Teddy Bear?">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="10.0" top="20.0" />
+                                                                              <Insets bottom="5.0" top="20.0" />
                                                                           </VBox.margin>
                                                                           <items>
                                                                               <FXCollections fx:factory="observableArrayList">
@@ -116,9 +122,9 @@
                                                                               </FXCollections>
                                                                           </items>
                                                                       </JFXComboBox>
-                                                                      <JFXComboBox fx:id="chocolate" prefHeight="27.0" prefWidth="280.0" promptText="Chocolate?">
+                                                                      <JFXComboBox fx:id="chocolate" prefHeight="27.0" prefWidth="295.0" promptText="Chocolate?">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="10.0" top="20.0" />
+                                                                              <Insets bottom="5.0" top="20.0" />
                                                                           </VBox.margin>
                                                                           <items>
                                                                               <FXCollections fx:factory="observableArrayList">
@@ -127,9 +133,9 @@
                                                                               </FXCollections>
                                                                           </items>
                                                                       </JFXComboBox>
-                                                                      <JFXTextArea fx:id="message" prefHeight="141.0" prefWidth="259.0" promptText="Message">
+                                                                      <JFXTextArea fx:id="message" prefHeight="141.0" prefWidth="295.0" promptText="Message">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="10.0" top="20.0" />
+                                                                              <Insets bottom="5.0" top="20.0" />
                                                                           </VBox.margin>
                                                                       </JFXTextArea>
                                                                       <GridPane>
@@ -158,7 +164,7 @@
                                                       <AnchorPane prefHeight="71.0" prefWidth="1200.0">
                                                           <children>
                                                               <JFXButton fx:id="cancel" layoutX="455.0" layoutY="45.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" />
-                                                              <JFXButton fx:id="submit" layoutX="532.0" layoutY="46.0" onAction="#handleButtonSubmit" styleClass="submit-button" text="Submit" />
+                                                              <JFXButton fx:id="submit" layoutX="532.0" layoutY="46.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
                                                           </children>
                                                       </AnchorPane>
                                                   </children>

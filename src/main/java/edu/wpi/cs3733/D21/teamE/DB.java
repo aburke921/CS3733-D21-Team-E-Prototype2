@@ -3,11 +3,16 @@ package edu.wpi.cs3733.D21.teamE;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
+import edu.wpi.cs3733.D21.teamE.database.*;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -33,6 +38,7 @@ public class DB {
 		RequestsDB.createInternalPatientRequest();
 		RequestsDB.createAubonPainMenuTable();
 		RequestsDB.createReligionRequestTable();
+		RequestsDB.createEntryRequestTable();
 	}
 
 	public static void createNodeTable() {
@@ -43,12 +49,11 @@ public class DB {
 	 * creates an appointment and adds to the appointmentDB table
 	 * @param patientID is the ID of the patient making the appointment
 	 * @param startTime is when the appointment starts
-	 * @param endTime   is when the appointment ends
 	 * @param doctorID  is the doctor assigned to the appointment
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int addAppointment(int patientID, long startTime, long endTime, int doctorID) {
-		return appointmentDB.addAppointment(patientID, startTime, endTime, doctorID);
+	public static int addAppointment(int patientID, String startTime, String date, Integer doctorID) {
+		return appointmentDB.addAppointment(patientID, startTime, date, doctorID);
 	}
 
 	/**
@@ -63,12 +68,11 @@ public class DB {
 	 * edits an appointment
 	 * @param appointmentID is the ID of the appointment
 	 * @param newStartTime  is the new start time of the appointment
-	 * @param newEndTime    is the new end time of the appointment
 	 * @param newDoctorID   is the new doctor assigned
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
-	public static int editAppointment(int appointmentID, int newStartTime, int newEndTime, Integer newDoctorID) {
-		return appointmentDB.editAppointment(appointmentID, newStartTime, newEndTime, newDoctorID);
+	public static int editAppointment(int appointmentID, String newStartTime, String date, Integer newDoctorID) {
+		return appointmentDB.editAppointment(appointmentID, newStartTime, date, newDoctorID);
 	}
 
 	/**
@@ -452,6 +456,13 @@ public class DB {
 		RequestsDB.addReligiousRequest(userID, roomID, assigneeID, religionType, description);
 	}
 
+	/**
+	 * This adds a entry request form to the table
+	 */
+	public static void addEntryRequest(CovidSurveyObj covidSurveyObj) {
+
+		RequestsDB.addEntryRequest(covidSurveyObj);
+	}
 
 	// Editing Tables:
 
@@ -601,7 +612,11 @@ public class DB {
 	}
 
 
-	// Querying Tables:
+	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {
+		return RequestsDB.editEntryRequest(covidSurveyObj);
+	}
+
+		// Querying Tables:
 
 	/**
 	 * Gets a list of all the "assigneeIDs", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID
@@ -660,13 +675,9 @@ public class DB {
 		return RequestsDB.getAubonPainFeild(column);
 	}
 
-	public static ObservableList<String> getAssigneeNames(String givenUserType) {
-		return RequestsDB.getAssigneeNames(givenUserType);
-	}
 
-	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
-		return RequestsDB.getAssigneeIDs(givenUserType);
-	}
+
+
 
 
 	// UserAccountDB:
@@ -734,15 +745,22 @@ public class DB {
 		return UserAccountDB.userLogin(email, password);
 	}
 
+	public static ObservableList<String> getAssigneeNames(String givenUserType) {
+		return RequestsDB.getAssigneeNames(givenUserType);
+	}
 
 	/**
 	 * Submits a Covid Survey to the server
-	 * @param surveyResults is the result int that we are submitting
+	 * @param covidSurveyObj is the result int that we are submitting
 	 * @param userID        is the user's ID that we are submitting
 	 * @return true if successfully changed one row, false otherwise
 	 */
-	public static boolean submitCovidSurvey(int surveyResults, int userID) {
-		return UserAccountDB.submitCovidSurvey(surveyResults, userID);
+	public static boolean submitCovidSurvey(CovidSurveyObj covidSurveyObj, int userID) {
+		return UserAccountDB.submitCovidSurvey(covidSurveyObj, userID);
+	}
+
+	public static ArrayList<Integer> getAssigneeIDs(String givenUserType) {
+		return RequestsDB.getAssigneeIDs(givenUserType);
 	}
 
 	/**
@@ -754,6 +772,9 @@ public class DB {
 		return UserAccountDB.isUserCovidSafe(userID);
 	}
 
+	public static String getEmail(int userID) {
+		return RequestsDB.getEmail(userID);
+	}
 	/**
 	 * Checks if a user have filled their COVID survey today
 	 * @param userID is the user's ID that we are checking
@@ -763,6 +784,9 @@ public class DB {
 		return UserAccountDB.filledCovidSurveyToday(userID);
 	}
 
+	public static String getUserName(int userID) {
+		return UserAccountDB.getUserName(userID);
+	}
 	/**
 	 * Submits a Parking Slot to the server
 	 * @param nodeID is the result nodeID that we are submitting
@@ -782,7 +806,31 @@ public class DB {
 		return UserAccountDB.whereDidIPark(userID);
 	}
 
-	public static String getUserName(int userID) {
-		return UserAccountDB.getUserName(userID);
+	//This should return the list of information within the table for covid surveys as a list of covid survey objects
+	public static ArrayList<CovidSurveyObj> getCovidSurveys() {
+		return RequestsDB.getCovidSurveys();
 	}
+
+	//This should mark a survey within the table as safe for entry
+	public static int markAsCovidSafe(int formNumber) {
+		return RequestsDB.markAsCovidSafe(formNumber);
+	}
+
+	//This should mark a survey within the table as unsafe for entry
+	public static int markAsCovidRisk(int formNumber) {
+		return RequestsDB.markAsCovidRisk(formNumber);
+	}
+
+	public static int updateUserAccountCovidStatus(int userID, String status) {
+		return RequestsDB.updateUserAccountCovidStatus(userID, status);
+	}
+
+	public static boolean isUserCovidRisk(int userID) {
+		return UserAccountDB.isUserCovidRisk(userID);
+	}
+
+	public static boolean isUserCovidUnmarked(int userID) {
+		return UserAccountDB.isUserCovidUnmarked(userID);
+	}
+
 }

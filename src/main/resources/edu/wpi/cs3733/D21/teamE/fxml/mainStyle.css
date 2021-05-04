@@ -56,6 +56,12 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
     -fx-background-color: -fx--primary;
 }
 
+.submit-button:hover {
+    -jfx-button-type: RAISED;
+    -fx-text-fill: WHITE;
+    -fx-background-color: -fx--primary-dark;
+}
+
 .cancel-button { /*todo, a reddish color for cancel buttons?*/
     -jfx-button-type: FLAT;
     -fx-border-color: -fx--secondary-light;
@@ -64,17 +70,54 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 
 .default-button {
     -jfx-button-type: FLAT;
-    -fx-text-fill: WHITE;
-    -fx-background-color: -fx--primary-dark;
-    -fx-border-color:  -fx--primary-light;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-text-fill: -fx--primary;
+    -fx-border-color:  -fx--primary;
+}
 
+.default-button:hover {
+    -fx-text-fill: -fx--primary-dark;
+    -fx-background-color: #a2dcfd;
+}
+
+.login-button {
+    -fx-background-color: -fx--primary-dark;
+    -fx-border-color: -fx--primary-light;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+    -fx-font-family: 'Arial Black';
+    -fx-font-size: 14px;
+}
+
+.login-button:hover {
+    -fx-background-color: -fx--primary;
+}
+
+.back-button {
+    -fx-background-color: -fx--primary-dark;
+    -fx-border-color: -fx--primary-light;
+    -fx-text-fill: WHITE;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.back-button:hover {
+    -fx-background-color: -fx--primary;
 }
 
 .normal-button {
     -jfx-button-type: RAISED;
-    -fx-background-color: white;
-    -fx-text-fill: black;
+    -fx-background-color: WHITE;
+    -fx-text-fill: BLACK;
 }
+
+.normal-button:hover {
+    -jfx-button-type: RAISED;
+    -fx-background-color: -fx--primary-light;
+    -fx-text-fill: BLACK;
+}
+
 
 /*Toggle buttons*/
 JFXToggleButton  {
@@ -190,6 +233,9 @@ JFXToggleButton  {
 /*    -fx-background-color: red;*/
 /*}*/
 
+/*------------------------
+    Icon STYLES
+--------------------------*/
 MaterialDesignIconView {
     -fx-fill: -fx--primary;
 }
@@ -200,6 +246,14 @@ MaterialDesignIconViewAlt {
 
 FontAwesomeIconView {
     -fx-fill: -fx--primary;
+}
+
+#submission-icon {
+    -fx-fill: #82cd58;
+}
+
+#white-icon {
+    -fx-fill: WHITE;
 }
 
 JFXButton:hover MaterialDesignIconView {
@@ -218,6 +272,13 @@ JFXButton:hover FontAwesomeIconView {
 .jfx-tree-table-view {
     -fx-tree-table-color: rgba(3, 155, 229, 0.4);
     -jfx-header-color: -fx--primary-dark; /*header text color*/
+}
+
+/*------------------------
+    LABEL STYLES
+-------------------------*/
+.create-account-label:hover {
+    -fx-text-fill: -fx--primary-dark;
 }
 
 .icon-button {

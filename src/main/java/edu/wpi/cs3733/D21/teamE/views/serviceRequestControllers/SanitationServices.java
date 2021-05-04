@@ -11,14 +11,20 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class SanitationServices extends ServiceRequestFormComponents {
 
+  @FXML // fx:id="background"
+  private ImageView background;
 
   @FXML private JFXTextField assignedIndividual;
   @FXML private JFXTextField Signature;
@@ -127,6 +133,17 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
   @FXML
   void initialize(){
+
+    Stage primaryStage = App.getPrimaryStage();
+    Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+    Image backgroundImage = backgroundImg;
+    background.setImage(backgroundImage);
+    background.setEffect(new GaussianBlur());
+
+    //background.setPreserveRatio(true);
+    background.fitWidthProperty().bind(primaryStage.widthProperty());
+    //background.fitHeightProperty().bind(primaryStage.heightProperty());
+
     assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
     assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
     assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";

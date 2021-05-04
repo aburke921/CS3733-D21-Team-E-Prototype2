@@ -1,4 +1,4 @@
-package edu.wpi.cs3733.D21.teamE.states;
+package edu.wpi.cs3733.D21.teamE.views;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import javafx.event.ActionEvent;
@@ -13,6 +13,7 @@ public class SubmissionState {
     public void switchScene(ActionEvent event) {
 
         String buttonName = ((Button) event.getSource()).getId();
+        System.out.println(buttonName);
 
         if(buttonName.equals("statusButton")){
             try {
@@ -42,3 +43,5 @@ public class SubmissionState {
         }
     }
 }
+
+

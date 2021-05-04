@@ -40,7 +40,7 @@
                                     <Insets top="20.0" />
                                  </VBox.margin>
                               </JFXButton>
-                              <JFXButton fx:id="covidSurveyStatusButton" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Path Finder">
+                              <JFXButton fx:id="covidSurveyStatusButton" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Covid Survey Status">
                                  <font>
                                     <Font size="18.0" />
                                  </font>

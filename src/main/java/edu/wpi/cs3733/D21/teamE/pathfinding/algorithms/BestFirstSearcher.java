@@ -11,13 +11,16 @@ import java.util.Queue;
 
 public class BestFirstSearcher extends Searcher {
 
+    private String type;
     /**
      * constructor
      */
 
 
-    public BestFirstSearcher(){
-      super();
+    public BestFirstSearcher(String _type){
+        super();
+        this.type = _type;
+
     }
 
     @Override
@@ -25,13 +28,14 @@ public class BestFirstSearcher extends Searcher {
 
         System.out.println("search not of BFS is called");
 
+        List<Node> visited = new LinkedList<>();
+
         Queue<Node> potentials = new LinkedList<>();
         HashMap<Node, Node> cameFrom = new HashMap<>();
 
         potentials.add(start);
 
         while(!potentials.isEmpty()){
-
 
             Node current = potentials.poll();
 
@@ -55,7 +59,8 @@ public class BestFirstSearcher extends Searcher {
 
             for(String neighborId : neighbors){
                 Node neighbor = getNode(neighborId);
-                if(!cameFrom.containsKey(neighbor)){
+                if(!potentials.contains(neighbor) && /*!visited.contains(neighbor) &&*/ current.compareTo(neighbor) != 0){
+                    //visited.add(neighbor);
                     cameFrom.put(neighbor, current);
                     potentials.add(neighbor);
                 }

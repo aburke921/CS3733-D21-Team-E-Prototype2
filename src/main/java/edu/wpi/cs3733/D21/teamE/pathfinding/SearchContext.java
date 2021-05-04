@@ -92,9 +92,9 @@ public class SearchContext {
         } else if(algo.equalsIgnoreCase("BFS")) {
             return new XFirstSearcher("BFS");
         } else if(algo.equalsIgnoreCase("Best")){
-            return new BestFirstSearcher();
+            return new BestFirstSearcher("Best");
         } else if(algo.equalsIgnoreCase("Dijkstra")){
-            return new DijkstraSearcher();
+            return new DijkstraSearcher("Dijkstra");
         } else{
             return null;
         }

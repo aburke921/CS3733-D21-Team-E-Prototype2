@@ -26,6 +26,15 @@ public class DefaultState {
             }
         }
 
+        else if(buttonName.equals("covidSurveyStatusButton")){
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurveyStatus.fxml"));
+                App.changeScene(root);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
         else if(buttonName.equals("pathFinderButton")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));

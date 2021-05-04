@@ -3,10 +3,12 @@ package edu.wpi.cs3733.D21.teamE.views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableView;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.states.DefaultState;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ServiceRequestForm;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
@@ -32,7 +34,7 @@ public class CovidSurveyStatus {
     private JFXButton backButton;
 
     @FXML
-    private void markAsSafe(JFXTreeTableView covidSurveyTable) {
+    private void markAsSafe() {
         int formNumber = ((CovidSurveyObj)(covidSurveyTable.getSelectionModel().getSelectedItem())).getFormNumber();
 //        DB.markAsCovidSafe(formNumber);
     }
@@ -87,6 +89,12 @@ public class CovidSurveyStatus {
                 }
             }
         }
+    }
+
+    @FXML
+    private void switchScene(ActionEvent e) {
+        DefaultState defaultState = new DefaultState();
+        defaultState.switchScene(e);
     }
 
     public void prepareTable(TreeTableView covidSurveyTable) {

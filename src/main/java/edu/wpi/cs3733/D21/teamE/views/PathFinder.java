@@ -892,8 +892,13 @@ public class PathFinder {
 
         nodeArrayList = DB.getAllNodes();
         for (int i = 0; i < nodeArrayList.size(); i++) {
-            longNameArrayList.add(nodeArrayList.get(i).get("longName"));
-            nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
+            Node node = nodeArrayList.get(i);
+            if (node.get("type").equalsIgnoreCase("HALL") || node.get("type").equalsIgnoreCase("WALK")) {
+                nodeArrayList.remove(i--);
+            } else {
+                longNameArrayList.add(node.get("longName"));
+                nodeIDArrayList.add(node.get("id"));
+            }
         }
 //        longNameArrayList = connection.getAllNodeLongNames();
 //        nodeIDArrayList = connection.getListOfNodeIDS();
@@ -907,8 +912,6 @@ public class PathFinder {
 
         new AutoCompleteComboBoxListener<>(startLocationComboBox);
         new AutoCompleteComboBoxListener<>(endLocationComboBox);
-
-        final ArrayList<Node> array = DB.getAllNodes();
 
         //Set up zoomable and pannable panes
         BorderPane borderPane = new BorderPane();
@@ -983,8 +986,8 @@ public class PathFinder {
             /*System.out.println(xInt);
             System.out.println(yInt);*/
 
-            for(int i = 0; i < array.size(); i++) {
-                Node node = array.get(i);
+            for(int i = 0; i < nodeArrayList.size(); i++) {
+                Node node = nodeArrayList.get(i);
                 double nodeX = node.getX() / scale;
                 int nodeXInt = (int) nodeX;
                 double nodeY = node.getY() / scale;
@@ -992,7 +995,7 @@ public class PathFinder {
                 System.out.println(nodeXInt);
                 if ((Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) && (node.get("floor").equalsIgnoreCase(currentFloor))) {
 
-                    System.out.println(array.get(i).get("longName"));
+                    System.out.println(nodeArrayList.get(i).get("longName"));
                     clickOnNode(i);
 
                 }

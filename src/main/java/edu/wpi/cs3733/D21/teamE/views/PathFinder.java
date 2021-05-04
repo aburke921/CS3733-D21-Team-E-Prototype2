@@ -156,6 +156,7 @@ public class PathFinder {
     private Button floor2;
     @FXML // fx:id="floor3"
     private Button floor3;
+    private Button currentlySelected;
 
     /*
      * Additional Variables
@@ -930,6 +931,14 @@ public class PathFinder {
 
         scale = imageWidth / imageView.getFitWidth();
 
+        floor1.setStyle("-fx-background-color: -fx--primary");
+        floor2.setStyle("-fx-background-color: -fx--primary-light");
+        floor3.setStyle("-fx-background-color: -fx--primary-light");
+        floorG.setStyle("-fx-background-color: -fx--primary-light");
+        floorL1.setStyle("-fx-background-color: -fx--primary-light");
+        floorL2.setStyle("-fx-background-color: -fx--primary-light");
+        currentlySelected = floor1;
+
         //Sidebar stuff
         minETA.setText("00");
         secETA.setText("00");
@@ -1032,14 +1041,22 @@ public class PathFinder {
             NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
             nM.getRectangle().setVisible(false);
         }
+        Button button = ((Button) e.getSource());
         currentMarkers.clear();
-        String floor = ((Button) e.getSource()).getText();
+        String floor = button.getText();
+        switchFocusButton(button);
         currFloor.setText(floor);
 
         setCurrentFloor(floor);
         //drawMap(currentFoundPath, currentFloor);
 
         System.out.println("Current floor set to " + floor);
+    }
+
+    private void switchFocusButton(Button button) {
+        currentlySelected.setStyle("-fx-background-color: -fx--primary-light");
+        currentlySelected = button;
+        currentlySelected.setStyle("-fx-background-color: -fx--primary");
     }
 
     public void sortNodesByType(ActionEvent event) {

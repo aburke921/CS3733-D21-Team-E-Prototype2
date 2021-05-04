@@ -250,7 +250,7 @@
       </AnchorPane>
       <AnchorPane fx:id="lowerAnchorPane" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="1200.0">
          <children>
-            <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" maxHeight="29.0" maxWidth="60.0" onAction="#switchScene" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="15.0" />
+            <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" maxHeight="29.0" maxWidth="60.0" onAction="#switchScene" prefHeight="29.0" prefWidth="60.0" styleClass="back-button" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="15.0" />
             <JFXToggleButton fx:id="handicap" layoutX="96.0" text="Handicap" />
             <JFXToggleButton fx:id="safe" layoutX="250.0" text="Emergency" />
          </children>

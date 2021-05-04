@@ -101,6 +101,16 @@ public class Directions {
             }
         });
 
+        imageStackPane.prefWidthProperty().bind(new DoubleBinding() {
+            {
+                super.bind( primaryStage.widthProperty() );
+            }
+            @Override
+            protected double computeValue() {
+                return primaryStage.widthProperty().getValue() * 3 / 5;
+            }
+        });
+
         directControl = DirectionsController.getInstance();
 
         car.setStyle("-fx-background-color: -fx--primary");
@@ -114,10 +124,10 @@ public class Directions {
         hospitalImageView.setImage(hospital);
         hospitalImageView.setPreserveRatio(true);
 
-        //hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
-        hospitalImageView.fitWidthProperty().bind(imageAnchorPane.widthProperty());
-        imageAnchorPane.prefWidthProperty().bind(imageAnchorPane.widthProperty());
-        //imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+        imageAnchorPane.setCenterShape(true);
+
+        imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+        hospitalImageView.fitHeightProperty().bind(imageAnchorPane.heightProperty());
     }
 
     @FXML

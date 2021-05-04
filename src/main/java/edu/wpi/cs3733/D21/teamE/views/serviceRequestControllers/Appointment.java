@@ -21,14 +21,22 @@ import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
+import edu.wpi.cs3733.D21.teamE.states.ServiceRequestState;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 import javax.mail.MessagingException;
 
@@ -38,6 +46,9 @@ public class Appointment extends ServiceRequestFormComponents{
 	RequiredFieldValidator validator = new RequiredFieldValidator();
 	ObservableList<String> userNames;
 	ArrayList<Integer> userID = new ArrayList<>();
+
+	@FXML // fx:id="background"
+	private ImageView background;
 
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -82,7 +93,11 @@ public class Appointment extends ServiceRequestFormComponents{
 
 
 
+	@FXML
+	public AnchorPane appBarAnchorPane;
 
+	@FXML
+	private StackPane stackPane;
 
 
 
@@ -101,6 +116,22 @@ public class Appointment extends ServiceRequestFormComponents{
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
 	void initialize() {
+
+
+		Stage primaryStage = App.getPrimaryStage();
+		Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+		Image backgroundImage = backgroundImg;
+		background.setImage(backgroundImage);
+		background.setEffect(new GaussianBlur());
+
+		//background.setPreserveRatio(true);
+		background.fitWidthProperty().bind(primaryStage.widthProperty());
+		//background.fitHeightProperty().bind(primaryStage.heightProperty());
+
+		RequiredFieldValidator validator = new RequiredFieldValidator();
+		ObservableList<String> userNames;
+		ArrayList<Integer> userID = new ArrayList<>();
+
 		userID = DB.getAssigneeIDs("doctor");
 		userNames = DB.getAssigneeNames("doctor");
 
@@ -115,6 +146,19 @@ public class Appointment extends ServiceRequestFormComponents{
 		assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'Appointment.fxml'.";
 		assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'Appointment.fxml'.";
 
+		//init appBar
+		javafx.scene.Node appBarComponent = null;
+		try {
+			App.setShowHelp(false); // show help or not
+			App.setShowLogin(true); // show login or not
+			App.setPageTitle("Schedule Appointment"); //set AppBar title
+			App.setHelpText(""); //set help text
+			App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
+			appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+			appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -200,6 +244,16 @@ public class Appointment extends ServiceRequestFormComponents{
 
 		return dateInput.validate() && startTimeInput.validate() &&
 				doctorInput.validate() && additionalNotesInput.validate();
+	}
+
+	/**
+	 * Switch to a different scene
+	 * @param e tells which button was pressed
+	 */
+	@FXML
+	private void switchScene(ActionEvent e) {
+		ServiceRequestState serviceRequestState = new ServiceRequestState();
+		serviceRequestState.switchScene(e);
 	}
 
 }

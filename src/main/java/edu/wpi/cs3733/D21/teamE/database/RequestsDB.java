@@ -804,6 +804,7 @@ public class RequestsDB {
 		}
 	}
 
+	//TODO: Not tested
 	/**
 	 * adds a request for food delivery
 	 * @param userID           ID of the user
@@ -871,7 +872,7 @@ public class RequestsDB {
 	 * @param foodCalories    this is the number of calories the food item has
 	 * @param foodDescription this is a description of the food item
 	 */
-	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription) {
+	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription){
 
 		String query = "Insert Into aubonPainMenu Values(?,?,?,?,?) ";
 
@@ -1955,6 +1956,23 @@ public class RequestsDB {
 			System.err.println("getAssigneeIDs() got a SQLException");
 		}
 		return listOfAssigneesIDs;
+	}
+
+	public static String getEmail(int userID) {
+		String query = "Select email From userAccount Where userID = " + userID;
+
+		String email = "";
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+			while (rset.next()) {
+				email = rset.getString("email");
+			}
+			rset.close();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("getEmail() got a SQLException");
+		}
+		return email;
 	}
 
 

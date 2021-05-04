@@ -25,7 +25,7 @@ public class UserAccountDB {
 		String query = "Create Table userAccount " +
 				"( " +
 				"userID              Int Primary Key, " +
-				"email               Varchar(31) Unique Not Null, " +
+				"email               Varchar(100) Unique Not Null, " +
 				"password            Varchar(31)        Not Null, " +
 				"userType            Varchar(31)        Not Null, " +
 				"firstName           Varchar(31)        Not Null, " +
@@ -464,4 +464,5 @@ public class UserAccountDB {
 		System.err.println("Error in getUserName() from UserAccountDB");
 		return null;
 	}
+
 }

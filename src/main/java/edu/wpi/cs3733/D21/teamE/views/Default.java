@@ -133,6 +133,7 @@ public class Default {
                     }
                 } else if(DB.isUserCovidUnmarked(App.userID)) {
                     //add popup
+                    System.out.println("Covid submission needs to be reviewed first");
                 } else {
                     System.out.println("It was none of the three strings");
                 }

@@ -386,6 +386,44 @@ public class UserAccountDB {
 		}
 	}
 
+	public static boolean isUserCovidRisk(int userID) {
+
+		String query = "Select covidStatus From userAccount Where userID = ? ";
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setInt(1, userID);
+			ResultSet rset = preparedStatement.executeQuery();
+			if (rset.next()) {
+				System.out.println(rset.getString("covidStatus").equals("Unsafe"));
+			}
+			return rset.getString("covidStatus").equals("Unsafe");
+		} catch (SQLException e) {
+			System.err.println("Error in isUserCovidSafe() from UserAccountDB");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public static boolean isUserCovidUnmarked(int userID) {
+
+
+		String query = "Select covidStatus From userAccount Where userID = ? ";
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setInt(1, userID);
+			ResultSet rset = preparedStatement.executeQuery();
+			if (rset.next()) {
+				//System.out.println(rset.getString("covidStatus").equals("Needs to Be Reviewed"));
+			}
+			return rset.getString("covidStatus").equals("Needs to Be Reviewed");
+		} catch (SQLException e) {
+			System.err.println("Error in isUserCovidSafe() from UserAccountDB");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+
 	/**
 	 * Checks if a user have filled their COVID survey today
 	 * @param userID is the user's ID that we are checking

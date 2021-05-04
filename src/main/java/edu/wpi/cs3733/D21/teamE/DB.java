@@ -825,4 +825,12 @@ public class DB {
 		return RequestsDB.updateUserAccountCovidStatus(userID, status);
 	}
 
+	public static boolean isUserCovidRisk(int userID) {
+		return UserAccountDB.isUserCovidRisk(userID);
+	}
+
+	public static boolean isUserCovidUnmarked(int userID) {
+		return UserAccountDB.isUserCovidUnmarked(userID);
+	}
+
 }

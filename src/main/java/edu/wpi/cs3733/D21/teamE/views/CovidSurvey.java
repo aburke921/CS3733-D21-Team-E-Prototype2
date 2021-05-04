@@ -102,6 +102,7 @@ public class CovidSurvey extends ServiceRequests {
 			CovidSurveyObj newSurvey = new CovidSurveyObj(App.userID, 0, positiveTestBool, symptomsBool, closeContactBool, quarantineBool, noSymptomsBool, "Needs to Be Reviewed");
 			DB.submitCovidSurvey(newSurvey, App.userID);
 			DB.addEntryRequest(newSurvey);
+			DB.updateUserAccountCovidStatus(App.userID, "Needs to Be Reviewed");
 			exit();
 		} else {
 			validateInput();

@@ -1,6 +1,8 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RegexValidator;
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.states.CovidSurveyState;
@@ -8,6 +10,7 @@ import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -32,6 +35,7 @@ public class createAccount {
 	@FXML
 	private AnchorPane appBarAnchorPane;
 
+
 	private static boolean checkString(String str) {
 		char ch;
 		boolean capitalFlag = false;
@@ -54,7 +58,7 @@ public class createAccount {
 
 	public void initialize() {
 		//init appBar
-		javafx.scene.Node appBarComponent = null;
+		Node appBarComponent = null;
 		try {
 			App.setShowHelp(false); // show help or not
 			App.setShowLogin(false); // show login or not
@@ -66,6 +70,54 @@ public class createAccount {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		//add field validation
+		addValidators();
+
+	}
+
+	private void addValidators() {
+		//email validator
+		RegexValidator emailValidator = new RegexValidator();
+		emailValidator.setRegexPattern("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
+		emailValidator.setMessage("Invalid Email");
+
+		email.getValidators().add(emailValidator);
+		email.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				email.validate();
+			}
+		});
+
+		//password validator
+		RegexValidator passwordValidator = new RegexValidator();
+		passwordValidator.setMessage("Invalid Password");
+		passwordValidator.setRegexPattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"); //todo, if a different special char is inputted, will error out. Eg: ~^-+
+
+		password.getValidators().add(passwordValidator);
+		password.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				password.validate();
+			}
+		});
+
+		//First & last Name validators
+		RequiredFieldValidator notEmptyValidator = new RequiredFieldValidator();;
+		notEmptyValidator.setMessage("Input Required");
+
+		firstName.getValidators().add(notEmptyValidator);
+		firstName.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				firstName.validate();
+			}
+		});
+
+		lastName.getValidators().add(notEmptyValidator);
+		lastName.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				lastName.validate();
+			}
+		});
 	}
 
 	public void createAccountButton(ActionEvent event) {

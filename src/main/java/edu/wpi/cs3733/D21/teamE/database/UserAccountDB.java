@@ -26,7 +26,7 @@ public class UserAccountDB {
 		String query = "Create Table userAccount " +
 				"( " +
 				"userID              Int Primary Key, " +
-				"email               Varchar(31) Unique Not Null, " +
+				"email               Varchar(100) Unique Not Null, " +
 				"password            Varchar(31)        Not Null, " +
 				"userType            Varchar(31)        Not Null, " +
 				"firstName           Varchar(31)        Not Null, " +
@@ -462,8 +462,8 @@ public class UserAccountDB {
 			preparedStatement.setInt(1, userID);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
-				String name = resultSet.getString("firstName") + " ";
-				return name += resultSet.getString("lastName");
+				String firstNameSpace = resultSet.getString("firstName") + " ";
+				return firstNameSpace + resultSet.getString("lastName");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -471,4 +471,5 @@ public class UserAccountDB {
 		System.err.println("Error in getUserName() from UserAccountDB");
 		return null;
 	}
+
 }

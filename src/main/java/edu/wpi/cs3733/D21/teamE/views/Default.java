@@ -10,6 +10,8 @@ import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.states.DefaultState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
+import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,6 +47,9 @@ public class Default {
 
     @FXML // fx:id="userManagementButton"
     private JFXButton userManagementButton;
+
+    @FXML // fx:id="scheduleAppointmentButton"
+    private JFXButton scheduleAppointmentButton;
 
     @FXML // fx:id="algo"
     private JFXComboBox algo;
@@ -119,7 +124,10 @@ public class Default {
 
     @FXML
     private void toScanQRCode(ActionEvent e) {
-	    String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
+	    //String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
+        // ↑ for normal testing and demo
+	    String result = QRCode.scanQR();
+	    // ↑ for submission
         System.out.println("Scanned String: " + result);
         String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
         System.out.println("Scanned pure: " + pure);
@@ -192,6 +200,17 @@ public class Default {
         defaultState.switchScene(e);
     }
 
+//    @FXML
+//    private void toAppointmentPage(ActionEvent e) {
+//        try {
+//            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Appointment.fxml"));
+//            App.setDraggableAndChangeScene(root);
+//        } catch (IOException ex) {
+//            System.out.println("Hi");
+//            ex.printStackTrace();
+//        }
+//    }
+
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {
     }
@@ -234,6 +253,11 @@ public class Default {
             algo.setVisible(false);
             applyChange.setVisible(false);
             userManagementButton.setVisible(false);
+
+        }
+
+        if (App.userID == 0) {
+            scheduleAppointmentButton.setVisible(false);
         }
 
         if (App.userID == 0 || DB.whereDidIPark(App.userID) == null){
@@ -262,5 +286,13 @@ public class Default {
         }
     }
 
+    public void toDirections(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Directions.fxml"));
+            App.changeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
 

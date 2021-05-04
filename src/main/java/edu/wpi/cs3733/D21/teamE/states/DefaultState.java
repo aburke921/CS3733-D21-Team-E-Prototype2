@@ -17,58 +17,74 @@ public class DefaultState {
 
         String buttonName = ((Button) event.getSource()).getId();
 
-        if(buttonName.equals("covidSurvey")){
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
+        switch (buttonName) {
+            case "covidSurvey":
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
+                    App.changeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "pathFinderButton":
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+                    App.changeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "serviceRequestButton":
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequests.fxml"));
+                    App.changeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "mapEditorButton":
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/newMapEditor.fxml"));
+                    App.changeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "userManagementButton":
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/UserManagement.fxml"));
+                    App.changeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "directions":
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Directions.fxml"));
+                    App.changeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "scheduleAppointmentButton":
+                try {
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Appointment.fxml"));
                 App.changeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "covidSurveyStatusButton":
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurveyStatus.fxml"));
+                    App.changeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
             }
         }
 
-        else if(buttonName.equals("covidSurveyStatusButton")){
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurveyStatus.fxml"));
-                App.changeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
 
-        else if(buttonName.equals("pathFinderButton")){
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                App.changeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        else if(buttonName.equals("serviceRequestButton")){
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequests.fxml"));
-                App.changeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        else if(buttonName.equals("mapEditorButton")){
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/newMapEditor.fxml"));
-                App.changeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        else if(buttonName.equals("userManagementButton")){
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/UserManagement.fxml"));
-                App.changeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
     }
 }

@@ -1129,8 +1129,8 @@ public class DatabaseTests {
 
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
-		int rowsAffected1 = DB.addAppointment(1, 400, 400, 2);
-		int rowsAffected2 = DB.addAppointment(2, 400, 400, 2);
+		int rowsAffected1 = DB.addAppointment(1, "4:00", "02/12/21", 2);
+		int rowsAffected2 = DB.addAppointment(2, "8:00",  "02/12/21",2);
 
 		int totalRowsAffected = rowsAffected1 + rowsAffected2;
 		assertEquals(2, totalRowsAffected);
@@ -1147,12 +1147,12 @@ public class DatabaseTests {
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 		DB.addSpecialUserType("ameliak@yahoo.com", "doctor02", "doctor", "Amelia", "Knight");
 
-		DB.addAppointment(1, 400, 400, 2);
-		DB.addAppointment(2, 400, 400, 2);
+		DB.addAppointment(1, "4:00",  "02/12/21",2);
+		DB.addAppointment(2, "8:00", "02/12/21",2);
 
 
-		int rowAffected = DB.editAppointment(1, 700, 700, null);
-		int rowAffected2 = DB.editAppointment(2, 500, 500, 3);
+		int rowAffected = DB.editAppointment(1, "6:00", "7:00", null);
+		int rowAffected2 = DB.editAppointment(2, "9:00", "10:00", 3);
 
 		int totalRowAffected = rowAffected + rowAffected2;
 
@@ -1168,8 +1168,8 @@ public class DatabaseTests {
 
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
-		DB.addAppointment(1, 400, 400, 2);
-		DB.addAppointment(2, 400, 400, 2);
+		DB.addAppointment(1, "8:00", "02/12/21",2);
+		DB.addAppointment(2, "8:00",  "02/12/21",2);
 
 		DB.addRemovedPatientAppointmentHistory(1);
 
@@ -1183,7 +1183,7 @@ public class DatabaseTests {
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 
-		DB.addAppointment(1, 400, 400, 2);
+		DB.addAppointment(1, "8:00",  "02/12/21",2);
 
 		int rowsAffected = DB.cancelAppointment(1);
 
@@ -1199,9 +1199,9 @@ public class DatabaseTests {
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
 
-		DB.addAppointment(1, 400, 400, 2);
-		DB.addAppointment(1, 500, 500, 2);
-		DB.addAppointment(1, 600, 600, 2);
+		DB.addAppointment(1, "8:00", "02/12/21",2);
+		DB.addAppointment(1, "8:00",  "02/13/21",2);
+		DB.addAppointment(1, "8:00",  "02/14/21",2);
 
 		int rowsAffected = DB.cancelAppointment(1);
 
@@ -1229,7 +1229,7 @@ public class DatabaseTests {
 //		DB.addSecurityRequest(22, "Russell Armstrong","WELEV00E01", "Medium", "Medium");
 	}
 
-	//	@Test
+//	@Test
 //	@DisplayName("testGetTablesToThatExist")
 //	public void testGetTablesToThatExist(){
 ////		try {
@@ -1250,7 +1250,7 @@ public class DatabaseTests {
 	@DisplayName("userLoginTest")
 	public void userLoginTest() {
 
-		//Visitors:
+//Visitors:
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
 		//Patients:
@@ -1284,7 +1284,6 @@ public class DatabaseTests {
 		insertUsers.add("Insert Into userAccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', Current Timestamp, 0, Null, Null)");
 		insertUsers.add("Insert Into userAccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', Current Timestamp, 0, Null, Null)");
 		insertUsers.add("Insert Into userAccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', Current Timestamp, 0, Null, Null)");
-
 		for (String insertUser : insertUsers) {
 			try (PreparedStatement prepState = makeConnection.makeConnection().connection.prepareStatement(insertUser)) {
 				prepState.execute();
@@ -1294,7 +1293,6 @@ public class DatabaseTests {
 				System.err.println("Error inserting into userAccount inside function userLoginTest()");
 			}
 		}
-
 		//Visitors:
 		assertEquals(1, DB.userLogin("bellag@gmail.com", "visitor1"));
 		assertEquals(2, DB.userLogin("terry_reilly123@yahoo.com", "visitor2"));
@@ -1733,6 +1731,17 @@ public class DatabaseTests {
 		assertEquals("ePARK00101", DB.whereDidIPark(1));
 		assertNull(DB.whereDidIPark(2));
 	}
+	@Test
+	@DisplayName("testGetEmail")
+	public void testGetEmail() {
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+
+		String email = DB.getEmail(1);
+
+		assertTrue(email.equals("bellag@gmail.com"));
+
+	}
+
 
 	@Test
 	@DisplayName("entryRequestTests")

@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -75,7 +77,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     }
 
     @FXML
-    private void saveData(ActionEvent e) {
+    private void saveData(ActionEvent e) throws MessagingException {
 
         int index = locationInput.getSelectionModel().getSelectedIndex();
 
@@ -88,6 +90,27 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         String signature = signatureInput.getText();
 
         DB.addMedicineRequest(App.userID, assigned, location, name, doseQuantity, doseMeasure, specialInstructions, signature);
+
+        super.handleButtonSubmit(e);
+
+        //For email implementation later
+//        String email = DB.getEmail(App.userID);
+//        String fullName = DB.getUserName(App.userID);
+////        String assigneeName = userNames.get(assigned);
+////        String locationName = locations.get(nodeIDIndex);
+//        String body = "Hello " + fullName + ", \n\n" + "Thank you for making an External Patient Transport request." +
+//                "Here is the summary of your request: \n\n" +
+//                " - Location: " + location + "\n" +
+//                " - Medicine Name: " + name + "\n" +
+//                " - Medicine Dosage: " + doseMeasure + "\n" +
+//                " - Does Quantity: " + doseQuantity + "\n" +
+//                " - Assignee Name: " + assigned + "\n" +
+//                " - Special Instructions: " + specialInstructions + "\n" +
+//                " - Signature: " + signatureInput + "\n\n" +
+//                "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+//                "- Emerald Emus BWH";
+//
+//        sendEmail.sendRequestConfirmation(email, body);
     }
 
     @FXML
@@ -98,7 +121,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
                 System.out.println(event); //Print the ActionEvent to console
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
                 App.getPrimaryStage().getScene().setRoot(root);
-            } catch (IOException ex) {
+            } catch (IOException | MessagingException ex) {
                 ex.printStackTrace();
             }
         }

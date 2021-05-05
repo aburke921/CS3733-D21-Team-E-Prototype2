@@ -10,12 +10,9 @@ import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.states.DefaultState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
-import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -62,6 +59,9 @@ public class Default {
     @FXML // fx:id="scheduleAppointmentButton"
     private JFXButton scheduleAppointmentButton;
 
+    @FXML // fx:id="covidSurveyStatusButton"
+    private JFXButton covidSurveyStatusButton;
+
     @FXML // fx:id="algo"
     private JFXComboBox algo;
 
@@ -95,52 +95,59 @@ public class Default {
         App.setSearchAlgo(algoIndex);
     }
 
-    /**
-     * Move to Path Finder page
-     * @param e
-     */
     @FXML
-    private void toPathFinder(ActionEvent e) {
-        if (App.userID != 0){
-            if (DB.filledCovidSurveyToday(App.userID) && DB.isUserCovidSafe(App.userID)) { // go to pathfinder
-                try {
-                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                    App.changeScene(root);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+    private void toPathFinder(ActionEvent event) {
+        if(App.userID != 0) {
+            if(DB.filledCovidSurveyToday(App.userID)) {
+                if((DB.isUserCovidSafe(App.userID))) {
+                    System.out.println("User is marked as safe");
+                    ArrayList<Node> indexer = DB.getAllNodes();
+                    int index = 0;
+                    for(int i = 0; i < indexer.size(); i++) {
+                        if(indexer.get(i).get("id").equals("FEXIT00201")) {
+                            index = i;
+                        }
+                    }
+                    PathFinder.endNodeIndex = index; //update this with the main entrance
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+                        App.changeScene(root);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else if(DB.isUserCovidRisk(App.userID)){
+                    System.out.println("User is marked as risk");
+                    ArrayList<Node> indexer = DB.getAllNodes();
+                    int index = 0;
+                    for(int i = 0; i < indexer.size(); i++) {
+                        if(indexer.get(i).get("id").equals("FEXIT00301")) {
+                            index = i;
+                        }
+                    }
+                    PathFinder.endNodeIndex = index; //update this to emergency entrance index
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+                        App.changeScene(root);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else if(DB.isUserCovidUnmarked(App.userID)) {
+                    App.newJFXDialogPopUp("","OK","Your covid survey still needs to be reviewed",stackPane);
+                    System.out.println("Covid submission needs to be reviewed first");
+                } else {
+                    System.out.println("It was none of the three strings");
                 }
-            } else { // go to covid survey
-                CovidSurvey.plzGoToPathFinder = true;
-                try {
-                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-                    App.changeScene(root);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
             }
-        } else if (App.noCleanSurveyYet) { // go to covid survey
-            CovidSurvey.plzGoToPathFinder = true;
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-                App.changeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        } else { // go to pathfinder
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                App.changeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        } else {
+            App.newJFXDialogPopUp("","OK","You need to create a guest account if you wish to pathfind within the hospital",stackPane);
         }
     }
 
     @FXML
     private void toScanQRCode(ActionEvent e) {
-	    //String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
+	    String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
         // ↑ for normal testing and demo
-	    String result = QRCode.scanQR();
+//	    String result = QRCode.scanQR();
 	    // ↑ for submission
         System.out.println("Scanned String: " + result);
         String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
@@ -192,16 +199,21 @@ public class Default {
 
     @FXML
     private void toParking(ActionEvent e) {
-
-        ArrayList<Node> nodeArrayList = DB.getAllNodes();
-        int index = 0;
-        for (int i = 0; i < nodeArrayList.size(); i++) {
-            if (nodeArrayList.get(i).get("id").equals(DB.whereDidIPark(App.userID))) {
-                index = i;
+        ArrayList<Node> indexer = DB.getAllNodes();
+        String parked = DB.whereDidIPark(App.userID);
+        System.out.println(DB.whereDidIPark(App.userID));
+        for(int i = 0; i < indexer.size(); i++) {
+            if(indexer.get(i).get("id").equals(DB.whereDidIPark(App.userID))) {
+                PathFinder.endNodeName = indexer.get(i).get("longName");
+                System.out.println(PathFinder.endNodeName);
             }
         }
-        PathFinder.endNodeIndex = index;
-        toPathFinder(e);
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+            App.changeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -287,7 +299,7 @@ public class Default {
             algo.setVisible(false);
             applyChange.setVisible(false);
             userManagementButton.setVisible(false);
-
+            covidSurveyStatusButton.setVisible(false);
         }
 
         if (App.userID == 0) {

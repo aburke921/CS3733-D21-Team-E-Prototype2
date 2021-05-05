@@ -1,65 +1,42 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.*;
-
-import java.io.IOException;
-
-import java.net.URL;
-import java.util.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ResourceBundle;
-
 import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.QRCode;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
-
-import edu.wpi.cs3733.D21.teamE.App;
-import edu.wpi.cs3733.D21.teamE.QRCode;
 import edu.wpi.cs3733.D21.teamE.observer.ImageObserver;
 import edu.wpi.cs3733.D21.teamE.observer.MarkerObserver;
 import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
-import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
-import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-
-import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Parent;
-
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.swing.event.ChangeListener;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -67,6 +44,9 @@ public class PathFinder {
 
     public static int startNodeIndex = -1;
     public static int endNodeIndex = -1;
+
+    public static String startNodeName = "";
+    public static String endNodeName = "";
 
     /*
      * FXML Values
@@ -240,6 +220,7 @@ public class PathFinder {
     /**
      * Get textual directions from {@link Path#makeDirections()}, and prints them out onto
      * a popup dialog.
+     * Populates them with icons corresponding to each step in the directions
      * @param event the calling event's info
      */
     @FXML
@@ -315,7 +296,7 @@ public class PathFinder {
 
 
         JFXDialogLayout popup = new JFXDialogLayout();
-        popup.setHeading(new Text("Detailed Path Directions"));
+        popup.setHeading(new Text("Detailed Path DirectionsController"));
         popup.setBody(tableView);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
         JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
@@ -845,6 +826,8 @@ public class PathFinder {
         currFloor.setText("");
         currFloor.setText(currentFloor);
 
+        switchFocusButton(floorNum);
+
         //draw path for new floor
         drawMap(currentFoundPath,currentFloor);
 
@@ -1038,8 +1021,17 @@ public class PathFinder {
         currFloor.textProperty().addListener(observable -> {
             subject.setState(currFloor.getText());
         });
+
+        if(!endNodeName.equals("")) {
+            endLocationComboBox.getSelectionModel().select(endNodeName);
+            endNodeName = "";
+        }
     }
 
+    /**
+     * Switches visible floor
+     * @param e Button click action
+     */
     public void chooseFloor(ActionEvent e) {
         //clear current floor of markers
         for (Node node : currentMarkers) {
@@ -1049,7 +1041,6 @@ public class PathFinder {
         Button button = ((Button) e.getSource());
         currentMarkers.clear();
         String floor = button.getText();
-        switchFocusButton(button);
         currFloor.setText(floor);
 
         setCurrentFloor(floor);
@@ -1058,13 +1049,44 @@ public class PathFinder {
         System.out.println("Current floor set to " + floor);
     }
 
-    private void switchFocusButton(Button button) {
+    /**
+     * Switch highlighted floor button
+     * @param floor Floor to switch to
+     */
+    private void switchFocusButton(String floor) {
         currentlySelected.setStyle("-fx-background-color: -fx--primary-light");
+        Button button = currentlySelected;
+        switch (floor) {
+            case "L2":
+                button = floorL2;
+                break;
+
+            case "L1":
+                button = floorL1;
+                break;
+
+            case "G":
+                button = floorG;
+                break;
+
+            case "1":
+                button = floor1;
+                break;
+
+            case "2":
+                button = floor2;
+                break;
+
+            case "3":
+                button = floor3;
+                break;
+        }
         currentlySelected = button;
         currentlySelected.setStyle("-fx-background-color: -fx--primary");
     }
 
-    public void sortNodesByType(ActionEvent event) {
+
+        public void sortNodesByType(ActionEvent event) {
         String currentType =((CheckBox) event.getSource()).getId().toUpperCase();
         //create hashcode string for hashmap
         String typeAndFloorString = currentType + currentFloor;

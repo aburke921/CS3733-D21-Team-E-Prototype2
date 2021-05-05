@@ -1,169 +1,323 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
+import com.google.maps.model.TravelMode;
 
-import com.google.maps.*;
-import com.google.maps.errors.ApiException;
-import com.google.maps.model.*;
-import io.github.cdimascio.dotenv.Dotenv;
+import com.jfoenix.controls.*;
+import edu.wpi.cs3733.D21.teamE.App;
+import javafx.beans.binding.DoubleBinding;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+
+import javafx.scene.control.ListCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.event.ActionEvent;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
 import java.io.IOException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
+/**
+ * Class to display directions to/from BWH using the Google Maps API
+ */
 public class DirectionsController {
-    // API Key, loaded from .env on init
-    private static String API_KEY = "";
 
-    // API Context
-    private static GeoApiContext geoContext;
+    @FXML // fx:id="appBarAnchorPane"
+    private AnchorPane appBarAnchorPane;
+    @FXML // fx:id="stackPane"
+    private StackPane stackPane; //main stack pane used for JFXDialog popups
+    @FXML // fx:id="leftAnchorPane"
+    private AnchorPane leftAnchorPane;
 
-    // Travel Mode, default is driving
-    private TravelMode mode = TravelMode.DRIVING;
+    @FXML // fx:id="imageView"
+    private ImageView hospitalImageView;
+    @FXML // fx:id="imageAnchorPane"
+    private AnchorPane imageAnchorPane;
+    @FXML // fx:id="imageStackPane"
+    private StackPane imageStackPane;
 
-    // Destinations
-    private static final String MAIN = "Brigham and Womens'";
-    private static final String LEFT = "80 Francis St, Boston, MA 02115";
-    private static final String RIGHT = "15-51 New Whitney St, Boston, MA 02115";
+    @FXML // fx:id="address"
+    private JFXTextField address;
+    @FXML // fx:id="city"
+    private JFXTextField city;
+    @FXML // fx:id="state"
+    private JFXTextField state;
+    @FXML // fx:id="zip"
+    private JFXTextField zip;
 
-    private static DirectionsController instance = null;
+    @FXML // fx:id="car"
+    private JFXButton car;
+    @FXML // fx:id="transit"
+    private JFXButton transit;
+    @FXML // fx:id="bike"
+    private JFXButton bike;
+    @FXML // fx:id="walking"
+    private JFXButton walking;
+    private JFXButton currentlySelected; // Currently selected travel selection button
 
-    public static DirectionsController getInstance()
-    {
-        if (instance == null)
-            instance = new DirectionsController();
+    @FXML // fix:id="backButton"
+    public Button backButton; // Value injected by FXMLLoader
+    @FXML // fx:id="lowerAnchorPane"
+    public AnchorPane lowerAnchorPane;
 
-        return instance;
-    }
+    @FXML // fx:id="toBWH"
+    public JFXButton toBWH; // Get Directions to BWH button
+    @FXML // fx:id="awayBWH"
+    public JFXButton awayBWH; // Get Directions from BWH button
 
-    private DirectionsController() {
-        init();
-    }
+    /**
+     * Singleton object
+     */
+    DirectionsEntity directionsEntity = null; // DirectionsEntity, Maps API interface
 
-    public void setMode(TravelMode mode) {
-        instance.mode = mode;
-    }
-
-    public List<String> getDirections(String origin, Boolean toBWH) {
+    /**
+     * JavaFX Init method
+     */
+    public void initialize() {
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
         try {
-            DirectionsResult result = getDir(origin, toBWH);
-            DirectionsLeg trip = result.routes[0].legs[0];
-            List<String> listing = directionsListing(trip, toBWH);
-            return listing;
-        } catch (IOException exception) {
-            System.err.println("IO Exception: " + exception.getMessage());
-        } catch (InterruptedException exception) {
-            System.err.println("Interrupted Exception: " + exception.getMessage());
-        } catch (ApiException exception) {
-            System.err.println("API Exception: " + exception.getMessage());
+            App.setShowHelp(false);
+            App.setShowLogin(true);
+            App.setStackPane(stackPane);
+            App.setPageTitle("Directions to BWH");
+            App.setHelpText(""); //todo help text
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return null;
-    }
 
-    private DirectionsResult getDir(String origin, Boolean toBWH) throws IOException, InterruptedException, ApiException {
-        DirectionsApiRequest request = new DirectionsApiRequest(geoContext);
-        request.mode(mode).departureTimeNow();
-        DirectionsResult result;
+        Stage primaryStage = App.getPrimaryStage();
 
-        if (toBWH) {
-            request.origin(origin);
-            if (mode == TravelMode.DRIVING) {
-                request.destination(LEFT);
-                DirectionsResult left = request.await();
+        
 
-                request = new DirectionsApiRequest(geoContext);
-                request.origin(origin);
-                request.mode(mode).departureTimeNow();
-                request.destination(RIGHT);
-                DirectionsResult right = request.await();
-
-                long leftDur = left.routes[0].legs[0].duration.inSeconds;
-                long rightDur = right.routes[0].legs[0].duration.inSeconds;
-
-                result = ( leftDur < rightDur) ? (left) : (right);
-            } else {
-                request.destination(MAIN);
-                result = request.await();
+        leftAnchorPane.prefWidthProperty().bind(new DoubleBinding() {
+            {
+                super.bind(primaryStage.widthProperty());
             }
+
+            @Override
+            protected double computeValue() {
+                return primaryStage.widthProperty().getValue() * 2 / 5;
+            }
+        });
+
+        imageStackPane.prefWidthProperty().bind(new DoubleBinding() {
+            {
+                super.bind(primaryStage.widthProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return primaryStage.widthProperty().getValue() * 3 / 5;
+            }
+        });
+
+        directionsEntity = DirectionsEntity.getInstance();
+
+        car.setStyle("-fx-background-color: -fx--primary");
+        bike.setStyle("-fx-background-color: -fx--primary-light");
+        walking.setStyle("-fx-background-color: -fx--primary-light");
+        transit.setStyle("-fx-background-color: -fx--primary-light");
+        currentlySelected = car;
+
+        toBWH.disableProperty().bind(address.textProperty().isEmpty());
+        awayBWH.disableProperty().bind(address.textProperty().isEmpty());
+
+        Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        hospitalImageView.setImage(hospital);
+        hospitalImageView.setPreserveRatio(true);
+
+        imageAnchorPane.setCenterShape(true);
+
+        imageAnchorPane.minHeightProperty().bind(primaryStage.heightProperty());
+        imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+        hospitalImageView.fitHeightProperty().bind(imageAnchorPane.heightProperty());
+        primaryStage.setWidth(primaryStage.getWidth() + 0.0001);
+    }
+
+    /**
+     * Gets directions to/from BWH
+     * Displays them in a dialog
+     * Reads text fields
+     *
+     * @param toBWH did the user request directions to or from BWH
+     */
+    @FXML
+    private void getDirections(Boolean toBWH) {
+        StringBuilder origin = new StringBuilder();
+        origin.append(address.textProperty().get()).append(" ");
+        origin.append(city.textProperty().get()).append(", ");
+        origin.append(state.textProperty().get()).append(" ");
+        origin.append(zip.textProperty().get());
+
+        List<String> directions = directionsEntity.getDirections(origin.toString(), toBWH);
+        if (directions == null) {
+            System.err.println("No Directions Found");
+            return;
+        }
+
+        JFXListView<String> listView = new JFXListView<>();
+        String header = directions.remove(0);
+        listView.getItems().addAll(directions);
+        listView.setPrefHeight(USE_COMPUTED_SIZE);
+        listView.setSelectionModel(new NoSelectionModel<String>());
+        listView.getStyleClass().add("directions");
+
+        listView.setCellFactory(param -> new ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+
+                } else {
+
+                    // set the width's
+                    setMinWidth(param.getWidth() - 25);
+                    setMaxWidth(param.getWidth() - 25);
+                    setPrefWidth(param.getWidth() - 25);
+
+                    // allow wrapping
+                    setWrapText(true);
+
+                    setText(item.toString());
+
+
+                }
+            }
+        });
+
+        JFXDialogLayout popup = new JFXDialogLayout();
+        popup.setHeading(new Text(header));
+        popup.setBody(listView);
+        popup.setPrefHeight(USE_COMPUTED_SIZE);
+        popup.getStyleClass().add("jfx-dialog");
+        JFXDialog dialog = new JFXDialog(imageStackPane, popup, JFXDialog.DialogTransition.CENTER);
+        dialog.getStyleClass().add("jfx-dialog");
+
+        dialog.prefWidthProperty().bind(new DoubleBinding() {
+            {
+                super.bind(imageStackPane.widthProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return imageStackPane.widthProperty().getValue() - 150;
+            }
+        });
+        popup.prefWidthProperty().bind(new DoubleBinding() {
+            {
+                super.bind(imageStackPane.widthProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return imageStackPane.widthProperty().getValue() - 150;
+            }
+        });
+
+        int fullSize = listView.getItems().size() * 45 + 120;
+        if (fullSize > 600) {
+            dialog.setMaxHeight(600);
         } else {
-            request.origin(MAIN);
-            request.destination(origin);
-            request.mode(mode);
-            result = request.await();
+            dialog.setMaxHeight(fullSize);
         }
+        JFXButton okay = new JFXButton("Close");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
 
-        return result;
+            }
+        });
+        popup.setActions(okay);
+        dialog.show();
+
     }
 
-    private List<String> directionsListing(DirectionsLeg trip, boolean toBWH) {
-        ArrayList<String> directions = new ArrayList<>();
-        directions.add(getHeader(trip, toBWH));
-        // First String is header
-        int stepNum = 1;
-        for (DirectionsStep step: trip.steps) {
-            String str = step.toString();
-            str = str.replaceAll("<div style=\"font-size:0.9em\">", " "); // linebreak comp
-            str = str.replaceAll("\\<.*?\\>", "");
-            str = str.substring(str.indexOf("\"")+1);
-            String dir = str.substring(0, str.indexOf("\""));
-            dir = dir.replaceAll("&nbsp;", " ");
-            String dirWithNum = (stepNum++) + ")\t " + dir;
-            directions.add(dirWithNum);
-        }
-
-        return directions;
+    /**
+     * Button handler for directions to BWH
+     *
+     * @param actionEvent Button click action
+     */
+    public void toBWH(ActionEvent actionEvent) {
+        getDirections(true);
     }
 
-    private String getHeader(DirectionsLeg trip, boolean toBWH) {
-        StringBuilder SB = new StringBuilder("Directions ");
-        SB.append((toBWH ? "to" : "from")).append(" Brigham and Women's Hospital ");
-        SB.append((toBWH ? ("from " + trip.startAddress) : ("to " + trip.endAddress)));
-        SB.append("\n\nBy ").append(modeName(instance.mode));
-        SB.append("\t\tDistance: ").append(trip.distance);
-        SB.append("\t\tDuration: ").append(trip.duration);
-        return SB.toString();
+    /**
+     * Button handler for directions from BWH
+     *
+     * @param actionEvent Button click action
+     */
+    public void awayBWH(ActionEvent actionEvent) {
+        getDirections(false);
     }
 
-    private String modeName(TravelMode mode) {
-        String str;
+    /**
+     * Switches which travel method button is being focused
+     *
+     * @param button The button to change the highlight to
+     */
+    private void switchFocusButton(JFXButton button) {
+        currentlySelected.setStyle("-fx-background-color: -fx--primary-light");
+        currentlySelected = button;
+        currentlySelected.setStyle("-fx-background-color: -fx--primary");
+    }
+
+    /**
+     * Switches the travel mode
+     *
+     * @param e Button click action
+     */
+    @FXML
+    private void chooseMode(ActionEvent e) {
+        String mode = ((Button) e.getSource()).getId();
         switch (mode) {
-            case WALKING:
-                str =  "Walking";
+            case "walking":
+                directionsEntity.setMode(TravelMode.WALKING);
+                switchFocusButton(walking);
                 break;
-            case BICYCLING:
-                str =  "Bicycling";
+
+            case "bike":
+                directionsEntity.setMode(TravelMode.BICYCLING);
+                switchFocusButton(bike);
                 break;
-            case TRANSIT:
-                str =  "Public Transit";
+
+            case "transit":
+                directionsEntity.setMode(TravelMode.TRANSIT);
+                switchFocusButton(transit);
                 break;
+
             default:
-                str =  "Driving";
+                directionsEntity.setMode(TravelMode.DRIVING);
+                switchFocusButton(car);
                 break;
-        };
-        return str;
-    }
-
-    private static void init() {
-        Dotenv dotenv = Dotenv.load();
-        API_KEY = dotenv.get("MAPS_API_KEY");
-        getGeoContext();
-    }
-
-    private static void getGeoContext() {
-        if(geoContext == null) {
-            geoContext = new GeoApiContext.Builder()
-                    .apiKey(API_KEY)
-                    .readTimeout(10000, TimeUnit.SECONDS)
-                    .queryRateLimit(5)
-                    .connectTimeout(1, TimeUnit.SECONDS)
-                    .build();
         }
     }
 
-    public static void close() {
-        if(geoContext != null) {
-            geoContext.shutdown();
+    /**
+     * Switches scene back to default page
+     *
+     * @param event Button click event
+     */
+    @FXML
+    private void toDefault(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
+            App.changeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 }

@@ -130,7 +130,7 @@ public class Appointment extends ServiceRequestFormComponents{
 
 		RequiredFieldValidator validator = new RequiredFieldValidator();
 		ObservableList<String> userNames;
-		ArrayList<Integer> userID = new ArrayList<>();
+		//ArrayList<Integer> userID = new ArrayList<>();
 
 		userID = DB.getAssigneeIDs("doctor");
 		userNames = DB.getAssigneeNames("doctor");

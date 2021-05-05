@@ -142,20 +142,19 @@ public class App extends Application {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("fxml/Default.fxml")); //get the Default FXMl
 			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
-
 			//set scene for primaryStage
 			Scene scene = new Scene(root);
-			Image icon = new Image(getClass().getResourceAsStream("logo.png"));
+			System.out.println("Scene");
+			Image icon = new Image(getClass().getResourceAsStream("Logo.png"));
+			System.out.println("Logo");
 			primaryStage.getIcons().add(icon);
+			System.out.println("add icon");
 			primaryStage.setScene(scene);
-
 			//set default sizes
 			primaryStage.setWidth(1200);
 			primaryStage.setHeight(785);
-
 			//add ResizeListener
 			ResizeHelper.addResizeListener(primaryStage, 1120, 775, Double.MAX_VALUE, Double.MAX_VALUE);
-
 			//show stage
 			primaryStage.show();
 		} catch (IOException e) {

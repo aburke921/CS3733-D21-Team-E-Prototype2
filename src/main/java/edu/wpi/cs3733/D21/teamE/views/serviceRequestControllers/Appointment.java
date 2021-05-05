@@ -129,7 +129,7 @@ public class Appointment extends ServiceRequestFormComponents{
 		//background.fitHeightProperty().bind(primaryStage.heightProperty());
 
 		RequiredFieldValidator validator = new RequiredFieldValidator();
-		ObservableList<String> userNames;
+		//ObservableList<String> userNames;
 		//ArrayList<Integer> userID = new ArrayList<>();
 
 		userID = DB.getAssigneeIDs("doctor");

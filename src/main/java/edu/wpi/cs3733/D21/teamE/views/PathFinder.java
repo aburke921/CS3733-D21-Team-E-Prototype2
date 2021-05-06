@@ -29,6 +29,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -224,10 +226,11 @@ public class PathFinder {
         if (currentFoundPath == null) return;
 
         List<String> directions = currentFoundPath.makeDirectionsWithDist();
+        String floor = "Floor " + currentFoundPath.getStart().get("floor");
 
         TableView tableView = new TableView();
 
-        TableColumn<TextualDirectionStep, FontAwesomeIconView> column1 = new TableColumn<>();
+        TableColumn<TextualDirectionStep, Text> column1 = new TableColumn<>();
         column1.setCellValueFactory(new PropertyValueFactory<>("icon"));
         column1.getStyleClass().add("iconTable");
         column1.setStyle("-fx-alignment: CENTER-LEFT");
@@ -241,6 +244,7 @@ public class PathFinder {
 
         tableView.setSelectionModel(null);
         tableView.setPrefHeight(USE_COMPUTED_SIZE);
+        tableView.getStyleClass().add("scrollables");
         tableView.getStyleClass().add("directions");
         tableView.getStyleClass().add("noheader");
         tableView.getStyleClass().add("table-row-cell");
@@ -249,9 +253,21 @@ public class PathFinder {
         tableView.getColumns().add(column1);
         tableView.getColumns().add(column2);
 
-
+        boolean floorChangeFlag = true;
 
         for (String dir : directions) {
+            if (floorChangeFlag) {
+                Text floorHeader = new Text(Character.toString(MaterialDesignIcon.PLAY_CIRCLE.getChar()));
+                //floorHeader.setRotate(180);
+                floorHeader.setStyle("-fx-fill: -fx--primary-dark");
+
+                Text floorText = new Text(floor);
+                floorText.setFont(Font.font(null, FontWeight.BOLD, 16));
+
+                tableView.getItems().add(new TextualDirectionStep(floorHeader, floorText));
+
+                floorChangeFlag = false;
+            }
             char step;
             Text text;
             int rotate = 0;
@@ -283,19 +299,27 @@ public class PathFinder {
             } else { // else is elevator
                 step = MaterialDesignIcon.ELEVATOR.getChar();
             }
+
             text = new Text(Character.toString(step));
             text.setRotate(rotate);
             text.setStyle("-fx-fill: -fx--primary-dark");
-            tableView.getItems().add(new TextualDirectionStep(text, dir));
+            tableView.getItems().add(new TextualDirectionStep(text, new Text("   "+ dir)));
+            if (dir.contains("Floor")) {
+                String s1 = dir.substring(dir.indexOf("Floor"));
+                s1 = s1.replace("Floor", "");
+                s1 = s1.replaceAll("\\s", "");
+                floor = "Floor " + s1;
+                floorChangeFlag = true;
+            }
         }
 
 
         JFXDialogLayout popup = new JFXDialogLayout();
-        popup.setHeading(new Text("Detailed Path DirectionsController"));
+        popup.setHeading(new Text("Path Directions"));
         popup.setBody(tableView);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
         JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
-        dialog.setMaxWidth(375);
+        dialog.setMaxWidth(400);
         int fullSize = tableView.getItems().size() * 41 + 120;
         dialog.setMaxHeight(Math.min(fullSize, 425));
         JFXButton okay = new JFXButton("Done");
@@ -368,9 +392,6 @@ public class PathFinder {
 
         });
         error.setActions(parking,start,bathroom,destination);
-
-
-
 
         dialog.show();
     }
@@ -517,13 +538,6 @@ public class PathFinder {
 
                 //draw the map for the current floor
                 drawMap(foundPath, currentFloor);
-
-                System.out.println();
-                List<String> directions = foundPath.makeDirections();
-                for (String dir : directions) {
-                    System.out.println(dir);
-                }
-
             }
         }
     }
@@ -877,6 +891,9 @@ public class PathFinder {
         startLocationComboBox.setItems(longNameArrayList);
         endLocationComboBox.setItems(longNameArrayList);
 
+        startLocationComboBox.getStyleClass().add("scrollables");
+        endLocationComboBox.getStyleClass().add("scrollables");
+
         System.out.println("done");
 
 
@@ -936,18 +953,6 @@ public class PathFinder {
         marker.populateLocationMarkerMarkerGroup(scale);
         markerPane.getChildren().add(marker.getMarkerGroup());
 
-        //Check if startNodeIndex has a value, if yes fill startLocationComboBox
-        if (startNodeIndex != -1) {
-            startLocationComboBox.getSelectionModel().select(startNodeIndex);
-            startNodeIndex = -1;
-        }
-
-        //Check if startNodeIndex has a value, if yes fill startLocationComboBox
-        if (endNodeIndex != -1) {
-            endLocationComboBox.getSelectionModel().select(endNodeIndex);
-            endNodeIndex = -1;
-        }
-
         System.out.println("Finish PathFinder Init.");
         pane.setOnMouseClicked(e -> {
             /*double xCoord = e.getX();
@@ -970,7 +975,7 @@ public class PathFinder {
                 int nodeXInt = (int) nodeX;
                 double nodeY = node.getY() / scale;
                 int nodeYInt = (int) nodeY;
-                System.out.println(nodeXInt);
+                //System.out.println(nodeXInt);
                 if ((Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) && (node.get("floor").equalsIgnoreCase(currentFloor))) {
 
                     System.out.println(nodeArrayList.get(i).get("longName"));
@@ -1079,7 +1084,7 @@ public class PathFinder {
     }
 
 
-        public void sortNodesByType(ActionEvent event) {
+    public void sortNodesByType(ActionEvent event) {
         String currentType =((CheckBox) event.getSource()).getId().toUpperCase();
         //create hashcode string for hashmap
         String typeAndFloorString = currentType + currentFloor;

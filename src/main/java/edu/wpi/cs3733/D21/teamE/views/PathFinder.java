@@ -47,6 +47,8 @@ public class PathFinder {
     public static String startNodeName = "";
     public static String endNodeName = "";
 
+    public static boolean useEmergencyPF = false;
+
     /*
      * FXML Values
      */
@@ -986,6 +988,9 @@ public class PathFinder {
         if(!endNodeName.equals("")) {
             endLocationComboBox.getSelectionModel().select(endNodeName);
             endNodeName = "";
+        }
+        if (useEmergencyPF) {
+            safe.setSelected(true);
         }
     }
 

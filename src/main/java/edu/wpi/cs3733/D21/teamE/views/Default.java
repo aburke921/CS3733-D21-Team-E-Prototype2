@@ -125,6 +125,7 @@ public class Default {
                         }
                     }
                     PathFinder.endNodeIndex = index; //update this to emergency entrance index
+                    PathFinder.useEmergencyPF = true;
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
                         App.changeScene(root);

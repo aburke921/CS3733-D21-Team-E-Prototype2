@@ -109,31 +109,24 @@ public class RequestsDB2 {
 		}
 	}
 
-
+	/**
+	 * This adds a floral request to the database that the user is making
+	 * @param request this is all of the information needed in a floral request object.
+	 */
 	public static void addFloralRequest(FloralObj request) {
-//		addRequest(userID, assigneeID, "floral");
 		addRequest(request.getUserID(), request.getAssigneeID(), "floral");
 
 		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
-//			prepState.setString(1, RoomNodeID);
 			prepState.setString(1, request.getNodeID());
-//			prepState.setString(2, recipientName);
 			prepState.setString(2, request.getRecipient());
-//			prepState.setString(3, flowerType);
 			prepState.setString(3, request.getFlower());
-//			prepState.setInt(4, flowerAmount);
 			prepState.setInt(4, request.getCount());
-//			prepState.setString(5, vaseType);
 			prepState.setString(5, request.getVase());
-//			prepState.setString(6, arrangement);
 			prepState.setString(6, request.getArrangement());
-//			prepState.setString(7, stuffedAnimal);
 			prepState.setString(7, request.getStuffedAnimal());
-//			prepState.setString(8, chocolate);
 			prepState.setString(8, request.getChocolate());
-//			prepState.setString(9, message);
 			prepState.setString(9, request.getMessage());
 
 			prepState.execute();
@@ -142,6 +135,96 @@ public class RequestsDB2 {
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
 		}
 	}
+
+
+	/**
+	 * This edits a floral request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a floral request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return
+	 */
+	public static int editFloralRequest(FloralObj request) {
+
+		boolean added = false;
+		String query = "Update floralRequests Set ";
+
+		if (request.getRecipient() != null) {
+			query = query + "recipientName = '" + request.getRecipient() + "'";
+
+			added = true;
+		}
+		if (request.getNodeID() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " roomID = '" + request.getNodeID() + "'";
+			added = true;
+		}
+		if (request.getFlower() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " flowerType = '" + request.getFlower() + "'";
+			added = true;
+		}
+
+		//TODO: changed this line from "request.getCount() != null" because it threw an error. Need make sure that I changed it ok
+		if (request.getCount() > 0) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " flowerAmount = " + request.getCount();
+			added = true;
+		}
+		if (request.getVase() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " vaseType = '" + request.getVase() + "'";
+			added = true;
+		}
+		if (request.getArrangement() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " arrangement = '" + request.getArrangement() + "'";
+			added = true;
+		}
+		if (request.getStuffedAnimal() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " stuffedAnimal = '" + request.getStuffedAnimal() + "'";
+			added = true;
+		}
+		if (request.getChocolate() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " chocolate = '" + request.getChocolate() + "'";
+			added = true;
+		}
+		if (request.getMessage() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " message = '" + request.getMessage() + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + request.getRequestID();
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating floral request");
+			return 0;
+		}
+	}
+
+
+
 
 
 

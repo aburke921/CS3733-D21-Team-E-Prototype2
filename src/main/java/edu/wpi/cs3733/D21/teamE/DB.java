@@ -6,6 +6,7 @@ import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.database.*;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
@@ -358,8 +359,8 @@ public class DB {
 	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
 	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
 	 */
-	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message) {
-		RequestsDB.addFloralRequest(userID, assigneeID, RoomNodeID, recipientName, flowerType, flowerAmount, vaseType, arrangement, stuffedAnimal, chocolate, message);
+	public static void addFloralRequest(FloralObj request) {
+		RequestsDB2.addFloralRequest(request);
 	}
 
 	/**
@@ -504,8 +505,13 @@ public class DB {
 	 * @param message      the new message containing either instructions or to the recipient the user wants to change
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message) {
-		return RequestsDB.editFloralRequest(requestID, roomID, recipientName, flowerType, flowerAmount, vaseType, arrangement, stuffedAnimal, chocolate, message);
+	/**
+	 *
+	 * @param request
+	 * @return
+	 */
+	public static int editFloralRequest(FloralObj request) {
+		return RequestsDB2.editFloralRequest(request);
 	}
 
 	/**

@@ -9,6 +9,8 @@ import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
@@ -43,6 +45,72 @@ public class DB {
 		RequestsDB.createReligionRequestTable();
 		RequestsDB.createEntryRequestTable();
 	}
+
+
+	/**
+	 * This adds a floral request to the database that the user is making
+	 * @param request this is all of the information needed, in a floral request object.
+	 */
+	public static void addFloralRequest(FloralObj request) { RequestsDB2.addFloralRequest(request); }
+
+	/**
+	 * This edits a floral request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a floral request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return
+	 */
+	public static int editFloralRequest(FloralObj request) { return RequestsDB2.editFloralRequest(request); }
+
+	/**
+	 * adds a language request to the languageRequest table
+	 * @param request this is all of the information needed, in a language request object.
+	 */
+	public static void addLanguageRequest(LanguageInterpreterObj request) { RequestsDB2.addLanguageRequest(request); }
+
+	/**
+	 * This edits a language request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a language request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return
+	 */
+	public static int editLanguageRequest(LanguageInterpreterObj request) { return RequestsDB2.editLanguageRequest(request); }
+
+	/**
+	 * adds a language request to the religiousRequest table
+	 * @param request this is all of the information needed, in a religious request object.
+	 */
+	public static void addReligiousRequest(ReligiousRequestObj request) { RequestsDB2.addReligiousRequest(request); }
+
+	/**
+	 * This edits a religious request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a religious request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return
+	 */
+	public static int editReligiousRequest(ReligiousRequestObj request) {
+		return RequestsDB2.editReligiousRequest(request);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public static void createNodeTable() {
 		NodeDB.createNodeTable();
@@ -374,16 +442,7 @@ public class DB {
 		RequestsDB.addSecurityRequest(userID, assigneeID, roomID, level, urgency);
 	}
 
-	/**
-	 * @param userID       ID of the user
-	 * @param assigneeID   ID of the assigned user who will complete this task
-	 * @param roomID       nodeID of the user
-	 * @param languageType type of language being requested
-	 * @param description  detailed description of request
-	 */
-	public static void addLanguageRequest(int userID, int assigneeID, String roomID, String languageType, String description) {
-		RequestsDB.addLanguageRequest(userID, assigneeID, roomID, languageType, description);
-	}
+
 
 	/**
 	 * @param userID         ID of the user
@@ -442,15 +501,7 @@ public class DB {
 		RequestsDB.addAubonPainMenuItem(foodImage, foodItem, foodPrice, foodCalories, foodDescription);
 	}
 
-	/**
-	 * add a religious request
-	 * @param roomID       where the request takes place
-	 * @param religionType the kind of the religion that request is requesting
-	 * @param description  some text to further describe the request
-	 */
-	public static void addReligiousRequest(int userID, String roomID, int assigneeID, String religionType, String description) {
-		RequestsDB.addReligiousRequest(userID, roomID, assigneeID, religionType, description);
-	}
+
 
 	/**
 	 * This adds a entry request form to the table
@@ -484,24 +535,9 @@ public class DB {
 		return RequestsDB2.editExternalPatientRequest(externalPatientObj);
 	}
 
-	/**
-	 * This edits a floral request form that is already in the database
-	 * @param requestID    the ID that specifies which external transfer form that is being edited
-	 * @param roomID       the new node/room/location the user is assigning this request to
-	 * @param flowerType   the type of flower the user wants to change their request to
-	 * @param flowerAmount the new quantity of flowers the user wants to change their request to
-	 * @param vaseType     the new vase type the user wants to change their request to
-	 * @param message      the new message containing either instructions or to the recipient the user wants to change
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	/**
-	 *
-	 * @param request
-	 * @return
-	 */
-	public static int editFloralRequest(FloralObj request) {
-		return RequestsDB2.editFloralRequest(request);
-	}
+
+
+
 
 	/**
 	 * This function edits a current request for medicine delivery with the information below for a request already in the database
@@ -542,16 +578,7 @@ public class DB {
 		return RequestsDB.editRequests(requestID, assigneeID, requestStatus);
 	}
 
-	/**
-	 * @param requestID    is the generated ID of the request
-	 * @param roomID       the new node/room/location the user is assigning this request to
-	 * @param languageType is the new language type being requested by the user
-	 * @param description  is an edited detailed description
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description) {
-		return RequestsDB.editLanguageRequest(requestID, roomID, languageType, description);
-	}
+
 
 	/**
 	 * @param requestID      is the generated ID of the request
@@ -596,15 +623,7 @@ public class DB {
 		return RequestsDB.editInternalPatientRequest(requestID, pickUpLocation, dropOffLocation, patientID, department, severity, description);
 	}
 
-	/**
-	 * edit a religious request
-	 * @param roomID       where the request takes place
-	 * @param religionType the kind of the religion that request is requesting
-	 * @param description  some text to further describe the request
-	 */
-	public static int editReligiousRequest(int requestID, String roomID, String religionType, String description) {
-		return RequestsDB.editReligiousRequest(requestID, roomID, religionType, description);
-	}
+
 
 
 	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {

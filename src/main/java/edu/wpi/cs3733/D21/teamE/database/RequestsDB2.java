@@ -2,6 +2,8 @@ package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -68,7 +70,7 @@ public class RequestsDB2 {
 
 
 
-	//FLORAL REQUEST STUFF:
+	//FLORAL REQUEST STUFF::::
 
 	/**
 	 * Uses executes the SQL statements required to create a floralRequests table. This is a type of request and share the same requestID.
@@ -111,7 +113,7 @@ public class RequestsDB2 {
 
 	/**
 	 * This adds a floral request to the database that the user is making
-	 * @param request this is all of the information needed in a floral request object.
+	 * @param request this is all of the information needed, in a floral request object.
 	 */
 	public static void addFloralRequest(FloralObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "floral");
@@ -135,7 +137,6 @@ public class RequestsDB2 {
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
 		}
 	}
-
 
 	/**
 	 * This edits a floral request form that is already in the database
@@ -222,6 +223,143 @@ public class RequestsDB2 {
 			return 0;
 		}
 	}
+
+
+
+
+
+	//LANGUAGE REQUEST STUFF::::
+
+	/**
+	 * adds a language request to the languageRequest table
+	 * @param request this is all of the information needed, in a language request object.
+	 */
+	public static void addLanguageRequest(LanguageInterpreterObj request) {
+//		addRequest(userID, assigneeID, "languageRequest");
+		addRequest(request.getUserID(), request.getAssigneeID(), "languageRequest");
+
+		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertLanguageReq)) {
+			prepState.setString(1, request.getNodeID());
+			prepState.setString(2, request.getLanguage());
+			prepState.setString(3, request.getDescription());
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into languageRequest inside function addLanguageRequest()");
+		}
+
+	}
+
+	/**
+	 * This edits a language request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a language request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return
+	 */
+	public static int editLanguageRequest(LanguageInterpreterObj request) {
+		boolean added = false;
+		String query = "Update languageRequest Set ";
+
+		if (request.getNodeID() != null) {
+			query = query + " roomID = '" + request.getNodeID() + "'";
+			added = true;
+		}
+		if (request.getLanguage() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "languageType = '" + request.getLanguage() + "'";
+			added = true;
+		}
+		if (request.getDescription() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + request.getDescription() + "'";
+		}
+
+		query = query + " where requestID = " + request.getRequestID();
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating languageRequest");
+			return 0;
+		}
+
+	}
+
+
+
+
+
+
+	// LANGUAGE REQUESTS STUFF::::
+	/**
+	 * adds a language request to the religiousRequest table
+	 * @param request this is all of the information needed, in a religious request object.
+	 */
+	public static void addReligiousRequest(ReligiousRequestObj request) {
+		addRequest(request.getUserID(), request.getAssigneeID(), "religiousRequest");
+
+		String insertMaintenanceReq = "Insert Into religiousRequest Values ((Select Count(*) From requests), ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
+			prepState.setString(1, request.getNodeID());
+			prepState.setString(2, request.getReligion());
+			prepState.setString(3, request.getDescription());
+
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into religiousRequest inside function addReligiousRequest()");
+		}
+	}
+
+
+	/**
+	 * This edits a religious request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a religious request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return
+	 */
+	public static int editReligiousRequest(ReligiousRequestObj request) {
+		boolean added = false;
+		String query = "Update religiousRequest Set ";
+
+		if (request.getNodeID() != null) {
+			query = query + "roomID = '" + request.getNodeID() + "'";
+			added = true;
+		}
+		if (request.getReligion() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "religionType = '" + request.getReligion() + "'";
+			added = true;
+		}
+		if (request.getDescription() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + request.getDescription() + "'";
+		}
+
+		query = query + " where requestID = " + request.getRequestID();
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating religiousRequest");
+			return 0;
+		}
+	}
+
 
 
 

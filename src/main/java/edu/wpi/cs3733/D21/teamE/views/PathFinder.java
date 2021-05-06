@@ -985,6 +985,10 @@ public class PathFinder {
 
         currFloor.textProperty().addListener(observable -> subject.setState(currFloor.getText()));
 
+        if(!startNodeName.equals("")) {
+            startLocationComboBox.getSelectionModel().select(startNodeName);
+            startNodeName = "";
+        }
         if(!endNodeName.equals("")) {
             endLocationComboBox.getSelectionModel().select(endNodeName);
             endNodeName = "";

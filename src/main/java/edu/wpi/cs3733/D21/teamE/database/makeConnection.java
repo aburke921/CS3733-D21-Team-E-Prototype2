@@ -60,13 +60,14 @@ public class makeConnection {
 
 	/**
 	 * Deletes node,hasEdge, userAccount, requests, floralRequests, sanitationRequest and extTransport tables.
-	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
+//	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
 	 * try/catch phrase set up in case the tables all ready do not exist
 	 */
 	public void deleteAllTables() {
 
 		try {
 			Statement stmt = this.connection.createStatement();
+			stmt.execute("Drop Table entryRequest");
 			stmt.execute("Drop Table religiousRequest");
 			stmt.execute("Drop Table aubonPainMenu");
 			stmt.execute("Drop Table internalPatientRequest");
@@ -81,10 +82,10 @@ public class makeConnection {
 			stmt.execute("Drop Table sanitationrequest");
 			stmt.execute("Drop Table floralrequests");
 			stmt.execute("Drop Table requests");
-			stmt.execute("Drop View visitoraccount");
-			stmt.execute("Drop View patientaccount");
-			stmt.execute("Drop View doctoraccount");
-			stmt.execute("Drop View adminaccount");
+//			stmt.execute("Drop View visitoraccount");
+//			stmt.execute("Drop View patientaccount");
+//			stmt.execute("Drop View doctoraccount");
+//			stmt.execute("Drop View adminaccount");
 			stmt.execute("Drop Table useraccount");
 			stmt.execute("Drop Table hasedge");
 			stmt.execute("Drop Table node");
@@ -97,10 +98,10 @@ public class makeConnection {
 
 
 	public boolean allTablesThere() {
-		ArrayList<String> tablesInDB = new ArrayList<String>();
+		ArrayList<String> tablesInDB = new ArrayList<>();
 		String[] names = {"TABLE"};
 		ResultSet result;
-		DatabaseMetaData metadata = null;
+		DatabaseMetaData metadata;
 		try {
 			metadata = connection.getMetaData();
 			result = metadata.getTables(null, null, null, names);
@@ -121,7 +122,7 @@ public class makeConnection {
 	/**
 	 * Calls all of the functions that creates each individual table
 	 * Tables Created: node, hasEdge, userAccount, requests, floralRequests, sanitationRequest, extTransport, medDelivery, securityServ
-	 * Views Created (which are like tables): visitorAccount, patientAccount, doctorAccount, adminAccount
+//	 * Views Created (which are like tables): visitorAccount, patientAccount, doctorAccount, adminAccount
 	 */
 
 
@@ -330,16 +331,20 @@ public class makeConnection {
 
 
 		//Special Accounts:
-		String insertUser1 = "Insert Into useraccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', Current Timestamp, 0, Null, Null)";
-		String insertUser2 = "Insert Into useraccount Values (-99, 'admin', 'admin', 'admin', 'Admin', 'Wong', Current Timestamp, 0, Null, Null)";
-		String insertUser3 = "Insert Into useraccount Values (99999, 'staff', 'staff', 'doctor', 'Staff', 'Wong', Current Timestamp, 0, Null, Null)";
-		String insertUser4 = "Insert Into useraccount Values (10000, 'guest', 'guest', 'patient', 'Guest', 'Wong', Current Timestamp, 0, Null, Null)";
+		String insertUser1 = "Insert Into useraccount Values (-1, 'engineeringsoftware3733@gmail.com', 'admin', 'admin', 'Super', 'Admin', Current Timestamp, '', Null, Null)";
+		String insertUser2 = "Insert Into useraccount Values (-99, 'wwong2@wpi.edu', 'admin', 'admin', 'Admin', 'Wong', Current Timestamp, '', Null, Null)";
+		String insertUser3 = "Insert Into useraccount Values (-9999, 'admin', 'admin', 'admin', 'Admin', 'Wong', Current Timestamp, '', Null, Null)";
+		String insertUser4 = "Insert Into useraccount Values (30000, 'staff', 'staff', 'doctor', 'Staff', 'Wong', Current Timestamp, '', Null, Null)";
+		String insertUser5 = "Insert Into useraccount Values (20000, 'patient', 'patient', 'patient', 'Patient', 'Dude', Current Timestamp, '', Null, Null)";
+		String insertUser6 = "Insert Into useraccount Values (10000, 'visitor', 'visitor', 'visitor', 'Visitor', 'Wong', Current Timestamp, '', Null, Null)";
 		try {
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate(insertUser1);
 			stmt.executeUpdate(insertUser2);
 			stmt.executeUpdate(insertUser3);
 			stmt.executeUpdate(insertUser4);
+			stmt.executeUpdate(insertUser5);
+			stmt.executeUpdate(insertUser6);
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

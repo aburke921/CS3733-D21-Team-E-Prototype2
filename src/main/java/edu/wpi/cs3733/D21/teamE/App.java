@@ -7,6 +7,8 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 
 
+import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
+import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.AppBarComponent;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -66,6 +68,12 @@ public class App extends Application {
 	/**@// todo document this*/
 	public static boolean noCleanSurveyYet = true;
 
+	/** Nodes and info for pathfinder to get on init
+	 * No nodes on default, no emergency on default */
+	private static Node startNode = null;
+	private static Node endNode = null;
+	private static boolean toEmergency = false;
+
 
 	//setters and getters for above variables
 	public static boolean isShowLogin() { return showLogin; }
@@ -82,7 +90,12 @@ public class App extends Application {
 	public static void setSearchAlgo(int searchAlgo) { App.searchAlgo = searchAlgo; }
 	public static void setPrimaryStage(Stage primaryStage) { App.primaryStage = primaryStage; }
 	public static Stage getPrimaryStage() { return primaryStage; }
-
+	public static Node getStartNode() { return startNode; }
+	public static void setStartNode(Node startNode) { App.startNode = startNode; }
+	public static Node getEndNode() { return endNode; }
+	public static void setEndNode(Node endNode) { App.endNode = endNode; }
+	public static boolean isToEmergency() { return toEmergency; }
+	public static void setToEmergency(boolean toEmergency) { App.toEmergency = toEmergency; }
 
 	/*---------------------------------
 	 *		JAVAFX APP FUNCTIONS
@@ -100,6 +113,7 @@ public class App extends Application {
 		System.out.println("Starting App Init...");
 		makeConnection connection = makeConnection.makeConnection();
 		System.out.println("...Connected to the DB");
+		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");
 		File edges = new File("CSVs/MapEAlledges.csv");
 		boolean tablesExist = connection.allTablesThere();
@@ -111,6 +125,9 @@ public class App extends Application {
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
 				DB.populateAbonPainTable();
+				for(int ID : sheetIDs){
+					SheetsAndJava.deleteSheetData(ID);
+				}
 				System.out.println("Done");
 			} catch (Exception e) {
 				System.out.println("...Tables already there");
@@ -137,18 +154,19 @@ public class App extends Application {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("fxml/Default.fxml")); //get the Default FXMl
 			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
-
 			//set scene for primaryStage
 			Scene scene = new Scene(root);
+			System.out.println("Scene");
+			Image icon = new Image(getClass().getResourceAsStream("Logo.png"));
+			System.out.println("Logo");
+			primaryStage.getIcons().add(icon);
+			System.out.println("add icon");
 			primaryStage.setScene(scene);
-
 			//set default sizes
 			primaryStage.setWidth(1200);
 			primaryStage.setHeight(785);
-
 			//add ResizeListener
 			ResizeHelper.addResizeListener(primaryStage, 1120, 775, Double.MAX_VALUE, Double.MAX_VALUE);
-
 			//show stage
 			primaryStage.show();
 		} catch (IOException e) {

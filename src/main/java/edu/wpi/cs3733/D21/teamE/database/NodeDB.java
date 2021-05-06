@@ -207,7 +207,7 @@ public class NodeDB {
 	public static ArrayList<Node> getAllNodesByType(String type) {
 		ArrayList<Node> nodesArray = new ArrayList<>();
 
-		String query = "select * from node WHERE '" + type + "' = NODETYPE";
+		String query = "select * from node WHERE '" + type + "' = nodeType Order By longName Asc";
 
 		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
 
@@ -244,7 +244,7 @@ public class NodeDB {
 //observable list -- UI
 
 
-		String query = "Select * From node";
+		String query = "Select * From node Order By longName Asc";
 		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
 
 			ResultSet rset = prepStat.executeQuery();

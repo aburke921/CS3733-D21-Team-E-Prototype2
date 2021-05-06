@@ -20,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +33,16 @@ public class Default {
     private AnchorPane appBarAnchorPane;
 
     @FXML // fx:id="imageView"
-    private ImageView imageView;
+    private ImageView hospitalImageView;
+
+    @FXML // fx:id="imageView"
+    private ImageView logoImageView;
+
+    @FXML // fx:id="imageAnchorPane"
+    private AnchorPane imageAnchorPane;
+
+    @FXML // fx:id="rightAnchorPane"
+    private AnchorPane rightAnchorPane;
 
     @FXML // fx:id="stackPane"
     private StackPane stackPane; //main stack pane used for JFXDialog popups
@@ -45,6 +55,12 @@ public class Default {
 
     @FXML // fx:id="userManagementButton"
     private JFXButton userManagementButton;
+
+    @FXML // fx:id="scheduleAppointmentButton"
+    private JFXButton scheduleAppointmentButton;
+
+    @FXML // fx:id="covidSurveyStatusButton"
+    private JFXButton covidSurveyStatusButton;
 
     @FXML // fx:id="algo"
     private JFXComboBox algo;
@@ -64,6 +80,9 @@ public class Default {
     @FXML // fx:id="LinkToParking"
     private Hyperlink LinkToParking;
 
+    @FXML // fx:id="imageStackPane"
+    private StackPane imageStackPane;
+
     private ObservableList<String> algoNames;
 
     /**
@@ -76,50 +95,50 @@ public class Default {
         App.setSearchAlgo(algoIndex);
     }
 
-    /**
-     * Move to Path Finder page
-     * @param e
-     */
     @FXML
-    private void toPathFinder(ActionEvent e) {
-        if (App.userID != 0){
-            if (DB.filledCovidSurveyToday(App.userID) && DB.isUserCovidSafe(App.userID)) { // go to pathfinder
-                try {
-                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                    App.changeScene(root);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+    private void toPathFinder(ActionEvent event) {
+        if(App.userID != 0) {
+            if(DB.filledCovidSurveyToday(App.userID)) {
+                if((DB.isUserCovidSafe(App.userID))) {
+                    System.out.println("User is marked as safe");
+                    App.setEndNode(DB.getNodeInfo("FEXIT00201"));
+
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+                        App.changeScene(root);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else if(DB.isUserCovidRisk(App.userID)){
+                    System.out.println("User is marked as risk");
+                    App.setEndNode(DB.getNodeInfo("FEXIT00301"));
+                    App.setToEmergency(true);
+                    try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+                        App.changeScene(root);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else if(DB.isUserCovidUnmarked(App.userID)) {
+                    App.newJFXDialogPopUp("","OK","Your covid survey still needs to be reviewed",stackPane);
+                    System.out.println("Covid submission needs to be reviewed first");
+                } else {
+                    System.out.println("It was none of the three strings");
                 }
-            } else { // go to covid survey
-                CovidSurvey.plzGoToPathFinder = true;
-                try {
-                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-                    App.changeScene(root);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+            } else {
+                App.newJFXDialogPopUp("","OK","You need to fill out a covid survey each day if you wish to pathfind within the hospital",stackPane);
             }
-        } else if (App.noCleanSurveyYet) { // go to covid survey
-            CovidSurvey.plzGoToPathFinder = true;
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurvey.fxml"));
-                App.changeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        } else { // go to pathfinder
-            try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                App.changeScene(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        } else {
+            App.newJFXDialogPopUp("","OK","You need to create a guest account if you wish to pathfind within the hospital",stackPane);
         }
     }
 
     @FXML
     private void toScanQRCode(ActionEvent e) {
-	    String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
+	    //String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
+        // for normal testing and demo
+	    String result = QRCode.scanQR();
+	    // for submission
         System.out.println("Scanned String: " + result);
         String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
         System.out.println("Scanned pure: " + pure);
@@ -133,15 +152,8 @@ public class Default {
 
         switch (lable) {
             case "n":
-                ArrayList<Node> nodeArrayList = DB.getAllNodes();
-                int index = 0;
-                for (int i = 0; i < nodeArrayList.size(); i++) {
-                    if (nodeArrayList.get(i).get("id").equals(code)) {
-                        index = i;
-                    }
-                }
-                PathFinder.startNodeIndex = index;
-                toPathFinder(e);
+                Node selected = DB.getNodeInfo(code);
+                App.setStartNode(selected);
                 break;
             case "p":
                 if (App.userID == 0) {
@@ -170,16 +182,16 @@ public class Default {
 
     @FXML
     private void toParking(ActionEvent e) {
-
-        ArrayList<Node> nodeArrayList = DB.getAllNodes();
-        int index = 0;
-        for (int i = 0; i < nodeArrayList.size(); i++) {
-            if (nodeArrayList.get(i).get("id").equals(DB.whereDidIPark(App.userID))) {
-                index = i;
-            }
+        ArrayList<Node> indexer = DB.getAllNodes();
+        String parked = DB.whereDidIPark(App.userID);
+        System.out.println(DB.whereDidIPark(App.userID));
+        App.setEndNode(DB.getNodeInfo(parked));
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+            App.changeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-        PathFinder.endNodeIndex = index;
-        toPathFinder(e);
     }
 
     /**
@@ -191,6 +203,17 @@ public class Default {
         DefaultState defaultState = new DefaultState();
         defaultState.switchScene(e);
     }
+
+//    @FXML
+//    private void toAppointmentPage(ActionEvent e) {
+//        try {
+//            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Appointment.fxml"));
+//            App.setDraggableAndChangeScene(root);
+//        } catch (IOException ex) {
+//            System.out.println("Hi");
+//            ex.printStackTrace();
+//        }
+//    }
 
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {
@@ -212,13 +235,33 @@ public class Default {
             e.printStackTrace();
         }
 
-        Image image = new Image("edu/wpi/cs3733/D21/teamE/logo.png");
-        imageView.setImage(image);
+        //Set up images
+        Stage primaryStage = App.getPrimaryStage();
 
+        Image hospital = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        hospitalImageView.setImage(hospital);
+        hospitalImageView.setPreserveRatio(true);
+
+        hospitalImageView.fitHeightProperty().bind(primaryStage.heightProperty());
+        hospitalImageView.fitWidthProperty().bind(primaryStage.widthProperty());
+        imageAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+        imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+
+
+        Image logo = new Image("edu/wpi/cs3733/D21/teamE/fullLogo.png");
+        logoImageView.setImage(logo);
+        logoImageView.setPreserveRatio(true);
+        //logoImageView.fitWidthProperty().bind(rightAnchorPane.widthProperty());
+        rightAnchorPane.prefWidthProperty().bind(primaryStage.widthProperty());
+        rightAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+
+        //Set up algorithm choices
         algoNames = FXCollections.observableArrayList();
         algoNames.add("A* Search");
         algoNames.add("Depth First Search");
         algoNames.add("Breadth First Search");
+        algoNames.add("Dijkstra Search");
+        algoNames.add("Best First");
 
         algo.setItems(algoNames);
         algo.setValue(algoNames.get(App.getSearchAlgo()));
@@ -234,6 +277,11 @@ public class Default {
             algo.setVisible(false);
             applyChange.setVisible(false);
             userManagementButton.setVisible(false);
+            covidSurveyStatusButton.setVisible(false);
+        }
+
+        if (App.userID == 0) {
+            scheduleAppointmentButton.setVisible(false);
         }
 
         if (App.userID == 0 || DB.whereDidIPark(App.userID) == null){
@@ -262,5 +310,13 @@ public class Default {
         }
     }
 
+    public void toDirections(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Directions.fxml"));
+            App.changeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
 

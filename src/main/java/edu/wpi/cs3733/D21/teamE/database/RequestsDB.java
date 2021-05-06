@@ -139,42 +139,6 @@ public class RequestsDB {
 		}
 	}
 
-	/**
-	 * Uses executes the SQL statements required to create a extTransport table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user is sending the request to.
-	 * - requestType: this the mode of transportation that the request is being made for. The valid options are: 'Ambulance', 'Helicopter', 'Plane'
-	 * - severity: this is how sever the patient is who the user/first responders are transporting.
-	 * - patientID: this is the ID of the patient that is being transported.
-	 * - ETA: this is the estimated time the patient will arrive.
-	 * - description: this is a detailed description of request that generally includes what happened to the patient and their current situation.
-	 */
-	public static void createExtTransportTable() {
-
-		String query = "Create Table extTransport( " +
-				"    requestID int Primary Key References requests On Delete Cascade, " +
-				"    roomID varchar(31) Not Null References node On Delete Cascade, " +
-				"    requestType varchar(100) Not Null, " +
-				"    severity varchar(30) Not Null, " +
-				"    patientID varchar(31) Not Null, " +
-				"    ETA varchar(100), " +
-				"    bloodPressure varchar(31), " +
-				"    temperature varchar(31), " +
-				"    oxygenLevel varchar(31), " +
-				"    description varchar(5000)," +
-				"    Constraint requestTypeLimitExtTrans Check (requestType In ('Ambulance', 'Helicopter', 'Plane'))" +
-				")";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating extTransport table");
-		}
-	}
 
 	/**
 	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
@@ -605,71 +569,39 @@ public class RequestsDB {
 
 	}
 
-	/**
-	 * This function needs to add a external patient form to the table for external patient forms
-	 * //@param form this is the form that we will create and send to the database
-	 */
-	public static void addExternalPatientRequest(int userID, int assigneeID, String roomID, String requestType, String severity, String patientID, String ETA, String bloodPressure, String temperature, String oxygenLevel, String description) {
-
-		addRequest(userID, assigneeID, "extTransport");
-
-		String insertExtTransport = "Insert Into exttransport " +
-				"Values ((Select Count(*) " +
-				"         From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, requestType);
-			prepState.setString(3, severity);
-			prepState.setString(4, patientID);
-			prepState.setString(5, ETA);
-			prepState.setString(6, bloodPressure);
-			prepState.setString(7, temperature);
-			prepState.setString(8, oxygenLevel);
-			prepState.setString(9, description);
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into extTransport inside function addExternalPatientRequest()");
-		}
-
-	}
-
-	/**
-	 * This adds a floral request to the database that the user is making
-	 * @param userID        this is the username that the user uses to log into the account
-	 * @param assigneeID    this is the ID of the assigned user
-	 * @param RoomNodeID    this is the nodeID/room the user is sending the request to
-	 * @param recipientName this is the name of the individual they want the flowers to be addressed to
-	 * @param flowerType    this is the type of flowers that the user wants to request
-	 * @param flowerAmount  this the number/quantity of flowers that the user is requesting
-	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
-	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
-	 */
-	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message) {
-		addRequest(userID, assigneeID, "floral");
-
-		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
-			prepState.setString(1, RoomNodeID);
-			prepState.setString(2, recipientName);
-			prepState.setString(3, flowerType);
-			prepState.setInt(4, flowerAmount);
-			prepState.setString(5, vaseType);
-			prepState.setString(6, arrangement);
-			prepState.setString(7, stuffedAnimal);
-			prepState.setString(8, chocolate);
-			prepState.setString(9, message);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
-		}
-	}
+//	/**
+//	 * This adds a floral request to the database that the user is making
+//	 * @param userID        this is the username that the user uses to log into the account
+//	 * @param assigneeID    this is the ID of the assigned user
+//	 * @param RoomNodeID    this is the nodeID/room the user is sending the request to
+//	 * @param recipientName this is the name of the individual they want the flowers to be addressed to
+//	 * @param flowerType    this is the type of flowers that the user wants to request
+//	 * @param flowerAmount  this the number/quantity of flowers that the user is requesting
+//	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
+//	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
+//	 */
+//	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message) {
+//		addRequest(userID, assigneeID, "floral");
+//
+//		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
+//			prepState.setString(1, RoomNodeID);
+//			prepState.setString(2, recipientName);
+//			prepState.setString(3, flowerType);
+//			prepState.setInt(4, flowerAmount);
+//			prepState.setString(5, vaseType);
+//			prepState.setString(6, arrangement);
+//			prepState.setString(7, stuffedAnimal);
+//			prepState.setString(8, chocolate);
+//			prepState.setString(9, message);
+//
+//			prepState.execute();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
+//		}
+//	}
 
 	/**
 	 * This adds a medicine request form to the table for medicine request forms
@@ -747,56 +679,31 @@ public class RequestsDB {
 	}
 
 
-	/**
-	 * @param userID       ID of the user
-	 * @param assigneeID   ID of the assigned user who will complete this task
-	 * @param roomID       nodeID of the user
-	 * @param languageType type of language being requested
-	 * @param description  detailed description of request
-	 */
-	public static void addLanguageRequest(int userID, int assigneeID, String roomID, String languageType, String description) {
-		addRequest(userID, assigneeID, "languageRequest");
+//	/**
+//	 * @param userID       ID of the user
+//	 * @param assigneeID   ID of the assigned user who will complete this task
+//	 * @param roomID       nodeID of the user
+//	 * @param languageType type of language being requested
+//	 * @param description  detailed description of request
+//	 */
+//	public static void addLanguageRequest(int userID, int assigneeID, String roomID, String languageType, String description) {
+//		addRequest(userID, assigneeID, "languageRequest");
+//
+//		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, ?)";
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(insertLanguageReq)) {
+//			prepState.setString(1, roomID);
+//			prepState.setString(2, languageType);
+//			prepState.setString(3, description);
+//
+//			prepState.execute();
+//		} catch (SQLException e) {
+//			//e.printStackTrace();
+//			System.err.println("Error inserting into languageRequest inside function addLanguageRequest()");
+//		}
+//
+//	}
 
-		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertLanguageReq)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, languageType);
-			prepState.setString(3, description);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into languageRequest inside function addLanguageRequest()");
-		}
-
-	}
-
-	/**
-	 * @param userID         ID of the user
-	 * @param roomID         nodeID of the user
-	 * @param assigneeID     ID of the assigned user who will complete this task
-	 * @param washLoadAmount amount of loads needed to wash
-	 * @param dryLoadAmount  amount of loads needed to dry
-	 * @param description    detailed description of request
-	 */
-	public static void addLaundryRequest(int userID, String roomID, int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
-		addRequest(userID, assigneeID, "laundryRequest");
-
-		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertLaundryReq)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, washLoadAmount);
-			prepState.setString(3, dryLoadAmount);
-			prepState.setString(4, description);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into laundryRequest inside function addLanguageRequest()");
-		}
-	}
 
 	/**
 	 * @param userID      ID of the user
@@ -937,28 +844,6 @@ public class RequestsDB {
 		}
 	}
 
-	/**
-	 * add a religious request
-	 * @param roomID       where the request takes place
-	 * @param religionType the kind of the religion that request is requesting
-	 * @param description  some text to further describe the request
-	 */
-	public static void addReligiousRequest(int userID, String roomID, int assigneeID, String religionType, String description) {
-		addRequest(userID, assigneeID, "religiousRequest");
-
-		String insertMaintenanceReq = "Insert Into religiousRequest Values ((Select Count(*) From requests), ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, religionType);
-			prepState.setString(3, description);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error inserting into religiousRequest inside function addReligiousRequest()");
-		}
-	}
 
 
 // EDITING TABLES::::
@@ -1107,185 +992,95 @@ public class RequestsDB {
 
 	}
 
-	/**
-	 * This edits a External Transport Services form that is already in the database
-	 * @param requestID   the ID that specifies which external transfer form that is being edited
-	 * @param roomID      this is the string used to update the hospital field
-	 * @param requestType this is the string used to update the type
-	 * @param severity    this is the string used to update the severity
-	 * @param patientID   this is the string used to update patientID
-	 * @param description this is the string used to update the description
-	 * @param ETA         this is the string used to update the eta
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String description, String ETA, String bloodPressure, String temperature, String oxygenLevel) {
 
-		boolean added = false;
-		String query = "Update extTransport Set ";
-
-		if (roomID != null) {
-			query = query + " roomID = '" + roomID + "'";
-
-			added = true;
-		}
-		if (requestType != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " requestType = '" + requestType + "'";
-			added = true;
-		}
-		if (severity != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " severity = '" + severity + "'";
-			added = true;
-		}
-		if (patientID != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " patientID = '" + patientID + "'";
-			added = true;
-		}
-		if (description != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " description = '" + description + "'";
-			added = true;
-		}
-		if (ETA != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " ETA = '" + ETA + "'";
-			added = true;
-		}
-		if (bloodPressure != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " bloodPressure = '" + bloodPressure + "'";
-			added = true;
-		}
-		if (temperature != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " temperature = '" + temperature + "'";
-			added = true;
-		}
-		if (oxygenLevel != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " oxygenLevel = '" + oxygenLevel + "'";
-			added = true;
-		}
-
-		query = query + " where requestID = " + requestID;
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating external transport request");
-			return 0;
-		}
-	}
-
-	/**
-	 * This edits a floral request form that is already in the database
-	 * @param requestID    the ID that specifies which external transfer form that is being edited
-	 * @param roomID       the new node/room/location the user is assigning this request to
-	 * @param flowerType   the type of flower the user wants to change their request to
-	 * @param flowerAmount the new quantity of flowers the user wants to change their request to
-	 * @param vaseType     the new vase type the user wants to change their request to
-	 * @param message      the new message containing either instructions or to the recipient the user wants to change
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message) {
-
-		boolean added = false;
-		String query = "Update floralRequests Set ";
-
-		if (recipientName != null) {
-			query = query + "recipientName = '" + recipientName + "'";
-
-			added = true;
-		}
-		if (roomID != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " roomID = '" + roomID + "'";
-			added = true;
-		}
-		if (flowerType != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " flowerType = '" + flowerType + "'";
-			added = true;
-		}
-		if (flowerAmount != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " flowerAmount = " + flowerAmount;
-			added = true;
-		}
-		if (vaseType != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " vaseType = '" + vaseType + "'";
-			added = true;
-		}
-		if (arrangement != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " arrangement = '" + arrangement + "'";
-			added = true;
-		}
-		if (stuffedAnimal != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " stuffedAnimal = '" + stuffedAnimal + "'";
-			added = true;
-		}
-		if (chocolate != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " chocolate = '" + chocolate + "'";
-			added = true;
-		}
-		if (message != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " message = '" + message + "'";
-			added = true;
-		}
-
-		query = query + " where requestID = " + requestID;
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating floral request");
-			return 0;
-		}
-	}
+//	/**
+//	 * This edits a floral request form that is already in the database
+//	 * @param requestID    the ID that specifies which external transfer form that is being edited
+//	 * @param roomID       the new node/room/location the user is assigning this request to
+//	 * @param flowerType   the type of flower the user wants to change their request to
+//	 * @param flowerAmount the new quantity of flowers the user wants to change their request to
+//	 * @param vaseType     the new vase type the user wants to change their request to
+//	 * @param message      the new message containing either instructions or to the recipient the user wants to change
+//	 * @return 1 if the update was successful, 0 if it failed
+//	 */
+//	public static int editFloralRequest(int requestID, String roomID, String recipientName, String flowerType, Integer flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message) {
+//
+//		boolean added = false;
+//		String query = "Update floralRequests Set ";
+//
+//		if (recipientName != null) {
+//			query = query + "recipientName = '" + recipientName + "'";
+//
+//			added = true;
+//		}
+//		if (roomID != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " roomID = '" + roomID + "'";
+//			added = true;
+//		}
+//		if (flowerType != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " flowerType = '" + flowerType + "'";
+//			added = true;
+//		}
+//		if (flowerAmount != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " flowerAmount = " + flowerAmount;
+//			added = true;
+//		}
+//		if (vaseType != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " vaseType = '" + vaseType + "'";
+//			added = true;
+//		}
+//		if (arrangement != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " arrangement = '" + arrangement + "'";
+//			added = true;
+//		}
+//		if (stuffedAnimal != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " stuffedAnimal = '" + stuffedAnimal + "'";
+//			added = true;
+//		}
+//		if (chocolate != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " chocolate = '" + chocolate + "'";
+//			added = true;
+//		}
+//		if (message != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " message = '" + message + "'";
+//			added = true;
+//		}
+//
+//		query = query + " where requestID = " + requestID;
+//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+//			prepState.executeUpdate();
+//			prepState.close();
+//			return 1;
+//		} catch (SQLException e) {
+//			//e.printStackTrace();
+//			System.err.println("Error in updating floral request");
+//			return 0;
+//		}
+//	}
 
 	/**
 	 * This function edits a current request for medicine delivery with the information below for a request already in the database
@@ -1439,48 +1234,48 @@ public class RequestsDB {
 	}
 
 
-	/**
-	 * @param requestID    is the generated ID of the request
-	 * @param roomID       the new node/room/location the user is assigning this request to
-	 * @param languageType is the new language type being requested by the user
-	 * @param description  is an edited detailed description
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description) {
-		boolean added = false;
-		String query = "Update languageRequest Set ";
-
-		if (roomID != null) {
-			query = query + " roomID = '" + roomID + "'";
-			added = true;
-		}
-		if (languageType != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "languageType = '" + languageType + "'";
-			added = true;
-		}
-		if (description != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "description = '" + description + "'";
-			added = true;
-		}
-
-		query = query + " where requestID = " + requestID;
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating languageRequest");
-			return 0;
-		}
-
-	}
+//	/**
+//	 * @param requestID    is the generated ID of the request
+//	 * @param roomID       the new node/room/location the user is assigning this request to
+//	 * @param languageType is the new language type being requested by the user
+//	 * @param description  is an edited detailed description
+//	 * @return 1 if the update was successful, 0 if it failed
+//	 */
+//	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description) {
+//		boolean added = false;
+//		String query = "Update languageRequest Set ";
+//
+//		if (roomID != null) {
+//			query = query + " roomID = '" + roomID + "'";
+//			added = true;
+//		}
+//		if (languageType != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + "languageType = '" + languageType + "'";
+//			added = true;
+//		}
+//		if (description != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + "description = '" + description + "'";
+//			added = true;
+//		}
+//
+//		query = query + " where requestID = " + requestID;
+//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+//			prepState.executeUpdate();
+//			prepState.close();
+//			return 1;
+//		} catch (SQLException e) {
+//			//e.printStackTrace();
+//			System.err.println("Error in updating languageRequest");
+//			return 0;
+//		}
+//
+//	}
 
 	/**
 	 * @param requestID      is the generated ID of the request
@@ -1715,45 +1510,6 @@ public class RequestsDB {
 		}
 	}
 
-	/**
-	 * edit a religious request
-	 * @param roomID       where the request takes place
-	 * @param religionType the kind of the religion that request is requesting
-	 * @param description  some text to further describe the request
-	 */
-	public static int editReligiousRequest(int requestID, String roomID, String religionType, String description) {
-		boolean added = false;
-		String query = "Update religiousRequest Set ";
-
-		if (roomID != null) {
-			query = query + "roomID = '" + roomID + "'";
-			added = true;
-		}
-		if (religionType != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "religionType = '" + religionType + "'";
-			added = true;
-		}
-		if (description != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "description = '" + description + "'";
-		}
-
-		query = query + " where requestID = " + requestID;
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating religiousRequest");
-			return 0;
-		}
-	}
 
 
 // QUERYING TABLES::::

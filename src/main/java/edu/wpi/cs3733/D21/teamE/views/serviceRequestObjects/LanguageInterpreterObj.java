@@ -5,8 +5,11 @@ public class LanguageInterpreterObj extends ServiceRequestObjs {
     private String language;
     private String description;
 
-    public LanguageInterpreterObj(String nodeID, int assigneeID, int userID, String language, String description) {
 
+
+    public LanguageInterpreterObj(int requestID, int userID, int assigneeID, String nodeID, String language, String description) {
+
+        super.requestID = requestID;
         super.nodeID = nodeID;
         super.assigneeID = assigneeID;
         super.userID = userID;

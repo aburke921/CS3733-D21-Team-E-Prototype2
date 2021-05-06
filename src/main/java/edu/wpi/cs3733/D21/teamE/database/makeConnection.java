@@ -60,7 +60,7 @@ public class makeConnection {
 
 	/**
 	 * Deletes node,hasEdge, userAccount, requests, floralRequests, sanitationRequest and extTransport tables.
-	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
+//	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
 	 * try/catch phrase set up in case the tables all ready do not exist
 	 */
 	public void deleteAllTables() {
@@ -82,10 +82,10 @@ public class makeConnection {
 			stmt.execute("Drop Table sanitationrequest");
 			stmt.execute("Drop Table floralrequests");
 			stmt.execute("Drop Table requests");
-			stmt.execute("Drop View visitoraccount");
-			stmt.execute("Drop View patientaccount");
-			stmt.execute("Drop View doctoraccount");
-			stmt.execute("Drop View adminaccount");
+//			stmt.execute("Drop View visitoraccount");
+//			stmt.execute("Drop View patientaccount");
+//			stmt.execute("Drop View doctoraccount");
+//			stmt.execute("Drop View adminaccount");
 			stmt.execute("Drop Table useraccount");
 			stmt.execute("Drop Table hasedge");
 			stmt.execute("Drop Table node");
@@ -122,7 +122,7 @@ public class makeConnection {
 	/**
 	 * Calls all of the functions that creates each individual table
 	 * Tables Created: node, hasEdge, userAccount, requests, floralRequests, sanitationRequest, extTransport, medDelivery, securityServ
-	 * Views Created (which are like tables): visitorAccount, patientAccount, doctorAccount, adminAccount
+//	 * Views Created (which are like tables): visitorAccount, patientAccount, doctorAccount, adminAccount
 	 */
 
 

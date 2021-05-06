@@ -7,6 +7,7 @@ import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.UserManagement;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
@@ -740,6 +741,7 @@ public class DatabaseTests {
 	@DisplayName("testGetRequestIDs2 : Admin")
 	public void testGetRequestIDs2() {
 
+
 		DB.addNode("test", 0, 0, "2", "Tower", "INFO", "longName", "shortName");
 
 		DB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
@@ -751,7 +753,13 @@ public class DatabaseTests {
 
 		DB.addExternalPatientRequest(1, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low", "headache");
 		DB.addExternalPatientRequest(2, 3, "test", "Ambulance", "severe", "123", "15 mins", "High", "Low", "Low", "migraine");
+
+//		FloralObj(String nodeID, int assigneeID, int userID, String flower, int count, String vase, String recipient, String message, String arrangement, String stuffedAnimal, String chocolate);
+//		FloralObj request = new FloralObj("test", );
+
 		DB.addFloralRequest(1, 4, "test", "Nupur", "Roses", 1, "Tall", "High", "Low", "Low", "feel better");
+//		addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message)
+
 
 		ArrayList<String> returnedIDs;
 		ArrayList<String> correctIDs = new ArrayList<>();

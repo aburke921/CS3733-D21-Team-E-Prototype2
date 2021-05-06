@@ -11,8 +11,10 @@ public class FloralObj extends ServiceRequestObjs {
     private String stuffedAnimal;
     private String chocolate;
 
-    public FloralObj(String nodeID, int assigneeID, int userID, String flower, int count, String vase, String recipient, String message, String arrangement, String stuffedAnimal, String chocolate) {
 
+    public FloralObj(int requestID, int userID, int assigneeID, String nodeID, String recipient, String flower, int count, String vase, String arrangement, String stuffedAnimal, String chocolate, String message) {
+
+        super.requestID = requestID;
         super.nodeID = nodeID;
         super.assigneeID = assigneeID;
         super.userID = userID;

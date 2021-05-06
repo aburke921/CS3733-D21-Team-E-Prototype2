@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -182,15 +183,28 @@ public class makeConnection {
 		DB.addSpecialUserType("darrenr@gmail.com", "floralPerson9", "floralPerson", "Darren", "Rossi");
 
 		//Floral Requests: //RequestID: 1-9
-		DB.addFloralRequest(13, 31, "ADEPT00101", "Adam", "Roses", 1, "None", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
-		DB.addFloralRequest(13, 32, "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
-		DB.addFloralRequest(14, 33, "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate","Get well soon");
-		DB.addFloralRequest(15, 34, "ADEPT00301", "Nikki", "Assortment", 1, "None", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Feel Better!");
-		DB.addFloralRequest(15, 35, "ADEPT00101", "Monica", "Roses", 6, "Tall", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate","Love and miss you!!");
-		DB.addFloralRequest(17, 36, "DDEPT00102", "Amy", "Tulips", 12, "Square", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Enjoy the flowers");
-		DB.addFloralRequest(17, 37, "ADEPT00102", "Alfred", "Carnations", 1, "Tall", "Include arrangement", "Include stuffed Animal", "Include Chocolate","Miss you!");
-		DB.addFloralRequest(19, 38, "ADEPT00101", "Caroline", "Assortment", 6, "Round", "do not Include arrangement", "do not Include stuffed Animal", "do not Include Chocolate","Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
-		DB.addFloralRequest(19, 39, "ADEPT00301", "Carrie", "Assortment", 12, "Round", "Include arrangement", "Include stuffed Animal", "Include Chocolate","Miss you!");
+		FloralObj floralRequest1 = new FloralObj(0,13, 31, "ADEPT00101", "Adam", "Roses", 1, "None", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
+		FloralObj floralRequest2 = new FloralObj(0,13, 32, "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
+		FloralObj floralRequest3 = new FloralObj(0,14, 33, "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate","Get well soon");
+		FloralObj floralRequest4 = new FloralObj(0,15, 34, "ADEPT00301", "Nikki", "Assortment", 1, "None", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Feel Better!");
+		FloralObj floralRequest5 = new FloralObj(0,15, 35, "ADEPT00101", "Monica", "Roses", 6, "Tall", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate","Love and miss you!!");
+		FloralObj floralRequest6 = new FloralObj(0,17, 36, "DDEPT00102", "Amy", "Tulips", 12, "Square", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Enjoy the flowers");
+		FloralObj floralRequest7 = new FloralObj(0,17, 37, "ADEPT00102", "Alfred", "Carnations", 1, "Tall", "Include arrangement", "Include stuffed Animal", "Include Chocolate","Miss you!");
+		FloralObj floralRequest8 = new FloralObj(0,19, 38, "ADEPT00101", "Caroline", "Assortment", 6, "Round", "do not Include arrangement", "do not Include stuffed Animal", "do not Include Chocolate","Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
+		FloralObj floralRequest9 = new FloralObj(0,19, 39, "ADEPT00301", "Carrie", "Assortment", 12, "Round", "Include arrangement", "Include stuffed Animal", "Include Chocolate","Miss you!");
+
+
+
+		DB.addFloralRequest(floralRequest1);
+		DB.addFloralRequest(floralRequest2);
+		DB.addFloralRequest(floralRequest3);
+		DB.addFloralRequest(floralRequest4);
+		DB.addFloralRequest(floralRequest5);
+		DB.addFloralRequest(floralRequest6);
+		DB.addFloralRequest(floralRequest7);
+		DB.addFloralRequest(floralRequest8);
+		DB.addFloralRequest(floralRequest9);
+
 
 		//custodian:
 		//40 - 48

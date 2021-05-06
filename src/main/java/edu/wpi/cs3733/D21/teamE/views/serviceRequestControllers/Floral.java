@@ -7,6 +7,7 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -112,7 +113,10 @@ public class Floral extends ServiceRequestFormComponents {
             String teddy = teddyBear.getSelectionModel().getSelectedItem();
             String choc = chocolate.getSelectionModel().getSelectedItem();
            // assigned is now an integer (userID) so must be changed
-            DB.addFloralRequest(App.userID, assigned, nodeInfo, receiver, type, count, vase, arrangement, teddy, choc, mess);
+
+            //TODO: this seems to be causing issues with the FloralObj.java object
+            FloralObj request = new FloralObj(0, App.userID, assigned, nodeInfo, receiver, type, count, vase, arrangement, teddy, choc, mess);
+            DB.addFloralRequest(request);
 
             String email = DB.getEmail(App.userID);
             String fullName = DB.getUserName(App.userID);

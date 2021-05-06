@@ -36,9 +36,9 @@ public class DirectionsEntity {
      */
     public static DirectionsEntity getInstance()
     {
-        if (instance == null)
+        if (instance == null) {
             instance = new DirectionsEntity();
-
+        }
         return instance;
     }
 

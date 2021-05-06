@@ -7,8 +7,11 @@ public class FloralObj extends ServiceRequestObjs {
     private String vase;
     private String recipient;
     private String message;
+    private String arrangement;
+    private String stuffedAnimal;
+    private String chocolate;
 
-    public FloralObj(String nodeID, int assigneeID, int userID, String flower, int count, String vase, String recipient, String message) {
+    public FloralObj(String nodeID, int assigneeID, int userID, String flower, int count, String vase, String recipient, String message, String arrangement, String stuffedAnimal, String chocolate) {
 
         super.nodeID = nodeID;
         super.assigneeID = assigneeID;
@@ -19,6 +22,9 @@ public class FloralObj extends ServiceRequestObjs {
         this.recipient = recipient;
         this.message = message;
         super.status = "In Progress";
+        this.arrangement = arrangement;
+        this.stuffedAnimal = stuffedAnimal;
+        this.chocolate = chocolate;
 
     }
 
@@ -41,6 +47,18 @@ public class FloralObj extends ServiceRequestObjs {
 
     public String getMessage() {
         return this.message;
+    }
+
+    public String getChocolate(){
+        return this.chocolate;
+    }
+
+    public String getStuffedAnimal(){
+        return this.stuffedAnimal;
+    }
+
+    public String getArrangement(){
+        return this.arrangement;
     }
 
 }

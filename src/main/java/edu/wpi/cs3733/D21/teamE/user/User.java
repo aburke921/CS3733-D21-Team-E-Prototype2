@@ -1,19 +1,9 @@
 package edu.wpi.cs3733.D21.teamE.user;
 
-import edu.wpi.cs3733.D21.teamE.map.Node;
-import edu.wpi.cs3733.D21.teamE.map.Path;
-import edu.wpi.cs3733.D21.teamE.Time;
-import edu.wpi.cs3733.D21.teamE.scheduler.Appointment;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ServiceRequestObjs;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 
 public class User {
     private String userType;
@@ -21,7 +11,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
-    private List<Appointment> schedule;
+
 
     public User(String _userType, int _userID, String _firstName, String _lastName, String _email) {
 
@@ -30,8 +20,6 @@ public class User {
         this.firstName = _firstName;
         this.lastName = _lastName;
         this.email = _email;
-
-        this.schedule = new LinkedList<>();
     }
 
     public StringProperty getProperty(String field) {

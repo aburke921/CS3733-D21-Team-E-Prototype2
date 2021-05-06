@@ -101,14 +101,8 @@ public class Default {
             if(DB.filledCovidSurveyToday(App.userID)) {
                 if((DB.isUserCovidSafe(App.userID))) {
                     System.out.println("User is marked as safe");
-                    ArrayList<Node> indexer = DB.getAllNodes();
-                    int index = 0;
-                    for(int i = 0; i < indexer.size(); i++) {
-                        if(indexer.get(i).get("id").equals("FEXIT00201")) {
-                            index = i;
-                        }
-                    }
-                    PathFinder.endNodeIndex = index; //update this with the main entrance
+                    App.setEndNode(DB.getNodeInfo("FEXIT00201"));
+
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
                         App.changeScene(root);
@@ -117,15 +111,8 @@ public class Default {
                     }
                 } else if(DB.isUserCovidRisk(App.userID)){
                     System.out.println("User is marked as risk");
-                    ArrayList<Node> indexer = DB.getAllNodes();
-                    int index = 0;
-                    for(int i = 0; i < indexer.size(); i++) {
-                        if(indexer.get(i).get("id").equals("FEXIT00301")) {
-                            index = i;
-                        }
-                    }
-                    PathFinder.endNodeIndex = index; //update this to emergency entrance index
-                    PathFinder.useEmergencyPF = true;
+                    App.setEndNode(DB.getNodeInfo("FEXIT00301"));
+                    App.setToEmergency(true);
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
                         App.changeScene(root);
@@ -165,15 +152,8 @@ public class Default {
 
         switch (lable) {
             case "n":
-                ArrayList<Node> nodeArrayList = DB.getAllNodes();
-                int index = 0;
-                for (int i = 0; i < nodeArrayList.size(); i++) {
-                    if (nodeArrayList.get(i).get("id").equals(code)) {
-                        index = i;
-                    }
-                }
-                PathFinder.startNodeIndex = index;
-                toPathFinder(e);
+                Node selected = DB.getNodeInfo(code);
+                App.setStartNode(selected);
                 break;
             case "p":
                 if (App.userID == 0) {
@@ -205,12 +185,7 @@ public class Default {
         ArrayList<Node> indexer = DB.getAllNodes();
         String parked = DB.whereDidIPark(App.userID);
         System.out.println(DB.whereDidIPark(App.userID));
-        for(int i = 0; i < indexer.size(); i++) {
-            if(indexer.get(i).get("id").equals(DB.whereDidIPark(App.userID))) {
-                PathFinder.endNodeName = indexer.get(i).get("longName");
-                System.out.println(PathFinder.endNodeName);
-            }
-        }
+        App.setEndNode(DB.getNodeInfo(parked));
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
             App.changeScene(root);

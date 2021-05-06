@@ -41,13 +41,11 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class PathFinder {
 
-    public static int startNodeIndex = -1;
-    public static int endNodeIndex = -1;
+    private static int startNodeIndex = -1;
+    private static int endNodeIndex = -1;
 
-    public static String startNodeName = "";
-    public static String endNodeName = "";
-
-    public static boolean useEmergencyPF = false;
+    private Node startNode = null;
+    private Node endNode = null;
 
     /*
      * FXML Values
@@ -196,6 +194,8 @@ public class PathFinder {
         // findPath button validation
         findPathButton.setDisable(startLocationComboBox.getSelectionModel().isEmpty() ||
                 endLocationComboBox.getSelectionModel().isEmpty());
+        // clear preset node
+        startNode = null;
     }
 
 
@@ -208,6 +208,8 @@ public class PathFinder {
         // findPath button validation
         findPathButton.setDisable(startLocationComboBox.getSelectionModel().isEmpty() ||
                 endLocationComboBox.getSelectionModel().isEmpty());
+        // clear preset node
+        endNode = null;
     }
 
     /**
@@ -334,12 +336,15 @@ public class PathFinder {
         });
         start.setOnAction(event -> {
             startLocationComboBox.getSelectionModel().select(index);
+            // clear preset node
+            startNode = null;
             dialog.close();
 
         });
         destination.setOnAction(event -> {
             endLocationComboBox.getSelectionModel().select(index);
-
+            // clear preset node
+            endNode = null;
             dialog.close();
 
         });
@@ -355,7 +360,9 @@ public class PathFinder {
 
             }
             endLocationComboBox.getSelectionModel().select(endIndex);
-
+            // clear preset nodes
+            startNode = null;
+            endNode = null;
             dialog.close();
 
 
@@ -398,17 +405,25 @@ public class PathFinder {
 
         System.out.println("\nFINDING PATH...");
 
-        //get index and ID of selected item in dropdown
-        startLocationComboBox.setItems(longNameArrayList);
-        int startLocationListSelectedIndex = startLocationComboBox.getSelectionModel().getSelectedIndex();
-        selectedStartNodeID = nodeIDArrayList.get(startLocationListSelectedIndex);
-        System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + selectedStartNodeID);
+        if (startNode != null) { // if not null, there is a preset start
+            selectedStartNodeID = startNode.get("id");
+        } else {
+            //get index and ID of selected item in dropdown
+            startLocationComboBox.setItems(longNameArrayList);
+            int startLocationListSelectedIndex = startLocationComboBox.getSelectionModel().getSelectedIndex();
+            selectedStartNodeID = nodeIDArrayList.get(startLocationListSelectedIndex);
+            System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + selectedStartNodeID);
+        }
 
-        //get index of selected item in dropdown
-        endLocationComboBox.setItems(longNameArrayList);
-        int endLocationListSelectedIndex = endLocationComboBox.getSelectionModel().getSelectedIndex();
-        selectedEndNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
-        System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + selectedEndNodeID);
+        if (endNode != null) { // if not null, there is a preset end
+            selectedEndNodeID = endNode.get("id");
+        } else {
+            //get index of selected item in dropdown
+            endLocationComboBox.setItems(longNameArrayList);
+            int endLocationListSelectedIndex = endLocationComboBox.getSelectionModel().getSelectedIndex();
+            selectedEndNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
+            System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + selectedEndNodeID);
+        }
 
         //Define Search
         SearchContext search = new SearchContext();
@@ -985,12 +1000,24 @@ public class PathFinder {
 
         currFloor.textProperty().addListener(observable -> subject.setState(currFloor.getText()));
 
-        if(!endNodeName.equals("")) {
-            endLocationComboBox.getSelectionModel().select(endNodeName);
-            endNodeName = "";
+        startNode = App.getStartNode();
+        if (startNode != null) {
+            startLocationComboBox.setValue(startNode.get("longName"));
+            App.setStartNode(null);
+            // Reset so user doesn't get this again
         }
-        if (useEmergencyPF) {
+
+        endNode = App.getEndNode();
+        if (endNode != null) {
+            endLocationComboBox.setValue(endNode.get("longName"));
+            App.setEndNode(null);
+            // Reset so user doesn't get this again
+        }
+
+        if (App.isToEmergency()) {
             safe.setSelected(true);
+            App.setToEmergency(false);
+            // Reset so user doesn't get this again
         }
     }
 
@@ -1086,15 +1113,7 @@ public class PathFinder {
         String result = QRCode.scanQR();
         String nodeID = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
         System.out.println("Scanned nodeID: " + nodeID);
-
-
-        ArrayList<Node> nodeArrayList = DB.getAllNodes();
-        int index = 0;
-        for(int i = 0; i < nodeArrayList.size();i++){
-            if(nodeArrayList.get(i).get("id").equals(nodeID)){
-                index = i;
-            }
-        }
-        startLocationComboBox.getSelectionModel().select(index);
+        startNode = DB.getNodeInfo(nodeID);
+        startLocationComboBox.setValue(startNode.get("longName"));
     }
 }

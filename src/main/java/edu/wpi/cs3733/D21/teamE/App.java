@@ -8,6 +8,7 @@ import com.jfoenix.controls.JFXDialogLayout;
 
 
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
+import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.AppBarComponent;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -67,6 +68,12 @@ public class App extends Application {
 	/**@// todo document this*/
 	public static boolean noCleanSurveyYet = true;
 
+	/** Nodes and info for pathfinder to get on init
+	 * No nodes on default, no emergency on default */
+	private static Node startNode = null;
+	private static Node endNode = null;
+	private static boolean toEmergency = false;
+
 
 	//setters and getters for above variables
 	public static boolean isShowLogin() { return showLogin; }
@@ -83,7 +90,12 @@ public class App extends Application {
 	public static void setSearchAlgo(int searchAlgo) { App.searchAlgo = searchAlgo; }
 	public static void setPrimaryStage(Stage primaryStage) { App.primaryStage = primaryStage; }
 	public static Stage getPrimaryStage() { return primaryStage; }
-
+	public static Node getStartNode() { return startNode; }
+	public static void setStartNode(Node startNode) { App.startNode = startNode; }
+	public static Node getEndNode() { return endNode; }
+	public static void setEndNode(Node endNode) { App.endNode = endNode; }
+	public static boolean isToEmergency() { return toEmergency; }
+	public static void setToEmergency(boolean toEmergency) { App.toEmergency = toEmergency; }
 
 	/*---------------------------------
 	 *		JAVAFX APP FUNCTIONS

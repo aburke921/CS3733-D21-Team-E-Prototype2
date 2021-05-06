@@ -747,30 +747,30 @@ public class RequestsDB {
 	}
 
 
-	/**
-	 * @param userID       ID of the user
-	 * @param assigneeID   ID of the assigned user who will complete this task
-	 * @param roomID       nodeID of the user
-	 * @param languageType type of language being requested
-	 * @param description  detailed description of request
-	 */
-	public static void addLanguageRequest(int userID, int assigneeID, String roomID, String languageType, String description) {
-		addRequest(userID, assigneeID, "languageRequest");
-
-		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertLanguageReq)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, languageType);
-			prepState.setString(3, description);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into languageRequest inside function addLanguageRequest()");
-		}
-
-	}
+//	/**
+//	 * @param userID       ID of the user
+//	 * @param assigneeID   ID of the assigned user who will complete this task
+//	 * @param roomID       nodeID of the user
+//	 * @param languageType type of language being requested
+//	 * @param description  detailed description of request
+//	 */
+//	public static void addLanguageRequest(int userID, int assigneeID, String roomID, String languageType, String description) {
+//		addRequest(userID, assigneeID, "languageRequest");
+//
+//		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, ?)";
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(insertLanguageReq)) {
+//			prepState.setString(1, roomID);
+//			prepState.setString(2, languageType);
+//			prepState.setString(3, description);
+//
+//			prepState.execute();
+//		} catch (SQLException e) {
+//			//e.printStackTrace();
+//			System.err.println("Error inserting into languageRequest inside function addLanguageRequest()");
+//		}
+//
+//	}
 
 	/**
 	 * @param userID         ID of the user
@@ -1439,48 +1439,48 @@ public class RequestsDB {
 	}
 
 
-	/**
-	 * @param requestID    is the generated ID of the request
-	 * @param roomID       the new node/room/location the user is assigning this request to
-	 * @param languageType is the new language type being requested by the user
-	 * @param description  is an edited detailed description
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description) {
-		boolean added = false;
-		String query = "Update languageRequest Set ";
-
-		if (roomID != null) {
-			query = query + " roomID = '" + roomID + "'";
-			added = true;
-		}
-		if (languageType != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "languageType = '" + languageType + "'";
-			added = true;
-		}
-		if (description != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "description = '" + description + "'";
-			added = true;
-		}
-
-		query = query + " where requestID = " + requestID;
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating languageRequest");
-			return 0;
-		}
-
-	}
+//	/**
+//	 * @param requestID    is the generated ID of the request
+//	 * @param roomID       the new node/room/location the user is assigning this request to
+//	 * @param languageType is the new language type being requested by the user
+//	 * @param description  is an edited detailed description
+//	 * @return 1 if the update was successful, 0 if it failed
+//	 */
+//	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description) {
+//		boolean added = false;
+//		String query = "Update languageRequest Set ";
+//
+//		if (roomID != null) {
+//			query = query + " roomID = '" + roomID + "'";
+//			added = true;
+//		}
+//		if (languageType != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + "languageType = '" + languageType + "'";
+//			added = true;
+//		}
+//		if (description != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + "description = '" + description + "'";
+//			added = true;
+//		}
+//
+//		query = query + " where requestID = " + requestID;
+//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+//			prepState.executeUpdate();
+//			prepState.close();
+//			return 1;
+//		} catch (SQLException e) {
+//			//e.printStackTrace();
+//			System.err.println("Error in updating languageRequest");
+//			return 0;
+//		}
+//
+//	}
 
 	/**
 	 * @param requestID      is the generated ID of the request

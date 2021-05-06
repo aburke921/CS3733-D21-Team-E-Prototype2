@@ -11,6 +11,7 @@ import edu.wpi.cs3733.D21.teamE.views.UserManagement;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.Floral;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
@@ -36,7 +37,6 @@ public class DatabaseTests {
 
 	@BeforeEach
 	public void setupTables() {
-
 
 		try {
 			connection.deleteAllTables();
@@ -1374,7 +1374,8 @@ public class DatabaseTests {
 		DB.addUserAccount("test1@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
 
-		DB.addLanguageRequest(1, 2, "test", "Hindi", "I need help translating");
+		LanguageInterpreterObj request = new LanguageInterpreterObj(0,1, 2, "test", "Hindi", "I need help translating");
+		DB.addLanguageRequest(request);
 	}
 
 	@Test
@@ -1408,10 +1409,13 @@ public class DatabaseTests {
 		DB.addUserAccount("test1@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
 
-		DB.addLanguageRequest(1, 2, "test", "Hindi", "I need help translating");
+		LanguageInterpreterObj request = new LanguageInterpreterObj(0,1, 2, "test", "Hindi", "I need help translating");
+
+		DB.addLanguageRequest(request);
 
 
-		assertEquals(1, DB.editLanguageRequest(1, "test", "Korean", null));
+		LanguageInterpreterObj infoToChange = new LanguageInterpreterObj(1,1, 0,"test", "Korean", null);
+		assertEquals(1, DB.editLanguageRequest(infoToChange));
 	}
 
 	@Test

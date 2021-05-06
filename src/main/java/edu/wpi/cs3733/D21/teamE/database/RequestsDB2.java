@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
 
 import java.sql.Connection;
@@ -109,54 +110,6 @@ public class RequestsDB2 {
 	}
 
 
-	/**
-	 * This adds a floral request to the database that the user is making
-	 * @param userID        this is the username that the user uses to log into the account
-	 * @param assigneeID    this is the ID of the assigned user
-	 * @param RoomNodeID    this is the nodeID/room the user is sending the request to
-	 * @param recipientName this is the name of the individual they want the flowers to be addressed to
-	 * @param flowerType    this is the type of flowers that the user wants to request
-	 * @param flowerAmount  this the number/quantity of flowers that the user is requesting
-	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
-	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
-	 */
-	/*
-	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message) {
-		addRequest(userID, assigneeID, "floral");
-
-		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
-			prepState.setString(1, RoomNodeID);
-			prepState.setString(2, recipientName);
-			prepState.setString(3, flowerType);
-			prepState.setInt(4, flowerAmount);
-			prepState.setString(5, vaseType);
-			prepState.setString(6, arrangement);
-			prepState.setString(7, stuffedAnimal);
-			prepState.setString(8, chocolate);
-			prepState.setString(9, message);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
-		}
-	}
-
-*/
-
-	/**
-	 * This adds a floral request to the database that the user is making
-	 * @param userID        this is the username that the user uses to log into the account
-	 * @param assigneeID    this is the ID of the assigned user
-	 * @param RoomNodeID    this is the nodeID/room the user is sending the request to
-	 * @param recipientName this is the name of the individual they want the flowers to be addressed to
-	 * @param flowerType    this is the type of flowers that the user wants to request
-	 * @param flowerAmount  this the number/quantity of flowers that the user is requesting
-	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
-	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
-	 */
 	public static void addFloralRequest(FloralObj request) {
 //		addRequest(userID, assigneeID, "floral");
 		addRequest(request.getUserID(), request.getAssigneeID(), "floral");
@@ -191,4 +144,91 @@ public class RequestsDB2 {
 	}
 
 
+
+
+
+
+	//EXTERNAL PATIENT REQUEST STUFF:
+
+	/**
+	 * Uses executes the SQL statements required to create a extTransport table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user is sending the request to.
+	 * - requestType: this the mode of transportation that the request is being made for. The valid options are: 'Ambulance', 'Helicopter', 'Plane'
+	 * - severity: this is how sever the patient is who the user/first responders are transporting.
+	 * - patientID: this is the ID of the patient that is being transported.
+	 * - ETA: this is the estimated time the patient will arrive.
+	 * - description: this is a detailed description of request that generally includes what happened to the patient and their current situation.
+	 */
+	public static void createExtTransportTable() {
+
+		String query = "Create Table extTransport( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID varchar(31) Not Null References node On Delete Cascade, " +
+				"    requestType varchar(100) Not Null, " +
+				"    severity varchar(30) Not Null, " +
+				"    patientID varchar(31) Not Null, " +
+				"    ETA varchar(100), " +
+				"    bloodPressure varchar(31), " +
+				"    temperature varchar(31), " +
+				"    oxygenLevel varchar(31), " +
+				"    description varchar(5000)," +
+				"    Constraint requestTypeLimitExtTrans Check (requestType In ('Ambulance', 'Helicopter', 'Plane'))" +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating extTransport table");
+		}
+	}
+
+	/**
+	 * This function needs to add a external patient form to the table for external patient forms
+	 * //@param form this is the form that we will create and send to the database
+	 */
+	public static void addExternalPatientRequest(ExternalPatientObj externalPatientObj) {
+		// int userID, int assigneeID, String roomID, String requestType, String severity, String patientID, String ETA, String bloodPressure, String temperature, String oxygenLevel, String description
+
+		int userID = externalPatientObj.getUserID();
+		int assigneeID = externalPatientObj.getAssigneeID();
+		String roomID = externalPatientObj.getNodeID();
+		String requestType = externalPatientObj.getRequestType();
+		String severity = externalPatientObj.getSeverity();
+		String patientID = externalPatientObj.getPatientID();
+		String ETA = externalPatientObj.getEta();
+		String bloodPressure = externalPatientObj.getBloodPressure();
+		String temperature = externalPatientObj.getTemperature();
+		String oxygenLevel = externalPatientObj.getOxygenLevel();
+		String description = externalPatientObj.getDetails();
+
+		addRequest(userID, assigneeID, "extTransport");
+
+		String insertExtTransport = "Insert Into exttransport " +
+				"Values ((Select Count(*) " +
+				"         From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, requestType);
+			prepState.setString(3, severity);
+			prepState.setString(4, patientID);
+			prepState.setString(5, ETA);
+			prepState.setString(6, bloodPressure);
+			prepState.setString(7, temperature);
+			prepState.setString(8, oxygenLevel);
+			prepState.setString(9, description);
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into extTransport inside function addExternalPatientRequest()");
+		}
+
+	}
 }

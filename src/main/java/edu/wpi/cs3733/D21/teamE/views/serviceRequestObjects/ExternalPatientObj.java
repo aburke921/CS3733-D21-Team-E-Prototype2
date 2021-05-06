@@ -18,8 +18,9 @@ public class ExternalPatientObj extends ServiceRequestObjs {
 
     private String details;
 
-    public ExternalPatientObj(int userID, String nodeID, int assigneeID, String severity, String requestType, String patientID, String eta, String bloodPressure, String temperature, String oxygenLevel, String details) {
+    public ExternalPatientObj(int requestID, int userID, int assigneeID, String nodeID, String severity, String requestType, String patientID, String eta, String bloodPressure, String temperature, String oxygenLevel, String details) {
 
+        super.requestID = requestID;
         super.assigneeID = assigneeID;
         super.userID = userID;
         super.nodeID = nodeID;

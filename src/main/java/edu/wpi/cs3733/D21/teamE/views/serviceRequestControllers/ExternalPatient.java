@@ -14,6 +14,7 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -137,7 +138,8 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 			int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
 			String id = nodeID.get(nodeIDIndex);
 			System.out.println(nodeID + " " + type + " " + severity + " " + patientID + " " + ETA + " " + details + " " + assigneeID);
-			DB.addExternalPatientRequest(App.userID, assigneeID, id, type, severity, patientID, ETA, bloodPressure, temperature, oxygenLevel, details);
+			ExternalPatientObj externalPatientObj = new ExternalPatientObj(0, App.userID, assigneeID, id, type, severity, patientID, ETA, bloodPressure, temperature, oxygenLevel, details);
+			DB.addExternalPatientRequest(externalPatientObj);
 
 			super.handleButtonSubmit(actionEvent);
 

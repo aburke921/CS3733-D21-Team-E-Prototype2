@@ -4,8 +4,10 @@ import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.ExternalPatient;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.database.*;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
@@ -344,20 +346,13 @@ public class DB {
 	 * This function needs to add a external patient form to the table for external patient forms
 	 * //@param form this is the form that we will create and send to the database
 	 */
-	public static void addExternalPatientRequest(int userID, int assigneeID, String roomID, String requestType, String severity, String patientID, String ETA, String bloodPressure, String temperature, String oxygenLevel, String description) {
-		RequestsDB.addExternalPatientRequest(userID, assigneeID, roomID, requestType, severity, patientID, ETA, bloodPressure, temperature, oxygenLevel, description);
+	public static void addExternalPatientRequest(ExternalPatientObj externalPatientObj) {
+		RequestsDB2.addExternalPatientRequest(externalPatientObj);
 	}
 
 	/**
 	 * This adds a floral request to the database that the user is making
-	 * @param userID        this is the username that the user uses to log into the account
-	 * @param assigneeID    this is the ID of the assigned user
-	 * @param RoomNodeID    this is the nodeID/room the user is sending the request to
-	 * @param recipientName this is the name of the individual they want the flowers to be addressed to
-	 * @param flowerType    this is the type of flowers that the user wants to request
-	 * @param flowerAmount  this the number/quantity of flowers that the user is requesting
-	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
-	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
+	 * @param request this is all of the information needed in a floral request object.
 	 */
 	public static void addFloralRequest(FloralObj request) {
 		RequestsDB2.addFloralRequest(request);
@@ -482,17 +477,11 @@ public class DB {
 
 	/**
 	 * This edits a External Transport Services form that is already in the database
-	 * @param requestID   the ID that specifies which external transfer form that is being edited
-	 * @param roomID      this is the string used to update the hospital field
-	 * @param requestType this is the string used to update the type
-	 * @param severity    this is the string used to update the severity
-	 * @param patientID   this is the string used to update patientID
-	 * @param description this is the string used to update the description
-	 * @param ETA         this is the string used to update the eta
+	 * takes in an External Patient Object
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String ETA, String bloodPressure, String temperature, String oxygenLevel, String description) {
-		return RequestsDB.editExternalPatientRequest(requestID, roomID, requestType, severity, patientID, ETA, bloodPressure, temperature, oxygenLevel, description);
+	public static int editExternalPatientRequest(ExternalPatientObj externalPatientObj) {
+		return RequestsDB2.editExternalPatientRequest(externalPatientObj);
 	}
 
 	/**

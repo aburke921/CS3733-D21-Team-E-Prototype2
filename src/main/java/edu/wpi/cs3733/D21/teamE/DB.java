@@ -30,20 +30,20 @@ public class DB {
 		NodeDB.createNodeTable();
 		EdgeDB.createEdgeTable();
 		UserAccountDB.createUserAccountTable();
-		RequestsDB.createRequestsTable();
-		RequestsDB.createFloralRequestsTable();
+		RequestsDB2.createRequestsTable();
+		RequestsDB2.createFloralRequestsTable();
 		RequestsDB.createSanitationTable();
 		RequestsDB2.createExtTransportTable();
 		RequestsDB.createMedDeliveryTable();
 		RequestsDB.createSecurityServTable();
 		appointmentDB.createAppointmentTable();
-		RequestsDB.createLanguageRequestTable();
-		RequestsDB.createLaundryRequestTable();
+		RequestsDB2.createLanguageRequestTable();
+		RequestsDB2.createLaundryRequestTable();
 		RequestsDB.createMaintenanceRequestTable();
 		RequestsDB.createFoodDeliveryTable();
 		RequestsDB.createInternalPatientRequest();
 		RequestsDB.createAubonPainMenuTable();
-		RequestsDB.createReligionRequestTable();
+		RequestsDB2.createReligionRequestTable();
 		RequestsDB.createEntryRequestTable();
 	}
 
@@ -57,7 +57,7 @@ public class DB {
 	/**
 	 * This edits a floral request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a floral request object. (If int = 0 --> do not change, If String = null --> do not change)
-	 * @return
+	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editFloralRequest(FloralObj request) { return RequestsDB2.editFloralRequest(request); }
 
@@ -70,7 +70,7 @@ public class DB {
 	/**
 	 * This edits a language request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a language request object. (If int = 0 --> do not change, If String = null --> do not change)
-	 * @return
+	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editLanguageRequest(LanguageInterpreterObj request) { return RequestsDB2.editLanguageRequest(request); }
 
@@ -83,7 +83,7 @@ public class DB {
 	/**
 	 * This edits a religious request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a religious request object. (If int = 0 --> do not change, If String = null --> do not change)
-	 * @return
+	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editReligiousRequest(ReligiousRequestObj request) { return RequestsDB2.editReligiousRequest(request); }
 
@@ -93,6 +93,15 @@ public class DB {
 	 */
 	public static void addLaundryRequest(LaundryObj request) {
 		RequestsDB2.addLaundryRequest(request);
+	}
+
+	/**
+	 * This edits a laundry request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a laundry request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editLaundryRequest(LaundryObj request) {
+		return RequestsDB2.editLaundryRequest(request);
 	}
 
 
@@ -571,17 +580,7 @@ public class DB {
 
 
 
-	/**
-	 * @param requestID      is the generated ID of the request
-	 * @param roomID         the new node/room/location the user is assigning this request to
-	 * @param washLoadAmount is new amount of loads to be washed
-	 * @param dryLoadAmount  is new amount of loads to be dried
-	 * @param description    is an edited detailed description
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editLaundryRequest(int requestID, String roomID, String washLoadAmount, String dryLoadAmount, String description) {
-		return RequestsDB.editLaundryRequest(requestID, roomID, washLoadAmount, dryLoadAmount, description);
-	}
+
 
 	/**
 	 * @param requestID   is the generated ID of the request

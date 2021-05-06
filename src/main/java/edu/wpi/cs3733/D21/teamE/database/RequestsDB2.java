@@ -14,7 +14,7 @@ public class RequestsDB2 {
 
 	static Connection connection = makeConnection.makeConnection().connection;
 
-	//ALL REQUEST STUFF::::
+	//ALL REQUEST STUFF:
 
 	/**
 	 * Uses executes the SQL statements required to create the requests table.
@@ -71,7 +71,7 @@ public class RequestsDB2 {
 
 
 
-	//FLORAL REQUEST STUFF::::
+	//FLORAL REQUEST STUFF:
 
 	/**
 	 * Uses executes the SQL statements required to create a floralRequests table. This is a type of request and share the same requestID.
@@ -142,7 +142,7 @@ public class RequestsDB2 {
 	/**
 	 * This edits a floral request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a floral request object. (If int = 0 --> do not change, If String = null --> do not change)
-	 * @return
+	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editFloralRequest(FloralObj request) {
 
@@ -166,7 +166,6 @@ public class RequestsDB2 {
 				query = query + ", ";
 			}
 			query = query + " flowerType = '" + request.getFlower() + "'";
-			added = true;
 		}
 
 		//TODO: changed this line from "request.getCount() != null" because it threw an error. Need make sure that I changed it ok
@@ -229,7 +228,37 @@ public class RequestsDB2 {
 
 
 
-	//LANGUAGE REQUEST STUFF::::
+	//LANGUAGE REQUEST STUFF:
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - languageType: this is the type of language the user is requesting
+	 * - description: detailed description of request
+	 */
+	public static void createLanguageRequestTable() {
+
+		String query = "Create Table languageRequest " +
+				"( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
+				"    languageType     varchar(31) Not Null, " +
+				"    description   varchar(5000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating languageRequest table");
+		}
+
+	}
 
 	/**
 	 * adds a language request to the languageRequest table
@@ -257,7 +286,7 @@ public class RequestsDB2 {
 	/**
 	 * This edits a language request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a language request object. (If int = 0 --> do not change, If String = null --> do not change)
-	 * @return
+	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editLanguageRequest(LanguageInterpreterObj request) {
 		boolean added = false;
@@ -299,7 +328,35 @@ public class RequestsDB2 {
 
 
 
-	// LANGUAGE REQUESTS STUFF::::
+	// RELIGIOUS REQUESTS STUFF:
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - religionID: is the type of maintenance required
+	 * - description: detailed description of request
+	 * - religionType: religion
+	 */
+	public static void createReligionRequestTable() {
+
+		String query = "Create Table religiousRequest " +
+				"( " +
+				"requestID     int Primary Key References requests (requestID) On Delete Cascade, " +
+				"roomID        varchar(31)  Not Null References node (nodeID) On Delete Cascade, " +
+				"religionType  varchar(31)  Not Null, " +
+				"description   varchar(5000) Not Null, " +
+				"Constraint religionTypeLimit Check (religionType In ('Religion1', 'Religion2', 'Religion3', 'Religion4')) " +
+				")";
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating religiousRequests table");
+		}
+	}
+
 	/**
 	 * adds a language request to the religiousRequest table
 	 * @param request this is all of the information needed, in a religious request object.
@@ -325,7 +382,7 @@ public class RequestsDB2 {
 	/**
 	 * This edits a religious request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a religious request object. (If int = 0 --> do not change, If String = null --> do not change)
-	 * @return
+	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editReligiousRequest(ReligiousRequestObj request) {
 		boolean added = false;
@@ -360,11 +417,6 @@ public class RequestsDB2 {
 			return 0;
 		}
 	}
-
-
-
-
-
 
 
 
@@ -454,7 +506,6 @@ public class RequestsDB2 {
 
 	}
 
-
 	/**
 	 * This edits a External Transport Services form that is already in the database
 	 * takes in an External Patient Object
@@ -535,7 +586,6 @@ public class RequestsDB2 {
 				query = query + ", ";
 			}
 			query = query + " oxygenLevel = '" + oxygenLevel + "'";
-			added = true;
 		}
 
 		query = query + " where requestID = " + externalPatientObj.getRequestID();
@@ -552,7 +602,42 @@ public class RequestsDB2 {
 	}
 
 
-	//LAUNDRY REQUEST STUFF::::
+
+
+
+	//LAUNDRY REQUEST STUFF:
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - washLoadAmount: amount of loads needed to wash
+	 * - dryLoadAmount: amount of loads needed to dry
+	 * - description:  detailed description of request
+	 */
+	public static void createLaundryRequestTable() {
+
+		String query = "Create Table laundryRequest " +
+				"( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
+				"    washLoadAmount   varchar(31) Not Null, " +
+				"    dryLoadAmount   varchar(31) Not Null, " +
+				"    description varchar(5000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating laundryRequest table");
+		}
+
+	}
 
 	/**
 	 * adds a laundry request to the laundryRequest table
@@ -578,6 +663,52 @@ public class RequestsDB2 {
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into laundryRequest inside function addLanguageRequest()");
+		}
+	}
+
+	/**
+	 * This edits a laundry request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a laundry request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editLaundryRequest(LaundryObj request) {
+		boolean added = false;
+		String query = "Update laundryRequest Set ";
+
+		if (request.getNodeID() != null) {
+			query = query + " roomID = '" + request.getNodeID() + "'";
+			added = true;
+		}
+		if (request.getWashLoadAmount() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "washLoadAmount = '" + request.getWashLoadAmount() + "'";
+			added = true;
+		}
+		if (request.getDryLoadAmount() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "dryLoadAmount = '" + request.getDryLoadAmount() + "'";
+			added = true;
+		}
+		if (request.getDescription() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + request.getDescription() + "'";
+		}
+
+		query = query + " where requestID = " + request.getRequestID();
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating laundryRequest");
+			return 0;
 		}
 	}
 

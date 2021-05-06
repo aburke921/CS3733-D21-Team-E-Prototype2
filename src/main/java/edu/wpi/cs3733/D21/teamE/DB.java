@@ -32,7 +32,7 @@ public class DB {
 		RequestsDB.createRequestsTable();
 		RequestsDB.createFloralRequestsTable();
 		RequestsDB.createSanitationTable();
-		RequestsDB.createExtTransportTable();
+		RequestsDB2.createExtTransportTable();
 		RequestsDB.createMedDeliveryTable();
 		RequestsDB.createSecurityServTable();
 		appointmentDB.createAppointmentTable();

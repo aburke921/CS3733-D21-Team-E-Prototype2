@@ -139,42 +139,6 @@ public class RequestsDB {
 		}
 	}
 
-	/**
-	 * Uses executes the SQL statements required to create a extTransport table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user is sending the request to.
-	 * - requestType: this the mode of transportation that the request is being made for. The valid options are: 'Ambulance', 'Helicopter', 'Plane'
-	 * - severity: this is how sever the patient is who the user/first responders are transporting.
-	 * - patientID: this is the ID of the patient that is being transported.
-	 * - ETA: this is the estimated time the patient will arrive.
-	 * - description: this is a detailed description of request that generally includes what happened to the patient and their current situation.
-	 */
-	public static void createExtTransportTable() {
-
-		String query = "Create Table extTransport( " +
-				"    requestID int Primary Key References requests On Delete Cascade, " +
-				"    roomID varchar(31) Not Null References node On Delete Cascade, " +
-				"    requestType varchar(100) Not Null, " +
-				"    severity varchar(30) Not Null, " +
-				"    patientID varchar(31) Not Null, " +
-				"    ETA varchar(100), " +
-				"    bloodPressure varchar(31), " +
-				"    temperature varchar(31), " +
-				"    oxygenLevel varchar(31), " +
-				"    description varchar(5000)," +
-				"    Constraint requestTypeLimitExtTrans Check (requestType In ('Ambulance', 'Helicopter', 'Plane'))" +
-				")";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating extTransport table");
-		}
-	}
 
 	/**
 	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
@@ -601,38 +565,6 @@ public class RequestsDB {
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into sanitationRequest inside function addSanitationRequest()");
-		}
-
-	}
-
-	/**
-	 * This function needs to add a external patient form to the table for external patient forms
-	 * //@param form this is the form that we will create and send to the database
-	 */
-	public static void addExternalPatientRequest(int userID, int assigneeID, String roomID, String requestType, String severity, String patientID, String ETA, String bloodPressure, String temperature, String oxygenLevel, String description) {
-
-		addRequest(userID, assigneeID, "extTransport");
-
-		String insertExtTransport = "Insert Into exttransport " +
-				"Values ((Select Count(*) " +
-				"         From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, requestType);
-			prepState.setString(3, severity);
-			prepState.setString(4, patientID);
-			prepState.setString(5, ETA);
-			prepState.setString(6, bloodPressure);
-			prepState.setString(7, temperature);
-			prepState.setString(8, oxygenLevel);
-			prepState.setString(9, description);
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into extTransport inside function addExternalPatientRequest()");
 		}
 
 	}
@@ -1085,96 +1017,6 @@ public class RequestsDB {
 
 	}
 
-	/**
-	 * This edits a External Transport Services form that is already in the database
-	 * @param requestID   the ID that specifies which external transfer form that is being edited
-	 * @param roomID      this is the string used to update the hospital field
-	 * @param requestType this is the string used to update the type
-	 * @param severity    this is the string used to update the severity
-	 * @param patientID   this is the string used to update patientID
-	 * @param description this is the string used to update the description
-	 * @param ETA         this is the string used to update the eta
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editExternalPatientRequest(int requestID, String roomID, String requestType, String severity, String patientID, String description, String ETA, String bloodPressure, String temperature, String oxygenLevel) {
-
-		boolean added = false;
-		String query = "Update extTransport Set ";
-
-		if (roomID != null) {
-			query = query + " roomID = '" + roomID + "'";
-
-			added = true;
-		}
-		if (requestType != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " requestType = '" + requestType + "'";
-			added = true;
-		}
-		if (severity != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " severity = '" + severity + "'";
-			added = true;
-		}
-		if (patientID != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " patientID = '" + patientID + "'";
-			added = true;
-		}
-		if (description != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " description = '" + description + "'";
-			added = true;
-		}
-		if (ETA != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " ETA = '" + ETA + "'";
-			added = true;
-		}
-		if (bloodPressure != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " bloodPressure = '" + bloodPressure + "'";
-			added = true;
-		}
-		if (temperature != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " temperature = '" + temperature + "'";
-			added = true;
-		}
-		if (oxygenLevel != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " oxygenLevel = '" + oxygenLevel + "'";
-			added = true;
-		}
-
-		query = query + " where requestID = " + requestID;
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating external transport request");
-			return 0;
-		}
-	}
 
 //	/**
 //	 * This edits a floral request form that is already in the database

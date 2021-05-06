@@ -8,6 +8,7 @@ import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
@@ -69,6 +70,32 @@ public class DB {
 	 * @return
 	 */
 	public static int editLanguageRequest(LanguageInterpreterObj request) { return RequestsDB2.editLanguageRequest(request); }
+
+	/**
+	 * adds a language request to the religiousRequest table
+	 * @param request this is all of the information needed, in a religious request object.
+	 */
+	public static void addReligiousRequest(ReligiousRequestObj request) { RequestsDB2.addReligiousRequest(request); }
+
+	/**
+	 * This edits a religious request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a religious request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return
+	 */
+	public static int editReligiousRequest(ReligiousRequestObj request) {
+		return RequestsDB2.editReligiousRequest(request);
+	}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -465,15 +492,7 @@ public class DB {
 		RequestsDB.addAubonPainMenuItem(foodImage, foodItem, foodPrice, foodCalories, foodDescription);
 	}
 
-	/**
-	 * add a religious request
-	 * @param roomID       where the request takes place
-	 * @param religionType the kind of the religion that request is requesting
-	 * @param description  some text to further describe the request
-	 */
-	public static void addReligiousRequest(int userID, String roomID, int assigneeID, String religionType, String description) {
-		RequestsDB.addReligiousRequest(userID, roomID, assigneeID, religionType, description);
-	}
+
 
 	/**
 	 * This adds a entry request form to the table
@@ -601,15 +620,7 @@ public class DB {
 		return RequestsDB.editInternalPatientRequest(requestID, pickUpLocation, dropOffLocation, patientID, department, severity, description);
 	}
 
-	/**
-	 * edit a religious request
-	 * @param roomID       where the request takes place
-	 * @param religionType the kind of the religion that request is requesting
-	 * @param description  some text to further describe the request
-	 */
-	public static int editReligiousRequest(int requestID, String roomID, String religionType, String description) {
-		return RequestsDB.editReligiousRequest(requestID, roomID, religionType, description);
-	}
+
 
 
 	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {

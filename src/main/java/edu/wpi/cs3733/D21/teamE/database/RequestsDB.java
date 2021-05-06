@@ -937,28 +937,6 @@ public class RequestsDB {
 		}
 	}
 
-	/**
-	 * add a religious request
-	 * @param roomID       where the request takes place
-	 * @param religionType the kind of the religion that request is requesting
-	 * @param description  some text to further describe the request
-	 */
-	public static void addReligiousRequest(int userID, String roomID, int assigneeID, String religionType, String description) {
-		addRequest(userID, assigneeID, "religiousRequest");
-
-		String insertMaintenanceReq = "Insert Into religiousRequest Values ((Select Count(*) From requests), ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, religionType);
-			prepState.setString(3, description);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error inserting into religiousRequest inside function addReligiousRequest()");
-		}
-	}
 
 
 // EDITING TABLES::::
@@ -1715,45 +1693,6 @@ public class RequestsDB {
 		}
 	}
 
-	/**
-	 * edit a religious request
-	 * @param roomID       where the request takes place
-	 * @param religionType the kind of the religion that request is requesting
-	 * @param description  some text to further describe the request
-	 */
-	public static int editReligiousRequest(int requestID, String roomID, String religionType, String description) {
-		boolean added = false;
-		String query = "Update religiousRequest Set ";
-
-		if (roomID != null) {
-			query = query + "roomID = '" + roomID + "'";
-			added = true;
-		}
-		if (religionType != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "religionType = '" + religionType + "'";
-			added = true;
-		}
-		if (description != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "description = '" + description + "'";
-		}
-
-		query = query + " where requestID = " + requestID;
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating religiousRequest");
-			return 0;
-		}
-	}
 
 
 // QUERYING TABLES::::

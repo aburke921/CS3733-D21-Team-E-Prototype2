@@ -16,6 +16,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.lang.String;
+import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,6 +33,12 @@ import javafx.stage.Stage;
 
 
 public class FoodDelivery extends ServiceRequestFormComponents {
+
+
+	ObservableList<String> locations;
+	ArrayList<String> nodeID = new ArrayList<>();
+	ObservableList<String> userNames;
+	ArrayList<Integer> userID = new ArrayList<>();
 
 	@FXML // fx:id="background"
 	private ImageView background;
@@ -96,8 +103,10 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		background.fitWidthProperty().bind(primaryStage.widthProperty());
 		//background.fitHeightProperty().bind(primaryStage.heightProperty());
 
-		ObservableList<String> locations  = DB.getAllNodeLongNames();
+		locations = DB.getAllNodeLongNames();
 		locationInput.setItems(locations);
+		userNames = DB.getAssigneeNames("nurse");
+		assigneeInput.setItems(userNames);
 
 		assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'FoodDelivery.fxml'.";

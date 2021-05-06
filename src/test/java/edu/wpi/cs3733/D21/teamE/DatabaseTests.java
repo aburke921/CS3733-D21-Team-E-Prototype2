@@ -1428,7 +1428,7 @@ public class DatabaseTests {
 		LaundryObj request = new LaundryObj(0,  "test", 1, 2, "2", "2", "I haven't done laundry in 2 weeks");
 		DB.addLaundryRequest(request);
 
-		assertEquals(1, DB.editLaundryRequest(1, "test", "3", "3", null));
+		assertEquals(1, DB.editLaundryRequest(new LaundryObj(1, "test", 0, 0, "3", "3", null)));
 	}
 
 	@Test

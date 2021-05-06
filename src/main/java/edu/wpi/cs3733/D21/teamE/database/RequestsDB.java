@@ -34,76 +34,8 @@ public class RequestsDB {
 // CREATING TABLES:::
 // CREATING TABLES:::
 
-	/**
-	 * Uses executes the SQL statements required to create the requests table.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - creatorID: this is the username of the user who created the request.
-	 * - creationTime: this is a time stamp that is added to the request at the moment it is made.
-	 * - requestType: this is the type of request that the user is making. The valid options are: "floral", "medDelivery", "sanitation", "security", "extTransport", 'languageRequest' 'laundryRequest' 'maintenanceRequest' 'foodDelivery' 'internalPatientRequest'
-	 * - requestStatus: this is the state in which the request is being processed. The valid options are: "complete", "canceled", "inProgress".
-	 * - assigneeID: this is the person who is assigned to the request
-	 */
-	public static void createRequestsTable() {
 
-		String query = "Create Table requests(" +
-				"requestID     int Primary Key, " +
-				"creatorID     int References useraccount On Delete Cascade," +
-				"creationTime  timestamp, " +
-				"requestType   varchar(31), " +
-				"requestStatus varchar(10), " +
-				"assigneeID    int References useraccount On Delete Cascade," +
-				"Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport', 'internalPatientRequest', 'languageRequest', 'laundryRequest', 'maintenanceRequest', 'foodDelivery', 'religiousRequest', 'entryRequest')), " +
-				"Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress')))";
 
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating requests table");
-		}
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a floralRequests table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user is sending the request to.
-	 * - recipientName: this is the name of the individual they want the flowers to be addressed to
-	 * - flowerType: this is the type of flowers that the user wants to request. The valid options are: 'Roses', 'Tulips', 'Carnations', 'Assortment'
-	 * - flowerAmount: this the number/quantity of flowers that the user is requesting. The valid options are: 1, 6, 12
-	 * - vaseType: this is the type of vase the user wants the flowers to be delivered in. The valid options are: 'Round', 'Square', 'Tall', 'None'
-	 * - message: this is a specific detailed message that the user can have delivered with the flowers or an instruction message
-	 * *                for whoever is fufilling the request
-	 */
-	public static void createFloralRequestsTable() {
-
-		String query = "Create Table floralRequests( " +
-				"requestID     int Primary Key References requests On Delete Cascade, " +
-				"roomID        varchar(31) References node On Delete Cascade, " +
-				"recipientName varchar(31), " +
-				"flowerType    varchar(31), " +
-				"flowerAmount  int, " +
-				"vaseType      varchar(31), " +
-				"arrangement varchar(31), " +
-				"stuffedAnimal varchar(31), " +
-				"chocolate varchar(31), " +
-				"message       varchar(5000), " +
-				"Constraint flowerTypeLimit Check (flowerType In ('Roses', 'Tulips', 'Carnations', 'Assortment')), " +
-				"Constraint flowerAmountLimit Check (flowerAmount In (1, 6, 12)), " +
-				"Constraint vaseTypeLimit Check (vaseType In ('Round', 'Square', 'Tall', 'None')))";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating floralRequests table");
-		}
-	}
 
 	/**
 	 * Uses executes the SQL statements required to create a sanitationRequest table. This is a type of request and share the same requestID.
@@ -206,68 +138,6 @@ public class RequestsDB {
 	 * This table has the attributes:
 	 * - requestID: this is used to identify a request. Every request must have one.
 	 * - roomID: this is the nodeID/room the user wants security assistance at
-	 * - languageType: this is the type of language the user is requesting
-	 * - description: detailed description of request
-	 */
-	public static void createLanguageRequestTable() {
-
-		String query = "Create Table languageRequest " +
-				"( " +
-				"    requestID int Primary Key References requests On Delete Cascade, " +
-				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
-				"    languageType     varchar(31) Not Null, " +
-				"    description   varchar(5000) " +
-				")";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating languageRequest table");
-		}
-
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants security assistance at
-	 * - washLoadAmount: amount of loads needed to wash
-	 * - dryLoadAmount: amount of loads needed to dry
-	 * - description:  detailed description of request
-	 */
-	public static void createLaundryRequestTable() {
-
-		String query = "Create Table laundryRequest " +
-				"( " +
-				"    requestID int Primary Key References requests On Delete Cascade, " +
-				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
-				"    washLoadAmount   varchar(31) Not Null, " +
-				"    dryLoadAmount   varchar(31) Not Null, " +
-				"    description varchar(5000) " +
-				")";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating laundryRequest table");
-		}
-
-	}
-
-	/**
-	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants security assistance at
 	 * - type: is the type of maintenance required
 	 * - severity: is how severe the situation is
 	 * - ETA: time taken to complete the request
@@ -354,32 +224,6 @@ public class RequestsDB {
 		}
 	}
 
-	/**
-	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants security assistance at
-	 * - religionID: is the type of maintenance required
-	 * - description: detailed description of request
-	 * - religionType: religion
-	 */
-	public static void createReligionRequestTable() {
-
-		String query = "Create Table religiousRequest " +
-				"( " +
-				"requestID     int Primary Key References requests (requestID) On Delete Cascade, " +
-				"roomID        varchar(31)  Not Null References node (nodeID) On Delete Cascade, " +
-				"religionType  varchar(31)  Not Null, " +
-				"description   varchar(5000) Not Null, " +
-				"Constraint religionTypeLimit Check (religionType In ('Religion1', 'Religion2', 'Religion3', 'Religion4')) " +
-				")";
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating religiousRequests table");
-		}
-	}
 
 	/**
 	 * create the entry request table
@@ -405,7 +249,6 @@ public class RequestsDB {
 			System.err.println("error creating entryRequest table");
 		}
 	}
-
 
 	/**
 	 * Uses executes the SQL statements required to create a aubonPainMenu table.
@@ -434,7 +277,6 @@ public class RequestsDB {
 			System.err.println("error creating aubonPainMenu table");
 		}
 	}
-
 
 	/**
 	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
@@ -569,39 +411,7 @@ public class RequestsDB {
 
 	}
 
-//	/**
-//	 * This adds a floral request to the database that the user is making
-//	 * @param userID        this is the username that the user uses to log into the account
-//	 * @param assigneeID    this is the ID of the assigned user
-//	 * @param RoomNodeID    this is the nodeID/room the user is sending the request to
-//	 * @param recipientName this is the name of the individual they want the flowers to be addressed to
-//	 * @param flowerType    this is the type of flowers that the user wants to request
-//	 * @param flowerAmount  this the number/quantity of flowers that the user is requesting
-//	 * @param vaseType      this is the type of vase the user wants the flowers to be delivered in
-//	 * @param message       this is a specific detailed message that the user can have delivered with the flowers or an instruction message
-//	 */
-//	public static void addFloralRequest(int userID, int assigneeID, String RoomNodeID, String recipientName, String flowerType, int flowerAmount, String vaseType, String arrangement, String stuffedAnimal, String chocolate, String message) {
-//		addRequest(userID, assigneeID, "floral");
-//
-//		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//
-//		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
-//			prepState.setString(1, RoomNodeID);
-//			prepState.setString(2, recipientName);
-//			prepState.setString(3, flowerType);
-//			prepState.setInt(4, flowerAmount);
-//			prepState.setString(5, vaseType);
-//			prepState.setString(6, arrangement);
-//			prepState.setString(7, stuffedAnimal);
-//			prepState.setString(8, chocolate);
-//			prepState.setString(9, message);
-//
-//			prepState.execute();
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
-//		}
-//	}
+
 
 	/**
 	 * This adds a medicine request form to the table for medicine request forms
@@ -679,30 +489,6 @@ public class RequestsDB {
 	}
 
 
-//	/**
-//	 * @param userID       ID of the user
-//	 * @param assigneeID   ID of the assigned user who will complete this task
-//	 * @param roomID       nodeID of the user
-//	 * @param languageType type of language being requested
-//	 * @param description  detailed description of request
-//	 */
-//	public static void addLanguageRequest(int userID, int assigneeID, String roomID, String languageType, String description) {
-//		addRequest(userID, assigneeID, "languageRequest");
-//
-//		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, ?)";
-//
-//		try (PreparedStatement prepState = connection.prepareStatement(insertLanguageReq)) {
-//			prepState.setString(1, roomID);
-//			prepState.setString(2, languageType);
-//			prepState.setString(3, description);
-//
-//			prepState.execute();
-//		} catch (SQLException e) {
-//			//e.printStackTrace();
-//			System.err.println("Error inserting into languageRequest inside function addLanguageRequest()");
-//		}
-//
-//	}
 
 
 	/**
@@ -1234,98 +1020,8 @@ public class RequestsDB {
 	}
 
 
-//	/**
-//	 * @param requestID    is the generated ID of the request
-//	 * @param roomID       the new node/room/location the user is assigning this request to
-//	 * @param languageType is the new language type being requested by the user
-//	 * @param description  is an edited detailed description
-//	 * @return 1 if the update was successful, 0 if it failed
-//	 */
-//	public static int editLanguageRequest(int requestID, String roomID, String languageType, String description) {
-//		boolean added = false;
-//		String query = "Update languageRequest Set ";
-//
-//		if (roomID != null) {
-//			query = query + " roomID = '" + roomID + "'";
-//			added = true;
-//		}
-//		if (languageType != null) {
-//			if (added) {
-//				query = query + ", ";
-//			}
-//			query = query + "languageType = '" + languageType + "'";
-//			added = true;
-//		}
-//		if (description != null) {
-//			if (added) {
-//				query = query + ", ";
-//			}
-//			query = query + "description = '" + description + "'";
-//			added = true;
-//		}
-//
-//		query = query + " where requestID = " + requestID;
-//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-//			prepState.executeUpdate();
-//			prepState.close();
-//			return 1;
-//		} catch (SQLException e) {
-//			//e.printStackTrace();
-//			System.err.println("Error in updating languageRequest");
-//			return 0;
-//		}
-//
-//	}
 
-	/**
-	 * @param requestID      is the generated ID of the request
-	 * @param roomID         the new node/room/location the user is assigning this request to
-	 * @param washLoadAmount is new amount of loads to be washed
-	 * @param dryLoadAmount  is new amount of loads to be dried
-	 * @param description    is an edited detailed description
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editLaundryRequest(int requestID, String roomID, String washLoadAmount, String dryLoadAmount, String description) {
-		boolean added = false;
-		String query = "Update laundryRequest Set ";
 
-		if (roomID != null) {
-			query = query + " roomID = '" + roomID + "'";
-			added = true;
-		}
-		if (washLoadAmount != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "washLoadAmount = '" + washLoadAmount + "'";
-			added = true;
-		}
-		if (dryLoadAmount != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "dryLoadAmount = '" + dryLoadAmount + "'";
-			added = true;
-		}
-		if (description != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "description = '" + description + "'";
-			added = true;
-		}
-
-		query = query + " where requestID = " + requestID;
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating laundryRequest");
-			return 0;
-		}
-	}
 
 	/**
 	 * @param requestID   is the generated ID of the request
@@ -1512,13 +1208,7 @@ public class RequestsDB {
 
 
 
-// QUERYING TABLES::::
-// QUERYING TABLES::::
-// QUERYING TABLES::::
-// QUERYING TABLES::::
-// QUERYING TABLES::::
-// QUERYING TABLES::::
-// QUERYING TABLES::::
+
 
 	/**
 	 * Gets a list of all the "assigneeIDs", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID

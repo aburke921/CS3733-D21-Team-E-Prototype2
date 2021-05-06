@@ -418,13 +418,6 @@ public class DB {
 		RequestsDB2.addExternalPatientRequest(externalPatientObj);
 	}
 
-	/**
-	 * This adds a floral request to the database that the user is making
-	 * @param request this is all of the information needed in a floral request object.
-	 */
-	public static void addFloralRequest(FloralObj request) {
-		RequestsDB2.addFloralRequest(request);
-	}
 
 	/**
 	 * This adds a medicine request form to the table for medicine request forms

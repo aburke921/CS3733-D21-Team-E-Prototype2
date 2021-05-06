@@ -101,14 +101,7 @@ public class Default {
             if(DB.filledCovidSurveyToday(App.userID)) {
                 if((DB.isUserCovidSafe(App.userID))) {
                     System.out.println("User is marked as safe");
-                    ArrayList<Node> indexer = DB.getAllNodes();
-                    int index = 0;
-                    for(int i = 0; i < indexer.size(); i++) {
-                        if(indexer.get(i).get("id").equals("FEXIT00201")) {
-                            index = i;
-                        }
-                    }
-                    PathFinder.endNodeIndex = index; //update this with the main entrance
+                    PathFinder.endNodeName = "75 Francis Lobby Entrance"; //update this with the main entrance
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
                         App.changeScene(root);
@@ -117,14 +110,7 @@ public class Default {
                     }
                 } else if(DB.isUserCovidRisk(App.userID)){
                     System.out.println("User is marked as risk");
-                    ArrayList<Node> indexer = DB.getAllNodes();
-                    int index = 0;
-                    for(int i = 0; i < indexer.size(); i++) {
-                        if(indexer.get(i).get("id").equals("FEXIT00301")) {
-                            index = i;
-                        }
-                    }
-                    PathFinder.endNodeIndex = index; //update this to emergency entrance index
+                    PathFinder.endNodeName = "Emergency Department Entrance"; //update this to emergency entrance index
                     PathFinder.useEmergencyPF = true;
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));

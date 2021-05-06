@@ -27,7 +27,9 @@ import java.util.ArrayList;
 public class LanguageInterpreter extends ServiceRequestFormComponents {
 
 	ObservableList<String> locations;
-	ArrayList<String> nodeID;
+	ArrayList<String> nodeID = new ArrayList<>();
+	ObservableList<String> userNames;
+	ArrayList<Integer> userID = new ArrayList<>();
 
 	@FXML // fx:id="background"
 	private ImageView background;
@@ -127,6 +129,8 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 
 		locations = DB.getAllNodeLongNames();
 		locationInput.setItems(locations);
+		userNames = DB.getAssigneeNames("interpreter");
+		assignedPersonnel.setItems(userNames);
 	}
 
 }

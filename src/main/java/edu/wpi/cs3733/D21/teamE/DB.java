@@ -4,11 +4,8 @@ import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
 import edu.wpi.cs3733.D21.teamE.database.*;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
@@ -82,9 +79,16 @@ public class DB {
 	 * @param request this the information that the user wants to change stored in a religious request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return
 	 */
-	public static int editReligiousRequest(ReligiousRequestObj request) {
-		return RequestsDB2.editReligiousRequest(request);
+	public static int editReligiousRequest(ReligiousRequestObj request) { return RequestsDB2.editReligiousRequest(request); }
+
+	/**
+	 * adds a laundry request to the laundryRequest table
+	 * @param request this is all of the information needed, in a religious request object.
+	 */
+	public static void addLaundryRequest(LaundryObj request) {
+		RequestsDB2.addLaundryRequest(request);
 	}
+
 
 
 
@@ -435,17 +439,7 @@ public class DB {
 
 
 
-	/**
-	 * @param userID         ID of the user
-	 * @param roomID         nodeID of the user
-	 * @param assigneeID     ID of the assigned user who will complete this task
-	 * @param washLoadAmount amount of loads needed to wash
-	 * @param dryLoadAmount  amount of loads needed to dry
-	 * @param description    detailed description of request
-	 */
-	public static void addLaundryRequest(int userID, String roomID, int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
-		RequestsDB.addLaundryRequest(userID, roomID, assigneeID, washLoadAmount, dryLoadAmount, description);
-	}
+
 
 	/**
 	 * @param userID      ID of the user

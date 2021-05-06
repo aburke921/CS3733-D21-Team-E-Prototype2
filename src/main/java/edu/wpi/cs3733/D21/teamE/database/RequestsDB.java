@@ -772,31 +772,6 @@ public class RequestsDB {
 //
 //	}
 
-	/**
-	 * @param userID         ID of the user
-	 * @param roomID         nodeID of the user
-	 * @param assigneeID     ID of the assigned user who will complete this task
-	 * @param washLoadAmount amount of loads needed to wash
-	 * @param dryLoadAmount  amount of loads needed to dry
-	 * @param description    detailed description of request
-	 */
-	public static void addLaundryRequest(int userID, String roomID, int assigneeID, String washLoadAmount, String dryLoadAmount, String description) {
-		addRequest(userID, assigneeID, "laundryRequest");
-
-		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertLaundryReq)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, washLoadAmount);
-			prepState.setString(3, dryLoadAmount);
-			prepState.setString(4, description);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into laundryRequest inside function addLanguageRequest()");
-		}
-	}
 
 	/**
 	 * @param userID      ID of the user

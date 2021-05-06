@@ -9,10 +9,7 @@ import edu.wpi.cs3733.D21.teamE.views.CovidSurvey;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.UserManagement;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.Floral;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
@@ -1387,7 +1384,8 @@ public class DatabaseTests {
 		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
 
-		DB.addLaundryRequest(1, "test", 2, "2", "2", "I haven't done laundry in 2 weeks");
+		LaundryObj request = new LaundryObj(0, "test", 2, 1,"2", "2", "I haven't done laundry in 2 weeks");
+		DB.addLaundryRequest(request);
 	}
 
 	@Test
@@ -1426,7 +1424,8 @@ public class DatabaseTests {
 		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "interpreter", "drew", "Shukla");
 
-		DB.addLaundryRequest(1, "test", 2, "2", "2", "I haven't done laundry in 2 weeks");
+		LaundryObj request = new LaundryObj(0,  "test", 1, 2, "2", "2", "I haven't done laundry in 2 weeks");
+		DB.addLaundryRequest(request);
 
 		assertEquals(1, DB.editLaundryRequest(1, "test", "3", "3", null));
 	}

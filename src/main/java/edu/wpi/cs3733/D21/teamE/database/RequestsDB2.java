@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LaundryObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
 
 import java.sql.Connection;
@@ -360,6 +361,39 @@ public class RequestsDB2 {
 	}
 
 
+
+
+
+
+
+	//LAUNDRY REQUEST STUFF::::
+
+	/**
+	 * adds a laundry request to the laundryRequest table
+	 * @param request this is all of the information needed, in a religious request object.
+	 */
+	public static void addLaundryRequest(LaundryObj request) {
+//		addRequest(userID, assigneeID, "laundryRequest");
+		addRequest(request.getUserID(), request.getAssigneeID(), "laundryRequest");
+
+		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertLaundryReq)) {
+//			prepState.setString(1, roomID);
+//			prepState.setString(2, washLoadAmount);
+//			prepState.setString(3, dryLoadAmount);
+//			prepState.setString(4, description);
+			prepState.setString(1, request.getNodeID());
+			prepState.setString(2, request.getWashLoadAmount());
+			prepState.setString(3, request.getDryLoadAmount());
+			prepState.setString(4, request.getDescription());
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into laundryRequest inside function addLanguageRequest()");
+		}
+	}
 
 
 

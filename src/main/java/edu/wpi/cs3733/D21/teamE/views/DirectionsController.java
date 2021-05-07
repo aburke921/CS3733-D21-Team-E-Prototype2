@@ -25,6 +25,9 @@ import java.util.*;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
+//TODO: move ListView of directions to beneath buttons
+//TODO: make
+
 /**
  * Class to display directions to/from BWH using the Google Maps API
  */

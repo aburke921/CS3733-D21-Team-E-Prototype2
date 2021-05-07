@@ -5,6 +5,7 @@ import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.ExternalPatient;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.MedicineDelivery;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
 import edu.wpi.cs3733.D21.teamE.database.*;
@@ -34,7 +35,7 @@ public class DB {
 		RequestsDB2.createFloralRequestsTable();
 		RequestsDB.createSanitationTable();
 		RequestsDB2.createExtTransportTable();
-		RequestsDB.createMedDeliveryTable();
+		RequestsDB2.createMedDeliveryTable();
 		RequestsDB.createSecurityServTable();
 		appointmentDB.createAppointmentTable();
 		RequestsDB2.createLanguageRequestTable();
@@ -438,10 +439,10 @@ public class DB {
 
 	/**
 	 * This adds a medicine request form to the table for medicine request forms
-	 * // @param form this is the form being added
+	 * @param medicineDeliveryObj object holding medicine req. fields
 	 */
-	public static void addMedicineRequest(int userID, int assigneeID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
-		RequestsDB.addMedicineRequest(userID, assigneeID, roomID, medicineName, quantity, dosage, specialInstructions, signature);
+	public static void addMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
+		RequestsDB2.addMedicineRequest(medicineDeliveryObj);
 	}
 
 	/**
@@ -522,20 +523,13 @@ public class DB {
 
 
 
-
 	/**
-	 * This function edits a current request for medicine delivery with the information below for a request already in the database
-	 * @param requestID           the ID that specifies which external transfer form that is being edited
-	 * @param roomID              the new node/room/location the user is assigning this request to
-	 * @param medicineName        this is the name of the medicine the user is changing the request to
-	 * @param quantity            this is the number of pills the user is changing the request to
-	 * @param dosage              this is the dosage (ml or mg) the user is changing the request to
-	 * @param specialInstructions this is the new special instructions the user is requesting
-	 * @param assigneeID          this is the userID of the a new employee or administrator that will be fulfilling the request.
-	 * @return 1 if the update was successful, 0 if it failed
+	 * edits medicine request which is already in DB
+	 * @param medicineDeliveryObj object holding medicine req. fields
+	 * @return
 	 */
-	public static int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, int assigneeID) {
-		return RequestsDB.editMedicineRequest(requestID, roomID, medicineName, quantity, dosage, specialInstructions, assigneeID);
+	public static int editMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
+		return RequestsDB2.editMedicineRequest(medicineDeliveryObj);
 	}
 
 	/**

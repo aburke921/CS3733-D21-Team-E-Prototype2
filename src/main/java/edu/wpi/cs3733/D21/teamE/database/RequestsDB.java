@@ -71,39 +71,6 @@ public class RequestsDB {
 		}
 	}
 
-
-	/**
-	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants the medecine delivered to.
-	 * - medicineName: this is the drug that the user is ordering/requesting
-	 * - quantity: the is the supply or the number of pills ordered
-	 * - dosage: this is the mg or ml quantity for a medication
-	 * - specialInstructions: this is any special details or instructions the user wants to give to who ever is processing the request.
-	 * - signature: this the signature (name in print) of the user who is filling out the request
-	 */
-	public static void createMedDeliveryTable() {
-
-		String query = "Create Table medDelivery ( " +
-				"requestID  int Primary Key References requests On Delete Cascade," +
-				"roomID     varchar(31) Not Null References node On Delete Cascade," +
-				"medicineName        varchar(31) Not Null," +
-				"quantity            int         Not Null," +
-				"dosage              varchar(31) Not Null," +
-				"specialInstructions varchar(5000)," +
-				"signature           varchar(31) Not Null" + ")";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating medDelivery table");
-		}
-	}
-
 	/**
 	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
 	 * This table has the attributes:
@@ -379,29 +346,7 @@ public class RequestsDB {
 
 
 
-	/**
-	 * This adds a medicine request form to the table for medicine request forms
-	 * // @param form this is the form being added
-	 */
-	public static void addMedicineRequest(int userID, int assigneeID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
-		addRequest(userID, assigneeID, "medDelivery");
 
-		String insertMedRequest = "Insert Into meddelivery Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, medicineName);
-			prepState.setInt(3, quantity);
-			prepState.setString(4, dosage);
-			prepState.setString(5, specialInstructions);
-			prepState.setString(6, signature);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
-		}
-	}
 
 	/**
 	 * This adds a security form to the table for security service form
@@ -808,75 +753,6 @@ public class RequestsDB {
 //		}
 //	}
 
-	/**
-	 * This function edits a current request for medicine delivery with the information below for a request already in the database
-	 * @param requestID           the ID that specifies which external transfer form that is being edited
-	 * @param roomID              the new node/room/location the user is assigning this request to
-	 * @param medicineName        this is the name of the medicine the user is changing the request to
-	 * @param quantity            this is the number of pills the user is changing the request to
-	 * @param dosage              this is the dosage (ml or mg) the user is changing the request to
-	 * @param specialInstructions this is the new special instructions the user is requesting
-	 * @param assigneeID          this is the userID of the a new employee or administrator that will be fulfilling the request.
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, int assigneeID) {
-
-		boolean added = false;
-		String query = "Update medDelivery Set ";
-
-		if (roomID != null) {
-			query = query + " roomID = '" + roomID + "'";
-
-			added = true;
-		}
-		if (medicineName != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " medicineName = '" + medicineName + "'";
-			added = true;
-		}
-		if (quantity != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " quantity = " + quantity;
-			added = true;
-		}
-		if (dosage != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " dosage = '" + dosage + "'";
-			added = true;
-		}
-		if (specialInstructions != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " specialInstructions = '" + specialInstructions + "'";
-			added = true;
-		}
-		if (assigneeID != 0) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " assigneeID = '" + assigneeID + "'";
-			added = true;
-		}
-
-		query = query + " where requestID = " + requestID;
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating medicine request");
-			return 0;
-		}
-	}
 
 	/**
 	 * This edits a security form already within the database

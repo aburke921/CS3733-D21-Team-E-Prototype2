@@ -5,10 +5,8 @@ import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
-import edu.wpi.cs3733.D21.teamE.views.CovidSurvey;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.UserManagement;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.Floral;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
@@ -19,8 +17,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 import org.junit.jupiter.api.*;
-
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -1526,7 +1522,7 @@ public class DatabaseTests {
 		DB.addSpecialUserType("interpreter123@gmail.com", "testPass", "EMT", "drew", "Shukla");
 		DB.addSpecialUserType("helloherh@gmail.com", "testPass", "patient", "nupi", "Shukla");
 
-		DB.addInternalPatientRequest(1, "test", "test2", 2, 3, "department", "not severe", "she is in pain");
+		DB.addInternalPatientRequest(new InternalPatientObj(0, 1, "test", "test2", 2, 3, "department", "not severe", "she is in pain"));
 	}
 
 	@Test
@@ -1540,8 +1536,8 @@ public class DatabaseTests {
 		DB.addSpecialUserType("helloherh@gmail.com", "testPass", "patient", "nupi", "Shukla");
 		DB.addSpecialUserType("idk@gmail.com", "testPass", "patient", "notme", "Shukla");
 
-		DB.addInternalPatientRequest(1, "test", "test2", 2, 3, "department", "not severe", "she is in pain");
-		int result = DB.editInternalPatientRequest(1, null, "test", 4, null, null, "hellloooooo");
+		DB.addInternalPatientRequest(new InternalPatientObj(0, 1, "test", "test2", 2, 3, "department", "not severe", "she is in pain"));
+		int result = DB.editInternalPatientRequest(new InternalPatientObj(1, 1, null, "test", 4, 0, null, "hellloooooo", null));
 
 		assertTrue(result == 1);
 

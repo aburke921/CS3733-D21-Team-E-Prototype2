@@ -54,6 +54,12 @@ public class RequestsDB2 {
 		}
 	}
 
+	/**
+	 * adds a request to the requests table in the databse
+	 * @param userID this is the userID of the person filling out the request
+	 * @param assigneeID this is the userID of the person who is assigned to this request
+	 * @param requestType this is the type of request that is being created
+	 */
 	public static void addRequest(int userID, int assigneeID, String requestType) {
 		String insertRequest = "Insert Into requests " +
 				"Values ((Select Count(*) " +
@@ -92,6 +98,43 @@ public class RequestsDB2 {
 		} catch (SQLException e) {
 //			e.printStackTrace();
 			System.err.println("Error in getMaxRequestID()");
+			return 0;
+		}
+	}
+
+	/**
+	 * Can change the assigneeID or the request status to any request
+	 * @param requestID     is the generated ID of the request
+	 * @param assigneeID    is the assignee's ID that you want to change it to
+	 * @param requestStatus is the status that you want to change it to
+	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
+	 */
+	public static int editRequests(int requestID, int assigneeID, String requestStatus) {
+
+		boolean added = false;
+		String query = "Update requests ";
+
+		if (assigneeID != 0) {
+			query = query + "Set assigneeID = '" + assigneeID + "'";
+
+			added = true;
+		}
+		if (requestStatus != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "Set requestStatus = '" + requestStatus + "'";
+
+		}
+
+		query = query + " Where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating request table");
 			return 0;
 		}
 	}
@@ -536,9 +579,10 @@ public class RequestsDB2 {
 
 	}
 
+
 	/**
 	 * This edits a External Transport Services form that is already in the database
-	 * takes in an External Patient Object
+	 * @param externalPatientObj takes in an External Patient Object
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editExternalPatientRequest(ExternalPatientObj externalPatientObj) {
@@ -1335,8 +1379,8 @@ public class RequestsDB2 {
 
 	//TODO: Not tested
 	/**
-	 * edits medicine request which is already in DB
-	 * @param request this the information that the user wants to change stored in a security request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * edits food delivery request which is already in DB
+	 * @param request this the information that the user wants to change stored in a food delivery request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editFoodDeliveryRequest(FoodDeliveryObj request) {
@@ -1551,82 +1595,95 @@ public class RequestsDB2 {
 		}
 	}
 
- 	public static void addInternalPatientRequest(int userID, String pickUpLocation, String dropOffLocation, int assigneeID, int patientID, String department, String severity, String description) {
-	addRequest(userID, assigneeID, "internalPatientRequest");
+	/**
+	 * adds a internal patient transport to the internalPatientRequest database table
+	 * @param request object holding internal patient transport req. fields
+	 */
+ 	public static void addInternalPatientRequest(InternalPatientObj request) {
+		addRequest(request.getUserID(), request.getAssigneeID(), "internalPatientRequest");
 
-	String insertInternalPatientReq = "Insert Into internalPatientRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+		String insertInternalPatientReq = "Insert Into internalPatientRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
 
-	try (PreparedStatement prepState = connection.prepareStatement(insertInternalPatientReq)) {
-		prepState.setInt(1, patientID);
-		prepState.setString(2, pickUpLocation);
-		prepState.setString(3, dropOffLocation);
-		prepState.setString(4, department);
-		prepState.setString(5, severity);
-		prepState.setString(6, description);
-
-		prepState.execute();
-	} catch (SQLException e) {
-		e.printStackTrace();
-		System.err.println("Error inserting into internalPatientRequest inside function addInternalPatientRequest()");
+		try (PreparedStatement prepState = connection.prepareStatement(insertInternalPatientReq)) {
+			prepState.setInt(1, request.getPatientID());
+			prepState.setString(2, request.getNodeID());
+			prepState.setString(3, request.getDropOffNodeID());
+			prepState.setString(4, request.getDepartment());
+			prepState.setString(5, request.getSeverity());
+			prepState.setString(6, request.getDescription());
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into internalPatientRequest inside function addInternalPatientRequest()");
+		}
 	}
-}
 
-	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
+	/**
+	 * edits internal patient transport delivery request which is already in DB
+	 * @param request this the information that the user wants to change stored in a food delivery request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editInternalPatientRequest(InternalPatientObj request) {
 		boolean added = false;
 		String query = "Update internalPatientRequest Set ";
 
-		if (pickUpLocation != null) {
-			query = query + " pickUpLocation = '" + pickUpLocation + "'";
+		if (request.getNodeID() != null) {
+			query = query + " pickUpLocation = '" + request.getNodeID() + "'";
 			added = true;
 		}
-		if (dropOffLocation != null) {
+		if (request.getDropOffNodeID() != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "dropOffLocation = '" + dropOffLocation + "'";
+			query = query + "dropOffLocation = '" + request.getDropOffNodeID() + "'";
 			added = true;
 		}
-		Integer patientIDObj = patientID;
-		if (patientIDObj != null) {
+		if (request.getPatientID() != 0) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "patientID = " + patientID;
+			query = query + "patientID = " + request.getPatientID();
 			added = true;
 		}
-		if (department != null) {
+		if (request.getDepartment() != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "department = '" + department + "'";
+			query = query + "department = '" + request.getDepartment() + "'";
 			added = true;
 		}
-		if (severity != null) {
+		if (request.getSeverity() != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "severity = '" + severity + "'";
+			query = query + "severity = '" + request.getSeverity() + "'";
 			added = true;
 		}
-		if (description != null) {
+		if (request.getDescription() != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "description = '" + description + "'";
-			added = true;
+			query = query + "description = '" + request.getDescription() + "'";
 		}
 
-		query = query + " where requestID = " + requestID;
+		query = query + " where requestID = " + request.getRequestID();
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.executeUpdate();
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating editInternalPatientRequest");
+//			e.printStackTrace();
+			System.err.println("Error in editInternalPatientRequest()");
 			return 0;
 		}
 	}
+
+
+
+
+
+
+
 
 //	public static void addInternalPatientRequest(InternalPatientObj internalPatientObj) {
 //
@@ -1720,6 +1777,16 @@ public class RequestsDB2 {
 
 
 	// ENTRY REQUEST STUFF:
+
+
+
+
+
+
+
+
+
+	//COVID SURVEY STUFF:
 
 	/**
 	 * create the entry request table

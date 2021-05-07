@@ -48,6 +48,22 @@ public class DB {
 		RequestsDB2.createEntryRequestTable();
 	}
 
+	/**
+	 * adds a request to the requests table in the databse
+	 * @param userID this is the userID of the person filling out the request
+	 * @param assigneeID this is the userID of the person who is assigned to this request
+	 * @param requestType this is the type of request that is being created
+	 */
+	public static void addRequest(int userID, int assigneeID, String requestType) { RequestsDB2.addRequest(userID, assigneeID, requestType); }
+
+	/**
+	 * Can change the assigneeID or the request status to any request
+	 * @param requestID     is the generated ID of the request
+	 * @param assigneeID    is the assignee's ID that you want to change it to
+	 * @param requestStatus is the status that you want to change it to
+	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
+	 */
+	public static int editRequests(int requestID, int assigneeID, String requestStatus) { return RequestsDB2.editRequests(requestID, assigneeID, requestStatus); }
 
 	/**
 	 * This adds a floral request to the database that the user is making
@@ -115,6 +131,19 @@ public class DB {
 	public static int editLaundryRequest(LaundryObj request) { return RequestsDB2.editLaundryRequest(request); }
 
 	/**
+	 * adds a maintenance request to the maintenanceRequest table
+	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
+	 */
+	public static void addMaintenanceRequest(MaintenanceObj maintenanceObj) { RequestsDB2.addMaintenanceRequest(maintenanceObj); }
+
+	/**
+	 * This edits a maintenance request which is already in the db
+	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editMaintenanceRequest(MaintenanceObj maintenanceObj) { return RequestsDB2.editMaintenanceRequest(maintenanceObj); }
+
+	/**
 	 * adds a security request to the securityServ table
 	 * @param request this is all of the information needed, in a security request object.
 	 */
@@ -179,6 +208,30 @@ public class DB {
 	 */
 	public static void populateAbonPainTable() { RequestsDB2.populateAbonPainTable(); }
 
+	/**
+	 * adds a internal patient transport to the internalPatientRequest database table
+	 * @param request object holding internal patient transport req. fields
+	 */
+	public static void addInternalPatientRequest(InternalPatientObj request) { RequestsDB2.addInternalPatientRequest(request); }
+
+	/**
+	 * edits internal patient transport delivery request which is already in DB
+	 * @param request this the information that the user wants to change stored in a food delivery request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editInternalPatientRequest(InternalPatientObj request) { return RequestsDB2.editInternalPatientRequest(request); }
+
+	/**
+	 * This adds a entry request form to the table
+	 */
+	public static void addEntryRequest(CovidSurveyObj covidSurveyObj) {
+
+		RequestsDB2.addEntryRequest(covidSurveyObj);
+	}
+
+	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {
+		return RequestsDB2.editEntryRequest(covidSurveyObj);
+	}
 
 
 
@@ -474,9 +527,6 @@ public class DB {
 
 	// Adding To Tables:
 
-	public static void addRequest(int userID, int assigneeID, String requestType) {
-		RequestsDB.addRequest(userID, assigneeID, requestType);
-	}
 
 
 
@@ -490,34 +540,6 @@ public class DB {
 
 
 
-	/**
-	 * adds a maintenance request to the maintenanceRequest table
-	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
-	 */
-	public static void addMaintenanceRequest(MaintenanceObj maintenanceObj) {
-		RequestsDB2.addMaintenanceRequest(maintenanceObj);
-	}
-
-
-
-
-	public static void addInternalPatientRequest(int userID, String pickUpLocation, String dropOffLocation, int assigneeID, int patientID, String department, String severity, String description) {
-		RequestsDB2.addInternalPatientRequest(userID, pickUpLocation, dropOffLocation, assigneeID, patientID, department, severity, description);
-	}
-
-
-
-
-
-	/**
-	 * This adds a entry request form to the table
-	 */
-	public static void addEntryRequest(CovidSurveyObj covidSurveyObj) {
-
-		RequestsDB2.addEntryRequest(covidSurveyObj);
-	}
-
-	// Editing Tables:
 
 
 
@@ -531,42 +553,33 @@ public class DB {
 
 
 
-	/**
-	 * Can change the assigneeID or the request status to any request
-	 * @param requestID     is the generated ID of the request
-	 * @param assigneeID    is the assignee's ID that you want to change it to
-	 * @param requestStatus is the status that you want to change it to
-	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
-	 */
-	public static int editRequests(int requestID, int assigneeID, String requestStatus) {
-		return RequestsDB.editRequests(requestID, assigneeID, requestStatus);
-	}
 
 
 
 
 
-	/**
-	 * This edits a maintenance request which is already in the db
-	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editMaintenanceRequest(MaintenanceObj maintenanceObj) {
-		return RequestsDB2.editMaintenanceRequest(maintenanceObj);
-	}
-
-
-
-	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
-		return RequestsDB2.editInternalPatientRequest(requestID, pickUpLocation, dropOffLocation, patientID, department, severity, description);
-	}
 
 
 
 
-	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {
-		return RequestsDB2.editEntryRequest(covidSurveyObj);
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		// Querying Tables:
 

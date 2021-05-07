@@ -3,7 +3,7 @@ package edu.wpi.cs3733.D21.teamE;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
-import edu.wpi.cs3733.D21.teamE.user.User;
+import edu.wpi.cs3733.D21.teamE.scheduler.Todo;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
@@ -11,6 +11,7 @@ import javafx.util.Pair;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DB {
 
@@ -624,6 +625,11 @@ public class DB {
 	 */
 	public static ArrayList<String> getMyAssignedRequestInfo(String tableName, int userID, String infoType) {
 		return RequestsDB.getMyAssignedRequestInfo(tableName, userID, infoType);
+	}
+
+	//todo
+	public static List<Todo> getTodoList(Date date){
+		return null;
 	}
 
 	/**

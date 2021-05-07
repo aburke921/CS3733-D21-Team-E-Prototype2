@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextArea;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -75,12 +76,15 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 
 	@FXML
 	void saveData(ActionEvent event) throws MessagingException {
-		int index = locationInput.getSelectionModel().getSelectedIndex();
-		String node = nodeID.get(index);
-		String assignee = assignedPersonnel.getSelectionModel().getSelectedItem();
+		int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+		int userIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
+
+		String node = nodeID.get(nodeIndex);
+		int assignee = userID.get(userIndex);
 		String descrip = descriptionInput.getText();
 		String language = languageSelection.getSelectionModel().getSelectedItem();
 
+		DB.addLanguageRequest(new LanguageInterpreterObj(0, App.userID, assignee, node, language, descrip));
 		super.handleButtonSubmit(event);
 
 		//For email implementation later
@@ -128,8 +132,11 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 		}
 
 		locations = DB.getAllNodeLongNames();
+		nodeID = DB.getListOfNodeIDS();
 		locationInput.setItems(locations);
+
 		userNames = DB.getAssigneeNames("interpreter");
+		userID = DB.getAssigneeIDs("interpreter");
 		assignedPersonnel.setItems(userNames);
 	}
 

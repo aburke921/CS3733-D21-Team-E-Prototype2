@@ -8,6 +8,7 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.MedicineDeliveryObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -91,12 +92,13 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         String location = nodeIDs.get(index);
         String name = medicineNameInput.getText();
         String doseMeasure = doseMeasureInput.getText();
+        int doseMeasureI = Integer.parseInt(doseMeasure);
         int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
         int assigned = Integer.parseInt( assignee.getText());
         String specialInstructions = specialInstructInput.getText();
         String signature = signatureInput.getText();
 
-        DB.addMedicineRequest(App.userID, assigned, location, name, doseQuantity, doseMeasure, specialInstructions, signature);
+        DB.addMedicineRequest(new MedicineDeliveryObj(0, App.userID, assigned, location, name, doseQuantity, doseMeasureI, specialInstructions, signature));
 
         //For email implementation later
 //        String email = DB.getEmail(App.userID);

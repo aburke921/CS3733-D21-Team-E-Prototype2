@@ -970,7 +970,7 @@ public class RequestsDB2 {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + " dosage = '" + dosage + "'";
+			query = query + " dosage = " + dosage;
 			added = true;
 		}
 		if (specialInstructions != null) {
@@ -996,7 +996,7 @@ public class RequestsDB2 {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error in updating medicine request");
 			return 0;
 		}

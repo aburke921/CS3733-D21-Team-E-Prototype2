@@ -8,7 +8,7 @@ public class MedicineDeliveryObj extends ServiceRequestObjs {
     private String specialInstructions;
     private String signature;
 
-    public MedicineDeliveryObj(int requestID, String nodeID, int assigneeID, int userID, String medicineName, Integer doseQuantity, Integer doseMeasure, String specialInstructions, String signature) {
+    public MedicineDeliveryObj(int requestID, int userID, int assigneeID, String nodeID, String medicineName, Integer doseQuantity, Integer doseMeasure, String specialInstructions, String signature) {
         super.requestID = requestID;
         super.assigneeID = assigneeID;
         super.nodeID = nodeID;

@@ -108,54 +108,8 @@ public class RequestsDB {
 
 	}
 
-	public static void createInternalPatientRequest() {
-		String query = "Create Table internalPatientRequest " +
-				"( " +
-				"    requestID int Primary Key References requests On Delete Cascade, " +
-				"    patientID int References userAccount(userID) On Delete Cascade, " +
-				"    pickUpLocation varchar(31) Not Null References node On Delete Cascade, " +
-				"    dropOffLocation varchar(31) Not Null References node On Delete Cascade, " +
-				"    department varchar(31), " +
-				"    severity varchar(31), " +
-				"    description varchar(5000) " +
-				")";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
 
 
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating internalPatientRequest table");
-		}
-	}
-
-
-	/**
-	 * create the entry request table
-	 * decision: 0 for not filled, 1 for allow, 2 for ER, 3 for block
-	 */
-	public static void createEntryRequestTable() {
-		// CovidSurveyObject has the following fields:
-			// Integer user, Integer formNumber, Boolean positiveTest, Boolean symptoms, Boolean closeContact, Boolean quarantine, Boolean noSymptoms
-		String query = "Create Table entryRequest " +
-				"( " +
-				"entryrequestID     int Primary Key, " +
-				"positiveTest boolean Not Null, " +
-				"symptoms     boolean Not Null, " +
-				"closeContact     boolean Not Null, " +
-				"quarantine     boolean Not Null, " +
-				"noSymptoms     boolean Not Null, " +
-				"status varchar(31) Not Null" +
-				")";
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating entryRequest table");
-		}
-	}
 
 	/**
 	 * Uses executes the SQL statements required to create a aubonPainMenu table.
@@ -297,35 +251,7 @@ public class RequestsDB {
 
 
 
-	/**
-	 * This adds a entry request form to the table
-	 * each time a new entry is added, status is automatically set as "Needs to be reviewed"
-	 */
-	public static void addEntryRequest(CovidSurveyObj covidSurveyObj) {
-		boolean positiveTest = covidSurveyObj.getPositiveTest();
-		boolean symptoms = covidSurveyObj.getSymptoms();
-		boolean closeContact = covidSurveyObj.getCloseContact();
-		boolean quarantine = covidSurveyObj.getQuarantine();
-		boolean noSymptoms = covidSurveyObj.getNoSymptoms();
-		int userID = covidSurveyObj.getUser();
 
-		//addRequest(userID, assigneeID, "entryRequest");
-
-		String insertEntryRequest = "Insert Into entryRequest Values ((Select Count(*) From entryRequest) + 1, ?, ?, ?, ?, ?, 'Needs to be reviewed')";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertEntryRequest)) {
-			prepState.setBoolean(1, positiveTest);
-			prepState.setBoolean(2, symptoms);
-			prepState.setBoolean(3, closeContact);
-			prepState.setBoolean(4, quarantine);
-			prepState.setBoolean(5, noSymptoms);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error inserting into entryRequest inside function addEntryRequest()");
-		}
-	}
 
 
 
@@ -423,25 +349,6 @@ public class RequestsDB {
 	}
 
 
-	public static void addInternalPatientRequest(int userID, String pickUpLocation, String dropOffLocation, int assigneeID, int patientID, String department, String severity, String description) {
-		addRequest(userID, assigneeID, "internalPatientRequest");
-
-		String insertInternalPatientReq = "Insert Into internalPatientRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertInternalPatientReq)) {
-			prepState.setInt(1, patientID);
-			prepState.setString(2, pickUpLocation);
-			prepState.setString(3, dropOffLocation);
-			prepState.setString(4, department);
-			prepState.setString(5, severity);
-			prepState.setString(6, description);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.err.println("Error inserting into internalPatientRequest inside function addInternalPatientRequest()");
-		}
-	}
 
 
 
@@ -449,78 +356,7 @@ public class RequestsDB {
 
 
 
-	/**
-	 *
-	 * @param covidSurveyObj
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {
-		//int requestID, boolean positiveTest, boolean symptoms, boolean closeContact, boolean quarantine, boolean noSymptoms, String status
-		int formNumber = covidSurveyObj.getFormNumber();
-		Boolean positiveTestB = covidSurveyObj.getPositiveTest();
-		Boolean symptomsB = covidSurveyObj.getSymptoms();
-		Boolean closeContactB = covidSurveyObj.getCloseContact();
-		Boolean quarantineB = covidSurveyObj.getQuarantine();
-		Boolean noSymptomsB = covidSurveyObj.getNoSymptoms();
-		String status = covidSurveyObj.getStatus();
 
-		boolean added = false;
-		String query = "Update entryRequest Set";
-
-		if (positiveTestB != null) {
-			query = query + " positiveTest = " + positiveTestB;
-			added = true;
-		}
-		if (symptomsB != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " symptoms = " + symptomsB;
-			added = true;
-		}
-		if (closeContactB != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " closeContact = " + closeContactB;
-			added = true;
-		}
-		if (quarantineB != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " quarantine = " + quarantineB;
-			added = true;
-		}
-		if (noSymptomsB != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " noSymptoms = " + noSymptomsB;
-			added = true;
-		}
-		if (status != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " status = '" + status + "'";
-			added = true;
-		}
-
-		query = query + " Where entryRequestID = " + formNumber;
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating entryRequest");
-			return 0;
-		}
-
-
-	}
 
 
 //	/**
@@ -724,62 +560,7 @@ public class RequestsDB {
 		}
 	}
 
-	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
-		boolean added = false;
-		String query = "Update internalPatientRequest Set ";
 
-		if (pickUpLocation != null) {
-			query = query + " pickUpLocation = '" + pickUpLocation + "'";
-			added = true;
-		}
-		if (dropOffLocation != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "dropOffLocation = '" + dropOffLocation + "'";
-			added = true;
-		}
-		Integer patientIDObj = patientID;
-		if (patientIDObj != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "patientID = " + patientID;
-			added = true;
-		}
-		if (department != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "department = '" + department + "'";
-			added = true;
-		}
-		if (severity != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "severity = '" + severity + "'";
-			added = true;
-		}
-		if (description != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "description = '" + description + "'";
-			added = true;
-		}
-
-		query = query + " where requestID = " + requestID;
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating editInternalPatientRequest");
-			return 0;
-		}
-	}
 
 
 

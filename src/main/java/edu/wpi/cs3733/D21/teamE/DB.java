@@ -42,10 +42,10 @@ public class DB {
 		RequestsDB2.createLaundryRequestTable();
 		RequestsDB2.createMaintenanceRequestTable();
 		RequestsDB.createFoodDeliveryTable();
-		RequestsDB.createInternalPatientRequest();
+		RequestsDB2.createInternalPatientRequest();
 		RequestsDB.createAubonPainMenuTable();
 		RequestsDB2.createReligionRequestTable();
-		RequestsDB.createEntryRequestTable();
+		RequestsDB2.createEntryRequestTable();
 	}
 
 
@@ -475,7 +475,7 @@ public class DB {
 	}
 
 	public static void addInternalPatientRequest(int userID, String pickUpLocation, String dropOffLocation, int assigneeID, int patientID, String department, String severity, String description) {
-		RequestsDB.addInternalPatientRequest(userID, pickUpLocation, dropOffLocation, assigneeID, patientID, department, severity, description);
+		RequestsDB2.addInternalPatientRequest(userID, pickUpLocation, dropOffLocation, assigneeID, patientID, department, severity, description);
 	}
 
 	/**
@@ -497,7 +497,7 @@ public class DB {
 	 */
 	public static void addEntryRequest(CovidSurveyObj covidSurveyObj) {
 
-		RequestsDB.addEntryRequest(covidSurveyObj);
+		RequestsDB2.addEntryRequest(covidSurveyObj);
 	}
 
 	// Editing Tables:
@@ -567,14 +567,14 @@ public class DB {
 	}
 
 	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
-		return RequestsDB.editInternalPatientRequest(requestID, pickUpLocation, dropOffLocation, patientID, department, severity, description);
+		return RequestsDB2.editInternalPatientRequest(requestID, pickUpLocation, dropOffLocation, patientID, department, severity, description);
 	}
 
 
 
 
 	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {
-		return RequestsDB.editEntryRequest(covidSurveyObj);
+		return RequestsDB2.editEntryRequest(covidSurveyObj);
 	}
 
 		// Querying Tables:

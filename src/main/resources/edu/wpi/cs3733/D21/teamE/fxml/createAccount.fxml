@@ -49,12 +49,12 @@
                                           </Label>
                                           <JFXTextField fx:id="email" maxWidth="300.0" prefColumnCount="0" prefWidth="300.0" promptText="Email">
                                              <VBox.margin>
-                                                <Insets top="20.0" />
+                                                <Insets bottom="10.0" top="20.0" />
                                              </VBox.margin>
                                           </JFXTextField>
                                           <JFXTextField fx:id="password" maxWidth="300.0" prefHeight="27.0" prefWidth="300.0" promptText="Password">
                                              <VBox.margin>
-                                                <Insets top="20.0" />
+                                                <Insets bottom="10.0" top="20.0" />
                                              </VBox.margin>
                                           </JFXTextField>
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: -fx--primary-dark;" text="Requirements:" wrappingWidth="299.130859375">
@@ -84,12 +84,12 @@
                                           </Text>
                                           <JFXTextField fx:id="firstName" maxWidth="300.0" prefWidth="300.0" promptText="First Name">
                                              <VBox.margin>
-                                                <Insets top="20.0" />
+                                                <Insets bottom="10.0" top="20.0" />
                                              </VBox.margin>
                                           </JFXTextField>
                                           <JFXTextField fx:id="lastName" maxWidth="300.0" prefWidth="300.0" promptText="Last Name">
                                              <VBox.margin>
-                                                <Insets top="20.0" />
+                                                <Insets bottom="10.0" top="20.0" />
                                              </VBox.margin>
                                           </JFXTextField>
                                           <HBox alignment="CENTER">

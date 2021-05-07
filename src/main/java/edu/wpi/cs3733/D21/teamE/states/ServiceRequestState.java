@@ -14,7 +14,7 @@ public class ServiceRequestState {
 
         String buttonName = ((Button) event.getSource()).getText();
 
-        if(buttonName.equals("Back")){
+        if(buttonName.equals("Back") || buttonName.equals("Cancel")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
                 App.changeScene(root);

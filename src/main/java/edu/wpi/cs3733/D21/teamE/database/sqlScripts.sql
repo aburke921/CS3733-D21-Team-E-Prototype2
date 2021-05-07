@@ -4,10 +4,10 @@ Drop Table extTransport;
 Drop Table sanitationRequest;
 Drop Table floralRequests;
 Drop Table requests;
-Drop View visitorAccount;
-Drop View patientAccount;
-Drop View adminAccount;
-Drop View doctorAccount;
+-- Drop View visitorAccount;
+-- Drop View patientAccount;
+-- Drop View adminAccount;
+-- Drop View doctorAccount;
 Drop Table userAccount;
 Drop Table hasEdge;
 Drop Table node;
@@ -60,25 +60,25 @@ Create Table userAccount
 
 
 
-Create View visitorAccount As
-Select *
-From userAccount
-Where userType = 'visitor';
-
-Create View patientAccount As
-Select *
-From userAccount
-Where userType = 'patient';
-
-Create View doctorAccount As
-Select *
-From userAccount
-Where userType = 'doctor';
-
-Create View adminAccount As
-Select *
-From userAccount
-Where userType = 'admin';
+-- Create View visitorAccount As
+-- Select *
+-- From userAccount
+-- Where userType = 'visitor';
+--
+-- Create View patientAccount As
+-- Select *
+-- From userAccount
+-- Where userType = 'patient';
+--
+-- Create View doctorAccount As
+-- Select *
+-- From userAccount
+-- Where userType = 'doctor';
+--
+-- Create View adminAccount As
+-- Select *
+-- From userAccount
+-- Where userType = 'admin';
 
 
 Create Table requests

@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -90,30 +91,45 @@
             <children>
             <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
                <children>
-                      <HBox prefHeight="37.0" prefWidth="687.0">
-                          <children>
-                        <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
-                           <HBox.margin>
-                              <Insets left="20.0" top="15.0" />
-                           </HBox.margin>
-                        </JFXSlider>
-                        <JFXComboBox fx:id="floorSelector" onAction="#selectFloor" prefHeight="27.0" prefWidth="147.0" promptText="Select Floor">
-                           <HBox.margin>
-                              <Insets left="40.0" top="10.0" />
-                           </HBox.margin>
-                        </JFXComboBox>
-                          </children>
-                      </HBox>
-                  <JFXButton fx:id="edgeMode" onAction="#toEdgeMode" prefHeight="44.0" prefWidth="104.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Edge Editor">
+                  <HBox prefHeight="37.0" prefWidth="1020.0">
+                     <children>
+                            <HBox prefHeight="37.0" prefWidth="687.0">
+                                <children>
+                              <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="15.0" />
+                                 </HBox.margin>
+                              </JFXSlider>
+                              <JFXComboBox fx:id="floorSelector" onAction="#selectFloor" prefHeight="27.0" prefWidth="147.0" promptText="Select Floor">
+                                 <HBox.margin>
+                                    <Insets left="40.0" top="10.0" />
+                                 </HBox.margin>
+                              </JFXComboBox>
+                              <JFXButton onAction="#toMap" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Display Map">
+                                 <HBox.margin>
+                                    <Insets left="30.0" top="10.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                                </children>
+                            </HBox>
+                     </children>
+                  </HBox>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <JFXButton fx:id="editNodeButton" onAction="#toNodeMode" styleClass="submit-button" text="Edit Nodes" />
+                        <JFXButton fx:id="editEdgeButton" onAction="#toEdgeMode" prefWidth="90.0" styleClass="submit-button" text="Edit Edges" GridPane.columnIndex="1" />
+                     </children>
                      <HBox.margin>
-                        <Insets left="30.0" top="2.0" />
+                        <Insets left="30.0" />
                      </HBox.margin>
-                  </JFXButton>
-                  <JFXButton fx:id="nodeMode" onAction="#toNodeMode" prefHeight="44.0" prefWidth="97.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Node Editor">
-                     <HBox.margin>
-                        <Insets left="20.0" top="2.0" />
-                     </HBox.margin>
-                  </JFXButton>
+                  </GridPane>
                </children>
             </HBox>
             </children>
@@ -165,8 +181,8 @@
                               </JFXComboBox>
                               <GridPane>
                                 <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.0" minWidth="10.0" prefWidth="125.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="108.0" minWidth="10.0" prefWidth="85.0" />
                                 </columnConstraints>
                                 <rowConstraints>
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -192,36 +208,12 @@
                                     </JFXButton>
                                  </children>
                                  <VBox.margin>
-                                    <Insets top="20.0" />
+                                    <Insets right="20.0" top="20.0" />
                                  </VBox.margin>
                               </GridPane>
-                              <GridPane>
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints maxHeight="39.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <JFXButton onAction="#openFileNode" prefHeight="40.0" prefWidth="99.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Retrieve CSV">
-                                       <GridPane.margin>
-                                          <Insets left="10.0" />
-                                       </GridPane.margin>
-                                    </JFXButton>
-                                    <JFXButton fx:id="nodeCSV" onAction="#fileOpenerNode" prefHeight="40.0" prefWidth="99.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Upload CSV" GridPane.columnIndex="1">
-                                       <GridPane.margin>
-                                          <Insets left="10.0" />
-                                       </GridPane.margin>
-                                    </JFXButton>
-                                 </children>
+                              <JFXButton onAction="#toEdgeTable" prefHeight="29.0" prefWidth="93.0" styleClass="submit-button" text="Edge Table">
                                  <VBox.margin>
-                                    <Insets top="219.0" />
-                                 </VBox.margin>
-                              </GridPane>
-                              <JFXButton fx:id="refresh2" onAction="#refreshButton" prefHeight="48.0" prefWidth="99.0" styleClass="submit-button" text="Refresh All">
-                                 <VBox.margin>
-                                    <Insets left="70.0" top="22.0" />
+                                    <Insets left="70.0" right="70.0" />
                                  </VBox.margin>
                               </JFXButton>
                            </children>
@@ -295,36 +287,12 @@
                                     </JFXButton>
                                  </children>
                                  <VBox.margin>
-                                    <Insets top="20.0" />
+                                    <Insets right="20.0" top="20.0" />
                                  </VBox.margin>
                               </GridPane>
-                              <GridPane prefHeight="39.0" prefWidth="230.0">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <JFXButton fx:id="nodeCSV1" onAction="#fileOpenerNode" prefHeight="40.0" prefWidth="99.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Upload CSV" GridPane.columnIndex="1">
-                                       <GridPane.margin>
-                                          <Insets left="10.0" />
-                                       </GridPane.margin>
-                                    </JFXButton>
-                                    <JFXButton fx:id="nodeCSV2" onAction="#openFileNode" prefHeight="40.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Retrieve CSV">
-                                       <GridPane.margin>
-                                          <Insets left="10.0" />
-                                       </GridPane.margin>
-                                    </JFXButton>
-                                 </children>
+                              <JFXButton onAction="#toNodeTable" prefHeight="29.0" prefWidth="93.0" styleClass="submit-button" text="Node Table">
                                  <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                              </GridPane>
-                              <JFXButton fx:id="refresh" onAction="#refreshButton" prefHeight="48.0" prefWidth="99.0" styleClass="submit-button" text="Refresh All">
-                                 <VBox.margin>
-                                    <Insets left="70.0" top="22.0" />
+                                    <Insets left="70.0" right="70.0" />
                                  </VBox.margin>
                               </JFXButton>
                            </children>
@@ -338,9 +306,11 @@
         <AnchorPane fx:id="lowerAnchorPane" prefHeight="59.0" prefWidth="1244.0">
             <children>
                 <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" onAction="#switchScene" prefHeight="29.0" prefWidth="60.0" styleClass="back-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
-            <JFXButton layoutX="498.0" layoutY="10.0" onAction="#toNodeTable" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Node Table" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="10.0" />
-            <JFXButton layoutX="363.0" layoutY="10.0" onAction="#toMap" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Display Map" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="10.0" />
-            <JFXButton layoutX="633.0" layoutY="10.0" onAction="#toEdgeTable" prefHeight="29.0" prefWidth="93.0" style="-fx-background-color: -fx--primary-dark;" styleClass="submit-button" text="Edge Table" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="10.0" />
+            <JFXToggleButton fx:id="drag" layoutX="794.0" text="Drag and Drop" />
+            <JFXButton fx:id="finishAligningButton" layoutX="478.0" layoutY="17.0" onAction="#finishAligning" styleClass="submit-button" text="Finish Aligning" />
+            <JFXButton fx:id="refresh" layoutX="980.0" layoutY="12.0" onAction="#refreshButton" styleClass="submit-button" text="Refresh All" />
+            <JFXButton fx:id="CSVButton" layoutX="1093.0" layoutY="12.0" onAction="#CSVPopUp" prefHeight="27.0" prefWidth="85.0" styleClass="submit-button" text="CSV" />
+            <JFXToggleButton fx:id="aligningButton" layoutX="614.0" text="Align Nodes" />
             </children>
         </AnchorPane>
     </children>

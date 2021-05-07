@@ -21,9 +21,9 @@ public class Path implements Comparable<Path>, Iterable<Node>{
     private double length = 0;
 
     //Scale from pixel to foot
-    public final double SCALE = 0.325;
+    private final double SCALE = 0.325;
     //Average walking speed for someone in their 60s, a large portion of patient demographic
-    public final int SPEED = 4;
+    private final int SPEED = 4;
 
     /**
      * construct an empty list

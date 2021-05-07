@@ -8,14 +8,14 @@ import javafx.scene.text.Text;
  */
 public class TextualDirectionStep {
     private Text icon;
-    private String direction;
+    private Text direction;
 
     /**
      * Constructor with both the Icon and Direction
      * @param icon The icon as a Text object
-     * @param direction Direction String
+     * @param direction Direction Text object (for floor headings)
      */
-    public TextualDirectionStep(Text icon, String direction) {
+    public TextualDirectionStep(Text icon, Text direction) {
         this.icon = icon;
         this.direction = direction;
     }
@@ -38,17 +38,17 @@ public class TextualDirectionStep {
 
     /**
      * Direction getter
-     * @return The direction string
+     * @return The direction Text object
      */
-    public String getDirection() {
+    public Text getDirection() {
         return direction;
     }
 
     /**
      * Direction setter
-     * @param direction The direction as a string
+     * @param direction The direction as a Text object
      */
-    public void setDirection(String direction) {
+    public void setDirection(Text direction) {
         this.direction = direction;
     }
 }

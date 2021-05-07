@@ -57,7 +57,7 @@ dependencies {
             'com.github.sarxos:webcam-capture:0.3.12',
 
             'com.google.maps:google-maps-services:0.18.0',
-            'io.github.cdimascio:java-dotenv:5.2.2',
+
             'org.slf4j:slf4j-simple:1.7.25',
             'org.apache.commons:commons-lang3:3.6',
     )

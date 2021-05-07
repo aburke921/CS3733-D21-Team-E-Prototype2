@@ -122,6 +122,8 @@ public class DirectionsController {
             }
         });
 
+        imageStackPane.prefHeightProperty().bind(primaryStage.heightProperty().subtract(appBarAnchorPane.heightProperty()));
+
         directionsEntity = DirectionsEntity.getInstance();
 
         car.setStyle("-fx-background-color: -fx--primary");
@@ -171,6 +173,7 @@ public class DirectionsController {
         listView.getItems().addAll(directions);
         listView.setPrefHeight(USE_COMPUTED_SIZE);
         listView.setSelectionModel(new NoSelectionModel<String>());
+        listView.getStyleClass().add("scrollables");
         listView.getStyleClass().add("directions");
 
         listView.setCellFactory(param -> new ListCell<String>() {

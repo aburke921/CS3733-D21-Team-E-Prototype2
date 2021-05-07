@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamE.database;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.SanitationServiceObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.SecurityServiceObj;
 
 import java.sql.*;
@@ -269,15 +270,15 @@ public class makeConnection {
 
 
 		//Sanitation Requests: //RequestID: 10 - 18
-		DB.addSanitationRequest(20, 40, "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd");
-		DB.addSanitationRequest(20, 41, "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium", "Bill Byrd");
-		DB.addSanitationRequest(24, 42, "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High", "Taylor Ramos");
-		DB.addSanitationRequest(25, 43, "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium", "Rosa Smith");
-		DB.addSanitationRequest(28, 44, "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical", "Abby Williams");
-		DB.addSanitationRequest(30, 45, "IREST00203", "Trash Removal", "Trash can smells bad", "Medium", "Alesha Harris");
-		DB.addSanitationRequest(29, 46, "IREST00303", "Trash Removal", "Trash can full. Another one is available so do not rush.", "Low", "Andrew Guerrero");
-		DB.addSanitationRequest(22, 47, "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel");
-		DB.addSanitationRequest(23, 48, "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
+		DB.addSanitationRequest(new SanitationServiceObj(10, 20, 40, "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd"));
+		DB.addSanitationRequest(new SanitationServiceObj(11, 20, 41, "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium", "Bill Byrd"));
+		DB.addSanitationRequest(new SanitationServiceObj(12, 24, 42, "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High", "Taylor Ramos"));
+		DB.addSanitationRequest(new SanitationServiceObj(13, 25, 43, "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium", "Rosa Smith"));
+		DB.addSanitationRequest(new SanitationServiceObj(14, 28, 44, "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical", "Abby Williams"));
+		DB.addSanitationRequest(new SanitationServiceObj(15, 30, 45, "IREST00203", "Trash Removal", "Trash can smells bad", "Medium", "Alesha Harris"));
+		DB.addSanitationRequest(new SanitationServiceObj(16, 29, 46, "IREST00303", "Trash Removal", "Trash can full. Another one is available so do not rush.", "Low", "Andrew Guerrero"));
+		DB.addSanitationRequest(new SanitationServiceObj(17, 22, 47, "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel"));
+		DB.addSanitationRequest(new SanitationServiceObj(18, 23, 48, "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson"));
 
 
 		DB.editRequests(11, 0, "canceled");

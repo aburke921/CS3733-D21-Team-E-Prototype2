@@ -114,7 +114,6 @@ public class Floral extends ServiceRequestFormComponents {
             String choc = chocolate.getSelectionModel().getSelectedItem();
            // assigned is now an integer (userID) so must be changed
 
-            //TODO: this seems to be causing issues with the FloralObj.java object
             FloralObj request = new FloralObj(0, App.userID, assigned, nodeInfo, receiver, type, count, vase, arrangement, teddy, choc, mess);
             DB.addFloralRequest(request);
 

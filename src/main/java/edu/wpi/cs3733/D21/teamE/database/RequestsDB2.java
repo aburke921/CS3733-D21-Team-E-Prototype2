@@ -900,7 +900,7 @@ public class RequestsDB2 {
 			prepState.setString(1, request.getNodeID());
 			prepState.setString(2, request.getSecurityLevel());
 			prepState.setString(3, request.getUrgencyLevel());
-			prepState.setString(3, request.getReason());
+			prepState.setString(4, request.getReason());
 
 			prepState.execute();
 		} catch (SQLException e) {
@@ -910,8 +910,8 @@ public class RequestsDB2 {
 	}
 
 	/**
-	 * This edits a laundry request form that is already in the database
-	 * @param request this the information that the user wants to change stored in a laundry request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * This edits a security request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a security request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editSecurityRequest(SecurityServiceObj request) {
@@ -958,6 +958,131 @@ public class RequestsDB2 {
 
 
 
+
+
+
+	//SANITATION REQUEST STUFF:
+
+	/**
+	 * Uses executes the SQL statements required to create a sanitationRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user is sending the request to.
+	 * - signature: this the signature (name in print) of the user who is filling out the request
+	 * - description: this is any description the user who is filling out the request wants to provide for the person who will be completing the request
+	 * - sanitationType: this is the type of sanitation/cleanup the user is requesting to be delt with. The valid options are: "Urine Cleanup",
+	 * "Feces Cleanup", "Preparation Cleanup", "Trash Removal"
+	 * - urgency: this is how urgent the request is and helpful for prioritizing. The valid options are: "Low", "Medium", "High", "Critical"
+	 */
+	public static void createSanitationTable() {
+
+		String query = "Create Table sanitationRequest( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID varchar(31) Not Null References node On Delete Cascade, " +
+				"    signature varchar(31) Not Null, " +
+				"    description varchar(5000), " +
+				"    sanitationType varchar(31), " +
+				"    urgency varchar(31) Not Null, " +
+				"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))," +
+				"    Constraint urgencyTypeLimit Check (urgency In ('Low', 'Medium', 'High', 'Critical')) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating sanitationRequest table");
+		}
+	}
+
+
+	/**
+	 * adds a sanitation request to the sanitationRequest table
+	 * @param request this is all of the information needed, in a sanitation request object.
+	 */
+	public static void addSanitationRequest(SanitationServiceObj request) {
+		addRequest(request.getUserID(), request.getAssigneeID(), "sanitation");
+
+		String insertSanitationRequest = "Insert Into sanitationRequest " +
+				"Values ((Select Count(*) " +
+				"         From requests), ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertSanitationRequest)) {
+			prepState.setString(1, request.getNodeID());
+			prepState.setString(2, request.getSignature());
+			prepState.setString(3, request.getDetail());
+			prepState.setString(4, request.getService());
+			prepState.setString(5, request.getSeverity());
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into sanitationRequest inside function addSanitationRequest()");
+		}
+
+	}
+
+
+	/**
+	 * This edits a sanitation request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a sanitation request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editSanitationRequest(SanitationServiceObj request) {
+
+		boolean added = false;
+		String query = "update sanitationRequest set";
+
+		if (request.getNodeID() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " roomID = '" + request.getNodeID() + "'";
+			added = true;
+		}
+		if (request.getService() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " sanitationType = '" + request.getService() + "'";
+			added = true;
+		}
+		if (request.getDetail() != null) {
+			query = query + " description = '" + request.getDetail() + "'";
+
+			added = true;
+		}
+		if (request.getSeverity() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " urgency = '" + request.getSeverity() + "'";
+			added = true;
+		}
+		if (request.getSignature() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "signature = '" + request.getSignature() + "'";
+		}
+
+
+		query = query + " where requestID = " + request.getRequestID();
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating sanitation request");
+			return 0;
+		}
+
+
+	}
 
 
 

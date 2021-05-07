@@ -569,7 +569,7 @@ public class DatabaseTests {
 		DB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("custodian@gmail.com", "testPass", "custodian", "drew", "Shukla");
 
-		DB.addSanitationRequest(1, 2, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
+		DB.addSanitationRequest(new SanitationServiceObj(0, 1, 2, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla"));
 	}
 
 	@Test
@@ -930,9 +930,9 @@ public class DatabaseTests {
 		DB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		DB.addSpecialUserType("custodian@gmail.com", "testPass", "custodian", "bob", "Shukla");
 
-		DB.addSanitationRequest(1, 2, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
+		DB.addSanitationRequest(new SanitationServiceObj(0, 1, 2, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla"));
 
-		assertEquals(1, DB.editSanitationRequest(1, "test", null, null, null, "hello test"));
+		assertEquals(1, DB.editSanitationRequest(new SanitationServiceObj(1, 1,0, "test", null, null, null, "hello test")));
 	}
 
 	@Test
@@ -988,7 +988,7 @@ public class DatabaseTests {
 
 		DB.addSecurityRequest(new SecurityServiceObj(0, 1, 2, "test", "low", "Low", "reason"));
 
-		assertEquals(1, DB.editSecurityRequest(new SecurityServiceObj(1, 1, 0, "high", "High", null, null)));
+		assertEquals(1, DB.editSecurityRequest(new SecurityServiceObj(1, 1, 1, "test", "High", null, null)));
 	}
 
 	@Test

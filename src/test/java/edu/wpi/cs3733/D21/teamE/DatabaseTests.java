@@ -604,7 +604,7 @@ public class DatabaseTests {
 		DB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("security@gmail.com", "testPass", "security", "drew", "Shukla");
 
-		DB.addSecurityRequest(1, 2, "test", "low", "Low");
+		DB.addSecurityRequest(new SecurityServiceObj(0, 1, 2, "test", "low", "Low", "reason"));
 	}
 
 	@Test
@@ -986,9 +986,9 @@ public class DatabaseTests {
 		DB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		DB.addSpecialUserType("security@gmail.com", "testPass", "security", "bob", "Shukla");
 
-		DB.addSecurityRequest(1, 2, "test", "low", "Low");
+		DB.addSecurityRequest(new SecurityServiceObj(0, 1, 2, "test", "low", "Low", "reason"));
 
-		assertEquals(1, DB.editSecurityRequest(1, null, "high", "High"));
+		assertEquals(1, DB.editSecurityRequest(new SecurityServiceObj(1, 1, 0, "high", "High", null, null)));
 	}
 
 	@Test

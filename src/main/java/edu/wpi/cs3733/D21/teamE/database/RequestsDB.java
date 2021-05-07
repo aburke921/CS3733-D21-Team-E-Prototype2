@@ -71,34 +71,40 @@ public class RequestsDB {
 		}
 	}
 
+
 	/**
 	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
 	 * This table has the attributes:
 	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants security assistance at
-	 * - level: this is the security level that is needed
-	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled. The valid options are: 'Low', 'Medium', 'High', 'Critical'
+	 * - roomID: this is the nodeID/room the user wants the medecine delivered to.
+	 * - medicineName: this is the drug that the user is ordering/requesting
+	 * - quantity: the is the supply or the number of pills ordered
+	 * - dosage: this is the mg or ml quantity for a medication
+	 * - specialInstructions: this is any special details or instructions the user wants to give to who ever is processing the request.
+	 * - signature: this the signature (name in print) of the user who is filling out the request
 	 */
-	public static void createSecurityServTable() {
+	public static void createMedDeliveryTable() {
 
-		String query = "Create Table securityServ ( " +
+		String query = "Create Table medDelivery ( " +
 				"requestID  int Primary Key References requests On Delete Cascade," +
 				"roomID     varchar(31) Not Null References node On Delete Cascade," +
-				"level     varchar(31)," +
-				"urgency   varchar(31) Not Null," +
-				"Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical')) " +
-				")";
+				"medicineName        varchar(31) Not Null," +
+				"quantity            int         Not Null," +
+				"dosage              varchar(31) Not Null," +
+				"specialInstructions varchar(5000)," +
+				"signature           varchar(31) Not Null" + ")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 
 			prepState.execute();
 
-
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			System.err.println("error creating securityServ table");
+			System.err.println("error creating medDelivery table");
 		}
 	}
+
+
 
 	/**
 	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
@@ -348,26 +354,6 @@ public class RequestsDB {
 
 
 
-	/**
-	 * This adds a security form to the table for security service form
-	 * // @param form this is the form added to the table
-	 */
-	public static void addSecurityRequest(int userID, int assigneeID, String roomID, String level, String urgency) {
-		addRequest(userID, assigneeID, "security");
-
-		String insertSecurityRequest = "Insert Into securityserv Values ((Select Count(*) From requests), ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertSecurityRequest)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, level);
-			prepState.setString(3, urgency);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
-		}
-	}
 
 	/**
 	 * This adds a entry request form to the table
@@ -754,49 +740,6 @@ public class RequestsDB {
 //	}
 
 
-	/**
-	 * This edits a security form already within the database
-	 * @param requestID the ID that specifies which external transfer form that is being edited
-	 * @param roomID    the new node/room/location the user is assigning this request to
-	 * @param level     this is the info to update levelOfSecurity
-	 * @param urgency   this is the info to update levelOfUrgency
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editSecurityRequest(int requestID, String roomID, String level, String urgency) {
-		boolean added = false;
-		String query = "Update securityServ Set ";
-
-		if (roomID != null) {
-			query = query + " roomID = '" + roomID + "'";
-
-			added = true;
-		}
-		if (level != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "level = '" + level + "'";
-			added = true;
-		}
-		if (urgency != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "urgency = '" + urgency + "'";
-			added = true;
-		}
-
-		query = query + " where requestID = " + requestID;
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating security request");
-			return 0;
-		}
-	}
 
 	/**
 	 * Can change the assigneeID or the request status to any request

@@ -28,7 +28,9 @@ import java.util.ArrayList;
 public class MedicineDelivery extends ServiceRequestFormComponents {
 
     ObservableList<String> locations;
-    ArrayList<String> nodeIDs;
+    ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> userNames;
+    ArrayList<Integer> userID = new ArrayList<>();
 
     @FXML // fx:id="background"
     private ImageView background;
@@ -46,7 +48,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     private JFXTextField doseMeasureInput;
 
     @FXML
-    private JFXTextField assignee;
+    private JFXComboBox<String> assignee;
 
     @FXML
     private JFXTextArea specialInstructInput;
@@ -89,15 +91,16 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
 
         int index = locationInput.getSelectionModel().getSelectedIndex();
 
-        String location = nodeIDs.get(index);
+        String location = nodeID.get(index);
         String name = medicineNameInput.getText();
         String doseMeasure = doseMeasureInput.getText();
         int doseMeasureI = Integer.parseInt(doseMeasure);
         int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
-        int assigned = Integer.parseInt( assignee.getText());
+//        int assigned = Integer.parseInt( assignee.getText());
         String specialInstructions = specialInstructInput.getText();
         String signature = signatureInput.getText();
 
+//        DB.addMedicineRequest(App.userID, assigned, location, name, doseQuantity, doseMeasure, specialInstructions, signature);
         DB.addMedicineRequest(new MedicineDeliveryObj(0, App.userID, assigned, location, name, doseQuantity, doseMeasureI, specialInstructions, signature));
 
         //For email implementation later
@@ -151,9 +154,9 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         //background.fitHeightProperty().bind(primaryStage.heightProperty());
 
         locations = DB.getAllNodeLongNames();
-        nodeIDs = DB.getListOfNodeIDS();
-
         locationInput.setItems(locations);
+        userNames = DB.getAssigneeNames("nurse");
+        assignee.setItems(userNames);
 
         assert locationInput != null;
         assert medicineNameInput != null;

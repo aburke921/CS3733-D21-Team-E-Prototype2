@@ -4,6 +4,7 @@ import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.MedicineDeliveryObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.SecurityServiceObj;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -310,14 +311,14 @@ public class makeConnection {
 
 
 		//Security Requests: //RequestID: 31 - 38
-		DB.addSecurityRequest(20, 61, "HDEPT00203", "Low", "Low");
-		DB.addSecurityRequest(22, 62, "WELEV00E01", "Medium", "Medium");
-		DB.addSecurityRequest(30, 63, "HDEPT00203", "Low", "Low");
-		DB.addSecurityRequest(27, 64, "ePARK00101", "Medium", "High");
-		DB.addSecurityRequest(24, 65, "BDEPT00402", "Medium", "Medium");
-		DB.addSecurityRequest(20, 66, "BDEPT00302", "Low", "Low");
-		DB.addSecurityRequest(25, 67, "CCONF002L1", "High", "Critical");
-		DB.addSecurityRequest(29, 68, "eWALK00701", "Medium", "Medium");
+		DB.addSecurityRequest(new SecurityServiceObj(31, 20, 61, "HDEPT00203", "Low", "Low", "Someone is hallucinating and not being safe"));
+		DB.addSecurityRequest(new SecurityServiceObj(32, 22, 62, "WELEV00E01", "Medium", "Medium", "A patient is being violent"));
+		DB.addSecurityRequest(new SecurityServiceObj(33, 30, 63, "HDEPT00203", "Low", "Low", "A women who was told to leave the hospital is not doing so"));
+		DB.addSecurityRequest(new SecurityServiceObj(34, 27, 64, "ePARK00101", "Medium", "High", "A parent whose child is in the hospital is threatening a doctor"));
+		DB.addSecurityRequest(new SecurityServiceObj(35, 24, 65, "BDEPT00402", "Medium", "Medium", null));
+		DB.addSecurityRequest(new SecurityServiceObj(36, 20, 66, "BDEPT00302", "Low", "Low", null));
+		DB.addSecurityRequest(new SecurityServiceObj(37, 25, 67, "CCONF002L1", "High", "Critical", "There is a suspicious person in the waiting room"));
+		DB.addSecurityRequest(new SecurityServiceObj(38, 29, 68, "eWALK00701", "Medium", "Medium", null));
 
 
 		DB.editRequests(31, 0, "canceled");

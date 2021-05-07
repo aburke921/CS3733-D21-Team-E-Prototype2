@@ -5,10 +5,8 @@ import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
-import edu.wpi.cs3733.D21.teamE.views.CovidSurvey;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.UserManagement;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.Floral;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
@@ -19,8 +17,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 import org.junit.jupiter.api.*;
-
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -1447,7 +1443,7 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testAddAubonPainMenuItem")
 	public void testAddAubonPainMenuItem() {
-		DB.addAubonPainMenuItem("foodImage", "foodItem", "$56.00", "23 Calories", "foodDescription");
+		DB.addAubonPainMenuItem(new AubonPainItem("foodImage", "foodItem", "$56.00", "23 Calories", "foodDescription"));
 	}
 
 	@Test
@@ -1460,13 +1456,15 @@ public class DatabaseTests {
 	@DisplayName("testGetAubonPanItems")
 	public void testGetAubonPanItems() {
 
-		DB.addAubonPainMenuItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
-		DB.addAubonPainMenuItem("URLLLLL", "pancakes", "$23.45", "3290 calories", "yummmyyy");
-		DB.addAubonPainMenuItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+
 
 		AubonPainItem item1 = new AubonPainItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
 		AubonPainItem item2 = new AubonPainItem("URLLLLL", "pancakes", "$23.45", "3290 calories", "yummmyyy");
 		AubonPainItem item3 = new AubonPainItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+
+		DB.addAubonPainMenuItem(item1);
+		DB.addAubonPainMenuItem(item2);
+		DB.addAubonPainMenuItem(item3);
 
 		ArrayList<AubonPainItem> correctItems = new ArrayList<>();
 		correctItems.add(item1);
@@ -1524,7 +1522,7 @@ public class DatabaseTests {
 		DB.addSpecialUserType("interpreter123@gmail.com", "testPass", "EMT", "drew", "Shukla");
 		DB.addSpecialUserType("helloherh@gmail.com", "testPass", "patient", "nupi", "Shukla");
 
-		DB.addInternalPatientRequest(1, "test", "test2", 2, 3, "department", "not severe", "she is in pain");
+		DB.addInternalPatientRequest(new InternalPatientObj(0, 1, "test", "test2", 2, 3, "department", "not severe", "she is in pain"));
 	}
 
 	@Test
@@ -1538,8 +1536,8 @@ public class DatabaseTests {
 		DB.addSpecialUserType("helloherh@gmail.com", "testPass", "patient", "nupi", "Shukla");
 		DB.addSpecialUserType("idk@gmail.com", "testPass", "patient", "notme", "Shukla");
 
-		DB.addInternalPatientRequest(1, "test", "test2", 2, 3, "department", "not severe", "she is in pain");
-		int result = DB.editInternalPatientRequest(1, null, "test", 4, null, null, "hellloooooo");
+		DB.addInternalPatientRequest(new InternalPatientObj(0, 1, "test", "test2", 2, 3, "department", "not severe", "she is in pain"));
+		int result = DB.editInternalPatientRequest(new InternalPatientObj(1, 1, null, "test", 4, 0, null, "hellloooooo", null));
 
 		assertTrue(result == 1);
 
@@ -1642,9 +1640,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAubonPainFeild")
 	public void testGetAubonPainFeild() {
-		DB.addAubonPainMenuItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
-		DB.addAubonPainMenuItem("URLLLLL", "pancakes", "$23.45", "3290 calories", "yummmyyy");
-		DB.addAubonPainMenuItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+		DB.addAubonPainMenuItem(new AubonPainItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description"));
+		DB.addAubonPainMenuItem(new AubonPainItem("URLLLLL", "pancakes", "$23.45", "3290 calories", "yummmyyy"));
+		DB.addAubonPainMenuItem(new AubonPainItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood"));
 
 		ArrayList<String> correctFoodImages = new ArrayList<>();
 		correctFoodImages.add("foodImageURL");
@@ -1659,9 +1657,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAubonPainFeild2")
 	public void testGetAubonPainFeild2() {
-		DB.addAubonPainMenuItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
-		DB.addAubonPainMenuItem(null, "pancakes", "$23.45", "3290 calories", "yummmyyy");
-		DB.addAubonPainMenuItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+		DB.addAubonPainMenuItem(new AubonPainItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description"));
+		DB.addAubonPainMenuItem(new AubonPainItem(null, "pancakes", "$23.45", "3290 calories", "yummmyyy"));
+		DB.addAubonPainMenuItem(new AubonPainItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood"));
 
 		ArrayList<String> correctFoodImages = new ArrayList<>();
 		correctFoodImages.add("foodImageURL");

@@ -41,13 +41,29 @@ public class DB {
 		RequestsDB2.createLanguageRequestTable();
 		RequestsDB2.createLaundryRequestTable();
 		RequestsDB2.createMaintenanceRequestTable();
-		RequestsDB.createFoodDeliveryTable();
+		RequestsDB2.createFoodDeliveryTable();
 		RequestsDB2.createInternalPatientRequest();
-		RequestsDB.createAubonPainMenuTable();
+		RequestsDB2.createAubonPainMenuTable();
 		RequestsDB2.createReligionRequestTable();
 		RequestsDB2.createEntryRequestTable();
 	}
 
+	/**
+	 * adds a request to the requests table in the databse
+	 * @param userID this is the userID of the person filling out the request
+	 * @param assigneeID this is the userID of the person who is assigned to this request
+	 * @param requestType this is the type of request that is being created
+	 */
+	public static void addRequest(int userID, int assigneeID, String requestType) { RequestsDB2.addRequest(userID, assigneeID, requestType); }
+
+	/**
+	 * Can change the assigneeID or the request status to any request
+	 * @param requestID     is the generated ID of the request
+	 * @param assigneeID    is the assignee's ID that you want to change it to
+	 * @param requestStatus is the status that you want to change it to
+	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
+	 */
+	public static int editRequests(int requestID, int assigneeID, String requestStatus) { return RequestsDB2.editRequests(requestID, assigneeID, requestStatus); }
 
 	/**
 	 * This adds a floral request to the database that the user is making
@@ -89,6 +105,19 @@ public class DB {
 	public static int editReligiousRequest(ReligiousRequestObj request) { return RequestsDB2.editReligiousRequest(request); }
 
 	/**
+	 * This function needs to add a external patient form to the table for external patient forms
+	 * //@param form this is the form that we will create and send to the database
+	 */
+	public static void addExternalPatientRequest(ExternalPatientObj externalPatientObj) { RequestsDB2.addExternalPatientRequest(externalPatientObj); }
+
+	/**
+	 * This edits a External Transport Services form that is already in the database
+	 * takes in an External Patient Object
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editExternalPatientRequest(ExternalPatientObj externalPatientObj) { return RequestsDB2.editExternalPatientRequest(externalPatientObj); }
+
+	/**
 	 * adds a laundry request to the laundryRequest table
 	 * @param request this is all of the information needed, in a religious request object.
 	 */
@@ -100,6 +129,19 @@ public class DB {
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editLaundryRequest(LaundryObj request) { return RequestsDB2.editLaundryRequest(request); }
+
+	/**
+	 * adds a maintenance request to the maintenanceRequest table
+	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
+	 */
+	public static void addMaintenanceRequest(MaintenanceObj maintenanceObj) { RequestsDB2.addMaintenanceRequest(maintenanceObj); }
+
+	/**
+	 * This edits a maintenance request which is already in the db
+	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editMaintenanceRequest(MaintenanceObj maintenanceObj) { return RequestsDB2.editMaintenanceRequest(maintenanceObj); }
 
 	/**
 	 * adds a security request to the securityServ table
@@ -127,10 +169,69 @@ public class DB {
 	 */
 	public static int editSanitationRequest(SanitationServiceObj request) { return RequestsDB2.editSanitationRequest(request); }
 
+	/**
+	 * This adds a medicine request form to the table for medicine request forms
+	 * @param medicineDeliveryObj object holding medicine req. fields
+	 */
+	public static void addMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) { RequestsDB2.addMedicineRequest(medicineDeliveryObj); }
 
+	/**
+	 * edits medicine request which is already in DB
+	 * @param medicineDeliveryObj object holding medicine req. fields
+	 * @return
+	 */
+	public static int editMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) { return RequestsDB2.editMedicineRequest(medicineDeliveryObj); }
 
+	/**
+	 * adds a food delivery request to the foodDelivery table
+	 * @param request this is all of the information needed, in a food delivery request object.
+	 */
+	public static void addFoodDeliveryRequest(FoodDeliveryObj request) { RequestsDB2.addFoodDeliveryRequest(request); }
 
+	/**
+	 * edits medicine request which is already in DB
+	 * @param request this the information that the user wants to change stored in a security request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editFoodDeliveryRequest(FoodDeliveryObj request) { return RequestsDB2.editFoodDeliveryRequest(request); }
 
+	/**
+	 * adds a menuItem to the aubonPainMenu database table
+	 * @param menuItem this is all of the information needed, in a security request object.
+	 */
+	public static void addAubonPainMenuItem(AubonPainItem menuItem) { RequestsDB2.addAubonPainMenuItem(menuItem); }
+
+	/**
+	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
+	 * description to the aubonPainMenu table
+	 * The link to the website being read is: https://order.aubonpain.com/menu/brigham-womens-hospital
+	 */
+	public static void populateAbonPainTable() { RequestsDB2.populateAbonPainTable(); }
+
+	/**
+	 * adds a internal patient transport to the internalPatientRequest database table
+	 * @param request object holding internal patient transport req. fields
+	 */
+	public static void addInternalPatientRequest(InternalPatientObj request) { RequestsDB2.addInternalPatientRequest(request); }
+
+	/**
+	 * edits internal patient transport delivery request which is already in DB
+	 * @param request this the information that the user wants to change stored in a food delivery request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editInternalPatientRequest(InternalPatientObj request) { return RequestsDB2.editInternalPatientRequest(request); }
+
+	/**
+	 * This adds a entry request form to the table
+	 */
+	public static void addEntryRequest(CovidSurveyObj covidSurveyObj) {
+
+		RequestsDB2.addEntryRequest(covidSurveyObj);
+	}
+
+	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {
+		return RequestsDB2.editEntryRequest(covidSurveyObj);
+	}
 
 
 
@@ -421,39 +522,11 @@ public class DB {
 	// Creating Tables:
 
 
-	/**
-	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
-	 * description to the aubonPainMenu table
-	 * The link to the website being read is: https://order.aubonpain.com/menu/brigham-womens-hospital
-	 */
-	public static void populateAbonPainTable() {
-		RequestsDB.populateAbonPainTable();
-	}
+
 
 
 	// Adding To Tables:
 
-	public static void addRequest(int userID, int assigneeID, String requestType) {
-		RequestsDB.addRequest(userID, assigneeID, requestType);
-	}
-
-
-	/**
-	 * This function needs to add a external patient form to the table for external patient forms
-	 * //@param form this is the form that we will create and send to the database
-	 */
-	public static void addExternalPatientRequest(ExternalPatientObj externalPatientObj) {
-		RequestsDB2.addExternalPatientRequest(externalPatientObj);
-	}
-
-
-	/**
-	 * This adds a medicine request form to the table for medicine request forms
-	 * @param medicineDeliveryObj object holding medicine req. fields
-	 */
-	public static void addMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
-		RequestsDB2.addMedicineRequest(medicineDeliveryObj);
-	}
 
 
 
@@ -461,121 +534,52 @@ public class DB {
 
 
 
-	/**
-	 * adds a maintenance request to the maintenanceRequest table
-	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
-	 */
-	public static void addMaintenanceRequest(MaintenanceObj maintenanceObj) {
-		RequestsDB2.addMaintenanceRequest(maintenanceObj);
-	}
-
-
-	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID, String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
-		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, allergies, foodItem, foodQuantity, beverageItem, beverageQuantity);
-	}
-
-	public static void addInternalPatientRequest(int userID, String pickUpLocation, String dropOffLocation, int assigneeID, int patientID, String department, String severity, String description) {
-		RequestsDB2.addInternalPatientRequest(userID, pickUpLocation, dropOffLocation, assigneeID, patientID, department, severity, description);
-	}
-
-	/**
-	 * adds a menuItem to the aubonPainMenu database table
-	 * @param foodImage       this is the url to an image of the item
-	 * @param foodItem        this is the item itself (this is unique and is used as an identifier)
-	 * @param foodPrice       this is the price of the foodItem
-	 * @param foodCalories    this is the number of calories the food item has
-	 * @param foodDescription this is a description of the food item
-	 */
-	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription) {
-		RequestsDB.addAubonPainMenuItem(foodImage, foodItem, foodPrice, foodCalories, foodDescription);
-	}
-
-
-
-	/**
-	 * This adds a entry request form to the table
-	 */
-	public static void addEntryRequest(CovidSurveyObj covidSurveyObj) {
-
-		RequestsDB2.addEntryRequest(covidSurveyObj);
-	}
-
-	// Editing Tables:
-
-
-
-	/**
-	 * This edits a External Transport Services form that is already in the database
-	 * takes in an External Patient Object
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editExternalPatientRequest(ExternalPatientObj externalPatientObj) {
-		return RequestsDB2.editExternalPatientRequest(externalPatientObj);
-	}
-
-
-
-
-	/**
-	 * edits medicine request which is already in DB
-	 * @param medicineDeliveryObj object holding medicine req. fields
-	 * @return
-	 */
-	public static int editMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
-		return RequestsDB2.editMedicineRequest(medicineDeliveryObj);
-	}
-
-
-
-
-	/**
-	 * Can change the assigneeID or the request status to any request
-	 * @param requestID     is the generated ID of the request
-	 * @param assigneeID    is the assignee's ID that you want to change it to
-	 * @param requestStatus is the status that you want to change it to
-	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
-	 */
-	public static int editRequests(int requestID, int assigneeID, String requestStatus) {
-		return RequestsDB.editRequests(requestID, assigneeID, requestStatus);
-	}
 
 
 
 
 
-	/**
-	 * This edits a maintenance request which is already in the db
-	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editMaintenanceRequest(MaintenanceObj maintenanceObj) {
-		return RequestsDB2.editMaintenanceRequest(maintenanceObj);
-	}
-
-	/**
-	 * @param requestID        is the generated ID of the request
-	 * @param roomID           the new node/room/location the user is assigning this request to
-	 * @param dietRestrictions is the edited restrictions of the user in terms of diet
-	 * @param allergies        is the edited allergies the user has
-	 * @param food             is the new food the user requests
-	 * @param beverage         is the new beverage the user requests
-	 * @param description      is an edited detailed description
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editFoodDeliveryRequest(int requestID, String roomID, String dietRestrictions, String allergies, String food, String beverage, String description) {
-		return RequestsDB.editFoodDeliveryRequest(requestID, roomID, dietRestrictions, allergies, food, beverage, description);
-	}
-
-	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
-		return RequestsDB2.editInternalPatientRequest(requestID, pickUpLocation, dropOffLocation, patientID, department, severity, description);
-	}
 
 
 
 
-	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {
-		return RequestsDB2.editEntryRequest(covidSurveyObj);
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		// Querying Tables:
 

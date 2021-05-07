@@ -3,10 +3,18 @@ package edu.wpi.cs3733.D21.teamE.database;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.MedicineDelivery;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Set;
 
 public class RequestsDB2 {
 
@@ -46,6 +54,12 @@ public class RequestsDB2 {
 		}
 	}
 
+	/**
+	 * adds a request to the requests table in the databse
+	 * @param userID this is the userID of the person filling out the request
+	 * @param assigneeID this is the userID of the person who is assigned to this request
+	 * @param requestType this is the type of request that is being created
+	 */
 	public static void addRequest(int userID, int assigneeID, String requestType) {
 		String insertRequest = "Insert Into requests " +
 				"Values ((Select Count(*) " +
@@ -63,6 +77,67 @@ public class RequestsDB2 {
 
 	}
 
+	/**
+	 * Gets the largest requestID, which can be used to increment and make a the next one
+	 * @return the largest requestID in the request table
+	 */
+	public static int getMaxRequestID() {
+		int maxID = 0;
+
+		String query = "Select Max(requestID) As maxRequestID From food";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if (rset.next()) {
+				maxID = rset.getInt("maxRequestID");
+			}
+
+			prepState.close();
+			return maxID;
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in getMaxRequestID()");
+			return 0;
+		}
+	}
+
+	/**
+	 * Can change the assigneeID or the request status to any request
+	 * @param requestID     is the generated ID of the request
+	 * @param assigneeID    is the assignee's ID that you want to change it to
+	 * @param requestStatus is the status that you want to change it to
+	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
+	 */
+	public static int editRequests(int requestID, int assigneeID, String requestStatus) {
+
+		boolean added = false;
+		String query = "Update requests ";
+
+		if (assigneeID != 0) {
+			query = query + "Set assigneeID = '" + assigneeID + "'";
+
+			added = true;
+		}
+		if (requestStatus != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "Set requestStatus = '" + requestStatus + "'";
+
+		}
+
+		query = query + " Where requestID = " + requestID;
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating request table");
+			return 0;
+		}
+	}
 
 
 
@@ -504,9 +579,10 @@ public class RequestsDB2 {
 
 	}
 
+
 	/**
 	 * This edits a External Transport Services form that is already in the database
-	 * takes in an External Patient Object
+	 * @param externalPatientObj takes in an External Patient Object
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editExternalPatientRequest(ExternalPatientObj externalPatientObj) {
@@ -1164,7 +1240,7 @@ public class RequestsDB2 {
 	/**
 	 * edits medicine request which is already in DB
 	 * @param medicineDeliveryObj object holding medicine req. fields
-	 * @return
+	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
 
@@ -1240,6 +1316,255 @@ public class RequestsDB2 {
 
 
 
+	//FOOD REQUEST STUFF:
+
+	/**
+	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - allergy: this is an food allergy that the user might have
+	 * - dietRestriction: this is any dietary restrictions that the person fulfilling the request might need to know about
+	 * - beverage: the drink the user is ordering
+	 * - comments: any comments the user wants to leave for the person fulfilling the request
+	 */
+	public static void createFoodDeliveryTable() {
+
+		String query = "Create Table foodDelivery ( " +
+				"    requestID int Primary Key References requests (requestID) On Delete Cascade, " +
+				"    roomID varchar(31) Not Null References node (nodeID) On Delete Cascade, " +
+				"    deliveryService varchar(50), " +
+				"    orderNumber varchar(50), " +
+				"    description varchar(3000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating foodDelivery table");
+		}
+
+
+	}
+
+	//TODO: Not tested
+	/**
+	 * adds a food delivery request to the foodDelivery table
+	 * @param request this is all of the information needed, in a food delivery request object.
+	 */
+	public static void addFoodDeliveryRequest(FoodDeliveryObj request) {
+		addRequest(request.getUserID(), request.getAssigneeID(), "foodDeliveryRequest");
+
+		int requestID = getMaxRequestID();
+
+		String insertFoodDeliveryReq = "Insert Into foodDelivery Values (?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertFoodDeliveryReq)) {
+			prepState.setInt(1, requestID);
+			prepState.setString(2, request.getNodeID());
+			prepState.setString(3, request.getDeliveryService());
+			prepState.setString(4, request.getOrderNumber());
+			prepState.setString(5, request.getDescription());
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into foodDeliveryRequest inside function addFoodDeliveryRequest()");
+		}
+	}
+
+
+	//TODO: Not tested
+	/**
+	 * edits food delivery request which is already in DB
+	 * @param request this the information that the user wants to change stored in a food delivery request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editFoodDeliveryRequest(FoodDeliveryObj request) {
+		boolean added = false;
+		String query = "Update foodDeliveryRequest Set ";
+
+		if (request.getNodeID() != null) {
+			query = query + " roomID = '" + request.getNodeID() + "'";
+			added = true;
+		}
+		if (request.getDeliveryService() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "deliveryService = '" + request.getDeliveryService() + "'";
+			added = true;
+		}
+		if (request.getOrderNumber() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "orderNumber = '" + request.getOrderNumber() + "'";
+			added = true;
+		}
+		if (request.getDescription() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + request.getDescription() + "'";
+		}
+
+		query = query + " where requestID = " + request.getRequestID();
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating foodDeliveryRequest");
+			return 0;
+		}
+	}
+
+
+	/**
+	 * Uses executes the SQL statements required to create a aubonPainMenu table.
+	 * This table has attributes:
+	 * - foodImage: this is the url to an image of the item
+	 * - foodItem: this is the item itself (this is unique and is used as an identifier)
+	 * - foodPrice: this is the price of the foodItem
+	 * - foodCalories: this is the number of calories the food item has
+	 * - foodDescription: this is a description of the food item
+	 */
+	public static void createAubonPainMenuTable() {
+		String query = "Create Table aubonPainMenu( " +
+				"    foodImage varchar(600), " +
+				"    foodItem varchar(100) Primary Key, " +
+				"    foodPrice varchar(50), " +
+				"    foodCalories varchar(50), " +
+				"    foodDescription varchar(3000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating aubonPainMenu table");
+		}
+	}
+
+	/**
+	 * adds a menuItem to the aubonPainMenu database table
+	 * @param menuItem this is all of the information needed, in a security request object.
+	 */
+	public static void addAubonPainMenuItem(AubonPainItem menuItem){
+
+		String query = "Insert Into aubonPainMenu Values(?,?,?,?,?) ";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.setString(1, menuItem.getImageURL());
+			prepState.setString(2, menuItem.getFoodItem());
+			prepState.setString(3, menuItem.getFoodPrice());
+			prepState.setString(4, menuItem.getFoodCalories());
+			prepState.setString(5, menuItem.getFoodDescription());
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("error inserting addAubonPainMenuItem() ");
+		}
+
+	}
+
+	/**
+	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
+	 * description to the aubonPainMenu table
+	 * The link to the website being read is: https://order.aubonpain.com/menu/brigham-womens-hospital
+	 */
+	public static void populateAbonPainTable() {
+
+		try {
+			Document doc = Jsoup.connect("https://order.aubonpain.com/menu/brigham-womens-hospital").get();
+			Set<String> classes = doc.classNames();
+
+			Elements elements = doc.body().select("*");
+
+			ArrayList<String> foodImage = new ArrayList<>();
+			ArrayList<String> foodItems = new ArrayList<>();
+			ArrayList<String> foodPrice = new ArrayList<>();
+			ArrayList<String> foodCalories = new ArrayList<>();
+			ArrayList<String> foodDescription = new ArrayList<>();
+
+			int count = 0;
+			for (Element element : elements) {
+				if (element.ownText().equals("Breakfast ON THE GO")) {
+					count++;
+				}
+				if (count == 2) {
+					if (element.normalName().equals("img")) {
+						foodImage.add(element.attr("abs:src"));
+					}
+
+					if (element.className().equals("product-name product__name")) {
+						foodItems.add(element.ownText());
+					}
+					if (element.className().equals("product__attribute product__attribute--price")) {
+						int numOfEmptySpacesToAdd = foodItems.size() - foodPrice.size() - 1;
+						for (int i = 0; i < numOfEmptySpacesToAdd; i++) {
+							foodPrice.add(null);
+						}
+						foodPrice.add(element.ownText());
+					}
+					if (element.className().equals("product__attribute product__attribute--calorie-label")) {
+						int numOfEmptySpacesToAdd = foodItems.size() - foodCalories.size() - 1;
+						for (int i = 0; i < numOfEmptySpacesToAdd; i++) {
+							foodCalories.add(null);
+						}
+						foodCalories.add(element.ownText());
+					}
+					if (element.className().equals("product__description")) {
+						int numOfEmptySpacesToAdd = foodItems.size() - foodDescription.size() - 1;
+						for (int i = 0; i < numOfEmptySpacesToAdd; i++) {
+							foodDescription.add(null);
+						}
+						foodDescription.add(element.ownText());
+					}
+				}
+
+			}
+
+			for (int i = 0; i < foodImage.size(); i++) {
+				String image = null;
+				String price = null;
+				String calories = null;
+				if (i < foodImage.size()) {
+					image = foodImage.get(i);
+				}
+				if (i < foodPrice.size()) {
+					price = foodPrice.get(i);
+				}
+				if (i < foodCalories.size()) {
+					calories = foodCalories.get(i);
+				}
+
+				addAubonPainMenuItem(new AubonPainItem(image, foodItems.get(i), price, calories, foodDescription.get(i)));
+			}
+
+
+		} catch (IOException e) {
+			//e.printStackTrace();
+			System.out.println("error reading in Aubon Pain website in addAbonPainTable()");
+		}
+
+	}
+
+
+
+
+
+
+
+
+
 	//TODO: uncomment this when Internal Patient Object is completed
 	// fix anything which needs to be fixed and write tests
 	// add this table to deleteAllTables and createAllTables
@@ -1270,82 +1595,95 @@ public class RequestsDB2 {
 		}
 	}
 
- 	public static void addInternalPatientRequest(int userID, String pickUpLocation, String dropOffLocation, int assigneeID, int patientID, String department, String severity, String description) {
-	addRequest(userID, assigneeID, "internalPatientRequest");
+	/**
+	 * adds a internal patient transport to the internalPatientRequest database table
+	 * @param request object holding internal patient transport req. fields
+	 */
+ 	public static void addInternalPatientRequest(InternalPatientObj request) {
+		addRequest(request.getUserID(), request.getAssigneeID(), "internalPatientRequest");
 
-	String insertInternalPatientReq = "Insert Into internalPatientRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+		String insertInternalPatientReq = "Insert Into internalPatientRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
 
-	try (PreparedStatement prepState = connection.prepareStatement(insertInternalPatientReq)) {
-		prepState.setInt(1, patientID);
-		prepState.setString(2, pickUpLocation);
-		prepState.setString(3, dropOffLocation);
-		prepState.setString(4, department);
-		prepState.setString(5, severity);
-		prepState.setString(6, description);
-
-		prepState.execute();
-	} catch (SQLException e) {
-		e.printStackTrace();
-		System.err.println("Error inserting into internalPatientRequest inside function addInternalPatientRequest()");
+		try (PreparedStatement prepState = connection.prepareStatement(insertInternalPatientReq)) {
+			prepState.setInt(1, request.getPatientID());
+			prepState.setString(2, request.getNodeID());
+			prepState.setString(3, request.getDropOffNodeID());
+			prepState.setString(4, request.getDepartment());
+			prepState.setString(5, request.getSeverity());
+			prepState.setString(6, request.getDescription());
+			prepState.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into internalPatientRequest inside function addInternalPatientRequest()");
+		}
 	}
-}
 
-	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
+	/**
+	 * edits internal patient transport delivery request which is already in DB
+	 * @param request this the information that the user wants to change stored in a food delivery request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editInternalPatientRequest(InternalPatientObj request) {
 		boolean added = false;
 		String query = "Update internalPatientRequest Set ";
 
-		if (pickUpLocation != null) {
-			query = query + " pickUpLocation = '" + pickUpLocation + "'";
+		if (request.getNodeID() != null) {
+			query = query + " pickUpLocation = '" + request.getNodeID() + "'";
 			added = true;
 		}
-		if (dropOffLocation != null) {
+		if (request.getDropOffNodeID() != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "dropOffLocation = '" + dropOffLocation + "'";
+			query = query + "dropOffLocation = '" + request.getDropOffNodeID() + "'";
 			added = true;
 		}
-		Integer patientIDObj = patientID;
-		if (patientIDObj != null) {
+		if (request.getPatientID() != 0) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "patientID = " + patientID;
+			query = query + "patientID = " + request.getPatientID();
 			added = true;
 		}
-		if (department != null) {
+		if (request.getDepartment() != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "department = '" + department + "'";
+			query = query + "department = '" + request.getDepartment() + "'";
 			added = true;
 		}
-		if (severity != null) {
+		if (request.getSeverity() != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "severity = '" + severity + "'";
+			query = query + "severity = '" + request.getSeverity() + "'";
 			added = true;
 		}
-		if (description != null) {
+		if (request.getDescription() != null) {
 			if (added) {
 				query = query + ", ";
 			}
-			query = query + "description = '" + description + "'";
-			added = true;
+			query = query + "description = '" + request.getDescription() + "'";
 		}
 
-		query = query + " where requestID = " + requestID;
+		query = query + " where requestID = " + request.getRequestID();
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.executeUpdate();
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating editInternalPatientRequest");
+//			e.printStackTrace();
+			System.err.println("Error in editInternalPatientRequest()");
 			return 0;
 		}
 	}
+
+
+
+
+
+
+
 
 //	public static void addInternalPatientRequest(InternalPatientObj internalPatientObj) {
 //
@@ -1439,6 +1777,16 @@ public class RequestsDB2 {
 
 
 	// ENTRY REQUEST STUFF:
+
+
+
+
+
+
+
+
+
+	//COVID SURVEY STUFF:
 
 	/**
 	 * create the entry request table

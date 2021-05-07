@@ -1397,7 +1397,7 @@ public class DatabaseTests {
 		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "electrician", "drew", "Shukla");
 
-		DB.addMaintenanceRequest(1, "test", 2, "electrical", "not very severe", "15 mins", "light switch not working");
+		DB.addMaintenanceRequest(new MaintenanceObj(1, 1, "test", 2, "electrical", "not very severe", "Bill", "15 mins", "light switch not working"));
 	}
 
 // this is where testAddFoodDeliveryRequest() can go
@@ -1438,9 +1438,9 @@ public class DatabaseTests {
 		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "electrician", "drew", "Shukla");
 
-		DB.addMaintenanceRequest(1, "test", 2, "electrical", "not very severe", "15 mins", "light switch not working");
+		DB.addMaintenanceRequest(new MaintenanceObj(1, 1, "test", 2, "electrical", "not very severe", "Bill", "15 mins", "light switch not working"));
 
-		assertEquals(1, DB.editMaintenanceRequest(1, "test", null, "extremely severe", null, "wires are loose everywhere!"));
+		assertEquals(1, DB.editMaintenanceRequest(new MaintenanceObj(1, 1, null, 2, null, "very severe", "Nupur", null, "wires are loose everywhere!")));
 	}
 
 

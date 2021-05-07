@@ -8,8 +8,9 @@ public class MaintenanceObj extends ServiceRequestObjs {
     private String eta;
     private String description;
 
-    public MaintenanceObj(String nodeID, int userID, int assigneeID, String request, String severity, String author, String eta, String description) {
+    public MaintenanceObj(int requestID, int userID, String nodeID, int assigneeID, String request, String severity, String author, String eta, String description) {
 
+        super.requestID = requestID;
         super.nodeID = nodeID;
         super.userID = userID;
         super.assigneeID = assigneeID;

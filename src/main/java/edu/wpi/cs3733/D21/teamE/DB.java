@@ -39,7 +39,7 @@ public class DB {
 		appointmentDB.createAppointmentTable();
 		RequestsDB2.createLanguageRequestTable();
 		RequestsDB2.createLaundryRequestTable();
-		RequestsDB.createMaintenanceRequestTable();
+		RequestsDB2.createMaintenanceRequestTable();
 		RequestsDB.createFoodDeliveryTable();
 		RequestsDB.createInternalPatientRequest();
 		RequestsDB.createAubonPainMenuTable();
@@ -457,30 +457,14 @@ public class DB {
 
 
 	/**
-	 * @param userID      ID of the user
-	 * @param roomID      nodeID of the user
-	 * @param assigneeID  ID of the assigned user who will complete this task
-	 * @param type        is the type of maintenance required
-	 * @param severity    is how severe the situation is
-	 * @param ETA         time taken to complete the request
-	 * @param description detailed description of request
+	 * adds a maintenance request to the maintenanceRequest table
+	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
 	 */
-	public static void addMaintenanceRequest(int userID, String roomID, int assigneeID, String type, String severity, String ETA, String description) {
-		RequestsDB.addMaintenanceRequest(userID, roomID, assigneeID, type, severity, ETA, description);
+	public static void addMaintenanceRequest(MaintenanceObj maintenanceObj) {
+		RequestsDB2.addMaintenanceRequest(maintenanceObj);
 	}
 
-	/**
-	 * adds a request for food delivery
-	 * @param userID           ID of the user
-	 * @param roomID           nodeID of the user
-	 * @param assigneeID       ID of the assigned user who will complete this task
-	 * @param dietRestrictions any restrictions the user has diet wise
-	 * @param allergies        any allergies the user has
-	 * @param foodItem         the food item choice made by the user
-	 * @param foodQuantity     the quantity of the food item the user wants
-	 * @param beverageItem     the beverage item choice made by the user
-	 * @param beverageQuantity the quantity of the beverage item the user wants
-	 */
+
 	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID, String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
 		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, allergies, foodItem, foodQuantity, beverageItem, beverageQuantity);
 	}
@@ -583,16 +567,12 @@ public class DB {
 
 
 	/**
-	 * @param requestID   is the generated ID of the request
-	 * @param roomID      the new node/room/location the user is assigning this request to
-	 * @param type        is the new type of maintenance request
-	 * @param severity    is the new severity of the situation
-	 * @param ETA         is the new estimated time
-	 * @param description is an edited detailed description
+	 * This edits a maintenance request which is already in the db
+	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editMaintenanceRequest(int requestID, String roomID, String type, String severity, String ETA, String description) {
-		return RequestsDB.editMaintenanceRequest(requestID, roomID, type, severity, ETA, description);
+	public static int editMaintenanceRequest(MaintenanceObj maintenanceObj) {
+		return RequestsDB2.editMaintenanceRequest(maintenanceObj);
 	}
 
 	/**

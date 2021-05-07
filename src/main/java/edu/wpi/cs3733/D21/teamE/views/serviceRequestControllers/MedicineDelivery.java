@@ -90,13 +90,14 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     private void saveData(ActionEvent e) throws MessagingException {
 
         int index = locationInput.getSelectionModel().getSelectedIndex();
+        int userIndex = assignee.getSelectionModel().getSelectedIndex();
 
         String location = nodeID.get(index);
         String name = medicineNameInput.getText();
         String doseMeasure = doseMeasureInput.getText();
         int doseMeasureI = Integer.parseInt(doseMeasure);
         int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
-//        int assigned = Integer.parseInt( assignee.getText());
+        int assigned = userID.get(userIndex);
         String specialInstructions = specialInstructInput.getText();
         String signature = signatureInput.getText();
 

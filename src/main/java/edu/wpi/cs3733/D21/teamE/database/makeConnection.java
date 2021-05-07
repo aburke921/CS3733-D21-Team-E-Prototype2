@@ -186,6 +186,7 @@ public class makeConnection {
 		DB.addSpecialUserType("sethw@gmail.com", "floralPerson8", "floralPerson", "Seth", "Warner");
 		DB.addSpecialUserType("darrenr@gmail.com", "floralPerson9", "floralPerson", "Darren", "Rossi");
 
+
 		//Floral Requests: //RequestID: 1-9
 		FloralObj floralRequest1 = new FloralObj(0,13, 31, "ADEPT00101", "Adam", "Roses", 1, "None", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
 		FloralObj floralRequest2 = new FloralObj(0,13, 32, "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
@@ -341,11 +342,57 @@ public class makeConnection {
 		DB.addExternalPatientRequest(new ExternalPatientObj(47,24, 77, "FDEPT00501", "High Severity", "Plane", "38739983",  "Low", "Low", "High","Heart transplant organ in route"));
 
 
+
+		//RELIGIOUS:
+		//78 - 86
+		DB.addSpecialUserType("achen@gmail.com", "R000001", "religious", "Amelie", "Chen");
+		DB.addSpecialUserType("aburke@gmail.com", "R000002", "religious", "Ashley", "Bolt");
+		DB.addSpecialUserType("samanthat@gmail.com", "R000003", "religious", "Samantha", "Tussell");
+		DB.addSpecialUserType("calebh@gmail.com", "R000004", "religious", "Caleb", "Hello");
+		DB.addSpecialUserType("dalet@gmail.com", "R000005", "religious", "Dale", "Test");
+		DB.addSpecialUserType("jerryh@gmail.com", "R000006", "religious", "Jerry", "Hello");
+		DB.addSpecialUserType("bettyy@gmail.com", "R000007", "religious", "Betty", "Yay");
+		DB.addSpecialUserType("maximn@gmail.com", "R000008", "religious", "Maxim", "No");
+		DB.addSpecialUserType("alanp@gmail.com", "R000009", "religious", "Alan", "Pri");
+
+
+		//INTERPRETER:
+		//87 - 95
+		DB.addSpecialUserType("chenA@gmail.com", "I000001", "interpreter", "Chen", "A");
+		DB.addSpecialUserType("burkeA@gmail.com", "I000002", "interpreter", "Bolt", "A");
+		DB.addSpecialUserType("tS@gmail.com", "I000003", "interpreter", "Tussell", "S");
+		DB.addSpecialUserType("hC@gmail.com", "I000004", "interpreter", "Hello", "C");
+		DB.addSpecialUserType("tD@gmail.com", "I000005", "interpreter", "Test", "Dale");
+		DB.addSpecialUserType("hJ@gmail.com", "I000006", "interpreter", "Hello", "Jerry");
+		DB.addSpecialUserType("bY@gmail.com", "I000007", "interpreter", "Yay", "Betty");
+		DB.addSpecialUserType("mY@gmail.com", "I000008", "interpreter", "No", "Maxim");
+		DB.addSpecialUserType("pA@gmail.com", "I000009", "interpreter", "Pri", "Alan");
+
+
+
+		//NURSE:
+		//96 - 104
+		DB.addSpecialUserType("asmith123@gmail.com", "N000001", "nurse", "Andrew", "Smith");
+		DB.addSpecialUserType("sanders123@gmail.com", "N000002", "nurse", "Smith", "Andrews");
+		DB.addSpecialUserType("js123@gmail.com", "N000003", "nurse", "Jessica", "Kayman");
+		DB.addSpecialUserType("nicolette234@gmail.com", "N000004", "nurse", "Cayman", "Nicolette");
+		DB.addSpecialUserType("Cayman123@gmail.com", "N000005", "nurse", "Nicolette", "Cayman");
+		DB.addSpecialUserType("Blossom12@gmail.com", "N000006", "nurse", "Jill", "Blossom");
+		DB.addSpecialUserType("James344@gmail.com", "N000007", "nurse", "Chris", "James");
+		DB.addSpecialUserType("Chris322@gmail.com", "N000008", "nurse", "James", "Chris");
+		DB.addSpecialUserType("fwe@gmail.com", "N000009", "nurse", "Alan", "Alan");
+
+
+
 		DB.editRequests(40, 0, "complete");
 		DB.editRequests(42, 0, "complete");
 		DB.editRequests(44, 0, "complete");
 		DB.editRequests(45, 0, "complete");
 		DB.editRequests(47, 0, "complete");
+
+
+
+
 
 
 		//Special Accounts:

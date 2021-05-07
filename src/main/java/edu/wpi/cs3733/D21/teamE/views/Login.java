@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.*;
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
@@ -119,6 +120,22 @@ public class Login {
 
 		//set submit as default (will submit on an "ENTER" keypress)
 		submitLoginButton.setDefaultButton(true);
+
+		//text validators
+		RequiredFieldValidator notEmptyValidator = new RequiredFieldValidator();
+//		notEmptyValidator.setMessage("Input Required"); //todo decide whether to increase spacing and include valid msg or not.
+		emailInput.getValidators().add(notEmptyValidator); //email validator
+		emailInput.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				emailInput.validate();
+			}
+		});
+		passwordInput.getValidators().add(notEmptyValidator); //password validator
+		passwordInput.focusedProperty().addListener((o, oldVal, newVal) -> {
+			if (!newVal) {
+				passwordInput.validate();
+			}
+		});
 	}
 
 	@FXML

@@ -35,9 +35,6 @@ public class DatabaseServiceProvider extends AbstractModule {
 
         Connection connection = DriverManager.getConnection(realDbUrl);
 
-
-
-
         return connection;
     }
 

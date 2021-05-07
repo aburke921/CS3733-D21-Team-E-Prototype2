@@ -25,20 +25,21 @@ public class makeConnection {
 			props.put("password", "admin");
 
 			String forNameURL = "org.apache.derby.jdbc.EmbeddedDriver";
-			if(driverString.contains("Client")){
+			if(driverString.contains("localhost")){
 				forNameURL = "org.apache.derby.jdbc.ClientDriver";
 			}
-
 
 			Class.forName(forNameURL);
 
 			try {
 				/*
-				 * Before making this connectin make sure you're database tab in Intellij
+				 * Before making this connection make sure you're database tab in Intellij
 				 * Is not connected to the database! This will cause the DriverManager to
 				 * Throw an SQLException and goof a bunch of stuff up!
 				 */
+
 				this.connection = DriverManager.getConnection(driverString, props);
+
 				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
 				// e.printStackTrace();

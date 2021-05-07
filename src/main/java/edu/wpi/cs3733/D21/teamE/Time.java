@@ -1,6 +1,6 @@
 package edu.wpi.cs3733.D21.teamE;
 
-public class Time {
+public class Time implements Comparable<Time>{
 
     public static final int DAY_START = 0;
     public static final int DAY_END = 24 * 60 * 60 - 1; //11:59:59 in seconds
@@ -31,12 +31,9 @@ public class Time {
      * @param _sec Seconds
      */
     public Time(int _sec){
-        int hour = _sec / 60 / 60;
-        int min = _sec / 60 % 60;
-        int sec = _sec % 60 % 60;
-        this.hour = hour;
-        this.min = min;
-        this.sec = sec;
+        this.hour = _sec / 60 / 60;
+        this.min = _sec / 60 % 60;
+        this.sec = _sec % 60 % 60;
     }
 
     /**
@@ -82,15 +79,14 @@ public class Time {
 
     /**
      * Total seconds setter
-     * @param secs Seconds
+     * @param seconds Seconds
      */
-    public void setTime(int secs){
-        int hour = secs / 60 / 60;
-        int min = secs / 60 % 60;
-        int sec = secs % 60 % 60;
-        this.hour = hour;
-        this.min = min;
-        this.sec = sec;
+    public static Time getTime(int seconds){
+        int hours = seconds / 60 / 60;
+        int mins = seconds / 60 % 60;
+        int secs = seconds % 60 % 60;
+
+        return new Time(hours, mins, secs);
     }
 
     public int getTotalSeconds(){
@@ -99,5 +95,28 @@ public class Time {
 
     public boolean equals(Time t){
         return ((t.getHour() == hour) && (t.getMin() == min) && (t.getSec() == sec));
+    }
+
+    public static Time parseString(String stringTime){
+        try {
+            String[] fields = stringTime.split(":");
+            int hours = Integer.parseInt(fields[0]);
+            int mins = Integer.parseInt(fields[1]);
+            int secs = Integer.parseInt(fields[2]);
+
+            return new Time(hours, mins, secs);
+        } catch(Exception e){
+            System.out.println("Could not parse String " + stringTime + " into a time");
+            return null;
+        }
+    }
+
+    @Override
+    public int compareTo(Time t) {
+        return Integer.compare(getTotalSeconds(), t.getTotalSeconds());
+    }
+
+    public Time add(Time t){
+        return getTime(getTotalSeconds()+t.getTotalSeconds());
     }
 }

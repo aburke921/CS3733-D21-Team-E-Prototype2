@@ -615,43 +615,44 @@ public class newMapEditor {
                     if (array.get(i).get("id").equals(idInput.getValue().toString())) {
                         s = DB.deleteNode(array.get(i).get("id"));
                     }
-                }
 
+
+                }
             }
         }
-        refresh();
-        return s;
-    }
+            refresh();
+            return s;
+        }
 
-    /**
-     * calls the deleteNode fcn when the delete button is clicked
-     * @param e
-     */
-    @FXML
-    public void deleteNodeButton(ActionEvent e) {
-        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
-        jfxDialogLayout.setBody(new Text("Are you sure you want to delete node?"));
-        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
-        JFXButton okay = new JFXButton("Yes");
-        JFXButton cancel = new JFXButton("Cancel");
-        okay.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                deleteNode(nodeTreeTable);
-                dialog.close();
+        /**
+         * calls the deleteNode fcn when the delete button is clicked
+         * @param e
+         */
+        @FXML
+        public void deleteNodeButton (ActionEvent e){
+            JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+            jfxDialogLayout.setBody(new Text("Are you sure you want to delete node?"));
+            JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+            JFXButton okay = new JFXButton("Yes");
+            JFXButton cancel = new JFXButton("Cancel");
+            okay.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    deleteNode(nodeTreeTable);
+                    dialog.close();
 
-            }
-        });
-        cancel.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
+                }
+            });
+            cancel.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    dialog.close();
 
-            }
-        });
-        jfxDialogLayout.setActions(okay, cancel);
-        dialog.show();
-    }
+                }
+            });
+            jfxDialogLayout.setActions(okay, cancel);
+            dialog.show();
+        }
 
     public void editNode(TreeTableView<Node> table) {
         String id = null;
@@ -1429,12 +1430,59 @@ public class newMapEditor {
      * deletes edge if ID in the dropdown matches ID of an edge in DB
      */
     public void deleteEdge() {
+        ArrayList<Node> nodeArray = DB.getAllNodes();
         ArrayList<Edge> array = DB.getAllEdges();
         if(edgeID.getValue() != null && startLocation.getValue() != null && endLocation.getValue() != null) {
+            //retrieves start and end node of new edge
+            String ID = null;
+            String startInput = null;
+            String endInput = null;
+            for(int i = 0; i < nodeArray.size(); i++) {
+                if(nodeArray.get(i).get("longName").equals(startLocation.getValue())) {
+                    startInput = nodeArray.get(i).get("id");
+                }
+                if(nodeArray.get(i).get("longName").equals(endLocation.getValue())) {
+                    endInput = nodeArray.get(i).get("id");
+                }
+                ID = startInput + "_" + endInput;
+            }
             for(int i = 0; i < array.size(); i++) {
-                if(array.get(i).getId().equals(edgeID.getValue().toString())) {
+                if(array.get(i).getId().equals(ID)) {
                     System.out.println("This lies between " + startLocation.getValue() + " and " + endLocation.getValue());
-                    DB.deleteEdge(array.get(i).getStartNodeId(), array.get(i).getEndNodeId());
+                    DB.deleteEdge(startInput, endInput);
+                }
+                if(array.get(i).getId().equals(endInput + "_" + startInput)) {
+                    ID = endInput + "_" + startInput;
+                    for(int j = 0; j < array.size(); j++) {
+                        if (array.get(j).getId().equals(ID)) {
+                            System.out.println("This lies between " + startLocation.getValue() + " and " + endLocation.getValue());
+                        }
+                    }
+                    JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+                    jfxDialogLayout.setBody(new Text("This edge does not exist! Did you mean: " + startLocation.getValue() + "_" + endLocation.getValue() + "?"));
+                    JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+                    JFXButton okay = new JFXButton("Yes");
+                    JFXButton cancel = new JFXButton("No");
+                    String finalStartInput = startInput;
+                    String finalEndInput = endInput;
+                    okay.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            DB.deleteEdge(finalStartInput, finalEndInput);
+                            dialog.close();
+                            refresh();
+
+                        }
+                    });
+                    cancel.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            dialog.close();
+
+                        }
+                    });
+                    jfxDialogLayout.setActions(okay, cancel);
+                    dialog.show();
                 }
             }
         }

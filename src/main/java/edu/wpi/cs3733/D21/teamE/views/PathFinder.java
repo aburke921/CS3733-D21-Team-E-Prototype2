@@ -167,6 +167,8 @@ public class PathFinder {
     private double imageWidth;
     private double imageHeight;
 
+    private ScrollPane scrollPane;
+
     private double scale;
 
     private double radius = 6;
@@ -838,6 +840,13 @@ public class PathFinder {
         double zoomAmount = constrain(1, 5, (1 / stageAmount));
 
         zoomSlider.setValue(zoomAmount);
+
+        xCenter = xCenter / 4100; // convert to percentage of pixels
+        yCenter = yCenter / 2600;
+        //TODO: Fix
+
+        scrollPane.setHvalue(yCenter);
+        scrollPane.setVvalue(xCenter);
     }
 
     /**
@@ -1009,7 +1018,7 @@ public class PathFinder {
 
         StackPane stackPane = new StackPane(imageView, markerPane, borderPane);
 
-        ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
+        scrollPane = new ScrollPane(new Group(stackPane));
         //stackPane.prefWidthProperty().bind(primaryStage.widthProperty());
         //stackPane.prefHeightProperty().bind(primaryStage.heightProperty());
 

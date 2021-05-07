@@ -3,6 +3,8 @@ package edu.wpi.cs3733.D21.teamE.database;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.MedicineDeliveryObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.SanitationServiceObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.SecurityServiceObj;
 
 import java.sql.*;
@@ -269,15 +271,15 @@ public class makeConnection {
 
 
 		//Sanitation Requests: //RequestID: 10 - 18
-		DB.addSanitationRequest(20, 40, "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd");
-		DB.addSanitationRequest(20, 41, "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium", "Bill Byrd");
-		DB.addSanitationRequest(24, 42, "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High", "Taylor Ramos");
-		DB.addSanitationRequest(25, 43, "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium", "Rosa Smith");
-		DB.addSanitationRequest(28, 44, "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical", "Abby Williams");
-		DB.addSanitationRequest(30, 45, "IREST00203", "Trash Removal", "Trash can smells bad", "Medium", "Alesha Harris");
-		DB.addSanitationRequest(29, 46, "IREST00303", "Trash Removal", "Trash can full. Another one is available so do not rush.", "Low", "Andrew Guerrero");
-		DB.addSanitationRequest(22, 47, "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel");
-		DB.addSanitationRequest(23, 48, "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson");
+		DB.addSanitationRequest(new SanitationServiceObj(10, 20, 40, "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd"));
+		DB.addSanitationRequest(new SanitationServiceObj(11, 20, 41, "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium", "Bill Byrd"));
+		DB.addSanitationRequest(new SanitationServiceObj(12, 24, 42, "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High", "Taylor Ramos"));
+		DB.addSanitationRequest(new SanitationServiceObj(13, 25, 43, "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium", "Rosa Smith"));
+		DB.addSanitationRequest(new SanitationServiceObj(14, 28, 44, "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical", "Abby Williams"));
+		DB.addSanitationRequest(new SanitationServiceObj(15, 30, 45, "IREST00203", "Trash Removal", "Trash can smells bad", "Medium", "Alesha Harris"));
+		DB.addSanitationRequest(new SanitationServiceObj(16, 29, 46, "IREST00303", "Trash Removal", "Trash can full. Another one is available so do not rush.", "Low", "Andrew Guerrero"));
+		DB.addSanitationRequest(new SanitationServiceObj(17, 22, 47, "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel"));
+		DB.addSanitationRequest(new SanitationServiceObj(18, 23, 48, "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson"));
 
 
 		DB.editRequests(11, 0, "canceled");
@@ -288,18 +290,18 @@ public class makeConnection {
 
 
 		//Medicine Delivery Request //RequestID: 19 - 30
-		DB.addMedicineRequest(20, 49, "BLABS00102", "Atorvastatin", 30, "20mg", "Once a day by mouth", "Bill Byrd");
-		DB.addMedicineRequest(20, 50, "BLABS00202", "Lisinopril", 90, "20mg", "Once a day by mouth", "Bill Byrd");
-		DB.addMedicineRequest(21, 51, "IDEPT00103", "Levothyroxine", 90, "12.5mcg", "Once a day my bouth", "Amelia Knight");
-		DB.addMedicineRequest(24, 52, "BLABS00102", "Metformin", 30, "850mg", "Twice a day by mouth", "Taylor Ramos");
-		DB.addMedicineRequest(27, 53, "IDEPT00803", "Amlodipine", 30, "5mg", "Once a day by mouth", "Lauren Bolton");
-		DB.addMedicineRequest(26, 54, "IDEPT00603", "Metoprolol", 90, "400mg", "Once a day by mouth", "Declan Patel");
-		DB.addMedicineRequest(23, 55, "IDEPT00403", "Omeprazole", 90, "40mg", "Three times a day by mouth before a meal", "Victoria Erickson");
-		DB.addMedicineRequest(24, 56, "IDEPT00703", "Simvastatin", 30, "10mg", "Once a day by mouth", "Taylor Ramos");
-		DB.addMedicineRequest(27, 57, "IDEPT00903", "Losartan", 90, "100mg", "Once daily by mouth", "Lauren Bolton");
-		DB.addMedicineRequest(21, 58, "IDEPT00203", "Albuterol", 30, "0.63mg", "3 times a day via nebulizer. 4 times a day if needed.", "Amelia Knight");
-		DB.addMedicineRequest(20, 59, "BLABS00202", "Metformin", 30, "8.5mL", "Once daily with meals.", "Bill Byrd");
-		DB.addMedicineRequest(23, 60, "BLABS00102", "Metformin", 30, "5mL", "Twice a day with meals.", "Victoria Erickson");
+		DB.addMedicineRequest(new MedicineDeliveryObj(19,20, 49, "BLABS00102", "Atorvastatin", 30, 20, "Once a day by mouth", "Bill Byrd"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(20, 20, 50, "BLABS00202", "Lisinopril", 90, 20, "Once a day by mouth", "Bill Byrd"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(21, 21, 51, "IDEPT00103", "Levothyroxine", 90, 125, "Once a day my bouth", "Amelia Knight"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(22, 24, 52, "BLABS00102", "Metformin", 30, 850, "Twice a day by mouth", "Taylor Ramos"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(23, 27, 53, "IDEPT00803", "Amlodipine", 30, 5, "Once a day by mouth", "Lauren Bolton"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(24, 26, 54, "IDEPT00603", "Metoprolol", 90, 400, "Once a day by mouth", "Declan Patel"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(25, 23, 55, "IDEPT00403", "Omeprazole", 90, 40, "Three times a day by mouth before a meal", "Victoria Erickson"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(26, 24, 56, "IDEPT00703", "Simvastatin", 30, 10, "Once a day by mouth", "Taylor Ramos"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(27, 27, 57, "IDEPT00903", "Losartan", 90, 100, "Once daily by mouth", "Lauren Bolton"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(28, 21, 58, "IDEPT00203", "Albuterol", 30, 63, "3 times a day via nebulizer. 4 times a day if needed.", "Amelia Knight"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(29, 20, 59, "BLABS00202", "Metformin", 30, 85, "Once daily with meals.", "Bill Byrd"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(30, 23, 60, "BLABS00102", "Metformin", 30, 5, "Twice a day with meals.", "Victoria Erickson"));
 
 
 		DB.editRequests(20, 0, "canceled");

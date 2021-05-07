@@ -6,6 +6,7 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.SanitationServiceObj;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -100,7 +101,9 @@ public class SanitationServices extends ServiceRequestFormComponents {
       String signature = Signature.getText();
       int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
       String node = nodeID.get(nodeIDIndex);
-      DB.addSanitationRequest(15,assigneeID,node, serviceKind,details,severity,signature);
+
+      String nodeID = nodeIDS.get(nodeIDIndex);
+      DB.addSanitationRequest(new SanitationServiceObj(0, 15,assigneeID,nodeID, serviceKind,details,severity,signature));
       //DB changed the assignee in the function call to an int (not string) --> we need the assignee's userID
       System.out.println(serviceKind);
 

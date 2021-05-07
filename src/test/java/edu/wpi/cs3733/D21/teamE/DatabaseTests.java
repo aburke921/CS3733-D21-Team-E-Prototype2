@@ -569,7 +569,7 @@ public class DatabaseTests {
 		DB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("custodian@gmail.com", "testPass", "custodian", "drew", "Shukla");
 
-		DB.addSanitationRequest(1, 2, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
+		DB.addSanitationRequest(new SanitationServiceObj(0, 1, 2, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla"));
 	}
 
 	@Test
@@ -592,7 +592,7 @@ public class DatabaseTests {
 		DB.addSpecialUserType("pharmacist@gmail.com", "testPass", "pharmacist", "drew", "Shukla");
 
 
-		DB.addMedicineRequest(1, 2, "test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		DB.addMedicineRequest(new MedicineDeliveryObj(1, 1, 2, "test", "drugs", 2, 100, "take once a day", "Nupur"));
 	}
 
 	@Test
@@ -815,9 +815,9 @@ public class DatabaseTests {
 		DB.addSpecialUserType("pharmacist2@gmail.com", "testPass", "pharmacist", "kim", "Shukla");
 		DB.addSpecialUserType("pharmacist3@gmail.com", "testPass", "pharmacist", "dell", "Shukla");
 
-		DB.addMedicineRequest(1, 3, "test1", "drugs", 2, "100ml", "take once a day", "Nupur");
-		DB.addMedicineRequest(1, 4, "test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
-		DB.addMedicineRequest(2, 5, "test3", "drugs3", 4, "1ml", "take once a day", "Nupur");
+		DB.addMedicineRequest(new MedicineDeliveryObj(1, 1, 3, "test1", "drugs", 2, 100, "take once a day", "Nupur"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(2, 1, 4, "test2", "drugs2", 3, 10, "take once a day", "Nupur"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(3, 2, 5, "test3", "drugs3", 4, 1, "take once a day", "Nupur"));
 
 		ArrayList<String> returnedAssignees = DB.getMyCreatedRequestInfo("medDelivery", 1, "assigneeID");
 		ArrayList<String> correctAssignees = new ArrayList<>();
@@ -841,9 +841,9 @@ public class DatabaseTests {
 		DB.addSpecialUserType("pharmacist2@gmail.com", "testPass", "pharmacist", "kim", "Shukla");
 		DB.addSpecialUserType("pharmacist3@gmail.com", "testPass", "pharmacist", "dell", "Shukla");
 
-		DB.addMedicineRequest(1, 3, "test", "drugs", 2, "100ml", "take once a day", "Nupur");
-		DB.addMedicineRequest(1, 4, "test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
-		DB.addMedicineRequest(2, 5, "test3", "drugs3", 4, "1ml", "take once a day", "Nupur");
+		DB.addMedicineRequest(new MedicineDeliveryObj(1, 1, 3, "test", "drugs", 2, 100, "take once a day", "Nupur"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(2, 1, 4, "test2", "drugs2", 3, 10, "take once a day", "Nupur"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(3, 2, 5, "test3", "drugs3", 4, 1, "take once a day", "Nupur"));
 
 
 		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
@@ -877,9 +877,9 @@ public class DatabaseTests {
 		DB.addSpecialUserType("pharmacist1@gmail.com", "testPass", "pharmacist", "bob", "Shukla");
 		DB.addSpecialUserType("pharmacist2@gmail.com", "testPass", "pharmacist", "kim", "Shukla");
 
-		DB.addMedicineRequest(1, 3, "test1", "drugs", 2, "100ml", "take once a day", "Nupur");
-		DB.addMedicineRequest(1, 4, "test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
-		DB.addMedicineRequest(2, 3, "test3", "drugs3", 4, "1ml", "take once a day", "Nupur");
+		DB.addMedicineRequest(new MedicineDeliveryObj(1, 1, 3, "test1", "drugs", 2, 100, "take once a day", "Nupur"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(2, 1, 4, "test2", "drugs2", 3, 10, "take once a day", "Nupur"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(3, 2, 3, "test3", "drugs3", 4, 1, "take once a day", "Nupur"));
 
 		ArrayList<String> returnedLocations = DB.getRequestLocations("medDelivery", 1);
 		ArrayList<String> correctLocations = new ArrayList<>();
@@ -901,9 +901,9 @@ public class DatabaseTests {
 		DB.addSpecialUserType("pharmacist1@gmail.com", "testPass", "pharmacist", "bob", "Shukla");
 		DB.addSpecialUserType("pharmacist2@gmail.com", "testPass", "pharmacist", "kim", "Shukla");
 
-		DB.addMedicineRequest(1, 3, "test1", "drugs", 2, "100ml", "take once a day", "Nupur");
-		DB.addMedicineRequest(1, 4, "test2", "drugs2", 3, "10ml", "take once a day", "Nupur");
-		DB.addMedicineRequest(2, 3, "test3", "drugs3", 4, "1ml", "take once a day", "Nupur");
+		DB.addMedicineRequest(new MedicineDeliveryObj(1, 1, 3, "test1", "drugs", 2, 100, "take once a day", "Nupur"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(2, 1, 4, "test2", "drugs2", 3, 10, "take once a day", "Nupur"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(3, 2, 3, "test3", "drugs3", 4, 1, "take once a day", "Nupur"));
 
 		DB.addSpecialUserType("abbyw@gmail.com", "admin001", "admin", "Abby", "Williams");
 		ArrayList<String> returnedLocations = DB.getRequestLocations("medDelivery", 5);
@@ -930,9 +930,9 @@ public class DatabaseTests {
 		DB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		DB.addSpecialUserType("custodian@gmail.com", "testPass", "custodian", "bob", "Shukla");
 
-		DB.addSanitationRequest(1, 2, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla");
+		DB.addSanitationRequest(new SanitationServiceObj(0, 1, 2, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla"));
 
-		assertEquals(1, DB.editSanitationRequest(1, "test", null, null, null, "hello test"));
+		assertEquals(1, DB.editSanitationRequest(new SanitationServiceObj(1, 1,0, "test", null, null, null, "hello test")));
 	}
 
 	@Test
@@ -957,9 +957,9 @@ public class DatabaseTests {
 		DB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		DB.addSpecialUserType("pharmacist@gmail.com", "testPass", "pharmacist", "bob", "Shukla");
 
-		DB.addMedicineRequest(1, 2, "test", "drugs", 2, "100ml", "take once a day", "Nupur");
+		DB.addMedicineRequest(new MedicineDeliveryObj(1, 1, 2, "test", "drugs", 2, 100, "take once a day", "Nupur"));
 
-		assertEquals(1, DB.editMedicineRequest(1, "test", "Tylenol", null, null, "Take twice everyday", 0));
+		assertEquals(1, DB.editMedicineRequest(new MedicineDeliveryObj(1, 1, 2, "test", "Tylenol", 100, 2, "Take twice everyday", null)));
 	}
 
 	@Test
@@ -988,7 +988,7 @@ public class DatabaseTests {
 
 		DB.addSecurityRequest(new SecurityServiceObj(0, 1, 2, "test", "low", "Low", "reason"));
 
-		assertEquals(1, DB.editSecurityRequest(new SecurityServiceObj(1, 1, 0, "high", "High", null, null)));
+		assertEquals(1, DB.editSecurityRequest(new SecurityServiceObj(1, 1, 1, "test", "High", null, null)));
 	}
 
 	@Test
@@ -999,8 +999,8 @@ public class DatabaseTests {
 		DB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("pharmacist@gmail.com", "testPass", "pharmacist", "bob", "Shukla");
 
-		DB.addMedicineRequest(1, 2, "test", "drugs", 2, "100ml", "take once a day", "Nupur");
-		DB.addMedicineRequest(1, 2, "test", "drugs2", 3, "10ml", "take once a day", "Nupur");
+		DB.addMedicineRequest(new MedicineDeliveryObj(1, 1, 2, "test", "drugs", 2, 100, "take once a day", "Nupur"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(2, 1, 2, "test", "drugs2", 3, 10, "take once a day", "Nupur"));
 
 		assertEquals(1, DB.editRequests(1, 0, "complete"));
 	}

@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.MedicineDelivery;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
 
 import java.sql.Connection;
@@ -900,7 +901,7 @@ public class RequestsDB2 {
 			prepState.setString(1, request.getNodeID());
 			prepState.setString(2, request.getSecurityLevel());
 			prepState.setString(3, request.getUrgencyLevel());
-			prepState.setString(3, request.getReason());
+			prepState.setString(4, request.getReason());
 
 			prepState.execute();
 		} catch (SQLException e) {
@@ -910,8 +911,8 @@ public class RequestsDB2 {
 	}
 
 	/**
-	 * This edits a laundry request form that is already in the database
-	 * @param request this the information that the user wants to change stored in a laundry request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * This edits a security request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a security request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
 	public static int editSecurityRequest(SecurityServiceObj request) {
@@ -960,6 +961,396 @@ public class RequestsDB2 {
 
 
 
+
+	//SANITATION REQUEST STUFF:
+
+	/**
+	 * Uses executes the SQL statements required to create a sanitationRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user is sending the request to.
+	 * - signature: this the signature (name in print) of the user who is filling out the request
+	 * - description: this is any description the user who is filling out the request wants to provide for the person who will be completing the request
+	 * - sanitationType: this is the type of sanitation/cleanup the user is requesting to be delt with. The valid options are: "Urine Cleanup",
+	 * "Feces Cleanup", "Preparation Cleanup", "Trash Removal"
+	 * - urgency: this is how urgent the request is and helpful for prioritizing. The valid options are: "Low", "Medium", "High", "Critical"
+	 */
+	public static void createSanitationTable() {
+
+		String query = "Create Table sanitationRequest( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID varchar(31) Not Null References node On Delete Cascade, " +
+				"    signature varchar(31) Not Null, " +
+				"    description varchar(5000), " +
+				"    sanitationType varchar(31), " +
+				"    urgency varchar(31) Not Null, " +
+				"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))," +
+				"    Constraint urgencyTypeLimit Check (urgency In ('Low', 'Medium', 'High', 'Critical')) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating sanitationRequest table");
+		}
+	}
+
+
+	/**
+	 * adds a sanitation request to the sanitationRequest table
+	 * @param request this is all of the information needed, in a sanitation request object.
+	 */
+	public static void addSanitationRequest(SanitationServiceObj request) {
+		addRequest(request.getUserID(), request.getAssigneeID(), "sanitation");
+
+		String insertSanitationRequest = "Insert Into sanitationRequest " +
+				"Values ((Select Count(*) " +
+				"         From requests), ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertSanitationRequest)) {
+			prepState.setString(1, request.getNodeID());
+			prepState.setString(2, request.getSignature());
+			prepState.setString(3, request.getDetail());
+			prepState.setString(4, request.getService());
+			prepState.setString(5, request.getSeverity());
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into sanitationRequest inside function addSanitationRequest()");
+		}
+
+	}
+
+
+	/**
+	 * This edits a sanitation request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a sanitation request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editSanitationRequest(SanitationServiceObj request) {
+
+		boolean added = false;
+		String query = "update sanitationRequest set";
+
+		if (request.getNodeID() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " roomID = '" + request.getNodeID() + "'";
+			added = true;
+		}
+		if (request.getService() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " sanitationType = '" + request.getService() + "'";
+			added = true;
+		}
+		if (request.getDetail() != null) {
+			query = query + " description = '" + request.getDetail() + "'";
+
+			added = true;
+		}
+		if (request.getSeverity() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " urgency = '" + request.getSeverity() + "'";
+			added = true;
+		}
+		if (request.getSignature() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "signature = '" + request.getSignature() + "'";
+		}
+
+
+		query = query + " where requestID = " + request.getRequestID();
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating sanitation request");
+			return 0;
+		}
+
+
+	}
+
+
+
+
+
+
+
+	//MEDICINE REQUEST STUFF:
+
+	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants the medecine delivered to.
+	 * - medicineName: this is the drug that the user is ordering/requesting
+	 * - quantity: the is the supply or the number of pills ordered
+	 * - dosage: this is the mg or ml quantity for a medication
+	 * - specialInstructions: this is any special details or instructions the user wants to give to who ever is processing the request.
+	 * - signature: this the signature (name in print) of the user who is filling out the request
+	 */
+	public static void createMedDeliveryTable() {
+		String query = "Create Table medDelivery ( " +
+				"requestID  int Primary Key References requests On Delete Cascade," +
+				"roomID     varchar(31) Not Null References node On Delete Cascade," +
+				"medicineName        varchar(31) Not Null," +
+				"quantity            int         Not Null," +
+				"dosage              int Not Null," +
+				"specialInstructions varchar(5000)," +
+				"signature           varchar(31) Not Null" + ")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating medDelivery table");
+		}
+	}
+
+	/**
+	 * This adds a medicine request form to the table for medicine request forms
+	 * @param medicineDeliveryObj object holding medicine req. fields
+	 */
+	public static void addMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
+		// int requestID, String nodeID, int assigneeID, int userID, String medicineName, String doseQuantity, String doseMeasure, String specialInstructions, String signature
+		// int userID, int assigneeID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature
+
+		int userID = medicineDeliveryObj.getUserID();
+		int assigneeID = medicineDeliveryObj.getAssigneeID();
+		String roomID = medicineDeliveryObj.getNodeID();
+		String medicineName = medicineDeliveryObj.getMedicineName();
+		int quantity = medicineDeliveryObj.getDoseQuantity();
+		int dosage = medicineDeliveryObj.getDoseMeasure();
+		String specialInstructions = medicineDeliveryObj.getSpecialInstructions();
+		String signature = medicineDeliveryObj.getSignature();
+
+		addRequest(userID, assigneeID, "medDelivery");
+
+		String insertMedRequest = "Insert Into meddelivery Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, medicineName);
+			prepState.setInt(3, quantity);
+			prepState.setInt(4, dosage);
+			prepState.setString(5, specialInstructions);
+			prepState.setString(6, signature);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
+		}
+	}
+
+	/**
+	 * edits medicine request which is already in DB
+	 * @param medicineDeliveryObj object holding medicine req. fields
+	 * @return
+	 */
+	public static int editMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
+
+		int requestID = medicineDeliveryObj.getRequestID();
+		int assigneeID = medicineDeliveryObj.getAssigneeID();
+		String roomID = medicineDeliveryObj.getNodeID();
+		String medicineName = medicineDeliveryObj.getMedicineName();
+		int quantity = medicineDeliveryObj.getDoseQuantity();
+		Integer quantityI = quantity;
+		int dosage = medicineDeliveryObj.getDoseMeasure();
+		Integer dosageI = quantity;
+		String specialInstructions = medicineDeliveryObj.getSpecialInstructions();
+		String signature = medicineDeliveryObj.getSignature();
+
+		boolean added = false;
+		String query = "Update medDelivery Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+
+			added = true;
+		}
+		if (medicineName != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " medicineName = '" + medicineName + "'";
+			added = true;
+		}
+		if (quantityI != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " quantity = " + quantity;
+			added = true;
+		}
+		if (dosageI != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " dosage = " + dosage;
+			added = true;
+		}
+		if (specialInstructions != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " specialInstructions = '" + specialInstructions + "'";
+			added = true;
+		}
+		if (signature != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " signature = '" + signature + "'";
+			added = true;
+		}
+
+
+		query = query + " where requestID = " + requestID;
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating medicine request");
+			return 0;
+		}
+	}
+
+
+
+
+	//TODO: uncomment this when Internal Patient Object is completed
+	// fix anything which needs to be fixed and write tests
+	// add this table to deleteAllTables and createAllTables
+
+	//INTERNAL PATIENT REQUEST STUFF:
+
+//	public static void createInternalPatientTable() {
+//		String query = "Create Table internalPatient ( " +
+//				"requestID  int Primary Key References requests On Delete Cascade, " +
+//				"roomID     varchar(31) Not Null References node On Delete Cascade, " +
+//				"dropOffLocation  varchar(31) Not Null References node On Delete Cascade, " +
+//				"department       varchar(31) Not Null, " +
+//				"severity         varchar(31) Not Null, " +
+//				"description varchar(5000) Not Null" + ")";
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+//
+//			prepState.execute();
+//
+//		} catch (SQLException e) {
+//			//e.printStackTrace();
+//			System.err.println("error creating internalPatient table");
+//		}
+//	}
+//
+//	public static void addInternalPatientRequest(InternalPatientObj internalPatientObj) {
+//
+//		int userID = internalPatientObj.getUserID();
+//		int assigneeID = internalPatientObj.getAssigneeID();
+//		String roomID = internalPatientObj.getNodeID();
+//		String dropOffLocation = internalPatientObj.getNodeID();
+//		String department = internalPatientObj.getDepartment();
+//		String severity = internalPatientObj.getSeverity();
+//		String description = internalPatientObj.getDescription();
+//
+//		addRequest(userID, assigneeID, "internalPatient");
+//
+//		String insertInternPatient = "Insert Into internalPatient Values ((Select Count(*) From requests), ?, ?, ?, ?, ?)";
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(insertInternPatient)) {
+//			prepState.setString(1, roomID);
+//			prepState.setString(2, dropOffLocation);
+//			prepState.setString(3, department);
+//			prepState.setString(4, severity);
+//			prepState.setString(5, description);
+//
+//			prepState.execute();
+//		} catch (SQLException e) {
+//			//e.printStackTrace();
+//			System.err.println("Error inserting into internalPatient inside function addInternalPatientRequest()");
+//		}
+//	}
+//
+//
+//	public static int editInternalPatient(InternalPatientObj internalPatientObj) {
+//
+//		int requestID = internalPatientObj.getRequestID();
+//		String roomID = internalPatientObj.getNodeID();
+//		String dropOffLocation = internalPatientObj.getNodeID();
+//		String department = internalPatientObj.getDepartment();
+//		String severity = internalPatientObj.getSeverity();
+//		String description = internalPatientObj.getDescription();
+//
+//		boolean added = false;
+//		String query = "Update internalPatient Set ";
+//
+//		if (roomID != null) {
+//			query = query + " roomID = '" + roomID + "'";
+//
+//			added = true;
+//		}
+//		if (dropOffLocation != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " dropOffLocation = '" + dropOffLocation + "'";
+//			added = true;
+//		}
+//		if (department != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " quantity = '" + department + "'";
+//			added = true;
+//		}
+//		if (severity != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " dosage = '" + severity + "'";
+//			added = true;
+//		}
+//		if (description != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " specialInstructions = '" + description + "'";
+//			added = true;
+//		}
+//
+//		query = query + " where requestID = " + requestID;
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+//			prepState.executeUpdate();
+//			prepState.close();
+//			return 1;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			System.err.println("Error in updating internalPatient request");
+//			return 0;
+//		}
+//	}
 
 
 }

@@ -5,6 +5,7 @@ import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.ExternalPatient;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.MedicineDelivery;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
 import edu.wpi.cs3733.D21.teamE.database.*;
@@ -32,9 +33,9 @@ public class DB {
 		UserAccountDB.createUserAccountTable();
 		RequestsDB2.createRequestsTable();
 		RequestsDB2.createFloralRequestsTable();
-		RequestsDB.createSanitationTable();
+		RequestsDB2.createSanitationTable();
 		RequestsDB2.createExtTransportTable();
-		RequestsDB.createMedDeliveryTable();
+		RequestsDB2.createMedDeliveryTable();
 		RequestsDB2.createSecurityServTable();
 		appointmentDB.createAppointmentTable();
 		RequestsDB2.createLanguageRequestTable();
@@ -113,7 +114,18 @@ public class DB {
 	 */
 	public static int editSecurityRequest(SecurityServiceObj request) { return RequestsDB2.editSecurityRequest(request); }
 
+	/**
+	 * adds a sanitation request to the sanitationRequest table
+	 * @param request this is all of the information needed, in a sanitation request object.
+	 */
+	public static void addSanitationRequest(SanitationServiceObj request) { RequestsDB2.addSanitationRequest(request); }
 
+	/**
+	 * This edits a sanitation request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a sanitation request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editSanitationRequest(SanitationServiceObj request) { return RequestsDB2.editSanitationRequest(request); }
 
 
 
@@ -425,13 +437,6 @@ public class DB {
 		RequestsDB.addRequest(userID, assigneeID, requestType);
 	}
 
-	/**
-	 * This adds a sanitation services form to the table specific for it
-	 * //@param form this is the form being added to the table
-	 */
-	public static void addSanitationRequest(int userID, int assigneeID, String roomID, String sanitationType, String description, String urgency, String signature) {
-		RequestsDB.addSanitationRequest(userID, assigneeID, roomID, sanitationType, description, urgency, signature);
-	}
 
 	/**
 	 * This function needs to add a external patient form to the table for external patient forms
@@ -444,10 +449,10 @@ public class DB {
 
 	/**
 	 * This adds a medicine request form to the table for medicine request forms
-	 * // @param form this is the form being added
+	 * @param medicineDeliveryObj object holding medicine req. fields
 	 */
-	public static void addMedicineRequest(int userID, int assigneeID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
-		RequestsDB.addMedicineRequest(userID, assigneeID, roomID, medicineName, quantity, dosage, specialInstructions, signature);
+	public static void addMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
+		RequestsDB2.addMedicineRequest(medicineDeliveryObj);
 	}
 
 
@@ -497,18 +502,7 @@ public class DB {
 
 	// Editing Tables:
 
-	/**
-	 * This edits a Sanitation Services form that is already in the database
-	 * @param requestID      the ID that specifies which sanitation form that is being edited
-	 * @param description    the new description that the user is using to update their form
-	 * @param roomID         the new node/room/location the user is assigning this request to
-	 * @param sanitationType the new type of sanitation that the user is changing their request to
-	 * @param urgency        the new urgency that the user is changing in their request
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editSanitationRequest(int requestID, String roomID, String sanitationType, String description, String urgency, String signature) {
-		return RequestsDB.editSanitationRequest(requestID, roomID, sanitationType, description, urgency, signature);
-	}
+
 
 	/**
 	 * This edits a External Transport Services form that is already in the database
@@ -522,20 +516,13 @@ public class DB {
 
 
 
-
 	/**
-	 * This function edits a current request for medicine delivery with the information below for a request already in the database
-	 * @param requestID           the ID that specifies which external transfer form that is being edited
-	 * @param roomID              the new node/room/location the user is assigning this request to
-	 * @param medicineName        this is the name of the medicine the user is changing the request to
-	 * @param quantity            this is the number of pills the user is changing the request to
-	 * @param dosage              this is the dosage (ml or mg) the user is changing the request to
-	 * @param specialInstructions this is the new special instructions the user is requesting
-	 * @param assigneeID          this is the userID of the a new employee or administrator that will be fulfilling the request.
-	 * @return 1 if the update was successful, 0 if it failed
+	 * edits medicine request which is already in DB
+	 * @param medicineDeliveryObj object holding medicine req. fields
+	 * @return
 	 */
-	public static int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, int assigneeID) {
-		return RequestsDB.editMedicineRequest(requestID, roomID, medicineName, quantity, dosage, specialInstructions, assigneeID);
+	public static int editMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
+		return RequestsDB2.editMedicineRequest(medicineDeliveryObj);
 	}
 
 

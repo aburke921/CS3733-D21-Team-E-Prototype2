@@ -37,39 +37,7 @@ public class RequestsDB {
 
 
 
-	/**
-	 * Uses executes the SQL statements required to create a sanitationRequest table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user is sending the request to.
-	 * - signature: this the signature (name in print) of the user who is filling out the request
-	 * - description: this is any description the user who is filling out the request wants to provide for the person who will be completing the request
-	 * - sanitationType: this is the type of sanitation/cleanup the user is requesting to be delt with. The valid options are: "Urine Cleanup",
-	 * "Feces Cleanup", "Preparation Cleanup", "Trash Removal"
-	 * - urgency: this is how urgent the request is and helpful for prioritizing. The valid options are: "Low", "Medium", "High", "Critical"
-	 */
-	public static void createSanitationTable() {
 
-		String query = "Create Table sanitationRequest( " +
-				"    requestID int Primary Key References requests On Delete Cascade, " +
-				"    roomID varchar(31) Not Null References node On Delete Cascade, " +
-				"    signature varchar(31) Not Null, " +
-				"    description varchar(5000), " +
-				"    sanitationType varchar(31), " +
-				"    urgency varchar(31) Not Null, " +
-				"    Constraint sanitationTypeLimit Check (sanitationType In ('Urine Cleanup', 'Feces Cleanup', 'Preparation Cleanup', 'Trash Removal'))," +
-				"    Constraint urgencyTypeLimit Check (urgency In ('Low', 'Medium', 'High', 'Critical')) " +
-				")";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating sanitationRequest table");
-		}
-	}
 
 
 	/**
@@ -324,57 +292,9 @@ public class RequestsDB {
 
 	}
 
-	/**
-	 * This adds a sanitation services form to the table specific for it
-	 * //@param form this is the form being added to the table
-	 */
-	public static void addSanitationRequest(int userID, int assigneeID, String roomID, String sanitationType, String description, String urgency, String signature) {
-		addRequest(userID, assigneeID, "sanitation");
-
-		String insertSanitationRequest = "Insert Into sanitationrequest " +
-				"Values ((Select Count(*) " +
-				"         From requests), ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertSanitationRequest)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, signature);
-			prepState.setString(3, description);
-			prepState.setString(4, sanitationType);
-			prepState.setString(5, urgency);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into sanitationRequest inside function addSanitationRequest()");
-		}
-
-	}
 
 
 
-	/**
-	 * This adds a medicine request form to the table for medicine request forms
-	 * // @param form this is the form being added
-	 */
-	public static void addMedicineRequest(int userID, int assigneeID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature) {
-		addRequest(userID, assigneeID, "medDelivery");
-
-		String insertMedRequest = "Insert Into meddelivery Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, medicineName);
-			prepState.setInt(3, quantity);
-			prepState.setString(4, dosage);
-			prepState.setString(5, specialInstructions);
-			prepState.setString(6, signature);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
-		}
-	}
 
 
 	/**
@@ -525,77 +445,8 @@ public class RequestsDB {
 
 
 
-// EDITING TABLES::::
-// EDITING TABLES::::
-// EDITING TABLES::::
-// EDITING TABLES::::
-// EDITING TABLES::::
-// EDITING TABLES::::
-// EDITING TABLES::::
-
-	/**
-	 * This edits a Sanitation Services form that is already in the database
-	 * @param requestID      the ID that specifies which sanitation form that is being edited
-	 * @param description    the new description that the user is using to update their form
-	 * @param roomID         the new node/room/location the user is assigning this request to
-	 * @param sanitationType the new type of sanitation that the user is changing their request to
-	 * @param urgency        the new urgency that the user is changing in their request
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editSanitationRequest(int requestID, String roomID, String sanitationType, String description, String urgency, String signature) {
-
-		boolean added = false;
-		String query = "update sanitationRequest set";
-
-		if (roomID != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " roomID = '" + roomID + "'";
-			added = true;
-		}
-		if (sanitationType != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " sanitationType = '" + sanitationType + "'";
-			added = true;
-		}
-		if (description != null) {
-			query = query + " description = '" + description + "'";
-
-			added = true;
-		}
-		if (urgency != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " urgency = '" + urgency + "'";
-			added = true;
-		}
-		if (signature != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "signature = '" + signature + "'";
-			added = true;
-		}
 
 
-		query = query + " where requestID = " + requestID;
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating sanitation request");
-			return 0;
-		}
-
-
-	}
 
 
 	/**
@@ -761,75 +612,6 @@ public class RequestsDB {
 //		}
 //	}
 
-	/**
-	 * This function edits a current request for medicine delivery with the information below for a request already in the database
-	 * @param requestID           the ID that specifies which external transfer form that is being edited
-	 * @param roomID              the new node/room/location the user is assigning this request to
-	 * @param medicineName        this is the name of the medicine the user is changing the request to
-	 * @param quantity            this is the number of pills the user is changing the request to
-	 * @param dosage              this is the dosage (ml or mg) the user is changing the request to
-	 * @param specialInstructions this is the new special instructions the user is requesting
-	 * @param assigneeID          this is the userID of the a new employee or administrator that will be fulfilling the request.
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editMedicineRequest(int requestID, String roomID, String medicineName, Integer quantity, String dosage, String specialInstructions, int assigneeID) {
-
-		boolean added = false;
-		String query = "Update medDelivery Set ";
-
-		if (roomID != null) {
-			query = query + " roomID = '" + roomID + "'";
-
-			added = true;
-		}
-		if (medicineName != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " medicineName = '" + medicineName + "'";
-			added = true;
-		}
-		if (quantity != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " quantity = " + quantity;
-			added = true;
-		}
-		if (dosage != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " dosage = '" + dosage + "'";
-			added = true;
-		}
-		if (specialInstructions != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " specialInstructions = '" + specialInstructions + "'";
-			added = true;
-		}
-		if (assigneeID != 0) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " assigneeID = '" + assigneeID + "'";
-			added = true;
-		}
-
-		query = query + " where requestID = " + requestID;
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating medicine request");
-			return 0;
-		}
-	}
 
 
 	/**

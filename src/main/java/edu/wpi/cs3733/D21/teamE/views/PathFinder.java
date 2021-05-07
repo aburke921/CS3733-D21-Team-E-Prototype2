@@ -16,6 +16,7 @@ import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
 import javafx.animation.PathTransition;
+import javafx.beans.binding.DoubleBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -830,23 +831,32 @@ public class PathFinder {
      * @param yMax Max Y Coordinate
      */
     private void zoomToPath(double xMin, double xMax, double yMin, double yMax) {
-        double xDist = (xMax - xMin); // Distance between the points (sets zoom)
-        double yDist = (yMax - yMin);
+        double xDist = xMax - xMin; // Distance between the points (sets zoom)
+        double yDist = yMax - yMin;
 
         double xCenter = xMax - xDist / 2; // Center of points, sets position
         double yCenter = yMax - yDist / 2;
 
-        double stageAmount = Math.max((xDist / 4100), (yDist / 2600)) + 0.2; // Percentage of stage visible
-        double zoomAmount = constrain(1, 5, (1 / stageAmount));
+        //TODO: make these dynamic
+        double fullStage = Math.max((xDist / 4100), (yDist / 2600)) + 0.2;
+        double stageAmount = constrain(0.2, 1, fullStage); // Percentage of stage visible
+        double zoomAmount = 5  * (1 - stageAmount);
 
         zoomSlider.setValue(zoomAmount);
 
-        xCenter = xCenter / 4100; // convert to percentage of pixels
-        yCenter = yCenter / 2600;
-        //TODO: Fix
+        double xEdge = xCenter - stageAmount * 5000 / 2;
+        double yEdge = yCenter - stageAmount * 3400 / 2;
 
-        scrollPane.setHvalue(yCenter);
-        scrollPane.setVvalue(xCenter);
+        double xScale = 5000 * (1 - stageAmount);
+        double yScale = 3400 * (1 - stageAmount);
+
+        scrollPane.setHvalue(xEdge / xScale);
+        scrollPane.setVvalue(yEdge / yScale);
+
+        System.out.println("X Center: " + xCenter + "\tY Center: " + yCenter);
+        System.out.println("Pane X: " + scrollPane.getHvalue() + "\tPane Y: " + scrollPane.getVvalue());
+
+
     }
 
     /**

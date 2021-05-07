@@ -41,21 +41,6 @@ public class Laundry extends ServiceRequestFormComponents {
     @FXML // fx:id="background"
     private ImageView background;
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
-
-    @FXML // fx:id="fullscreen"
-    private Rectangle fullscreen; // Value injected by FXMLLoader
-
-    @FXML // fx:id="hide"
-    private Circle hide; // Value injected by FXMLLoader
-
-    @FXML // fx:id="exit"
-    private Polygon exit; // Value injected by FXMLLoader
-
     @FXML // fx:id="locationInput"
     private JFXComboBox<String> locationInput; // Value injected by FXMLLoader
 
@@ -106,9 +91,6 @@ public class Laundry extends ServiceRequestFormComponents {
         background.fitWidthProperty().bind(primaryStage.widthProperty());
         //background.fitHeightProperty().bind(primaryStage.heightProperty());
 
-        assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'Laundry.fxml'.";
-        assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'Laundry.fxml'.";
-        assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert washLoadAmountInput != null : "fx:id=\"washLoadAmountInput\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert dryLoadAmountInput != null : "fx:id=\"dryLoadAmountInput\" was not injected: check your FXML file 'Laundry.fxml'.";

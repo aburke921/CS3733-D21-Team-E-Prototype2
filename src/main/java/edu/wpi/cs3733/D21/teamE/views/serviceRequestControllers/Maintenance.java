@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.MaintenanceObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,9 +38,6 @@ public class Maintenance extends ServiceRequestFormComponents {
     @FXML // fx:id="background"
     private ImageView background;
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
-
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
@@ -58,44 +56,11 @@ public class Maintenance extends ServiceRequestFormComponents {
     @FXML // fx:id="requestTypeInput"
     private JFXComboBox<String> requestTypeInput; // Value injected by FXMLLoader
 
-    @FXML // fx:id="power"
-    private String power; // Value injected by FXMLLoader
-
-    @FXML // fx:id="plumbing"
-    private String plumbing; // Value injected by FXMLLoader
-
-    @FXML // fx:id="window"
-    private String window; // Value injected by FXMLLoader
-
-    @FXML // fx:id="door"
-    private String door; // Value injected by FXMLLoader
-
-    @FXML // fx:id="ceiling"
-    private String ceiling; // Value injected by FXMLLoader
-
-    @FXML // fx:id="elev"
-    private String elev; // Value injected by FXMLLoader
-
-    @FXML // fx:id="esc"
-    private String esc; // Value injected by FXMLLoader
-
     @FXML // fx:id="severityInput"
     private JFXComboBox<String> severityInput; // Value injected by FXMLLoader
 
-    @FXML // fx:id="high_severity"
-    private String high_severity; // Value injected by FXMLLoader
-
-    @FXML // fx:id="medium_severity"
-    private String medium_severity; // Value injected by FXMLLoader
-
-    @FXML // fx:id="low_severity"
-    private String low_severity; // Value injected by FXMLLoader
-
     @FXML // fx:id="assignedPersonnelInput"
     private JFXComboBox<String> assignedPersonnelInput; // Value injected by FXMLLoader
-
-    @FXML // fx:id="authorInput"
-    private JFXTextField authorInput; // Value injected by FXMLLoader
 
     @FXML // fx:id="descriptionInput"
     private JFXTextArea descriptionInput; // Value injected by FXMLLoader
@@ -123,6 +88,17 @@ public class Maintenance extends ServiceRequestFormComponents {
 
     @FXML
     void saveData(ActionEvent event) {
+        int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+        int userIndex = assignedPersonnelInput.getSelectionModel().getSelectedIndex();
+
+        String node = nodeID.get(nodeIndex);
+        int user = userID.get(userIndex);
+        String requestType = requestTypeInput.getSelectionModel().getSelectedItem();
+        String severity = severityInput.getSelectionModel().getSelectedItem();
+        String desc = descriptionInput.getText();
+        String time = ETAInput.getText();
+
+        DB.addMaintenanceRequest(new MaintenanceObj(0, App.userID, node, user, requestType, severity, "Remove this", time, desc));
         super.handleButtonSubmit(event);
     }
 
@@ -140,8 +116,11 @@ public class Maintenance extends ServiceRequestFormComponents {
         //background.fitHeightProperty().bind(primaryStage.heightProperty());
 
         locations = DB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
         locationInput.setItems(locations);
+
         userNames = DB.getAssigneeNames("custodian");
+        userID = DB.getAssigneeIDs("custodian");
         assignedPersonnelInput.setItems(userNames);
 
         assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
@@ -149,19 +128,8 @@ public class Maintenance extends ServiceRequestFormComponents {
         assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert requestTypeInput != null : "fx:id=\"requestTypeInput\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
-        assert power != null : "fx:id=\"power\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
-        assert plumbing != null : "fx:id=\"plumbing\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
-        assert window != null : "fx:id=\"window\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
-        assert door != null : "fx:id=\"door\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
-        assert ceiling != null : "fx:id=\"ceiling\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
-        assert elev != null : "fx:id=\"elev\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
-        assert esc != null : "fx:id=\"esc\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert severityInput != null : "fx:id=\"severityInput\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
-        assert high_severity != null : "fx:id=\"high_severity\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
-        assert medium_severity != null : "fx:id=\"medium_severity\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
-        assert low_severity != null : "fx:id=\"low_severity\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert assignedPersonnelInput != null : "fx:id=\"assignedPersonnelInput\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
-        assert authorInput != null : "fx:id=\"authorInput\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert descriptionInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert ETAInput != null : "fx:id=\"ETAInput\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";

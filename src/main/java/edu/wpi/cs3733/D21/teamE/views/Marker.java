@@ -93,6 +93,8 @@ public class Marker {
             rectangle.setStroke(Color.BLACK);
             rectangle.setFill(typeColor.get(nodeArrayList.get(i).get("type")));
             rectangle.setVisible(false);
+            rectangle.setArcHeight(sideLength/2);
+            rectangle.setArcWidth(sideLength/2);
             //rectangle.setOpacity(0.25);
 
             NodeMarker nodeMarker = new NodeMarker(nodeArrayList.get(i), rectangle);

@@ -710,6 +710,148 @@ public class RequestsDB2 {
 
 
 
+	//SECURITY REQUEST STUFF:
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - type: is the type of maintenance required
+	 * - severity: is how severe the situation is
+	 * - ETA: time taken to complete the request
+	 * - description: detailed description of request
+	 */
+	public static void createMaintenanceRequestTable() {
+
+		String query = "Create Table maintenanceRequest " +
+				"( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
+				"    type varchar(31), " +
+				"    severity    varchar(31)  Not Null, " +
+				"	 author varchar(31) Not Null, " +
+				"    ETA   varchar(31) Not Null, " +
+				"    description varchar(5000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating maintenanceRequest table");
+		}
+
+	}
+
+	/**
+	 * adds a maintenance request to the maintenanceRequest table
+	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
+	 */
+	public static void addMaintenanceRequest(MaintenanceObj maintenanceObj) {
+
+		int userID = maintenanceObj.getUserID();
+		int assigneeID = maintenanceObj.getAssigneeID();
+		String roomID = maintenanceObj.getNodeID();
+		String type = maintenanceObj.getRequest();
+		String severity = maintenanceObj.getSeverity();
+		String author = maintenanceObj.getAuthor();
+		String ETA = maintenanceObj.getEta();
+		String description = maintenanceObj.getDescription();
+
+
+		addRequest(userID, assigneeID, "maintenanceRequest");
+
+		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, type);
+			prepState.setString(3, severity);
+			prepState.setString(4, author);
+			prepState.setString(5, ETA);
+			prepState.setString(6, description);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into maintenanceRequest inside function addMaintenanceRequest()");
+		}
+	}
+
+	/**
+	 * This edits a maintenance request which is already in the db
+	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editMaintenanceRequest(MaintenanceObj maintenanceObj) {
+
+		String roomID = maintenanceObj.getNodeID();
+		String type = maintenanceObj.getRequest();
+		String severity = maintenanceObj.getSeverity();
+		String author = maintenanceObj.getAuthor();
+		String ETA = maintenanceObj.getEta();
+		String description = maintenanceObj.getDescription();
+
+
+		boolean added = false;
+		String query = "Update maintenanceRequest Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (type != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "type = '" + type + "'";
+			added = true;
+		}
+		if (severity != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "severity = '" + severity + "'";
+			added = true;
+		}
+		if (author != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "author = '" + author + "'";
+			added = true;
+		}
+		if (ETA != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "ETA = '" + ETA + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + maintenanceObj.getRequestID();
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating maintenanceRequest");
+			return 0;
+		}
+	}
+
 
 
 

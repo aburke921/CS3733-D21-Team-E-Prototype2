@@ -107,40 +107,6 @@ public class RequestsDB {
 
 
 	/**
-	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
-	 * This table has the attributes:
-	 * - requestID: this is used to identify a request. Every request must have one.
-	 * - roomID: this is the nodeID/room the user wants security assistance at
-	 * - type: is the type of maintenance required
-	 * - severity: is how severe the situation is
-	 * - ETA: time taken to complete the request
-	 * - description: detailed description of request
-	 */
-	public static void createMaintenanceRequestTable() {
-
-		String query = "Create Table maintenanceRequest " +
-				"( " +
-				"    requestID int Primary Key References requests On Delete Cascade, " +
-				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
-				"    type varchar(31), " +
-				"    severity    varchar(31)  Not Null, " +
-				"    ETA   varchar(31) Not Null, " +
-				"    description varchar(5000) " +
-				")";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-
-			prepState.execute();
-
-
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("error creating maintenanceRequest table");
-		}
-
-	}
-
-	/**
 	 * Uses executes the SQL statements required to create a foodDelivery table. This is a type of request and share the same requestID.
 	 * This table has the attributes:
 	 * - requestID: this is used to identify a request. Every request must have one.
@@ -444,33 +410,7 @@ public class RequestsDB {
 
 
 
-	/**
-	 * @param userID      ID of the user
-	 * @param roomID      nodeID of the user
-	 * @param assigneeID  ID of the assigned user who will complete this task
-	 * @param type        is the type of maintenance required
-	 * @param severity    is how severe the situation is
-	 * @param ETA         time taken to complete the request
-	 * @param description detailed description of request
-	 */
-	public static void addMaintenanceRequest(int userID, String roomID, int assigneeID, String type, String severity, String ETA, String description) {
-		addRequest(userID, assigneeID, "maintenanceRequest");
 
-		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?)";
-
-		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
-			prepState.setString(1, roomID);
-			prepState.setString(2, type);
-			prepState.setString(3, severity);
-			prepState.setString(4, ETA);
-			prepState.setString(5, description);
-
-			prepState.execute();
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error inserting into maintenanceRequest inside function addMaintenanceRequest()");
-		}
-	}
 
 	//TODO: Not tested
 	/**
@@ -933,63 +873,6 @@ public class RequestsDB {
 
 
 
-	/**
-	 * @param requestID   is the generated ID of the request
-	 * @param roomID      the new node/room/location the user is assigning this request to
-	 * @param type        is the new type of maintenance request
-	 * @param severity    is the new severity of the situation
-	 * @param ETA         is the new estimated time
-	 * @param description is an edited detailed description
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editMaintenanceRequest(int requestID, String roomID, String type, String severity, String ETA, String description) {
-		boolean added = false;
-		String query = "Update maintenanceRequest Set ";
-
-		if (roomID != null) {
-			query = query + " roomID = '" + roomID + "'";
-			added = true;
-		}
-		if (type != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "type = '" + type + "'";
-			added = true;
-		}
-		if (severity != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "severity = '" + severity + "'";
-			added = true;
-		}
-		if (ETA != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "ETA = '" + ETA + "'";
-			added = true;
-		}
-		if (description != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "description = '" + description + "'";
-			added = true;
-		}
-
-		query = query + " where requestID = " + requestID;
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			prepState.executeUpdate();
-			prepState.close();
-			return 1;
-		} catch (SQLException e) {
-			//e.printStackTrace();
-			System.err.println("Error in updating maintenanceRequest");
-			return 0;
-		}
-	}
 
 	//TODO: ASHLEY review this please (i didn't take your Food table into account)
 

@@ -757,10 +757,89 @@ public class PathFinder {
                 //add all objects to the scene
                 pane.getChildren().addAll(g);
 
+                ArrayList<Double> xCoords = new ArrayList<>();
+                ArrayList<Double> yCoords = new ArrayList<>();
+
+                int i = 0;
+                for (Double coord : coordsList) {
+                    if ((i % 2) == 0) {
+                        xCoords.add(coord);
+                    } else {
+                        yCoords.add(coord);
+                    }
+                    i++;
+                }
+
+                // Set to opposites, for comparison
+                double xMin = 5000/scale;
+                double xMax = 0;
+
+                for (Double coord : xCoords) {
+                    if (coord < xMin) {
+                        xMin = coord;
+                    }
+                    if (coord > xMax) {
+                        xMax = coord;
+                    }
+                }
+
+                // Set to opposites, for comparison
+                double yMin = 3400/scale;
+                double yMax = 0;
+
+                for (Double coord : yCoords) {
+                    if (coord < yMin) {
+                        yMin = coord;
+                    }
+                    if (coord > yMax) {
+                        yMax = coord;
+                    }
+                }
+
+                // Descale, back to "original" coords
+                zoomToPath(xMin * scale, xMax * scale, yMin * scale, yMax * scale);
+
             } else {
                 System.out.println("No path on this floor");
                 //todo snackbar to say no nodes on this floor?
             }
+        }
+    }
+
+    /**
+     * Zooms into the Path
+     * @param xMin Min X Coordinate
+     * @param xMax Max X Coordinate
+     * @param yMin Min Y Coordinate
+     * @param yMax Max Y Coordinate
+     */
+    private void zoomToPath(double xMin, double xMax, double yMin, double yMax) {
+        double xDist = (xMax - xMin); // Distance between the points (sets zoom)
+        double yDist = (yMax - yMin);
+
+        double xCenter = xMax - xDist / 2; // Center of points, sets position
+        double yCenter = yMax - yDist / 2;
+
+        double stageAmount = Math.max((xDist / 4100), (yDist / 2600)) + 0.2; // Percentage of stage visible
+        double zoomAmount = constrain(1, 5, (1 / stageAmount));
+
+        zoomSlider.setValue(zoomAmount);
+    }
+
+    /**
+     * Constrains a value to within a minimum value and maximum value
+     * @param min Minimum value
+     * @param max Maximum value
+     * @param val The value
+     * @return The constrained value
+     */
+    private double constrain(double min, double max, double val) {
+        if (val > max) {
+            return max;
+        } else if (val < min) {
+            return min;
+        } else {
+            return val;
         }
     }
 
@@ -970,7 +1049,7 @@ public class PathFinder {
                 int nodeXInt = (int) nodeX;
                 double nodeY = node.getY() / scale;
                 int nodeYInt = (int) nodeY;
-                System.out.println(nodeXInt);
+                //System.out.println(nodeXInt);
                 if ((Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) && (node.get("floor").equalsIgnoreCase(currentFloor))) {
 
                     System.out.println(nodeArrayList.get(i).get("longName"));

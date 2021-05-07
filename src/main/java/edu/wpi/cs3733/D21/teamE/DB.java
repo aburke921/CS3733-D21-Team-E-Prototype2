@@ -41,9 +41,9 @@ public class DB {
 		RequestsDB2.createLanguageRequestTable();
 		RequestsDB2.createLaundryRequestTable();
 		RequestsDB2.createMaintenanceRequestTable();
-		RequestsDB.createFoodDeliveryTable();
+		RequestsDB2.createFoodDeliveryTable();
 		RequestsDB.createInternalPatientRequest();
-		RequestsDB.createAubonPainMenuTable();
+		RequestsDB2.createAubonPainMenuTable();
 		RequestsDB2.createReligionRequestTable();
 		RequestsDB.createEntryRequestTable();
 	}
@@ -89,6 +89,19 @@ public class DB {
 	public static int editReligiousRequest(ReligiousRequestObj request) { return RequestsDB2.editReligiousRequest(request); }
 
 	/**
+	 * This function needs to add a external patient form to the table for external patient forms
+	 * //@param form this is the form that we will create and send to the database
+	 */
+	public static void addExternalPatientRequest(ExternalPatientObj externalPatientObj) { RequestsDB2.addExternalPatientRequest(externalPatientObj); }
+
+	/**
+	 * This edits a External Transport Services form that is already in the database
+	 * takes in an External Patient Object
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editExternalPatientRequest(ExternalPatientObj externalPatientObj) { return RequestsDB2.editExternalPatientRequest(externalPatientObj); }
+
+	/**
 	 * adds a laundry request to the laundryRequest table
 	 * @param request this is all of the information needed, in a religious request object.
 	 */
@@ -127,9 +140,44 @@ public class DB {
 	 */
 	public static int editSanitationRequest(SanitationServiceObj request) { return RequestsDB2.editSanitationRequest(request); }
 
+	/**
+	 * This adds a medicine request form to the table for medicine request forms
+	 * @param medicineDeliveryObj object holding medicine req. fields
+	 */
+	public static void addMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) { RequestsDB2.addMedicineRequest(medicineDeliveryObj); }
 
+	/**
+	 * edits medicine request which is already in DB
+	 * @param medicineDeliveryObj object holding medicine req. fields
+	 * @return
+	 */
+	public static int editMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) { return RequestsDB2.editMedicineRequest(medicineDeliveryObj); }
 
+	/**
+	 * adds a food delivery request to the foodDelivery table
+	 * @param request this is all of the information needed, in a food delivery request object.
+	 */
+	public static void addFoodDeliveryRequest(FoodDeliveryObj request) { RequestsDB2.addFoodDeliveryRequest(request); }
 
+	/**
+	 * edits medicine request which is already in DB
+	 * @param request this the information that the user wants to change stored in a security request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editFoodDeliveryRequest(FoodDeliveryObj request) { return RequestsDB2.editFoodDeliveryRequest(request); }
+
+	/**
+	 * adds a menuItem to the aubonPainMenu database table
+	 * @param menuItem this is all of the information needed, in a security request object.
+	 */
+	public static void addAubonPainMenuItem(AubonPainItem menuItem) { RequestsDB2.addAubonPainMenuItem(menuItem); }
+
+	/**
+	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
+	 * description to the aubonPainMenu table
+	 * The link to the website being read is: https://order.aubonpain.com/menu/brigham-womens-hospital
+	 */
+	public static void populateAbonPainTable() { RequestsDB2.populateAbonPainTable(); }
 
 
 
@@ -421,14 +469,7 @@ public class DB {
 	// Creating Tables:
 
 
-	/**
-	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
-	 * description to the aubonPainMenu table
-	 * The link to the website being read is: https://order.aubonpain.com/menu/brigham-womens-hospital
-	 */
-	public static void populateAbonPainTable() {
-		RequestsDB.populateAbonPainTable();
-	}
+
 
 
 	// Adding To Tables:
@@ -438,22 +479,10 @@ public class DB {
 	}
 
 
-	/**
-	 * This function needs to add a external patient form to the table for external patient forms
-	 * //@param form this is the form that we will create and send to the database
-	 */
-	public static void addExternalPatientRequest(ExternalPatientObj externalPatientObj) {
-		RequestsDB2.addExternalPatientRequest(externalPatientObj);
-	}
 
 
-	/**
-	 * This adds a medicine request form to the table for medicine request forms
-	 * @param medicineDeliveryObj object holding medicine req. fields
-	 */
-	public static void addMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
-		RequestsDB2.addMedicineRequest(medicineDeliveryObj);
-	}
+
+
 
 
 
@@ -470,25 +499,13 @@ public class DB {
 	}
 
 
-	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID, String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
-		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, allergies, foodItem, foodQuantity, beverageItem, beverageQuantity);
-	}
+
 
 	public static void addInternalPatientRequest(int userID, String pickUpLocation, String dropOffLocation, int assigneeID, int patientID, String department, String severity, String description) {
 		RequestsDB.addInternalPatientRequest(userID, pickUpLocation, dropOffLocation, assigneeID, patientID, department, severity, description);
 	}
 
-	/**
-	 * adds a menuItem to the aubonPainMenu database table
-	 * @param foodImage       this is the url to an image of the item
-	 * @param foodItem        this is the item itself (this is unique and is used as an identifier)
-	 * @param foodPrice       this is the price of the foodItem
-	 * @param foodCalories    this is the number of calories the food item has
-	 * @param foodDescription this is a description of the food item
-	 */
-	public static void addAubonPainMenuItem(String foodImage, String foodItem, String foodPrice, String foodCalories, String foodDescription) {
-		RequestsDB.addAubonPainMenuItem(foodImage, foodItem, foodPrice, foodCalories, foodDescription);
-	}
+
 
 
 
@@ -504,26 +521,12 @@ public class DB {
 
 
 
-	/**
-	 * This edits a External Transport Services form that is already in the database
-	 * takes in an External Patient Object
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editExternalPatientRequest(ExternalPatientObj externalPatientObj) {
-		return RequestsDB2.editExternalPatientRequest(externalPatientObj);
-	}
 
 
 
 
-	/**
-	 * edits medicine request which is already in DB
-	 * @param medicineDeliveryObj object holding medicine req. fields
-	 * @return
-	 */
-	public static int editMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
-		return RequestsDB2.editMedicineRequest(medicineDeliveryObj);
-	}
+
+
 
 
 
@@ -552,19 +555,7 @@ public class DB {
 		return RequestsDB2.editMaintenanceRequest(maintenanceObj);
 	}
 
-	/**
-	 * @param requestID        is the generated ID of the request
-	 * @param roomID           the new node/room/location the user is assigning this request to
-	 * @param dietRestrictions is the edited restrictions of the user in terms of diet
-	 * @param allergies        is the edited allergies the user has
-	 * @param food             is the new food the user requests
-	 * @param beverage         is the new beverage the user requests
-	 * @param description      is an edited detailed description
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editFoodDeliveryRequest(int requestID, String roomID, String dietRestrictions, String allergies, String food, String beverage, String description) {
-		return RequestsDB.editFoodDeliveryRequest(requestID, roomID, dietRestrictions, allergies, food, beverage, description);
-	}
+
 
 	public static int editInternalPatientRequest(int requestID, String pickUpLocation, String dropOffLocation, int patientID, String department, String severity, String description) {
 		return RequestsDB.editInternalPatientRequest(requestID, pickUpLocation, dropOffLocation, patientID, department, severity, description);

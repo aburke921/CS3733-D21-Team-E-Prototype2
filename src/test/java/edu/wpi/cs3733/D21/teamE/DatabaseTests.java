@@ -1447,7 +1447,7 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testAddAubonPainMenuItem")
 	public void testAddAubonPainMenuItem() {
-		DB.addAubonPainMenuItem("foodImage", "foodItem", "$56.00", "23 Calories", "foodDescription");
+		DB.addAubonPainMenuItem(new AubonPainItem("foodImage", "foodItem", "$56.00", "23 Calories", "foodDescription"));
 	}
 
 	@Test
@@ -1460,13 +1460,15 @@ public class DatabaseTests {
 	@DisplayName("testGetAubonPanItems")
 	public void testGetAubonPanItems() {
 
-		DB.addAubonPainMenuItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
-		DB.addAubonPainMenuItem("URLLLLL", "pancakes", "$23.45", "3290 calories", "yummmyyy");
-		DB.addAubonPainMenuItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+
 
 		AubonPainItem item1 = new AubonPainItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
 		AubonPainItem item2 = new AubonPainItem("URLLLLL", "pancakes", "$23.45", "3290 calories", "yummmyyy");
 		AubonPainItem item3 = new AubonPainItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+
+		DB.addAubonPainMenuItem(item1);
+		DB.addAubonPainMenuItem(item2);
+		DB.addAubonPainMenuItem(item3);
 
 		ArrayList<AubonPainItem> correctItems = new ArrayList<>();
 		correctItems.add(item1);
@@ -1642,9 +1644,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAubonPainFeild")
 	public void testGetAubonPainFeild() {
-		DB.addAubonPainMenuItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
-		DB.addAubonPainMenuItem("URLLLLL", "pancakes", "$23.45", "3290 calories", "yummmyyy");
-		DB.addAubonPainMenuItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+		DB.addAubonPainMenuItem(new AubonPainItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description"));
+		DB.addAubonPainMenuItem(new AubonPainItem("URLLLLL", "pancakes", "$23.45", "3290 calories", "yummmyyy"));
+		DB.addAubonPainMenuItem(new AubonPainItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood"));
 
 		ArrayList<String> correctFoodImages = new ArrayList<>();
 		correctFoodImages.add("foodImageURL");
@@ -1659,9 +1661,9 @@ public class DatabaseTests {
 	@Test
 	@DisplayName("testGetAubonPainFeild2")
 	public void testGetAubonPainFeild2() {
-		DB.addAubonPainMenuItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description");
-		DB.addAubonPainMenuItem(null, "pancakes", "$23.45", "3290 calories", "yummmyyy");
-		DB.addAubonPainMenuItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood");
+		DB.addAubonPainMenuItem(new AubonPainItem("foodImageURL", "foodItem", "$4732.23", "243 calories", "food description"));
+		DB.addAubonPainMenuItem(new AubonPainItem(null, "pancakes", "$23.45", "3290 calories", "yummmyyy"));
+		DB.addAubonPainMenuItem(new AubonPainItem("foooooodddd URL", "soup", "$92.44", "3 calories", "goood"));
 
 		ArrayList<String> correctFoodImages = new ArrayList<>();
 		correctFoodImages.add("foodImageURL");

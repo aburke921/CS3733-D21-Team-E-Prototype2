@@ -94,10 +94,10 @@ public class SecurityService extends ServiceRequestFormComponents {
     }
 
     private boolean validateInput(){
+
         RequiredFieldValidator validator = new RequiredFieldValidator();
 
         validator.setMessage("Input required");
-
 
         locationInput.getValidators().add(validator);
         levelOfSecurity.getValidators().add(validator);
@@ -113,15 +113,15 @@ public class SecurityService extends ServiceRequestFormComponents {
     private void saveData(ActionEvent actionEvent){
         if(validateInput()){
 
-            ArrayList<String> nodeIDS = DB.getListOfNodeIDS();
-            String securityLevel = levelOfSecurity.getSelectionModel().getSelectedItem().toString();
-            String urgencyLevel = levelOfUrgency.getSelectionModel().getSelectedItem().toString();
-            int assignee = Integer.parseInt(assignedPersonnel.getSelectionModel().getSelectedItem());
+            String securityLevel = levelOfSecurity.getSelectionModel().getSelectedItem();
+            String urgencyLevel = levelOfUrgency.getSelectionModel().getSelectedItem();
+            int assigneeIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
+            int assignee = userID.get(assigneeIndex);
             String reason = reasonForRequest.getText();
             int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
-            String nodeID = nodeIDS.get(nodeIDIndex);
-            System.out.println(securityLevel + "" + urgencyLevel + "" + assignee + "" + nodeID);
-            DB.addSecurityRequest(new SecurityServiceObj(0, App.userID, assignee, nodeID, securityLevel, urgencyLevel, null));
+            String node = nodeID.get(nodeIDIndex);
+
+            DB.addSecurityRequest(new SecurityServiceObj(0, App.userID, assignee, node, securityLevel, urgencyLevel, reason));
 
             super.handleButtonSubmit(actionEvent);
 
@@ -172,8 +172,11 @@ public class SecurityService extends ServiceRequestFormComponents {
         //background.fitHeightProperty().bind(primaryStage.heightProperty());
 
         locations = DB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
         locationInput.setItems(locations);
+
         userNames = DB.getAssigneeNames("security");
+        userID = DB.getAssigneeIDs("security");
         assignedPersonnel.setItems(userNames);
 
         assert helpSecurityService != null : "fx:id=\"helpSecurityService\" was not injected: check your FXML file 'SecurityService.fxml'.";

@@ -136,7 +136,7 @@ public class createAccount {
 		});
 
 		//First & last Name validators
-		RequiredFieldValidator notEmptyValidator = new RequiredFieldValidator();;
+		RequiredFieldValidator notEmptyValidator = new RequiredFieldValidator();
 		notEmptyValidator.setMessage("Input Required");
 
 		firstName.getValidators().add(notEmptyValidator);

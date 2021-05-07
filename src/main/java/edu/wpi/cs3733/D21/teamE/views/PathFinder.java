@@ -5,6 +5,7 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.QRCode;
@@ -569,6 +570,10 @@ public class PathFinder {
         for(Path path : paths){
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
 
+                double markerIconXOffset = -(scale * 3);
+                double markerIconYOffset = -(scale / 2);
+                String mapMarkerSize = "25";
+
                 Iterator<Node> legItr = path.iterator();
                 Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
@@ -602,13 +607,22 @@ public class PathFinder {
                         if (!(prevYCoord < 1) || !(prevXCoord < 1)) {
                             //technically second node, here to prevent circle from being "under" path line, prev will be fist node
                             firstNode = 0;
-                            Circle circle;
+                            MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
+                            icon.setSize(mapMarkerSize);
+                            icon.setLayoutX(prevXCoord + markerIconXOffset);
+                            icon.setLayoutY(prevYCoord + markerIconYOffset);
+
                             if (firstID.equalsIgnoreCase(selectedStartNodeID)) {
+                                System.out.println(scale);
                                 // True first node
-                                circle = new Circle(prevXCoord, prevYCoord, radius, Color.GREEN);
+                                icon.setId("submission-icon");
+
+                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.GREEN);
                             } else {
                                 // First on floor
-                                circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
+                                icon.setId("red-icon");
+
+                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
                             }
 
 
@@ -618,27 +632,30 @@ public class PathFinder {
                             line.setStrokeWidth(strokeWidth);
                             line.setStroke(Color.RED);
 
-                            g.getChildren().addAll(line, circle);
+                            g.getChildren().addAll(line, icon);
                         } else {
                             //Track true first node's ID, for node color issue
                             firstID = node.get("id");
                         }
                         if (!legItr.hasNext()) { //if current node is the ending node for this floor, e.g. last node is also first node on floor
 
-                            Circle circle;
+                            MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
+                            icon.setSize(mapMarkerSize);
+                            icon.setLayoutX(xCoord + markerIconXOffset);
+                            icon.setLayoutY(yCoord + markerIconYOffset);
 
                             if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
                                 //place a dot on the location
-                                circle = new Circle(xCoord, yCoord, radius, Color.GREEN);
+                                icon.setId("submission-icon");
                             } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
                                 //place a dot on the location
-                                circle = new Circle(xCoord, yCoord, radius, Color.BLACK);
+                                icon.setId("black-icon");
                             } else { // end node of just this floor
                                 //place a dot on the location
-                                circle = new Circle(xCoord, yCoord, radius, Color.RED);
+                                icon.setId("red-icon");
                             }
 
-                            g.getChildren().addAll(circle);
+                            g.getChildren().addAll(icon);
                         }
                         //update the coordinates for the previous node
                         prevXCoord = xCoord;
@@ -647,14 +664,17 @@ public class PathFinder {
 
                     } else if (!legItr.hasNext()) { //if current node is the ending node for this floor
 
-                        Circle circle;
+                        MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
+                        icon.setSize(mapMarkerSize);
+                        icon.setLayoutX(xCoord + markerIconXOffset);
+                        icon.setLayoutY(yCoord + markerIconYOffset);
 
                         if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
                             //place a dot on the location
-                            circle = new Circle(xCoord, yCoord, radius, Color.BLACK);
+                            icon.setId("black-icon");
                         } else { // end node of just this floor
                             //place a dot on the location
-                            circle = new Circle(xCoord, yCoord, radius, Color.RED);
+                            icon.setId("red-icon");
                         }
 
                         //create a line between this node and the previous node
@@ -724,10 +744,10 @@ public class PathFinder {
 
                         floorLabel.setOnMouseClicked(e -> setCurrentFloor(finalDestFloor));
 
-                        g.getChildren().addAll(line, circle, flowPane);
+                        g.getChildren().addAll(line, icon, flowPane);
                     } else {
                         //otherwise, only add the line and node circle
-                        g.getChildren().addAll(line, circle);
+                        g.getChildren().addAll(line, icon);
                     }
 
                     //else, if current node is not this floors ending node, i.e., path continues

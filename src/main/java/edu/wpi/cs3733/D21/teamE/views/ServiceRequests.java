@@ -24,9 +24,6 @@ public class ServiceRequests {
     @FXML // fx:id="background"
     private ImageView background;
 
-    @FXML // fx:id="background"
-    private ImageView background;
-
     @FXML // fx:id="exit"
     private Polygon exit;
 

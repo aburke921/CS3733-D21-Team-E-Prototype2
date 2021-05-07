@@ -1098,9 +1098,12 @@ public class newMapEditor {
                 }
                 });
             } else {
+                //populates fields with information of selected node or edge in table
+                startTableClickHandlers();
+
+                //for clicks interacting with map
+                startMapClickHandler();
                 System.out.println("no");
-                scrollPane.setPannable(true);
-                refresh();
 
             }
         });
@@ -1110,11 +1113,7 @@ public class newMapEditor {
 
 
 
-        //populates fields with information of selected node or edge in table
-        startTableClickHandlers();
 
-        //for clicks interacting with map
-        startMapClickHandler();
 
     }
 
@@ -1156,6 +1155,13 @@ public class newMapEditor {
                                 yCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getY()));
                                 typeInput.setValue(currentArrayOfAllNodes.get(i).get("type"));
                                 buildingInput.setValue(currentArrayOfAllNodes.get(i).get("building"));
+                                clickedX = nodeXInt;
+                                clickedY = nodeYInt;
+                                clickedID = currentArrayOfAllNodes.get(i).get("id");
+                                clickedBuilding = currentArrayOfAllNodes.get(i).get("building");
+                                clickedLongName = currentArrayOfAllNodes.get(i).get("longName");
+                                clickedType = currentArrayOfAllNodes.get(i).get("type");
+                                clickedShortname = currentArrayOfAllNodes.get(i).get("shortName");
 
                             }
                         }

@@ -37,7 +37,7 @@
                         <Insets left="15.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
+                  <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" indicatorPosition="RIGHT" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
                      <HBox.margin>
                         <Insets left="20.0" top="17.0" />
                      </HBox.margin>
@@ -215,12 +215,7 @@
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="walk" checkedColor="BLACK" onAction="#sortNodesByType" text="Walkways">
-                                                   <VBox.margin>
-                                                      <Insets top="8.0" />
-                                                   </VBox.margin>
-                                                </JFXCheckBox>
-                                                <JFXCheckBox fx:id="hall" checkedColor="#7c7c7c" onAction="#sortNodesByType" text="Hallways">
+                                                <JFXCheckBox fx:id="all" checkedColor="BLACK" onAction="#sortNodesByType" text="Select All">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>

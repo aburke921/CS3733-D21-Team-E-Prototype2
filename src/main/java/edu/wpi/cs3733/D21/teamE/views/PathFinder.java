@@ -1,72 +1,54 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.*;
-
-import java.io.IOException;
-
-import java.net.URL;
-import java.util.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ResourceBundle;
-
 import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.QRCode;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
-
-import edu.wpi.cs3733.D21.teamE.App;
-import edu.wpi.cs3733.D21.teamE.QRCode;
 import edu.wpi.cs3733.D21.teamE.observer.ImageObserver;
 import edu.wpi.cs3733.D21.teamE.observer.MarkerObserver;
 import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
-import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
-import javafx.animation.KeyFrame;
 import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-
-import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Parent;
-
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.swing.event.ChangeListener;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class PathFinder {
 
-    public static int startNodeIndex = -1;
-    public static int endNodeIndex = -1;
+    private static int startNodeIndex = -1;
+    private static int endNodeIndex = -1;
+
+    private Node startNode = null;
+    private Node endNode = null;
 
     /*
      * FXML Values
@@ -158,6 +140,19 @@ public class PathFinder {
     private Button floor3;
     private Button currentlySelected;
 
+    @FXML JFXCheckBox rest;
+    @FXML JFXCheckBox info;
+    @FXML JFXCheckBox dept;
+    @FXML JFXCheckBox labs;
+    @FXML JFXCheckBox retl;
+    @FXML JFXCheckBox serv;
+    @FXML JFXCheckBox conf;
+    @FXML JFXCheckBox EXIT;
+    @FXML JFXCheckBox elev;
+    @FXML JFXCheckBox stai;
+    @FXML JFXCheckBox park;
+    @FXML JFXCheckBox all;
+
     /*
      * Additional Variables
      */
@@ -194,7 +189,9 @@ public class PathFinder {
 
     private Marker marker = new Marker();
 
-    private ArrayList<Node> currentMarkers = new ArrayList<Node>();
+    private ArrayList<Node> currentMarkers = new ArrayList<>();
+
+    private String[] nodeTypes = {"CONF", "DEPT", "ELEV", "INFO", "LABS", "REST","RETL", "STAI", "SERV", "EXIT", "PARK"};
 
     /**
      * Switch to a different scene
@@ -213,12 +210,10 @@ public class PathFinder {
     @FXML
     void selectStartNode(ActionEvent event) {
         // findPath button validation
-        if (startLocationComboBox.getSelectionModel().isEmpty() ||
-                endLocationComboBox.getSelectionModel().isEmpty()) {
-            findPathButton.setDisable(true);
-        } else {
-            findPathButton.setDisable(false);
-        }
+        findPathButton.setDisable(startLocationComboBox.getSelectionModel().isEmpty() ||
+                endLocationComboBox.getSelectionModel().isEmpty());
+        // clear preset node
+        startNode = null;
     }
 
 
@@ -229,17 +224,16 @@ public class PathFinder {
     @FXML
     void selectEndNode(ActionEvent event) {
         // findPath button validation
-        if (startLocationComboBox.getSelectionModel().isEmpty() ||
-                endLocationComboBox.getSelectionModel().isEmpty()) {
-            findPathButton.setDisable(true);
-        } else {
-            findPathButton.setDisable(false);
-        }
+        findPathButton.setDisable(startLocationComboBox.getSelectionModel().isEmpty() ||
+                endLocationComboBox.getSelectionModel().isEmpty());
+        // clear preset node
+        endNode = null;
     }
 
     /**
      * Get textual directions from {@link Path#makeDirections()}, and prints them out onto
      * a popup dialog.
+     * Populates them with icons corresponding to each step in the directions
      * @param event the calling event's info
      */
     @FXML
@@ -248,16 +242,11 @@ public class PathFinder {
         if (currentFoundPath == null) return;
 
         List<String> directions = currentFoundPath.makeDirectionsWithDist();
-        // Include Icon next to direction
-        JFXListView<String> listView = new JFXListView<>();
-        listView.getItems().addAll(directions);
-        listView.setPrefHeight(USE_COMPUTED_SIZE);
-        listView.setSelectionModel(new NoSelectionModel<String>());
-        listView.getStyleClass().add("directions");
+        String floor = "Floor " + currentFoundPath.getStart().get("floor");
 
         TableView tableView = new TableView();
 
-        TableColumn<TextualDirectionStep, FontAwesomeIconView> column1 = new TableColumn<>();
+        TableColumn<TextualDirectionStep, Text> column1 = new TableColumn<>();
         column1.setCellValueFactory(new PropertyValueFactory<>("icon"));
         column1.getStyleClass().add("iconTable");
         column1.setStyle("-fx-alignment: CENTER-LEFT");
@@ -269,6 +258,9 @@ public class PathFinder {
         column2.setCellValueFactory(new PropertyValueFactory<>("direction"));
         column2.setStyle("-fx-alignment: CENTER-LEFT");
 
+        tableView.setSelectionModel(null);
+        tableView.setPrefHeight(USE_COMPUTED_SIZE);
+        tableView.getStyleClass().add("scrollables");
         tableView.getStyleClass().add("directions");
         tableView.getStyleClass().add("noheader");
         tableView.getStyleClass().add("table-row-cell");
@@ -277,9 +269,21 @@ public class PathFinder {
         tableView.getColumns().add(column1);
         tableView.getColumns().add(column2);
 
-
+        boolean floorChangeFlag = true;
 
         for (String dir : directions) {
+            if (floorChangeFlag) {
+                Text floorHeader = new Text(Character.toString(MaterialDesignIcon.PLAY_CIRCLE.getChar()));
+                //floorHeader.setRotate(180);
+                floorHeader.setStyle("-fx-fill: -fx--primary-dark");
+
+                Text floorText = new Text(floor);
+                floorText.setFont(Font.font(null, FontWeight.BOLD, 16));
+
+                tableView.getItems().add(new TextualDirectionStep(floorHeader, floorText));
+
+                floorChangeFlag = false;
+            }
             char step;
             Text text;
             int rotate = 0;
@@ -311,33 +315,31 @@ public class PathFinder {
             } else { // else is elevator
                 step = MaterialDesignIcon.ELEVATOR.getChar();
             }
+
             text = new Text(Character.toString(step));
             text.setRotate(rotate);
             text.setStyle("-fx-fill: -fx--primary-dark");
-            tableView.getItems().add(new TextualDirectionStep(text, dir));
+            tableView.getItems().add(new TextualDirectionStep(text, new Text("   "+ dir)));
+            if (dir.contains("Floor")) {
+                String s1 = dir.substring(dir.indexOf("Floor"));
+                s1 = s1.replace("Floor", "");
+                s1 = s1.replaceAll("\\s", "");
+                floor = "Floor " + s1;
+                floorChangeFlag = true;
+            }
         }
 
 
         JFXDialogLayout popup = new JFXDialogLayout();
-        popup.setHeading(new Text("Detailed Path Directions"));
+        popup.setHeading(new Text("Path Directions"));
         popup.setBody(tableView);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
         JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
-        dialog.setMaxWidth(375);
-        int fullSize = listView.getItems().size() * 41 + 120;
-        if (fullSize > 425) {
-            dialog.setMaxHeight(425);
-        } else {
-            dialog.setMaxHeight(fullSize);
-        }
+        dialog.setMaxWidth(400);
+        int fullSize = tableView.getItems().size() * 41 + 120;
+        dialog.setMaxHeight(Math.min(fullSize, 425));
         JFXButton okay = new JFXButton("Done");
-        okay.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
-
-            }
-        });
+        okay.setOnAction(event1 -> dialog.close());
         popup.setActions(okay);
         dialog.show();
     }
@@ -359,68 +361,53 @@ public class PathFinder {
         JFXButton bathroom = new JFXButton("Nearest Bathroom");
 
 
-        parking.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if (DB.submitParkingSlot(nodeArrayList.get(index).get("id"), App.userID)) {
-                    dialog.close();
-                } else {
-                    JFXDialogLayout error = new JFXDialogLayout();
-                    error.setHeading(new Text("Error when trying to add parking slot"));
-                    JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
-                    JFXButton dismiss = new JFXButton("Dismiss");
-                    dismiss.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            dialog.close();
-                        }
-                    });
-                    error.setActions(dismiss);
-                    dialog.show();
+        parking.setOnAction(event -> {
+            if (DB.submitParkingSlot(nodeArrayList.get(index).get("id"), App.userID)) {
+                dialog.close();
+            } else {
+                JFXDialogLayout error1 = new JFXDialogLayout();
+                error1.setHeading(new Text("Error when trying to add parking slot"));
+                JFXDialog dialog1 = new JFXDialog(stackPane, error1,JFXDialog.DialogTransition.CENTER);
+                JFXButton dismiss = new JFXButton("Dismiss");
+                dismiss.setOnAction(event1 -> dialog1.close());
+                error1.setActions(dismiss);
+                dialog1.show();
+            }
+        });
+        start.setOnAction(event -> {
+            startLocationComboBox.getSelectionModel().select(index);
+            // clear preset node
+            startNode = null;
+            dialog.close();
+
+        });
+        destination.setOnAction(event -> {
+            endLocationComboBox.getSelectionModel().select(index);
+            // clear preset node
+            endNode = null;
+            dialog.close();
+
+        });
+        bathroom.setOnAction(event -> {
+            SearchContext search = new SearchContext();
+            startLocationComboBox.getSelectionModel().select(index);
+            Node bathroom1 = search.findNearest(nodeArrayList.get(index),"REST");
+            int endIndex = 0;
+            for(int i = 0; i < nodeArrayList.size();i++){
+                if(nodeArrayList.get(i).get("id").equals(bathroom1.get("id"))){
+                    endIndex = i;
                 }
-            }
-        });
-        start.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                startLocationComboBox.getSelectionModel().select(index);
-                dialog.close();
 
             }
-        });
-        destination.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                endLocationComboBox.getSelectionModel().select(index);;
-
-                dialog.close();
-
-            }
-        });
-        bathroom.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                SearchContext search = new SearchContext();
-                startLocationComboBox.getSelectionModel().select(index);
-                Node bathroom = search.findNearest(nodeArrayList.get(index),"REST");
-                int endIndex = 0;
-                for(int i = 0; i < nodeArrayList.size();i++){
-                    if(nodeArrayList.get(i).get("id").equals(bathroom.get("id"))){
-                        endIndex = i;
-                    }
-
-                }
-                endLocationComboBox.getSelectionModel().select(endIndex);
-
-                dialog.close();
+            endLocationComboBox.getSelectionModel().select(endIndex);
+            // clear preset nodes
+            startNode = null;
+            endNode = null;
+            dialog.close();
 
 
-            }
         });
         error.setActions(parking,start,bathroom,destination);
-
-
-
 
         dialog.show();
     }
@@ -455,22 +442,29 @@ public class PathFinder {
 
         System.out.println("\nFINDING PATH...");
 
-        //get index and ID of selected item in dropdown
-        startLocationComboBox.setItems(longNameArrayList);
-        int startLocationListSelectedIndex = startLocationComboBox.getSelectionModel().getSelectedIndex();
-        selectedStartNodeID = nodeIDArrayList.get(startLocationListSelectedIndex);
-        System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + selectedStartNodeID);
+        if (startNode != null) { // if not null, there is a preset start
+            selectedStartNodeID = startNode.get("id");
+        } else {
+            //get index and ID of selected item in dropdown
+            startLocationComboBox.setItems(longNameArrayList);
+            int startLocationListSelectedIndex = startLocationComboBox.getSelectionModel().getSelectedIndex();
+            selectedStartNodeID = nodeIDArrayList.get(startLocationListSelectedIndex);
+            System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + selectedStartNodeID);
+        }
 
-        //get index of selected item in dropdown
-        endLocationComboBox.setItems(longNameArrayList);
-        int endLocationListSelectedIndex = endLocationComboBox.getSelectionModel().getSelectedIndex();
-        selectedEndNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
-        System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + selectedEndNodeID);
+        if (endNode != null) { // if not null, there is a preset end
+            selectedEndNodeID = endNode.get("id");
+        } else {
+            //get index of selected item in dropdown
+            endLocationComboBox.setItems(longNameArrayList);
+            int endLocationListSelectedIndex = endLocationComboBox.getSelectionModel().getSelectedIndex();
+            selectedEndNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
+            System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + selectedEndNodeID);
+        }
 
-        //Define A* Search
-        System.out.println("A* Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
+        //Define Search
         SearchContext search = new SearchContext();
-        String algoType = null;
+        String algoType;
         switch (App.getSearchAlgo()) {
             case 1:
                 algoType = "DFS";
@@ -478,11 +472,19 @@ public class PathFinder {
             case 2:
                 algoType = "BFS";
                 break;
+            case 3:
+                algoType = "Dijkstra";
+                break;
+            case 4:
+                algoType = "Best";
+                break;
             default:
                 algoType = "A*";
                 break;
         }
         search.setAlgo(algoType);
+        System.out.println(algoType + " Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
+
 
         //set constrains
         if (handicap.isSelected()) {
@@ -545,20 +547,13 @@ public class PathFinder {
                 minETA.setText(Integer.toString(foundPath.getETA().getMin()));
                 secETA.setText(String.format("%02d", (foundPath.getETA().getSec())));
                 int len = (int) Math.round(foundPath.getPathLengthFeet());
-                dist.setText(Integer.toString(len) + " Feet");
+                dist.setText(len + " Feet");
 
                 //save found path for when floors are switched
                 currentFoundPath = foundPath;
 
                 //draw the map for the current floor
                 drawMap(foundPath, currentFloor);
-
-                System.out.println();
-                List<String> directions = foundPath.makeDirections();
-                for (String dir : directions) {
-                    System.out.println(dir);
-                }
-
             }
         }
     }
@@ -589,6 +584,10 @@ public class PathFinder {
         List<Path> paths = fullPath.splitByFloor();
         for(Path path : paths){
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
+
+                double markerIconXOffset = -(scale * 3);
+                double markerIconYOffset = -(scale / 2);
+                String mapMarkerSize = "25";
 
                 Iterator<Node> legItr = path.iterator();
                 Group g = new Group(); //create group to contain all the shapes before we add them to the scene
@@ -623,13 +622,22 @@ public class PathFinder {
                         if (!(prevYCoord < 1) || !(prevXCoord < 1)) {
                             //technically second node, here to prevent circle from being "under" path line, prev will be fist node
                             firstNode = 0;
-                            Circle circle;
+                            MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
+                            icon.setSize(mapMarkerSize);
+                            icon.setLayoutX(prevXCoord + markerIconXOffset);
+                            icon.setLayoutY(prevYCoord + markerIconYOffset);
+
                             if (firstID.equalsIgnoreCase(selectedStartNodeID)) {
+                                System.out.println(scale);
                                 // True first node
-                                circle = new Circle(prevXCoord, prevYCoord, radius, Color.GREEN);
+                                icon.setId("submission-icon");
+
+                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.GREEN);
                             } else {
                                 // First on floor
-                                circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
+                                icon.setId("red-icon");
+
+                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
                             }
 
 
@@ -639,27 +647,30 @@ public class PathFinder {
                             line.setStrokeWidth(strokeWidth);
                             line.setStroke(Color.RED);
 
-                            g.getChildren().addAll(line, circle);
+                            g.getChildren().addAll(line, icon);
                         } else {
                             //Track true first node's ID, for node color issue
                             firstID = node.get("id");
                         }
                         if (!legItr.hasNext()) { //if current node is the ending node for this floor, e.g. last node is also first node on floor
 
-                            Circle circle;
+                            MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
+                            icon.setSize(mapMarkerSize);
+                            icon.setLayoutX(xCoord + markerIconXOffset);
+                            icon.setLayoutY(yCoord + markerIconYOffset);
 
                             if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
                                 //place a dot on the location
-                                circle = new Circle(xCoord, yCoord, radius, Color.GREEN);
+                                icon.setId("submission-icon");
                             } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
                                 //place a dot on the location
-                                circle = new Circle(xCoord, yCoord, radius, Color.BLACK);
+                                icon.setId("black-icon");
                             } else { // end node of just this floor
                                 //place a dot on the location
-                                circle = new Circle(xCoord, yCoord, radius, Color.RED);
+                                icon.setId("red-icon");
                             }
 
-                            g.getChildren().addAll(circle);
+                            g.getChildren().addAll(icon);
                         }
                         //update the coordinates for the previous node
                         prevXCoord = xCoord;
@@ -668,14 +679,17 @@ public class PathFinder {
 
                     } else if (!legItr.hasNext()) { //if current node is the ending node for this floor
 
-                        Circle circle;
+                        MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
+                        icon.setSize(mapMarkerSize);
+                        icon.setLayoutX(xCoord + markerIconXOffset);
+                        icon.setLayoutY(yCoord + markerIconYOffset);
 
                         if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
                             //place a dot on the location
-                            circle = new Circle(xCoord, yCoord, radius, Color.BLACK);
+                            icon.setId("black-icon");
                         } else { // end node of just this floor
                             //place a dot on the location
-                            circle = new Circle(xCoord, yCoord, radius, Color.RED);
+                            icon.setId("red-icon");
                         }
 
                         //create a line between this node and the previous node
@@ -743,14 +757,12 @@ public class PathFinder {
                         //if a floor label was made, line and node circle along with the label and its parent flowPane
                         String finalDestFloor = destFloor;
 
-                        floorLabel.setOnMouseClicked(e -> {
-                            setCurrentFloor(finalDestFloor);
-                        });
+                        floorLabel.setOnMouseClicked(e -> setCurrentFloor(finalDestFloor));
 
-                        g.getChildren().addAll(line, circle, flowPane);
+                        g.getChildren().addAll(line, icon, flowPane);
                     } else {
                         //otherwise, only add the line and node circle
-                        g.getChildren().addAll(line, circle);
+                        g.getChildren().addAll(line, icon);
                     }
 
                     //else, if current node is not this floors ending node, i.e., path continues
@@ -843,6 +855,8 @@ public class PathFinder {
         currFloor.setText("");
         currFloor.setText(currentFloor);
 
+        switchFocusButton(floorNum);
+
         //draw path for new floor
         drawMap(currentFoundPath,currentFloor);
 
@@ -860,7 +874,7 @@ public class PathFinder {
 
 
         //init appBar
-        javafx.scene.Node appBarComponent = null;
+        javafx.scene.Node appBarComponent;
         try {
             App.setPageTitle("Path Finder"); //set AppBar title
             App.setHelpText("To use the pathfinder, first select a starting location and end location you would like " +
@@ -893,12 +907,17 @@ public class PathFinder {
         //todo here
 
         longNameArrayList = FXCollections.observableArrayList();
-        nodeIDArrayList = new ArrayList<String>();
+        nodeIDArrayList = new ArrayList<>();
 
         nodeArrayList = DB.getAllNodes();
         for (int i = 0; i < nodeArrayList.size(); i++) {
-            longNameArrayList.add(nodeArrayList.get(i).get("longName"));
-            nodeIDArrayList.add(nodeArrayList.get(i).get("id"));
+            Node node = nodeArrayList.get(i);
+            if (node.get("type").equalsIgnoreCase("HALL") || node.get("type").equalsIgnoreCase("WALK")) {
+                nodeArrayList.remove(i--);
+            } else {
+                longNameArrayList.add(node.get("longName"));
+                nodeIDArrayList.add(node.get("id"));
+            }
         }
 //        longNameArrayList = connection.getAllNodeLongNames();
 //        nodeIDArrayList = connection.getListOfNodeIDS();
@@ -907,13 +926,14 @@ public class PathFinder {
         startLocationComboBox.setItems(longNameArrayList);
         endLocationComboBox.setItems(longNameArrayList);
 
+        startLocationComboBox.getStyleClass().add("scrollables");
+        endLocationComboBox.getStyleClass().add("scrollables");
+
         System.out.println("done");
 
 
         new AutoCompleteComboBoxListener<>(startLocationComboBox);
         new AutoCompleteComboBoxListener<>(endLocationComboBox);
-
-        final ArrayList<Node> array = DB.getAllNodes();
 
         //Set up zoomable and pannable panes
         BorderPane borderPane = new BorderPane();
@@ -968,18 +988,6 @@ public class PathFinder {
         marker.populateLocationMarkerMarkerGroup(scale);
         markerPane.getChildren().add(marker.getMarkerGroup());
 
-        //Check if startNodeIndex has a value, if yes fill startLocationComboBox
-        if (startNodeIndex != -1) {
-            startLocationComboBox.getSelectionModel().select(startNodeIndex);
-            startNodeIndex = -1;
-        }
-
-        //Check if startNodeIndex has a value, if yes fill startLocationComboBox
-        if (endNodeIndex != -1) {
-            endLocationComboBox.getSelectionModel().select(endNodeIndex);
-            endNodeIndex = -1;
-        }
-
         System.out.println("Finish PathFinder Init.");
         pane.setOnMouseClicked(e -> {
             /*double xCoord = e.getX();
@@ -996,16 +1004,16 @@ public class PathFinder {
             /*System.out.println(xInt);
             System.out.println(yInt);*/
 
-            for(int i = 0; i < array.size(); i++) {
-                Node node = array.get(i);
+            for(int i = 0; i < nodeArrayList.size(); i++) {
+                Node node = nodeArrayList.get(i);
                 double nodeX = node.getX() / scale;
                 int nodeXInt = (int) nodeX;
                 double nodeY = node.getY() / scale;
                 int nodeYInt = (int) nodeY;
-                System.out.println(nodeXInt);
+                //System.out.println(nodeXInt);
                 if ((Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) && (node.get("floor").equalsIgnoreCase(currentFloor))) {
 
-                    System.out.println(array.get(i).get("longName"));
+                    System.out.println(nodeArrayList.get(i).get("longName"));
                     clickOnNode(i);
 
                 }
@@ -1030,11 +1038,33 @@ public class PathFinder {
         new ImageObserver(subject, imageView);
         //new PathObserver(subject, pane, currentFoundPath, scale, selectedStartNodeID, selectedEndNodeID);
 
-        currFloor.textProperty().addListener(observable -> {
-            subject.setState(currFloor.getText());
-        });
+        currFloor.textProperty().addListener(observable -> subject.setState(currFloor.getText()));
+
+        startNode = App.getStartNode();
+        if (startNode != null) {
+            startLocationComboBox.setValue(startNode.get("longName"));
+            App.setStartNode(null);
+            // Reset so user doesn't get this again
+        }
+
+        endNode = App.getEndNode();
+        if (endNode != null) {
+            endLocationComboBox.setValue(endNode.get("longName"));
+            App.setEndNode(null);
+            // Reset so user doesn't get this again
+        }
+
+        if (App.isToEmergency()) {
+            safe.setSelected(true);
+            App.setToEmergency(false);
+            // Reset so user doesn't get this again
+        }
     }
 
+    /**
+     * Switches visible floor
+     * @param e Button click action
+     */
     public void chooseFloor(ActionEvent e) {
         //clear current floor of markers
         for (Node node : currentMarkers) {
@@ -1044,7 +1074,6 @@ public class PathFinder {
         Button button = ((Button) e.getSource());
         currentMarkers.clear();
         String floor = button.getText();
-        switchFocusButton(button);
         currFloor.setText(floor);
 
         setCurrentFloor(floor);
@@ -1053,55 +1082,156 @@ public class PathFinder {
         System.out.println("Current floor set to " + floor);
     }
 
-    private void switchFocusButton(Button button) {
+    /**
+     * Switch highlighted floor button
+     * @param floor Floor to switch to
+     */
+    private void switchFocusButton(String floor) {
         currentlySelected.setStyle("-fx-background-color: -fx--primary-light");
+        Button button = currentlySelected;
+        switch (floor) {
+            case "L2":
+                button = floorL2;
+                break;
+
+            case "L1":
+                button = floorL1;
+                break;
+
+            case "G":
+                button = floorG;
+                break;
+
+            case "1":
+                button = floor1;
+                break;
+
+            case "2":
+                button = floor2;
+                break;
+
+            case "3":
+                button = floor3;
+                break;
+        }
         currentlySelected = button;
         currentlySelected.setStyle("-fx-background-color: -fx--primary");
     }
 
+    @FXML
     public void sortNodesByType(ActionEvent event) {
-        String currentType =((CheckBox) event.getSource()).getId().toUpperCase();
-        //create hashcode string for hashmap
-        String typeAndFloorString = currentType + currentFloor;
-        //Get the nodes with the current floor and type
-        ArrayList<Node> nodeList = marker.getTypeAndFloorNode().get(typeAndFloorString);
+        String selectedType =((CheckBox) event.getSource()).getId().toUpperCase();
 
         if (((CheckBox) event.getSource()).isSelected()) {
-            System.out.println(((CheckBox) event.getSource()).getId().toUpperCase());
-            marker.getSelectedCheckBox().replace(((CheckBox) event.getSource()).getId().toUpperCase(), 1);
+            System.out.println(selectedType);
 
-            for (Node node : nodeList) {
-                NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
-                Rectangle r = nM.getRectangle();
-                r.setVisible(true);
-                //r.setFill(marker.getTypeColor().get(currentType));
-                currentMarkers.add(node);
+            if (!selectedType.equals("ALL")) {
+                //create hashcode string for hashmap
+                String typeAndFloorString = selectedType + currentFloor;
+                //Get the nodes with the current floor and type
+                ArrayList<Node> nodeList = marker.getTypeAndFloorNode().get(typeAndFloorString);
+
+                marker.getSelectedCheckBox().replace(((CheckBox) event.getSource()).getId().toUpperCase(), 1);
+
+                for (Node node : nodeList) {
+                    NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                    Rectangle r = nM.getRectangle();
+                    r.setVisible(true);
+                    currentMarkers.add(node);
+                }
+            } else {
+                rest.setSelected(true);
+                info.setSelected(true);
+                dept.setSelected(true);
+                labs.setSelected(true);
+                retl.setSelected(true);
+                serv.setSelected(true);
+                conf.setSelected(true);
+                EXIT.setSelected(true);
+                elev.setSelected(true);
+                stai.setSelected(true);
+                park.setSelected(true);
+
+                for(String type : nodeTypes) {
+                    marker.getSelectedCheckBox().replace(type.toUpperCase(), 1);
+
+                    String typeAndFloorString = type + currentFloor;
+                    ArrayList<Node> nodeList = marker.getTypeAndFloorNode().get(typeAndFloorString);
+
+                    for(Node node : nodeList) {
+                        NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                        Rectangle r = nM.getRectangle();
+                        r.setVisible(true);
+                        currentMarkers.add(DB.getNodeInfo(node.get("id")));
+                    }
+                }
             }
         } else {
-            System.out.println(((CheckBox) event.getSource()).getId().toUpperCase());
-            marker.getSelectedCheckBox().replace(((CheckBox) event.getSource()).getId().toUpperCase(), 0);
+            System.out.println(selectedType);
 
-            for (Node node : nodeList) {
-                NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
-                nM.getRectangle().setVisible(false);
-                currentMarkers.remove(node);
+            if(!selectedType.equals("ALL")) {
+                //create hashcode string for hashmap
+                String typeAndFloorString = selectedType + currentFloor;
+                //Get the nodes with the current floor and type
+                ArrayList<Node> nodeList = marker.getTypeAndFloorNode().get(typeAndFloorString);
+
+                marker.getSelectedCheckBox().replace(((CheckBox) event.getSource()).getId().toUpperCase(), 0);
+
+                for (Node node : nodeList) {
+                    NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                    nM.getRectangle().setVisible(false);
+                    currentMarkers.remove(node);
+                }
+            } else {
+                rest.setSelected(false);
+                info.setSelected(false);
+                dept.setSelected(false);
+                labs.setSelected(false);
+                retl.setSelected(false);
+                serv.setSelected(false);
+                conf.setSelected(false);
+                EXIT.setSelected(false);
+                elev.setSelected(false);
+                stai.setSelected(false);
+                park.setSelected(false);
+
+                for(String type : nodeTypes) {
+                    marker.getSelectedCheckBox().replace(type.toUpperCase(), 0);
+
+                    String typeAndFloorString = type + currentFloor;
+                    ArrayList<Node> nodeList = marker.getTypeAndFloorNode().get(typeAndFloorString);
+
+                    for(Node node : nodeList) {
+                        NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                        nM.getRectangle().setVisible(false);
+                        currentMarkers.remove(DB.getNodeInfo(node.get("id")));
+                    }
+                }
             }
         }
+
+        if(allSelected()) {
+            all.setSelected(true);
+        } else {
+            all.setSelected(false);
+        }
+    }
+
+    public boolean allSelected() {
+        boolean allSelected = true;
+        for (String type : nodeTypes) {
+            if (marker.getSelectedCheckBox().get(type) == 0) {
+                allSelected = false;
+            }
+        }
+        return allSelected;
     }
 
     public void startQRScanning(ActionEvent event) {
         String result = QRCode.scanQR();
         String nodeID = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
         System.out.println("Scanned nodeID: " + nodeID);
-
-
-        ArrayList<Node> nodeArrayList = DB.getAllNodes();
-        int index = 0;
-        for(int i = 0; i < nodeArrayList.size();i++){
-            if(nodeArrayList.get(i).get("id").equals(nodeID)){
-                index = i;
-            }
-        }
-        startLocationComboBox.getSelectionModel().select(index);
+        startNode = DB.getNodeInfo(nodeID);
+        startLocationComboBox.setValue(startNode.get("longName"));
     }
 }

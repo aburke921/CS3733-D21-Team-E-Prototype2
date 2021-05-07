@@ -249,11 +249,19 @@ FontAwesomeIconView {
 }
 
 #submission-icon {
-    -fx-fill: #82cd58;
+    -fx-fill: #368509;
 }
 
 #white-icon {
     -fx-fill: WHITE;
+}
+
+#black-icon {
+    -fx-fill: BLACK;
+}
+
+#red-icon {
+    -fx-fill: RED;
 }
 
 JFXButton:hover MaterialDesignIconView {
@@ -285,7 +293,7 @@ JFXButton:hover FontAwesomeIconView {
     -fx-fill: WHITE;
 }
 
-transit-button{
+.transit-button{
     -jfx-button-type: RAISED;
 }
 
@@ -302,47 +310,52 @@ transit-button{
 
 /* ListView CSS from: https://blog.ngopal.com.np/2012/07/11/customize-scrollbar-via-css/*/
 
-.directions .jfx-rippler{
+scrollables.directions .jfx-rippler{
     -jfx-rippler-fill: rgba(255,255,255,0);
 }
 
-.directions{
+scrollables.directions{
     -fx-border-color: rgba(255,255,255,0);
 }
 
 /* The main scrollbar CSS class of ListView */
-.directions .scroll-bar:horizontal {
-    -fx-pref-width: 0;
+.scrollables .scroll-bar:horizontal {
+    -fx-pref-width: 12;
+    -fx-background-color:transparent;
 }
 
-.directions  .scroll-bar:vertical{
+.scrollables  .scroll-bar:vertical{
     -fx-pref-width: 12;
     -fx-background-color:transparent;
 
 }
 
 /* The increment and decrement button CSS class of scrollbar */
-.directions .increment-button ,.directions .decrement-button {
+.scrollables .increment-button ,.scrollables .decrement-button {
     -fx-background-color:transparent;
     -fx-border-color:derive(gray,80%);
 }
 
 /* The main scrollbar **track** CSS class  */
-.directions .scroll-bar:vertical .track{
+.scrollables .scroll-bar:vertical .track{
     -fx-background-color: transparent;
     -fx-border-color:derive(gray,80%);
     -fx-background-radius: 0em;
 }
 
 /* The main scrollbar **thumb** CSS class which we drag every time (movable) */
-.directions .scroll-bar:vertical .thumb {
+.scrollables .scroll-bar:vertical .thumb {
     -fx-background-color: -fx--primary;
     -fx-background-insets: 2, 0, 0;
     -fx-background-radius: 2em;
 
 }
 
-.jfx-dialog-overlay-pane > StackPane{
+.directions .scroll-bar:horizontal {
+    -fx-pref-width: 0;
+}
+
+.jfx-dialog{
     -fx-effect: null;
 }
 

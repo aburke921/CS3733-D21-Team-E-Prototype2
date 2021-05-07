@@ -73,8 +73,15 @@ public class DefaultState {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+                break;
+            case "covidSurveyStatusButton":
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurveyStatus.fxml"));
+                    App.changeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            }
         }
-
-
     }
-}

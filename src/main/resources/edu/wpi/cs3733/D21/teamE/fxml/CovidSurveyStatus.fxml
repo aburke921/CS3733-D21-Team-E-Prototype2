@@ -124,7 +124,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <JFXButton fx:id="backButton" maxHeight="30.0" onAction="#switchScene" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back">
+                  <JFXButton fx:id="backButton" maxHeight="30.0" onAction="#goBack" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back">
                      <GridPane.margin>
                         <Insets bottom="20.0" left="20.0" />
                      </GridPane.margin>

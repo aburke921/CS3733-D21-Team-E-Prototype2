@@ -1,15 +1,18 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
-import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.Time;
 import edu.wpi.cs3733.D21.teamE.states.CovidSurveyState;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 
@@ -32,12 +35,30 @@ public class CovidSurvey extends ServiceRequests {
 	@FXML
 	private StackPane stackPane;
 
-	/**
-	 * Creates a popup if the user indicates any symptoms.
-	 */
-	@FXML
-	void popUp() {
-		App.newJFXDialogPopUp("","Exit","Based on your response you should go home.",stackPane);
+	public static void exitPopUp(String heading, String button, String message, StackPane stackPane) {
+		System.out.println("DialogBox Posted");
+		JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+		jfxDialogLayout.setHeading(new Text(heading));
+		jfxDialogLayout.setBody(new Text(message));
+		JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+		JFXButton okay = new JFXButton(button);
+		okay.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
+					App.changeScene(root);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+		jfxDialogLayout.setActions(okay);
+		dialog.show();
+	}
+
+	private void exit() {
+		exitPopUp("","Exit","Thank you for filling out the form, please wait for it to be reviewed before entry.", stackPane);
 	}
 
 	/**
@@ -47,69 +68,44 @@ public class CovidSurvey extends ServiceRequests {
 		App.newJFXDialogPopUp("","Done","Please select at least one checkbox.",stackPane);
 	}
 
-	@FXML
-	void submitButton(ActionEvent actionEvent) {
-		int rating = 0;
-		if (noSymptoms.isSelected()) {
-			rating += 1;
-		}
-		if (quarantine.isSelected()) {
-			rating += 10;
-		}
-		if (closeContact.isSelected()) {
-			rating += 100;
-		}
-		if (symptoms.isSelected()) {
-			rating += 1000;
-		}
-		if (positiveTest.isSelected()) {
-			rating += 10000;
-		}
+	private boolean validateInputVersion() {
+		return symptoms.isSelected() || positiveTest.isSelected() || closeContact.isSelected()
+				|| quarantine.isSelected() || noSymptoms.isSelected();
+	}
 
-		if (rating == 0) {
-			validateInput();
-		} else if (App.userID != 0) {
-			if (DB.submitCovidSurvey(rating, App.userID)) {
-				System.out.println("user's covid survey of " + rating + " was submitted");
-			} else {
-				System.err.println("user's covid survey of " + rating + " was not submitted");
-				popUp();
+	@FXML
+	private void submitButton(ActionEvent event) {
+		if(validateInputVersion()) {
+			boolean positiveTestBool = false;
+			boolean symptomsBool = false;
+			boolean closeContactBool = false;
+			boolean quarantineBool = false;
+			boolean noSymptomsBool = false;
+			if (positiveTest.isSelected()) {
+				positiveTestBool = true;
 			}
-			if (DB.isUserCovidSafe(App.userID)) {
-				if (plzGoToPathFinder){
-					plzGoToPathFinder = false;
-					try {
-						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-						App.changeScene(root);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
-				}else {
-					CovidSurveyState covidSurveyState = new CovidSurveyState();
-					covidSurveyState.switchScene(actionEvent);
-				}
-			} else {
-				popUp();
+			if (symptoms.isSelected()) {
+				symptomsBool = true;
 			}
+			if (closeContact.isSelected()) {
+				closeContactBool = true;
+			}
+			if (quarantine.isSelected()) {
+				quarantineBool = true;
+			}
+			if (noSymptoms.isSelected()) {
+				noSymptomsBool = true;
+			}
+
+			//TODO: based on what user has selected, set the string to either "Needs to be reviewed", "Safe", "Unsafe"
+
+			CovidSurveyObj newSurvey = new CovidSurveyObj(App.userID, 0, positiveTestBool, symptomsBool, closeContactBool, quarantineBool, noSymptomsBool, "Needs to Be Reviewed");
+			DB.submitCovidSurvey(newSurvey, App.userID);
+			DB.addEntryRequest(newSurvey);
+			DB.updateUserAccountCovidStatus(App.userID, "Needs to Be Reviewed");
+			exit();
 		} else {
-			if (rating < 10) {
-				App.noCleanSurveyYet = false;
-				if (plzGoToPathFinder) {
-					plzGoToPathFinder = false;
-					try {
-						Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-						App.changeScene(root);
-					} catch (IOException ex) {
-						ex.printStackTrace();
-					}
-				} else {
-					CovidSurveyState covidSurveyState = new CovidSurveyState();
-					covidSurveyState.switchScene(actionEvent);
-				}
-			} else {
-				App.noCleanSurveyYet = true;
-				popUp();
-			}
+			validateInput();
 		}
 	}
 

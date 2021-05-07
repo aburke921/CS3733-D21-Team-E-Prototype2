@@ -29,16 +29,12 @@ public class XFirstSearcher extends Searcher {
      * Searches for a Path from startId to endId
      * Utilizing the Depth First Search Algorithm
      * i.e. will continue along a path until it hits a dead end or finds its goal
-     * @param startId the Node to begin Path at
-     * @param endId the Node to end Path at
+     * @param start the Node to begin Path at
+     * @param end the Node to end Path at
      * @return Path object representing the route from startId to endId
      */
     @Override
-    public Path search(String startId, String endId){
-
-        //get node info from database
-        Node start = getNode(startId);
-        Node end = getNode(endId);
+    public Path search(Node start, Node end){
 
         //stack (rep by linkedlist) of nodes to search next
         LinkedList<Node> potentials = new LinkedList<>();
@@ -77,7 +73,7 @@ public class XFirstSearcher extends Searcher {
             //move to current (pop off stack and add to visited)
             visited.add(current);
 
-            List<String> neighbors = getNeighbors(current.get("id"));
+            List<String> neighbors = current.getNeighbors();
             //for each neighbor, add to potentials if
             //it hasnt been visited and isn't already a potential
             for(String neighborId : neighbors){

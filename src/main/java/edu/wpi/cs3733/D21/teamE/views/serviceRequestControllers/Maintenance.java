@@ -31,6 +31,8 @@ public class Maintenance extends ServiceRequestFormComponents {
 
     ObservableList<String> locations;
     ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> userNames;
+    ArrayList<Integer> userID = new ArrayList<>();
 
     @FXML // fx:id="background"
     private ImageView background;
@@ -90,7 +92,7 @@ public class Maintenance extends ServiceRequestFormComponents {
     private String low_severity; // Value injected by FXMLLoader
 
     @FXML // fx:id="assignedPersonnelInput"
-    private JFXTextField assignedPersonnelInput; // Value injected by FXMLLoader
+    private JFXComboBox<String> assignedPersonnelInput; // Value injected by FXMLLoader
 
     @FXML // fx:id="authorInput"
     private JFXTextField authorInput; // Value injected by FXMLLoader
@@ -137,9 +139,11 @@ public class Maintenance extends ServiceRequestFormComponents {
         background.fitWidthProperty().bind(primaryStage.widthProperty());
         //background.fitHeightProperty().bind(primaryStage.heightProperty());
 
-        nodeID = DB.getListOfNodeIDS();
         locations = DB.getAllNodeLongNames();
         locationInput.setItems(locations);
+        userNames = DB.getAssigneeNames("custodian");
+        assignedPersonnelInput.setItems(userNames);
+
         assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";

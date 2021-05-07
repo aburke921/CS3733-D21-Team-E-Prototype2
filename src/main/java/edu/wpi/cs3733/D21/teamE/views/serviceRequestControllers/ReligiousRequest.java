@@ -5,6 +5,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.DB;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
 
@@ -18,8 +20,14 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ReligiousRequest extends ServiceRequestFormComponents {
+
+    ObservableList<String> locations;
+    ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> userNames;
+    ArrayList<Integer> userID = new ArrayList<>();
 
     @FXML // fx:id="background"
     private ImageView background;
@@ -31,7 +39,7 @@ public class ReligiousRequest extends ServiceRequestFormComponents {
     private JFXComboBox<String> religionInput;
 
     @FXML
-    private JFXTextField assignedPersonnel;
+    private JFXComboBox<String> assignedPersonnel;
 
     @FXML
     private JFXTextArea description;
@@ -85,6 +93,11 @@ public class ReligiousRequest extends ServiceRequestFormComponents {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        locations = DB.getAllNodeLongNames();
+        locationInput.setItems(locations);
+        userNames = DB.getAssigneeNames("religiousPerson");
+        assignedPersonnel.setItems(userNames);
     }
 
 }

@@ -82,7 +82,8 @@ public class ReligiousRequest extends ServiceRequestFormComponents {
             int user = userID.get(assigneeIndex);
             String desc = description.getText();
 
-            DB.addReligiousRequest(new ReligiousRequestObj(0, App.userID, node, user, religion, desc));
+            ReligiousRequestObj object = new ReligiousRequestObj(0, App.userID, node, user, religion, desc);
+            DB.addReligiousRequest(object);
             super.handleButtonSubmit(event);
         }
     }

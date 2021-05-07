@@ -91,9 +91,8 @@ public class SanitationServices extends ServiceRequestFormComponents {
       int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
       String node = nodeID.get(nodeIDIndex);
 
-      DB.addSanitationRequest(new SanitationServiceObj(0, App.userID, assigneeID, node, serviceKind,details,severity));
-
-      super.handleButtonSubmit(actionEvent);
+      SanitationServiceObj object = new SanitationServiceObj(0, App.userID, assigneeID, node, serviceKind,details,severity);
+      DB.addSanitationRequest(object);
 
       //For email implementation later
 //      String email = DB.getEmail(App.userID);
@@ -117,7 +116,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
 //
 //      sendEmail.sendRequestConfirmation(email, body);
 
-      //Setting up all variables to be entered
+      super.handleButtonSubmit(actionEvent);
     }
 
   }

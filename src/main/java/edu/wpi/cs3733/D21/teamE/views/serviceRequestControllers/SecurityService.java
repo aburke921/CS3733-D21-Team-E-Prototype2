@@ -121,9 +121,8 @@ public class SecurityService extends ServiceRequestFormComponents {
             int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
             String node = nodeID.get(nodeIDIndex);
 
-            DB.addSecurityRequest(new SecurityServiceObj(0, App.userID, assignee, node, securityLevel, urgencyLevel, reason));
-
-            super.handleButtonSubmit(actionEvent);
+            SecurityServiceObj object = new SecurityServiceObj(0, App.userID, assignee, node, securityLevel, urgencyLevel, reason);
+            DB.addSecurityRequest(object);
 
             //For email implementation later
 //            String email = DB.getEmail(App.userID);
@@ -146,6 +145,7 @@ public class SecurityService extends ServiceRequestFormComponents {
 //                    "- Emerald Emus BWH";
 //
 //            sendEmail.sendRequestConfirmation(email, body);
+            super.handleButtonSubmit(actionEvent);
         }
     }
 

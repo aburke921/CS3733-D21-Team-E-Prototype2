@@ -24,10 +24,15 @@ import java.util.ArrayList;
 
 public class SanitationServices extends ServiceRequestFormComponents {
 
+  ObservableList<String> locations;
+  ArrayList<String> nodeID = new ArrayList<>();
+  ObservableList<String> userNames;
+  ArrayList<Integer> userID = new ArrayList<>();
+
   @FXML // fx:id="background"
   private ImageView background;
 
-  @FXML private JFXTextField assignedIndividual;
+  @FXML private JFXComboBox<String> assignedIndividual;
   @FXML private JFXTextField Signature;
   @FXML private JFXTextArea detailedInstructionsInput;
   @FXML private JFXComboBox<String> locationInput;
@@ -89,11 +94,14 @@ public class SanitationServices extends ServiceRequestFormComponents {
       //connection.addRequest("sanitationServices", request);
       ArrayList<String> nodeIDS = DB.getListOfNodeIDS();
       String serviceKind = ServiceTypeinput.getValue();
-      int assigneeID = 99999;
+      int assigneeIndex = assignedIndividual.getSelectionModel().getSelectedIndex();
+      int assigneeID = userID.get(assigneeIndex);
       String details = detailedInstructionsInput.getText();
       String severity = Severity.getValue();
       String signature = Signature.getText();
       int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
+      String node = nodeID.get(nodeIDIndex);
+
       String nodeID = nodeIDS.get(nodeIDIndex);
       DB.addSanitationRequest(new SanitationServiceObj(0, 15,assigneeID,nodeID, serviceKind,details,severity,signature));
       //DB changed the assignee in the function call to an int (not string) --> we need the assignee's userID
@@ -170,9 +178,14 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
     //ServiceTypeinput.setItems(Services);
 
-    ObservableList<String> locations  = DB.getAllNodeLongNames();
-
+    locations  = DB.getAllNodeLongNames();
+    nodeID = DB.getListOfNodeIDS();
     locationInput.setItems(locations);
+
+    userNames = DB.getAssigneeNames("custodian");
+    userID = DB.getAssigneeIDs("custodian");
+    assignedIndividual.setItems(userNames);
+
     ObservableList<String> rating  = FXCollections.observableArrayList();
     rating.setAll("Low","Medium","High","Critical");
     Severity.setItems(rating);

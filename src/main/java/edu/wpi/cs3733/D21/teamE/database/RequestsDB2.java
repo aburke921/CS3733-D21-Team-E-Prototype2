@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.MedicineDelivery;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
 
 import java.sql.Connection;
@@ -1087,4 +1088,151 @@ public class RequestsDB2 {
 
 
 
+
+
+
+	//MEDICINE REQUEST STUFF:
+
+	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants the medecine delivered to.
+	 * - medicineName: this is the drug that the user is ordering/requesting
+	 * - quantity: the is the supply or the number of pills ordered
+	 * - dosage: this is the mg or ml quantity for a medication
+	 * - specialInstructions: this is any special details or instructions the user wants to give to who ever is processing the request.
+	 * - signature: this the signature (name in print) of the user who is filling out the request
+	 */
+	public static void createMedDeliveryTable() {
+		String query = "Create Table medDelivery ( " +
+				"requestID  int Primary Key References requests On Delete Cascade," +
+				"roomID     varchar(31) Not Null References node On Delete Cascade," +
+				"medicineName        varchar(31) Not Null," +
+				"quantity            int         Not Null," +
+				"dosage              int Not Null," +
+				"specialInstructions varchar(5000)," +
+				"signature           varchar(31) Not Null" + ")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating medDelivery table");
+		}
+	}
+
+	/**
+	 * This adds a medicine request form to the table for medicine request forms
+	 * @param medicineDeliveryObj object holding medicine req. fields
+	 */
+	public static void addMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
+		// int requestID, String nodeID, int assigneeID, int userID, String medicineName, String doseQuantity, String doseMeasure, String specialInstructions, String signature
+		// int userID, int assigneeID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature
+
+		int userID = medicineDeliveryObj.getUserID();
+		int assigneeID = medicineDeliveryObj.getAssigneeID();
+		String roomID = medicineDeliveryObj.getNodeID();
+		String medicineName = medicineDeliveryObj.getMedicineName();
+		int quantity = medicineDeliveryObj.getDoseQuantity();
+		int dosage = medicineDeliveryObj.getDoseMeasure();
+		String specialInstructions = medicineDeliveryObj.getSpecialInstructions();
+		String signature = medicineDeliveryObj.getSignature();
+
+		addRequest(userID, assigneeID, "medDelivery");
+
+		String insertMedRequest = "Insert Into meddelivery Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, medicineName);
+			prepState.setInt(3, quantity);
+			prepState.setInt(4, dosage);
+			prepState.setString(5, specialInstructions);
+			prepState.setString(6, signature);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
+		}
+	}
+
+	/**
+	 * edits medicine request which is already in DB
+	 * @param medicineDeliveryObj object holding medicine req. fields
+	 * @return
+	 */
+	public static int editMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
+
+		int requestID = medicineDeliveryObj.getRequestID();
+		int assigneeID = medicineDeliveryObj.getAssigneeID();
+		String roomID = medicineDeliveryObj.getNodeID();
+		String medicineName = medicineDeliveryObj.getMedicineName();
+		int quantity = medicineDeliveryObj.getDoseQuantity();
+		Integer quantityI = quantity;
+		int dosage = medicineDeliveryObj.getDoseMeasure();
+		Integer dosageI = quantity;
+		String specialInstructions = medicineDeliveryObj.getSpecialInstructions();
+		String signature = medicineDeliveryObj.getSignature();
+
+		boolean added = false;
+		String query = "Update medDelivery Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+
+			added = true;
+		}
+		if (medicineName != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " medicineName = '" + medicineName + "'";
+			added = true;
+		}
+		if (quantityI != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " quantity = " + quantity;
+			added = true;
+		}
+		if (dosageI != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " dosage = " + dosage;
+			added = true;
+		}
+		if (specialInstructions != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " specialInstructions = '" + specialInstructions + "'";
+			added = true;
+		}
+		if (signature != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + " signature = '" + signature + "'";
+			added = true;
+		}
+
+
+		query = query + " where requestID = " + requestID;
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error in updating medicine request");
+			return 0;
+		}
+	}
 }

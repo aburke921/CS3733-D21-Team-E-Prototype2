@@ -29,7 +29,7 @@ public class DatabaseTests {
 
 	@BeforeAll
 	public void setConnection() {
-		connection = makeConnection.makeConnection();
+		connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
 	}
 
 	@BeforeEach
@@ -1289,7 +1289,7 @@ public class DatabaseTests {
 		insertUsers.add("Insert Into userAccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', Current Timestamp, '', Null, Null)");
 
 		for (String insertUser : insertUsers) {
-			try (PreparedStatement prepState = makeConnection.makeConnection().connection.prepareStatement(insertUser)) {
+			try (PreparedStatement prepState = makeConnection.makeConnection("jdbc:derby://localhost:1527/BWDB").connection.prepareStatement(insertUser)) {
 				prepState.execute();
 			} catch (SQLException e) {
 				e.printStackTrace();

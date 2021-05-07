@@ -26,6 +26,7 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 import org.apache.derby.drda.NetworkServerControl;
 import java.net.InetAddress;
@@ -84,6 +85,7 @@ public class App extends Application {
 
 	public static String driverURL = "jdbc:derby:BWDB;create=true";
 
+
 	//setters and getters for above variables
 	public static boolean isShowLogin() { return showLogin; }
 	public static void setShowLogin(boolean showLogin) { App.showLogin = showLogin; }
@@ -133,6 +135,7 @@ public class App extends Application {
 
 		if(DBOption == 2){
 			driverURL = "jdbc:derby://localhost:1527/BWDB";
+//			driverURL = "jdbc:derby://localhost:1527/BWDB;createFrom=backupBWDB/BWDB";
 		}
 
 
@@ -207,6 +210,13 @@ public class App extends Application {
 	@Override
 	public void stop() {
 		System.out.println("Shutting Down");
+
+		try {
+			DB.backupDatabase();
+		}catch (SQLException e){
+			e.printStackTrace();
+			System.err.println("Error backing up the database");
+		}
 		System.exit(0);
 	}
 

@@ -42,6 +42,8 @@ public class makeConnection {
 
 				this.connection = DriverManager.getConnection(driverString, props);
 
+
+
 				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
 				// e.printStackTrace();
@@ -360,6 +362,8 @@ public class makeConnection {
 		}
 
 	}
+
+
 
 
 }

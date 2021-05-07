@@ -30,6 +30,11 @@ import javafx.stage.Stage;
 
 public class SecurityService extends ServiceRequestFormComponents {
 
+    ObservableList<String> locations;
+    ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> userNames;
+    ArrayList<Integer> userID = new ArrayList<>();
+
     @FXML // fx:id="background"
     private ImageView background;
 
@@ -166,8 +171,11 @@ public class SecurityService extends ServiceRequestFormComponents {
         background.fitWidthProperty().bind(primaryStage.widthProperty());
         //background.fitHeightProperty().bind(primaryStage.heightProperty());
 
-        ObservableList<String> locations = DB.getAllNodeLongNames();
+        locations = DB.getAllNodeLongNames();
         locationInput.setItems(locations);
+        userNames = DB.getAssigneeNames("security");
+        assignedPersonnel.setItems(userNames);
+
         assert helpSecurityService != null : "fx:id=\"helpSecurityService\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert locationInput != null : "fx:id=\"locationOfDelivery\" was not injected: check your FXML file 'SecurityService.fxml'.";
         assert levelOfSecurity != null : "fx:id=\"levelOfSecurity\" was not injected: check your FXML file 'SecurityService.fxml'.";

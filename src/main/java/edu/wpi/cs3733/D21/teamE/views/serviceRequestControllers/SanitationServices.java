@@ -23,10 +23,15 @@ import java.util.ArrayList;
 
 public class SanitationServices extends ServiceRequestFormComponents {
 
+  ObservableList<String> locations;
+  ArrayList<String> nodeID = new ArrayList<>();
+  ObservableList<String> userNames;
+  ArrayList<Integer> userID = new ArrayList<>();
+
   @FXML // fx:id="background"
   private ImageView background;
 
-  @FXML private JFXTextField assignedIndividual;
+  @FXML private JFXComboBox<String> assignedIndividual;
   @FXML private JFXTextField Signature;
   @FXML private JFXTextArea detailedInstructionsInput;
   @FXML private JFXComboBox<String> locationInput;
@@ -169,9 +174,11 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
     //ServiceTypeinput.setItems(Services);
 
-    ObservableList<String> locations  = DB.getAllNodeLongNames();
-
+    locations  = DB.getAllNodeLongNames();
     locationInput.setItems(locations);
+    userNames = DB.getAssigneeNames("custodian");
+    assignedIndividual.setItems(userNames);
+
     ObservableList<String> rating  = FXCollections.observableArrayList();
     rating.setAll("Low","Medium","High","Critical");
     Severity.setItems(rating);

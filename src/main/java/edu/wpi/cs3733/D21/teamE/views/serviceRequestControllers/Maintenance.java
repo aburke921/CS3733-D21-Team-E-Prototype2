@@ -65,9 +65,6 @@ public class Maintenance extends ServiceRequestFormComponents {
     @FXML // fx:id="descriptionInput"
     private JFXTextArea descriptionInput; // Value injected by FXMLLoader
 
-    @FXML // fx:id="ETAInput"
-    private JFXTextField ETAInput; // Value injected by FXMLLoader
-
     @FXML // fx:id="cancel"
     private JFXButton cancel; // Value injected by FXMLLoader
 
@@ -96,9 +93,8 @@ public class Maintenance extends ServiceRequestFormComponents {
         String requestType = requestTypeInput.getSelectionModel().getSelectedItem();
         String severity = severityInput.getSelectionModel().getSelectedItem();
         String desc = descriptionInput.getText();
-        String time = ETAInput.getText();
 
-        DB.addMaintenanceRequest(new MaintenanceObj(0, App.userID, node, user, requestType, severity, "Remove this", time, desc));
+        DB.addMaintenanceRequest(new MaintenanceObj(0, App.userID, node, user, requestType, severity, desc));
         super.handleButtonSubmit(event);
     }
 
@@ -131,7 +127,6 @@ public class Maintenance extends ServiceRequestFormComponents {
         assert severityInput != null : "fx:id=\"severityInput\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert assignedPersonnelInput != null : "fx:id=\"assignedPersonnelInput\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert descriptionInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
-        assert ETAInput != null : "fx:id=\"ETAInput\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";
 

@@ -4,11 +4,9 @@ public class MaintenanceObj extends ServiceRequestObjs {
 
     private String request;
     private String severity;
-    private String author;
-    private String eta;
     private String description;
 
-    public MaintenanceObj(int requestID, int userID, String nodeID, int assigneeID, String request, String severity, String author, String eta, String description) {
+    public MaintenanceObj(int requestID, int userID, String nodeID, int assigneeID, String request, String severity, String description) {
 
         super.requestID = requestID;
         super.nodeID = nodeID;
@@ -16,8 +14,6 @@ public class MaintenanceObj extends ServiceRequestObjs {
         super.assigneeID = assigneeID;
         this.request = request;
         this.severity = severity;
-        this.author = author;
-        this.eta = eta;
         this.description = description;
         super.status = "In Progress";
 
@@ -29,14 +25,6 @@ public class MaintenanceObj extends ServiceRequestObjs {
 
     public String getSeverity() {
         return this.severity;
-    }
-
-    public String getAuthor() {
-        return this.author;
-    }
-
-    public String getEta() {
-        return this.eta;
     }
 
     public String getDescription() {

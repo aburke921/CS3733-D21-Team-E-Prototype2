@@ -516,7 +516,6 @@ public class RequestsDB2 {
 				"    requestType varchar(100) Not Null, " +
 				"    severity varchar(30) Not Null, " +
 				"    patientID varchar(31) Not Null, " +
-				"    ETA varchar(100), " +
 				"    bloodPressure varchar(31), " +
 				"    temperature varchar(31), " +
 				"    oxygenLevel varchar(31), " +
@@ -547,7 +546,6 @@ public class RequestsDB2 {
 		String requestType = externalPatientObj.getRequestType();
 		String severity = externalPatientObj.getSeverity();
 		String patientID = externalPatientObj.getPatientID();
-		String ETA = externalPatientObj.getEta();
 		String bloodPressure = externalPatientObj.getBloodPressure();
 		String temperature = externalPatientObj.getTemperature();
 		String oxygenLevel = externalPatientObj.getOxygenLevel();
@@ -557,18 +555,17 @@ public class RequestsDB2 {
 
 		String insertExtTransport = "Insert Into exttransport " +
 				"Values ((Select Count(*) " +
-				"         From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				"         From requests), ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
 			prepState.setString(1, roomID);
 			prepState.setString(2, requestType);
 			prepState.setString(3, severity);
 			prepState.setString(4, patientID);
-			prepState.setString(5, ETA);
-			prepState.setString(6, bloodPressure);
-			prepState.setString(7, temperature);
-			prepState.setString(8, oxygenLevel);
-			prepState.setString(9, description);
+			prepState.setString(5, bloodPressure);
+			prepState.setString(6, temperature);
+			prepState.setString(7, oxygenLevel);
+			prepState.setString(8, description);
 
 			prepState.execute();
 
@@ -592,7 +589,6 @@ public class RequestsDB2 {
 		String requestType = externalPatientObj.getRequestType();
 		String severity = externalPatientObj.getSeverity();
 		String patientID = externalPatientObj.getPatientID();
-		String ETA = externalPatientObj.getEta();
 		String bloodPressure = externalPatientObj.getBloodPressure();
 		String temperature = externalPatientObj.getTemperature();
 		String oxygenLevel = externalPatientObj.getOxygenLevel();
@@ -632,13 +628,6 @@ public class RequestsDB2 {
 				query = query + ", ";
 			}
 			query = query + " description = '" + description + "'";
-			added = true;
-		}
-		if (ETA != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + " ETA = '" + ETA + "'";
 			added = true;
 		}
 		if (bloodPressure != null) {
@@ -808,8 +797,6 @@ public class RequestsDB2 {
 				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
 				"    type varchar(31), " +
 				"    severity    varchar(31)  Not Null, " +
-				"	 author varchar(31) Not Null, " +
-				"    ETA   varchar(31) Not Null, " +
 				"    description varchar(5000) " +
 				")";
 
@@ -836,21 +823,17 @@ public class RequestsDB2 {
 		String roomID = maintenanceObj.getNodeID();
 		String type = maintenanceObj.getRequest();
 		String severity = maintenanceObj.getSeverity();
-		String author = maintenanceObj.getAuthor();
-		String ETA = maintenanceObj.getEta();
 		String description = maintenanceObj.getDescription();
 
 
 		addRequest(userID, assigneeID, "maintenanceRequest");
 
-		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Count(*) From requests), ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
 			prepState.setString(1, roomID);
 			prepState.setString(2, type);
 			prepState.setString(3, severity);
-			prepState.setString(4, author);
-			prepState.setString(5, ETA);
 			prepState.setString(6, description);
 
 			prepState.execute();
@@ -870,8 +853,6 @@ public class RequestsDB2 {
 		String roomID = maintenanceObj.getNodeID();
 		String type = maintenanceObj.getRequest();
 		String severity = maintenanceObj.getSeverity();
-		String author = maintenanceObj.getAuthor();
-		String ETA = maintenanceObj.getEta();
 		String description = maintenanceObj.getDescription();
 
 
@@ -894,20 +875,6 @@ public class RequestsDB2 {
 				query = query + ", ";
 			}
 			query = query + "severity = '" + severity + "'";
-			added = true;
-		}
-		if (author != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "author = '" + author + "'";
-			added = true;
-		}
-		if (ETA != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "ETA = '" + ETA + "'";
 			added = true;
 		}
 		if (description != null) {
@@ -1206,8 +1173,6 @@ public class RequestsDB2 {
 	 * @param medicineDeliveryObj object holding medicine req. fields
 	 */
 	public static void addMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
-		// int requestID, String nodeID, int assigneeID, int userID, String medicineName, String doseQuantity, String doseMeasure, String specialInstructions, String signature
-		// int userID, int assigneeID, String roomID, String medicineName, int quantity, String dosage, String specialInstructions, String signature
 
 		int userID = medicineDeliveryObj.getUserID();
 		int assigneeID = medicineDeliveryObj.getAssigneeID();

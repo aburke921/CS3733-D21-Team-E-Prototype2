@@ -17,6 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 import org.junit.jupiter.api.*;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -1300,7 +1301,7 @@ public class DatabaseTests {
 		DB.addSpecialUserType("ciarang@gmail.com", "EMT000001", "EMT", "Ciaran", "Goodwin");
 		DB.addSpecialUserType("lolab@gmail.com", "EMT000002", "EMT", "Lola", "Bond");
 		//Real Admins:
-		ArrayList<String> insertUsers = new ArrayList<String>();
+		ArrayList<String> insertUsers = new ArrayList<>();
 		insertUsers.add("Insert Into userAccount Values (-1, 'superAdmin', 'superAdmin999', 'admin', 'Super', 'Admin', Current Timestamp, '', Null, Null)");
 		insertUsers.add("Insert Into userAccount Values (-99, 'admin', 'admin', 'admin', 'admin', 'admin', Current Timestamp, '', Null, Null)");
 		insertUsers.add("Insert Into userAccount Values (99999, 'staff', 'staff', 'doctor', 'staff', 'staff', Current Timestamp, '', Null, Null)");
@@ -1356,7 +1357,7 @@ public class DatabaseTests {
 	@DisplayName("testGetUserType")
 	public void testGetUserType() {
 		DB.addSpecialUserType("email@gmail.com", "12345678", "admin", "firstName", "lastName");
-		String returnedUserType = UserAccountDB.getUserType(1);
+		String returnedUserType = DB.getUserType(1);
 		assertEquals("admin", returnedUserType);
 	}
 
@@ -1539,7 +1540,7 @@ public class DatabaseTests {
 		DB.addInternalPatientRequest(new InternalPatientObj(0, 1, "test", "test2", 2, 3, "department", "not severe", "she is in pain"));
 		int result = DB.editInternalPatientRequest(new InternalPatientObj(1, 1, null, "test", 4, 0, null, "hellloooooo", null));
 
-		assertTrue(result == 1);
+		assertEquals(1, result);
 
 	}
 
@@ -1616,7 +1617,7 @@ public class DatabaseTests {
 				if (returnedUser.getUserID() == correctUser.getUserID()) {
 					userID = true;
 				}
-				if (returnedUser.getFirstName() == correctUser.getFirstName()) {
+				if (returnedUser.getFirstName().equals(correctUser.getFirstName())) {
 					firstName = true;
 				}
 				if (returnedUser.getLastName().equals(correctUser.getLastName())) {
@@ -1776,7 +1777,7 @@ public class DatabaseTests {
 
 		String email = DB.getEmail(1);
 
-		assertTrue(email.equals("bellag@gmail.com"));
+		assertEquals("bellag@gmail.com", email);
 
 	}
 
@@ -1819,7 +1820,7 @@ public class DatabaseTests {
 
 		int result = DB.markAsCovidSafe(1);
 
-		assertTrue(result == 1);
+		assertEquals(1, result);
 
 	}
 
@@ -1835,7 +1836,7 @@ public class DatabaseTests {
 
 		int result = DB.markAsCovidRisk(1);
 
-		assertTrue(result == 1);
+		assertEquals(1, result);
 	}
 
 	@Test
@@ -1885,10 +1886,10 @@ public class DatabaseTests {
 			for (int survey = 0; survey < resultCovidSurveys.size(); survey++) {
 				CovidSurveyObj returnedCovidSurveyObj = resultCovidSurveys.get(survey);
 				CovidSurveyObj correctCovidSurveyObj = actualCovidSurveys.get(survey);
-				if (returnedCovidSurveyObj.getUser() == correctCovidSurveyObj.getUser()) {
+				if (returnedCovidSurveyObj.getUser().equals(correctCovidSurveyObj.getUser())) {
 					userID = true;
 				}
-				if (returnedCovidSurveyObj.getFormNumber() == correctCovidSurveyObj.getFormNumber()) {
+				if (returnedCovidSurveyObj.getFormNumber().equals(correctCovidSurveyObj.getFormNumber())) {
 					formNumber = true;
 				}
 				if (returnedCovidSurveyObj.getPositiveTest() == correctCovidSurveyObj.getPositiveTest()) {

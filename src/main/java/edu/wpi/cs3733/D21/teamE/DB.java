@@ -710,6 +710,10 @@ public class DB {
 		return UserAccountDB.userLogin(email, password);
 	}
 
+	public static String getUserType(int userID) {
+		return UserAccountDB.getUserType(userID);
+	}
+
 	public static ObservableList<String> getAssigneeNames(String givenUserType) {
 		return RequestsDB.getAssigneeNames(givenUserType);
 	}

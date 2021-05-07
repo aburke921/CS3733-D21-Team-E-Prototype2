@@ -177,6 +177,8 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 
 		nodeID = DB.getListOfNodeIDS();
 		locations = DB.getAllNodeLongNames();
+
+
 		userID = DB.getAssigneeIDs("EMT");
 		userNames = DB.getAssigneeNames("EMT");
 

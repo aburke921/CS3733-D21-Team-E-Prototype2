@@ -119,8 +119,8 @@ public class ReligiousRequest extends ServiceRequestFormComponents {
         nodeID = DB.getListOfNodeIDS();
         locationInput.setItems(locations);
 
-        userNames = DB.getAssigneeNames("religiousPerson");
-        userID = DB.getAssigneeIDs("religiousPerson");
+        userNames = DB.getAssigneeNames("religious");
+        userID = DB.getAssigneeIDs("religious");
         assignedPersonnel.setItems(userNames);
     }
 

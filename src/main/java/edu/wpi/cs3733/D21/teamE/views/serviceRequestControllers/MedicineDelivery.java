@@ -89,15 +89,15 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     @FXML
     private void saveData(ActionEvent e) throws MessagingException {
 
-        int index = locationInput.getSelectionModel().getSelectedIndex();
+        int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
         int userIndex = assignee.getSelectionModel().getSelectedIndex();
 
-        String location = nodeID.get(index);
+        int assigned = userID.get(userIndex);
+        String location = nodeID.get(nodeIndex);
         String name = medicineNameInput.getText();
         String doseMeasure = doseMeasureInput.getText();
         int doseMeasureI = Integer.parseInt(doseMeasure);
         int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
-        int assigned = userID.get(userIndex);
         String specialInstructions = specialInstructInput.getText();
         String signature = signatureInput.getText();
 

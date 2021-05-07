@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
@@ -66,6 +67,22 @@ public class ReligiousRequest extends ServiceRequestFormComponents {
         super.handleButtonCancel(event);
     }
 
+    @FXML
+    void saveData(ActionEvent event) {
+
+        int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+        int assigneeIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
+
+        String node = nodeID.get(nodeIndex);
+        String religion = religionInput.getSelectionModel().getSelectedItem();
+        int user = userID.get(assigneeIndex);
+        String desc = description.getText();
+
+        DB.addReligiousRequest(new ReligiousRequestObj(0, App.userID, node, user, religion, desc));
+
+        super.handleButtonSubmit(event);
+    }
+
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
 
@@ -95,8 +112,11 @@ public class ReligiousRequest extends ServiceRequestFormComponents {
         }
 
         locations = DB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
         locationInput.setItems(locations);
+
         userNames = DB.getAssigneeNames("religiousPerson");
+        userID = DB.getAssigneeIDs("religiousPerson");
         assignedPersonnel.setItems(userNames);
     }
 

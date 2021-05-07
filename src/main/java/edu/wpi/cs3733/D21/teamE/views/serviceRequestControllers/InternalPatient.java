@@ -4,8 +4,10 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.InternalPatientObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,9 +54,45 @@ public class InternalPatient extends ServiceRequestFormComponents{
     @FXML
     private StackPane stackPane;
 
-    public void saveData(ActionEvent actionEvent) {
-        super.handleButtonSubmit(actionEvent);
+    private boolean validateInput() {
+        RequiredFieldValidator validator = new RequiredFieldValidator();
+        validator.setMessage("Input required");
 
+        pickupInput.getValidators().add(validator);
+        dropoffInput.getValidators().add(validator);
+        departmentInput.getValidators().add(validator);
+        severityInput.getValidators().add(validator);
+        patientIdInput.getValidators().add(validator);
+        assignedPersonnel.getValidators().add(validator);
+        descriptionInput.getValidators().add(validator);
+
+        return pickupInput.validate() && dropoffInput.validate() && departmentInput.validate()
+                && severityInput.validate() && patientIdInput.validate() && assignedPersonnel.validate()
+                && descriptionInput.validate();
+    }
+
+    @FXML
+    public void saveData(ActionEvent actionEvent) {
+        if(validateInput()) {
+            //Setting up indexes for getting id
+            int nodePickupIndex = pickupInput.getSelectionModel().getSelectedIndex();
+            int nodeDropOffIndex = dropoffInput.getSelectionModel().getSelectedIndex();
+            int userIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
+
+            //Setting up fields to be added to object
+            int user = userID.get(userIndex);
+            String pickUp = nodeID.get(nodePickupIndex);
+            String dropOff = nodeID.get(nodeDropOffIndex);
+            String dept = departmentInput.getText();
+            String sever = severityInput.getSelectionModel().getSelectedItem();
+            int patientID = Integer.parseInt(patientIdInput.getText());
+            String desc = descriptionInput.getText();
+
+            //Setting up object and adding it to database
+            InternalPatientObj object = new InternalPatientObj(0, App.userID, pickUp, dropOff, user, patientID, dept, sever, desc);
+            DB.addInternalPatientRequest(object);
+            super.handleButtonSubmit(actionEvent);
+        }
     }
 
     @FXML
@@ -85,9 +123,12 @@ public class InternalPatient extends ServiceRequestFormComponents{
         }
 
         locations = DB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
         pickupInput.setItems(locations);
         dropoffInput.setItems(locations);
+
         userNames = DB.getAssigneeNames("nurse");
+        userID = DB.getAssigneeIDs("nurse");
         assignedPersonnel.setItems(userNames);
     }
 }

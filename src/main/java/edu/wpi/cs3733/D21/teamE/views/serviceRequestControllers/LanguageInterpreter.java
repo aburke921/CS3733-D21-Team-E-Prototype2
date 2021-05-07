@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
@@ -68,26 +69,36 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 	@FXML
 	private StackPane stackPane;
 
+	private boolean validateInput() {
 
-	@FXML
-	void handleButtonCancel(ActionEvent event) {
-		super.handleButtonCancel(event);
+		RequiredFieldValidator validator = new RequiredFieldValidator();
+		validator.setMessage("Input required");
+
+		locationInput.getValidators().add(validator);
+		assignedPersonnel.getValidators().add(validator);
+		descriptionInput.getValidators().add(validator);
+		languageSelection.getValidators().add(validator);
+
+		return locationInput.validate() && assignedPersonnel.validate() &&
+				descriptionInput.validate() && languageSelection.validate();
 	}
 
 	@FXML
 	void saveData(ActionEvent event) throws MessagingException {
-		int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
-		int userIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
+		if (validateInput()) {
+			int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+			int userIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
 
-		String node = nodeID.get(nodeIndex);
-		int assignee = userID.get(userIndex);
-		String descrip = descriptionInput.getText();
-		String language = languageSelection.getSelectionModel().getSelectedItem();
+			String node = nodeID.get(nodeIndex);
+			int assignee = userID.get(userIndex);
+			String descrip = descriptionInput.getText();
+			String language = languageSelection.getSelectionModel().getSelectedItem();
 
-		DB.addLanguageRequest(new LanguageInterpreterObj(0, App.userID, assignee, node, language, descrip));
-		super.handleButtonSubmit(event);
+			LanguageInterpreterObj object = new LanguageInterpreterObj(0, App.userID, assignee, node, language, descrip);
+			DB.addLanguageRequest(object);
 
-		//For email implementation later
+
+			//For email implementation later
 //		String email = DB.getEmail(App.userID);
 //		String fullName = DB.getUserName(App.userID);
 ////		String assigneeName = userNames.get(assigneeIDIndex);
@@ -102,6 +113,8 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 //				"- Emerald Emus BWH";
 //
 //		sendEmail.sendRequestConfirmation(email, body);
+			super.handleButtonSubmit(event);
+		}
 	}
 
 	@FXML

@@ -35,7 +35,7 @@ public class DB {
 		RequestsDB.createSanitationTable();
 		RequestsDB2.createExtTransportTable();
 		RequestsDB.createMedDeliveryTable();
-		RequestsDB.createSecurityServTable();
+		RequestsDB2.createSecurityServTable();
 		appointmentDB.createAppointmentTable();
 		RequestsDB2.createLanguageRequestTable();
 		RequestsDB2.createLaundryRequestTable();
@@ -91,21 +91,27 @@ public class DB {
 	 * adds a laundry request to the laundryRequest table
 	 * @param request this is all of the information needed, in a religious request object.
 	 */
-	public static void addLaundryRequest(LaundryObj request) {
-		RequestsDB2.addLaundryRequest(request);
-	}
+	public static void addLaundryRequest(LaundryObj request) { RequestsDB2.addLaundryRequest(request); }
 
 	/**
 	 * This edits a laundry request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a laundry request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editLaundryRequest(LaundryObj request) {
-		return RequestsDB2.editLaundryRequest(request);
-	}
+	public static int editLaundryRequest(LaundryObj request) { return RequestsDB2.editLaundryRequest(request); }
 
+	/**
+	 * adds a security request to the securityServ table
+	 * @param request this is all of the information needed, in a security request object.
+	 */
+	public static void addSecurityRequest(SecurityServiceObj request) { RequestsDB2.addSecurityRequest(request); }
 
-
+	/**
+	 * This edits a laundry request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a laundry request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editSecurityRequest(SecurityServiceObj request) { return RequestsDB2.editSecurityRequest(request); }
 
 
 
@@ -444,13 +450,7 @@ public class DB {
 		RequestsDB.addMedicineRequest(userID, assigneeID, roomID, medicineName, quantity, dosage, specialInstructions, signature);
 	}
 
-	/**
-	 * This adds a security form to the table for security service form
-	 * // @param form this is the form added to the table
-	 */
-	public static void addSecurityRequest(int userID, int assigneeID, String roomID, String level, String urgency) {
-		RequestsDB.addSecurityRequest(userID, assigneeID, roomID, level, urgency);
-	}
+
 
 
 
@@ -554,17 +554,7 @@ public class DB {
 		return RequestsDB.editMedicineRequest(requestID, roomID, medicineName, quantity, dosage, specialInstructions, assigneeID);
 	}
 
-	/**
-	 * This edits a security form already within the database
-	 * @param requestID the ID that specifies which external transfer form that is being edited
-	 * @param roomID    the new node/room/location the user is assigning this request to
-	 * @param level     this is the info to update levelOfSecurity
-	 * @param urgency   this is the info to update levelOfUrgency
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editSecurityRequest(int requestID, String roomID, String level, String urgency) {
-		return RequestsDB.editSecurityRequest(requestID, roomID, level, urgency);
-	}
+
 
 
 	/**

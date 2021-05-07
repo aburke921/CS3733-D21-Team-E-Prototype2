@@ -152,8 +152,11 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         //background.fitHeightProperty().bind(primaryStage.heightProperty());
 
         locations = DB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
         locationInput.setItems(locations);
+
         userNames = DB.getAssigneeNames("nurse");
+        userID = DB.getAssigneeIDs("nurse");
         assignee.setItems(userNames);
 
         assert locationInput != null;

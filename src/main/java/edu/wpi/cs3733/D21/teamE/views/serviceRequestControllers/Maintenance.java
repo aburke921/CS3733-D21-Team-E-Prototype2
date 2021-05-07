@@ -116,8 +116,11 @@ public class Maintenance extends ServiceRequestFormComponents {
         //background.fitHeightProperty().bind(primaryStage.heightProperty());
 
         locations = DB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
         locationInput.setItems(locations);
+
         userNames = DB.getAssigneeNames("custodian");
+        userID = DB.getAssigneeIDs("custodian");
         assignedPersonnelInput.setItems(userNames);
 
         assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'MaintenanceRequest.fxml'.";

@@ -181,9 +181,8 @@ public class csvDB {
 				strBuild.append(rset.getInt("appointmentID")).append(",");
 				strBuild.append(rset.getString("patientID")).append(",");
 				strBuild.append(rset.getString("doctorID")).append(",");
-				strBuild.append(rset.getString("nodeID")).append(",");
-				strBuild.append(rset.getTimestamp("startTime")).append(",");
-				strBuild.append(rset.getTimestamp("endTime")).append("\n");
+				strBuild.append(rset.getString("startTime")).append(",");
+				strBuild.append(rset.getString("appointmentDate")).append("\n");
 			}
 
 			// create a file writer to write to files

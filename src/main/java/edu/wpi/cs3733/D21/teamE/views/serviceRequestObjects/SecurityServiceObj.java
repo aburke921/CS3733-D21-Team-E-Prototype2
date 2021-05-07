@@ -6,8 +6,11 @@ public class SecurityServiceObj extends ServiceRequestObjs {
     private String urgencyLevel;
     private String reason;
 
-    public SecurityServiceObj(String nodeID, int userID, int assigneeID, String securityLevel, String urgencyLevel, String reason) {
 
+
+    public SecurityServiceObj(int requestID, int userID, int assigneeID, String nodeID, String securityLevel, String urgencyLevel, String reason) {
+
+        super.requestID = requestID;
         super.nodeID = nodeID;
         super.assigneeID = assigneeID;
         super.userID = userID;

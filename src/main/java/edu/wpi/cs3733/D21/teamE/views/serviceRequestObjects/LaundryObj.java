@@ -6,8 +6,9 @@ public class LaundryObj extends ServiceRequestObjs {
     private String dryLoadAmount;
     private String description;
 
-    public LaundryObj(String nodeID, int assigneeID, int userID, String washLoadAmount, String dryLoadAmount, String description) {
+    public LaundryObj(int requestID, String nodeID, int assigneeID,int userID, String washLoadAmount, String dryLoadAmount, String description) {
 
+        super.requestID = requestID;
         super.assigneeID = assigneeID;
         super.nodeID = nodeID;
         super.userID = userID;

@@ -1,15 +1,15 @@
 package edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects;
 
-public class MedicineDelivery extends ServiceRequestObjs {
+public class MedicineDeliveryObj extends ServiceRequestObjs {
 
     private String medicineName;
-    private String doseQuantity;
-    private String doseMeasure;
+    private Integer doseQuantity;
+    private Integer doseMeasure;
     private String specialInstructions;
     private String signature;
 
-    public MedicineDelivery(String nodeID, int assigneeID, int userID, String medicineName, String doseQuantity, String doseMeasure, String specialInstructions, String signature) {
-
+    public MedicineDeliveryObj(int requestID, int userID, int assigneeID, String nodeID, String medicineName, Integer doseQuantity, Integer doseMeasure, String specialInstructions, String signature) {
+        super.requestID = requestID;
         super.assigneeID = assigneeID;
         super.nodeID = nodeID;
         super.userID = userID;
@@ -26,11 +26,11 @@ public class MedicineDelivery extends ServiceRequestObjs {
         return this.medicineName;
     }
 
-    public String getDoseQuantity() {
+    public Integer getDoseQuantity() {
         return this.doseQuantity;
     }
 
-    public String getDoseMeasure() {
+    public Integer getDoseMeasure() {
         return this.doseMeasure;
     }
 

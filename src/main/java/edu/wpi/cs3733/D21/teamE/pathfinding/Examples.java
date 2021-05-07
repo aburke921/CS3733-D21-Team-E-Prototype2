@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.pathfinding;
 
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
 import edu.wpi.cs3733.D21.teamE.DB;
@@ -12,7 +13,7 @@ public class Examples {
 
     public static void main(String[] args){
         System.out.println("STARTING UP!!!");
-        makeConnection connection = makeConnection.makeConnection();
+        makeConnection connection = makeConnection.makeConnection(App.driverURL);
         System.out.println("Connected to the DB");
 
         File nodes = new File("CSVs/MapEAllnodes.csv");

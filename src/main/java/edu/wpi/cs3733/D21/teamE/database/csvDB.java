@@ -1,12 +1,14 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.App;
+
 import java.io.*;
 import java.sql.*;
 
 
 public class csvDB {
 
-	static Connection connection = makeConnection.makeConnection().getConnection();
+	static Connection connection = makeConnection.makeConnection(App.driverURL).getConnection();
 
 	/**
 	 * Reads csv & inserts into table

@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamE.pathfinding.algorithms;
 
 import java.util.*;
 
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
@@ -27,7 +28,7 @@ public abstract class Searcher {
      */
     public Searcher(){
         graph = new HashMap<>();
-        con = makeConnection.makeConnection();
+        con = makeConnection.makeConnection(App.driverURL);
 
         refreshGraph();
     }

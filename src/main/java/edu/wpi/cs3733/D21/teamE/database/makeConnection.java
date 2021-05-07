@@ -14,7 +14,7 @@ public class makeConnection {
 	//private MapEditor mapEditor = new MapEditor();
 
 	// private constructor restricted to this class itself
-	public makeConnection() {
+	public makeConnection(String driverString) {
 		// Initialize DB
 		System.out.println("Starting connection to Apache Derby\n");
 		try {
@@ -24,7 +24,13 @@ public class makeConnection {
 			props.put("user", "admin");
 			props.put("password", "admin");
 
-			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+			String forNameURL = "org.apache.derby.jdbc.EmbeddedDriver";
+			if(driverString.contains("Client")){
+				forNameURL = "org.apache.derby.jdbc.ClientDriver";
+			}
+
+
+			Class.forName(forNameURL);
 
 			try {
 				/*
@@ -32,7 +38,7 @@ public class makeConnection {
 				 * Is not connected to the database! This will cause the DriverManager to
 				 * Throw an SQLException and goof a bunch of stuff up!
 				 */
-				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
+				this.connection = DriverManager.getConnection(driverString, props);
 				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
 				// e.printStackTrace();
@@ -45,10 +51,10 @@ public class makeConnection {
 	}
 
 	// static method to create instance of Singleton class
-	public static makeConnection makeConnection() {
+	public static makeConnection makeConnection(String driverString) {
 		// To ensure only one instance is created
 		if (singleInstance == null) {
-			singleInstance = new makeConnection();
+			singleInstance = new makeConnection(driverString);
 		}
 		return singleInstance;
 	}

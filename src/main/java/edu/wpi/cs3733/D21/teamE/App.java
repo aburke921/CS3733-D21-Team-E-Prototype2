@@ -26,10 +26,13 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Scanner;
+
 
 
 public class App extends Application {
 
+	public static String driverURL = "jdbc:derby:BWDB;create=true";
 	/*-------------------------------------
 	* 	   VARIABLES/SETTERS/GETTERS
 	*------------------------------------*/
@@ -110,8 +113,22 @@ public class App extends Application {
 	 */
 	@Override
 	public void init() {
+
+		Scanner input = new Scanner(System.in);
+		System.out.println("Which connection would you like");
+		System.out.println("    1: Embedded");
+		System.out.println("    2: Client");
+
+		int DBOption = input.nextInt();
+
+
+		if(DBOption == 2){
+			driverURL = "jdbc:derby://localhost:1527/BWDB";
+		}
+
+
 		System.out.println("Starting App Init...");
-		makeConnection connection = makeConnection.makeConnection();
+		makeConnection connection = makeConnection.makeConnection(driverURL);
 		System.out.println("...Connected to the DB");
 		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");

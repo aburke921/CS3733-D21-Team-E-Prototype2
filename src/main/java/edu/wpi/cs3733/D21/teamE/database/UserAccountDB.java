@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.UserManagement.User;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 
 public class UserAccountDB {
 
-	static Connection connection = makeConnection.makeConnection().getConnection();
+	static Connection connection = makeConnection.makeConnection(App.driverURL).getConnection();
 
 	/**
 	 * Uses executes the SQL statements required to create the userAccount table.

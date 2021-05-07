@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import javafx.util.Pair;
 import java.sql.*;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 
 public class EdgeDB {
 
-	static Connection connection = makeConnection.makeConnection().getConnection();
+	static Connection connection = makeConnection.makeConnection(App.driverURL).getConnection();
 
 	/**
 	 * Uses executes the SQL statements required to create the hasEdge table.

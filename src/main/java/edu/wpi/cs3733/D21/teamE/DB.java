@@ -35,11 +35,11 @@ public class DB {
 		RequestsDB.createSanitationTable();
 		RequestsDB2.createExtTransportTable();
 		RequestsDB.createMedDeliveryTable();
-		RequestsDB.createSecurityServTable();
+		RequestsDB2.createSecurityServTable();
 		appointmentDB.createAppointmentTable();
 		RequestsDB2.createLanguageRequestTable();
 		RequestsDB2.createLaundryRequestTable();
-		RequestsDB.createMaintenanceRequestTable();
+		RequestsDB2.createMaintenanceRequestTable();
 		RequestsDB.createFoodDeliveryTable();
 		RequestsDB.createInternalPatientRequest();
 		RequestsDB.createAubonPainMenuTable();
@@ -91,21 +91,27 @@ public class DB {
 	 * adds a laundry request to the laundryRequest table
 	 * @param request this is all of the information needed, in a religious request object.
 	 */
-	public static void addLaundryRequest(LaundryObj request) {
-		RequestsDB2.addLaundryRequest(request);
-	}
+	public static void addLaundryRequest(LaundryObj request) { RequestsDB2.addLaundryRequest(request); }
 
 	/**
 	 * This edits a laundry request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a laundry request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editLaundryRequest(LaundryObj request) {
-		return RequestsDB2.editLaundryRequest(request);
-	}
+	public static int editLaundryRequest(LaundryObj request) { return RequestsDB2.editLaundryRequest(request); }
 
+	/**
+	 * adds a security request to the securityServ table
+	 * @param request this is all of the information needed, in a security request object.
+	 */
+	public static void addSecurityRequest(SecurityServiceObj request) { RequestsDB2.addSecurityRequest(request); }
 
-
+	/**
+	 * This edits a laundry request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a laundry request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editSecurityRequest(SecurityServiceObj request) { return RequestsDB2.editSecurityRequest(request); }
 
 
 
@@ -444,43 +450,21 @@ public class DB {
 		RequestsDB.addMedicineRequest(userID, assigneeID, roomID, medicineName, quantity, dosage, specialInstructions, signature);
 	}
 
+
+
+
+
+
+
 	/**
-	 * This adds a security form to the table for security service form
-	 * // @param form this is the form added to the table
+	 * adds a maintenance request to the maintenanceRequest table
+	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
 	 */
-	public static void addSecurityRequest(int userID, int assigneeID, String roomID, String level, String urgency) {
-		RequestsDB.addSecurityRequest(userID, assigneeID, roomID, level, urgency);
+	public static void addMaintenanceRequest(MaintenanceObj maintenanceObj) {
+		RequestsDB2.addMaintenanceRequest(maintenanceObj);
 	}
 
 
-
-
-
-	/**
-	 * @param userID      ID of the user
-	 * @param roomID      nodeID of the user
-	 * @param assigneeID  ID of the assigned user who will complete this task
-	 * @param type        is the type of maintenance required
-	 * @param severity    is how severe the situation is
-	 * @param ETA         time taken to complete the request
-	 * @param description detailed description of request
-	 */
-	public static void addMaintenanceRequest(int userID, String roomID, int assigneeID, String type, String severity, String ETA, String description) {
-		RequestsDB.addMaintenanceRequest(userID, roomID, assigneeID, type, severity, ETA, description);
-	}
-
-	/**
-	 * adds a request for food delivery
-	 * @param userID           ID of the user
-	 * @param roomID           nodeID of the user
-	 * @param assigneeID       ID of the assigned user who will complete this task
-	 * @param dietRestrictions any restrictions the user has diet wise
-	 * @param allergies        any allergies the user has
-	 * @param foodItem         the food item choice made by the user
-	 * @param foodQuantity     the quantity of the food item the user wants
-	 * @param beverageItem     the beverage item choice made by the user
-	 * @param beverageQuantity the quantity of the beverage item the user wants
-	 */
 	public static void addFoodDeliveryRequest(int userID, String roomID, int assigneeID, String dietRestrictions, String allergies, String foodItem, int foodQuantity, String beverageItem, int beverageQuantity) {
 		RequestsDB.addFoodDeliveryRequest(userID, roomID, assigneeID, dietRestrictions, allergies, foodItem, foodQuantity, beverageItem, beverageQuantity);
 	}
@@ -554,17 +538,7 @@ public class DB {
 		return RequestsDB.editMedicineRequest(requestID, roomID, medicineName, quantity, dosage, specialInstructions, assigneeID);
 	}
 
-	/**
-	 * This edits a security form already within the database
-	 * @param requestID the ID that specifies which external transfer form that is being edited
-	 * @param roomID    the new node/room/location the user is assigning this request to
-	 * @param level     this is the info to update levelOfSecurity
-	 * @param urgency   this is the info to update levelOfUrgency
-	 * @return 1 if the update was successful, 0 if it failed
-	 */
-	public static int editSecurityRequest(int requestID, String roomID, String level, String urgency) {
-		return RequestsDB.editSecurityRequest(requestID, roomID, level, urgency);
-	}
+
 
 
 	/**
@@ -583,16 +557,12 @@ public class DB {
 
 
 	/**
-	 * @param requestID   is the generated ID of the request
-	 * @param roomID      the new node/room/location the user is assigning this request to
-	 * @param type        is the new type of maintenance request
-	 * @param severity    is the new severity of the situation
-	 * @param ETA         is the new estimated time
-	 * @param description is an edited detailed description
+	 * This edits a maintenance request which is already in the db
+	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editMaintenanceRequest(int requestID, String roomID, String type, String severity, String ETA, String description) {
-		return RequestsDB.editMaintenanceRequest(requestID, roomID, type, severity, ETA, description);
+	public static int editMaintenanceRequest(MaintenanceObj maintenanceObj) {
+		return RequestsDB2.editMaintenanceRequest(maintenanceObj);
 	}
 
 	/**

@@ -1,10 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LaundryObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -711,6 +707,257 @@ public class RequestsDB2 {
 			return 0;
 		}
 	}
+
+
+
+	//SECURITY REQUEST STUFF:
+
+	/**
+	 * Uses executes the SQL statements required to create a languageRequest table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - type: is the type of maintenance required
+	 * - severity: is how severe the situation is
+	 * - ETA: time taken to complete the request
+	 * - description: detailed description of request
+	 */
+	public static void createMaintenanceRequestTable() {
+
+		String query = "Create Table maintenanceRequest " +
+				"( " +
+				"    requestID int Primary Key References requests On Delete Cascade, " +
+				"    roomID    varchar(31) Not Null References node On Delete Cascade, " +
+				"    type varchar(31), " +
+				"    severity    varchar(31)  Not Null, " +
+				"	 author varchar(31) Not Null, " +
+				"    ETA   varchar(31) Not Null, " +
+				"    description varchar(5000) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating maintenanceRequest table");
+		}
+
+	}
+
+	/**
+	 * adds a maintenance request to the maintenanceRequest table
+	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
+	 */
+	public static void addMaintenanceRequest(MaintenanceObj maintenanceObj) {
+
+		int userID = maintenanceObj.getUserID();
+		int assigneeID = maintenanceObj.getAssigneeID();
+		String roomID = maintenanceObj.getNodeID();
+		String type = maintenanceObj.getRequest();
+		String severity = maintenanceObj.getSeverity();
+		String author = maintenanceObj.getAuthor();
+		String ETA = maintenanceObj.getEta();
+		String description = maintenanceObj.getDescription();
+
+
+		addRequest(userID, assigneeID, "maintenanceRequest");
+
+		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
+			prepState.setString(1, roomID);
+			prepState.setString(2, type);
+			prepState.setString(3, severity);
+			prepState.setString(4, author);
+			prepState.setString(5, ETA);
+			prepState.setString(6, description);
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into maintenanceRequest inside function addMaintenanceRequest()");
+		}
+	}
+
+	/**
+	 * This edits a maintenance request which is already in the db
+	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editMaintenanceRequest(MaintenanceObj maintenanceObj) {
+
+		String roomID = maintenanceObj.getNodeID();
+		String type = maintenanceObj.getRequest();
+		String severity = maintenanceObj.getSeverity();
+		String author = maintenanceObj.getAuthor();
+		String ETA = maintenanceObj.getEta();
+		String description = maintenanceObj.getDescription();
+
+
+		boolean added = false;
+		String query = "Update maintenanceRequest Set ";
+
+		if (roomID != null) {
+			query = query + " roomID = '" + roomID + "'";
+			added = true;
+		}
+		if (type != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "type = '" + type + "'";
+			added = true;
+		}
+		if (severity != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "severity = '" + severity + "'";
+			added = true;
+		}
+		if (author != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "author = '" + author + "'";
+			added = true;
+		}
+		if (ETA != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "ETA = '" + ETA + "'";
+			added = true;
+		}
+		if (description != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "description = '" + description + "'";
+			added = true;
+		}
+
+		query = query + " where requestID = " + maintenanceObj.getRequestID();
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating maintenanceRequest");
+			return 0;
+		}
+	}
+
+
+
+
+	//SECURITY REQUEST STUFF:
+
+	/**
+	 * Uses executes the SQL statements required to create a medDelivery table. This is a type of request and share the same requestID.
+	 * This table has the attributes:
+	 * - requestID: this is used to identify a request. Every request must have one.
+	 * - roomID: this is the nodeID/room the user wants security assistance at
+	 * - level: this is the security level that is needed
+	 * - urgency: this is how urgent it is for security to arrive or for the request to be filled. The valid options are: 'Low', 'Medium', 'High', 'Critical'
+	 */
+	public static void createSecurityServTable() {
+
+		String query = "Create Table securityServ ( " +
+				"requestID  int Primary Key References requests On Delete Cascade," +
+				"roomID     varchar(31) Not Null References node On Delete Cascade," +
+				"level     varchar(31)," +
+				"urgency   varchar(31) Not Null," +
+				"reason     varchar(3000)," +
+				"Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical')) " +
+				")";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+
+			prepState.execute();
+
+
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("error creating securityServ table");
+		}
+	}
+
+	/**
+	 * adds a security request to the securityServ table
+	 * @param request this is all of the information needed, in a security request object.
+	 */
+	public static void addSecurityRequest(SecurityServiceObj request) {
+		addRequest(request.getUserID(), request.getAssigneeID(), "security");
+
+		String insertSecurityRequest = "Insert Into securityServ Values ((Select Count(*) From requests), ?, ?, ?, ?)";
+
+		try (PreparedStatement prepState = connection.prepareStatement(insertSecurityRequest)) {
+			prepState.setString(1, request.getNodeID());
+			prepState.setString(2, request.getSecurityLevel());
+			prepState.setString(3, request.getUrgencyLevel());
+			prepState.setString(3, request.getReason());
+
+			prepState.execute();
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
+		}
+	}
+
+	/**
+	 * This edits a laundry request form that is already in the database
+	 * @param request this the information that the user wants to change stored in a laundry request object. (If int = 0 --> do not change, If String = null --> do not change)
+	 * @return 1 if the update was successful, 0 if it failed
+	 */
+	public static int editSecurityRequest(SecurityServiceObj request) {
+		boolean added = false;
+		String query = "Update securityServ Set ";
+
+		if (request.getNodeID() != null) {
+			query = query + " roomID = '" + request.getNodeID() + "'";
+
+			added = true;
+		}
+		if (request.getSecurityLevel() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "level = '" + request.getSecurityLevel() + "'";
+			added = true;
+		}
+		if (request.getUrgencyLevel() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "urgency = '" + request.getUrgencyLevel() + "'";
+			added = true;
+		}
+		if (request.getReason() != null) {
+			if (added) {
+				query = query + ", ";
+			}
+			query = query + "reason = '" + request.getReason() + "'";
+		}
+
+		query = query + " where requestID = " + request.getRequestID();
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			prepState.executeUpdate();
+			prepState.close();
+			return 1;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating security request");
+			return 0;
+		}
+	}
+
+
+
 
 
 

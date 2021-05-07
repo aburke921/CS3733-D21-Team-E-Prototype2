@@ -13,6 +13,7 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.SecurityServiceObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -115,7 +116,7 @@ public class SecurityService extends ServiceRequestFormComponents {
             int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
             String nodeID = nodeIDS.get(nodeIDIndex);
             System.out.println(securityLevel + "" + urgencyLevel + "" + assignee + "" + nodeID);
-            DB.addSecurityRequest(App.userID, assignee, nodeID, securityLevel, urgencyLevel);
+            DB.addSecurityRequest(new SecurityServiceObj(0, App.userID, assignee, nodeID, securityLevel, urgencyLevel, null));
 
             super.handleButtonSubmit(actionEvent);
 

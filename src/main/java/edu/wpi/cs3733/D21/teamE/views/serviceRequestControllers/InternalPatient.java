@@ -18,13 +18,17 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class InternalPatient extends ServiceRequestFormComponents{
 
+    ObservableList<String> locations;
+    ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> userNames;
+    ArrayList<Integer> userID = new ArrayList<>();
+
     @FXML // fx:id="background"
     private ImageView background;
-
-
     @FXML
     private JFXComboBox<String> pickupInput;
     @FXML
@@ -36,7 +40,7 @@ public class InternalPatient extends ServiceRequestFormComponents{
     @FXML
     private JFXTextField patientIdInput;
     @FXML
-    private JFXTextField assignedPersonnel;
+    private JFXComboBox<String> assignedPersonnel;
     @FXML
     private JFXTextArea descriptionInput;
     @FXML
@@ -80,8 +84,10 @@ public class InternalPatient extends ServiceRequestFormComponents{
             e.printStackTrace();
         }
 
-        ObservableList<String> locations = DB.getAllNodeLongNames();
+        locations = DB.getAllNodeLongNames();
         pickupInput.setItems(locations);
         dropoffInput.setItems(locations);
+        userNames = DB.getAssigneeNames("nurse");
+        assignedPersonnel.setItems(userNames);
     }
 }

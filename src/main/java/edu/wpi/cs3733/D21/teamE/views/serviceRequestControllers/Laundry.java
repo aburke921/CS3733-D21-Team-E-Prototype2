@@ -12,6 +12,7 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.lang.String;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import edu.wpi.cs3733.D21.teamE.App;
@@ -31,6 +32,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class Laundry extends ServiceRequestFormComponents {
+
+    ObservableList<String> locations;
+    ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> userNames;
+    ArrayList<Integer> userID = new ArrayList<>();
 
     @FXML // fx:id="background"
     private ImageView background;
@@ -60,7 +66,7 @@ public class Laundry extends ServiceRequestFormComponents {
     private JFXComboBox<String> dryLoadAmountInput; // Value injected by FXMLLoader
 
     @FXML // fx:id="assignedPersonnel"
-    private JFXTextField assignedPersonnel; // Value injected by FXMLLoader
+    private JFXComboBox<String> assignedPersonnel; // Value injected by FXMLLoader
 
     @FXML // fx:id="descriptionInput"
     private JFXTextArea descriptionInput; // Value injected by FXMLLoader
@@ -104,8 +110,6 @@ public class Laundry extends ServiceRequestFormComponents {
         assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'Laundry.fxml'.";
-        ObservableList<String> locations = DB.getAllNodeLongNames();
-        locationInput.setItems(locations);
         assert washLoadAmountInput != null : "fx:id=\"washLoadAmountInput\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert dryLoadAmountInput != null : "fx:id=\"dryLoadAmountInput\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert assignedPersonnel != null : "fx:id=\"assignedPersonnel\" was not injected: check your FXML file 'Laundry.fxml'.";
@@ -113,6 +117,10 @@ public class Laundry extends ServiceRequestFormComponents {
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'Laundry.fxml'.";
 
+        locations = DB.getAllNodeLongNames();
+        locationInput.setItems(locations);
+        userNames = DB.getAssigneeNames("custodian");
+        assignedPersonnel.setItems(userNames);
 
         //init appBar
         javafx.scene.Node appBarComponent = null;

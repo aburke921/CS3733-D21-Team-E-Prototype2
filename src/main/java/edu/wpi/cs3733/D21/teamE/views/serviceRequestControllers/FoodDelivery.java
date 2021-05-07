@@ -86,7 +86,15 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 
 	@FXML
 	void saveData(ActionEvent event) {
+		int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+		int userIndex = assigneeInput.getSelectionModel().getSelectedIndex();
 
+		String node = nodeID.get(nodeIndex);
+		int user = userID.get(userIndex);
+		String deliverer = deliveryService.getText();
+		String desc = descriptionInput.getText();
+		//TODO update this to include object with proper fields
+//		DB.addFoodDeliveryRequest();
 		super.handleButtonSubmit(event);
 	}
 
@@ -104,8 +112,11 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		//background.fitHeightProperty().bind(primaryStage.heightProperty());
 
 		locations = DB.getAllNodeLongNames();
+		nodeID = DB.getListOfNodeIDS();
 		locationInput.setItems(locations);
+
 		userNames = DB.getAssigneeNames("nurse");
+		userID = DB.getAssigneeIDs("nurse");
 		assigneeInput.setItems(userNames);
 
 		assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'FoodDelivery.fxml'.";

@@ -6,8 +6,10 @@ package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 
 import java.io.IOException;
 
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FoodDeliveryObj;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -84,18 +86,38 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		super.handleButtonCancel(event);
 	}
 
+	private boolean validateInput() {
+
+		RequiredFieldValidator validator = new RequiredFieldValidator();
+		validator.setMessage("Input Required");
+
+		locationInput.getValidators().add(validator);
+		assigneeInput.getValidators().add(validator);
+		deliveryService.getValidators().add(validator);
+		orderNumber.getValidators().add(validator);
+		descriptionInput.getValidators().add(validator);
+
+		return locationInput.validate() && assigneeInput.validate() && deliveryService.validate()
+				&& orderNumber.validate() && descriptionInput.validate();
+	}
+
 	@FXML
 	void saveData(ActionEvent event) {
-		int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
-		int userIndex = assigneeInput.getSelectionModel().getSelectedIndex();
-
-		String node = nodeID.get(nodeIndex);
-		int user = userID.get(userIndex);
-		String deliverer = deliveryService.getText();
-		String desc = descriptionInput.getText();
-		//TODO update this to include object with proper fields
-//		DB.addFoodDeliveryRequest();
-		super.handleButtonSubmit(event);
+		if(validateInput()) {
+			//Setting indexes for picking from the id lists
+			int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+			int userIndex = assigneeInput.getSelectionModel().getSelectedIndex();
+			//Setting up data to add into object
+			String node = nodeID.get(nodeIndex);
+			int user = userID.get(userIndex);
+			String deliverer = deliveryService.getText();
+			String orderNum = orderNumber.getText();
+			String desc = descriptionInput.getText();
+			//creating object and passing it to database
+			FoodDeliveryObj object = new FoodDeliveryObj(0,App.userID,node,user,deliverer,orderNum, desc);
+			DB.addFoodDeliveryRequest(object);
+			super.handleButtonSubmit(event);
+		}
 	}
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete

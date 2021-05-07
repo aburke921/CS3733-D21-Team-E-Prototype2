@@ -77,7 +77,6 @@ public class Floral extends ServiceRequestFormComponents {
 
         validator.setMessage("Input required");
 
-
         locationInput.getValidators().add(validator);
         flowerType.getValidators().add(validator);
         flowerCount.getValidators().add(validator);
@@ -91,8 +90,6 @@ public class Floral extends ServiceRequestFormComponents {
         return  locationInput.validate() && flowerType.validate() && flowerCount.validate() &&
                 vaseType.validate() && assignee.validate() && message.validate() && chocolate.validate()
                 && teddyBear.validate() && arrangementStyle.validate();
-
-
     }
 
     @FXML

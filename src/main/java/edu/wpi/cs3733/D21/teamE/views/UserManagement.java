@@ -188,8 +188,12 @@ public class UserManagement {
 
     }
 
+    /**
+     * Called by refresh button
+     * @param event calling event
+     */
     @FXML
-    void startTableButton(ActionEvent event) {
+    void refreshButtonHandler(ActionEvent event) {
         refreshTable();
     }
 
@@ -203,6 +207,9 @@ public class UserManagement {
         userManagementState.switchScene(event);
     }
 
+    /**
+     * Inits Appbar, TreeTableView, and the addUser ComboBox
+     */
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert appBarAnchorPane != null : "fx:id=\"appBarAnchorPane\" was not injected: check your FXML file 'UserManagement.fxml'.";
@@ -232,11 +239,9 @@ public class UserManagement {
     }
 
 
-    //User class
-
     /**
-     * todo, temp user class, should be moved elsewhere
      * firstName, lastName, userID, userType, email
+     * @// todo, temp user class, should be moved elsewhere.
      */
     public static final class User {
         final StringProperty firstName;
@@ -315,6 +320,11 @@ public class UserManagement {
         }
     }
 
+    /**
+     * Adds and populates table with users from DB.
+     * If the root element is null (i.e. new table), create the columns.
+     * @param table Table to be 'prepared'
+     */
     public void prepareUsers(TreeTableView<User> table) {
         System.out.println("preparing users...");
         ArrayList<User> array = UserAccountDB.getAllUsers();
@@ -380,7 +390,7 @@ public class UserManagement {
     }
 
     /**
-     * @// TODO: 4/27/21
+     * Empties all fields, and deselects all comboboxes - visible or not.
      */
     private void clearFieldContent() {
         userNameInput.setText(null);

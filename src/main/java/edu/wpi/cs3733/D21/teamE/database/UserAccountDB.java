@@ -43,7 +43,7 @@ public class UserAccountDB {
 
 			prepState.execute();
 
-			createUserAccountTypeViews();
+			//createUserAccountTypeViews();
 
 		} catch (SQLException e) {
 			//e.printStackTrace();
@@ -53,59 +53,59 @@ public class UserAccountDB {
 		return 1;
 	}
 
-	/**
-	 * Uses executes the SQL statements required to create views for different types of users. The views created
-	 * are: visitorAccount, patientAccount, doctorAccount, adminAccount.
-	 */
-	public static void createUserAccountTypeViews() {
-		try {
-			Statement stmt = connection.createStatement();
-			String sqlQuery = "Create View visitorAccount As " +
-					"Select * " +
-					"From useraccount " +
-					"Where usertype = 'visitor'";
-			stmt.execute(sqlQuery);
-
-		} catch (SQLException e) {
-			// e.printStackTrace();
-			System.err.println("error creating visitorAccount view");
-		}
-		try {
-			Statement stmt = connection.createStatement();
-			String sqlQuery = "Create View patientAccount As " +
-					"Select * " +
-					"From useraccount " +
-					"Where usertype = 'patient'";
-			stmt.execute(sqlQuery);
-		} catch (SQLException e) {
-			// e.printStackTrace();
-			System.err.println("error creating patientAccount view");
-		}
-		try {
-			Statement stmt = connection.createStatement();
-			String sqlQuery = "Create View doctorAccount As " +
-					"Select * " +
-					"From useraccount " +
-					"Where usertype = 'doctor'";
-			stmt.execute(sqlQuery);
-		} catch (SQLException e) {
-			// e.printStackTrace();
-			System.err.println("error creating doctorAccount view");
-		}
-
-		try {
-			Statement stmt = connection.createStatement();
-			String sqlQuery = "Create View adminAccount As " +
-					"Select * " +
-					"From useraccount " +
-					"Where usertype = 'admin'";
-			stmt.execute(sqlQuery);
-		} catch (SQLException e) {
-			// e.printStackTrace();
-			System.err.println("error creating adminAccount view");
-		}
-
-	}
+//	/**
+//	 * Uses executes the SQL statements required to create views for different types of users. The views created
+//	 * are: visitorAccount, patientAccount, doctorAccount, adminAccount.
+//	 */
+//	public static void createUserAccountTypeViews() {
+//		try {
+//			Statement stmt = connection.createStatement();
+//			String sqlQuery = "Create View visitorAccount As " +
+//					"Select * " +
+//					"From useraccount " +
+//					"Where usertype = 'visitor'";
+//			stmt.execute(sqlQuery);
+//
+//		} catch (SQLException e) {
+//			// e.printStackTrace();
+//			System.err.println("error creating visitorAccount view");
+//		}
+//		try {
+//			Statement stmt = connection.createStatement();
+//			String sqlQuery = "Create View patientAccount As " +
+//					"Select * " +
+//					"From useraccount " +
+//					"Where usertype = 'patient'";
+//			stmt.execute(sqlQuery);
+//		} catch (SQLException e) {
+//			// e.printStackTrace();
+//			System.err.println("error creating patientAccount view");
+//		}
+//		try {
+//			Statement stmt = connection.createStatement();
+//			String sqlQuery = "Create View doctorAccount As " +
+//					"Select * " +
+//					"From useraccount " +
+//					"Where usertype = 'doctor'";
+//			stmt.execute(sqlQuery);
+//		} catch (SQLException e) {
+//			// e.printStackTrace();
+//			System.err.println("error creating doctorAccount view");
+//		}
+//
+//		try {
+//			Statement stmt = connection.createStatement();
+//			String sqlQuery = "Create View adminAccount As " +
+//					"Select * " +
+//					"From useraccount " +
+//					"Where usertype = 'admin'";
+//			stmt.execute(sqlQuery);
+//		} catch (SQLException e) {
+//			// e.printStackTrace();
+//			System.err.println("error creating adminAccount view");
+//		}
+//
+//	}
 
 	/**
 	 * This is allows a visitor to create a user account giving them more access to the certain requests available

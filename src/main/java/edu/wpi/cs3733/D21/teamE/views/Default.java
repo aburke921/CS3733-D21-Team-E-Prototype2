@@ -5,7 +5,6 @@ import com.jfoenix.controls.JFXComboBox;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.QRCode;
-import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.states.DefaultState;
 import javafx.collections.FXCollections;
@@ -101,14 +100,8 @@ public class Default {
             if(DB.filledCovidSurveyToday(App.userID)) {
                 if((DB.isUserCovidSafe(App.userID))) {
                     System.out.println("User is marked as safe");
-                    ArrayList<Node> indexer = DB.getAllNodes();
-                    int index = 0;
-                    for(int i = 0; i < indexer.size(); i++) {
-                        if(indexer.get(i).get("id").equals("FEXIT00201")) {
-                            index = i;
-                        }
-                    }
-                    PathFinder.endNodeIndex = index; //update this with the main entrance
+                    App.setEndNode(DB.getNodeInfo("FEXIT00201"));
+
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
                         App.changeScene(root);
@@ -117,14 +110,8 @@ public class Default {
                     }
                 } else if(DB.isUserCovidRisk(App.userID)){
                     System.out.println("User is marked as risk");
-                    ArrayList<Node> indexer = DB.getAllNodes();
-                    int index = 0;
-                    for(int i = 0; i < indexer.size(); i++) {
-                        if(indexer.get(i).get("id").equals("FEXIT00301")) {
-                            index = i;
-                        }
-                    }
-                    PathFinder.endNodeIndex = index; //update this to emergency entrance index
+                    App.setEndNode(DB.getNodeInfo("FEXIT00301"));
+                    App.setToEmergency(true);
                     try {
                         Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
                         App.changeScene(root);
@@ -132,23 +119,25 @@ public class Default {
                         ex.printStackTrace();
                     }
                 } else if(DB.isUserCovidUnmarked(App.userID)) {
-//                    App.newJFXDialogPopUp("","OK","Your covid survey still needs to be reviewed",stackPane);
+                    App.newJFXDialogPopUp("","OK","Your covid survey still needs to be reviewed",stackPane);
                     System.out.println("Covid submission needs to be reviewed first");
                 } else {
                     System.out.println("It was none of the three strings");
                 }
+            } else {
+                App.newJFXDialogPopUp("","OK","You need to fill out a covid survey each day if you wish to pathfind within the hospital",stackPane);
             }
         } else {
-            //Have to figure out how we wanna handle guests
+            App.newJFXDialogPopUp("","OK","You need to create a guest account if you wish to pathfind within the hospital",stackPane);
         }
     }
 
     @FXML
     private void toScanQRCode(ActionEvent e) {
-	    String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
-        // ↑ for normal testing and demo
-//	    String result = QRCode.scanQR();
-	    // ↑ for submission
+	    //String result = QRCode.readQR("src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png");
+        // for normal testing and demo
+	    String result = QRCode.scanQR();
+	    // for submission
         System.out.println("Scanned String: " + result);
         String pure = result.substring(result.lastIndexOf('/') - 1, result.lastIndexOf('.'));
         System.out.println("Scanned pure: " + pure);
@@ -162,15 +151,8 @@ public class Default {
 
         switch (lable) {
             case "n":
-                ArrayList<Node> nodeArrayList = DB.getAllNodes();
-                int index = 0;
-                for (int i = 0; i < nodeArrayList.size(); i++) {
-                    if (nodeArrayList.get(i).get("id").equals(code)) {
-                        index = i;
-                    }
-                }
-                PathFinder.startNodeIndex = index;
-                toPathFinder(e);
+                Node selected = DB.getNodeInfo(code);
+                App.setStartNode(selected);
                 break;
             case "p":
                 if (App.userID == 0) {
@@ -199,16 +181,16 @@ public class Default {
 
     @FXML
     private void toParking(ActionEvent e) {
-
-        ArrayList<Node> nodeArrayList = DB.getAllNodes();
-        int index = 0;
-        for (int i = 0; i < nodeArrayList.size(); i++) {
-            if (nodeArrayList.get(i).get("id").equals(DB.whereDidIPark(App.userID))) {
-                index = i;
-            }
+        ArrayList<Node> indexer = DB.getAllNodes();
+        String parked = DB.whereDidIPark(App.userID);
+        System.out.println(DB.whereDidIPark(App.userID));
+        App.setEndNode(DB.getNodeInfo(parked));
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+            App.changeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-        PathFinder.endNodeIndex = index;
-        toPathFinder(e);
     }
 
     /**
@@ -283,7 +265,7 @@ public class Default {
         algo.setItems(algoNames);
         algo.setValue(algoNames.get(App.getSearchAlgo()));
 
-        String userType = UserAccountDB.getUserType(App.userID);
+        String userType = DB.getUserType(App.userID);
         if(App.userID == 0) {
             serviceRequestButton.setVisible(false);
         }

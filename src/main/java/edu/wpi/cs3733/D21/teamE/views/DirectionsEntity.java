@@ -4,8 +4,8 @@ package edu.wpi.cs3733.D21.teamE.views;
 import com.google.maps.*;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
-import io.github.cdimascio.dotenv.Dotenv;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -36,9 +36,9 @@ public class DirectionsEntity {
      */
     public static DirectionsEntity getInstance()
     {
-        if (instance == null)
+        if (instance == null) {
             instance = new DirectionsEntity();
-
+        }
         return instance;
     }
 
@@ -183,7 +183,7 @@ public class DirectionsEntity {
                 str =  "Public Transit";
                 break;
             default:
-                str =  "Driving";
+            str =  "Driving";
                 break;
         };
         return str;
@@ -195,8 +195,18 @@ public class DirectionsEntity {
      * Connects with the API
      */
     private static void init() {
-        Dotenv dotenv = Dotenv.load();
-        API_KEY = dotenv.get("MAPS_API_KEY");
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(".env"));
+            String keyLine = reader.readLine();
+            String key = keyLine.replace("MAPS_API_KEY=", "");
+            API_KEY = key;
+            reader.close();
+        } catch (FileNotFoundException e) {
+            System.err.println(".env not found");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         getGeoContext();
     }
 

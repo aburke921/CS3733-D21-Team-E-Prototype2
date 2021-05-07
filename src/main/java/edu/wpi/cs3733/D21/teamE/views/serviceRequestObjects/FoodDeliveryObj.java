@@ -1,42 +1,32 @@
 package edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects;
 
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
+import javafx.fxml.FXML;
+
 public class FoodDeliveryObj extends ServiceRequestObjs {
 
-    private String dietaryRestrictions;
-    private String allergies;
-    private String food;
-    private String beverage;
+    private String deliveryService;
+    private String orderNumber;
     private String description;
 
-    public FoodDeliveryObj(String nodeID, int userID, int assigneeID, String dietaryRestrictions, String allergies, String food, String beverage, String description) {
+    public FoodDeliveryObj(int requestID, int userID, String nodeID, int assigneeID, String deliveryService, String orderNumber, String description) {
 
+        super.requestID = requestID;
         super.nodeID = nodeID;
         super.userID = userID;
         super.assigneeID = assigneeID;
-        this.dietaryRestrictions = dietaryRestrictions;
-        this.allergies = allergies;
-        this.food = food;
-        this.beverage = beverage;
+        this.deliveryService = deliveryService;
+        this.orderNumber = orderNumber;
         this.description = description;
         super.status = "In Progress";
 
     }
 
-    public String getDietaryRestrictions() {
-        return this.dietaryRestrictions;
-    }
+    public String getDeliveryService(){ return this.deliveryService; }
 
-    public String getAllergies() {
-        return this.allergies;
-    }
-
-    public String getFood() {
-        return this.food;
-    }
-
-    public String getBeverage() {
-        return this.beverage;
-    }
+    public String getOrderNumber(){ return this.orderNumber; }
 
     public String getDescription() {
         return this.description;

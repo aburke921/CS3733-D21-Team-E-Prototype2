@@ -96,9 +96,6 @@ public class ServiceRequestStatus {
     private void addToTable(String tableName, TreeItem<ServiceRequestForm> inProgress, TreeItem<ServiceRequestForm> completed, TreeItem<ServiceRequestForm> cancelled) {
 
         ArrayList<String> idArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestID");
-//        for(int j = 0; j < idArray.size(); j++) {
-//            System.out.println(idArray.get(j));
-//        }
         ArrayList<String> statusArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
         ArrayList<String> locationArray = DB.getRequestLocations(tableName, App.userID);
         ArrayList<String> assigneeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "AssigneeID");
@@ -199,21 +196,44 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> cancelled = new TreeItem<>(new ServiceRequestForm("Cancelled"));
 
         //Setting up children of sub-root nodes
+        //completed
         TreeItem<ServiceRequestForm> externalPatientCompleted = new TreeItem<>(new ServiceRequestForm("External Patient Form"));
         TreeItem<ServiceRequestForm> floralFormCompleted = new TreeItem<>(new ServiceRequestForm("Floral Form"));
         TreeItem<ServiceRequestForm> medicineDeliveryCompleted = new TreeItem<>(new ServiceRequestForm("Medicine Delivery Form"));
         TreeItem<ServiceRequestForm> sanitationServicesCompleted = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
         TreeItem<ServiceRequestForm> securityServiceCompleted = new TreeItem<>(new ServiceRequestForm("Security Service Form"));
+        TreeItem<ServiceRequestForm> foodDeliveryCompleted = new TreeItem<>(new ServiceRequestForm("Food Delivery Form"));
+        TreeItem<ServiceRequestForm> internalPatientCompleted = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
+        TreeItem<ServiceRequestForm> languageInterpreterCompleted = new TreeItem<>(new ServiceRequestForm("Language Interpreter Form"));
+        TreeItem<ServiceRequestForm> laundryCompleted = new TreeItem<>(new ServiceRequestForm("Laundry Form"));
+        TreeItem<ServiceRequestForm> maintenanceCompleted = new TreeItem<>(new ServiceRequestForm("Facilities Maintenance Form"));
+        TreeItem<ServiceRequestForm> religiousCompleted = new TreeItem<>(new ServiceRequestForm("Religious Form"));
+
+        //in progress
         TreeItem<ServiceRequestForm> externalPatientInProgress = new TreeItem<>(new ServiceRequestForm("External Patient Form"));
         TreeItem<ServiceRequestForm> floralFormInProgress = new TreeItem<>(new ServiceRequestForm("Floral Form"));
         TreeItem<ServiceRequestForm> medicineDeliveryInProgress = new TreeItem<>(new ServiceRequestForm("Medicine Delivery Form"));
         TreeItem<ServiceRequestForm> sanitationServicesInProgress = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
         TreeItem<ServiceRequestForm> securityServiceInProgress = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
+        TreeItem<ServiceRequestForm> foodDeliveryInProgress = new TreeItem<>(new ServiceRequestForm("Food Delivery Form"));
+        TreeItem<ServiceRequestForm> internalPatientInProgress = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
+        TreeItem<ServiceRequestForm> languageInterpreterInProgress = new TreeItem<>(new ServiceRequestForm("Language Interpreter Form"));
+        TreeItem<ServiceRequestForm> laundryInProgress = new TreeItem<>(new ServiceRequestForm("Laundry Form"));
+        TreeItem<ServiceRequestForm> maintenanceInProgress = new TreeItem<>(new ServiceRequestForm("Facilities Maintenance Form"));
+        TreeItem<ServiceRequestForm> religiousInProgress = new TreeItem<>(new ServiceRequestForm("Religious Form"));
+
+        //cancelled
         TreeItem<ServiceRequestForm> externalPatientCancelled = new TreeItem<>(new ServiceRequestForm("External Patient Form"));
         TreeItem<ServiceRequestForm> floralFormCancelled = new TreeItem<>(new ServiceRequestForm("Floral Form"));
         TreeItem<ServiceRequestForm> medicineDeliveryCancelled = new TreeItem<>(new ServiceRequestForm("Medicine Delivery Form"));
         TreeItem<ServiceRequestForm> sanitationServicesCancelled = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
         TreeItem<ServiceRequestForm> securityServiceCancelled = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
+        TreeItem<ServiceRequestForm> foodDeliveryCancelled = new TreeItem<>(new ServiceRequestForm("Food Delivery Form"));
+        TreeItem<ServiceRequestForm> internalPatientCancelled = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
+        TreeItem<ServiceRequestForm> languageInterpreterCancelled = new TreeItem<>(new ServiceRequestForm("Language Interpreter Form"));
+        TreeItem<ServiceRequestForm> laundryCancelled = new TreeItem<>(new ServiceRequestForm("Laundry Form"));
+        TreeItem<ServiceRequestForm> maintenanceCancelled = new TreeItem<>(new ServiceRequestForm("Facilities Maintenance Form"));
+        TreeItem<ServiceRequestForm> religiousCancelled = new TreeItem<>(new ServiceRequestForm("Religious Form"));
 
         //Adding request forms
         addToTable("securityServ", securityServiceInProgress, securityServiceCompleted, securityServiceCancelled);
@@ -221,11 +241,20 @@ public class ServiceRequestStatus {
         addToTable("floralRequests", floralFormInProgress, floralFormCompleted, floralFormCancelled);
         addToTable("sanitationRequest", sanitationServicesInProgress, sanitationServicesCompleted, sanitationServicesCancelled);
         addToTable("medDelivery", medicineDeliveryInProgress, medicineDeliveryCompleted, medicineDeliveryCancelled);
+        addToTable("foodDelivery",foodDeliveryInProgress,foodDeliveryCompleted,foodDeliveryCancelled);
+        addToTable("internalPatientRequest",internalPatientInProgress,internalPatientCompleted,internalPatientCancelled);
+        addToTable("languageRequest",languageInterpreterInProgress,languageInterpreterCompleted,languageInterpreterCancelled);
+        addToTable("laundryRequest",laundryInProgress,laundryCompleted,laundryCancelled);
+        addToTable("maintenanceRequest",maintenanceInProgress,maintenanceCompleted,maintenanceCancelled);
+        addToTable("religiousRequest",religiousInProgress,religiousCompleted,religiousCancelled);
 
         //Adding children to sub-root nodes
-        inProgress.getChildren().setAll(externalPatientInProgress, floralFormInProgress, medicineDeliveryInProgress, sanitationServicesInProgress, securityServiceInProgress);
-        completed.getChildren().setAll(externalPatientCompleted, floralFormCompleted, medicineDeliveryCompleted, sanitationServicesCompleted, securityServiceCompleted);
-        cancelled.getChildren().setAll(externalPatientCancelled, floralFormCancelled, medicineDeliveryCancelled, sanitationServicesCancelled, securityServiceCancelled);
+        inProgress.getChildren().setAll(externalPatientInProgress, floralFormInProgress, medicineDeliveryInProgress, sanitationServicesInProgress, securityServiceInProgress,
+                foodDeliveryInProgress, internalPatientInProgress, languageInterpreterInProgress, laundryInProgress, maintenanceInProgress, religiousInProgress);
+        completed.getChildren().setAll(externalPatientCompleted, floralFormCompleted, medicineDeliveryCompleted, sanitationServicesCompleted, securityServiceCompleted,
+                foodDeliveryCompleted,internalPatientCompleted,languageInterpreterCompleted,laundryCompleted,maintenanceCompleted,religiousCompleted);
+        cancelled.getChildren().setAll(externalPatientCancelled, floralFormCancelled, medicineDeliveryCancelled, sanitationServicesCancelled, securityServiceCancelled,
+                foodDeliveryCancelled,internalPatientCancelled,languageInterpreterCancelled,laundryCancelled,maintenanceCancelled,religiousCancelled);
 
         //Adding sub-roots to root node
         rootNode.getChildren().setAll(inProgress, completed, cancelled);

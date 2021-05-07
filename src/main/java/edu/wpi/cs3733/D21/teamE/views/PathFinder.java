@@ -19,7 +19,6 @@ import javafx.animation.PathTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -30,6 +29,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -42,8 +43,11 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class PathFinder {
 
-    public static int startNodeIndex = -1;
-    public static int endNodeIndex = -1;
+    private static int startNodeIndex = -1;
+    private static int endNodeIndex = -1;
+
+    private Node startNode = null;
+    private Node endNode = null;
 
     /*
      * FXML Values
@@ -171,7 +175,7 @@ public class PathFinder {
 
     private Marker marker = new Marker();
 
-    private ArrayList<Node> currentMarkers = new ArrayList<Node>();
+    private ArrayList<Node> currentMarkers = new ArrayList<>();
 
     /**
      * Switch to a different scene
@@ -190,12 +194,10 @@ public class PathFinder {
     @FXML
     void selectStartNode(ActionEvent event) {
         // findPath button validation
-        if (startLocationComboBox.getSelectionModel().isEmpty() ||
-                endLocationComboBox.getSelectionModel().isEmpty()) {
-            findPathButton.setDisable(true);
-        } else {
-            findPathButton.setDisable(false);
-        }
+        findPathButton.setDisable(startLocationComboBox.getSelectionModel().isEmpty() ||
+                endLocationComboBox.getSelectionModel().isEmpty());
+        // clear preset node
+        startNode = null;
     }
 
 
@@ -206,12 +208,10 @@ public class PathFinder {
     @FXML
     void selectEndNode(ActionEvent event) {
         // findPath button validation
-        if (startLocationComboBox.getSelectionModel().isEmpty() ||
-                endLocationComboBox.getSelectionModel().isEmpty()) {
-            findPathButton.setDisable(true);
-        } else {
-            findPathButton.setDisable(false);
-        }
+        findPathButton.setDisable(startLocationComboBox.getSelectionModel().isEmpty() ||
+                endLocationComboBox.getSelectionModel().isEmpty());
+        // clear preset node
+        endNode = null;
     }
 
     /**
@@ -226,10 +226,11 @@ public class PathFinder {
         if (currentFoundPath == null) return;
 
         List<String> directions = currentFoundPath.makeDirectionsWithDist();
+        String floor = "Floor " + currentFoundPath.getStart().get("floor");
 
         TableView tableView = new TableView();
 
-        TableColumn<TextualDirectionStep, FontAwesomeIconView> column1 = new TableColumn<>();
+        TableColumn<TextualDirectionStep, Text> column1 = new TableColumn<>();
         column1.setCellValueFactory(new PropertyValueFactory<>("icon"));
         column1.getStyleClass().add("iconTable");
         column1.setStyle("-fx-alignment: CENTER-LEFT");
@@ -243,6 +244,7 @@ public class PathFinder {
 
         tableView.setSelectionModel(null);
         tableView.setPrefHeight(USE_COMPUTED_SIZE);
+        tableView.getStyleClass().add("scrollables");
         tableView.getStyleClass().add("directions");
         tableView.getStyleClass().add("noheader");
         tableView.getStyleClass().add("table-row-cell");
@@ -251,9 +253,21 @@ public class PathFinder {
         tableView.getColumns().add(column1);
         tableView.getColumns().add(column2);
 
-
+        boolean floorChangeFlag = true;
 
         for (String dir : directions) {
+            if (floorChangeFlag) {
+                Text floorHeader = new Text(Character.toString(MaterialDesignIcon.PLAY_CIRCLE.getChar()));
+                //floorHeader.setRotate(180);
+                floorHeader.setStyle("-fx-fill: -fx--primary-dark");
+
+                Text floorText = new Text(floor);
+                floorText.setFont(Font.font(null, FontWeight.BOLD, 16));
+
+                tableView.getItems().add(new TextualDirectionStep(floorHeader, floorText));
+
+                floorChangeFlag = false;
+            }
             char step;
             Text text;
             int rotate = 0;
@@ -285,33 +299,31 @@ public class PathFinder {
             } else { // else is elevator
                 step = MaterialDesignIcon.ELEVATOR.getChar();
             }
+
             text = new Text(Character.toString(step));
             text.setRotate(rotate);
             text.setStyle("-fx-fill: -fx--primary-dark");
-            tableView.getItems().add(new TextualDirectionStep(text, dir));
+            tableView.getItems().add(new TextualDirectionStep(text, new Text("   "+ dir)));
+            if (dir.contains("Floor")) {
+                String s1 = dir.substring(dir.indexOf("Floor"));
+                s1 = s1.replace("Floor", "");
+                s1 = s1.replaceAll("\\s", "");
+                floor = "Floor " + s1;
+                floorChangeFlag = true;
+            }
         }
 
 
         JFXDialogLayout popup = new JFXDialogLayout();
-        popup.setHeading(new Text("Detailed Path DirectionsController"));
+        popup.setHeading(new Text("Path Directions"));
         popup.setBody(tableView);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
         JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
-        dialog.setMaxWidth(375);
+        dialog.setMaxWidth(400);
         int fullSize = tableView.getItems().size() * 41 + 120;
-        if (fullSize > 425) {
-            dialog.setMaxHeight(425);
-        } else {
-            dialog.setMaxHeight(fullSize);
-        }
+        dialog.setMaxHeight(Math.min(fullSize, 425));
         JFXButton okay = new JFXButton("Done");
-        okay.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
-
-            }
-        });
+        okay.setOnAction(event1 -> dialog.close());
         popup.setActions(okay);
         dialog.show();
     }
@@ -333,68 +345,53 @@ public class PathFinder {
         JFXButton bathroom = new JFXButton("Nearest Bathroom");
 
 
-        parking.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if (DB.submitParkingSlot(nodeArrayList.get(index).get("id"), App.userID)) {
-                    dialog.close();
-                } else {
-                    JFXDialogLayout error = new JFXDialogLayout();
-                    error.setHeading(new Text("Error when trying to add parking slot"));
-                    JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
-                    JFXButton dismiss = new JFXButton("Dismiss");
-                    dismiss.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            dialog.close();
-                        }
-                    });
-                    error.setActions(dismiss);
-                    dialog.show();
+        parking.setOnAction(event -> {
+            if (DB.submitParkingSlot(nodeArrayList.get(index).get("id"), App.userID)) {
+                dialog.close();
+            } else {
+                JFXDialogLayout error1 = new JFXDialogLayout();
+                error1.setHeading(new Text("Error when trying to add parking slot"));
+                JFXDialog dialog1 = new JFXDialog(stackPane, error1,JFXDialog.DialogTransition.CENTER);
+                JFXButton dismiss = new JFXButton("Dismiss");
+                dismiss.setOnAction(event1 -> dialog1.close());
+                error1.setActions(dismiss);
+                dialog1.show();
+            }
+        });
+        start.setOnAction(event -> {
+            startLocationComboBox.getSelectionModel().select(index);
+            // clear preset node
+            startNode = null;
+            dialog.close();
+
+        });
+        destination.setOnAction(event -> {
+            endLocationComboBox.getSelectionModel().select(index);
+            // clear preset node
+            endNode = null;
+            dialog.close();
+
+        });
+        bathroom.setOnAction(event -> {
+            SearchContext search = new SearchContext();
+            startLocationComboBox.getSelectionModel().select(index);
+            Node bathroom1 = search.findNearest(nodeArrayList.get(index),"REST");
+            int endIndex = 0;
+            for(int i = 0; i < nodeArrayList.size();i++){
+                if(nodeArrayList.get(i).get("id").equals(bathroom1.get("id"))){
+                    endIndex = i;
                 }
-            }
-        });
-        start.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                startLocationComboBox.getSelectionModel().select(index);
-                dialog.close();
 
             }
-        });
-        destination.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                endLocationComboBox.getSelectionModel().select(index);;
-
-                dialog.close();
-
-            }
-        });
-        bathroom.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                SearchContext search = new SearchContext();
-                startLocationComboBox.getSelectionModel().select(index);
-                Node bathroom = search.findNearest(nodeArrayList.get(index),"REST");
-                int endIndex = 0;
-                for(int i = 0; i < nodeArrayList.size();i++){
-                    if(nodeArrayList.get(i).get("id").equals(bathroom.get("id"))){
-                        endIndex = i;
-                    }
-
-                }
-                endLocationComboBox.getSelectionModel().select(endIndex);
-
-                dialog.close();
+            endLocationComboBox.getSelectionModel().select(endIndex);
+            // clear preset nodes
+            startNode = null;
+            endNode = null;
+            dialog.close();
 
 
-            }
         });
         error.setActions(parking,start,bathroom,destination);
-
-
-
 
         dialog.show();
     }
@@ -429,22 +426,29 @@ public class PathFinder {
 
         System.out.println("\nFINDING PATH...");
 
-        //get index and ID of selected item in dropdown
-        startLocationComboBox.setItems(longNameArrayList);
-        int startLocationListSelectedIndex = startLocationComboBox.getSelectionModel().getSelectedIndex();
-        selectedStartNodeID = nodeIDArrayList.get(startLocationListSelectedIndex);
-        System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + selectedStartNodeID);
+        if (startNode != null) { // if not null, there is a preset start
+            selectedStartNodeID = startNode.get("id");
+        } else {
+            //get index and ID of selected item in dropdown
+            startLocationComboBox.setItems(longNameArrayList);
+            int startLocationListSelectedIndex = startLocationComboBox.getSelectionModel().getSelectedIndex();
+            selectedStartNodeID = nodeIDArrayList.get(startLocationListSelectedIndex);
+            System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + selectedStartNodeID);
+        }
 
-        //get index of selected item in dropdown
-        endLocationComboBox.setItems(longNameArrayList);
-        int endLocationListSelectedIndex = endLocationComboBox.getSelectionModel().getSelectedIndex();
-        selectedEndNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
-        System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + selectedEndNodeID);
+        if (endNode != null) { // if not null, there is a preset end
+            selectedEndNodeID = endNode.get("id");
+        } else {
+            //get index of selected item in dropdown
+            endLocationComboBox.setItems(longNameArrayList);
+            int endLocationListSelectedIndex = endLocationComboBox.getSelectionModel().getSelectedIndex();
+            selectedEndNodeID = nodeIDArrayList.get(endLocationListSelectedIndex);
+            System.out.println("New ID resolution: (index) " + endLocationListSelectedIndex + ", (ID) " + selectedEndNodeID);
+        }
 
-        //Define A* Search
-        System.out.println("A* Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
+        //Define Search
         SearchContext search = new SearchContext();
-        String algoType = null;
+        String algoType;
         switch (App.getSearchAlgo()) {
             case 1:
                 algoType = "DFS";
@@ -463,6 +467,8 @@ public class PathFinder {
                 break;
         }
         search.setAlgo(algoType);
+        System.out.println(algoType + " Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
+
 
         //set constrains
         if (handicap.isSelected()) {
@@ -525,20 +531,13 @@ public class PathFinder {
                 minETA.setText(Integer.toString(foundPath.getETA().getMin()));
                 secETA.setText(String.format("%02d", (foundPath.getETA().getSec())));
                 int len = (int) Math.round(foundPath.getPathLengthFeet());
-                dist.setText(Integer.toString(len) + " Feet");
+                dist.setText(len + " Feet");
 
                 //save found path for when floors are switched
                 currentFoundPath = foundPath;
 
                 //draw the map for the current floor
                 drawMap(foundPath, currentFloor);
-
-                System.out.println();
-                List<String> directions = foundPath.makeDirections();
-                for (String dir : directions) {
-                    System.out.println(dir);
-                }
-
             }
         }
     }
@@ -723,9 +722,7 @@ public class PathFinder {
                         //if a floor label was made, line and node circle along with the label and its parent flowPane
                         String finalDestFloor = destFloor;
 
-                        floorLabel.setOnMouseClicked(e -> {
-                            setCurrentFloor(finalDestFloor);
-                        });
+                        floorLabel.setOnMouseClicked(e -> setCurrentFloor(finalDestFloor));
 
                         g.getChildren().addAll(line, circle, flowPane);
                     } else {
@@ -842,7 +839,7 @@ public class PathFinder {
 
 
         //init appBar
-        javafx.scene.Node appBarComponent = null;
+        javafx.scene.Node appBarComponent;
         try {
             App.setPageTitle("Path Finder"); //set AppBar title
             App.setHelpText("To use the pathfinder, first select a starting location and end location you would like " +
@@ -875,7 +872,7 @@ public class PathFinder {
         //todo here
 
         longNameArrayList = FXCollections.observableArrayList();
-        nodeIDArrayList = new ArrayList<String>();
+        nodeIDArrayList = new ArrayList<>();
 
         nodeArrayList = DB.getAllNodes();
         for (int i = 0; i < nodeArrayList.size(); i++) {
@@ -893,6 +890,9 @@ public class PathFinder {
         //add ObservableLists to dropdowns
         startLocationComboBox.setItems(longNameArrayList);
         endLocationComboBox.setItems(longNameArrayList);
+
+        startLocationComboBox.getStyleClass().add("scrollables");
+        endLocationComboBox.getStyleClass().add("scrollables");
 
         System.out.println("done");
 
@@ -953,18 +953,6 @@ public class PathFinder {
         marker.populateLocationMarkerMarkerGroup(scale);
         markerPane.getChildren().add(marker.getMarkerGroup());
 
-        //Check if startNodeIndex has a value, if yes fill startLocationComboBox
-        if (startNodeIndex != -1) {
-            startLocationComboBox.getSelectionModel().select(startNodeIndex);
-            startNodeIndex = -1;
-        }
-
-        //Check if startNodeIndex has a value, if yes fill startLocationComboBox
-        if (endNodeIndex != -1) {
-            endLocationComboBox.getSelectionModel().select(endNodeIndex);
-            endNodeIndex = -1;
-        }
-
         System.out.println("Finish PathFinder Init.");
         pane.setOnMouseClicked(e -> {
             /*double xCoord = e.getX();
@@ -987,7 +975,7 @@ public class PathFinder {
                 int nodeXInt = (int) nodeX;
                 double nodeY = node.getY() / scale;
                 int nodeYInt = (int) nodeY;
-                System.out.println(nodeXInt);
+                //System.out.println(nodeXInt);
                 if ((Math.abs(nodeXInt - xInt) <= 2 && Math.abs(nodeYInt - yInt) <= 2) && (node.get("floor").equalsIgnoreCase(currentFloor))) {
 
                     System.out.println(nodeArrayList.get(i).get("longName"));
@@ -1015,9 +1003,27 @@ public class PathFinder {
         new ImageObserver(subject, imageView);
         //new PathObserver(subject, pane, currentFoundPath, scale, selectedStartNodeID, selectedEndNodeID);
 
-        currFloor.textProperty().addListener(observable -> {
-            subject.setState(currFloor.getText());
-        });
+        currFloor.textProperty().addListener(observable -> subject.setState(currFloor.getText()));
+
+        startNode = App.getStartNode();
+        if (startNode != null) {
+            startLocationComboBox.setValue(startNode.get("longName"));
+            App.setStartNode(null);
+            // Reset so user doesn't get this again
+        }
+
+        endNode = App.getEndNode();
+        if (endNode != null) {
+            endLocationComboBox.setValue(endNode.get("longName"));
+            App.setEndNode(null);
+            // Reset so user doesn't get this again
+        }
+
+        if (App.isToEmergency()) {
+            safe.setSelected(true);
+            App.setToEmergency(false);
+            // Reset so user doesn't get this again
+        }
     }
 
     /**
@@ -1078,7 +1084,7 @@ public class PathFinder {
     }
 
 
-        public void sortNodesByType(ActionEvent event) {
+    public void sortNodesByType(ActionEvent event) {
         String currentType =((CheckBox) event.getSource()).getId().toUpperCase();
         //create hashcode string for hashmap
         String typeAndFloorString = currentType + currentFloor;
@@ -1112,15 +1118,7 @@ public class PathFinder {
         String result = QRCode.scanQR();
         String nodeID = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
         System.out.println("Scanned nodeID: " + nodeID);
-
-
-        ArrayList<Node> nodeArrayList = DB.getAllNodes();
-        int index = 0;
-        for(int i = 0; i < nodeArrayList.size();i++){
-            if(nodeArrayList.get(i).get("id").equals(nodeID)){
-                index = i;
-            }
-        }
-        startLocationComboBox.getSelectionModel().select(index);
+        startNode = DB.getNodeInfo(nodeID);
+        startLocationComboBox.setValue(startNode.get("longName"));
     }
 }

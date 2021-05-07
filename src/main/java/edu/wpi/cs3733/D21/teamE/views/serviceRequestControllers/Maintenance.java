@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.MaintenanceObj;
@@ -77,25 +78,37 @@ public class Maintenance extends ServiceRequestFormComponents {
     @FXML
     private StackPane stackPane;
 
+    private boolean validateInput() {
+        RequiredFieldValidator validator = new RequiredFieldValidator();
+        validator.setMessage("Input Required");
 
-    @FXML
-    void handleButtonCancel(ActionEvent event) {
-        super.handleButtonCancel(event);
+        locationInput.getValidators().add(validator);
+        requestTypeInput.getValidators().add(validator);
+        severityInput.getValidators().add(validator);
+        assignedPersonnelInput.getValidators().add(validator);
+        descriptionInput.getValidators().add(validator);
+
+        return locationInput.validate() && requestTypeInput.validate() &&
+                severityInput.validate() && assignedPersonnelInput.validate() &&
+                descriptionInput.validate();
     }
 
     @FXML
     void saveData(ActionEvent event) {
-        int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
-        int userIndex = assignedPersonnelInput.getSelectionModel().getSelectedIndex();
+        if(validateInput()) {
+            int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+            int userIndex = assignedPersonnelInput.getSelectionModel().getSelectedIndex();
 
-        String node = nodeID.get(nodeIndex);
-        int user = userID.get(userIndex);
-        String requestType = requestTypeInput.getSelectionModel().getSelectedItem();
-        String severity = severityInput.getSelectionModel().getSelectedItem();
-        String desc = descriptionInput.getText();
+            String node = nodeID.get(nodeIndex);
+            int user = userID.get(userIndex);
+            String requestType = requestTypeInput.getSelectionModel().getSelectedItem();
+            String severity = severityInput.getSelectionModel().getSelectedItem();
+            String desc = descriptionInput.getText();
 
-        DB.addMaintenanceRequest(new MaintenanceObj(0, App.userID, node, user, requestType, severity, desc));
-        super.handleButtonSubmit(event);
+            MaintenanceObj object = new MaintenanceObj(0, App.userID, node, user, requestType, severity, desc);
+            DB.addMaintenanceRequest(object);
+            super.handleButtonSubmit(event);
+        }
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

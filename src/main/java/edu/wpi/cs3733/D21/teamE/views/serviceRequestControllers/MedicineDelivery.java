@@ -71,7 +71,6 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     private boolean validateInput() {
 
         RequiredFieldValidator validator = new RequiredFieldValidator();
-
         validator.setMessage("Input required");
 
         locationInput.getValidators().add(validator);
@@ -101,7 +100,8 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
             String specialInstructions = specialInstructInput.getText();
             String signature = signatureInput.getText();
 
-            DB.addMedicineRequest(new MedicineDeliveryObj(0, App.userID, assigned, location, name, doseQuantity, doseMeasureI, specialInstructions, signature));
+            MedicineDeliveryObj object = new MedicineDeliveryObj(0, App.userID, assigned, location, name, doseQuantity, doseMeasureI, specialInstructions, signature);
+            DB.addMedicineRequest(object);
 
             //For email implementation later
 //        String email = DB.getEmail(App.userID);

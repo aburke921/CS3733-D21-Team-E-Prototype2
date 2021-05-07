@@ -15,8 +15,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LaundryObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -68,14 +70,40 @@ public class Laundry extends ServiceRequestFormComponents {
     @FXML
     private StackPane stackPane;
 
-    @FXML
-    void handleButtonCancel(ActionEvent event) {
-        super.handleButtonCancel(event);
+    private boolean validateInput() {
+        RequiredFieldValidator validator = new RequiredFieldValidator();
+        validator.setMessage("Input required");
+
+        locationInput.getValidators().add(validator);
+        washLoadAmountInput.getValidators().add(validator);
+        dryLoadAmountInput.getValidators().add(validator);
+        assignedPersonnel.getValidators().add(validator);
+        descriptionInput.getValidators().add(validator);
+
+        return locationInput.validate() && washLoadAmountInput.validate() &&
+                dryLoadAmountInput.validate() && assignedPersonnel.validate() &&
+                descriptionInput.validate();
     }
 
     @FXML
     void saveData(ActionEvent event) {
-        super.handleButtonSubmit(event);
+        if(validateInput()) {
+            //setting up indexes
+            int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+            int userIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
+
+            //Creating data to be added to object
+            String node = nodeID.get(nodeIndex);
+            int user = userID.get(userIndex);
+            String wash = washLoadAmountInput.getSelectionModel().getSelectedItem();
+            String dry = dryLoadAmountInput.getSelectionModel().getSelectedItem();
+            String desc = descriptionInput.getText();
+
+            //Creating object and passing to database
+            LaundryObj object = new LaundryObj(0, node, user, App.userID, wash, dry, desc);
+            DB.addLaundryRequest(object);
+            super.handleButtonSubmit(event);
+        }
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

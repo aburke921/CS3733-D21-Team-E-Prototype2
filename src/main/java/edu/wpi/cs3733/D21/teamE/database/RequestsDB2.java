@@ -834,7 +834,7 @@ public class RequestsDB2 {
 			prepState.setString(1, roomID);
 			prepState.setString(2, type);
 			prepState.setString(3, severity);
-			prepState.setString(6, description);
+			prepState.setString(4, description);
 
 			prepState.execute();
 		} catch (SQLException e) {
@@ -1024,7 +1024,6 @@ public class RequestsDB2 {
 		String query = "Create Table sanitationRequest( " +
 				"    requestID int Primary Key References requests On Delete Cascade, " +
 				"    roomID varchar(31) Not Null References node On Delete Cascade, " +
-				"    signature varchar(31) Not Null, " +
 				"    description varchar(5000), " +
 				"    sanitationType varchar(31), " +
 				"    urgency varchar(31) Not Null, " +
@@ -1052,18 +1051,17 @@ public class RequestsDB2 {
 
 		String insertSanitationRequest = "Insert Into sanitationRequest " +
 				"Values ((Select Count(*) " +
-				"         From requests), ?, ?, ?, ?, ?)";
+				"         From requests), ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertSanitationRequest)) {
 			prepState.setString(1, request.getNodeID());
-			prepState.setString(2, request.getSignature());
-			prepState.setString(3, request.getDetail());
-			prepState.setString(4, request.getService());
-			prepState.setString(5, request.getSeverity());
+			prepState.setString(2, request.getDetail());
+			prepState.setString(3, request.getService());
+			prepState.setString(4, request.getSeverity());
 
 			prepState.execute();
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error inserting into sanitationRequest inside function addSanitationRequest()");
 		}
 
@@ -1105,12 +1103,6 @@ public class RequestsDB2 {
 			}
 			query = query + " urgency = '" + request.getSeverity() + "'";
 			added = true;
-		}
-		if (request.getSignature() != null) {
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "signature = '" + request.getSignature() + "'";
 		}
 
 

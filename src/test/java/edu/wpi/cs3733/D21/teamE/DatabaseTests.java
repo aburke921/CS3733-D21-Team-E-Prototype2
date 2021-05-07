@@ -565,7 +565,7 @@ public class DatabaseTests {
 		DB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("custodian@gmail.com", "testPass", "custodian", "drew", "Shukla");
 
-		DB.addSanitationRequest(new SanitationServiceObj(0, 1, 2, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla"));
+		DB.addSanitationRequest(new SanitationServiceObj(0, 1, 2, "test", "Urine Cleanup", "description here", "Low"));
 	}
 
 	@Test
@@ -576,7 +576,7 @@ public class DatabaseTests {
 		DB.addUserAccount("test@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("EMT@gmail.com", "testPass", "EMT", "drew", "Shukla");
 
-		DB.addExternalPatientRequest(new ExternalPatientObj(1, 1, 2, "test", "severe", "Ambulance", "123", "15 mins", "High", "Low", "Low", "They do not feel good"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(1, 1, 2, "test", "severe", "Ambulance", "123", "High", "Low", "Low", "They do not feel good"));
 	}
 
 	@Test
@@ -670,9 +670,9 @@ public class DatabaseTests {
 		DB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson", "drew", "Shukla");
 
 
-		DB.addExternalPatientRequest(new ExternalPatientObj(1, 1, 3, "test", "severe", "Ambulance", "123", "15 mins", "High", "Low", "Low", "headache"));
-		DB.addExternalPatientRequest(new ExternalPatientObj(2, 1, 3, "test", "severe", "Ambulance", "123", "15 mins", "High", "Low", "Low", "migraine"));
-		DB.addExternalPatientRequest(new ExternalPatientObj(3, 2, 3, "test", "severe", "Ambulance", "123", "15 mins", "High", "Low", "Low", "migraine"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(1, 1, 3, "test", "severe", "Ambulance", "123",  "High", "Low", "Low", "headache"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(2, 1, 3, "test", "severe", "Ambulance", "123",  "High", "Low", "Low", "migraine"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(3, 2, 3, "test", "severe", "Ambulance", "123",  "High", "Low", "Low", "migraine"));
 
 		FloralObj request = new FloralObj(4,1, 4, "test", "Nupur", "Roses", 1, "Tall", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "feel better");
 
@@ -699,9 +699,9 @@ public class DatabaseTests {
 		DB.addSpecialUserType("EMT1@gmail.com", "testPass", "EMT", "bob", "Shukla");
 		DB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson", "drew", "Shukla");
 
-		DB.addExternalPatientRequest(new ExternalPatientObj(1, 1, 3, "test", "severe", "Ambulance", "123", "15 mins", "High", "Low", "Low", "headache"));
-		DB.addExternalPatientRequest(new ExternalPatientObj(2, 1, 3, "test", "severe", "Ambulance", "123", "15 mins", "High", "Low", "Low", "migraine"));
-		DB.addExternalPatientRequest(new ExternalPatientObj(3, 2, 3, "test", "severe", "Ambulance", "123", "15 mins", "High", "Low", "Low", "migraine"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(1, 1, 3, "test", "severe", "Ambulance", "123", "High", "Low", "Low", "headache"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(2, 1, 3, "test", "severe", "Ambulance", "123",  "High", "Low", "Low", "migraine"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(3, 2, 3, "test", "severe", "Ambulance", "123",  "High", "Low", "Low", "migraine"));
 
 		FloralObj request = new FloralObj(0,1, 4, "test", "Nupur", "Roses", 1, "Tall", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "feel better");
 
@@ -740,8 +740,8 @@ public class DatabaseTests {
 		DB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson", "drew", "Shukla");
 
 
-		DB.addExternalPatientRequest(new ExternalPatientObj(1, 1, 3, "test", "severe", "Ambulance", "123", "15 mins", "High", "Low", "Low", "headache"));
-		DB.addExternalPatientRequest(new ExternalPatientObj(2, 2, 3, "test", "severe", "Ambulance", "123", "15 mins", "High", "Low", "Low", "migraine"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(1, 1, 3, "test", "severe", "Ambulance", "123",  "High", "Low", "Low", "headache"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(2, 2, 3, "test", "severe", "Ambulance", "123",  "High", "Low", "Low", "migraine"));
 
 		FloralObj request = new FloralObj(0,1, 4, "test", "Nupur", "Roses", 1, "Tall", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "feel better");
 
@@ -768,8 +768,8 @@ public class DatabaseTests {
 		DB.addSpecialUserType("floralPerson1@gmail.com", "testPass", "floralPerson", "drew", "Shukla");
 
 
-		DB.addExternalPatientRequest(new ExternalPatientObj(1, 1, 3, "test", "severe", "Ambulance", "123", "15 mins", "High", "Low", "Low", "headache"));
-		DB.addExternalPatientRequest(new ExternalPatientObj(2, 2, 3, "test", "severe", "Ambulance", "123", "15 mins", "High", "Low", "Low", "migraine"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(1, 1, 3, "test", "severe", "Ambulance", "123",  "High", "Low", "Low", "headache"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(2, 2, 3, "test", "severe", "Ambulance", "123",  "High", "Low", "Low", "migraine"));
 
 		FloralObj request = new FloralObj(0,1, 4, "test", "Nupur", "Roses", 1, "Tall", "High", "Low", "Low", "feel better");
 		DB.addFloralRequest(request);
@@ -926,9 +926,9 @@ public class DatabaseTests {
 		DB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		DB.addSpecialUserType("custodian@gmail.com", "testPass", "custodian", "bob", "Shukla");
 
-		DB.addSanitationRequest(new SanitationServiceObj(0, 1, 2, "test", "Urine Cleanup", "description here", "Low", "Nupur Shukla"));
+		DB.addSanitationRequest(new SanitationServiceObj(0, 1, 2, "test", "Urine Cleanup", "description here", "Low"));
 
-		assertEquals(1, DB.editSanitationRequest(new SanitationServiceObj(1, 1,0, "test", null, null, null, "hello test")));
+		assertEquals(1, DB.editSanitationRequest(new SanitationServiceObj(1, 1,0, "test", null, null, null)));
 	}
 
 	@Test
@@ -939,8 +939,8 @@ public class DatabaseTests {
 		DB.addUserAccount("test@email.com", "testPassword", "Testing", "Queen");
 		DB.addSpecialUserType("EMT@gmail.com", "testPass", "EMT", "bob", "Shukla");
 
-		DB.addExternalPatientRequest(new ExternalPatientObj(1, 1, 2, "test", "severe", "Ambulance", "123", "15 mins", "High", "Low", "Low", "headache"));
-		ExternalPatientObj changedRequest = new ExternalPatientObj(1, 0, 0, "test", "severe", "Plane", "145", "15 mins", "Low", "High", null, null);
+		DB.addExternalPatientRequest(new ExternalPatientObj(1, 1, 2, "test", "severe", "Ambulance", "123",  "High", "Low", "Low", "headache"));
+		ExternalPatientObj changedRequest = new ExternalPatientObj(1, 0, 0, "test", "severe", "Plane", "145", "Low", "High", null, null);
 
 		assertEquals(1, DB.editExternalPatientRequest(changedRequest));
 	}
@@ -1120,15 +1120,15 @@ public class DatabaseTests {
 		DB.addSpecialUserType("alans@gmail.com", "admin001", "EMT", "Alan", "Singh");
 
 
-		DB.addExternalPatientRequest(new ExternalPatientObj(1, 27, 31, "EEXIT00101", "High Severity", "Ambulance", "12334567", "5 minutes", "Low", "High", "Low", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. "));
-		DB.addExternalPatientRequest(new ExternalPatientObj(2, 30, 32, "EEXIT00101", "High Severity", "Ambulance", "4093380", "20 minutes", "High", "Low", "Low", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(3, 22, 33, "FDEPT00501", "High Severity", "Helicopter", "92017693", "10 minutes", "Low", "Low", "High", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(4, 20, 34, "FDEPT00501", "High Severity", "Helicopter", "93754789", "20 minutes", "High", "Low", "Low", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(5, 24, 35, "EEXIT00101", "High Severity", "Ambulance", "417592", "10 minutes", "High", "High", "Low", "Smoke inhalation due to a fire. No burns but difficult time breathing."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(6, 28, 36, "FDEPT00501", "High Severity", "Helicopter", "44888936", "15 minutes", "Low", "Low", "High", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition"));
-		DB.addExternalPatientRequest(new ExternalPatientObj(7, 24, 37, "EEXIT00101", "High Severity", "Ambulance", "33337861", "7 minutes", "High", "Low", "Low", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(8, 27, 38, "FDEPT00501", "High Severity", "Ambulance", "40003829", "10 minutes", "High", "Low", "Low", "Relocating a patient with lung cancer from Mt.Auburn Hospital."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(9, 24, 39, "FDEPT00501", "High Severity", "Plane", "38739983", "12 hours", "Low", "High", "Low", "Heart transplant organ in route"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(1, 27, 31, "EEXIT00101", "High Severity", "Ambulance", "12334567",  "Low", "High", "Low", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident. "));
+		DB.addExternalPatientRequest(new ExternalPatientObj(2, 30, 32, "EEXIT00101", "High Severity", "Ambulance", "4093380", "High", "Low", "Low", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(3, 22, 33, "FDEPT00501", "High Severity", "Helicopter", "92017693", "Low", "Low", "High", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(4, 20, 34, "FDEPT00501", "High Severity", "Helicopter", "93754789",  "High", "Low", "Low", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(5, 24, 35, "EEXIT00101", "High Severity", "Ambulance", "417592", "High", "High", "Low", "Smoke inhalation due to a fire. No burns but difficult time breathing."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(6, 28, 36, "FDEPT00501", "High Severity", "Helicopter", "44888936",  "Low", "Low", "High", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(7, 24, 37, "EEXIT00101", "High Severity", "Ambulance", "33337861", "High", "Low", "Low", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(8, 27, 38, "FDEPT00501", "High Severity", "Ambulance", "40003829", "High", "Low", "Low", "Relocating a patient with lung cancer from Mt.Auburn Hospital."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(9, 24, 39, "FDEPT00501", "High Severity", "Plane", "38739983", "Low", "High", "Low", "Heart transplant organ in route"));
 
 
 		ArrayList<String> correctLongNames = new ArrayList<>();
@@ -1434,9 +1434,9 @@ public class DatabaseTests {
 		DB.addUserAccount("test2@gmail.com", "testPass", "Nubia", "Shukla");
 		DB.addSpecialUserType("interpreter@gmail.com", "testPass", "electrician", "drew", "Shukla");
 
-		DB.addMaintenanceRequest(new MaintenanceObj(1, 1, "test", 2, "electrical", "not very severe", "Bill", "15 mins", "light switch not working"));
+		DB.addMaintenanceRequest(new MaintenanceObj(1, 1, "test", 2, "electrical", "not very severe", "light switch not working"));
 
-		assertEquals(1, DB.editMaintenanceRequest(new MaintenanceObj(1, 1, null, 2, null, "very severe", "Nupur", null, "wires are loose everywhere!")));
+		assertEquals(1, DB.editMaintenanceRequest(new MaintenanceObj(1, 1, null, 2, null, "very severe","wires are loose everywhere!")));
 	}
 
 

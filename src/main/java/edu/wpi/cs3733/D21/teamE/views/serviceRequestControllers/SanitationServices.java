@@ -92,7 +92,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
       int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
       String node = nodeID.get(nodeIDIndex);
 
-      DB.addSanitationRequest(new SanitationServiceObj(0, App.userID,assigneeID,node, serviceKind,details,severity,""));
+      DB.addSanitationRequest(new SanitationServiceObj(0, App.userID, assigneeID, node, serviceKind,details,severity));
 
       super.handleButtonSubmit(actionEvent);
 

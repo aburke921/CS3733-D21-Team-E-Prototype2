@@ -1446,43 +1446,16 @@ public class newMapEditor {
                 }
                 ID = startInput + "_" + endInput;
             }
+            //if edge found, delete
             for(int i = 0; i < array.size(); i++) {
-                if(array.get(i).getId().equals(ID)) {
+                if (array.get(i).getId().equals(ID)) {
                     System.out.println("This lies between " + startLocation.getValue() + " and " + endLocation.getValue());
+                    System.out.println("correct delete");
                     DB.deleteEdge(startInput, endInput);
                 }
-                if(array.get(i).getId().equals(endInput + "_" + startInput)) {
-                    ID = endInput + "_" + startInput;
-                    for(int j = 0; j < array.size(); j++) {
-                        if (array.get(j).getId().equals(ID)) {
-                            System.out.println("This lies between " + startLocation.getValue() + " and " + endLocation.getValue());
-                        }
-                    }
-                    JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
-                    jfxDialogLayout.setBody(new Text("This edge does not exist! Did you mean: " + startLocation.getValue() + "_" + endLocation.getValue() + "?"));
-                    JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
-                    JFXButton okay = new JFXButton("Yes");
-                    JFXButton cancel = new JFXButton("No");
-                    String finalStartInput = startInput;
-                    String finalEndInput = endInput;
-                    okay.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            DB.deleteEdge(finalStartInput, finalEndInput);
-                            dialog.close();
-                            refresh();
-
-                        }
-                    });
-                    cancel.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            dialog.close();
-
-                        }
-                    });
-                    jfxDialogLayout.setActions(okay, cancel);
-                    dialog.show();
+                //if reverse edge found, alert user and ask if they want to delete correct edge
+                if (array.get(i).getId().equals(endInput + "_" + startInput)) {
+                    DB.deleteEdge(startInput, endInput);
                 }
             }
         }
@@ -1522,29 +1495,50 @@ public class newMapEditor {
      * creates an edge using information taken from fields
      */
     public void addEdge() {
+        ArrayList<Edge> edgeList = DB.getAllEdges();
         ArrayList<Node> array = DB.getAllNodes();
         String startInput = null;
         String endInput = null;
         if(startLocation.getValue() != null && endLocation.getValue() != null) {
-            System.out.println(startLocation.getValue());
             String ID = null;
+            String reverseID = null;
             //retrieves start and end node of new edge
             for(int i = 0; i < array.size(); i++) {
-                if(array.get(i).get("longName").equals(startLocation.getValue())) {
+                if (array.get(i).get("longName").equals(startLocation.getValue())) {
                     startInput = array.get(i).get("id");
                 }
-                if(array.get(i).get("longName").equals(endLocation.getValue())) {
+                if (array.get(i).get("longName").equals(endLocation.getValue())) {
                     endInput = array.get(i).get("id");
                 }
-            }
-            //creates node ID
-            if(startInput != null && endInput != null) {
                 ID = startInput + "_" + endInput;
+                reverseID = endInput + "_" + startInput;
             }
-            //adds edge, populates edge ID field with new ID
-            DB.addEdge(ID, startInput, endInput);
-            edgeID.setValue(ID);
-            refresh();
+                //check duplicate
+                for (int j = 0; j < edgeList.size(); j++) {
+                    if (edgeList.get(j).getId().equals(ID) || edgeList.get(j).getId().equals(reverseID)  ) {
+                        System.out.println("duplicate!");
+                        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+                        jfxDialogLayout.setBody(new Text("This edge already exists!"));
+                        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+                        JFXButton cancel = new JFXButton("Cancel");
+                        cancel.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                dialog.close();
+
+                            }
+                        });
+                        jfxDialogLayout.setActions(cancel);
+                        dialog.show();
+                        return;
+                    }
+                }
+            //creates node ID
+            if (startInput != null && endInput != null) {
+                ID = startInput + "_" + endInput;
+                DB.addEdge(ID, startInput, endInput);
+                refresh();
+            }
         }
     }
 

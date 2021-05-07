@@ -74,7 +74,7 @@ public class EdgeCSVUpload {
     }
 
     @FXML
-    public void fileOpener(ActionEvent e) {
+    public void edgeFileOpener(ActionEvent e) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
 
@@ -88,7 +88,7 @@ public class EdgeCSVUpload {
     }
 
     @FXML
-    private void openFile(ActionEvent e) throws IOException {
+    private void openEdgeFile(ActionEvent e) throws IOException {
 
 
         DB.getNewCSVFile("hasEdge");

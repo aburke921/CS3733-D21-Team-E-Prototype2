@@ -1537,10 +1537,32 @@ public class newMapEditor {
         jfxDialogLayout.setHeading(new Text("CSV Handler"));
         jfxDialogLayout.setBody(new Text("What action would you like to take?"));
         JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
-        JFXButton upload = new JFXButton("Upload CSV");
-        JFXButton retrieve = new JFXButton("Retrieve CSV");
+        JFXButton uploadNode = new JFXButton("Upload Node CSV");
+        JFXButton retrieveNode = new JFXButton("Retrieve Node CSV");
+        JFXButton uploadEdge = new JFXButton("Upload Edge CSV");
+        JFXButton retrieveEdge = new JFXButton("Retrieve Edge CSV");
         JFXButton cancel = new JFXButton("Cancel");
-        upload.setOnAction(new EventHandler<ActionEvent>() {
+        retrieveEdge.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    openEdgeFile(event);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                dialog.close();
+
+            }
+        });
+        retrieveEdge.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                    edgeFileOpener(event);
+                dialog.close();
+
+            }
+        });
+        uploadNode.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 fileOpenerNode(event);
@@ -1548,7 +1570,7 @@ public class newMapEditor {
 
             }
         });
-        retrieve.setOnAction(new EventHandler<ActionEvent>() {
+        retrieveNode.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 try {
@@ -1567,10 +1589,34 @@ public class newMapEditor {
 
             }
         });
-        jfxDialogLayout.setActions(upload, retrieve, cancel);
+        jfxDialogLayout.setActions(retrieveEdge, uploadEdge, uploadNode, retrieveNode, cancel);
         dialog.show();
     }
 
+    @FXML
+    public void edgeFileOpener(ActionEvent e) {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(App.getPrimaryStage());
+
+        if (file != null) {
+            DB.deleteEdgeTable();
+            DB.createEdgeTable();
+            DB.populateTable("hasEdge", file);
+            System.out.println("Success");
+        }
+        prepareEdges(edgeTreeTable);
+    }
+
+    @FXML
+    private void openEdgeFile(ActionEvent e) throws IOException {
+
+
+        DB.getNewCSVFile("hasEdge");
+        File file = new File("CSVs/outputEdge.csv");
+        Desktop desktop = Desktop.getDesktop();
+        desktop.open(file);
+        prepareEdges(edgeTreeTable);
+    }
     /**
      * function for floor dropdown, allows user to change which floor's
      * map they are currently viewing

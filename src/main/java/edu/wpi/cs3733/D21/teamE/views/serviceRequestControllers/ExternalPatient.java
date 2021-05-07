@@ -66,8 +66,6 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 	private JFXComboBox<String> assignedPersonnel; // Value injected by FXMLLoader
 	@FXML // fx:id="descriptionInput"
 	private JFXTextArea descriptionInput; // Value injected by FXMLLoader
-	@FXML // fx:id="ETAInput"
-	private JFXTextField ETAInput; // Value injected by FXMLLoader
 	@FXML // fx:id="cancel"
 	private JFXButton cancel; // Value injected by FXMLLoader
 	@FXML // fx:id="submit"
@@ -102,7 +100,6 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 		requestTypeInput.getValidators().add(validator);
 		severityInput.getValidators().add(validator);
 		patientIdInput.getValidators().add(validator);
-		ETAInput.getValidators().add(validator);
 		descriptionInput.getValidators().add(validator);
 		assignedPersonnel.getValidators().add(validator);
 		oxygenInput.getValidators().add(validator);
@@ -111,7 +108,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 
 		return locationInput.validate() && requestTypeInput.validate() && severityInput.validate() &&
 				patientIdInput.validate() && assignedPersonnel.validate() && descriptionInput.validate() &&
-				ETAInput.validate() && oxygenInput.validate() && bloodPressureInput.validate() && temperatureInput.validate();
+				oxygenInput.validate() && bloodPressureInput.validate() && temperatureInput.validate();
 	}
 
 	/**
@@ -128,7 +125,6 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 			String type = requestTypeInput.getSelectionModel().getSelectedItem().toString();
 			String severity = severityInput.getSelectionModel().getSelectedItem().toString();
 			String patientID = patientIdInput.getText();
-			String ETA = ETAInput.getText();
 			String bloodPressure = bloodPressureInput.getText();
 			String temperature = temperatureInput.getText();
 			String oxygenLevel = oxygenInput.getText();
@@ -137,8 +133,7 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 			int assigneeID = userID.get(assigneeIDIndex);
 			int nodeIDIndex = locationInput.getSelectionModel().getSelectedIndex();
 			String id = nodeID.get(nodeIDIndex);
-			System.out.println(nodeID + " " + type + " " + severity + " " + patientID + " " + ETA + " " + details + " " + assigneeID);
-			ExternalPatientObj externalPatientObj = new ExternalPatientObj(0, App.userID, assigneeID, id, type, severity, patientID, ETA, bloodPressure, temperature, oxygenLevel, details);
+			ExternalPatientObj externalPatientObj = new ExternalPatientObj(0, App.userID, assigneeID, id, type, severity, patientID, bloodPressure, temperature, oxygenLevel, details);
 			DB.addExternalPatientRequest(externalPatientObj);
 
 			super.handleButtonSubmit(actionEvent);
@@ -152,7 +147,6 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 					" - Type: " + type + "\n" +
 					" - Severity: " + severity + "\n" +
 					" - PatientID: " + patientID + "\n" +
-					" - ETA: " + ETA + "\n" +
 					" - Blood Pressure: " + bloodPressure + "\n" +
 					" - Temperature: " + temperature + "\n" +
 					" - Oxygen Level: " + oxygenLevel + "\n" +
@@ -200,7 +194,6 @@ public class ExternalPatient extends ServiceRequestFormComponents {
 		assert low_severity != null : "fx:id=\"low_severity\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert patientIdInput != null : "fx:id=\"patientIdInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert descriptionInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
-		assert ETAInput != null : "fx:id=\"ETAInput\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'ExternalPatient.fxml'.";
 		assert assignedPersonnel != null : "fx:id=\"assignedPersonnel\" was not injected: check your FXML file 'ExternalPatient.fxml'.";

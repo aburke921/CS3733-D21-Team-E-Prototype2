@@ -271,15 +271,15 @@ public class makeConnection {
 
 
 		//Sanitation Requests: //RequestID: 10 - 18
-		DB.addSanitationRequest(new SanitationServiceObj(10, 20, 40, "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium", "Bill Byrd"));
-		DB.addSanitationRequest(new SanitationServiceObj(11, 20, 41, "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium", "Bill Byrd"));
-		DB.addSanitationRequest(new SanitationServiceObj(12, 24, 42, "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High", "Taylor Ramos"));
-		DB.addSanitationRequest(new SanitationServiceObj(13, 25, 43, "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium", "Rosa Smith"));
-		DB.addSanitationRequest(new SanitationServiceObj(14, 28, 44, "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical", "Abby Williams"));
-		DB.addSanitationRequest(new SanitationServiceObj(15, 30, 45, "IREST00203", "Trash Removal", "Trash can smells bad", "Medium", "Alesha Harris"));
-		DB.addSanitationRequest(new SanitationServiceObj(16, 29, 46, "IREST00303", "Trash Removal", "Trash can full. Another one is available so do not rush.", "Low", "Andrew Guerrero"));
-		DB.addSanitationRequest(new SanitationServiceObj(17, 22, 47, "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low", "Simon Daniel"));
-		DB.addSanitationRequest(new SanitationServiceObj(18, 23, 48, "IREST00403", "Trash Removal", "", "Low", "Victoria Erickson"));
+		DB.addSanitationRequest(new SanitationServiceObj(10, 20, 40, "AREST00101", "Urine Cleanup", "Restroom with urine on the floor", "Medium"));
+		DB.addSanitationRequest(new SanitationServiceObj(11, 20, 41, "AREST00103", "Urine Cleanup", "Restroom with urine on the toilet seet", "Medium"));
+		DB.addSanitationRequest(new SanitationServiceObj(12, 24, 42, "AREST00103", "Feces Cleanup", "Feces smeared on toilet seats", "High"));
+		DB.addSanitationRequest(new SanitationServiceObj(13, 25, 43, "ARETL00101", "Trash Removal", "Trash can full, starting to smell", "Medium"));
+		DB.addSanitationRequest(new SanitationServiceObj(14, 28, 44, "IREST00103", "Feces Cleanup", "Just outside of the bathroom there is a pile of feces. Someone did not make it in time.", "Critical"));
+		DB.addSanitationRequest(new SanitationServiceObj(15, 30, 45, "IREST00203", "Trash Removal", "Trash can smells bad", "Medium"));
+		DB.addSanitationRequest(new SanitationServiceObj(16, 29, 46, "IREST00303", "Trash Removal", "Trash can full. Another one is available so do not rush.", "Low"));
+		DB.addSanitationRequest(new SanitationServiceObj(17, 22, 47, "HRETL00102", "Urine Cleanup", "Liquid on the floor. Unclear if it is urine. Not a whole lot of it.", "Low"));
+		DB.addSanitationRequest(new SanitationServiceObj(18, 23, 48, "IREST00403", "Trash Removal", "", "Low"));
 
 
 		DB.editRequests(11, 0, "canceled");
@@ -330,15 +330,15 @@ public class makeConnection {
 
 
 		//RequestID: 39 - 47
-		DB.addExternalPatientRequest(new ExternalPatientObj(39, 27, 70, "EEXIT00101", "High Severity", "Ambulance", "12334567", "5 minutes", "High", "Low", "Low", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(40, 30, 71, "EEXIT00101", "High Severity", "Ambulance", "4093380", "20 minutes", "Low", "High", "High","Patient coming in with cut on right hand. Needs stitches. Bleeding is stable."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(41, 22, 72, "FDEPT00501", "High Severity", "Helicopter", "92017693", "10 minutes", "High", "High", "Low","Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(42, 20, 73, "FDEPT00501", "High Severity", "Helicopter", "93754789", "20 minutes", "High", "High", "Low","Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(43, 24, 74, "EEXIT00101", "High Severity", "Ambulance", "417592", "10 minutes", "Low", "Low", "High","Smoke inhalation due to a fire. No burns but difficult time breathing."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(44, 28, 75, "FDEPT00501", "High Severity", "Helicopter", "44888936", "15 minutes", "High", "High", "Low","Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition"));
-		DB.addExternalPatientRequest(new ExternalPatientObj(45,24, 76, "EEXIT00101", "High Severity", "Ambulance", "33337861", "7 minutes", "High", "Low", "High","Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(46,27, 77, "EEXIT00101", "High Severity", "Ambulance", "40003829", "10 minutes", "Low", "High", "Low","Relocating a patient with lung cancer from Mt.Auburn Hospital."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(47,24, 77, "FDEPT00501", "High Severity", "Plane", "38739983", "12 hours", "Low", "Low", "High","Heart transplant organ in route"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(39, 27, 70, "EEXIT00101", "High Severity", "Ambulance", "12334567", "High", "Low", "Low", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(40, 30, 71, "EEXIT00101", "High Severity", "Ambulance", "4093380", "Low", "High", "High","Patient coming in with cut on right hand. Needs stitches. Bleeding is stable."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(41, 22, 72, "FDEPT00501", "High Severity", "Helicopter", "92017693", "High", "High", "Low","Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(42, 20, 73, "FDEPT00501", "High Severity", "Helicopter", "93754789", "High", "High", "Low","Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(43, 24, 74, "EEXIT00101", "High Severity", "Ambulance", "417592",  "Low", "Low", "High","Smoke inhalation due to a fire. No burns but difficult time breathing."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(44, 28, 75, "FDEPT00501", "High Severity", "Helicopter", "44888936",  "High", "High", "Low","Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(45,24, 76, "EEXIT00101", "High Severity", "Ambulance", "33337861",  "High", "Low", "High","Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(46,27, 77, "EEXIT00101", "High Severity", "Ambulance", "40003829",  "Low", "High", "Low","Relocating a patient with lung cancer from Mt.Auburn Hospital."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(47,24, 77, "FDEPT00501", "High Severity", "Plane", "38739983",  "Low", "Low", "High","Heart transplant organ in route"));
 
 
 		DB.editRequests(40, 0, "complete");

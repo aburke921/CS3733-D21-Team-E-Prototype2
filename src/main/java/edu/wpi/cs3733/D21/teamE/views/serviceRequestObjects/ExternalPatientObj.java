@@ -8,8 +8,6 @@ public class ExternalPatientObj extends ServiceRequestObjs {
 
     private String patientID;
 
-    private String eta;
-
     private String bloodPressure;
 
     private String temperature;
@@ -18,7 +16,7 @@ public class ExternalPatientObj extends ServiceRequestObjs {
 
     private String details;
 
-    public ExternalPatientObj(int requestID, int userID, int assigneeID, String nodeID, String severity, String requestType, String patientID, String eta, String bloodPressure, String temperature, String oxygenLevel, String details) {
+    public ExternalPatientObj(int requestID, int userID, int assigneeID, String nodeID, String severity, String requestType, String patientID, String bloodPressure, String temperature, String oxygenLevel, String details) {
 
         super.requestID = requestID;
         super.assigneeID = assigneeID;
@@ -27,7 +25,6 @@ public class ExternalPatientObj extends ServiceRequestObjs {
         this.severity = severity;
         this.requestType = requestType;
         this.patientID = patientID;
-        this.eta = eta;
         this.bloodPressure = bloodPressure;
         this.temperature = temperature;
         this.oxygenLevel = oxygenLevel;
@@ -46,10 +43,6 @@ public class ExternalPatientObj extends ServiceRequestObjs {
 
     public String getPatientID() {
         return this.patientID;
-    }
-
-    public String getEta() {
-        return this.eta;
     }
 
     public String getBloodPressure() {

@@ -88,27 +88,26 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
 
     @FXML
     private void saveData(ActionEvent e) throws MessagingException {
+        if(validateInput()) {
+            int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+            int userIndex = assignee.getSelectionModel().getSelectedIndex();
 
-        int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
-        int userIndex = assignee.getSelectionModel().getSelectedIndex();
+            int assigned = userID.get(userIndex);
+            String location = nodeID.get(nodeIndex);
+            String name = medicineNameInput.getText();
+            String doseMeasure = doseMeasureInput.getText();
+            int doseMeasureI = Integer.parseInt(doseMeasure);
+            int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
+            String specialInstructions = specialInstructInput.getText();
+            String signature = signatureInput.getText();
 
-        int assigned = userID.get(userIndex);
-        String location = nodeID.get(nodeIndex);
-        String name = medicineNameInput.getText();
-        String doseMeasure = doseMeasureInput.getText();
-        int doseMeasureI = Integer.parseInt(doseMeasure);
-        int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
-        String specialInstructions = specialInstructInput.getText();
-        String signature = signatureInput.getText();
+            DB.addMedicineRequest(new MedicineDeliveryObj(0, App.userID, assigned, location, name, doseQuantity, doseMeasureI, specialInstructions, signature));
 
-//        DB.addMedicineRequest(App.userID, assigned, location, name, doseQuantity, doseMeasure, specialInstructions, signature);
-        DB.addMedicineRequest(new MedicineDeliveryObj(0, App.userID, assigned, location, name, doseQuantity, doseMeasureI, specialInstructions, signature));
-
-        //For email implementation later
+            //For email implementation later
 //        String email = DB.getEmail(App.userID);
 //        String fullName = DB.getUserName(App.userID);
-////        String assigneeName = userNames.get(assigned);
-////        String locationName = locations.get(nodeIDIndex);
+//        String assigneeName = userNames.get(assigned);
+//        String locationName = locations.get(nodeIDIndex);
 //        String body = "Hello " + fullName + ", \n\n" + "Thank you for making an External Patient Transport request." +
 //                "Here is the summary of your request: \n\n" +
 //                " - Location: " + location + "\n" +
@@ -123,20 +122,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
 //
 //        sendEmail.sendRequestConfirmation(email, body);
 
-        super.handleButtonSubmit(e);
-    }
-
-    @FXML
-    void handleButtonSubmit(ActionEvent event) {
-        if (validateInput()) {
-            try {
-                saveData(event);
-                System.out.println(event); //Print the ActionEvent to console
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-                App.getPrimaryStage().getScene().setRoot(root);
-            } catch (IOException | MessagingException ex) {
-                ex.printStackTrace();
-            }
+            super.handleButtonSubmit(e);
         }
     }
 
@@ -155,8 +141,11 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         //background.fitHeightProperty().bind(primaryStage.heightProperty());
 
         locations = DB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
         locationInput.setItems(locations);
+
         userNames = DB.getAssigneeNames("nurse");
+        userID = DB.getAssigneeIDs("nurse");
         assignee.setItems(userNames);
 
         assert locationInput != null;

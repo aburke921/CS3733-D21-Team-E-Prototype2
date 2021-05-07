@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
@@ -57,30 +58,33 @@ public class ReligiousRequest extends ServiceRequestFormComponents {
     @FXML
     private StackPane stackPane;
 
-    @FXML
-    void handleButtonSubmit(ActionEvent event) {
-        super.handleButtonSubmit(event);
-    }
+    private boolean validateInput() {
+        RequiredFieldValidator validator = new RequiredFieldValidator();
+        validator.setMessage("Input required");
 
-    @FXML
-    void handleButtonCancel(ActionEvent event) {
-        super.handleButtonCancel(event);
+        locationInput.getValidators().add(validator);
+        religionInput.getValidators().add(validator);
+        assignedPersonnel.getValidators().add(validator);
+        description.getValidators().add(validator);
+
+        return  locationInput.validate() && religionInput.validate() &&
+                assignedPersonnel.validate() && description.validate();
     }
 
     @FXML
     void saveData(ActionEvent event) {
+        if(validateInput()) {
+            int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+            int assigneeIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
 
-        int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
-        int assigneeIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
+            String node = nodeID.get(nodeIndex);
+            String religion = religionInput.getSelectionModel().getSelectedItem();
+            int user = userID.get(assigneeIndex);
+            String desc = description.getText();
 
-        String node = nodeID.get(nodeIndex);
-        String religion = religionInput.getSelectionModel().getSelectedItem();
-        int user = userID.get(assigneeIndex);
-        String desc = description.getText();
-
-        DB.addReligiousRequest(new ReligiousRequestObj(0, App.userID, node, user, religion, desc));
-
-        super.handleButtonSubmit(event);
+            DB.addReligiousRequest(new ReligiousRequestObj(0, App.userID, node, user, religion, desc));
+            super.handleButtonSubmit(event);
+        }
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

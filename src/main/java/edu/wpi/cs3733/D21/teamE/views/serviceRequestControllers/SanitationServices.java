@@ -81,7 +81,6 @@ public class SanitationServices extends ServiceRequestFormComponents {
   @FXML
   private void saveData(ActionEvent actionEvent){
 
-
     if(validateInput()){
 
       String serviceKind = ServiceTypeinput.getValue();
@@ -121,9 +120,6 @@ public class SanitationServices extends ServiceRequestFormComponents {
       //Setting up all variables to be entered
     }
 
-
-
-
   }
 
 
@@ -146,7 +142,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
     userNames = DB.getAssigneeNames("custodian");
     userID = DB.getAssigneeIDs("custodian");
-    //assignee.setItems(userNames);
+    assignee.setItems(userNames);
 
     assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
     assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";

@@ -6,8 +6,10 @@ package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 
 import java.io.IOException;
 
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FoodDeliveryObj;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -16,6 +18,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.lang.String;
+import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,6 +35,12 @@ import javafx.stage.Stage;
 
 
 public class FoodDelivery extends ServiceRequestFormComponents {
+
+
+	ObservableList<String> locations;
+	ArrayList<String> nodeID = new ArrayList<>();
+	ObservableList<String> userNames;
+	ArrayList<Integer> userID = new ArrayList<>();
 
 	@FXML // fx:id="background"
 	private ImageView background;
@@ -77,10 +86,38 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		super.handleButtonCancel(event);
 	}
 
+	private boolean validateInput() {
+
+		RequiredFieldValidator validator = new RequiredFieldValidator();
+		validator.setMessage("Input Required");
+
+		locationInput.getValidators().add(validator);
+		assigneeInput.getValidators().add(validator);
+		deliveryService.getValidators().add(validator);
+		orderNumber.getValidators().add(validator);
+		descriptionInput.getValidators().add(validator);
+
+		return locationInput.validate() && assigneeInput.validate() && deliveryService.validate()
+				&& orderNumber.validate() && descriptionInput.validate();
+	}
+
 	@FXML
 	void saveData(ActionEvent event) {
-
-		super.handleButtonSubmit(event);
+		if(validateInput()) {
+			//Setting indexes for picking from the id lists
+			int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+			int userIndex = assigneeInput.getSelectionModel().getSelectedIndex();
+			//Setting up data to add into object
+			String node = nodeID.get(nodeIndex);
+			int user = userID.get(userIndex);
+			String deliverer = deliveryService.getText();
+			String orderNum = orderNumber.getText();
+			String desc = descriptionInput.getText();
+			//creating object and passing it to database
+			FoodDeliveryObj object = new FoodDeliveryObj(0,App.userID,node,user,deliverer,orderNum, desc);
+			DB.addFoodDeliveryRequest(object);
+			super.handleButtonSubmit(event);
+		}
 	}
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
@@ -96,8 +133,13 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 		background.fitWidthProperty().bind(primaryStage.widthProperty());
 		//background.fitHeightProperty().bind(primaryStage.heightProperty());
 
-		ObservableList<String> locations  = DB.getAllNodeLongNames();
+		locations = DB.getAllNodeLongNames();
+		nodeID = DB.getListOfNodeIDS();
 		locationInput.setItems(locations);
+
+		userNames = DB.getAssigneeNames("nurse");
+		userID = DB.getAssigneeIDs("nurse");
+		assigneeInput.setItems(userNames);
 
 		assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'FoodDelivery.fxml'.";
 		assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'FoodDelivery.fxml'.";

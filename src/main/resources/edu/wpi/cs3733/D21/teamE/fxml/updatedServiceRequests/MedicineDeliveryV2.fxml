@@ -58,11 +58,11 @@
                                                       <VBox.margin>
                                                          <Insets bottom="5.0" top="20.0" />
                                                       </VBox.margin></JFXTextField>
-                                                                <JFXTextField fx:id="assignee" prefHeight="27.0" prefWidth="280.0" promptText="Assignee">
+                                                                <JFXComboBox fx:id="assignee" prefHeight="27.0" prefWidth="280.0" promptText="Assignee">
                                                                     <VBox.margin>
                                                                         <Insets bottom="5.0" top="20.0" />
                                                                     </VBox.margin>
-                                                                </JFXTextField>
+                                                                </JFXComboBox>
                                                             </children>
                                                             <FlowPane.margin>
                                                                 <Insets left="10.0" />

@@ -1235,4 +1235,122 @@ public class RequestsDB2 {
 			return 0;
 		}
 	}
+
+
+
+
+	//TODO: uncomment this when Internal Patient Object is completed
+	// fix anything which needs to be fixed and write tests
+	// add this table to deleteAllTables and createAllTables
+
+	//INTERNAL PATIENT REQUEST STUFF:
+
+//	public static void createInternalPatientTable() {
+//		String query = "Create Table internalPatient ( " +
+//				"requestID  int Primary Key References requests On Delete Cascade, " +
+//				"roomID     varchar(31) Not Null References node On Delete Cascade, " +
+//				"dropOffLocation  varchar(31) Not Null References node On Delete Cascade, " +
+//				"department       varchar(31) Not Null, " +
+//				"severity         varchar(31) Not Null, " +
+//				"description varchar(5000) Not Null" + ")";
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+//
+//			prepState.execute();
+//
+//		} catch (SQLException e) {
+//			//e.printStackTrace();
+//			System.err.println("error creating internalPatient table");
+//		}
+//	}
+//
+//	public static void addInternalPatientRequest(InternalPatientObj internalPatientObj) {
+//
+//		int userID = internalPatientObj.getUserID();
+//		int assigneeID = internalPatientObj.getAssigneeID();
+//		String roomID = internalPatientObj.getNodeID();
+//		String dropOffLocation = internalPatientObj.getNodeID();
+//		String department = internalPatientObj.getDepartment();
+//		String severity = internalPatientObj.getSeverity();
+//		String description = internalPatientObj.getDescription();
+//
+//		addRequest(userID, assigneeID, "internalPatient");
+//
+//		String insertInternPatient = "Insert Into internalPatient Values ((Select Count(*) From requests), ?, ?, ?, ?, ?)";
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(insertInternPatient)) {
+//			prepState.setString(1, roomID);
+//			prepState.setString(2, dropOffLocation);
+//			prepState.setString(3, department);
+//			prepState.setString(4, severity);
+//			prepState.setString(5, description);
+//
+//			prepState.execute();
+//		} catch (SQLException e) {
+//			//e.printStackTrace();
+//			System.err.println("Error inserting into internalPatient inside function addInternalPatientRequest()");
+//		}
+//	}
+//
+//
+//	public static int editInternalPatient(InternalPatientObj internalPatientObj) {
+//
+//		int requestID = internalPatientObj.getRequestID();
+//		String roomID = internalPatientObj.getNodeID();
+//		String dropOffLocation = internalPatientObj.getNodeID();
+//		String department = internalPatientObj.getDepartment();
+//		String severity = internalPatientObj.getSeverity();
+//		String description = internalPatientObj.getDescription();
+//
+//		boolean added = false;
+//		String query = "Update internalPatient Set ";
+//
+//		if (roomID != null) {
+//			query = query + " roomID = '" + roomID + "'";
+//
+//			added = true;
+//		}
+//		if (dropOffLocation != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " dropOffLocation = '" + dropOffLocation + "'";
+//			added = true;
+//		}
+//		if (department != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " quantity = '" + department + "'";
+//			added = true;
+//		}
+//		if (severity != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " dosage = '" + severity + "'";
+//			added = true;
+//		}
+//		if (description != null) {
+//			if (added) {
+//				query = query + ", ";
+//			}
+//			query = query + " specialInstructions = '" + description + "'";
+//			added = true;
+//		}
+//
+//		query = query + " where requestID = " + requestID;
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+//			prepState.executeUpdate();
+//			prepState.close();
+//			return 1;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			System.err.println("Error in updating internalPatient request");
+//			return 0;
+//		}
+//	}
+
+
 }

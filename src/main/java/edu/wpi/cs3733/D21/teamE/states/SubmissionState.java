@@ -12,21 +12,30 @@ public class SubmissionState {
 
     public void switchScene(ActionEvent event) {
 
-        String buttonName = ((Button) event.getSource()).getText();
+        String buttonName = ((Button) event.getSource()).getId();
 
-        if(buttonName.equals("Back")){
+        if(buttonName.equals("statusButton")){
             try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Login.fxml"));
-                App.getPrimaryStage().getScene().setRoot(root);
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequestStatus.fxml"));
+                App.changeScene(root);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
 
-        else if(buttonName.equals("Submit")){
+        else if(buttonName.equals("requestButton")){
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequests.fxml"));
+                App.changeScene(root);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        else if(buttonName.equals("defaultButton")){
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-                App.getPrimaryStage().getScene().setRoot(root);
+                App.changeScene(root);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }

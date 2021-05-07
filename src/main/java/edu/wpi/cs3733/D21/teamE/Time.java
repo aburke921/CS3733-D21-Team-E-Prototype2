@@ -53,6 +53,10 @@ public class Time implements Comparable<Time>{
         return sec;
     }
 
+    /**
+     * Seconds setter
+     * @param sec Number of seconds
+     */
     public void setSec(int sec) {
         this.sec = sec;
     }
@@ -65,6 +69,10 @@ public class Time implements Comparable<Time>{
         return min;
     }
 
+    /**
+     * Minutes setter
+     * @param min Number of minutes
+     */
     public void setMin(int min) {
         this.min = min;
     }
@@ -93,6 +101,11 @@ public class Time implements Comparable<Time>{
         return hour*60*60+min*60+sec;
     }
 
+    /**
+     * Equals method
+     * @param t The time to compare to
+     * @return True if both the minutes and seconds are equal
+     */
     public boolean equals(Time t){
         return ((t.getHour() == hour) && (t.getMin() == min) && (t.getSec() == sec));
     }

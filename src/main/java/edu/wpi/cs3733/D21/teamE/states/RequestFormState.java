@@ -25,7 +25,7 @@ public class RequestFormState {
 
         else if (buttonName.equals("Submit")) {
             try {
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ServiceRequests.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Submission.fxml"));
                 App.changeScene(root);
             } catch (IOException ex) {
                 ex.printStackTrace();

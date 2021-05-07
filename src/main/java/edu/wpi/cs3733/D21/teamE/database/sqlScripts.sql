@@ -4,10 +4,10 @@ Drop Table extTransport;
 Drop Table sanitationRequest;
 Drop Table floralRequests;
 Drop Table requests;
-Drop View visitorAccount;
-Drop View patientAccount;
-Drop View adminAccount;
-Drop View doctorAccount;
+-- Drop View visitorAccount;
+-- Drop View patientAccount;
+-- Drop View adminAccount;
+-- Drop View doctorAccount;
 Drop Table userAccount;
 Drop Table hasEdge;
 Drop Table node;
@@ -60,25 +60,25 @@ Create Table userAccount
 
 
 
-Create View visitorAccount As
-Select *
-From userAccount
-Where userType = 'visitor';
-
-Create View patientAccount As
-Select *
-From userAccount
-Where userType = 'patient';
-
-Create View doctorAccount As
-Select *
-From userAccount
-Where userType = 'doctor';
-
-Create View adminAccount As
-Select *
-From userAccount
-Where userType = 'admin';
+-- Create View visitorAccount As
+-- Select *
+-- From userAccount
+-- Where userType = 'visitor';
+--
+-- Create View patientAccount As
+-- Select *
+-- From userAccount
+-- Where userType = 'patient';
+--
+-- Create View doctorAccount As
+-- Select *
+-- From userAccount
+-- Where userType = 'doctor';
+--
+-- Create View adminAccount As
+-- Select *
+-- From userAccount
+-- Where userType = 'admin';
 
 
 Create Table requests
@@ -88,9 +88,8 @@ Create Table requests
 --                          creationTime timestamp,
 	requestType   varchar(31),
 	requestStatus varchar(10),
-	assignee      varchar(31),
-	Constraint requestTypeLimit Check (requestType In
-	                                   ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
+	assignee      int References userAccount On Delete Cascade,
+--	Constraint requestTypeLimit Check (requestType In ('floral', 'medDelivery', 'sanitation', 'security', 'extTransport')),
 	Constraint requestStatusLimit Check (requestStatus In ('complete', 'canceled', 'inProgress'))
 );
 
@@ -155,6 +154,13 @@ Create Table securityServ
 	level     varchar(31),
 	urgency   varchar(31) Not Null,
 	Constraint urgencyTypeLimitServ Check (urgency In ('Low', 'Medium', 'High', 'Critical'))
+);
+
+Create Table entryRequest
+(
+	surveyResult int,
+	decision     int, -- 1 for allow, 2 for ER, 3 for block
+	Constraint decisionLimit Check (decision In (1, 2, 3))
 );
 
 

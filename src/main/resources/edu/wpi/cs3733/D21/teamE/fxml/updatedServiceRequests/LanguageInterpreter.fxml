@@ -51,11 +51,6 @@
                                                       <Insets top="20.0" />
                                                    </VBox.margin>
                                                 </JFXComboBox>
-                                                <JFXTimePicker defaultColor="#13a5ed" prefHeight="25.0" prefWidth="295.0">
-                                                   <VBox.margin>
-                                                      <Insets bottom="5.0" top="20.0" />
-                                                   </VBox.margin>
-                                                </JFXTimePicker>
                                                 <JFXComboBox fx:id="languageSelection" prefHeight="27.0" prefWidth="295.0" promptText="Language">
                                                    <VBox.margin>
                                                       <Insets bottom="5.0" top="20.0" />

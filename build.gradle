@@ -52,6 +52,7 @@ dependencies {
             'org.apache.derby:derby:10.14.2.0',
             'org.apache.derby:derbytools:10.14.2.0',
             'org.apache.derby:derbyclient:10.14.2.0',
+            'org.apache.derby:derbynet:10.14.2.0',
             'org.xerial:sqlite-jdbc:3.30.1',
 
 

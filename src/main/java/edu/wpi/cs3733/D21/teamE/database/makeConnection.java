@@ -6,6 +6,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
 
+
+
 public class makeConnection {
 
 	// static variable singleInstance of type SingleConnection

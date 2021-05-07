@@ -27,12 +27,14 @@ import javafx.stage.StageStyle;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-
-
+import org.apache.derby.drda.NetworkServerControl;
+import java.net.InetAddress;
 
 public class App extends Application {
 
-	public static String driverURL = "jdbc:derby:BWDB;create=true";
+
+
+
 	/*-------------------------------------
 	* 	   VARIABLES/SETTERS/GETTERS
 	*------------------------------------*/
@@ -77,6 +79,10 @@ public class App extends Application {
 	private static Node endNode = null;
 	private static boolean toEmergency = false;
 
+	public App() {
+	}
+
+	public static String driverURL = "jdbc:derby:BWDB;create=true";
 
 	//setters and getters for above variables
 	public static boolean isShowLogin() { return showLogin; }
@@ -112,7 +118,10 @@ public class App extends Application {
 	 *
 	 */
 	@Override
-	public void init() {
+	public void init() throws Exception {
+
+		NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"),1527);
+		server.start(null);
 
 		Scanner input = new Scanner(System.in);
 		System.out.println("Which connection would you like");

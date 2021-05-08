@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.MedicineDelivery;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -1760,7 +1759,8 @@ public class RequestsDB2 {
 				"closeContact     boolean Not Null, " +
 				"quarantine     boolean Not Null, " +
 				"noSymptoms     boolean Not Null, " +
-				"status varchar(31) Not Null" +
+				"status varchar(31) Not Null," +
+				"userID int" +
 				")";
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.execute();
@@ -1784,7 +1784,7 @@ public class RequestsDB2 {
 
 		//addRequest(userID, assigneeID, "entryRequest");
 
-		String insertEntryRequest = "Insert Into entryRequest Values ((Select Count(*) From entryRequest) + 1, ?, ?, ?, ?, ?, 'Needs to be reviewed')";
+		String insertEntryRequest = "Insert Into entryRequest Values ((Select Count(*) From entryRequest) + 1, ?, ?, ?, ?, ?, 'Needs to be reviewed' ,?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertEntryRequest)) {
 			prepState.setBoolean(1, positiveTest);
@@ -1792,6 +1792,7 @@ public class RequestsDB2 {
 			prepState.setBoolean(3, closeContact);
 			prepState.setBoolean(4, quarantine);
 			prepState.setBoolean(5, noSymptoms);
+			prepState.setInt(6, userID);
 
 			prepState.execute();
 		} catch (SQLException e) {

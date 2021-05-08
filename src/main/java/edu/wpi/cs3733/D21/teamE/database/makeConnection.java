@@ -47,14 +47,22 @@ public class makeConnection {
 				 */
 
 				this.connection = DriverManager.getConnection(driverString, props);
-
+				System.out.println("Connected to admin's choice of DB");
 				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
-				// e.printStackTrace();
+				try{
+					this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
+					System.out.println("Connected to Embedded");
+				}
+				catch (SQLException s) {
+					//s.printStackTrace();
+					System.err.println("nothing works");
+				}
+				//e.printStackTrace();
 				System.err.println("error with the DriverManager, check if you have connected to database in IntelliJ");
 			}
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("error with the EmbeddedDriver class.forName thing");
 		}
 	}

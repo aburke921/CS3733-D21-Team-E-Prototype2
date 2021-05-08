@@ -25,6 +25,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -35,8 +37,6 @@ import org.apache.derby.drda.NetworkServerControl;
 import java.net.InetAddress;
 
 public class App extends Application {
-
-
 
 
 	/*-------------------------------------
@@ -82,8 +82,7 @@ public class App extends Application {
 	private static Node startNode = null;
 	private static Node endNode = null;
 	private static boolean toEmergency = false;
-
-//	public static String driverURL = "jdbc:derby:BWDB;create=true";
+	private static String driverURL = "";
 
 	public App() {
 
@@ -134,27 +133,73 @@ public class App extends Application {
 //		}
 
 
-		Scanner input = new Scanner(System.in);
-		System.out.println("Which connection would you like");
-		System.out.println("    1: Embedded");
-		System.out.println("    2: Client");
-
-		int DBOption = input.nextInt();
-		String driverURL = "jdbc:derby:BWDB;create=true";
-		if(DBOption == 2){
-			String directory = System.getProperty("user.dir");
-			//driverURL = "jdbc:derby://localhost:1527/BWDB;create=true";
-			driverURL = "jdbc:derby://localhost:1527/bw";
-//			createFrom=" + directory + "/BWDB"
-		}
-
-
+//		Scanner input = new Scanner(System.in);
+//		System.out.println("Which connection would you like");
+//		System.out.println("    1: Embedded");
+//		System.out.println("    2: Client");
+//
+//		int DBOption = input.nextInt();
+//		String driverURL = "jdbc:derby:BWDB;create=true";
+//		if(DBOption == 2){
+//			String directory = System.getProperty("user.dir");
+//			//driverURL = "jdbc:derby://localhost:1527/BWDB;create=true";
+//			driverURL = "jdbc:derby://localhost:1527/bw;create=true";
+////			createFrom=" + directory + "/BWDB"
+//		}
+//
+//
 			NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
 			server.start(null);
 
 
+	/*
+		- Create a text file
+			Line 1: Default: "jdbc:derby:BWDB;create=true"
+					Other: "jdbc:derby://localhost:1527/bw"
+
+		- When app starts:
+			- look at the textFile and try to make the connnection with the given driver URL
+				- If it fails (makeConnection Fails) try again with embedded
+
+		- Inside AppBarComponent.java
+			- if current driver URL.equals("jdbc:derby:BWDB;create=true") show the client toggle, hide the embedded toggle
+			- if current driver URL.equals("jdbc:derby://localhost:1527/bw;create=true") show the embedded, hide the client toggle
+			-
+			- When client toggle is switched
+				- overwrite the connection option in textfile with the embedded
+				- Show pop up asking admin to restart application
+
+			- When embedded toggle is switched
+				- overwrite the connection option in textfile with the client
+				- Show pop up asking admin to restart application
+
+	 */
+
+
+
+		// reading the driverOption.txt file
+		try {
+			File file = new File("src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt");
+			Scanner scanner = new Scanner(file);
+			while (scanner.hasNextLine()) {
+				String data = scanner.nextLine();
+				driverURL = data;
+			}
+			scanner.close();
+		} catch (FileNotFoundException e) {
+			System.err.println("An error occurred in reading the file.");
+			//e.printStackTrace();
+		}
+
+
 		System.out.println("Starting App Init...");
 		makeConnection connection = makeConnection.makeConnection(driverURL);
+//		if (connection.connection == null) {
+//			connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
+//			System.out.println("...Could not connect to admin's choice of DB, switching to default");
+//		}
+
+
 		System.out.println("...Connected to the DB");
 		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");
@@ -177,6 +222,7 @@ public class App extends Application {
 			}
 		}
 		System.out.println("App Initialized.");
+
 	}
 
 	/**
@@ -266,52 +312,6 @@ public class App extends Application {
 	public static void changeScene(Parent root) {
 		primaryStage.getScene().setRoot(root);
 	}
-
-
-
-
-
-
-	/*
-	- Create a text file
-		Line 1: Default: "jdbc:derby:BWDB;create=true"
-				Other: "jdbc:derby://localhost:1527/bw"
-
-	- When app starts:
-		- look at the textFile and try to make the connnection with the given driver URL
-			- If it fails (makeConnection Fails) try again with embedded
-
-	- Inside AppBarComponent.java
-		- if current driver URL.equals("jdbc:derby:BWDB;create=true") show the client toggle, hide the embedded toggle
-		- if current driver URL.equals("jdbc:derby://localhost:1527/bw") show the embedded, hide the client toggle
-		-
-		- When client toggle is switched
-		    - overwrite the connection option in textfile with the embedded
-		    - Show message saying restart application
-
-		- When embedded toggle is switched
-		    - overwrite the connection option in textfile with the client
-		    - Show message saying restart application
-
-	 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

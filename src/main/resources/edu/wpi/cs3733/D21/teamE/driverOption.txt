@@ -1,1 +1,1 @@
-jdbc:derby:BWDB;create=true
+jdbc:derby://localhost:1527/BWDB;create=true

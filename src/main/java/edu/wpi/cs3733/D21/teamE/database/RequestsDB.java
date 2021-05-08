@@ -373,5 +373,24 @@ public class RequestsDB {
 		return email;
 	}
 
+	public static boolean checkForNoSymptoms(int formNumber) {
+		boolean noSymptoms = false;
+		String query = "select * from entryRequest where entryRequestID = " + formNumber;
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if(rset.next()) {
+				noSymptoms = rset.getBoolean("noSymptoms");
+			}
+			return noSymptoms;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating markAsCovidSafe");
+			return false;
+		}
+
+	}
+
 
 }

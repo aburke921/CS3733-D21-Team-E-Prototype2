@@ -802,4 +802,7 @@ public class DB {
 		return UserAccountDB.isUserCovidUnmarked(userID);
 	}
 
+	public static boolean checkForNoSymptoms(int formNumber) {
+		return RequestsDB.checkForNoSymptoms(formNumber);
+	}
 }

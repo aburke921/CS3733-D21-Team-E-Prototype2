@@ -215,6 +215,11 @@
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
+                                                <JFXCheckBox fx:id="all" checkedColor="BLACK" onAction="#sortNodesByType" text="Select All">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
                                              </children>
                                           </VBox>
                                        </children>

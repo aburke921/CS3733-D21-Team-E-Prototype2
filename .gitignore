@@ -166,3 +166,5 @@ tokens/StoredCredential
 
 # Do Not make this public
 .env
+
+/BWHApplication.log.lck

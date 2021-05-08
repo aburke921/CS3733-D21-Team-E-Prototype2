@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.CheckBox;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -80,6 +81,12 @@ public class ToDoDetails extends ServiceRequestFormComponents{
     @FXML // fx:id="priorityInput"
     private JFXComboBox<String> priorityInput; // Value injected by FXMLLoader
 
+    @FXML // fx:id="sendNotification"
+    private JFXCheckBox sendNotification; // Value injected by FXMLLoader
+    @FXML // fx:id="notificationDate"
+    private JFXDatePicker notificationDateInput; // Value injected by FXMLLoader
+    @FXML // fx:id="notificationTime"
+    private JFXTimePicker notificationTimeInput; // Value injected by FXMLLoader
 
     @FXML
     public AnchorPane appBarAnchorPane;
@@ -224,22 +231,29 @@ public class ToDoDetails extends ServiceRequestFormComponents{
             String additionalNotes = additionalNotesInput.getText();
             System.out.println("additionalNotes " + additionalNotes);
 
+            String notificationTime = notificationTimeInput.getValue().toString();
+            System.out.println("notificationTime " + notificationTime);
+            String notificationDate = notificationDateInput.getValue().toString();
+            System.out.println("date " + date);
 
 //            DB.addAppointment(App.userID, startTime, date, doctorID);
 
-//            String email = DB.getEmail(App.userID);
-//            String fullName = DB.getUserName(App.userID);
+            String email = DB.getEmail(App.userID);
+            String fullName = DB.getUserName(App.userID);
 //            sendEmail.sendAppointmentConfirmation(email, startTime, fullName);
-//            int position = fullName.indexOf(" ");
-//
-//            String firstName = fullName.substring(0, position);
-//            String lastName = fullName.substring(position);
-//            String dateAndTime = date + " " + startTime;
+            int position = fullName.indexOf(" ");
+
+            String firstName = fullName.substring(0, position);
+            String lastName = fullName.substring(position);
+            String taskDateAndTime = date + " " + startTime;
+            String notificationDateAndTime = notificationDate + " " + notificationTime;
 //            int appointmentID = appointmentDB.getAppointmentID(App.userID, startTime, date);
 
-//            if (oneMonthPrior == true) {
-//                SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "1 Month Prior");
-//            }
+            int todoID = 0;
+
+            if (sendNotification.isSelected()) {
+                //SheetsAndJava.addTodoToSheet(todoID, title, email, firstName, lastName, );
+            }
 
             super.handleButtonSubmit(actionEvent);
         }
@@ -265,6 +279,17 @@ public class ToDoDetails extends ServiceRequestFormComponents{
         return titleInput.validate() && userIDInput.validate() && dateInput.validate()
                 && startTimeInput.validate() && endTimeInput.validate() && locationInput.validate()
                 && additionalNotesInput.validate() && statusInput.validate() && priorityInput.validate();
+    }
+
+    @FXML
+    private void sendNotification(ActionEvent event) {
+        if(((JFXCheckBox)(event.getSource())).isSelected()) {
+            notificationTimeInput.setVisible(true);
+            notificationDateInput.setVisible(true);
+        } else {
+            notificationTimeInput.setVisible(false);
+            notificationDateInput.setVisible(false);
+        }
     }
 
     /**

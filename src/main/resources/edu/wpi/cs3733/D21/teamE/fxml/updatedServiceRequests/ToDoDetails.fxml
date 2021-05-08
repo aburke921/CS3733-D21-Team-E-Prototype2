@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextArea?>
@@ -91,6 +92,21 @@
                                                             <Insets top="20.0" />
                                                          </VBox.margin>
                                                       </JFXComboBox>
+                                                      <JFXCheckBox fx:id="sendNotification" checkedColor="#039be5" onAction="#sendNotification" text="Send Notification?">
+                                                         <VBox.margin>
+                                                            <Insets top="20.0" />
+                                                         </VBox.margin>
+                                                      </JFXCheckBox>
+                                                      <JFXDatePicker fx:id="notificationDateInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="278.0" promptText="Scheduled Date" visible="false">
+                                                         <VBox.margin>
+                                                            <Insets top="5.0" />
+                                                         </VBox.margin>
+                                                      </JFXDatePicker>
+                                                      <JFXTimePicker fx:id="notificationTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="Notification Time" visible="false">
+                                                         <VBox.margin>
+                                                            <Insets top="5.0" />
+                                                         </VBox.margin>
+                                                      </JFXTimePicker>
                                                                     </children>
                                                                     <FlowPane.margin>
                                                                         <Insets left="20.0" />

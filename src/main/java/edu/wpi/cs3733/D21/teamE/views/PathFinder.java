@@ -581,7 +581,7 @@ public class PathFinder {
                 double distance = 0;
 
                 double dashlength = 10;
-                double lineOffset = 20;
+                double lineOffset = -20;
 
                 ObservableList<Double> coordsList = FXCollections.observableArrayList();
 
@@ -601,7 +601,7 @@ public class PathFinder {
 
                 Polyline polyline = new Polyline();
                 polyline.getPoints().addAll(coordsList);
-                polyline.setStroke(Color.RED);
+                polyline.setStroke(Color.web("#006db3"));
                 polyline.setStrokeWidth(2);
                 polyline.getStrokeDashArray().setAll(dashlength, dashlength);
                 pane.getChildren().addAll(polyline);

@@ -17,6 +17,7 @@ import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
 import javafx.animation.PathTransition;
+import javafx.beans.binding.DoubleBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -181,6 +182,19 @@ public class PathFinder {
     private double imageWidth;
     private double imageHeight;
 
+    private ScrollPane scrollPane;
+    Stage primaryStage;
+
+    private int[] floorVisits = new int[]{0, 0, 0, 0, 0, 0}; // Number of times each floor has been visited, in order: L2, L1, G, 1, 2, 3
+    private HashMap<String, Integer> floorMap = new HashMap<String, Integer>(){{
+        put("L2", 0);
+        put("L1", 1);
+        put("G", 2);
+        put("1", 3);
+        put("2", 4);
+        put("3", 5);
+    }};
+
     private double scale;
 
     private double radius = 6;
@@ -274,7 +288,6 @@ public class PathFinder {
         for (String dir : directions) {
             if (floorChangeFlag) {
                 Text floorHeader = new Text(Character.toString(MaterialDesignIcon.PLAY_CIRCLE.getChar()));
-                //floorHeader.setRotate(180);
                 floorHeader.setStyle("-fx-fill: -fx--primary-dark");
 
                 Text floorText = new Text(floor);
@@ -439,6 +452,7 @@ public class PathFinder {
      */
     @FXML
     public void findPath(ActionEvent event) {
+        floorVisits = new int[]{0, 0, 0, 0, 0, 0};
 
         System.out.println("\nFINDING PATH...");
 
@@ -581,6 +595,8 @@ public class PathFinder {
             return;
         }
 
+        int legNum = 0;
+
         List<Path> paths = fullPath.splitByFloor();
         for(Path path : paths){
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
@@ -590,6 +606,7 @@ public class PathFinder {
                 String mapMarkerSize = "25";
 
                 Iterator<Node> legItr = path.iterator();
+
                 Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
                 //Use these variables to keep track of the coordinates of the previous node
@@ -757,7 +774,11 @@ public class PathFinder {
                         //if a floor label was made, line and node circle along with the label and its parent flowPane
                         String finalDestFloor = destFloor;
 
-                        floorLabel.setOnMouseClicked(e -> setCurrentFloor(finalDestFloor));
+                        floorLabel.setOnMouseClicked(e -> {
+                            int num = floorMap.get(floorNum);
+                            floorVisits[num] = floorVisits[num] + 1;
+                            setCurrentFloor(finalDestFloor);
+                        });
 
                         g.getChildren().addAll(line, icon, flowPane);
                     } else {
@@ -806,10 +827,107 @@ public class PathFinder {
                 //add all objects to the scene
                 pane.getChildren().addAll(g);
 
+                ArrayList<Double> xCoords = new ArrayList<>();
+                ArrayList<Double> yCoords = new ArrayList<>();
+
+                int i = 0;
+                for (Double coord : coordsList) {
+                    if ((i % 2) == 0) {
+                        xCoords.add(coord);
+                    } else {
+                        yCoords.add(coord);
+                    }
+                    i++;
+                }
+
+                // Set to opposites, for comparison
+                double xMin = 5000/scale;
+                double xMax = 0;
+
+                for (Double coord : xCoords) {
+                    if (coord < xMin) {
+                        xMin = coord;
+                    }
+                    if (coord > xMax) {
+                        xMax = coord;
+                    }
+                }
+
+                // Set to opposites, for comparison
+                double yMin = 3400/scale;
+                double yMax = 0;
+
+                for (Double coord : yCoords) {
+                    if (coord < yMin) {
+                        yMin = coord;
+                    }
+                    if (coord > yMax) {
+                        yMax = coord;
+                    }
+                }
+
+                // Descale, back to "original" coords
+                if (legNum == floorVisits[floorMap.get(floorNum)]) {
+                    zoomToPath(xMin * scale, xMax * scale, yMin * scale, yMax * scale);
+                }
+                legNum++;
             } else {
                 System.out.println("No path on this floor");
                 //todo snackbar to say no nodes on this floor?
             }
+        }
+    }
+
+    /**
+     * Zooms into the Path
+     * @param xMin Min X Coordinate
+     * @param xMax Max X Coordinate
+     * @param yMin Min Y Coordinate
+     * @param yMax Max Y Coordinate
+     */
+    private void zoomToPath(double xMin, double xMax, double yMin, double yMax) {
+        double fullScaleX = 5000 * scrollPane.getWidth() / primaryStage.getWidth(); // max number of viewable pixels
+        double fullScaleY = 3400 * scrollPane.getHeight() / primaryStage.getHeight();
+
+        double xDist = xMax - xMin; // Distance between the points (sets zoom)
+        double yDist = yMax - yMin;
+
+        double fullStage = Math.max((xDist / fullScaleX), (yDist / fullScaleY)) + 0.175;
+        double stageAmount = constrain(0.2, 1, fullStage); // Percentage of stage visible
+        double zoomAmount = 1 / stageAmount;
+
+        zoomSlider.setValue(zoomAmount);
+
+        double xCenter = xMax - xDist / 2; // Center of points, sets position
+        double yCenter = yMax - yDist / 2;
+
+        double centerX = fullScaleX * stageAmount / 2; // Center of viewport
+        double centerY = fullScaleY * stageAmount / 2;
+
+        double xOffset = 5000 - fullScaleX * stageAmount; //how many pixels can the map be shifted by
+        double yOffset = 3400 - fullScaleY * stageAmount;
+
+        double x = (xCenter - centerX) / xOffset;
+        double y = (yCenter - centerY) / yOffset;
+
+        scrollPane.setHvalue(x);
+        scrollPane.setVvalue(y);
+    }
+
+    /**
+     * Constrains a value to within a minimum value and maximum value
+     * @param min Minimum value
+     * @param max Maximum value
+     * @param val The value
+     * @return The constrained value
+     */
+    private double constrain(double min, double max, double val) {
+        if (val > max) {
+            return max;
+        } else if (val < min) {
+            return min;
+        } else {
+            return val;
         }
     }
 
@@ -890,7 +1008,7 @@ public class PathFinder {
         }
 
         //get primaryStage
-        Stage primaryStage = App.getPrimaryStage();
+        primaryStage = App.getPrimaryStage();
 
         //get dimensions of stage
         stageWidth = primaryStage.getWidth();
@@ -965,7 +1083,7 @@ public class PathFinder {
 
         StackPane stackPane = new StackPane(imageView, markerPane, borderPane);
 
-        ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
+        scrollPane = new ScrollPane(new Group(stackPane));
         //stackPane.prefWidthProperty().bind(primaryStage.widthProperty());
         //stackPane.prefHeightProperty().bind(primaryStage.heightProperty());
 

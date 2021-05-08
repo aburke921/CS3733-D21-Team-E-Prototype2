@@ -113,9 +113,14 @@ public class Time implements Comparable<Time>{
     public static Time parseString(String stringTime){
         try {
             String[] fields = stringTime.split(":");
+            int secs;
+            if(fields.length == 3){
+                secs = Integer.parseInt(fields[2]);
+            } else {
+                secs = 0;
+            }
             int hours = Integer.parseInt(fields[0]);
             int mins = Integer.parseInt(fields[1]);
-            int secs = Integer.parseInt(fields[2]);
 
             return new Time(hours, mins, secs);
         } catch(Exception e){

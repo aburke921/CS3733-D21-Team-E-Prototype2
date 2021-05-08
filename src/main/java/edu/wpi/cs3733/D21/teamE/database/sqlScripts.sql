@@ -60,16 +60,16 @@ Create Table userAccount
 
 Create Table ToDo
 (
-	ToDoID           int Primary Key,
-	userID           int References userAccount Not Null,
-	title            varchar(63)                Not Null,
-	status           int                        Not Null Default 1,    -- default 1 (normal), 10/0 (complete/deleted)
-	priority         int                        Not Null Default 0,    -- default 0 (none), 1/2/3 (low/mid/high)
+	ToDoID           Int Primary Key,
+	userID           Int References userAccount Not Null,
+	title            Varchar(63)                Not Null,
+	status           Int                        Not Null Default 1,    -- default 1 (normal), 10/0 (complete/deleted)
+	priority         Int                        Not Null Default 0,    -- default 0 (none), 1/2/3 (low/mid/high)
 -- optional:
 	scheduledDate    Varchar(31)                         Default Null, -- format:
 	scheduledTime    Varchar(31)                         Default Null, -- format: 23:17:00
-	nodeID           varchar(31) References node,
-	detail           varchar(1023),
+	nodeID           Varchar(31) References node,
+	detail           Varchar(1023),
 	expectedLength   Varchar(31),                                      -- how long it would take, format: 23:17:00
 	notificationDate Varchar(31),                                      -- eg. remind me 2 days before this (send email)
 	notificationTime Varchar(31)                                       -- format: 23:17:00 eg. remind me 30 mins before this (send email)

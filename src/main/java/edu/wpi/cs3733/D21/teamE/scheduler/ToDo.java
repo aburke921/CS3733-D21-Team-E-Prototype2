@@ -1,21 +1,25 @@
 package edu.wpi.cs3733.D21.teamE.scheduler;
 
+import edu.wpi.cs3733.D21.teamE.Date;
 import edu.wpi.cs3733.D21.teamE.Time;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 
 
 public class ToDo implements Comparable<ToDo>{
-    private int todoID;
-    private int userID;
-    private String title;
-    private int status;
-    private int priority;
+    private final int todoID;
+    private final int userID;
+    private final String title;
+    private final int status;
+    private final int priority;
 
     //possibly null
-    private Time alertTime;
-    private Time startTime;
-    private Time duration;
+    private Date scheduledDate;
+    private Time scheduledTime;
     private Node location;
+    private String detail;
+    private Time duration;
+    private Date notificationDate;
+    private Time notificationTime;
 
     public ToDo(int _todoID, int _userID, String _title, int _status, int _priority){
         todoID = _todoID;
@@ -25,101 +29,80 @@ public class ToDo implements Comparable<ToDo>{
         priority = _priority;
     }
 
-    public ToDo(int _todoID, int _userID, String _title, int _status, int _priority, Time _alertTime, Time _startTime, Time _duration, Node _location){
+    public ToDo(int _todoID, int _userID, String _title, int _status, int _priority, Date _scheduleDate, Time _scheduleTime, Node _location, String _detail, Time _duration, Date _notificationDate, Time _notificationTime){
         this(_todoID, _userID, _title, _status, _priority);
-        alertTime = _alertTime;
-        startTime = _startTime;
-        duration = _duration;
+        scheduledDate = _scheduleDate;
+        scheduledTime = _scheduleTime;
         location = _location;
+        detail = _detail;
+        duration = _duration;
+        notificationDate = _notificationDate;
+        notificationTime = _notificationTime;
     }
 
-    public ToDo(int _todoID, int _userID, String _title, int _status, int _priority, String _alertTime, String _startTime, String _duration, Node _location){
-        this(_todoID, _userID, _title, _status, _priority, Time.parseString(_alertTime), Time.parseString(_startTime), Time.parseString(_duration), _location);
+    public ToDo(int _todoID, int _userID, String _title, int _status, int _priority, String _scheduleDate, String _scheduleTime, Node _location, String _detail, String _duration, String _notificationDate, String _notificationTime){
+        this(_todoID, _userID, _title, _status, _priority, Date.parseString(_scheduleDate), Time.parseString(_scheduleTime), _location, _detail, Time.parseString(_duration), Date.parseString(_notificationDate), Time.parseString(_notificationTime));
     }
 
     public int getTodoID() {
         return todoID;
     }
 
-    public void setTodoID(int todoID) {
-        this.todoID = todoID;
-    }
-
     public int getUserID() {
         return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getStatus() {
         return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public int getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public Time getNotificationTime() {
+        return notificationTime;
     }
 
-    public Time getAlertTime() {
-        return alertTime;
-    }
-
-    public void setAlertTime(Time alertTime) {
-        this.alertTime = alertTime;
-    }
-
-    public Time getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
+    public Time getScheduledTime() {
+        return scheduledTime;
     }
 
     public Time getDuration() {
         return duration;
     }
 
-    public void setDuration(Time duration) {
-        this.duration = duration;
-    }
-
     public Time getEndTime(){
-        return startTime.add(duration);
+        return scheduledTime.add(duration);
     }
 
     public Node getLocation() {
         return location;
     }
 
-    public void setLocation(Node location) {
-        this.location = location;
+    public Date getScheduledDate() {
+        return scheduledDate;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public Date getNotificationDate() {
+        return notificationDate;
     }
 
     @Override
     public int compareTo(ToDo t) {
-        return startTime.compareTo(t.startTime);
+        return scheduledTime.compareTo(t.scheduledTime);
     }
 
     public boolean isConflict(ToDo t) {
-        return (t.startTime.compareTo(startTime) > 0 && t.startTime.compareTo(getEndTime()) < 0) ||
-                (startTime.compareTo(t.startTime) > 0 && startTime.compareTo(t.getEndTime()) < 0);
+        return (t.scheduledTime.compareTo(scheduledTime) > 0 && t.scheduledTime.compareTo(getEndTime()) < 0) ||
+                (scheduledTime.compareTo(t.scheduledTime) > 0 && scheduledTime.compareTo(t.getEndTime()) < 0);
     }
 }

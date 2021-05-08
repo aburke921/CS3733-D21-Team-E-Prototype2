@@ -35,7 +35,7 @@ public class RequestsDB2 {
 	public static void createRequestsTable() {
 
 		String query = "Create Table requests(" +
-				"requestID     int Primary Key, " +
+				"requestID     int Primary Key References ToDo, " +
 				"creatorID     int References useraccount On Delete Cascade," +
 				"creationTime  timestamp, " +
 				"requestType   varchar(31), " +
@@ -61,9 +61,11 @@ public class RequestsDB2 {
 	 * @param requestType this is the type of request that is being created
 	 */
 	public static void addRequest(int userID, int assigneeID, String requestType) {
+		// Not multi-user safe, but hey we only have one client accessing the db at a time
+		ToDoDB.addCustomToDo(userID, "Request #" + ToDoDB.getMaxToDoID());
+
 		String insertRequest = "Insert Into requests " +
-				"Values ((Select Count(*) " +
-				"         From requests) + 1, ?, Current Timestamp, ?, 'inProgress', ?)";
+				"Values (" + ToDoDB.getMaxToDoID() + ", ?, Current Timestamp, ?, 'inProgress', ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
@@ -192,7 +194,7 @@ public class RequestsDB2 {
 	public static void addFloralRequest(FloralObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "floral");
 
-		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String insertFloralRequest = "Insert Into floralrequests Values ((Select MAX(requestID) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
 			prepState.setString(1, request.getNodeID());
@@ -341,7 +343,7 @@ public class RequestsDB2 {
 //		addRequest(userID, assigneeID, "languageRequest");
 		addRequest(request.getUserID(), request.getAssigneeID(), "languageRequest");
 
-		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, ?)";
+		String insertLanguageReq = "Insert Into languageRequest Values ((Select Max(requestID) From requests), ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertLanguageReq)) {
 			prepState.setString(1, request.getNodeID());
@@ -437,7 +439,7 @@ public class RequestsDB2 {
 	public static void addReligiousRequest(ReligiousRequestObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "religiousRequest");
 
-		String insertMaintenanceReq = "Insert Into religiousRequest Values ((Select Count(*) From requests), ?, ?, ?)";
+		String insertMaintenanceReq = "Insert Into religiousRequest Values ((Select Max(requestID) From requests), ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
 			prepState.setString(1, request.getNodeID());
@@ -710,7 +712,7 @@ public class RequestsDB2 {
 //		addRequest(userID, assigneeID, "laundryRequest");
 		addRequest(request.getUserID(), request.getAssigneeID(), "laundryRequest");
 
-		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?)";
+		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Max(requestID) From requests), ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertLaundryReq)) {
 //			prepState.setString(1, roomID);
@@ -828,7 +830,7 @@ public class RequestsDB2 {
 
 		addRequest(userID, assigneeID, "maintenanceRequest");
 
-		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Count(*) From requests), ?, ?, ?, ?)";
+		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Max(requestID) From requests), ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
 			prepState.setString(1, roomID);
@@ -939,7 +941,7 @@ public class RequestsDB2 {
 	public static void addSecurityRequest(SecurityServiceObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "security");
 
-		String insertSecurityRequest = "Insert Into securityServ Values ((Select Count(*) From requests), ?, ?, ?, ?)";
+		String insertSecurityRequest = "Insert Into securityServ Values ((Select Max(requestID) From requests), ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertSecurityRequest)) {
 			prepState.setString(1, request.getNodeID());
@@ -1177,7 +1179,7 @@ public class RequestsDB2 {
 
 		addRequest(userID, assigneeID, "medDelivery");
 
-		String insertMedRequest = "Insert Into meddelivery Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+		String insertMedRequest = "Insert Into meddelivery Values ((Select Max(requestID) From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
 			prepState.setString(1, roomID);
@@ -1316,7 +1318,7 @@ public class RequestsDB2 {
 	public static void addFoodDeliveryRequest(FoodDeliveryObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "foodDeliveryRequest");
 
-		int requestID = getMaxRequestID();
+		int requestID = ToDoDB.getMaxToDoID();
 
 		String insertFoodDeliveryReq = "Insert Into foodDelivery Values (?, ?, ?, ?, ?)";
 
@@ -1559,7 +1561,7 @@ public class RequestsDB2 {
  	public static void addInternalPatientRequest(InternalPatientObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "internalPatientRequest");
 
-		String insertInternalPatientReq = "Insert Into internalPatientRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
+		String insertInternalPatientReq = "Insert Into internalPatientRequest Values ((Select Max(requestID) From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertInternalPatientReq)) {
 			prepState.setInt(1, request.getPatientID());
@@ -1654,7 +1656,7 @@ public class RequestsDB2 {
 //
 //		addRequest(userID, assigneeID, "internalPatient");
 //
-//		String insertInternPatient = "Insert Into internalPatient Values ((Select Count(*) From requests), ?, ?, ?, ?, ?)";
+//		String insertInternPatient = "Insert Into internalPatient Values ((Select Max(requestID) From requests), ?, ?, ?, ?, ?)";
 //
 //		try (PreparedStatement prepState = connection.prepareStatement(insertInternPatient)) {
 //			prepState.setString(1, roomID);

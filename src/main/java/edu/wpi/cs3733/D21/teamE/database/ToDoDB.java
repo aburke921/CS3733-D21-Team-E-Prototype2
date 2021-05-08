@@ -38,7 +38,7 @@ public class ToDoDB {
 		return 1;
 	}
 
-	private static int getMaxToDoID() {
+	public static int getMaxToDoID() {
 		try (PreparedStatement prepState = connection.prepareStatement("Select Max(ToDoID) As maxToDoID From ToDo")) {
 			ResultSet rSet = prepState.executeQuery();
 			if (rSet.next()) {

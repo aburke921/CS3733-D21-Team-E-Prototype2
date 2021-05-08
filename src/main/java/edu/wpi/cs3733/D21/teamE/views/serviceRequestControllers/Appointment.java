@@ -5,28 +5,16 @@ package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
  */
 
 import com.jfoenix.controls.*;
-
-import java.io.IOException;
-import java.net.URL;
-import java.security.GeneralSecurityException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-
 import com.jfoenix.validation.RequiredFieldValidator;
-
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.states.ServiceRequestState;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-
 import javafx.fxml.FXML;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
@@ -39,6 +27,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
+import java.net.URL;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class Appointment extends ServiceRequestFormComponents{
 

@@ -9,7 +9,7 @@ public class appointmentDB {
 	public static void createAppointmentTable() {
 		//TODO: before deleting any users, save their information from userAccount into CSV
 		String query = "Create Table appointment( " +
-				"    appointmentID Int Primary Key, " +
+				"    appointmentID Int Primary Key References ToDo, " +
 				"    patientID Int References useraccount (userid) On Delete Cascade , " +
 				"    doctorID Int References useraccount (userid) On Delete Cascade, " +
 				"    appointmentDate varchar(31) Not Null, " +
@@ -36,8 +36,10 @@ public class appointmentDB {
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
 	public static int addAppointment(int patientID, String startTime, String date, Integer doctorID) {
+		// Not multi-user safe, but hey we only have one client accessing the db at a time
+		ToDoDB.addCustomToDo(doctorID, "Appointment #" + ToDoDB.getMaxToDoID());
 
-		String insertAddApt = "insert into appointment values(" + (getMaxAppointmentID() + 1) + ",?, ?, ?, ?)";
+		String insertAddApt = "Insert Into appointment Values(" + ToDoDB.getMaxToDoID() + ",?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertAddApt)) {
 			prepState.setInt(1, patientID);

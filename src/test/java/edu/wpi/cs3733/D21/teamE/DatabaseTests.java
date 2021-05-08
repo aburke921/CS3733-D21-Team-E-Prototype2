@@ -1564,7 +1564,7 @@ public class DatabaseTests {
 	}
 
 	@Test
-	@DisplayName("testGetAllNodes")
+	@DisplayName("testGetAllUsers")
 	public void testGetAllUsers() {
 
 

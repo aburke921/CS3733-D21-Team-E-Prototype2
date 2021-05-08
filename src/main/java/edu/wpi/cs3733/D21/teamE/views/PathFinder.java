@@ -16,7 +16,6 @@ import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
 import javafx.animation.PathTransition;
-import javafx.beans.binding.DoubleBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

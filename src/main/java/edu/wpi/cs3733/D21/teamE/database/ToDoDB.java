@@ -70,6 +70,36 @@ public class ToDoDB {
 			break;
 	}*/
 
+	/**
+	 * Updates an entered ToDo_item with the following fields, input null to ignore String attributes and -1 to ignore int attributes
+	 * @param ToDoID
+	 * @param userID
+	 * @param title
+	 * @param status
+	 * @param priority
+	 * @param scheduledDate
+	 * @param scheduledTime
+	 * @param nodeID
+	 * @param detail
+	 * @param expectedLength
+	 * @param notificationDate
+	 * @param notificationTime
+	 * @return true if one line changed successfully, false otherwise
+	 */
+	public static boolean updateCustomToDo(int ToDoID, int userID, String title, int status, int priority, String scheduledDate, String scheduledTime, String nodeID, String detail, String expectedLength, String notificationDate, String notificationTime) {
+		StringBuilder sqlSB = new StringBuilder();
+		int i = 0;
+		try (PreparedStatement preparedStatement = connection.prepareStatement(String.valueOf(sqlSB))) {
+			preparedStatement.setInt(i - 1, ToDoID);
+			preparedStatement.setInt(i, userID);
+			return preparedStatement.executeUpdate() == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error updating ToDo ID: " + ToDoID + " in addCustomToDo()");
+			return false;
+		}
+	}
+
 	public static List<ToDo> getToDoList(int userID, String date) {
 		return null;
 	}

@@ -813,8 +813,5 @@ public class DB {
 	}
 
 
-	public static String getUserType(int userID){
-		return UserAccountDB.getUserType(userID);
-	}
 
 }

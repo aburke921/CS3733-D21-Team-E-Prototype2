@@ -22,6 +22,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
+
 public class Settings {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
@@ -76,11 +78,17 @@ public class Settings {
         }
         else {
 
+            System.out.println("Back to embedded");
             //TODO: embedded driver wanted (need to figure out how to save client data to embedded driver)
         }
     }
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    @FXML
+    private void saveData(ActionEvent actionEvent) throws MessagingException {
+
+    }
+
+        @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
 
         Stage primaryStage = App.getPrimaryStage();

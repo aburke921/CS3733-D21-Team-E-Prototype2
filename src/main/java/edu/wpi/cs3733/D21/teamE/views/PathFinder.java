@@ -570,6 +570,8 @@ public class PathFinder {
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
 
                 Iterator<Node> legItr = path.iterator();
+                Iterator<Node> legItrCopy = path.iterator();
+
                 Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
                 //Use these variables to keep track of the coordinates of the previous node
@@ -585,6 +587,30 @@ public class PathFinder {
 
                 int firstNode = 1;
                 String firstID = null;
+
+                //loop through list of nodes and add coordinates to Array List (this will be used to create the polyline)
+                while (legItrCopy.hasNext()) {
+                    Node node = legItrCopy.next();
+                    //Resize the coordinates to match the resized image
+                    double xCoord = (double) node.getX() / scale;
+                    double yCoord = (double) node.getY() / scale;
+
+                    coordsList.add(xCoord);
+                    coordsList.add(yCoord);
+                }
+
+                Polyline polyline = new Polyline();
+                polyline.getPoints().addAll(coordsList);
+                polyline.setStroke(Color.RED);
+                polyline.setStrokeWidth(2);
+                polyline.getStrokeDashArray().setAll(dashlength, dashlength);
+                pane.getChildren().addAll(polyline);
+
+                Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(polyline.strokeDashOffsetProperty(), 0)),
+                        new KeyFrame(Duration.seconds(1), new KeyValue(polyline.strokeDashOffsetProperty(), lineOffset)));
+                timeline.setCycleCount(Timeline.INDEFINITE);
+                timeline.play();
+
                 while (legItr.hasNext()) { //loop through list
                     //this iterator will return a Node object
                     //which is just a container for all the node info like its coordinates
@@ -730,19 +756,8 @@ public class PathFinder {
 
                 }
 
-                Polyline polyline = new Polyline();
-                polyline.getPoints().addAll(coordsList);
-                polyline.setStroke(Color.RED);
-                polyline.setStrokeWidth(2);
-                polyline.getStrokeDashArray().setAll(dashlength, dashlength);
-
-                Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(polyline.strokeDashOffsetProperty(), 0)),
-                        new KeyFrame(Duration.seconds(1), new KeyValue(polyline.strokeDashOffsetProperty(), lineOffset)));
-                timeline.setCycleCount(Timeline.INDEFINITE);
-                timeline.play();
-
                 //add all objects to the scene
-                pane.getChildren().addAll(g, polyline);
+                pane.getChildren().addAll(g);
 
             } else {
                 System.out.println("No path on this floor");

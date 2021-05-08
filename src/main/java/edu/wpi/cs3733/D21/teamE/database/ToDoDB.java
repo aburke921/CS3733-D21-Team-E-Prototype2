@@ -60,7 +60,7 @@ public class ToDoDB {
 	public static int addCustomToDo(int userID, String title) {
 		try (PreparedStatement preparedStatement = connection.prepareStatement("Insert Into ToDo " +
 				"(ToDoID, userID, Title) Values (?, ?, ?)")) {
-			preparedStatement.setInt(1, getMaxToDoID());
+			preparedStatement.setInt(1, getMaxToDoID() + 1);
 			preparedStatement.setInt(2, userID);
 			preparedStatement.setString(3, title);
 			if (preparedStatement.executeUpdate() == 1) {

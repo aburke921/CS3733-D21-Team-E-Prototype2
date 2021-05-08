@@ -4,6 +4,7 @@ import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -37,23 +38,38 @@ public class ToDoDB {
 		return 1;
 	}
 
+	private static int getMaxToDoID() {
+		try (PreparedStatement prepState = connection.prepareStatement("Select Max(ToDoID) As maxToDoID From ToDo")) {
+			ResultSet rSet = prepState.executeQuery();
+			if (rSet.next()) {
+				return rSet.getInt("maxToDoID");
+			}
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Did not get maxToDoID in getMaxToDoID()");
+		}
+		return 0;
+	}
+
 	/**
 	 * adds a ToDo_row to the ToDo_table in the database
 	 * @param userID this is the userID of the person associated with the ToDo_item
 	 * @param title  this is the todo_name of the custom todo_item
-	 * @return true if one line changed successfully, false otherwise
+	 * @return the ToDoID, 0 if failed
 	 */
-	public static boolean addCustomToDo(int userID, String title) {
+	public static int addCustomToDo(int userID, String title) {
 		try (PreparedStatement preparedStatement = connection.prepareStatement("Insert Into ToDo " +
-				"(ToDoID, userID, Title) " +
-				"Values ((Select Max(ToDoID) From ToDo), ?, ?)")) {
-			preparedStatement.setInt(1, userID);
-			preparedStatement.setString(2, title);
-			return preparedStatement.executeUpdate() == 1;
+				"(ToDoID, userID, Title) Values (?, ?, ?)")) {
+			preparedStatement.setInt(1, getMaxToDoID());
+			preparedStatement.setInt(2, userID);
+			preparedStatement.setString(3, title);
+			if (preparedStatement.executeUpdate() == 1) {
+				return getMaxToDoID();
+			} else return 0;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error inserting into ToDo table in addCustomToDo()");
-			return false;
+			return 0;
 		}
 	}/*
 	@param ToDoType   1 for clean, custom todos with no associated appointment/requests

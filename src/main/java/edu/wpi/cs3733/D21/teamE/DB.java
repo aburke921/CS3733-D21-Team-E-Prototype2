@@ -778,6 +778,17 @@ public class DB {
 
 
 	/**
+	 * adds a ToDo_row to the ToDo_table in the database
+	 * @param userID this is the userID of the person associated with the ToDo_item
+	 * @param title  this is the todo_name of the custom todo_item
+	 * @return the ToDoID, 0 if failed
+	 */
+	public static int addCustomToDo(int userID, String title) {
+		return ToDoDB.addCustomToDo(userID, title);
+	}
+
+
+	/**
 	 * Updates an entered ToDo_item with the following fields, input null to ignore String attributes and -1 to ignore int attributes
 	 * @param ToDoID           mandatory
 	 * @param userID           mandatory, changes the owner of the item to this userID, use App.userID if no change

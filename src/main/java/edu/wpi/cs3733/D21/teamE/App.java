@@ -83,7 +83,7 @@ public class App extends Application {
 	private static Node endNode = null;
 	private static boolean toEmergency = false;
 
-//	public static String driverURL = "jdbc:derby:BWDB;create=true";
+	public static String driverURL;
 
 	public App() {
 
@@ -140,11 +140,11 @@ public class App extends Application {
 		System.out.println("    2: Client");
 
 		int DBOption = input.nextInt();
-		String driverURL = "jdbc:derby:BWDB;create=true";
+		driverURL = "jdbc:derby:BWDB;create=true";
 		if(DBOption == 2){
 			String directory = System.getProperty("user.dir");
 			//driverURL = "jdbc:derby://localhost:1527/BWDB;create=true";
-			driverURL = "jdbc:derby://localhost:1527/bw";
+			driverURL = "jdbc:derby://localhost:1527/bw;create=true";
 //			createFrom=" + directory + "/BWDB"
 		}
 

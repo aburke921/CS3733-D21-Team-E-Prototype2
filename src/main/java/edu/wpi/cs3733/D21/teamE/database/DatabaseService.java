@@ -11,7 +11,7 @@ import edu.wpi.cs3733.D21.teamE.DB;
 
 public class DatabaseService {
 
-    static Connection connection = makeConnection.makeConnection(App.getDriverURL()).getConnection();
+    static Connection connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true").getConnection();
 
     public static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
@@ -24,6 +24,38 @@ public class DatabaseService {
             }
         }
         return dir.delete();
+    }
+
+    public static void terminateConnection(String terminationType) {
+
+//        String query = "disconnect";
+//        try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+//            prepStat.execute();
+//        }catch (SQLException e){
+//            e.printStackTrace();
+//            System.err.println("Error terminating connection");
+//        }
+        try {
+            DriverManager.getConnection(terminationType);
+        }catch (SQLException e){
+//            e.printStackTrace();
+        }
+//        if(driverString.contains("localhost")){
+//            try {
+//                DriverManager.getConnection("jdbc:derby://localhost:1527/bw;shutdown=true");
+//            }catch (SQLException e){
+//                e.printStackTrace();
+//                System.err.println("Error terminating localhost connection");
+//            }
+//        }
+//        else{
+//            try{
+//                DriverManager.getConnection("jdbc:derby:BWDB;shutdown=true");
+//            }catch (SQLException e){
+//                e.printStackTrace();
+//                System.err.println("Error terminating embedded connection");
+//            }
+//        }
     }
 
 }

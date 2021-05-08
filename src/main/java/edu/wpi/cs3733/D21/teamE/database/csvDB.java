@@ -8,7 +8,7 @@ import java.sql.*;
 
 public class csvDB {
 
-	static Connection connection = makeConnection.makeConnection(App.getDriverURL()).getConnection();
+	static Connection connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true").getConnection();
 
 	/**
 	 * Reads csv & inserts into table

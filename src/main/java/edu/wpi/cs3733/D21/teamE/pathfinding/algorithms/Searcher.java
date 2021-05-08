@@ -28,7 +28,7 @@ public abstract class Searcher {
      */
     public Searcher(){
         graph = new HashMap<>();
-        con = makeConnection.makeConnection(App.getDriverURL());
+        con = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
 
         refreshGraph();
     }

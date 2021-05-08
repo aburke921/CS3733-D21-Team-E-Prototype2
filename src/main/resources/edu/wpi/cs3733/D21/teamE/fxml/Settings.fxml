@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.Settings">
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.Settings">
     <children>
         <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
         <AnchorPane prefHeight="687.0" prefWidth="1199.0">
@@ -31,7 +31,7 @@
                                             <children>
                                                 <HBox maxWidth="600.0" prefHeight="433.0" prefWidth="600.0" styleClass="centerPane">
                                        <children>
-                                          <JFXToggleButton fx:id="clientToggle" text="Client Driven Database">
+                                          <JFXToggleButton fx:id="clientToggle" onAction="#switchDatabases" text="Client Driven Database">
                                              <HBox.margin>
                                                 <Insets left="20.0" top="20.0" />
                                              </HBox.margin>

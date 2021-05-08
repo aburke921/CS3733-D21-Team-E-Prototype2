@@ -18,6 +18,10 @@ import java.util.HashMap;
 
 public class DB {
 
+
+	public static void terminateConnection(String terminationType) {
+		DatabaseService.terminateConnection(terminationType);
+	}
 	// AppointmentDB:
 
 	public static void createAllTables() {

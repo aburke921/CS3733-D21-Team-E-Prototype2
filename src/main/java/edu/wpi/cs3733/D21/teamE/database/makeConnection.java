@@ -64,6 +64,9 @@ public class makeConnection {
 		return singleInstance;
 	}
 
+
+
+
 	public Connection getConnection() {
 		return this.connection;
 	}
@@ -93,10 +96,6 @@ public class makeConnection {
 			stmt.execute("Drop Table sanitationrequest");
 			stmt.execute("Drop Table floralrequests");
 			stmt.execute("Drop Table requests");
-//			stmt.execute("Drop View visitoraccount");
-//			stmt.execute("Drop View patientaccount");
-//			stmt.execute("Drop View doctoraccount");
-//			stmt.execute("Drop View adminaccount");
 			stmt.execute("Drop Table useraccount");
 			stmt.execute("Drop Table hasedge");
 			stmt.execute("Drop Table node");

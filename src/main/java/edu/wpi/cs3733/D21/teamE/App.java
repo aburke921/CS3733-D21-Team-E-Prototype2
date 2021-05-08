@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 import org.apache.derby.drda.NetworkServerControl;
@@ -83,7 +84,6 @@ public class App extends Application {
 	private static boolean toEmergency = false;
 
 
-	private static String driverURL = "jdbc:derby:BWDB;create=true";
 
 	public App() {
 
@@ -113,12 +113,7 @@ public class App extends Application {
 	public static void setEndNode(Node endNode) { App.endNode = endNode; }
 	public static boolean isToEmergency() { return toEmergency; }
 	public static void setToEmergency(boolean toEmergency) { App.toEmergency = toEmergency; }
-	public static String getDriverURL() {
-		return driverURL;
-	}
-	public static void setDriverURL(String driverURL) {
-		App.driverURL = driverURL;
-	}
+
 
 	/*---------------------------------
 	 *		JAVAFX APP FUNCTIONS
@@ -156,7 +151,7 @@ public class App extends Application {
 
 
 		System.out.println("Starting App Init...");
-		makeConnection connection = makeConnection.makeConnection(driverURL);
+		makeConnection connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
 		System.out.println("...Connected to the DB");
 		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");

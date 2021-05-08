@@ -13,7 +13,7 @@ public class Examples {
 
     public static void main(String[] args){
         System.out.println("STARTING UP!!!");
-        makeConnection connection = makeConnection.makeConnection(App.getDriverURL());
+        makeConnection connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
         System.out.println("Connected to the DB");
 
         File nodes = new File("CSVs/MapEAllnodes.csv");

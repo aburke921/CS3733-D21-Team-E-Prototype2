@@ -10,6 +10,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ServiceRequestObjs;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.effect.GaussianBlur;
@@ -56,13 +59,20 @@ public class Settings {
 //    jdbc:derby://localhost:1527/memory:myInMemDB;shutdown=true
 
     @FXML
-    void saveData(ActionEvent event) {
+    void switchDatabases(ActionEvent event){
         String directory = System.getProperty("user.dir");
         if (clientToggle.isSelected()) {
-            //    jdbc:derby:memory:myInMemDB;shutdown=true
+
+            //terminate the embedded DB connection
+            DB.terminateConnection("jdbc:derby:;shutdown=true");
             System.out.println("Client Driven Connection");
-            // makeConnection and set Driver URL to client
-            App.setDriverURL("jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/BWDB");
+
+            //Create the driver URL for the client driver connection
+            String driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/BWDB";
+
+            //make the new client driver connection
+            makeConnection.makeConnection(driverURL);
+
         }
         else {
 

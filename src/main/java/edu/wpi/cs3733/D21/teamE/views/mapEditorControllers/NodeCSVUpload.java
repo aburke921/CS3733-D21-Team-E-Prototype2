@@ -113,7 +113,7 @@ public class NodeCSVUpload {
     public void fileOpener(ActionEvent e) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
-        makeConnection connection = makeConnection.makeConnection(App.getDriverURL());
+        makeConnection connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
         if (file != null) {
             //Have to save edge table so we can get it back after deleting
             DB.getNewCSVFile("hasEdge");

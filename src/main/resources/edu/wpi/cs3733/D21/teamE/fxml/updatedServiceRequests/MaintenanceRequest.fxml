@@ -58,17 +58,16 @@
                                                                     </VBox.margin>
                                                                     <items>
                                                                         <FXCollections fx:factory="observableArrayList">
-                                                                            <String fx:id="power" fx:value="Power Issue" />
-                                                                            <String fx:id="lights" fx:value="Lights Issue" />
-                                                                            <String fx:id="plumbing" fx:value="Plumbing Issue" />
-                                                                            <String fx:id="gas" fx:value="Gas Leak" />
-                                                                            <String fx:id="equipment" fx:value="Equipment Issue" />
-                                                                            <String fx:id="window" fx:value="Broken Window" />
-                                                                            <String fx:id="door" fx:value="Broken Door" />
-                                                                            <String fx:id="ceiling" fx:value="Broken Ceiling Tile" />
-                                                                            <String fx:id="elev" fx:value="Elevator Issue" />
-                                                                            <String fx:id="esc" fx:value="Escalator Issue" />
-                                                                            <!-- more? -->
+                                                                            <String fx:value="Power Issue" />
+                                                                            <String fx:value="Lights Issue" />
+                                                                            <String fx:value="Plumbing Issue" />
+                                                                            <String fx:value="Gas Leak" />
+                                                                            <String fx:value="Equipment Issue" />
+                                                                            <String fx:value="Broken Window" />
+                                                                            <String fx:value="Broken Door" />
+                                                                            <String fx:value="Broken Ceiling Tile" />
+                                                                            <String fx:value="Elevator Issue" />
+                                                                            <String fx:value="Escalator Issue" />
                                                                         </FXCollections>
                                                                     </items>
                                                                 </JFXComboBox>
@@ -78,22 +77,17 @@
                                                                     </VBox.margin>
                                                                     <items>
                                                                         <FXCollections fx:factory="observableArrayList">
-                                                                            <String fx:id="high_severity" fx:value="High Severity" />
-                                                                            <String fx:id="medium_severity" fx:value="Medium Severity" />
-                                                                            <String fx:id="low_severity" fx:value="Low Severity" />
+                                                                            <String fx:value="High Severity" />
+                                                                            <String fx:value="Medium Severity" />
+                                                                            <String fx:value="Low Severity" />
                                                                         </FXCollections>
                                                                     </items>
                                                                 </JFXComboBox>
-                                                                <JFXTextField fx:id="assignedPersonnelInput" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
+                                                                <JFXComboBox fx:id="assignedPersonnelInput" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
                                                                     <VBox.margin>
                                                                         <Insets bottom="5.0" top="20.0" />
                                                                     </VBox.margin>
-                                                                </JFXTextField>
-                                                                <JFXTextField fx:id="authorInput" prefHeight="27.0" prefWidth="280.0" promptText="Author">
-                                                                    <VBox.margin>
-                                                                        <Insets top="20.0" />
-                                                                    </VBox.margin>
-                                                                </JFXTextField>
+                                                                </JFXComboBox>
                                                             </children>
                                                             <FlowPane.margin>
                                                                 <Insets left="10.0" />
@@ -110,11 +104,6 @@
                                                                         <Insets bottom="5.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXTextArea>
-                                                                <JFXTextField fx:id="ETAInput" promptText="ETA">
-                                                                    <VBox.margin>
-                                                                        <Insets top="20.0" />
-                                                                    </VBox.margin>
-                                                                </JFXTextField>
                                                                 <GridPane>
                                                                     <columnConstraints>
                                                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />

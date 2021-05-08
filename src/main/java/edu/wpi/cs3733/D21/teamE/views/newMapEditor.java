@@ -1098,23 +1098,25 @@ public class newMapEditor {
                 }
                 });
             } else {
+                //populates fields with information of selected node or edge in table
+                startTableClickHandlers();
+
+                //for clicks interacting with map
+                startMapClickHandler();
                 System.out.println("no");
-                scrollPane.setPannable(true);
-                refresh();
 
             }
         });
-
-
-
-
-
 
         //populates fields with information of selected node or edge in table
         startTableClickHandlers();
 
         //for clicks interacting with map
         startMapClickHandler();
+
+
+
+
 
     }
 

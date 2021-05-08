@@ -25,13 +25,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Scanner;
 
-import lombok.SneakyThrows;
 import org.apache.derby.drda.NetworkServerControl;
 import java.net.InetAddress;
 
@@ -130,52 +125,8 @@ public class App extends Application {
 	@Override
 	public void init() throws Exception {
 
-//		if(Files.exists(Paths.get("bw"))) {
-//			DB.deleteClientBW(new File("bw"));
-//		}
-
-
-//		Scanner input = new Scanner(System.in);
-//		System.out.println("Which connection would you like");
-//		System.out.println("    1: Embedded");
-//		System.out.println("    2: Client");
-//
-//		int DBOption = input.nextInt();
-//		String driverURL = "jdbc:derby:BWDB;create=true";
-//		if(DBOption == 2){
-//			String directory = System.getProperty("user.dir");
-//			//driverURL = "jdbc:derby://localhost:1527/BWDB;create=true";
-//			driverURL = "jdbc:derby://localhost:1527/bw;create=true";
-////			createFrom=" + directory + "/BWDB"
-//		}
-//
-//
 			NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
 			server.start(null);
-
-
-	/*
-		- Create a text file
-			Line 1: Default: "jdbc:derby:BWDB;create=true"
-					Other: "jdbc:derby://localhost:1527/bw"
-
-		- When app starts:
-			- look at the textFile and try to make the connnection with the given driver URL
-				- If it fails (makeConnection Fails) try again with embedded
-
-		- Inside AppBarComponent.java
-			- if current driver URL.equals("jdbc:derby:BWDB;create=true") show the client toggle, hide the embedded toggle
-			- if current driver URL.equals("jdbc:derby://localhost:1527/bw;create=true") show the embedded, hide the client toggle
-			-
-			- When client toggle is switched
-				- overwrite the connection option in textfile with the embedded
-				- Show pop up asking admin to restart application
-
-			- When embedded toggle is switched
-				- overwrite the connection option in textfile with the client
-				- Show pop up asking admin to restart application
-
-	 */
 
 
 
@@ -315,8 +266,7 @@ public class App extends Application {
 		jfxDialogLayout.setHeading(new Text(heading));
 		jfxDialogLayout.setBody(new Text(message));
 		JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
-		JFXButton cancelButton = new JFXButton("Cancel");
-		JFXButton restartButton = new JFXButton("Restart Now");
+		JFXButton cancelButton = new JFXButton("Ok");
 		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -324,17 +274,7 @@ public class App extends Application {
 
 			}
 		});
-		restartButton.setOnAction(new EventHandler<ActionEvent>() {
-			@SneakyThrows
-			@Override
-			public void handle(ActionEvent event) {
-				Runtime.getRuntime().exec("java -jar CS3733-D21-Team-E-Prototype2.jar");
-				System.exit(0);
-
-			}
-		});
 		jfxDialogLayout.setActions(cancelButton);
-		jfxDialogLayout.setActions(restartButton);
 		dialog.show();
 	}
 

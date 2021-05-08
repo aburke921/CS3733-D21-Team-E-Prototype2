@@ -113,15 +113,18 @@ public class Default {
                         App.setEndNode(DB.getNodeInfo("FEXIT00301")); //ER
                         App.setLockEndPath(true);
                     }
-                } else if (true) { //todo, if (check-in result indicated safe)
+                } else if (DB.isUserCovidSafe(App.userID)) { //todo, if (check-in result indicated safe)
                     //no restrictions on pathfinding
                     logger.info("User can go anywhere - they have been approved at check-in");
                     App.setEndNode(null);
                     App.setLockEndPath(false);
-                } else { //if check-in result was user being denied access to hospital
+                } else if (DB.isUserCovidRisk(App.userID)) { //if check-in result was user being denied access to hospital
                     logger.info("User cannot enter the hospital - they have been turned away at check-in");
                     App.setLockEndPath(true);
                     //todo do not allow pathfinding
+                } else {
+                    logger.severe("User is not marked correctly?");
+                    //should only get here if user is not one of: safe, risk, to be reviewed.
                 }
 
                 //route to pathFinder.

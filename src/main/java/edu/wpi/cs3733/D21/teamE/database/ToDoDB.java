@@ -13,15 +13,16 @@ public class ToDoDB {
 				"( " +
 				"ToDoID           int Primary Key, " +
 				"userID           int References userAccount Not Null, " +
-				"title            varchar(31)                        Not Null, " +
-				"status           int                                Not Null, " + // normal/complete/archived/deleted/...
-				"priority         int                                Not Null, " + // 1/2/3/...
-				"scheduledTime    Time, " + // nullable, edited frequently
-				"nodeID           varchar(31) References node, " + // nullable
-				"requestID        int References requests, " + // nullable, auto-add to list when assigned
+				"title            varchar(31)                Not Null, " +
+				"status           int                        Not Null, " +
+				"priority         int                        Not Null, " +
+				"scheduledDate    Varchar(31), " +
+				"scheduledTime    Varchar(31), " +
+				"nodeID           varchar(31) References node, " +
 				"detail           varchar(255), " +
-				"expectedTime     Time, " + // how long it would take
-				"notificationTime Time  " + // eg. remind me 30 mins before this (send email)
+				"expectedLength   Time, " +
+				"notificationDate Varchar(31), " +
+				"notificationTime Varchar(31) " +
 				")";
 
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {

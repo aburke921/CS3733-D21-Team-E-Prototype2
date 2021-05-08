@@ -171,6 +171,16 @@ public class PathFinder {
     private ScrollPane scrollPane;
     Stage primaryStage;
 
+    private int[] floorVisits = new int[]{0, 0, 0, 0, 0, 0}; // Number of times each floor has been visited, in order: L2, L1, G, 1, 2, 3
+    private HashMap<String, Integer> floorMap = new HashMap<String, Integer>(){{
+        put("L2", 0);
+        put("L1", 1);
+        put("G", 2);
+        put("1", 3);
+        put("2", 4);
+        put("3", 5);
+    }};
+
     private double scale;
 
     private double radius = 6;
@@ -262,7 +272,6 @@ public class PathFinder {
         for (String dir : directions) {
             if (floorChangeFlag) {
                 Text floorHeader = new Text(Character.toString(MaterialDesignIcon.PLAY_CIRCLE.getChar()));
-                //floorHeader.setRotate(180);
                 floorHeader.setStyle("-fx-fill: -fx--primary-dark");
 
                 Text floorText = new Text(floor);
@@ -427,6 +436,7 @@ public class PathFinder {
      */
     @FXML
     public void findPath(ActionEvent event) {
+        floorVisits = new int[]{0, 0, 0, 0, 0, 0};
 
         System.out.println("\nFINDING PATH...");
 
@@ -569,11 +579,14 @@ public class PathFinder {
             return;
         }
 
+        int legNum = 0;
+
         List<Path> paths = fullPath.splitByFloor();
         for(Path path : paths){
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
 
                 Iterator<Node> legItr = path.iterator();
+
                 Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
                 //Use these variables to keep track of the coordinates of the previous node
@@ -726,7 +739,11 @@ public class PathFinder {
                         //if a floor label was made, line and node circle along with the label and its parent flowPane
                         String finalDestFloor = destFloor;
 
-                        floorLabel.setOnMouseClicked(e -> setCurrentFloor(finalDestFloor));
+                        floorLabel.setOnMouseClicked(e -> {
+                            int num = floorMap.get(floorNum);
+                            floorVisits[num] = floorVisits[num] + 1;
+                            setCurrentFloor(finalDestFloor);
+                        });
 
                         g.getChildren().addAll(line, circle, flowPane);
                     } else {
@@ -815,8 +832,10 @@ public class PathFinder {
                 }
 
                 // Descale, back to "original" coords
-                zoomToPath(xMin * scale, xMax * scale, yMin * scale, yMax * scale);
-
+                if (legNum == floorVisits[floorMap.get(floorNum)]) {
+                    zoomToPath(xMin * scale, xMax * scale, yMin * scale, yMax * scale);
+                }
+                legNum++;
             } else {
                 System.out.println("No path on this floor");
                 //todo snackbar to say no nodes on this floor?

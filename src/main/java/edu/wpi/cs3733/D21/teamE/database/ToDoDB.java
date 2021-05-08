@@ -93,9 +93,34 @@ public class ToDoDB {
 		if (status != -1) {
 			sql += ", status = ?";
 		}
+		if (priority != -1) {
+			sql += ", priority = ?";
+		}
+		if (scheduledDate != null) {
+			sql += ", scheduledDate = ?";
+		}
+		if (scheduledTime != null) {
+			sql += ", scheduledTime = ?";
+		}
+		if (nodeID != null) {
+			sql += ", nodeID = ?";
+		}
+		if (detail != null) {
+			sql += ", detail = ?";
+		}
+		if (expectedLength != null) {
+			sql += ", expectedLength = ?";
+		}
+		if (notificationDate != null) {
+			sql += ", notificationDate = ?";
+		}
+		if (notificationTime != null) {
+			sql += ", notificationTime = ?";
+		}
 		sql += " Where ToDoID = ?";
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setInt(1, userID);
 			int i = 1;
 			if (title != null) {
 				i++;
@@ -104,6 +129,38 @@ public class ToDoDB {
 			if (status != -1) {
 				i++;
 				preparedStatement.setInt(i, status);
+			}
+			if (priority != -1) {
+				i++;
+				preparedStatement.setInt(i, priority);
+			}
+			if (scheduledDate != null) {
+				i++;
+				preparedStatement.setString(i, scheduledDate);
+			}
+			if (scheduledTime != null) {
+				i++;
+				preparedStatement.setString(i, scheduledTime);
+			}
+			if (nodeID != null) {
+				i++;
+				preparedStatement.setString(i, nodeID);
+			}
+			if (detail != null) {
+				i++;
+				preparedStatement.setString(i, detail);
+			}
+			if (expectedLength != null) {
+				i++;
+				preparedStatement.setString(i, expectedLength);
+			}
+			if (notificationDate != null) {
+				i++;
+				preparedStatement.setString(i, notificationDate);
+			}
+			if (notificationTime != null) {
+				i++;
+				preparedStatement.setString(i, notificationTime);
 			}
 			preparedStatement.setInt(i + 1, ToDoID);
 			return preparedStatement.executeUpdate() == 1;

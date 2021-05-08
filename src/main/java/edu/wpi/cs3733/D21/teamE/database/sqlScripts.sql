@@ -63,7 +63,7 @@ Create Table ToDo
 	ToDoID           int Primary Key,
 	userID           int References userAccount Not Null,
 	title            varchar(63)                Not Null,
-	status           int                        Not Null Default 1,    -- normal/complete/archived/deleted/...
+	status           int                        Not Null Default 1,    -- default 1 (normal), 10/0 (complete/deleted)
 	priority         int                        Not Null Default 0,    -- default 0 (none), 1/2/3 (low/mid/high)
 -- optional:
 	scheduledDate    Varchar(31)                         Default Null, -- format:

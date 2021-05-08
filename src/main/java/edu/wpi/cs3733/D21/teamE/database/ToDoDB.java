@@ -17,7 +17,7 @@ public class ToDoDB {
 				"ToDoID           int Primary Key, " +
 				"userID           int References userAccount Not Null," +
 				"title            varchar(63) Not Null," +
-				"status           int Not Null Default 1," + // normal/complete/archived/deleted/...
+				"status           int Not Null Default 1," + // default 1 (normal), 10/0 (complete/deleted)
 				"priority         int Not Null Default 0," + // default 0 (none), 1/2/3 (low/mid/high)
 				//optional:
 				"scheduledDate    Varchar(31) Default Null," + // format:
@@ -26,7 +26,7 @@ public class ToDoDB {
 				"detail           varchar(1023)," +
 				"expectedLength   Varchar(31)," + // how long it would take, format: 23:17:00
 				"notificationDate Varchar(31)," + // eg. remind me 2 days before this (send email)
-				"notificationTime Varchar(31)" + // format: 23:17:00 eg. remind me 30 mins before this (send email)
+				"notificationTime Varchar(31)" +  // format: 23:17:00 eg. remind me 30 mins before this (send email)
 				")")) {
 			prepState.execute();
 		} catch (SQLException e) {
@@ -72,30 +72,46 @@ public class ToDoDB {
 
 	/**
 	 * Updates an entered ToDo_item with the following fields, input null to ignore String attributes and -1 to ignore int attributes
-	 * @param ToDoID
-	 * @param userID
-	 * @param title
-	 * @param status
-	 * @param priority
-	 * @param scheduledDate
-	 * @param scheduledTime
-	 * @param nodeID
-	 * @param detail
-	 * @param expectedLength
-	 * @param notificationDate
-	 * @param notificationTime
+	 * @param ToDoID           mandatory
+	 * @param userID           mandatory, changes the owner of the item to this userID, use App.userID if no change
+	 * @param status           default 1 (normal), 10/0 (complete/deleted)
+	 * @param priority         default 0 (none), 1/2/3 (low/mid/high)
+	 * @param scheduledDate    format:
+	 * @param scheduledTime    format: 23:17:00
+	 * @param nodeID           has to exist in the node table
+	 * @param detail           maximum 1023 characters
+	 * @param expectedLength   how long it would take, format: 23:17:00
+	 * @param notificationDate eg. remind me 2 days before this (send email)
+	 * @param notificationTime format: 23:17:00 eg. remind me 30 mins before this (send email)
 	 * @return true if one line changed successfully, false otherwise
 	 */
-	public static boolean updateCustomToDo(int ToDoID, int userID, String title, int status, int priority, String scheduledDate, String scheduledTime, String nodeID, String detail, String expectedLength, String notificationDate, String notificationTime) {
-		StringBuilder sqlSB = new StringBuilder();
-		int i = 0;
+	public static boolean updateToDo(int ToDoID, int userID, String title, int status, int priority, String scheduledDate, String scheduledTime, String nodeID, String detail, String expectedLength, String notificationDate, String notificationTime) {
+		StringBuilder sqlSB = new StringBuilder("Update ToDo Set userID = ?");
+
+		if (title != null) {
+			sqlSB.append(", title = ?");
+		}
+		if (status != -1) {
+			sqlSB.append(", status = ?");
+		}
+		sqlSB.append(" Where ToDoID = ?");
+
 		try (PreparedStatement preparedStatement = connection.prepareStatement(String.valueOf(sqlSB))) {
-			preparedStatement.setInt(i - 1, ToDoID);
-			preparedStatement.setInt(i, userID);
+			int i = 1;
+			if (title != null) {
+				i++;
+				preparedStatement.setString(i, title);
+			}
+			if (status != -1) {
+				i++;
+				preparedStatement.setInt(i, status);
+			}
+			preparedStatement.setInt(i + 1, ToDoID);
 			return preparedStatement.executeUpdate() == 1;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.err.println("Error updating ToDo ID: " + ToDoID + " in addCustomToDo()");
+			System.err.println("Error updating ToDo ID: " + ToDoID + " in addCustomToDo()\nQuery: ");
+			System.err.println(sqlSB);
 			return false;
 		}
 	}

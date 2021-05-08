@@ -30,6 +30,8 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import lombok.SneakyThrows;
 import org.apache.derby.drda.NetworkServerControl;
 import java.net.InetAddress;
 
@@ -307,6 +309,34 @@ public class App extends Application {
 		dialog.show();
 	}
 
+	public static void databaseChangePopup(String heading, String message, StackPane stackPane) {
+		System.out.println("DialogBox Posted");
+		JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+		jfxDialogLayout.setHeading(new Text(heading));
+		jfxDialogLayout.setBody(new Text(message));
+		JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+		JFXButton cancelButton = new JFXButton("Cancel");
+		JFXButton restartButton = new JFXButton("Restart Now");
+		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				dialog.close();
+
+			}
+		});
+		restartButton.setOnAction(new EventHandler<ActionEvent>() {
+			@SneakyThrows
+			@Override
+			public void handle(ActionEvent event) {
+				Runtime.getRuntime().exec("java -jar CS3733-D21-Team-E-Prototype2.jar");
+				System.exit(0);
+
+			}
+		});
+		jfxDialogLayout.setActions(cancelButton);
+		jfxDialogLayout.setActions(restartButton);
+		dialog.show();
+	}
 
 	/**
 	 * Changes the currently displayed scene.

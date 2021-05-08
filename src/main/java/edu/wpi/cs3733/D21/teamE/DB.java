@@ -777,6 +777,26 @@ public class DB {
 	// ToDoDB:
 
 
+	/**
+	 * Updates an entered ToDo_item with the following fields, input null to ignore String attributes and -1 to ignore int attributes
+	 * @param ToDoID           mandatory
+	 * @param userID           mandatory, changes the owner of the item to this userID, use App.userID if no change
+	 * @param status           default 1 (normal), 10/0 (complete/deleted)
+	 * @param priority         default 0 (none), 1/2/3 (low/mid/high)
+	 * @param scheduledDate    format:
+	 * @param scheduledTime    format: 23:17:00
+	 * @param nodeID           has to exist in the node table
+	 * @param detail           maximum 1023 characters
+	 * @param expectedLength   how long it would take, format: 23:17:00
+	 * @param notificationDate eg. remind me 2 days before this (send email)
+	 * @param notificationTime format: 23:17:00 eg. remind me 30 mins before this (send email)
+	 * @return true if one line changed successfully, false otherwise
+	 */
+	public static boolean updateToDo(int ToDoID, int userID, String title, int status, int priority, String scheduledDate, String scheduledTime, String nodeID, String detail, String expectedLength, String notificationDate, String notificationTime) {
+		return ToDoDB.updateToDo(ToDoID, userID, title, status, priority, scheduledDate, scheduledTime, nodeID, detail, expectedLength, notificationDate, notificationTime);
+	}
+
+
 	public static List<ToDo> getToDoList(int userID, String date) {
 		return ToDoDB.getToDoList(userID, date);
 	}

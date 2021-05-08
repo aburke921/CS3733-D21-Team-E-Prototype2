@@ -1,8 +1,11 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 public class ToDoDB {
 
@@ -29,6 +32,12 @@ public class ToDoDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("error creating ToDo table");
+			return 0;
 		}
+		return 1;
+	}
+
+	public static List<ToDo> getToDoList(int userID, String date){
+		return null;
 	}
 }

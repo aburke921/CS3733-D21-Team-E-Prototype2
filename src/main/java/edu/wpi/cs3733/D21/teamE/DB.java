@@ -3,7 +3,7 @@ package edu.wpi.cs3733.D21.teamE;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
-import edu.wpi.cs3733.D21.teamE.scheduler.Todo;
+import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
 import javafx.collections.ObservableList;
@@ -41,7 +41,7 @@ public class DB {
 	}
 
 	/**
-	 * adds a request to the requests table in the databse
+	 * adds a request to the requests table in the database
 	 * @param userID      this is the userID of the person filling out the request
 	 * @param assigneeID  this is the userID of the person who is assigned to this request
 	 * @param requestType this is the type of request that is being created
@@ -208,7 +208,6 @@ public class DB {
 	/**
 	 * edits medicine request which is already in DB
 	 * @param medicineDeliveryObj object holding medicine req. fields
-	 * @return
 	 */
 	public static int editMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
 		return RequestsDB2.editMedicineRequest(medicineDeliveryObj);
@@ -778,8 +777,8 @@ public class DB {
 	// ToDoDB:
 
 
-	public static List<Todo> getTodoList(Date date) {
-		return null;
+	public static List<ToDo> getToDoList(int userID, String date) {
+		return ToDoDB.getToDoList(userID, date);
 	}
 
 }

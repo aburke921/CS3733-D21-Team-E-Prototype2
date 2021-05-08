@@ -55,7 +55,7 @@ public class RequestsDB2 {
 	}
 
 	/**
-	 * adds a request to the requests table in the databse
+	 * adds a request to the requests table in the database
 	 * @param userID this is the userID of the person filling out the request
 	 * @param assigneeID this is the userID of the person who is assigned to this request
 	 * @param requestType this is the type of request that is being created

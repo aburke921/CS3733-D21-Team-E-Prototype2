@@ -37,7 +37,40 @@ public class ToDoDB {
 		return 1;
 	}
 
-	public static List<ToDo> getToDoList(int userID, String date){
+	/**
+	 * adds a ToDo_row to the ToDo_table in the database
+	 * @param userID this is the userID of the person associated with the ToDo_item
+	 * @param title  this is the todo_name of the custom todo_item
+	 * @return true if one line changed successfully, false otherwise
+	 */
+	public static boolean addCustomToDo(int userID, String title) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement("Insert Into ToDo " +
+				"(ToDoID, userID, Title) " +
+				"Values ((Select Max(ToDoID) From ToDo), ?, ?)")) {
+			preparedStatement.setInt(1, userID);
+			preparedStatement.setString(2, title);
+			return preparedStatement.executeUpdate() == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error inserting into ToDo table in addCustomToDo()");
+			return false;
+		}
+	}/*
+	@param ToDoType   1 for clean, custom todos with no associated appointment/requests
+	                     2 for service requests, 3 for appointments
+	switch (ToDoType) {
+		case 1: // clean, custom todos with no associated appointment/requests
+			break;
+		case 2: // service requests
+			break;
+		case 3: // appointments
+			break;
+		default:
+			System.err.println("Not supported todo_type in addCustomToDo()");
+			break;
+	}*/
+
+	public static List<ToDo> getToDoList(int userID, String date) {
 		return null;
 	}
 }

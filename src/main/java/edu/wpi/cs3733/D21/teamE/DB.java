@@ -808,6 +808,10 @@ public class DB {
 	}
 
 
+	/**
+	 * @param date enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
+	 * @return a List of ToDo_items
+	 */
 	public static List<ToDo> getToDoList(int userID, String date) {
 		return ToDoDB.getToDoList(userID, date);
 	}

@@ -188,7 +188,50 @@ public class ToDoDB {
 		}
 	}
 
+	/**
+	 * @param date enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
+	 * @return a List of ToDo_items
+	 */
 	public static List<ToDo> getToDoList(int userID, String date) {
-		return null;
+		List<ToDo> toDoList = new ArrayList<>();
+		String sql = "Select * From ToDo Where userID = ?";
+		switch (date) {
+			case "everything": // all ToDos(including undated ones)
+				sql += " Where userID = ?";
+				break;
+			case "": // undated ToDos
+				sql += " Where userID = ? And scheduledDate Is Null";
+				break;
+			default:
+				sql += " Where userID = ? And scheduledDate = ?";
+				break;
+		}
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+			preparedStatement.setInt(1, userID);
+			if (!date.equals("everything") && !date.equals("")){
+				preparedStatement.setString(2, date);
+			}
+			ResultSet resultSet = preparedStatement.executeQuery();
+			while (resultSet.next()) {
+				toDoList.add(new ToDo(
+						resultSet.getInt("ToDoID"),
+						resultSet.getInt("userID"),
+						resultSet.getString("title"),
+						resultSet.getInt("status"),
+						resultSet.getInt("priority"),
+						resultSet.getString("scheduledDate"),
+						resultSet.getString("scheduledTime"),
+						NodeDB.getNodeInfo(resultSet.getString("nodeID")),
+						resultSet.getString("detail"),
+						resultSet.getString("expectedLength"),
+						resultSet.getString("notificationDate"),
+						resultSet.getString("notificationTime")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("SQL error in getToDoList()");
+		}
+		return toDoList;
 	}
 }

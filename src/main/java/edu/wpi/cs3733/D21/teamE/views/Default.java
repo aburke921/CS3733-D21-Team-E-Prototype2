@@ -102,7 +102,7 @@ public class Default {
         if(App.userID != 0) {
             if(DB.filledCovidSurveyToday(App.userID)) {
                 if (DB.isUserCovidUnmarked(App.userID)) { //if (waiting for nurse to perform check-in)
-                    if (true) { //todo, if (survey said no symptoms)
+                    if (true) { //todo, if (survey said no symptoms). Can't use checkForNoSymptoms until I can figure out how to get the current users formNumber
                         //only allow going to the main entrance
                         logger.info("User can only go to main entrance - They did not indicate COVID on their survey, but have not yet been permitted full access to hospital");
                         App.setEndNode(DB.getNodeInfo("FEXIT00201")); //Main Entrance
@@ -212,6 +212,7 @@ public class Default {
         }
     }
 
+    //todo, disable fields as done in toPathFinderAbove so the user can't bypass thier restrictions
     @FXML
     private void toParking(ActionEvent e) {
         ArrayList<Node> indexer = DB.getAllNodes();

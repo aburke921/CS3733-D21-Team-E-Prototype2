@@ -208,11 +208,18 @@ public class AppBarComponent {
 
     @FXML
     void clientToggle(ActionEvent event){
-
+        if (clientToggle.isSelected()) {
+            String message = "  - To switch to an embedded driven database connection, please restart the application! \n   - If this was a mistake, click the \"Embedded Driven Database\" toggle to continue using the a client driven database in the future";
+            App.newJFXDialogPopUp("Switch to Embedded Driven Database", "Close", message, App.getStackPane());
+        }
     }
     @FXML
-    void embeddedToggle(ActionEvent event){
-
+    void embeddedToggle(ActionEvent event) {
+        if (embeddedToggle.isSelected()) {
+            String message = "  - To switch to a client driven database connection, please restart the application! \n  - If this was a mistake, click the \"Client Driven Database\" toggle to continue using the a client driven database int the future";
+            App.newJFXDialogPopUp("Switch to Client Driven Database", "Close", message, App.getStackPane());
+            App.newJFXDialogPopUp("Switch to Client Driven Database", "Close", message, App.getStackPane());
+        }
     }
 
 

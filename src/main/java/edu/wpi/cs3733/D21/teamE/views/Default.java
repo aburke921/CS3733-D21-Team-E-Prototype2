@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class Default {
 
@@ -84,6 +85,8 @@ public class Default {
 
     private ObservableList<String> algoNames;
 
+    Logger logger = Logger.getLogger("BWH"); //get logger for logging.
+
     /**
      * Change Pathfinding Algorithm
      * @param e
@@ -98,32 +101,58 @@ public class Default {
     private void toPathFinder(ActionEvent event) {
         if(App.userID != 0) {
             if(DB.filledCovidSurveyToday(App.userID)) {
-                if((DB.isUserCovidSafe(App.userID))) {
-                    System.out.println("User is marked as safe");
-                    App.setEndNode(DB.getNodeInfo("FEXIT00201"));
-
-                    try {
-                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                        App.changeScene(root);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+                if (true) { //todo, if (waiting for nurse to perform check-in)
+                    if (true) { //todo, if (survey said no symptoms)
+                        //todo only allow going to the main entrance
+                        logger.info("User can only go to main entrance - They did not indicate COVID on their survey, but have not yet been permitted full access to hospital");
+                        App.setEndNode(DB.getNodeInfo("FEXIT00201")); //Main Entrance
+                    } else { //if survey indicated COVID
+                        //todo only allow going to ER
+                        logger.info("User can only go to ER - They have indicated COVID on their survey, and have not yet been permitted full access to hospital");
+                        App.setEndNode(DB.getNodeInfo("FEXIT00301")); //ER
                     }
-                } else if(DB.isUserCovidRisk(App.userID)){
-                    System.out.println("User is marked as risk");
-                    App.setEndNode(DB.getNodeInfo("FEXIT00301"));
-                    App.setToEmergency(true);
-                    try {
-                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                        App.changeScene(root);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                } else if(DB.isUserCovidUnmarked(App.userID)) {
-                    App.newJFXDialogPopUp("","OK","Your covid survey still needs to be reviewed",stackPane);
-                    System.out.println("Covid submission needs to be reviewed first");
-                } else {
-                    System.out.println("It was none of the three strings");
+                } else if (true) { //todo, if (check-in result indicated safe)
+                    //no restrictions on pathfinding
+                    logger.info("User can go anywhere - they have been approved at check-in");
+                    App.setEndNode(null);
+                } else { //if check-in result was user being denied access to hospital
+                    logger.info("User cannot enter the hospital - they have been turned away at check-in");
+                    //todo do not allow pathfinding
                 }
+
+                //route to pathFinder.
+                try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+                        App.changeScene(root);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+//                if((DB.isUserCovidSafe(App.userID))) {
+//                    System.out.println("User is marked as safe");
+//                    App.setEndNode(DB.getNodeInfo("FEXIT00201"));
+//
+//                    try {
+//                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+//                        App.changeScene(root);
+//                    } catch (IOException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                } else if(DB.isUserCovidRisk(App.userID)){
+//                    System.out.println("User is marked as risk");
+//                    App.setEndNode(DB.getNodeInfo("FEXIT00301"));
+//                    App.setToEmergency(true);
+//                    try {
+//                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+//                        App.changeScene(root);
+//                    } catch (IOException ex) {
+//                        ex.printStackTrace();
+//                    }
+//                } else if(DB.isUserCovidUnmarked(App.userID)) {
+//                    App.newJFXDialogPopUp("","OK","Your covid survey still needs to be reviewed",stackPane);
+//                    System.out.println("Covid submission needs to be reviewed first");
+//                } else {
+//                    System.out.println("It was none of the three strings");
+//                }
             } else {
                 App.newJFXDialogPopUp("","OK","You need to fill out a covid survey each day if you wish to pathfind within the hospital",stackPane);
             }

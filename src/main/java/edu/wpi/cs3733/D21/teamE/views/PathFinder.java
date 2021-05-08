@@ -678,22 +678,13 @@ public class PathFinder {
                                 // True first node
                                 icon.setId("submission-icon");
 
-                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.GREEN);
                             } else {
                                 // First on floor
                                 icon.setId("red-icon");
 
-                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
                             }
 
-
-                            //create a line between this node and the previous node
-                            Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-                            line.setStrokeLineCap(StrokeLineCap.ROUND);
-                            line.setStrokeWidth(strokeWidth);
-                            line.setStroke(Color.RED);
-
-                            g.getChildren().addAll(line, icon);
+                            g.getChildren().addAll(icon);
                         } else {
                             //Track true first node's ID, for node color issue
                             firstID = node.get("id");

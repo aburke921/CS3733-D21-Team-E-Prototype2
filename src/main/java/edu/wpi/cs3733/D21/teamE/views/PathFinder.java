@@ -169,6 +169,7 @@ public class PathFinder {
     private double imageHeight;
 
     private ScrollPane scrollPane;
+    Stage primaryStage;
 
     private double scale;
 
@@ -831,16 +832,18 @@ public class PathFinder {
      * @param yMax Max Y Coordinate
      */
     private void zoomToPath(double xMin, double xMax, double yMin, double yMax) {
+        double fullScaleX = 5000 * scrollPane.getWidth() / primaryStage.getWidth(); // max number of viewable pixels
+        double fullScaleY = 3400 * scrollPane.getHeight() / primaryStage.getHeight();
+
         double xDist = xMax - xMin; // Distance between the points (sets zoom)
         double yDist = yMax - yMin;
 
         double xCenter = xMax - xDist / 2; // Center of points, sets position
         double yCenter = yMax - yDist / 2;
 
-        //TODO: make these dynamic
-        double fullStage = Math.max((xDist / 4100), (yDist / 2600)) + 0.2;
+        double fullStage = Math.max((xDist / fullScaleX), (yDist / fullScaleY)) + 0.175;
         double stageAmount = constrain(0.2, 1, fullStage); // Percentage of stage visible
-        double zoomAmount = 5  * (1 - stageAmount);
+        double zoomAmount = 1 / stageAmount;
 
         zoomSlider.setValue(zoomAmount);
 
@@ -953,7 +956,7 @@ public class PathFinder {
         }
 
         //get primaryStage
-        Stage primaryStage = App.getPrimaryStage();
+        primaryStage = App.getPrimaryStage();
 
         //get dimensions of stage
         stageWidth = primaryStage.getWidth();

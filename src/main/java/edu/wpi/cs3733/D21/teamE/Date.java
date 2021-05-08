@@ -12,4 +12,18 @@ public class Date {
     }
 
 
+    public static Date parseString(String stringDate){
+        try {
+            String[] fields = stringDate.split("-");
+            int years = Integer.parseInt(fields[0]);
+            int months = Integer.parseInt(fields[1]);
+            int days = Integer.parseInt(fields[2]);
+
+            return new Date(years, months, days);
+        } catch(Exception e){
+            System.out.println("Could not parse String " + stringDate + " into a time");
+            return null;
+        }
+    }
+
 }

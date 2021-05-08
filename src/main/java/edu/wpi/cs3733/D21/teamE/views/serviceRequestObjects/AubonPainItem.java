@@ -9,13 +9,11 @@ public class AubonPainItem {
 	String foodDescription;
 
 	public AubonPainItem(String imageURL, String foodItem, String foodPrice, String foodCalories, String foodDescription){
-
 		this.imageURL = imageURL;
 		this.foodItem = foodItem;
 		this.foodPrice = foodPrice;
 		this.foodCalories = foodCalories;
 		this.foodDescription = foodDescription;
-
 	}
 
 	public AubonPainItem(String foodItem, String foodPrice, String foodCalories, String foodDescription){

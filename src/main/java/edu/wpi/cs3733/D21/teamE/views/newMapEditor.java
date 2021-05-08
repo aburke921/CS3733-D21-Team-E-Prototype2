@@ -116,6 +116,20 @@ public class newMapEditor {
     private JFXComboBox edgeID;
     @FXML
     private JFXComboBox floorSelector;
+    @FXML
+    private JFXToggleButton drag;
+    @FXML
+    private JFXButton finishAligningButton;
+    @FXML
+    private JFXButton verticalButton;
+    @FXML
+    private JFXButton horizontalButton;
+    @FXML
+    private JFXToggleButton aligningButton;
+    @FXML
+    private JFXButton editEdgeButton;
+    @FXML
+    private JFXButton editNodeButton;
 
 
 
@@ -123,7 +137,7 @@ public class newMapEditor {
     /*
      * Additional Variables
      */
-
+    private static boolean isVertical = false;
     private String startID = "test";
 
     private String endID = "test";
@@ -151,6 +165,26 @@ public class newMapEditor {
 
     private double scale;
     private int selection = 0;
+    //variables for storing x and y of cliced node
+    private int clickedX;
+    private int clickedY = 0;
+    private String clickedID;
+    private String clickedType;
+    private String clickedBuilding;
+    private String clickedLongName;
+    private String clickedShortname;
+
+
+    //private static boolean isAligning = false;
+    private static boolean finishAligning = false;
+    private ArrayList<Node> nodeArrayListToBeAligned = new ArrayList<Node>();
+
+    private ArrayList<Node> currentArrayOfAllNodes = DB.getAllNodes();
+
+    private int edgeButtonSelection = 0;
+    private int buttonSelection = 0;
+
+
 
 
     /**
@@ -179,12 +213,6 @@ public class newMapEditor {
         pane.getChildren().clear();
         System.out.println(" DONE");
 
-
-        //if path is null
-        if (DB.getAllNodes() == null) {
-            //todo snackbar to say error
-            return;
-        }
         //create group to contain all the shapes before we add them to the scene
         Group g = new Group();
 
@@ -194,15 +222,9 @@ public class newMapEditor {
         ArrayList<Edge> edgeArray = new ArrayList<Edge>();
         edgeArray = DB.getAllEdges();
 
-        //display all nodes
+        //display all edges
         scale = imageWidth / imageView.getFitWidth();
-        for (int i = 0; i < nodeArray.size(); i++) {
-            double xCoord = nodeArray.get(i).getX() / scale;
-            double yCoord = nodeArray.get(i).getY() / scale;
-            Circle circle = new Circle(xCoord, yCoord, 2, Color.GREEN);
-            g.getChildren().add(circle);
-
-        }
+        ArrayList<String> lineList = new ArrayList<String>();
         //display all edges
         for(int i = 0; i < edgeArray.size(); i++) {
             double startX = -1;
@@ -228,12 +250,63 @@ public class newMapEditor {
                 //if you've retrieved the edge, create a line
                 if (startX != -1 && startY != -1 && endX != -1 && endY != -1) {
                     Line line = new Line(startX, startY, endX, endY);
-                    line.setStrokeLineCap(StrokeLineCap.ROUND);
-                    line.setStrokeWidth(1);
-                    g.getChildren().add(line);
+                    line.setStroke(Color.color(1,0,0,0.4));
+                    //don't add same edge twice
+                    if(!lineList.contains(line.toString())) {
+                        line.setStrokeLineCap(StrokeLineCap.ROUND);
+                        line.setStrokeWidth(1);
+                        g.getChildren().add(line);
+                        lineList.add(line.toString());
+                    }
 
                 }
             }
+        }
+        //display all nodes
+        for (int i = 0; i < nodeArray.size(); i++) {
+            double xCoord = nodeArray.get(i).getX() / scale;
+            double yCoord = nodeArray.get(i).getY() / scale;
+            Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+            if(nodeArray.get(i).get("type").equals("HALL")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#7c7c7c"));
+            }
+            if(nodeArray.get(i).get("type").equals("CONF")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#7f5124"));
+            }
+            if(nodeArray.get(i).get("type").equals("DEPT")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#74058c"));
+            }
+            if(nodeArray.get(i).get("type").equals("ELEV")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#769557"));
+            }
+            if(nodeArray.get(i).get("type").equals("INFO")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#dc721c"));
+            }
+            if(nodeArray.get(i).get("type").equals("LABS")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#c900ae"));
+            }
+            if(nodeArray.get(i).get("type").equals("REST")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#b00404"));
+            }
+            if(nodeArray.get(i).get("type").equals("RETL")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#3d4f9d"));
+            }
+            if(nodeArray.get(i).get("type").equals("STAI")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#007f52"));
+            }
+            if(nodeArray.get(i).get("type").equals("SERV")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#005cff"));
+            }
+            if(nodeArray.get(i).get("type").equals("EXIT")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#90e430"));
+            }
+            if(nodeArray.get(i).get("type").equals("PARK")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#1299d2"));
+            }
+            if(nodeArray.get(i).get("type").equals("WALK")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+            }
+            g.getChildren().add(circle);
         }
         pane.getChildren().add(g);
     }
@@ -304,207 +377,13 @@ public class newMapEditor {
                 "Node Type", "Long Name", "Short Name");
         final TreeItem<Node> rootNode = new TreeItem<Node>(node0);
         table.setRoot(rootNode);
-        /*
-        //Setting up sub-root nodes
-        Node l1Node = new Node("", 0, 0 , "", "", "", "L1", "");
-        Node l2Node = new Node("", 0, 0 , "", "", "", "L2", "");
-        Node f1Node = new Node("", 0, 0 , "", "", "", "Floor 1", "");
-        Node f2Node = new Node("", 0, 0 , "", "", "", "Floor 2", "");
-        Node f3Node = new Node("", 0, 0 , "", "", "", "Floor 3", "");
-        TreeItem<Node> l1Item = new TreeItem<>(l1Node);
-        TreeItem<Node> l2Item = new TreeItem<>(l2Node);
-        TreeItem<Node> f1Item = new TreeItem<>(f1Node);
-        TreeItem<Node> f2Item = new TreeItem<>(f2Node);
-        TreeItem<Node> f3Item = new TreeItem<>(f3Node);
 
-        rootNode.getChildren().addAll(l1Item,l2Item,f1Item,f2Item,f3Item);
-
-
-//        nodeTypeArrayList.add("HALL");
-//        nodeTypeArrayList.add("CONF");
-//        nodeTypeArrayList.add("DEPT");
-//        nodeTypeArrayList.add("ELEV");
-//        nodeTypeArrayList.add("INFO");
-//        nodeTypeArrayList.add("LABS");
-//        nodeTypeArrayList.add("REST");
-//        nodeTypeArrayList.add("RETL");
-//        nodeTypeArrayList.add("STAI");
-//        nodeTypeArrayList.add("SERV");
-//        nodeTypeArrayList.add("EXIT");
-//        nodeTypeArrayList.add("BATH");
-
-        //Setting up the children for these
-        Node l1Hall = new Node("", 0, 0, "", "", "", "Hall","");
-        Node l1Conf = new Node("", 0, 0, "", "", "", "Conf","");
-        Node l1Dept = new Node("", 0, 0, "", "", "", "Dept","");
-        Node l1Elev = new Node("", 0, 0, "", "", "", "Elev","");
-        Node l1Info = new Node("", 0, 0, "", "", "", "Info","");
-        Node l1Labs = new Node("", 0, 0, "", "", "", "Labs","");
-        Node l1Rest = new Node("", 0, 0, "", "", "", "Rest","");
-        Node l1Retl = new Node("", 0, 0, "", "", "", "Retl","");
-        Node l1Stai = new Node("", 0, 0, "", "", "", "Stai","");
-        Node l1Serv = new Node("", 0, 0, "", "", "", "Serv","");
-        Node l1Exit = new Node("", 0, 0, "", "", "", "Exit","");
-        Node l1Bath = new Node("", 0, 0, "", "", "", "Bath","");
-        TreeItem<Node> l1HallItem = new TreeItem<>(l1Hall);
-        TreeItem<Node> l1ConfItem = new TreeItem<>(l1Conf);
-        TreeItem<Node> l1DeptItem = new TreeItem<>(l1Dept);
-        TreeItem<Node> l1ElevItem = new TreeItem<>(l1Elev);
-        TreeItem<Node> l1InfoItem = new TreeItem<>(l1Info);
-        TreeItem<Node> l1LabsItem = new TreeItem<>(l1Labs);
-        TreeItem<Node> l1RestItem = new TreeItem<>(l1Rest);
-        TreeItem<Node> l1RetlItem = new TreeItem<>(l1Retl);
-        TreeItem<Node> l1StaiItem = new TreeItem<>(l1Stai);
-        TreeItem<Node> l1ServItem = new TreeItem<>(l1Serv);
-        TreeItem<Node> l1ExitItem = new TreeItem<>(l1Exit);
-        TreeItem<Node> l1BathItem = new TreeItem<>(l1Bath);
-        l1Item.getChildren().addAll(l1HallItem,l1ConfItem,l1DeptItem,l1ElevItem,l1InfoItem,l1LabsItem,l1RestItem,l1RetlItem,
-                l1StaiItem,l1ServItem,l1ExitItem,l1BathItem);
-
-        Node l2Hall = new Node("", 0, 0, "", "", "", "Hall","");
-        Node l2Conf = new Node("", 0, 0, "", "", "", "Conf","");
-        Node l2Dept = new Node("", 0, 0, "", "", "", "Dept","");
-        Node l2Elev = new Node("", 0, 0, "", "", "", "Elev","");
-        Node l2Info = new Node("", 0, 0, "", "", "", "Info","");
-        Node l2Labs = new Node("", 0, 0, "", "", "", "Labs","");
-        Node l2Rest = new Node("", 0, 0, "", "", "", "Rest","");
-        Node l2Retl = new Node("", 0, 0, "", "", "", "Retl","");
-        Node l2Stai = new Node("", 0, 0, "", "", "", "Stai","");
-        Node l2Serv = new Node("", 0, 0, "", "", "", "Serv","");
-        Node l2Exit = new Node("", 0, 0, "", "", "", "Exit","");
-        Node l2Bath = new Node("", 0, 0, "", "", "", "Bath","");
-        TreeItem<Node> l2HallItem = new TreeItem<>(l2Hall);
-        TreeItem<Node> l2ConfItem = new TreeItem<>(l2Conf);
-        TreeItem<Node> l2DeptItem = new TreeItem<>(l2Dept);
-        TreeItem<Node> l2ElevItem = new TreeItem<>(l2Elev);
-        TreeItem<Node> l2InfoItem = new TreeItem<>(l2Info);
-        TreeItem<Node> l2LabsItem = new TreeItem<>(l2Labs);
-        TreeItem<Node> l2RestItem = new TreeItem<>(l2Rest);
-        TreeItem<Node> l2RetlItem = new TreeItem<>(l2Retl);
-        TreeItem<Node> l2StaiItem = new TreeItem<>(l2Stai);
-        TreeItem<Node> l2ServItem = new TreeItem<>(l2Serv);
-        TreeItem<Node> l2ExitItem = new TreeItem<>(l2Exit);
-        TreeItem<Node> l2BathItem = new TreeItem<>(l2Bath);
-        l2Item.getChildren().addAll(l2HallItem,l2ConfItem,l2DeptItem,l2ElevItem,l2InfoItem,l2LabsItem,l2RestItem,l2RetlItem,
-                l2StaiItem,l2ServItem,l2ExitItem,l2BathItem);
-
-        Node f1Hall = new Node("", 0, 0, "", "", "", "Hall","");
-        Node f1Conf = new Node("", 0, 0, "", "", "", "Conf","");
-        Node f1Dept = new Node("", 0, 0, "", "", "", "Dept","");
-        Node f1Elev = new Node("", 0, 0, "", "", "", "Elev","");
-        Node f1Info = new Node("", 0, 0, "", "", "", "Info","");
-        Node f1Labs = new Node("", 0, 0, "", "", "", "Labs","");
-        Node f1Rest = new Node("", 0, 0, "", "", "", "Rest","");
-        Node f1Retl = new Node("", 0, 0, "", "", "", "Retl","");
-        Node f1Stai = new Node("", 0, 0, "", "", "", "Stai","");
-        Node f1Serv = new Node("", 0, 0, "", "", "", "Serv","");
-        Node f1Exit = new Node("", 0, 0, "", "", "", "Exit","");
-        Node f1Bath = new Node("", 0, 0, "", "", "", "Bath","");
-        TreeItem<Node> f1HallItem = new TreeItem<>(f1Hall);
-        TreeItem<Node> f1ConfItem = new TreeItem<>(f1Conf);
-        TreeItem<Node> f1DeptItem = new TreeItem<>(f1Dept);
-        TreeItem<Node> f1ElevItem = new TreeItem<>(f1Elev);
-        TreeItem<Node> f1InfoItem = new TreeItem<>(f1Info);
-        TreeItem<Node> f1LabsItem = new TreeItem<>(f1Labs);
-        TreeItem<Node> f1RestItem = new TreeItem<>(f1Rest);
-        TreeItem<Node> f1RetlItem = new TreeItem<>(f1Retl);
-        TreeItem<Node> f1StaiItem = new TreeItem<>(f1Stai);
-        TreeItem<Node> f1ServItem = new TreeItem<>(f1Serv);
-        TreeItem<Node> f1ExitItem = new TreeItem<>(f1Exit);
-        TreeItem<Node> f1BathItem = new TreeItem<>(f1Bath);
-        f1Item.getChildren().addAll(f1HallItem,f1ConfItem,f1DeptItem,f1ElevItem,f1InfoItem,f1LabsItem,f1RestItem,f1RetlItem,
-                f1StaiItem,f1ServItem,f1ExitItem,f1BathItem);
-
-        Node f2Hall = new Node("", 0, 0, "", "", "", "Hall","");
-        Node f2Conf = new Node("", 0, 0, "", "", "", "Conf","");
-        Node f2Dept = new Node("", 0, 0, "", "", "", "Dept","");
-        Node f2Elev = new Node("", 0, 0, "", "", "", "Elev","");
-        Node f2Info = new Node("", 0, 0, "", "", "", "Info","");
-        Node f2Labs = new Node("", 0, 0, "", "", "", "Labs","");
-        Node f2Rest = new Node("", 0, 0, "", "", "", "Rest","");
-        Node f2Retl = new Node("", 0, 0, "", "", "", "Retl","");
-        Node f2Stai = new Node("", 0, 0, "", "", "", "Stai","");
-        Node f2Serv = new Node("", 0, 0, "", "", "", "Serv","");
-        Node f2Exit = new Node("", 0, 0, "", "", "", "Exit","");
-        Node f2Bath = new Node("", 0, 0, "", "", "", "Bath","");
-        TreeItem<Node> f2HallItem = new TreeItem<>(f2Hall);
-        TreeItem<Node> f2ConfItem = new TreeItem<>(f2Conf);
-        TreeItem<Node> f2DeptItem = new TreeItem<>(f2Dept);
-        TreeItem<Node> f2ElevItem = new TreeItem<>(f2Elev);
-        TreeItem<Node> f2InfoItem = new TreeItem<>(f2Info);
-        TreeItem<Node> f2LabsItem = new TreeItem<>(f2Labs);
-        TreeItem<Node> f2RestItem = new TreeItem<>(f2Rest);
-        TreeItem<Node> f2RetlItem = new TreeItem<>(f2Retl);
-        TreeItem<Node> f2StaiItem = new TreeItem<>(f2Stai);
-        TreeItem<Node> f2ServItem = new TreeItem<>(f2Serv);
-        TreeItem<Node> f2ExitItem = new TreeItem<>(f2Exit);
-        TreeItem<Node> f2BathItem = new TreeItem<>(f2Bath);
-        f2Item.getChildren().addAll(f2HallItem,f2ConfItem,f2DeptItem,f2ElevItem,f2InfoItem,f2LabsItem,f2RestItem,f2RetlItem,
-                f2StaiItem,f2ServItem,f2ExitItem,f2BathItem);
-
-        Node f3Hall = new Node("", 0, 0, "", "", "", "Hall","");
-        Node f3Conf = new Node("", 0, 0, "", "", "", "Conf","");
-        Node f3Dept = new Node("", 0, 0, "", "", "", "Dept","");
-        Node f3Elev = new Node("", 0, 0, "", "", "", "Elev","");
-        Node f3Info = new Node("", 0, 0, "", "", "", "Info","");
-        Node f3Labs = new Node("", 0, 0, "", "", "", "Labs","");
-        Node f3Rest = new Node("", 0, 0, "", "", "", "Rest","");
-        Node f3Retl = new Node("", 0, 0, "", "", "", "Retl","");
-        Node f3Stai = new Node("", 0, 0, "", "", "", "Stai","");
-        Node f3Serv = new Node("", 0, 0, "", "", "", "Serv","");
-        Node f3Exit = new Node("", 0, 0, "", "", "", "Exit","");
-        Node f3Bath = new Node("", 0, 0, "", "", "", "Bath","");
-        TreeItem<Node> f3HallItem = new TreeItem<>(f3Hall);
-        TreeItem<Node> f3ConfItem = new TreeItem<>(f3Conf);
-        TreeItem<Node> f3DeptItem = new TreeItem<>(f3Dept);
-        TreeItem<Node> f3ElevItem = new TreeItem<>(f3Elev);
-        TreeItem<Node> f3InfoItem = new TreeItem<>(f3Info);
-        TreeItem<Node> f3LabsItem = new TreeItem<>(f3Labs);
-        TreeItem<Node> f3RestItem = new TreeItem<>(f3Rest);
-        TreeItem<Node> f3RetlItem = new TreeItem<>(f3Retl);
-        TreeItem<Node> f3StaiItem = new TreeItem<>(f3Stai);
-        TreeItem<Node> f3ServItem = new TreeItem<>(f3Serv);
-        TreeItem<Node> f3ExitItem = new TreeItem<>(f3Exit);
-        TreeItem<Node> f3BathItem = new TreeItem<>(f3Bath);
-        f3Item.getChildren().addAll(f3HallItem,f3ConfItem,f3DeptItem,f3ElevItem,f3InfoItem,f3LabsItem,f3RestItem,f3RetlItem,
-                f3StaiItem,f3ServItem,f3ExitItem,f3BathItem);
-        */
-
-
-//        if (table.getRoot().getChildren().isEmpty() == false && array.size() > 0) {
-//            table.getRoot().getChildren().remove(0, array.size() - 1);
-//        }
         //iterate over list of nodes from DB, add to table
         for (int i = 0; i < array.size(); i++) {
             Node s = array.get(i);
             final TreeItem<Node> node = new TreeItem<Node>(s);
             table.getRoot().getChildren().add(node);
         }
-            /*
-
-            if(s.get("floor").equals("L1")) {
-                addToTable(node, l1HallItem,l1ConfItem,l1DeptItem,l1ElevItem,l1InfoItem,l1LabsItem,l1RestItem,l1RetlItem,
-                        l1StaiItem,l1ServItem,l1ExitItem,l1BathItem);
-            }
-            if(s.get("floor").equals("L2")) {
-                addToTable(node, l2HallItem,l2ConfItem,l2DeptItem,l2ElevItem,l2InfoItem,l2LabsItem,l2RestItem,l2RetlItem,
-                        l2StaiItem,l2ServItem,l2ExitItem,l2BathItem);
-            }
-            if(s.get("floor").equals("1")) {
-                addToTable(node, f1HallItem,f1ConfItem,f1DeptItem,f1ElevItem,f1InfoItem,f1LabsItem,f1RestItem,f1RetlItem,
-                        f1StaiItem,f1ServItem,f1ExitItem,f1BathItem);
-            }
-            if(s.get("floor").equals("2")) {
-                addToTable(node, f2HallItem,f2ConfItem,f2DeptItem,f2ElevItem,f2InfoItem,f2LabsItem,f2RestItem,f2RetlItem,
-                        f2StaiItem,f2ServItem,f2ExitItem,f2BathItem);
-            }
-            if(s.get("floor").equals("3")) {
-                addToTable(node, f3HallItem,f3ConfItem,f3DeptItem,f3ElevItem,f3InfoItem,f3LabsItem,f3RestItem,f3RetlItem,
-                        f3StaiItem,f3ServItem,f3ExitItem,f3BathItem);
-            }
-            //int n = array.get(i).getX();
-            //table.getRoot().getChildren().add(node);
-        }*/
     }
 
     /**
@@ -644,6 +523,7 @@ public class newMapEditor {
         int yVal = Integer.parseInt(yCordInput.getText());
         i = DB.addNode(genNodeID(typeInput.getValue().toString(),floorInput.getValue().toString(), longNameInput.getText()), xVal, yVal, floorInput.getValue().toString(), buildingInput.getValue().toString(), typeInput.getValue().toString(), longNameInput.getText(), shortNameInput.getText());
         System.out.println(i);
+        refresh();
         return i;
     }
 
@@ -653,7 +533,28 @@ public class newMapEditor {
      */
     @FXML
     public void addNodeButton(ActionEvent e) {
-        addNode();
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setBody(new Text("Are you sure you want to add node?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Yes");
+        JFXButton cancel = new JFXButton("Cancel");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                addNode();
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
     }
 
     /**
@@ -695,6 +596,7 @@ public class newMapEditor {
     /**
      * retrieves the ID of the selected item in the table, passes that into deleteNode fcn from database
      * @param table
+     * @// TODO: 4/30/2021 what does this return?
      */
     public int deleteNode(TreeTableView<Node> table) {
         int s = -1;
@@ -717,6 +619,7 @@ public class newMapEditor {
 
             }
         }
+        refresh();
         return s;
     }
 
@@ -726,7 +629,28 @@ public class newMapEditor {
      */
     @FXML
     public void deleteNodeButton(ActionEvent e) {
-        deleteNode(nodeTreeTable);
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setBody(new Text("Are you sure you want to delete node?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Yes");
+        JFXButton cancel = new JFXButton("Cancel");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                deleteNode(nodeTreeTable);
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
     }
 
     public void editNode(TreeTableView<Node> table) {
@@ -792,10 +716,32 @@ public class newMapEditor {
             yVal = Integer.valueOf(yVal);
         }
         DB.modifyNode(id, xVal, yVal, floor, building, type, longName, shortName);
+        refresh();
     }
 
     public void editNodeButton(ActionEvent e) {
-        editNode(nodeTreeTable);
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setBody(new Text("Are you sure you want to add node?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Yes");
+        JFXButton cancel = new JFXButton("Cancel");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                editNode(nodeTreeTable);
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
     }
 
     /**
@@ -857,7 +803,20 @@ public class newMapEditor {
      * resets tables and map after edits made
      */
     public void refresh() {
-        initialize();
+
+        //update array or nodes, todo are there any other times when this array should be updated? Any other times when the nodes get changed?
+        currentArrayOfAllNodes = DB.getAllNodes();
+
+        //refresh map
+        drawMap(currentFloor);
+
+        //refresh tables
+        prepareNodes(nodeTreeTable);
+        prepareEdges(edgeTreeTable);
+        //isAligning = false;
+        //finishAligning = false;
+        finishAligningButton.setVisible(false);
+        finishAligning = false;
     }
 
     /**
@@ -865,7 +824,6 @@ public class newMapEditor {
      * @param e
      */
     public void refreshButton(ActionEvent e) {
-        toNodeMode(e);
         refresh();
     }
 
@@ -875,20 +833,7 @@ public class newMapEditor {
      */
     @FXML
     private void errorPopup(String errorMessage) {
-        JFXDialogLayout error = new JFXDialogLayout();
-        error.setHeading(new Text("Error!"));
-        error.setBody(new Text(errorMessage));
-        JFXDialog dialog = new JFXDialog(stackPane, error, JFXDialog.DialogTransition.CENTER);
-        JFXButton okay = new JFXButton("Okay");
-        okay.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
-
-            }
-        });
-        error.setActions(okay);
-        dialog.show();
+        App.newJFXDialogPopUp("Error!","Okay",errorMessage,stackPane);
     }
 
 
@@ -1032,9 +977,11 @@ public class newMapEditor {
         edgeID.setItems(edgeIDArrayList);
         startLocation.setItems(longNameArrayList);
         endLocation.setItems(longNameArrayList);
+
+        //set initial combobox value
+        floorSelector.getSelectionModel().select("1"); //floor 1
         System.out.println("done");
 
-        new AutoCompleteComboBoxListener<>(startLocation);
         new AutoCompleteComboBoxListener<>(endLocation);
 
         //Set up zoomable and pannable panes
@@ -1068,12 +1015,284 @@ public class newMapEditor {
         rootBorderPane.setPrefWidth(stageWidth);
         rootBorderPane.setPrefHeight(stageHeight);
 
-        System.out.println("Finish PathFinder Init.");
+        //propagate tables and map
+        refresh();
 
-        drawMap(currentFloor);
-        prepareNodes(nodeTreeTable);
-        prepareEdges(edgeTreeTable);
+        //hide edge and node vBox by default, and finish aligning button
         edgeVBox.setVisible(false);
+        nodeVBox.setVisible(false);
+        finishAligningButton.setVisible(false);
+
+        //retrieving nodes
+        currentArrayOfAllNodes = DB.getAllNodes();
+
+        //creating group for adding nodes/edges
+//        Group g = new Group();
+
+        //dragging nodes
+        drag.setOnAction(e -> {
+
+            if (drag.isSelected()) {
+                pane.setOnMouseClicked(ev -> {
+                    double X = ev.getX();
+                    int xInt = (int) X;
+                    double Y = ev.getY();
+                    int yInt = (int) Y;
+                    for (int i = 0; i < currentArrayOfAllNodes.size(); i++) {
+                        if (currentArrayOfAllNodes.get(i).get("floor").equals(currentFloor)) {
+                            //coordinates of current node
+                            double nodeX = currentArrayOfAllNodes.get(i).getX() / scale;
+                            int nodeXInt = (int) nodeX;
+                            double nodeY = currentArrayOfAllNodes.get(i).getY() / scale;
+                            int nodeYInt = (int) nodeY;
+                            //if node coordinates match click coordinates +- 1, autofill fields with node info
+                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
+                                clickedX = nodeXInt;
+                                clickedY = nodeYInt;
+                                clickedID = currentArrayOfAllNodes.get(i).get("id");
+                                clickedBuilding = currentArrayOfAllNodes.get(i).get("building");
+                                clickedLongName = currentArrayOfAllNodes.get(i).get("longName");
+                                clickedType = currentArrayOfAllNodes.get(i).get("type");
+                                clickedShortname = currentArrayOfAllNodes.get(i).get("shortName");
+
+
+                            }
+                        }
+                    }
+
+
+
+                System.out.println("No drag");
+
+                ObservableList groups = pane.getChildren();
+
+                ObservableList shapes = FXCollections.observableArrayList();
+                if(groups.get(0) instanceof Group){
+                    shapes = ((Group) groups.get(0)).getChildren();
+
+                }
+
+                System.out.println(clickedX);
+
+                for(int i = 0; i < shapes.size();i++){
+                    if(shapes.get(i) instanceof Circle){
+                        if((int)((Circle) shapes.get(i)).getCenterX() == clickedX && (int)((Circle) shapes.get(i)).getCenterY() == clickedY){
+                            Circle circle = ((Circle) shapes.get(i));
+                            System.out.println("Yay");
+                            circle.setOnMouseDragged(event ->{
+                                scrollPane.setPannable(false);
+                                circle.setCenterX((int)event.getX());
+                                circle.setCenterY((int)event.getY());
+                                DB.modifyNode(clickedID,(int)(circle.getCenterX() * scale),(int)(circle.getCenterY()*scale),currentFloor,clickedBuilding,clickedType,clickedLongName, clickedShortname);
+                            });
+                            circle.setOnMouseReleased(mouseEvent ->{
+                                refresh();
+                                scrollPane.setPannable(true);
+                            });
+
+                        }
+
+                    }
+
+
+                }
+                });
+            } else {
+                //populates fields with information of selected node or edge in table
+                startTableClickHandlers();
+
+                //for clicks interacting with map
+                startMapClickHandler();
+                System.out.println("no");
+
+            }
+        });
+
+        //populates fields with information of selected node or edge in table
+        startTableClickHandlers();
+
+        //for clicks interacting with map
+        startMapClickHandler();
+
+
+
+
+
+    }
+
+    private void startMapClickHandler() {
+        //create image group
+        Group g = new Group(); //todo see below todo.
+        //if(aligningButton.isSelected() == false) {
+        //finishAligning = false;
+        pane.setOnMouseClicked(e -> {
+            aligningButton.setOnAction(f -> {
+                if (aligningButton.isSelected()) {
+                    newJFXDialogPopUp("Align Nodes", "Vertical", "Horizontal", "Cancel", "Which way would you like to assign your nodes?", this.stackPane);
+                }
+                finishAligningButton.setVisible(true);
+            });
+            if (aligningButton.isSelected()) {
+                //double click
+                if (e.getClickCount() == 2) {
+                    //coordinates of click
+                    double X = e.getX();
+                    int xInt = (int) X;
+                    double Y = e.getY();
+                    int yInt = (int) Y;
+                    for (int i = 0; i < currentArrayOfAllNodes.size(); i++) {
+                        if (currentArrayOfAllNodes.get(i).get("floor").equals(currentFloor)) {
+                            //coordinates of current node
+                            double nodeX = currentArrayOfAllNodes.get(i).getX() / scale;
+                            int nodeXInt = (int) nodeX;
+                            double nodeY = currentArrayOfAllNodes.get(i).getY() / scale;
+                            int nodeYInt = (int) nodeY;
+                            //if node coordinates match click coordinates +- 1, autofill fields with node info
+                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
+                                nodeArrayListToBeAligned.add(currentArrayOfAllNodes.get(i));
+                                idInput.setValue(currentArrayOfAllNodes.get(i).get("id"));
+                                floorInput.setValue(currentArrayOfAllNodes.get(i).get("floor"));
+                                longNameInput.setText(currentArrayOfAllNodes.get(i).get("longName"));
+                                shortNameInput.setText(currentArrayOfAllNodes.get(i).get("shortName"));
+                                xCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getX()));
+                                yCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getY()));
+                                typeInput.setValue(currentArrayOfAllNodes.get(i).get("type"));
+                                buildingInput.setValue(currentArrayOfAllNodes.get(i).get("building"));
+
+                            }
+                        }
+                    }
+                    if (finishAligning) {
+                        //align nodes on clicked location
+                        alignNodesOnLocation(e.getX(), e.getY(), nodeArrayListToBeAligned, isVertical);
+                        //finishAligning = false;
+                        nodeArrayListToBeAligned.removeAll(nodeArrayListToBeAligned);
+                        aligningButton.setSelected(false);
+                        refresh();
+                    }
+                }
+            } else {
+                if (e.getClickCount() == 2) {
+                    //ints for displaying
+                    double xCoordScale = e.getX();
+                    xCoordScale = xCoordScale * scale;
+                    int xCordIntScale = (int) xCoordScale;
+                    double yCoordScale = e.getY();
+                    yCoordScale = yCoordScale * scale;
+                    int yCordIntScale = (int) yCoordScale;
+                    //ints for placing circle
+                    double xCoord = e.getX();
+                    double yCoord = e.getY();
+                    Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+                    //todo do the following 3 lines do the same as `pane.getChildren().add(circle);` ?
+                    g.getChildren().add(circle);
+                    pane.getChildren().add(g);
+                    //clears fields, populates X, Y coordinates of created node in fields
+                    longNameInput.clear();
+                    shortNameInput.clear();
+                    floorInput.getSelectionModel().clearSelection();
+                    floorInput.setValue(null);
+                    idInput.getSelectionModel().clearSelection();
+                    idInput.setValue(null);
+                    buildingInput.getSelectionModel().clearSelection();
+                    buildingInput.setValue(null);
+                    typeInput.getSelectionModel().clearSelection();
+                    typeInput.setValue(null);
+                    xCordInput.setText(Integer.toString(xCordIntScale));
+                    yCordInput.setText(Integer.toString(yCordIntScale));
+                } else if (e.getClickCount() == 1) {
+                    System.out.println("inSelected");
+                    //coordinates of click
+                    double X = e.getX();
+                    int xInt = (int) X;
+                    double Y = e.getY();
+                    int yInt = (int) Y;
+                    for (int i = 0; i < currentArrayOfAllNodes.size(); i++) {
+                        if (currentArrayOfAllNodes.get(i).get("floor").equals(currentFloor)) {
+                            //coordinates of current node
+                            double nodeX = currentArrayOfAllNodes.get(i).getX() / scale;
+                            int nodeXInt = (int) nodeX;
+                            double nodeY = currentArrayOfAllNodes.get(i).getY() / scale;
+                            int nodeYInt = (int) nodeY;
+
+                            //if node coordinates match click coordinates +- 1, autofill fields with node info
+                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
+                                idInput.setValue(currentArrayOfAllNodes.get(i).get("id"));
+                                floorInput.setValue(currentArrayOfAllNodes.get(i).get("floor"));
+                                longNameInput.setText(currentArrayOfAllNodes.get(i).get("longName"));
+                                shortNameInput.setText(currentArrayOfAllNodes.get(i).get("shortName"));
+                                xCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getX()));
+                                yCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getY()));
+                                typeInput.setValue(currentArrayOfAllNodes.get(i).get("type"));
+                                buildingInput.setValue(currentArrayOfAllNodes.get(i).get("building"));
+
+
+                                //for edges, use counter to determine if it is first or second node selected
+                                //populate edge fields with information
+                                selection++;
+                                if (selection == 1) {
+
+
+                                    startID = currentArrayOfAllNodes.get(i).get("id");
+                                    startLocation.setValue(currentArrayOfAllNodes.get(i).get("longName"));
+                                    xCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getX()));
+                                    yCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getY()));
+
+
+
+
+                                }
+                                if (selection == 2) {
+                                    endLocation.setValue(currentArrayOfAllNodes.get(i).get("longName"));
+                                    endID = currentArrayOfAllNodes.get(i).get("id");
+                                    edgeIDArrayList.add(startID + "_" + endID);
+                                    edgeID.setItems(edgeIDArrayList);
+                                    edgeID.setValue(startID + "_" + endID);
+                                    selection = 0;
+
+
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /** @// TODO: 5/4/2021 edit so it only takes in one coord (dont need X & Y, only one depending on vert/horizontal)
+     * Aligns the nodes horizontally or vertically.
+     * Note: Only edits DB, does not refresh
+     * @param alignX X coord to align
+     * @param alignY Y coord to align
+     * @param toAlign Nodes that need to be aligned
+     * @param isVertical Vertical else Horizontal
+     */
+    private void alignNodesOnLocation(double alignX, double alignY, ArrayList<Node> toAlign, boolean isVertical) {
+        int modifyInt = -1;
+        double X = alignX * scale;
+        int xInt = (int) X;
+        double Y = alignY * scale;
+        int yInt = (int) Y;
+        for (int i = 0; i < toAlign.size(); i++) {
+            Node currentNode = toAlign.get(i);
+            System.out.println("Aligning " + currentNode);
+            if (isVertical) {
+                modifyInt = DB.modifyNode(currentNode.get("id"), xInt, currentNode.getY(), currentNode.get("floor"), currentNode.get("building"),
+                        currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
+            } else {
+                modifyInt = DB.modifyNode(currentNode.get("id"), currentNode.getX(), yInt, currentNode.get("floor"), currentNode.get("building"),
+                        currentNode.get("type"), currentNode.get("longName"), currentNode.get("shortName"));
+            }
+        }
+        System.out.println(modifyInt);
+    }
+
+    /**
+     * Adds event handlers to populate the form fields when a table row is clicked
+     */
+    private void startTableClickHandlers() {
 
         //populates fields with information of selected node in table
         nodeTreeTable.setOnMouseClicked(e -> {
@@ -1097,94 +1316,64 @@ public class newMapEditor {
                 edgeID.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getId());
                 startLocation.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getStartNodeId());
                 endLocation.setValue(edgeTreeTable.getSelectionModel().getSelectedItem().getValue().getEndNodeId());
+            }
+        });
+    }
+
+    /**
+     * Creates a new JFX Dialog on the current page.
+     * @param message Message to display in the dialog box.
+     * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
+     */
+    public static void newJFXDialogPopUp(String heading, String vertical, String horizontal, String cancelButton, String message, StackPane stackPane) {
+        System.out.println("DialogBox Posted");
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setHeading(new Text(heading));
+        jfxDialogLayout.setBody(new Text(message));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton(cancelButton);
+        JFXButton opt1 = new JFXButton(vertical);
+        JFXButton opt2 = new JFXButton(horizontal);
+        opt1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                isVertical = true;
+                dialog.close();
 
             }
         });
+        opt2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                isVertical = false;
+                dialog.close();
 
-        //retrieving nodes
-        ArrayList<Node> array = DB.getAllNodes();
-
-        //creating group for adding nodes/edges
-        Group g = new Group();
-
-        //for clicks interacting with map
-        pane.setOnMouseClicked(e -> {
-            //double click
-            if (e.getClickCount() == 2) {
-                //ints for displaying
-                double xCoordScale = e.getX();
-                xCoordScale = xCoordScale * scale;
-                int xCordIntScale = (int) xCoordScale;
-                double yCoordScale = e.getY();
-                yCoordScale = yCoordScale * scale;
-                int yCordIntScale = (int) yCoordScale;
-                //ints for placing circle
-                double xCoord = e.getX();
-                double yCoord = e.getY();
-                Circle circle = new Circle(xCoord, yCoord, 2, Color.GREEN);
-                g.getChildren().add(circle);
-                pane.getChildren().add(g);
-                //clears fields, populates X, Y coordinates of created node in fields
-                longNameInput.clear();
-                shortNameInput.clear();
-                floorInput.getSelectionModel().clearSelection();
-                floorInput.setValue(null);
-                idInput.getSelectionModel().clearSelection();
-                idInput.setValue(null);
-                buildingInput.getSelectionModel().clearSelection();
-                buildingInput.setValue(null);
-                typeInput.getSelectionModel().clearSelection();
-                typeInput.setValue(null);
-                xCordInput.setText(Integer.toString(xCordIntScale));
-                yCordInput.setText(Integer.toString(yCordIntScale));
-            } else {
-                //single click
-                if (e.getClickCount() == 1) {
-                    //coordinates of click
-                    double X = e.getX();
-                    int xInt = (int) X;
-                    double Y = e.getY();
-                    int yInt = (int) Y;
-                    for (int i = 0; i < array.size(); i++) {
-                        if(array.get(i).get("floor").equals(currentFloor)) {
-                            //coordinates of current node
-                            double nodeX = array.get(i).getX() / scale;
-                            int nodeXInt = (int) nodeX;
-                            double nodeY = array.get(i).getY() / scale;
-                            int nodeYInt = (int) nodeY;
-
-                            //if node coordinates match click coordinates +- 1, autofill fields with node info
-                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
-                                idInput.setValue(array.get(i).get("id"));
-                                floorInput.setValue(array.get(i).get("floor"));
-                                longNameInput.setText(array.get(i).get("longName"));
-                                shortNameInput.setText(array.get(i).get("shortName"));
-                                xCordInput.setText(Integer.toString(array.get(i).getX()));
-                                yCordInput.setText(Integer.toString(array.get(i).getY()));
-                                typeInput.setValue(array.get(i).get("type"));
-                                buildingInput.setValue(array.get(i).get("building"));
-
-                                //for edges, use counter to determine if it is first or second node selected
-                                //populate edge fields with information
-                                selection++;
-                                if (selection == 1) {
-                                    startID = array.get(i).get("id");
-                                    startLocation.setValue(array.get(i).get("longName"));
-                                }
-                                if (selection == 2) {
-                                    endLocation.setValue(array.get(i).get("longName"));
-                                    endID = array.get(i).get("id");
-                                    edgeIDArrayList.add(startID + "_" + endID);
-                                    edgeID.setItems(edgeIDArrayList);
-                                    edgeID.setValue(startID + "_" + endID);
-                                    selection = 0;
-                                }
-                            }
-                        }
-                    }
-                }
             }
         });
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, opt1, opt2);
+        dialog.show();
+    }
+
+    public void finishAligning(ActionEvent e) {
+        //isAligning = false;
+        finishAligning = true;
+    }
+
+    /**
+     *
+     */
+    @FXML
+    public void alignSelectedNodes(ActionEvent e) {
+        //isAligning = true;
+        newJFXDialogPopUp("Align Nodes", "Vertical", "Horizontal", "Cancel", "Select the nodes you would like to align", stackPane);
+        finishAligning = false;
 
     }
 
@@ -1212,7 +1401,28 @@ public class newMapEditor {
      * @param actionEvent
      */
     public void deleteEdgeButton(ActionEvent actionEvent) {
-        deleteEdge();
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setBody(new Text("Are you sure you want to delete edge?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Yes");
+        JFXButton cancel = new JFXButton("Cancel");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                deleteEdge();
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
     }
 
     /**
@@ -1228,6 +1438,7 @@ public class newMapEditor {
                 }
             }
         }
+        refresh();
     }
 
     /**
@@ -1235,7 +1446,28 @@ public class newMapEditor {
      * @param actionEvent
      */
     public void addEdgeButton(ActionEvent actionEvent) {
-        addEdge();
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setBody(new Text("Are you sure you want to add edge?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Yes");
+        JFXButton cancel = new JFXButton("Cancel");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                addEdge();
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
     }
 
     /**
@@ -1264,6 +1496,7 @@ public class newMapEditor {
             //adds edge, populates edge ID field with new ID
             DB.addEdge(ID, startInput, endInput);
             edgeID.setValue(ID);
+            refresh();
         }
     }
 
@@ -1273,16 +1506,31 @@ public class newMapEditor {
      * @param actionEvent
      */
     public void toEdgeMode(ActionEvent actionEvent) {
-        edgeVBox.toFront();
-        edgeVBox.setVisible(true);
-        nodeVBox.setVisible(false);
-        edgeID.getSelectionModel().clearSelection();
-        edgeID.setValue(null);
-        startLocation.getSelectionModel().clearSelection();
-        startLocation.setValue(null);
-        endLocation.getSelectionModel().clearSelection();
-        endLocation.setValue(null);
-        selection = 0;
+        //edgeButtonSelection = 0;
+        edgeButtonSelection++;
+        if(edgeButtonSelection == 1) {
+            editEdgeButton.setText("Cancel");
+            editEdgeButton.setStyle("-fx-background-color: #dc143c; ");
+            edgeVBox.toFront();
+            edgeVBox.setVisible(true);
+            nodeVBox.setVisible(false);
+            edgeID.getSelectionModel().clearSelection();
+            edgeID.setValue(null);
+            startLocation.getSelectionModel().clearSelection();
+            startLocation.setValue(null);
+            endLocation.getSelectionModel().clearSelection();
+            endLocation.setValue(null);
+            selection = 0;
+        } else if(edgeButtonSelection == 2) {
+            editEdgeButton.setText("Edit Edges");
+            editEdgeButton.setStyle("-fx-style-class: submit-button");
+            nodeVBox.toFront();
+            if(buttonSelection == 1) {
+                nodeVBox.setVisible(true);
+            }
+            edgeVBox.setVisible(false);
+            edgeButtonSelection = 0;
+        }
     }
 
     /**
@@ -1291,21 +1539,77 @@ public class newMapEditor {
      * @param actionEvent
      */
     public void toNodeMode(ActionEvent actionEvent) {
-        nodeVBox.toFront();
-        nodeVBox.setVisible(true);
-        edgeVBox.setVisible(false);
-        longNameInput.clear();
-        shortNameInput.clear();
-        floorInput.getSelectionModel().clearSelection();
-        floorInput.setValue(null);
-        idInput.getSelectionModel().clearSelection();
-        idInput.setValue(null);
-        buildingInput.getSelectionModel().clearSelection();
-        buildingInput.setValue(null);
-        typeInput.getSelectionModel().clearSelection();
-        typeInput.setValue(null);
-        xCordInput.clear();
-        yCordInput.clear();
+        //edgeButtonSelection = 0;
+        buttonSelection++;
+        if(buttonSelection == 1) {
+            editNodeButton.setText("Cancel");
+            editNodeButton.setStyle("-fx-background-color: #dc143c; ");
+            nodeVBox.toFront();
+            nodeVBox.setVisible(true);
+            edgeVBox.setVisible(false);
+            longNameInput.clear();
+            shortNameInput.clear();
+            floorInput.getSelectionModel().clearSelection();
+            floorInput.setValue(null);
+            idInput.getSelectionModel().clearSelection();
+            idInput.setValue(null);
+            buildingInput.getSelectionModel().clearSelection();
+            buildingInput.setValue(null);
+            typeInput.getSelectionModel().clearSelection();
+            typeInput.setValue(null);
+            xCordInput.clear();
+            yCordInput.clear();
+        } else if(buttonSelection == 2) {
+            editNodeButton.setText("Edit Nodes");
+            editNodeButton.setStyle("-fx-style-class: submit-button");
+            nodeVBox.setVisible(false);
+            edgeVBox.toFront();
+            if(edgeButtonSelection == 1) {
+                edgeVBox.setVisible(true);
+            }
+            buttonSelection = 0;
+        }
+    }
+    /**
+     *
+     */
+    public void CSVPopUp(ActionEvent e) {
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setHeading(new Text("CSV Handler"));
+        jfxDialogLayout.setBody(new Text("What action would you like to take?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton upload = new JFXButton("Upload CSV");
+        JFXButton retrieve = new JFXButton("Retrieve CSV");
+        JFXButton cancel = new JFXButton("Cancel");
+        upload.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                fileOpenerNode(event);
+                dialog.close();
+
+            }
+        });
+        retrieve.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    openFileNode(event);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(upload, retrieve, cancel);
+        dialog.show();
     }
 
     /**
@@ -1320,6 +1624,36 @@ public class newMapEditor {
 
         //draw path for new floor
         drawMap(currentFloor);
+    }
+    /**
+     * Creates a new JFX Dialog on the current page.
+     * @param message Message to display in the dialog box.
+     * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
+     */
+    public static void PopUp(String heading, String button, String cancelButton, String message, StackPane stackPane) {
+        System.out.println("DialogBox Posted");
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setHeading(new Text(heading));
+        jfxDialogLayout.setBody(new Text(message));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton(button);
+        JFXButton cancel = new JFXButton(cancelButton);
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
     }
 }
 

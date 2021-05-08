@@ -51,14 +51,13 @@ public class SearchContext {
         search.setType(constraint);
     }
 
-    public Path search(String startNode, String endNode){
+    public Path search(Object startNode, Object endNode){
         return save(search.search(startNode, endNode));
     }
 
-    public Path search(List stopIds){
-        return save(search.search(stopIds));
+    public Path search(List stops){
+        return save(search.search(stops));
     }
-
 
     public Path searchAlongPath(Path route, String stopType){
         return save(search.searchAlongPath(route, stopType));
@@ -81,13 +80,21 @@ public class SearchContext {
     }
 
     private Searcher translateAlgo(String algo){
+
+
+        System.out.println("DEBUG:   alg: " + algo);
+
         if(algo.equalsIgnoreCase("A*")){
-            return new Searcher();
+            return new AStarSearcher();
         } else if(algo.equalsIgnoreCase("DFS")){
             return new XFirstSearcher("DFS");
-        } else if(algo.equalsIgnoreCase("BFS")){
+        } else if(algo.equalsIgnoreCase("BFS")) {
             return new XFirstSearcher("BFS");
-        } else {
+        } else if(algo.equalsIgnoreCase("Best")){
+            return new BestFirstSearcher("Best");
+        } else if(algo.equalsIgnoreCase("Dijkstra")){
+            return new DijkstraSearcher("Dijkstra");
+        } else{
             return null;
         }
     }

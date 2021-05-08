@@ -1,7 +1,3 @@
-/**
- * Sample Skeleton for 'UserManagement.fxml' Controller Class
- */
-
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.JFXButton;
@@ -10,19 +6,20 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
+import edu.wpi.cs3733.D21.teamE.user.User;
 import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import edu.wpi.cs3733.D21.teamE.states.UserManagementState;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
@@ -105,7 +102,7 @@ public class UserManagement {
             addUser.setText("Add User");
             showFields(false);
             clearFieldContent();
-            prepareUsers(treeTableView);
+            refreshTable();
 
         } else { //admin would like to start adding user
             addingUser = true;
@@ -169,7 +166,7 @@ public class UserManagement {
             editUser.setText("Edit User");
             currentlyEditing = null;
             clearFieldContent();
-            prepareUsers(treeTableView);
+            refreshTable();
         } else { //no edit is in progress
 
             if (treeTableView.getSelectionModel().getSelectedItem() != null) {
@@ -193,9 +190,13 @@ public class UserManagement {
 
     }
 
+    /**
+     * Called by refresh button
+     * @param event calling event
+     */
     @FXML
-    void startTableButton(ActionEvent event) {
-        prepareUsers(treeTableView);
+    void refreshButtonHandler(ActionEvent event) {
+        refreshTable();
     }
 
     /**
@@ -208,6 +209,9 @@ public class UserManagement {
         userManagementState.switchScene(event);
     }
 
+    /**
+     * Inits Appbar, TreeTableView, and the addUser ComboBox
+     */
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert appBarAnchorPane != null : "fx:id=\"appBarAnchorPane\" was not injected: check your FXML file 'UserManagement.fxml'.";
@@ -237,90 +241,14 @@ public class UserManagement {
     }
 
 
-    //User class
 
     /**
-     * todo, temp user class, should be moved elsewhere
-     * firstName, lastName, userID, userType, email
+     * Adds and populates table with users from DB.
+     * If the root element is null (i.e. new table), create the columns.
+     * @param table Table to be 'prepared'
      */
-    public static final class User {
-        final StringProperty firstName;
-        final StringProperty lastName;
-        final IntegerProperty userID;
-        final StringProperty userType;
-        final StringProperty email;
-
-        public String getFirstName() {
-            return firstName.get();
-        }
-
-        public StringProperty firstNameProperty() {
-            return firstName;
-        }
-
-        public void setFirstName(String firstName) {
-            this.firstName.set(firstName);
-        }
-
-        public String getLastName() {
-            return lastName.get();
-        }
-
-        public StringProperty lastNameProperty() {
-            return lastName;
-        }
-
-        public void setLastName(String lastName) {
-            this.lastName.set(lastName);
-        }
-
-        public int getUserID() {
-            return userID.get();
-        }
-
-        public IntegerProperty userIDProperty() {
-            return userID;
-        }
-
-        public void setUserID(int userID) {
-            this.userID.set(userID);
-        }
-
-        public String getUserType() {
-            return userType.get();
-        }
-
-        public StringProperty userTypeProperty() {
-            return userType;
-        }
-
-        public void setUserType(String userType) {
-            this.userType.set(userType);
-        }
-
-        public String getEmail() {
-            return email.get();
-        }
-
-        public StringProperty emailProperty() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email.set(email);
-        }
-
-        public User(String userType, int userID, String firstName, String lastName, String email) {
-
-            this.userType = new SimpleStringProperty(userType);
-            this.userID = new SimpleIntegerProperty(userID);
-            this.firstName = new SimpleStringProperty(firstName);
-            this.lastName = new SimpleStringProperty(lastName);
-            this.email = new SimpleStringProperty(email);
-        }
-    }
-
     public void prepareUsers(TreeTableView<User> table) {
+        System.out.println("preparing users...");
         ArrayList<User> array = UserAccountDB.getAllUsers();
         if (table.getRoot() == null) {
             User user0 = new User("", 0, "", "", "");
@@ -384,13 +312,44 @@ public class UserManagement {
     }
 
     /**
-     * @// TODO: 4/27/21
+     * Empties all fields, and deselects all comboboxes - visible or not.
      */
     private void clearFieldContent() {
         userNameInput.setText(null);
         userTypeInput.getSelectionModel().select(null);
         userPassword.setText(null);
         userEmail.setText(null);
+    }
+
+    /**
+     * Refreshes the TreeTableView by deleting all contents and repopulating.
+     * Will attempt to maintain currently selected item, by re-selecting the same row index.
+     */
+    private void refreshTable() {
+        //cache currently selected item
+        int selectedItemIndex = treeTableView.getSelectionModel().getFocusedIndex();
+
+
+        /*CLEAR TABLE*/
+
+        //get list size
+        int size  = treeTableView.getRoot().getChildren().size();
+
+        //if list isn't empty, clear all contents
+        if (treeTableView.getRoot().getChildren().size() > 0) {
+            treeTableView.getRoot().getChildren().subList(0, size).clear();
+            Logger.getLogger("BWH").fine("Table Content Removed");
+        }
+
+        /*REPOPULATE TABLE*/
+        prepareUsers(treeTableView);
+
+        //restore selected item (checks to make sure it might still exist, could select wrong item if multiple things changed)
+        if (treeTableView.getRoot().getChildren().size() > selectedItemIndex) {
+            //select same index (is hopefully the same item)
+            treeTableView.getSelectionModel().select(selectedItemIndex);
+        }
+
     }
 
 }

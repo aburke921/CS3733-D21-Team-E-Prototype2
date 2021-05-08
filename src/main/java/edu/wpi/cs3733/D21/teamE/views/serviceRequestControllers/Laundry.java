@@ -12,36 +12,36 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.lang.String;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LaundryObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 public class Laundry extends ServiceRequestFormComponents {
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
+    ObservableList<String> locations;
+    ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> userNames;
+    ArrayList<Integer> userID = new ArrayList<>();
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
-
-    @FXML // fx:id="fullscreen"
-    private Rectangle fullscreen; // Value injected by FXMLLoader
-
-    @FXML // fx:id="hide"
-    private Circle hide; // Value injected by FXMLLoader
-
-    @FXML // fx:id="exit"
-    private Polygon exit; // Value injected by FXMLLoader
+    @FXML // fx:id="background"
+    private ImageView background;
 
     @FXML // fx:id="locationInput"
     private JFXComboBox<String> locationInput; // Value injected by FXMLLoader
@@ -53,7 +53,7 @@ public class Laundry extends ServiceRequestFormComponents {
     private JFXComboBox<String> dryLoadAmountInput; // Value injected by FXMLLoader
 
     @FXML // fx:id="assignedPersonnel"
-    private JFXTextField assignedPersonnel; // Value injected by FXMLLoader
+    private JFXComboBox<String> assignedPersonnel; // Value injected by FXMLLoader
 
     @FXML // fx:id="descriptionInput"
     private JFXTextArea descriptionInput; // Value injected by FXMLLoader
@@ -70,25 +70,56 @@ public class Laundry extends ServiceRequestFormComponents {
     @FXML
     private StackPane stackPane;
 
-    @FXML
-    void handleButtonCancel(ActionEvent event) {
-        super.handleButtonCancel(event);
+    private boolean validateInput() {
+        RequiredFieldValidator validator = new RequiredFieldValidator();
+        validator.setMessage("Input required");
+
+        locationInput.getValidators().add(validator);
+        washLoadAmountInput.getValidators().add(validator);
+        dryLoadAmountInput.getValidators().add(validator);
+        assignedPersonnel.getValidators().add(validator);
+        descriptionInput.getValidators().add(validator);
+
+        return locationInput.validate() && washLoadAmountInput.validate() &&
+                dryLoadAmountInput.validate() && assignedPersonnel.validate() &&
+                descriptionInput.validate();
     }
 
     @FXML
     void saveData(ActionEvent event) {
-        super.handleButtonSubmit(event);
+        if(validateInput()) {
+            //setting up indexes
+            int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+            int userIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
+
+            //Creating data to be added to object
+            String node = nodeID.get(nodeIndex);
+            int user = userID.get(userIndex);
+            String wash = washLoadAmountInput.getSelectionModel().getSelectedItem();
+            String dry = dryLoadAmountInput.getSelectionModel().getSelectedItem();
+            String desc = descriptionInput.getText();
+
+            //Creating object and passing to database
+            LaundryObj object = new LaundryObj(0, node, user, App.userID, wash, dry, desc);
+            DB.addLaundryRequest(object);
+            super.handleButtonSubmit(event);
+        }
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
 
-        assert fullscreen != null : "fx:id=\"fullscreen\" was not injected: check your FXML file 'Laundry.fxml'.";
-        assert hide != null : "fx:id=\"hide\" was not injected: check your FXML file 'Laundry.fxml'.";
-        assert exit != null : "fx:id=\"exit\" was not injected: check your FXML file 'Laundry.fxml'.";
+        Stage primaryStage = App.getPrimaryStage();
+        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        Image backgroundImage = backgroundImg;
+        background.setImage(backgroundImage);
+        background.setEffect(new GaussianBlur());
+
+        //background.setPreserveRatio(true);
+        background.fitWidthProperty().bind(primaryStage.widthProperty());
+        //background.fitHeightProperty().bind(primaryStage.heightProperty());
+
         assert locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file 'Laundry.fxml'.";
-        ObservableList<String> locations = DB.getAllNodeLongNames();
-        locationInput.setItems(locations);
         assert washLoadAmountInput != null : "fx:id=\"washLoadAmountInput\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert dryLoadAmountInput != null : "fx:id=\"dryLoadAmountInput\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert assignedPersonnel != null : "fx:id=\"assignedPersonnel\" was not injected: check your FXML file 'Laundry.fxml'.";
@@ -96,6 +127,10 @@ public class Laundry extends ServiceRequestFormComponents {
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'Laundry.fxml'.";
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'Laundry.fxml'.";
 
+        locations = DB.getAllNodeLongNames();
+        locationInput.setItems(locations);
+        userNames = DB.getAssigneeNames("custodian");
+        assignedPersonnel.setItems(userNames);
 
         //init appBar
         javafx.scene.Node appBarComponent = null;

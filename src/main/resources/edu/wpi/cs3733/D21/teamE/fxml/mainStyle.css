@@ -8,6 +8,8 @@
     -fx--secondary: #546e7a;
     -fx--secondary-light: #819ca9;
     -fx--secondary-dark: #29434e;
+
+    -fx--error: #D34336;
 }
 
 /*--------------------------
@@ -30,10 +32,34 @@ JFXTextField:hover, JFXTextArea:hover, JFXComboBox:hover, JFXPasswordField:hover
 
 JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField:pressed {}
 
+/*Error Styles*/
+.jfx-text-field:error, .jfx-password-field:error, .jfx-text-area:error {
+    -jfx-focus-color: -fx--error;
+    -jfx-unfocus-color: -fx--error;
+}
+
+/*Error Styles*/
+.jfx-text-field .error-label, .jfx-password-field .error-label, .jfx-text-area .error-label {
+    -fx-text-fill: -fx--error;
+    -fx-font-size: 0.75em;
+}
+
+/*Error Styles*/
+.jfx-text-field .error-icon, .jfx-password-field .error-icon, .jfx-text-area .error-icon {
+    -fx-text-fill: -fx--error;
+    -fx-font-size: 1em;
+}
+
 .submit-button {
     -jfx-button-type: RAISED;
     -fx-text-fill: WHITE;
     -fx-background-color: -fx--primary;
+}
+
+.submit-button:hover {
+    -jfx-button-type: RAISED;
+    -fx-text-fill: WHITE;
+    -fx-background-color: -fx--primary-dark;
 }
 
 .cancel-button { /*todo, a reddish color for cancel buttons?*/
@@ -44,17 +70,54 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 
 .default-button {
     -jfx-button-type: FLAT;
-    -fx-text-fill: WHITE;
-    -fx-background-color: -fx--primary-dark;
-    -fx-border-color:  -fx--primary-light;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-text-fill: -fx--primary;
+    -fx-border-color:  -fx--primary;
+}
 
+.default-button:hover {
+    -fx-text-fill: -fx--primary-dark;
+    -fx-background-color: #a2dcfd;
+}
+
+.login-button {
+    -fx-background-color: -fx--primary-dark;
+    -fx-border-color: -fx--primary-light;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+    -fx-font-family: 'Arial Black';
+    -fx-font-size: 14px;
+}
+
+.login-button:hover {
+    -fx-background-color: -fx--primary;
+}
+
+.back-button {
+    -fx-background-color: -fx--primary-dark;
+    -fx-border-color: -fx--primary-light;
+    -fx-text-fill: WHITE;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.back-button:hover {
+    -fx-background-color: -fx--primary;
 }
 
 .normal-button {
     -jfx-button-type: RAISED;
-    -fx-background-color: white;
-    -fx-text-fill: black;
+    -fx-background-color: WHITE;
+    -fx-text-fill: BLACK;
 }
+
+.normal-button:hover {
+    -jfx-button-type: RAISED;
+    -fx-background-color: -fx--primary-light;
+    -fx-text-fill: BLACK;
+}
+
 
 /*Toggle buttons*/
 JFXToggleButton  {
@@ -170,12 +233,27 @@ JFXToggleButton  {
 /*    -fx-background-color: red;*/
 /*}*/
 
+/*------------------------
+    Icon STYLES
+--------------------------*/
 MaterialDesignIconView {
     -fx-fill: -fx--primary;
 }
 
+MaterialDesignIconViewAlt {
+    -fx-fill: WHITE;
+}
+
 FontAwesomeIconView {
     -fx-fill: -fx--primary;
+}
+
+#submission-icon {
+    -fx-fill: #82cd58;
+}
+
+#white-icon {
+    -fx-fill: WHITE;
 }
 
 JFXButton:hover MaterialDesignIconView {
@@ -196,6 +274,100 @@ JFXButton:hover FontAwesomeIconView {
     -jfx-header-color: -fx--primary-dark; /*header text color*/
 }
 
-JFXListView {
+/*------------------------
+    LABEL STYLES
+-------------------------*/
+.create-account-label:hover {
+    -fx-text-fill: -fx--primary-dark;
+}
 
+.icon-button {
+    -fx-fill: WHITE;
+}
+
+.transit-button{
+    -jfx-button-type: RAISED;
+}
+
+.floor-change Label{
+    -fx-font-size: 10px;
+    -fx-background-color: WHITE;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: BLACK;
+    -fx-border-width: 1px;
+}
+
+
+
+/* ListView CSS from: https://blog.ngopal.com.np/2012/07/11/customize-scrollbar-via-css/*/
+
+scrollables.directions .jfx-rippler{
+    -jfx-rippler-fill: rgba(255,255,255,0);
+}
+
+scrollables.directions{
+    -fx-border-color: rgba(255,255,255,0);
+}
+
+/* The main scrollbar CSS class of ListView */
+.scrollables .scroll-bar:horizontal {
+    -fx-pref-width: 12;
+    -fx-background-color:transparent;
+}
+
+.scrollables  .scroll-bar:vertical{
+    -fx-pref-width: 12;
+    -fx-background-color:transparent;
+
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+.scrollables .increment-button ,.scrollables .decrement-button {
+    -fx-background-color:transparent;
+    -fx-border-color:derive(gray,80%);
+}
+
+/* The main scrollbar **track** CSS class  */
+.scrollables .scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color:derive(gray,80%);
+    -fx-background-radius: 0em;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.scrollables .scroll-bar:vertical .thumb {
+    -fx-background-color: -fx--primary;
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+
+}
+
+.directions .scroll-bar:horizontal {
+    -fx-pref-width: 0;
+}
+
+.jfx-dialog{
+    -fx-effect: null;
+}
+
+.iconTable {
+    -fx-font-family:"Material Design Icons";
+    -fx-font-size: 2em;
+    -fx-text-fill: -fx--primary-dark;
+}
+
+.noheader .column-header-background {
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+}
+
+.table-row-cell {
+    -fx-cell-size: 2.1em;
+}
+
+.custom-jfx-check-box {
+    -jfx-checked-color: -fx--primary;
+    -jfx-unchecked-color: BLACK;
 }

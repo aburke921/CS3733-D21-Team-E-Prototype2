@@ -7,21 +7,33 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.email.sendEmail;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.MedicineDeliveryObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class MedicineDelivery extends ServiceRequestFormComponents {
 
     ObservableList<String> locations;
-    ArrayList<String> nodeIDs;
+    ArrayList<String> nodeID = new ArrayList<>();
+    ObservableList<String> userNames;
+    ArrayList<Integer> userID = new ArrayList<>();
+
+    @FXML // fx:id="background"
+    private ImageView background;
 
     @FXML
     private JFXComboBox<String> locationInput;
@@ -36,7 +48,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     private JFXTextField doseMeasureInput;
 
     @FXML
-    private JFXTextField assignee;
+    private JFXComboBox<String> assignee;
 
     @FXML
     private JFXTextArea specialInstructInput;
@@ -59,7 +71,6 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     private boolean validateInput() {
 
         RequiredFieldValidator validator = new RequiredFieldValidator();
-
         validator.setMessage("Input required");
 
         locationInput.getValidators().add(validator);
@@ -75,42 +86,67 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     }
 
     @FXML
-    private void saveData(ActionEvent e) {
+    private void saveData(ActionEvent e) throws MessagingException {
+        if(validateInput()) {
+            int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+            int userIndex = assignee.getSelectionModel().getSelectedIndex();
 
-        int index = locationInput.getSelectionModel().getSelectedIndex();
+            int assigned = userID.get(userIndex);
+            String location = nodeID.get(nodeIndex);
+            String name = medicineNameInput.getText();
+            String doseMeasure = doseMeasureInput.getText();
+            int doseMeasureI = Integer.parseInt(doseMeasure);
+            int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
+            String specialInstructions = specialInstructInput.getText();
+            String signature = signatureInput.getText();
 
-        String location = nodeIDs.get(index);
-        String name = medicineNameInput.getText();
-        String doseMeasure = doseMeasureInput.getText();
-        int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
-        int assigned = Integer.parseInt( assignee.getText());
-        String specialInstructions = specialInstructInput.getText();
-        String signature = signatureInput.getText();
+            MedicineDeliveryObj object = new MedicineDeliveryObj(0, App.userID, assigned, location, name, doseQuantity, doseMeasureI, specialInstructions, signature);
+            DB.addMedicineRequest(object);
 
-        DB.addMedicineRequest(App.userID, assigned, location, name, doseQuantity, doseMeasure, specialInstructions, signature);
-    }
+            //For email implementation later
+//        String email = DB.getEmail(App.userID);
+//        String fullName = DB.getUserName(App.userID);
+//        String assigneeName = userNames.get(assigned);
+//        String locationName = locations.get(nodeIDIndex);
+//        String body = "Hello " + fullName + ", \n\n" + "Thank you for making an External Patient Transport request." +
+//                "Here is the summary of your request: \n\n" +
+//                " - Location: " + location + "\n" +
+//                " - Medicine Name: " + name + "\n" +
+//                " - Medicine Dosage: " + doseMeasure + "\n" +
+//                " - Does Quantity: " + doseQuantity + "\n" +
+//                " - Assignee Name: " + assigned + "\n" +
+//                " - Special Instructions: " + specialInstructions + "\n" +
+//                " - Signature: " + signatureInput + "\n\n" +
+//                "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+//                "- Emerald Emus BWH";
+//
+//        sendEmail.sendRequestConfirmation(email, body);
 
-    @FXML
-    void handleButtonSubmit(ActionEvent event) {
-        if (validateInput()) {
-            try {
-                saveData(event);
-                System.out.println(event); //Print the ActionEvent to console
-                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
-                App.getPrimaryStage().getScene().setRoot(root);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            super.handleButtonSubmit(e);
         }
     }
 
     @FXML
     void initialize() {
 
-        locations = DB.getAllNodeLongNames();
-        nodeIDs = DB.getListOfNodeIDS();
 
+        Stage primaryStage = App.getPrimaryStage();
+        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        Image backgroundImage = backgroundImg;
+        background.setImage(backgroundImage);
+        background.setEffect(new GaussianBlur());
+
+        //background.setPreserveRatio(true);
+        background.fitWidthProperty().bind(primaryStage.widthProperty());
+        //background.fitHeightProperty().bind(primaryStage.heightProperty());
+
+        locations = DB.getAllNodeLongNames();
+        nodeID = DB.getListOfNodeIDS();
         locationInput.setItems(locations);
+
+        userNames = DB.getAssigneeNames("nurse");
+        userID = DB.getAssigneeIDs("nurse");
+        assignee.setItems(userNames);
 
         assert locationInput != null;
         assert medicineNameInput != null;

@@ -101,7 +101,7 @@
                         <Insets bottom="20.0" left="20.0" />
                      </GridPane.margin>
                   </JFXButton>
-                  <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#startTableButton" text="Refresh" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+                  <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#refreshButtonHandler" text="Refresh" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>

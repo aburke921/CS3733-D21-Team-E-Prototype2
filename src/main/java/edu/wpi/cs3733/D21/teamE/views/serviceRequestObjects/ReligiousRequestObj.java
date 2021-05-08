@@ -5,8 +5,10 @@ public class ReligiousRequestObj extends ServiceRequestObjs {
     private String religion;
     private String description;
 
-    public ReligiousRequestObj(String nodeID, int userID, int assigneeID, String religion, String description) {
 
+    public ReligiousRequestObj(int requestID, int userID, String nodeID, int assigneeID, String religion, String description) {
+
+        super.requestID = requestID;
         super.nodeID = nodeID;
         super.userID = userID;
         super.assigneeID = assigneeID;

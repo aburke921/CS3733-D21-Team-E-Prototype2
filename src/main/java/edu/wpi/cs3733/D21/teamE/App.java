@@ -121,6 +121,7 @@ public class App extends Application {
 	 * Makes a connection to the DB to check if the proper tables exist in the right places.
 	 * If not, it will repopulate the DB with data from {@link makeConnection#addDataForPresentation()}.
 	 *
+	 *
 	 */
 	@Override
 	public void init() throws Exception {

@@ -5,7 +5,6 @@ import com.jfoenix.controls.JFXComboBox;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.QRCode;
-import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.states.DefaultState;
 import javafx.collections.FXCollections;
@@ -266,7 +265,7 @@ public class Default {
         algo.setItems(algoNames);
         algo.setValue(algoNames.get(App.getSearchAlgo()));
 
-        String userType = UserAccountDB.getUserType(App.userID);
+        String userType = DB.getUserType(App.userID);
         if(App.userID == 0) {
             serviceRequestButton.setVisible(false);
         }

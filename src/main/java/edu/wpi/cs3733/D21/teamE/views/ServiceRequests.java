@@ -1,16 +1,15 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import edu.wpi.cs3733.D21.teamE.App;
-import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
-import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
+import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.states.ServiceRequestState;
-import edu.wpi.cs3733.D21.teamE.states.ServiceRequestStatusState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -45,15 +44,15 @@ public class ServiceRequests {
 
     public void initialize() {
 
-        Stage primaryStage = App.getPrimaryStage();
+//        Stage primaryStage = App.getPrimaryStage();
 //        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
 //        Image backgroundImage = backgroundImg;
 //        background.setImage(backgroundImage);
 //        background.setEffect(new GaussianBlur());
-
-        //background.setPreserveRatio(true);
-        background.fitWidthProperty().bind(primaryStage.widthProperty());
-        //background.fitHeightProperty().bind(primaryStage.heightProperty());
+//
+//        //background.setPreserveRatio(true);
+//        background.fitWidthProperty().bind(primaryStage.widthProperty());
+//        //background.fitHeightProperty().bind(primaryStage.heightProperty());
 
         //init appBar
         javafx.scene.Node appBarComponent = null;
@@ -67,7 +66,7 @@ public class ServiceRequests {
             e.printStackTrace();
         }
 
-        String userType = UserAccountDB.getUserType(App.userID);
+        String userType = DB.getUserType(App.userID);
         if(userType.equals("visitor")) {
             adminServices.setVisible(false);
             visitorServices.setVisible(true);

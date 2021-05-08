@@ -982,7 +982,6 @@ public class newMapEditor {
         floorSelector.getSelectionModel().select("1"); //floor 1
         System.out.println("done");
 
-        new AutoCompleteComboBoxListener<>(startLocation);
         new AutoCompleteComboBoxListener<>(endLocation);
 
         //Set up zoomable and pannable panes
@@ -1032,9 +1031,39 @@ public class newMapEditor {
 
         //dragging nodes
         drag.setOnAction(e -> {
+
             if (drag.isSelected()) {
+                pane.setOnMouseClicked(ev -> {
+                    double X = ev.getX();
+                    int xInt = (int) X;
+                    double Y = ev.getY();
+                    int yInt = (int) Y;
+                    for (int i = 0; i < currentArrayOfAllNodes.size(); i++) {
+                        if (currentArrayOfAllNodes.get(i).get("floor").equals(currentFloor)) {
+                            //coordinates of current node
+                            double nodeX = currentArrayOfAllNodes.get(i).getX() / scale;
+                            int nodeXInt = (int) nodeX;
+                            double nodeY = currentArrayOfAllNodes.get(i).getY() / scale;
+                            int nodeYInt = (int) nodeY;
+                            //if node coordinates match click coordinates +- 1, autofill fields with node info
+                            if (Math.abs(nodeXInt - xInt) <= 1 && Math.abs(nodeYInt - yInt) <= 1) {
+                                clickedX = nodeXInt;
+                                clickedY = nodeYInt;
+                                clickedID = currentArrayOfAllNodes.get(i).get("id");
+                                clickedBuilding = currentArrayOfAllNodes.get(i).get("building");
+                                clickedLongName = currentArrayOfAllNodes.get(i).get("longName");
+                                clickedType = currentArrayOfAllNodes.get(i).get("type");
+                                clickedShortname = currentArrayOfAllNodes.get(i).get("shortName");
+
+
+                            }
+                        }
+                    }
+
+
+
                 System.out.println("No drag");
-                scrollPane.setPannable(false);
+
                 ObservableList groups = pane.getChildren();
 
                 ObservableList shapes = FXCollections.observableArrayList();
@@ -1051,29 +1080,43 @@ public class newMapEditor {
                             Circle circle = ((Circle) shapes.get(i));
                             System.out.println("Yay");
                             circle.setOnMouseDragged(event ->{
+                                scrollPane.setPannable(false);
                                 circle.setCenterX((int)event.getX());
                                 circle.setCenterY((int)event.getY());
                                 DB.modifyNode(clickedID,(int)(circle.getCenterX() * scale),(int)(circle.getCenterY()*scale),currentFloor,clickedBuilding,clickedType,clickedLongName, clickedShortname);
-
-
                             });
+                            circle.setOnMouseReleased(mouseEvent ->{
+                                refresh();
+                                scrollPane.setPannable(true);
+                            });
+
                         }
+
                     }
 
+
                 }
+                });
             } else {
+                //populates fields with information of selected node or edge in table
+                startTableClickHandlers();
+
+                //for clicks interacting with map
+                startMapClickHandler();
                 System.out.println("no");
-                scrollPane.setPannable(true);
 
             }
         });
-
 
         //populates fields with information of selected node or edge in table
         startTableClickHandlers();
 
         //for clicks interacting with map
         startMapClickHandler();
+
+
+
+
 
     }
 
@@ -1115,6 +1158,7 @@ public class newMapEditor {
                                 yCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getY()));
                                 typeInput.setValue(currentArrayOfAllNodes.get(i).get("type"));
                                 buildingInput.setValue(currentArrayOfAllNodes.get(i).get("building"));
+
                             }
                         }
                     }
@@ -1187,17 +1231,14 @@ public class newMapEditor {
                                 //populate edge fields with information
                                 selection++;
                                 if (selection == 1) {
+
+
                                     startID = currentArrayOfAllNodes.get(i).get("id");
                                     startLocation.setValue(currentArrayOfAllNodes.get(i).get("longName"));
                                     xCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getX()));
                                     yCordInput.setText(Integer.toString(currentArrayOfAllNodes.get(i).getY()));
-                                    clickedX = nodeXInt;
-                                    clickedY = nodeYInt;
-                                    clickedID = currentArrayOfAllNodes.get(i).get("id");
-                                    clickedBuilding = currentArrayOfAllNodes.get(i).get("building");
-                                    clickedLongName = currentArrayOfAllNodes.get(i).get("longName");
-                                    clickedType = currentArrayOfAllNodes.get(i).get("type");
-                                    clickedShortname = currentArrayOfAllNodes.get(i).get("shortName");
+
+
 
 
                                 }

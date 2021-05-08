@@ -94,25 +94,29 @@
                                  <VBox.margin>
                                     <Insets bottom="10.0" left="5.0" top="20.0" />
                                  </VBox.margin>
-                                 <items>
-                                    <FXCollections fx:factory="observableArrayList">
-                                       <String fx:id="ambulance" fx:value="Ambulance" />
-                                       <String fx:id="helicopter" fx:value="Helicopter" />
-                                       <String fx:id="plane" fx:value="Plane" />
-                                    </FXCollections>
-                                 </items>
                               </JFXComboBox>
                               <JFXComboBox fx:id="ServiceTypeinput" prefHeight="27.0" prefWidth="295.0" promptText="Service Type">
-      
+                                 <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                       <String fx:value="Urine CleanUp"/>
+                                       <String fx:value="Feces Cleanup"/>
+                                       <String fx:value="Trash Removal"/>
+                                    </FXCollections>
+                                 </items>
                                  <VBox.margin>
                                     <Insets left="5.0" top="20.0" />
                                  </VBox.margin>
                               </JFXComboBox>
-                              <JFXTextField fx:id="assignedIndividual" prefHeight="27.0" prefWidth="289.0" promptText="Personnel Name">
+                              <JFXComboBox fx:id="assignedIndividual" prefHeight="27.0" prefWidth="289.0" promptText="Personnel Name">
+                                 <items>
+                                    <FXCollections fx:factory="observableArrayList">
+
+                                    </FXCollections>
+                                 </items>
                                  <VBox.margin>
                                     <Insets left="5.0" top="30.0" />
                                  </VBox.margin>
-                              </JFXTextField>
+                              </JFXComboBox>
                            </children>
                         </VBox>
                      </children>
@@ -129,20 +133,16 @@
                               <JFXComboBox fx:id="Severity" prefHeight="27.0" prefWidth="295.0" promptText="Severity">
                                  <items>
                                     <FXCollections fx:factory="observableArrayList">
-                                       <String fx:id="ambulance1" fx:value="Ambulance" />
-                                       <String fx:id="helicopter1" fx:value="Helicopter" />
-                                       <String fx:id="plane1" fx:value="Plane" />
+                                       <String fx:value="Critical" />
+                                       <String fx:value="High" />
+                                       <String fx:value="Medium" />
+                                       <String fx:value="Low" />
                                     </FXCollections>
                                  </items>
                                  <VBox.margin>
                                     <Insets top="30.0" />
                                  </VBox.margin>
                               </JFXComboBox>
-                              <JFXTextField fx:id="Signature" prefHeight="27.0" prefWidth="289.0" promptText="Signature">
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                              </JFXTextField>
                                     </children>
                                     <FlowPane.margin>
                                         <Insets left="20.0" />

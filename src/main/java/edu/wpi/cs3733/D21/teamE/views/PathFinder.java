@@ -949,7 +949,7 @@ public class PathFinder {
             g.getChildren().add(circle);
              */
             scale = imageWidth / imageView.getFitWidth();
-            System.out.println("click!");
+            //System.out.println("click!"); for debug
             double X = e.getX();
             int xInt = (int)X;
             double Y = e.getY();

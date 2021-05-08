@@ -63,7 +63,7 @@ public class App extends Application {
 
 	/**Value of currently logged in user.
 	 * 0 Indicates no user logged in.*/
-	public static int userID = 0;
+	public static int userID = -9999;
 
 	/**@// todo document this*/
 	public static boolean noCleanSurveyYet = true;

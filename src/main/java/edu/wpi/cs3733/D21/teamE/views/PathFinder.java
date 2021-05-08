@@ -73,6 +73,7 @@ public class PathFinder {
 
     @FXML // fx:id="endLocationList"
     private JFXComboBox<String> endLocationComboBox; // Value injected by FXMLLoader
+
     @FXML
     private JFXToggleButton handicap;
 
@@ -155,11 +156,27 @@ public class PathFinder {
 
     private ArrayList<Node> nodeArrayList;
 
-    private final String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; //list of floorNames
+    private ObservableList<String> longNameArrayList;
+
+    private final String[] typeNames = {"REST", "INFO", "DEPT", "LABS", "RETL", "SERV", "CONF", "EXIT", "ELEV", "STAI", "PARK"}; // array of types
+
+    private final HashMap<String, String> longNames = new HashMap<String, String>(){{
+        put("REST", "Restrooms");
+        put("INFO", "Information Desks");
+        put("DEPT", "Departments");
+        put("LABS", "Laboratories");
+        put("RETL", "Retail");
+        put("SERV", "Services");
+        put("CONF", "Conferences");
+        put("EXIT", "Entrances/Exits");
+        put("ELEV", "Elevators");
+        put("STAI", "Stairs");
+        put("PARK", "Parking");
+    }};
+
+    private final String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; // list of floorNames
 
     private int currentFloorNamesIndex = 4; //start # should be init floor index + 1 (variable is actually always one beyond current floor)
-
-    private ObservableList<String> longNameArrayList;
 
     private double stageWidth;
     private double stageHeight;
@@ -244,7 +261,6 @@ public class PathFinder {
 
         tableView.setSelectionModel(null);
         tableView.setPrefHeight(USE_COMPUTED_SIZE);
-        tableView.getStyleClass().add("scrollables");
         tableView.getStyleClass().add("directions");
         tableView.getStyleClass().add("noheader");
         tableView.getStyleClass().add("table-row-cell");
@@ -889,11 +905,22 @@ public class PathFinder {
         startLocationComboBox.setItems(longNameArrayList);
         endLocationComboBox.setItems(longNameArrayList);
 
-        startLocationComboBox.getStyleClass().add("scrollables");
-        endLocationComboBox.getStyleClass().add("scrollables");
+        // TODO: make combo boxes into search boxes but add dropdowns below
+
+        ArrayList<TreeItem> categories = new ArrayList<>();
+
+        for (String type : typeNames) {
+            TreeItem category = new TreeItem(longNames.get(type));
+            ArrayList<TreeItem> nodes = new ArrayList<>();
+            for (Node node : DB.getAllNodesByType(type)) {
+                TreeItem item = new TreeItem(node.get("longName"));
+                nodes.add(item);
+            }
+            category.getChildren().addAll(nodes);
+            categories.add(category);
+        }
 
         System.out.println("done");
-
 
         new AutoCompleteComboBoxListener<>(startLocationComboBox);
         new AutoCompleteComboBoxListener<>(endLocationComboBox);

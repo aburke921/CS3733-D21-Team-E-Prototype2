@@ -309,8 +309,6 @@ JFXButton:hover FontAwesomeIconView {
     -fx-background-color: -fx--primary-dark;
 }
 
-
-
 .floor-change Label{
     -fx-font-size: 10px;
     -fx-background-color: WHITE;

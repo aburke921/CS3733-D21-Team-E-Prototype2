@@ -16,6 +16,7 @@ import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
 import javafx.animation.PathTransition;
+import javafx.beans.binding.DoubleBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -258,7 +259,6 @@ public class PathFinder {
         for (String dir : directions) {
             if (floorChangeFlag) {
                 Text floorHeader = new Text(Character.toString(MaterialDesignIcon.PLAY_CIRCLE.getChar()));
-                //floorHeader.setRotate(180);
                 floorHeader.setStyle("-fx-fill: -fx--primary-dark");
 
                 Text floorText = new Text(floor);
@@ -816,11 +816,10 @@ public class PathFinder {
      * @param floorNum floor to change to
      */
     public void setCurrentFloor(String floorNum) {
+        switchFocusButton(floorNum);
         currentFloor = floorNum;
         currFloor.setText("");
         currFloor.setText(currentFloor);
-
-        switchFocusButton(floorNum);
 
         //draw path for new floor
         drawMap(currentFoundPath,currentFloor);
@@ -916,12 +915,6 @@ public class PathFinder {
 
         scale = imageWidth / imageView.getFitWidth();
 
-        floor1.setStyle("-fx-background-color: -fx--primary");
-        floor2.setStyle("-fx-background-color: -fx--primary-light");
-        floor3.setStyle("-fx-background-color: -fx--primary-light");
-        floorG.setStyle("-fx-background-color: -fx--primary-light");
-        floorL1.setStyle("-fx-background-color: -fx--primary-light");
-        floorL2.setStyle("-fx-background-color: -fx--primary-light");
         currentlySelected = floor1;
 
         //Sidebar stuff
@@ -1031,17 +1024,19 @@ public class PathFinder {
      * @param e Button click action
      */
     public void chooseFloor(ActionEvent e) {
+        Button button = ((Button) e.getSource());
+        String floor = button.getText();
+        currFloor.setText(floor);
+
+        setCurrentFloor(floor);
+
         //clear current floor of markers
         for (Node node : currentMarkers) {
             NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
             nM.getRectangle().setVisible(false);
         }
-        Button button = ((Button) e.getSource());
-        currentMarkers.clear();
-        String floor = button.getText();
-        currFloor.setText(floor);
 
-        setCurrentFloor(floor);
+        currentMarkers.clear();
         //drawMap(currentFoundPath, currentFloor);
 
         System.out.println("Current floor set to " + floor);
@@ -1052,35 +1047,35 @@ public class PathFinder {
      * @param floor Floor to switch to
      */
     private void switchFocusButton(String floor) {
-        currentlySelected.setStyle("-fx-background-color: -fx--primary-light");
-        Button button = currentlySelected;
+        currentlySelected.getStyleClass().remove("transit-button-selected");
+        currentlySelected.getStyleClass().add("transit-button-unselected");
         switch (floor) {
             case "L2":
-                button = floorL2;
+                currentlySelected = floorL2;
                 break;
 
             case "L1":
-                button = floorL1;
+                currentlySelected = floorL1;
                 break;
 
             case "G":
-                button = floorG;
+                currentlySelected = floorG;
                 break;
 
             case "1":
-                button = floor1;
+                currentlySelected = floor1;
                 break;
 
             case "2":
-                button = floor2;
+                currentlySelected = floor2;
                 break;
 
             case "3":
-                button = floor3;
+                currentlySelected = floor3;
                 break;
         }
-        currentlySelected = button;
-        currentlySelected.setStyle("-fx-background-color: -fx--primary");
+        currentlySelected.getStyleClass().remove("transit-button-unselected");
+        currentlySelected.getStyleClass().add("transit-button-selected");
     }
 
 

@@ -287,7 +287,33 @@ JFXButton:hover FontAwesomeIconView {
 
 .transit-button{
     -jfx-button-type: RAISED;
+    -fx-text-fill: WHITE;
+    -jfx-rippler-fill: -fx--primary-dark;
 }
+
+.transit-button-selected{
+    -jfx-button-type: RAISED;
+    -fx-text-fill: WHITE;
+    -fx-background-color: -fx--primary;
+    -jfx-rippler-fill: -fx--primary-dark;
+}
+
+.transit-button-selected:hover {
+    -fx-background-color: -fx--primary-dark;
+}
+
+.transit-button-unselected{
+    -jfx-button-type: RAISED;
+    -fx-text-fill: WHITE;
+    -fx-background-color: -fx--primary-light;
+    -jfx-rippler-fill: -fx--primary-dark;
+}
+
+.transit-button-unselected:hover {
+    -fx-background-color: -fx--primary-dark;
+}
+
+
 
 .floor-change Label{
     -fx-font-size: 10px;

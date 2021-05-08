@@ -42,32 +42,32 @@
                         <Insets left="20.0" top="17.0" />
                      </HBox.margin>
                   </JFXSlider>
-                  <JFXButton fx:id="floorL2" onAction="#chooseFloor" styleClass="submit-button" text="L2">
+                  <JFXButton fx:id="floorL2" onAction="#chooseFloor" styleClass="transit-button-unselected" text="L2">
                      <HBox.margin>
                         <Insets left="20.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floorL1" onAction="#chooseFloor" styleClass="submit-button" text="L1">
+                  <JFXButton fx:id="floorL1" onAction="#chooseFloor" styleClass="transit-button-unselected" text="L1">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floorG" onAction="#chooseFloor" styleClass="submit-button" text="G">
+                  <JFXButton fx:id="floorG" onAction="#chooseFloor" styleClass="transit-button-unselected" text="G">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floor1" minWidth="26.0" onAction="#chooseFloor" styleClass="submit-button" text="1">
+                  <JFXButton fx:id="floor1" minWidth="26.0" onAction="#chooseFloor" styleClass="transit-button-selected" text="1">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floor2" onAction="#chooseFloor" styleClass="submit-button" text="2">
+                  <JFXButton fx:id="floor2" onAction="#chooseFloor" styleClass="transit-button-unselected" text="2">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floor3" onAction="#chooseFloor" styleClass="submit-button" text="3">
+                  <JFXButton fx:id="floor3" onAction="#chooseFloor" styleClass="transit-button-unselected" text="3">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>

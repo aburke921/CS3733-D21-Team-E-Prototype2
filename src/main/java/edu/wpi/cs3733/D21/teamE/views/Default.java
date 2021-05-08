@@ -101,14 +101,14 @@ public class Default {
     private void toPathFinder(ActionEvent event) {
         if(App.userID != 0) {
             if(DB.filledCovidSurveyToday(App.userID)) {
-                if (true) { //todo, if (waiting for nurse to perform check-in)
+                if (DB.isUserCovidUnmarked(App.userID)) { //if (waiting for nurse to perform check-in)
                     if (true) { //todo, if (survey said no symptoms)
-                        //todo only allow going to the main entrance
+                        //only allow going to the main entrance
                         logger.info("User can only go to main entrance - They did not indicate COVID on their survey, but have not yet been permitted full access to hospital");
                         App.setEndNode(DB.getNodeInfo("FEXIT00201")); //Main Entrance
                         App.setLockEndPath(true);
                     } else { //if survey indicated COVID
-                        //todo only allow going to ER
+                        //only allow going to ER
                         logger.info("User can only go to ER - They have indicated COVID on their survey, and have not yet been permitted full access to hospital");
                         App.setEndNode(DB.getNodeInfo("FEXIT00301")); //ER
                         App.setLockEndPath(true);

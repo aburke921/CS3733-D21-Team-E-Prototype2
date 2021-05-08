@@ -7,25 +7,19 @@ public class Schedule {
     private final List<ToDo> schedule;
 
     public Schedule(List<ToDo> todoList){
-        schedule = new ArrayList<ToDo>(todoList.size()){
-            @Override
-            public boolean add(ToDo o) {
-                if(isAvailable(o) && super.add(o)){
-                    Collections.sort(schedule);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        };
+        schedule = new ArrayList<>(todoList.size());
         for(ToDo todo : todoList){
-            //noinspection UseBulkOperation
-            schedule.add(todo);
+            add(todo);
         }
     }
 
     public boolean add(ToDo newToDo){
-        return schedule.add(newToDo);
+        if(isAvailable(newToDo) && schedule.add(newToDo)){
+            Collections.sort(schedule);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean isAvailable(ToDo t) {

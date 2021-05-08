@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.scheduler;
 
+import edu.wpi.cs3733.D21.teamE.Date;
 import edu.wpi.cs3733.D21.teamE.Time;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 
@@ -12,10 +13,13 @@ public class ToDo implements Comparable<ToDo>{
     private int priority;
 
     //possibly null
-    private Time alertTime;
-    private Time startTime;
-    private Time duration;
+    private Date scheduledDate;
+    private Time scheduledTime;
     private Node location;
+    private String detail;
+    private Time duration;
+    private Date notificationDate;
+    private Time notificationTime;
 
     public ToDo(int _todoID, int _userID, String _title, int _status, int _priority){
         todoID = _todoID;
@@ -27,7 +31,7 @@ public class ToDo implements Comparable<ToDo>{
 
     public ToDo(int _todoID, int _userID, String _title, int _status, int _priority, Time _alertTime, Time _startTime, Time _duration, Node _location){
         this(_todoID, _userID, _title, _status, _priority);
-        alertTime = _alertTime;
+        notificationTime = _alertTime;
         startTime = _startTime;
         duration = _duration;
         location = _location;
@@ -77,12 +81,12 @@ public class ToDo implements Comparable<ToDo>{
         this.priority = priority;
     }
 
-    public Time getAlertTime() {
-        return alertTime;
+    public Time getNotificationTime() {
+        return notificationTime;
     }
 
-    public void setAlertTime(Time alertTime) {
-        this.alertTime = alertTime;
+    public void setNotificationTime(Time notificationTime) {
+        this.notificationTime = notificationTime;
     }
 
     public Time getStartTime() {

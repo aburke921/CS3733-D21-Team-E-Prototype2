@@ -578,7 +578,6 @@ public class PathFinder {
 
                 double distance = 0;
 
-                Line line = new Line(0, 0, 0, 0);
                 double dashlength = 10;
                 double lineOffset = 20;
 
@@ -615,14 +614,8 @@ public class PathFinder {
                                 circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
                             }
 
-                            //create a line between this node and the previous node
-                            line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-                            line.getStrokeDashArray().setAll(dashlength, dashlength);
-                            line.setStrokeLineCap(StrokeLineCap.ROUND);
-                            line.setStrokeWidth(strokeWidth);
-                            line.setStroke(Color.RED);
-
                             g.getChildren().addAll(circle);
+
                         } else {
                             //Track true first node's ID, for node color issue
                             firstID = node.get("id");
@@ -660,13 +653,6 @@ public class PathFinder {
                             //place a dot on the location
                             circle = new Circle(xCoord, yCoord, radius, Color.RED);
                         }
-
-                        //create a line between this node and the previous node
-                        line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-                        line.getStrokeDashArray().setAll(dashlength, dashlength);
-                        line.setStrokeLineCap(StrokeLineCap.ROUND);
-                        line.setStrokeWidth(strokeWidth);
-                        line.setStroke(Color.RED);
 
                         Label floorLabel = null;
                         FlowPane flowPane = new FlowPane();
@@ -737,15 +723,6 @@ public class PathFinder {
 
                     //else, if current node is not this floors ending node, i.e., path continues
                     } else {
-                        //create a line between this node and the previous node
-                        line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-                        line.getStrokeDashArray().setAll(dashlength, dashlength);
-                        line.setStrokeLineCap(StrokeLineCap.ROUND);
-                        line.setStrokeWidth(strokeWidth);
-                        line.setStroke(Color.RED);
-
-                       // g.getChildren().add(line);
-
                         //update the coordinates for the previous node
                         prevXCoord = xCoord;
                         prevYCoord = yCoord;
@@ -763,28 +740,6 @@ public class PathFinder {
                         new KeyFrame(Duration.seconds(1), new KeyValue(polyline.strokeDashOffsetProperty(), lineOffset)));
                 timeline.setCycleCount(Timeline.INDEFINITE);
                 timeline.play();
-
-
-//                //Add moving ball along path
-//                Circle ball = new Circle(5, Color.RED);
-//                g.getChildren().add(ball);
-//
-//                Polyline polyline = new Polyline();
-//                polyline.getPoints().addAll(coordsList);
-//
-//                PathTransition transition = new PathTransition();
-//                transition.setNode(ball);
-//
-//                if(distance > 100){
-//                    double duration = distance / 150;
-//                    transition.setDuration(Duration.seconds(duration));
-//                } else {
-//                    transition.setDuration(Duration.seconds(1));
-//                }
-//
-//                transition.setPath(polyline);
-//                transition.setCycleCount(PathTransition.INDEFINITE);
-//                transition.play();
 
                 //add all objects to the scene
                 pane.getChildren().addAll(g, polyline);

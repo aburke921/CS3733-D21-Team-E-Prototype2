@@ -138,6 +138,7 @@ public class App extends Application {
 			while (scanner.hasNextLine()) {
 				String data = scanner.nextLine();
 				driverURL = data;
+				nextDriverURL = data;
 			}
 			scanner.close();
 		} catch (FileNotFoundException e) {

@@ -18,8 +18,7 @@ import java.util.HashMap;
 public class TreeViewTesting extends Application {
 
     private final String[] typeNames = {"REST", "INFO", "DEPT", "LABS", "RETL", "SERV", "CONF", "EXIT", "ELEV", "STAI", "PARK"}; // array of types
-    private ArrayList<Node>[] nodeArray;
-    private ArrayList<String>[] nodeNameArray;
+    private HashMap<String, HashMap<String, String>> directory = new HashMap<>();
 
     private final HashMap<String, String> longNames = new HashMap<String, String>(){{
         put("REST", "Restrooms");
@@ -46,14 +45,19 @@ public class TreeViewTesting extends Application {
         ArrayList<TreeItem> categories = new ArrayList<>();
 
         for (String type : typeNames) {
-            TreeItem category = new TreeItem(longNames.get(type));
+            String longName = longNames.get(type);
+            TreeItem category = new TreeItem(longName);
             ArrayList<TreeItem> nodes = new ArrayList<>();
+            HashMap<String, String> nameToID = new HashMap<>();
             for (Node node : DB.getAllNodesByType(type)) {
                 TreeItem item = new TreeItem(node.get("longName"));
                 nodes.add(item);
+
+                nameToID.put(node.get("longName"), node.get("id"));
             }
             category.getChildren().addAll(nodes);
             categories.add(category);
+            directory.put(longName, nameToID);
         }
 
         // Create the TreeView
@@ -81,8 +85,11 @@ public class TreeViewTesting extends Application {
             cell.setOnMouseClicked(event -> {
                 if (! cell.isEmpty()) {
                     TreeItem<String> treeItem = cell.getTreeItem();
-                    if (!treeItem.getParent().equals(rootItem)) {
-                        System.out.println("Type: " + treeItem.getParent().toString() + "\tNode: " + treeItem.toString());
+                    TreeItem<String> parent = treeItem.getParent();
+                    if (!parent.equals(rootItem)) { // reject categories, only allow nodes
+                        String name = treeItem.getValue();
+                        String type = parent.getValue();
+                        System.out.println("Type: " + type + "\tNode: " + name + "\tNodeID: " + directory.get(type).get(name));
                     }
 
                 }

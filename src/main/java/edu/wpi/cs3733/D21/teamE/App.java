@@ -26,6 +26,8 @@ import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.Scanner;
 import org.apache.derby.drda.NetworkServerControl;
@@ -122,6 +124,10 @@ public class App extends Application {
 	@Override
 	public void init() throws Exception {
 
+		if(Files.exists(Paths.get("bw"))) {
+			DB.deleteClientBW(new File("bw"));
+		}
+
 		NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"),1527);
 		server.start(null);
 
@@ -132,11 +138,12 @@ public class App extends Application {
 
 		int DBOption = input.nextInt();
 
-
+		String directory = System.getProperty("user.dir");
 		if(DBOption == 2){
-			driverURL = "jdbc:derby://localhost:1527/BWDB";
-//			driverURL = "jdbc:derby://localhost:1527/BWDB;createFrom=backupBWDB/BWDB";
+			//driverURL = "jdbc:derby://localhost:1527/BWDB;create=true";
+			driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/BWDB";
 		}
+
 
 
 		System.out.println("Starting App Init...");
@@ -210,13 +217,7 @@ public class App extends Application {
 	@Override
 	public void stop() {
 		System.out.println("Shutting Down");
-
-		try {
-			DB.backupDatabase();
-		}catch (SQLException e){
-			e.printStackTrace();
-			System.err.println("Error backing up the database");
-		}
+		DB.deleteClientBW(new File("bw"));
 		System.exit(0);
 	}
 

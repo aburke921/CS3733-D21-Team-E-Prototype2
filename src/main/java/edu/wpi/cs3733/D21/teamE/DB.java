@@ -20,10 +20,6 @@ public class DB {
 
 	// AppointmentDB:
 
-	public static void backupDatabase() throws SQLException {
-		DatabaseService.backUpDatabase();
-	}
-
 	public static void createAllTables() {
 		NodeDB.createNodeTable();
 		EdgeDB.createEdgeTable();
@@ -835,6 +831,12 @@ public class DB {
 
 	public static boolean isUserCovidUnmarked(int userID) {
 		return UserAccountDB.isUserCovidUnmarked(userID);
+	}
+
+
+
+	public static void deleteClientBW(File dir) {
+		DatabaseService.deleteDir(dir);
 	}
 
 }

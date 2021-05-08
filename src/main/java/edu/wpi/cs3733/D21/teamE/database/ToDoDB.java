@@ -86,17 +86,16 @@ public class ToDoDB {
 	 * @return true if one line changed successfully, false otherwise
 	 */
 	public static boolean updateToDo(int ToDoID, int userID, String title, int status, int priority, String scheduledDate, String scheduledTime, String nodeID, String detail, String expectedLength, String notificationDate, String notificationTime) {
-		StringBuilder sqlSB = new StringBuilder("Update ToDo Set userID = ?");
-
+		String sql = "Update ToDo Set userID = ?";
 		if (title != null) {
-			sqlSB.append(", title = ?");
+			sql += ", title = ?";
 		}
 		if (status != -1) {
-			sqlSB.append(", status = ?");
+			sql += ", status = ?";
 		}
-		sqlSB.append(" Where ToDoID = ?");
+		sql += " Where ToDoID = ?";
 
-		try (PreparedStatement preparedStatement = connection.prepareStatement(String.valueOf(sqlSB))) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			int i = 1;
 			if (title != null) {
 				i++;
@@ -111,7 +110,7 @@ public class ToDoDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error updating ToDo ID: " + ToDoID + " in addCustomToDo()\nQuery: ");
-			System.err.println(sqlSB);
+			System.err.println(sql);
 			return false;
 		}
 	}

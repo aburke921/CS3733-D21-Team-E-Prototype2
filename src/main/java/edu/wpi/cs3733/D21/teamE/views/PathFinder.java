@@ -1024,6 +1024,9 @@ public class PathFinder {
             App.setToEmergency(false);
             // Reset so user doesn't get this again
         }
+
+        //if combobox is restricted - dont allow access to changing it.
+        endLocationComboBox.setDisable(App.isLockEndPath()); //lock path
     }
 
     /**

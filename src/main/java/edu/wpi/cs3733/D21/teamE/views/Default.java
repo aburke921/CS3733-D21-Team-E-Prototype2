@@ -102,7 +102,7 @@ public class Default {
         if(App.userID != 0) {
             if(DB.filledCovidSurveyToday(App.userID)) {
                 if (DB.isUserCovidUnmarked(App.userID)) { //if (waiting for nurse to perform check-in)
-                    if (DB.checkForNoSymptoms(App.userID)) { //todo, if (survey said no symptoms). Can't use checkForNoSymptoms until I can figure out how to get the current users formNumber
+                    if (DB.checkForNoSymptoms(App.userID)) { //if (survey said no symptoms).
                         //only allow going to the main entrance
                         logger.info("User can only go to main entrance - They did not indicate COVID on their survey, but have not yet been permitted full access to hospital");
                         App.setEndNode(DB.getNodeInfo("FEXIT00201")); //Main Entrance
@@ -113,7 +113,7 @@ public class Default {
                         App.setEndNode(DB.getNodeInfo("FEXIT00301")); //ER
                         App.setLockEndPath(true);
                     }
-                } else if (DB.isUserCovidSafe(App.userID)) { //todo, if (check-in result indicated safe)
+                } else if (DB.isUserCovidSafe(App.userID)) { //if (check-in result indicated safe)
                     //no restrictions on pathfinding
                     logger.info("User can go anywhere - they have been approved at check-in");
                     App.setEndNode(null);
@@ -134,36 +134,10 @@ public class Default {
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
-//                if((DB.isUserCovidSafe(App.userID))) {
-//                    System.out.println("User is marked as safe");
-//                    App.setEndNode(DB.getNodeInfo("FEXIT00201"));
-//
-//                    try {
-//                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-//                        App.changeScene(root);
-//                    } catch (IOException ex) {
-//                        ex.printStackTrace();
-//                    }
-//                } else if(DB.isUserCovidRisk(App.userID)){
-//                    System.out.println("User is marked as risk");
-//                    App.setEndNode(DB.getNodeInfo("FEXIT00301"));
-//                    App.setToEmergency(true);
-//                    try {
-//                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-//                        App.changeScene(root);
-//                    } catch (IOException ex) {
-//                        ex.printStackTrace();
-//                    }
-//                } else if(DB.isUserCovidUnmarked(App.userID)) {
-//                    App.newJFXDialogPopUp("","OK","Your covid survey still needs to be reviewed",stackPane);
-//                    System.out.println("Covid submission needs to be reviewed first");
-//                } else {
-//                    System.out.println("It was none of the three strings");
-//                }
-            } else {
+            } else { //else, user has not filled out covid survey today
                 App.newJFXDialogPopUp("","OK","You need to fill out a covid survey each day if you wish to pathfind within the hospital",stackPane);
             }
-        } else {
+        } else { //else, user id is 0 (guest)
             App.newJFXDialogPopUp("","OK","You need to create a guest account if you wish to pathfind within the hospital",stackPane);
         }
     }
@@ -215,7 +189,7 @@ public class Default {
         }
     }
 
-    //todo, disable fields as done in toPathFinderAbove so the user can't bypass thier restrictions
+    //todo, disable fields as done in toPathFinderAbove so the user can't bypass their restrictions
     @FXML
     private void toParking(ActionEvent e) {
         ArrayList<Node> indexer = DB.getAllNodes();

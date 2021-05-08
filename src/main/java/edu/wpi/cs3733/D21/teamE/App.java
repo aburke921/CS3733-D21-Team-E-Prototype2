@@ -24,10 +24,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -84,6 +81,7 @@ public class App extends Application {
 	private static boolean toEmergency = false;
 
 	public static String driverURL;
+	public static String nextDriverURL;
 
 	public App() {
 
@@ -113,6 +111,7 @@ public class App extends Application {
 	public static void setEndNode(Node endNode) { App.endNode = endNode; }
 	public static boolean isToEmergency() { return toEmergency; }
 	public static void setToEmergency(boolean toEmergency) { App.toEmergency = toEmergency; }
+	public static void setNextDriverURL(String url){ nextDriverURL = url; }
 
 
 	/*---------------------------------
@@ -265,7 +264,18 @@ public class App extends Application {
 	@Override
 	public void stop() {
 		System.out.println("Shutting Down");
-		DB.deleteClientBW(new File("bw"));
+		if(!driverURL.equals(nextDriverURL)){
+			//ovewrite to textfile
+			try {
+				FileWriter myWriter = new FileWriter("src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt");
+				myWriter.write(nextDriverURL);
+				myWriter.close();
+				System.out.println("Successfully wrote to the file.");
+			} catch (IOException e) {
+				System.out.println("An error occurred.");
+				e.printStackTrace();
+			}
+		}
 		System.exit(0);
 	}
 

@@ -211,6 +211,10 @@ public class AppBarComponent {
         if (clientToggle.isSelected()) {
             String message = "  - To switch to an embedded driven database connection, please restart the application! \n   - If this was a mistake, click the \"Embedded Driven Database\" toggle to continue using the a client driven database in the future";
             App.newJFXDialogPopUp("Switch to Embedded Driven Database", "Close", message, App.getStackPane());
+            App.setNextDriverURL("jdbc:derby://localhost:1527/bw;create=true");
+        }
+        else{
+            App.setNextDriverURL("jdbc:derby:BWDB;create=true");
         }
     }
     @FXML
@@ -218,49 +222,12 @@ public class AppBarComponent {
         if (embeddedToggle.isSelected()) {
             String message = "  - To switch to a client driven database connection, please restart the application! \n  - If this was a mistake, click the \"Client Driven Database\" toggle to continue using the a client driven database int the future";
             App.newJFXDialogPopUp("Switch to Client Driven Database", "Close", message, App.getStackPane());
-            App.newJFXDialogPopUp("Switch to Client Driven Database", "Close", message, App.getStackPane());
+            App.setNextDriverURL("jdbc:derby:BWDB;create=true");
+        }
+        else{
+            App.setNextDriverURL("jdbc:derby://localhost:1527/bw;create=true");
         }
     }
 
-
-    @FXML
-    void switchDatabases(ActionEvent event){
-//        String directory = System.getProperty("user.dir");
-//        if (clientToggle.isSelected()) {
-//
-//            //terminate the embedded DB connection
-//            DatabaseService.terminateConnection();
-//            makeConnection.reinitializeSingleton();
-//
-//            System.out.println("Client Driven Connection");
-//
-//            //Create the driver URL for the client driver connection
-//            String driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/BWDB";
-//
-//            System.out.println(driverURL);
-//
-//            //make the new client driver connection
-//            makeConnection.makeConnection(driverURL);
-//            System.out.println(driverURL);
-//
-//
-//        }
-//        else {
-//
-////            System.out.println("Back to embedded");
-////            //terminate the client connection DB connection
-////            DB.terminateConnection();
-////
-////            //Create the driver URL for the embedded driver connection from the bw folder
-////            String driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/bw";
-//
-//            //Delete bw folder
-//
-//            //connect to the embedded driver
-////            makeConnection.makeConnection(driverURL);
-//
-//            //TODO: embedded driver wanted (need to figure out how to save client data to embedded driver)
-//        }
-    }
 
 }

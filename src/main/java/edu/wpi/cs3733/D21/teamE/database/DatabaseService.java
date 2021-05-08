@@ -30,7 +30,10 @@ public class DatabaseService {
 
 
         try {
-            DriverManager.getConnection("jdbc:derby:;shutdown=true");
+
+//            DriverManager.getConnection("jdbc:derby:;shutdown=true");
+            connection.close();
+
         }catch (SQLException e){
             e.printStackTrace();
         }

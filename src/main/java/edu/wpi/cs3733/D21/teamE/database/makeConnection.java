@@ -1,7 +1,12 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import com.google.inject.Singleton;
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import org.apache.derby.drda.NetworkServerControl;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -14,6 +19,7 @@ public class makeConnection {
 	public static makeConnection singleInstance = null;
 	public Connection connection;
 	//private MapEditor mapEditor = new MapEditor();
+//	public static String driverURL = App.driverURL;
 
 	// private constructor restricted to this class itself
 	public makeConnection(String driverString) {
@@ -42,8 +48,6 @@ public class makeConnection {
 
 				this.connection = DriverManager.getConnection(driverString, props);
 
-
-
 				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
 				// e.printStackTrace();
@@ -65,7 +69,9 @@ public class makeConnection {
 	}
 
 
-
+	public static void reinitializeSingleton(){
+		singleInstance = null;
+	}
 
 	public Connection getConnection() {
 		return this.connection;

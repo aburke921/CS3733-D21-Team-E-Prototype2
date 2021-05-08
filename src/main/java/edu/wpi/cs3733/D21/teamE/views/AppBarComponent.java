@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXToggleButton;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.DatabaseService;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import org.apache.derby.iapi.services.daemon.DaemonService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -194,29 +196,35 @@ public class AppBarComponent {
         if (clientToggle.isSelected()) {
 
             //terminate the embedded DB connection
-            DB.terminateConnection();
+            DatabaseService.terminateConnection();
+            makeConnection.reinitializeSingleton();
+
             System.out.println("Client Driven Connection");
 
             //Create the driver URL for the client driver connection
             String driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/BWDB";
 
+            System.out.println(driverURL);
+
             //make the new client driver connection
             makeConnection.makeConnection(driverURL);
+            System.out.println(driverURL);
+
 
         }
         else {
 
-            System.out.println("Back to embedded");
-            //terminate the client connection DB connection
-            DB.terminateConnection();
-
-            //Create the driver URL for the embedded driver connection from the bw folder
-            String driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/bw";
+//            System.out.println("Back to embedded");
+//            //terminate the client connection DB connection
+//            DB.terminateConnection();
+//
+//            //Create the driver URL for the embedded driver connection from the bw folder
+//            String driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/bw";
 
             //Delete bw folder
 
             //connect to the embedded driver
-            makeConnection.makeConnection(driverURL);
+//            makeConnection.makeConnection(driverURL);
 
             //TODO: embedded driver wanted (need to figure out how to save client data to embedded driver)
         }

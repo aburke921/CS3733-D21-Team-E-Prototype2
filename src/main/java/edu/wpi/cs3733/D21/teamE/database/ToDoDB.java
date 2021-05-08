@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ToDoDB {
@@ -194,7 +195,7 @@ public class ToDoDB {
 	 */
 	public static List<ToDo> getToDoList(int userID, String date) {
 		List<ToDo> toDoList = new ArrayList<>();
-		String sql = "Select * From ToDo Where userID = ?";
+		String sql = "Select * From ToDo";
 		switch (date) {
 			case "everything": // all ToDos(including undated ones)
 				sql += " Where userID = ?";

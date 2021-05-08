@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class NodeDB {
 
-	static Connection connection = makeConnection.makeConnection(App.driverURL).connection;
+	static Connection connection = makeConnection.makeConnection(App.getDriverURL()).connection;
 
 
 	/**

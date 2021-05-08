@@ -686,7 +686,7 @@ public class MapEditor {
     public void fileOpener(ActionEvent e) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
-        makeConnection connection = makeConnection.makeConnection(App.driverURL);
+        makeConnection connection = makeConnection.makeConnection(App.getDriverURL());
         if (file != null) {
             //Have to save edge table so we can get it back after deleting
             DB.getNewCSVFile("hasEdge");

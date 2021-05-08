@@ -24,7 +24,7 @@ import java.util.Set;
 
 public class RequestsDB {
 
-	static Connection connection = makeConnection.makeConnection(App.driverURL).connection;
+	static Connection connection = makeConnection.makeConnection(App.getDriverURL()).connection;
 
 // CREATING TABLES:::
 // CREATING TABLES:::

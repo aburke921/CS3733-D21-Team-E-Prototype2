@@ -11,7 +11,7 @@ import edu.wpi.cs3733.D21.teamE.DB;
 
 public class DatabaseService {
 
-    static Connection connection = makeConnection.makeConnection(App.driverURL).getConnection();
+    static Connection connection = makeConnection.makeConnection(App.getDriverURL()).getConnection();
 
     public static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {

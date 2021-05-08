@@ -28,7 +28,7 @@ public abstract class Searcher {
      */
     public Searcher(){
         graph = new HashMap<>();
-        con = makeConnection.makeConnection(App.driverURL);
+        con = makeConnection.makeConnection(App.getDriverURL());
 
         refreshGraph();
     }

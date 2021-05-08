@@ -82,10 +82,14 @@ public class App extends Application {
 	private static Node endNode = null;
 	private static boolean toEmergency = false;
 
+
+	private static String driverURL = "jdbc:derby:BWDB;create=true";
+
 	public App() {
+
 	}
 
-	public static String driverURL = "jdbc:derby:BWDB;create=true";
+
 
 
 	//setters and getters for above variables
@@ -109,6 +113,12 @@ public class App extends Application {
 	public static void setEndNode(Node endNode) { App.endNode = endNode; }
 	public static boolean isToEmergency() { return toEmergency; }
 	public static void setToEmergency(boolean toEmergency) { App.toEmergency = toEmergency; }
+	public static String getDriverURL() {
+		return driverURL;
+	}
+	public static void setDriverURL(String driverURL) {
+		App.driverURL = driverURL;
+	}
 
 	/*---------------------------------
 	 *		JAVAFX APP FUNCTIONS
@@ -131,18 +141,17 @@ public class App extends Application {
 		NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"),1527);
 		server.start(null);
 
-		Scanner input = new Scanner(System.in);
-		System.out.println("Which connection would you like");
-		System.out.println("    1: Embedded");
-		System.out.println("    2: Client");
+//		Scanner input = new Scanner(System.in);
+//		System.out.println("Which connection would you like");
+//		System.out.println("    1: Embedded");
+//		System.out.println("    2: Client");
 
-		int DBOption = input.nextInt();
+		//int DBOption = input.nextInt();
 
-		String directory = System.getProperty("user.dir");
-		if(DBOption == 2){
-			//driverURL = "jdbc:derby://localhost:1527/BWDB;create=true";
-			driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/BWDB";
-		}
+//		if(DBOption == 2){
+//			//driverURL = "jdbc:derby://localhost:1527/BWDB;create=true";
+//			driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/BWDB";
+//		}
 
 
 
@@ -188,7 +197,7 @@ public class App extends Application {
 		//Grab FXML for and set primary stage properties.
 		App.primaryStage = primaryStage;
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("fxml/Default.fxml")); //get the Default FXMl
+			Parent root = FXMLLoader.load(getClass().getResource("fxml/Settings.fxml")); //get the Default FXMl
 			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
 			//set scene for primaryStage
 			Scene scene = new Scene(root);

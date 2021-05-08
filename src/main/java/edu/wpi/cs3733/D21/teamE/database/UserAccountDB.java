@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class UserAccountDB {
 
-	static Connection connection = makeConnection.makeConnection(App.driverURL).getConnection();
+	static Connection connection = makeConnection.makeConnection(App.getDriverURL()).getConnection();
 
 	/**
 	 * Uses executes the SQL statements required to create the userAccount table.

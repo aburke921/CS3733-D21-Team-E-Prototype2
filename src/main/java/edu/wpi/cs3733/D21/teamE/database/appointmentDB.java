@@ -6,7 +6,7 @@ import java.sql.*;
 
 public class appointmentDB {
 
-	static Connection connection = makeConnection.makeConnection(App.driverURL).connection;
+	static Connection connection = makeConnection.makeConnection(App.getDriverURL()).connection;
 
 	public static void createAppointmentTable() {
 		//TODO: before deleting any users, save their information from userAccount into CSV

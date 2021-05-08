@@ -26,19 +26,13 @@ public class DatabaseService {
         return dir.delete();
     }
 
-    public static void terminateConnection(String terminationType) {
+    public static void terminateConnection() {
 
-//        String query = "disconnect";
-//        try (PreparedStatement prepStat = connection.prepareStatement(query)) {
-//            prepStat.execute();
-//        }catch (SQLException e){
-//            e.printStackTrace();
-//            System.err.println("Error terminating connection");
-//        }
+
         try {
-            DriverManager.getConnection(terminationType);
+            DriverManager.getConnection("jdbc:derby:;shutdown=true");
         }catch (SQLException e){
-//            e.printStackTrace();
+            e.printStackTrace();
         }
 //        if(driverString.contains("localhost")){
 //            try {

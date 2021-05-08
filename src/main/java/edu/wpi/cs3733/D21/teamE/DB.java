@@ -19,8 +19,8 @@ import java.util.HashMap;
 public class DB {
 
 
-	public static void terminateConnection(String terminationType) {
-		DatabaseService.terminateConnection(terminationType);
+	public static void terminateConnection() {
+		DatabaseService.terminateConnection();
 	}
 	// AppointmentDB:
 
@@ -841,6 +841,11 @@ public class DB {
 
 	public static void deleteClientBW(File dir) {
 		DatabaseService.deleteDir(dir);
+	}
+
+
+	public static String getUserType(int userID){
+		return UserAccountDB.getUserType(userID);
 	}
 
 }

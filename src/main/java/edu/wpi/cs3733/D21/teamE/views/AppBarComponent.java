@@ -1,8 +1,10 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXToggleButton;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -64,6 +66,9 @@ public class AppBarComponent {
 
     @FXML
     private JFXButton appLoginButtonLeft;
+
+    @FXML // fx:id="clientToggle"
+    private JFXToggleButton clientToggle; // Value injected by FXMLLoader
 
     @FXML
     void getLoginAppBar(ActionEvent event) {
@@ -138,16 +143,25 @@ public class AppBarComponent {
         if (!App.isShowHelp()) { //if help button shouldn't be shown
             appBarHelpButton.setVisible(false); //remove help button
             appLoginButtonLeft.setVisible(false); //remove left login button
+            clientToggle.setVisible(false);
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButton.setVisible(true); //double check visibility (will be overridden by isShowLogin())
                 appLoginButton.setText("Hello, " + DB.getUserName(App.userID));
+                if(DB.getUserType(App.userID).equals("admin")){
+                    clientToggle.setVisible(true);
+                }
+
+
             }
         } else {
             appLoginButton.setVisible(false); //remove right login button
+            clientToggle.setVisible(false);
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButtonLeft.setVisible(true); //double check it is visible
                 appLoginButtonLeft.setText("Hello, " + DB.getUserName(App.userID));
-
+                if(DB.getUserType(App.userID).equals("admin")){
+                    clientToggle.setVisible(true);
+                }
             }
         }
         if (!App.isShowLogin()) { //if no login should be shown
@@ -173,4 +187,39 @@ public class AppBarComponent {
 
 
     }
+
+    @FXML
+    void switchDatabases(ActionEvent event){
+        String directory = System.getProperty("user.dir");
+        if (clientToggle.isSelected()) {
+
+            //terminate the embedded DB connection
+            DB.terminateConnection();
+            System.out.println("Client Driven Connection");
+
+            //Create the driver URL for the client driver connection
+            String driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/BWDB";
+
+            //make the new client driver connection
+            makeConnection.makeConnection(driverURL);
+
+        }
+        else {
+
+            System.out.println("Back to embedded");
+            //terminate the client connection DB connection
+            DB.terminateConnection();
+
+            //Create the driver URL for the embedded driver connection from the bw folder
+            String driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/bw";
+
+            //Delete bw folder
+
+            //connect to the embedded driver
+            makeConnection.makeConnection(driverURL);
+
+            //TODO: embedded driver wanted (need to figure out how to save client data to embedded driver)
+        }
+    }
+
 }

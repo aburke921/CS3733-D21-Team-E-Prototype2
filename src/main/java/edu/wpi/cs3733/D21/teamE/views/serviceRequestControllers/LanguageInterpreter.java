@@ -3,9 +3,11 @@ package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,7 +29,9 @@ import java.util.ArrayList;
 public class LanguageInterpreter extends ServiceRequestFormComponents {
 
 	ObservableList<String> locations;
-	ArrayList<String> nodeID;
+	ArrayList<String> nodeID = new ArrayList<>();
+	ObservableList<String> userNames;
+	ArrayList<Integer> userID = new ArrayList<>();
 
 	@FXML // fx:id="background"
 	private ImageView background;
@@ -65,23 +69,36 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 	@FXML
 	private StackPane stackPane;
 
+	private boolean validateInput() {
 
-	@FXML
-	void handleButtonCancel(ActionEvent event) {
-		super.handleButtonCancel(event);
+		RequiredFieldValidator validator = new RequiredFieldValidator();
+		validator.setMessage("Input required");
+
+		locationInput.getValidators().add(validator);
+		assignedPersonnel.getValidators().add(validator);
+		descriptionInput.getValidators().add(validator);
+		languageSelection.getValidators().add(validator);
+
+		return locationInput.validate() && assignedPersonnel.validate() &&
+				descriptionInput.validate() && languageSelection.validate();
 	}
 
 	@FXML
 	void saveData(ActionEvent event) throws MessagingException {
-		int index = locationInput.getSelectionModel().getSelectedIndex();
-		String node = nodeID.get(index);
-		String assignee = assignedPersonnel.getSelectionModel().getSelectedItem();
-		String descrip = descriptionInput.getText();
-		String language = languageSelection.getSelectionModel().getSelectedItem();
+		if (validateInput()) {
+			int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
+			int userIndex = assignedPersonnel.getSelectionModel().getSelectedIndex();
 
-		super.handleButtonSubmit(event);
+			String node = nodeID.get(nodeIndex);
+			int assignee = userID.get(userIndex);
+			String descrip = descriptionInput.getText();
+			String language = languageSelection.getSelectionModel().getSelectedItem();
 
-		//For email implementation later
+			LanguageInterpreterObj object = new LanguageInterpreterObj(0, App.userID, assignee, node, language, descrip);
+			DB.addLanguageRequest(object);
+
+
+			//For email implementation later
 //		String email = DB.getEmail(App.userID);
 //		String fullName = DB.getUserName(App.userID);
 ////		String assigneeName = userNames.get(assigneeIDIndex);
@@ -96,6 +113,8 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 //				"- Emerald Emus BWH";
 //
 //		sendEmail.sendRequestConfirmation(email, body);
+			super.handleButtonSubmit(event);
+		}
 	}
 
 	@FXML
@@ -126,7 +145,12 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 		}
 
 		locations = DB.getAllNodeLongNames();
+		nodeID = DB.getListOfNodeIDS();
 		locationInput.setItems(locations);
+
+		userNames = DB.getAssigneeNames("interpreter");
+		userID = DB.getAssigneeIDs("interpreter");
+		assignedPersonnel.setItems(userNames);
 	}
 
 }

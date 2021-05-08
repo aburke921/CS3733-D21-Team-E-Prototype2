@@ -7,6 +7,7 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -76,7 +77,6 @@ public class Floral extends ServiceRequestFormComponents {
 
         validator.setMessage("Input required");
 
-
         locationInput.getValidators().add(validator);
         flowerType.getValidators().add(validator);
         flowerCount.getValidators().add(validator);
@@ -90,8 +90,6 @@ public class Floral extends ServiceRequestFormComponents {
         return  locationInput.validate() && flowerType.validate() && flowerCount.validate() &&
                 vaseType.validate() && assignee.validate() && message.validate() && chocolate.validate()
                 && teddyBear.validate() && arrangementStyle.validate();
-
-
     }
 
     @FXML
@@ -112,7 +110,9 @@ public class Floral extends ServiceRequestFormComponents {
             String teddy = teddyBear.getSelectionModel().getSelectedItem();
             String choc = chocolate.getSelectionModel().getSelectedItem();
            // assigned is now an integer (userID) so must be changed
-            DB.addFloralRequest(App.userID, assigned, nodeInfo, receiver, type, count, vase, arrangement, teddy, choc, mess);
+
+            FloralObj request = new FloralObj(0, App.userID, assigned, nodeInfo, receiver, type, count, vase, arrangement, teddy, choc, mess);
+            DB.addFloralRequest(request);
 
             String email = DB.getEmail(App.userID);
             String fullName = DB.getUserName(App.userID);

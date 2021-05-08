@@ -70,7 +70,10 @@ public class AppBarComponent {
     private JFXButton appLoginButtonLeft;
 
     @FXML // fx:id="clientToggle"
-    private JFXToggleButton clientToggle; // Value injected by FXMLLoader
+    private JFXToggleButton clientToggle;
+
+    @FXML // fx:id="embeddedToggle"
+    private JFXToggleButton embeddedToggle;
 
     @FXML
     void getLoginAppBar(ActionEvent event) {
@@ -146,11 +149,20 @@ public class AppBarComponent {
             appBarHelpButton.setVisible(false); //remove help button
             appLoginButtonLeft.setVisible(false); //remove left login button
             clientToggle.setVisible(false);
+            embeddedToggle.setVisible(false);
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButton.setVisible(true); //double check visibility (will be overridden by isShowLogin())
                 appLoginButton.setText("Hello, " + DB.getUserName(App.userID));
                 if(DB.getUserType(App.userID).equals("admin")){
-                    clientToggle.setVisible(true);
+
+                    if(App.driverURL.equals("jdbc:derby://localhost:1527/bw;create=true")){
+                        embeddedToggle.setVisible(true);
+                    }
+                    else{
+                        clientToggle.setVisible(true);
+                    }
+
+
                 }
 
 
@@ -158,10 +170,14 @@ public class AppBarComponent {
         } else {
             appLoginButton.setVisible(false); //remove right login button
             clientToggle.setVisible(false);
+            embeddedToggle.setVisible(false);
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButtonLeft.setVisible(true); //double check it is visible
                 appLoginButtonLeft.setText("Hello, " + DB.getUserName(App.userID));
-                if(DB.getUserType(App.userID).equals("admin")){
+                if(App.driverURL.equals("jdbc:derby://localhost:1527/bw;create=true")){
+                    embeddedToggle.setVisible(true);
+                }
+                else{
                     clientToggle.setVisible(true);
                 }
             }
@@ -191,43 +207,60 @@ public class AppBarComponent {
     }
 
     @FXML
-    void switchDatabases(ActionEvent event){
-        String directory = System.getProperty("user.dir");
+    void clientToggle(ActionEvent event){
         if (clientToggle.isSelected()) {
-
-            //terminate the embedded DB connection
-            DatabaseService.terminateConnection();
-            makeConnection.reinitializeSingleton();
-
-            System.out.println("Client Driven Connection");
-
-            //Create the driver URL for the client driver connection
-            String driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/BWDB";
-
-            System.out.println(driverURL);
-
-            //make the new client driver connection
-            makeConnection.makeConnection(driverURL);
-            System.out.println(driverURL);
-
-
+            String message = "  - To switch to an embedded driven database connection, please restart the application! \n   - If this was a mistake, click the \"Embedded Driven Database\" toggle to continue using the a client driven database in the future";
+            App.newJFXDialogPopUp("Switch to Embedded Driven Database", "Close", message, App.getStackPane());
         }
-        else {
+    }
+    @FXML
+    void embeddedToggle(ActionEvent event) {
+        if (embeddedToggle.isSelected()) {
+            String message = "  - To switch to a client driven database connection, please restart the application! \n  - If this was a mistake, click the \"Client Driven Database\" toggle to continue using the a client driven database int the future";
+            App.newJFXDialogPopUp("Switch to Client Driven Database", "Close", message, App.getStackPane());
+            App.newJFXDialogPopUp("Switch to Client Driven Database", "Close", message, App.getStackPane());
+        }
+    }
 
-//            System.out.println("Back to embedded");
-//            //terminate the client connection DB connection
-//            DB.terminateConnection();
+
+    @FXML
+    void switchDatabases(ActionEvent event){
+//        String directory = System.getProperty("user.dir");
+//        if (clientToggle.isSelected()) {
 //
-//            //Create the driver URL for the embedded driver connection from the bw folder
-//            String driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/bw";
-
-            //Delete bw folder
-
-            //connect to the embedded driver
+//            //terminate the embedded DB connection
+//            DatabaseService.terminateConnection();
+//            makeConnection.reinitializeSingleton();
+//
+//            System.out.println("Client Driven Connection");
+//
+//            //Create the driver URL for the client driver connection
+//            String driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/BWDB";
+//
+//            System.out.println(driverURL);
+//
+//            //make the new client driver connection
 //            makeConnection.makeConnection(driverURL);
-
-            //TODO: embedded driver wanted (need to figure out how to save client data to embedded driver)
-        }
+//            System.out.println(driverURL);
+//
+//
+//        }
+//        else {
+//
+////            System.out.println("Back to embedded");
+////            //terminate the client connection DB connection
+////            DB.terminateConnection();
+////
+////            //Create the driver URL for the embedded driver connection from the bw folder
+////            String driverURL = "jdbc:derby://localhost:1527/bw;createFrom=" + directory + "/bw";
+//
+//            //Delete bw folder
+//
+//            //connect to the embedded driver
+////            makeConnection.makeConnection(driverURL);
+//
+//            //TODO: embedded driver wanted (need to figure out how to save client data to embedded driver)
+//        }
     }
 
 }

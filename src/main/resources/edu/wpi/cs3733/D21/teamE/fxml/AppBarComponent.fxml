@@ -65,11 +65,16 @@
                   <Insets right="30.0" />
                </padding>
                <children>
-                  <StackPane alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="357.0">
+                  <StackPane alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="402.0">
                      <children>
-                        <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="38.0" prefWidth="338.0">
+                        <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="38.0" prefWidth="388.0">
                            <children>
-                              <JFXToggleButton fx:id="clientToggle" onAction="#switchDatabases" prefHeight="60.0" prefWidth="225.0" text="Client Driven Database" textFill="WHITE" />
+                              <StackPane prefHeight="60.0" prefWidth="291.0">
+                                 <children>
+                                    <JFXToggleButton fx:id="clientToggle" onAction="#clientToggle" prefHeight="60.0" prefWidth="225.0" text="Client Driven Database" textFill="WHITE" />
+                                    <JFXToggleButton fx:id="embeddedToggle" onAction="#embeddedToggle" prefHeight="60.0" prefWidth="298.0" text="Embedded Driven Database" textFill="WHITE" />
+                                 </children>
+                              </StackPane>
                               <JFXButton fx:id="appLoginButtonLeft" onAction="#getLoginAppBar" style="-fx-background-color: -fx--primary-dark;" text="Login" textFill="WHITE">
                                  <HBox.margin>
                                     <Insets right="20.0" />

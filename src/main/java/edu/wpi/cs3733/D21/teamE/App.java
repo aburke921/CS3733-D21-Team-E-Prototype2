@@ -82,7 +82,8 @@ public class App extends Application {
 	private static Node startNode = null;
 	private static Node endNode = null;
 	private static boolean toEmergency = false;
-	private static String driverURL = "";
+
+	public static String driverURL;
 
 	public App() {
 
@@ -194,12 +195,6 @@ public class App extends Application {
 
 		System.out.println("Starting App Init...");
 		makeConnection connection = makeConnection.makeConnection(driverURL);
-//		if (connection.connection == null) {
-//			connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
-//			System.out.println("...Could not connect to admin's choice of DB, switching to default");
-//		}
-
-
 		System.out.println("...Connected to the DB");
 		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");

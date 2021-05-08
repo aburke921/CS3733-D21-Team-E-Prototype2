@@ -15,7 +15,7 @@ import edu.wpi.cs3733.D21.teamE.observer.MarkerObserver;
 import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
-import javafx.animation.PathTransition;
+import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -578,6 +578,10 @@ public class PathFinder {
 
                 double distance = 0;
 
+                Line line = new Line(0, 0, 0, 0);
+                double dashlength = 10;
+                double lineOffset = 20;
+
                 ObservableList<Double> coordsList = FXCollections.observableArrayList();
 
                 int firstNode = 1;
@@ -611,14 +615,14 @@ public class PathFinder {
                                 circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
                             }
 
-
                             //create a line between this node and the previous node
-                            Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                            line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                            line.getStrokeDashArray().setAll(dashlength, dashlength);
                             line.setStrokeLineCap(StrokeLineCap.ROUND);
                             line.setStrokeWidth(strokeWidth);
                             line.setStroke(Color.RED);
 
-                            g.getChildren().addAll(line, circle);
+                            g.getChildren().addAll(circle);
                         } else {
                             //Track true first node's ID, for node color issue
                             firstID = node.get("id");
@@ -658,7 +662,8 @@ public class PathFinder {
                         }
 
                         //create a line between this node and the previous node
-                        Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                        line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                        line.getStrokeDashArray().setAll(dashlength, dashlength);
                         line.setStrokeLineCap(StrokeLineCap.ROUND);
                         line.setStrokeWidth(strokeWidth);
                         line.setStroke(Color.RED);
@@ -724,21 +729,22 @@ public class PathFinder {
 
                         floorLabel.setOnMouseClicked(e -> setCurrentFloor(finalDestFloor));
 
-                        g.getChildren().addAll(line, circle, flowPane);
+                        g.getChildren().addAll(circle, flowPane);
                     } else {
                         //otherwise, only add the line and node circle
-                        g.getChildren().addAll(line, circle);
+                        g.getChildren().addAll(circle);
                     }
 
                     //else, if current node is not this floors ending node, i.e., path continues
                     } else {
                         //create a line between this node and the previous node
-                        Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                        line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                        line.getStrokeDashArray().setAll(dashlength, dashlength);
                         line.setStrokeLineCap(StrokeLineCap.ROUND);
                         line.setStrokeWidth(strokeWidth);
                         line.setStroke(Color.RED);
 
-                        g.getChildren().add(line);
+                       // g.getChildren().add(line);
 
                         //update the coordinates for the previous node
                         prevXCoord = xCoord;
@@ -747,29 +753,41 @@ public class PathFinder {
 
                 }
 
-                //Add moving ball along path
-                Circle ball = new Circle(5, Color.RED);
-                g.getChildren().add(ball);
-
                 Polyline polyline = new Polyline();
                 polyline.getPoints().addAll(coordsList);
+                polyline.setStroke(Color.RED);
+                polyline.setStrokeWidth(2);
+                polyline.getStrokeDashArray().setAll(dashlength, dashlength);
 
-                PathTransition transition = new PathTransition();
-                transition.setNode(ball);
+                Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(polyline.strokeDashOffsetProperty(), 0)),
+                        new KeyFrame(Duration.seconds(1), new KeyValue(polyline.strokeDashOffsetProperty(), lineOffset)));
+                timeline.setCycleCount(Timeline.INDEFINITE);
+                timeline.play();
 
-                if(distance > 100){
-                    double duration = distance / 150;
-                    transition.setDuration(Duration.seconds(duration));
-                } else {
-                    transition.setDuration(Duration.seconds(1));
-                }
 
-                transition.setPath(polyline);
-                transition.setCycleCount(PathTransition.INDEFINITE);
-                transition.play();
+//                //Add moving ball along path
+//                Circle ball = new Circle(5, Color.RED);
+//                g.getChildren().add(ball);
+//
+//                Polyline polyline = new Polyline();
+//                polyline.getPoints().addAll(coordsList);
+//
+//                PathTransition transition = new PathTransition();
+//                transition.setNode(ball);
+//
+//                if(distance > 100){
+//                    double duration = distance / 150;
+//                    transition.setDuration(Duration.seconds(duration));
+//                } else {
+//                    transition.setDuration(Duration.seconds(1));
+//                }
+//
+//                transition.setPath(polyline);
+//                transition.setCycleCount(PathTransition.INDEFINITE);
+//                transition.play();
 
                 //add all objects to the scene
-                pane.getChildren().addAll(g);
+                pane.getChildren().addAll(g, polyline);
 
             } else {
                 System.out.println("No path on this floor");

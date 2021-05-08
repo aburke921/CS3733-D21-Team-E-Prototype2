@@ -167,4 +167,4 @@ tokens/StoredCredential
 # Do Not make this public
 .env
 
-driverOption.txt
+src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt

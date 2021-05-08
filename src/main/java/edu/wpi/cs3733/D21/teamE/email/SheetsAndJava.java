@@ -116,6 +116,24 @@ public class SheetsAndJava {
 
     }
 
+    public static void addTodoToSheet(int todoID, String title, String email, String firstName, String lastName, String duration, String location, String date) throws IOException, GeneralSecurityException {
+
+        sheetsService = getSheetService();
+
+        ValueRange appendBody = new ValueRange()
+                .setValues(Arrays.asList(
+                        Arrays.asList(todoID, title, email, firstName, lastName, duration, location, date)
+                ));
+
+        AppendValuesResponse appendResult = sheetsService.spreadsheets().values()
+                .append((SPREADSHEET_ID), "ToDo 1 Hour", appendBody)
+                .setValueInputOption("USER_ENTERED")
+                .setInsertDataOption("INSERT_ROWS")
+                .setIncludeValuesInResponse(true)
+                .execute();
+
+    }
+
 
     public static void deleteSheetData(int sheetID) throws GeneralSecurityException, IOException {
         sheetsService = getSheetService();

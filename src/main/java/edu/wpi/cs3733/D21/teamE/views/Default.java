@@ -317,15 +317,6 @@ public class Default {
             ex.printStackTrace();
         }
     }
-
-    @FXML
-    public void todoButton(ActionEvent actionEvent) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ToDoDetails.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+    
 }
 

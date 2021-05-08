@@ -51,7 +51,6 @@
                                                 <Insets right="50.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton onAction="#todoButton" />
                                           <JFXButton fx:id="pathFinderButton" alignment="CENTER" minWidth="200.0" onAction="#toPathFinder" prefWidth="200.0" styleClass="default-button" text="Path Finder" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="18.0" />

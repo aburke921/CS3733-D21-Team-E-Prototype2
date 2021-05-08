@@ -838,28 +838,26 @@ public class PathFinder {
         double xDist = xMax - xMin; // Distance between the points (sets zoom)
         double yDist = yMax - yMin;
 
-        double xCenter = xMax - xDist / 2; // Center of points, sets position
-        double yCenter = yMax - yDist / 2;
-
         double fullStage = Math.max((xDist / fullScaleX), (yDist / fullScaleY)) + 0.175;
         double stageAmount = constrain(0.2, 1, fullStage); // Percentage of stage visible
         double zoomAmount = 1 / stageAmount;
 
         zoomSlider.setValue(zoomAmount);
 
-        double xEdge = xCenter - stageAmount * 5000 / 2;
-        double yEdge = yCenter - stageAmount * 3400 / 2;
+        double xCenter = xMax - xDist / 2; // Center of points, sets position
+        double yCenter = yMax - yDist / 2;
 
-        double xScale = 5000 * (1 - stageAmount);
-        double yScale = 3400 * (1 - stageAmount);
+        double centerX = fullScaleX * stageAmount / 2; // Center of viewport
+        double centerY = fullScaleY * stageAmount / 2;
 
-        scrollPane.setHvalue(xEdge / xScale);
-        scrollPane.setVvalue(yEdge / yScale);
+        double xOffset = 5000 - fullScaleX * stageAmount; //how many pixels can the map be shifted by
+        double yOffset = 3400 - fullScaleY * stageAmount;
 
-        System.out.println("X Center: " + xCenter + "\tY Center: " + yCenter);
-        System.out.println("Pane X: " + scrollPane.getHvalue() + "\tPane Y: " + scrollPane.getVvalue());
+        double x = (xCenter - centerX) / xOffset;
+        double y = (yCenter - centerY) / yOffset;
 
-
+        scrollPane.setHvalue(x);
+        scrollPane.setVvalue(y);
     }
 
     /**

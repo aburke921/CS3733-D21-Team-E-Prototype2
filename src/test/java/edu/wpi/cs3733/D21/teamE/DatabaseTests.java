@@ -178,8 +178,8 @@ public class DatabaseTests {
 				if (returnedNode.get("shortName").equals(correctNode.get("shortName"))) {
 					shortName = true;
 				}
-				if (nodeID && xCoord && yCoord && floor && building && nodeType && longName && !shortName) {
-					allCorrect = false;
+				if (nodeID && xCoord && yCoord && floor && building && nodeType && longName && shortName) {
+					allCorrect = true;
 				}
 			}
 		} else {
@@ -1575,7 +1575,7 @@ public class DatabaseTests {
 	}
 
 	@Test
-	@DisplayName("testGetAllNodes")
+	@DisplayName("testGetAllUsers")
 	public void testGetAllUsers() {
 
 
@@ -1630,7 +1630,7 @@ public class DatabaseTests {
 					email = true;
 				}
 				if (userType && userID && firstName && lastName && email) {
-					allCorrect = false;
+					allCorrect = true;
 				}
 			}
 		} else {

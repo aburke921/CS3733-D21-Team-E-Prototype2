@@ -4,7 +4,7 @@ import edu.wpi.cs3733.D21.teamE.Time;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 
 
-public class Todo implements Comparable<Todo>{
+public class ToDo implements Comparable<ToDo>{
     private int todoID;
     private int userID;
     private String title;
@@ -17,7 +17,7 @@ public class Todo implements Comparable<Todo>{
     private Time duration;
     private Node location;
 
-    public Todo(int _todoID, int _userID, String _title, int _status, int _priority){
+    public ToDo(int _todoID, int _userID, String _title, int _status, int _priority){
         todoID = _todoID;
         userID = _userID;
         title = _title;
@@ -25,7 +25,7 @@ public class Todo implements Comparable<Todo>{
         priority = _priority;
     }
 
-    public Todo(int _todoID, int _userID, String _title, int _status, int _priority, Time _alertTime, Time _startTime, Time _duration, Node _location){
+    public ToDo(int _todoID, int _userID, String _title, int _status, int _priority, Time _alertTime, Time _startTime, Time _duration, Node _location){
         this(_todoID, _userID, _title, _status, _priority);
         alertTime = _alertTime;
         startTime = _startTime;
@@ -33,7 +33,7 @@ public class Todo implements Comparable<Todo>{
         location = _location;
     }
 
-    public Todo(int _todoID, int _userID, String _title, int _status, int _priority, String _alertTime, String _startTime, String _duration, Node _location){
+    public ToDo(int _todoID, int _userID, String _title, int _status, int _priority, String _alertTime, String _startTime, String _duration, Node _location){
         this(_todoID, _userID, _title, _status, _priority, Time.parseString(_alertTime), Time.parseString(_startTime), Time.parseString(_duration), _location);
     }
 
@@ -114,11 +114,11 @@ public class Todo implements Comparable<Todo>{
     }
 
     @Override
-    public int compareTo(Todo t) {
+    public int compareTo(ToDo t) {
         return startTime.compareTo(t.startTime);
     }
 
-    public boolean isConflict(Todo t) {
+    public boolean isConflict(ToDo t) {
         return (t.startTime.compareTo(startTime) > 0 && t.startTime.compareTo(getEndTime()) < 0) ||
                 (startTime.compareTo(t.startTime) > 0 && startTime.compareTo(t.getEndTime()) < 0);
     }

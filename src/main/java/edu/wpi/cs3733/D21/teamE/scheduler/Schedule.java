@@ -4,12 +4,12 @@ import edu.wpi.cs3733.D21.teamE.map.Node;
 import java.util.*;
 
 public class Schedule {
-    private final List<Todo> schedule;
+    private final List<ToDo> schedule;
 
-    public Schedule(List<Todo> todoList){
-        schedule = new ArrayList<Todo>(todoList.size()){
+    public Schedule(List<ToDo> todoList){
+        schedule = new ArrayList<ToDo>(todoList.size()){
             @Override
-            public boolean add(Todo o) {
+            public boolean add(ToDo o) {
                 if(isAvailable(o) && super.add(o)){
                     Collections.sort(schedule);
                     return true;
@@ -18,19 +18,19 @@ public class Schedule {
                 }
             }
         };
-        for(Todo todo : todoList){
+        for(ToDo todo : todoList){
             //noinspection UseBulkOperation
             schedule.add(todo);
         }
     }
 
-    public boolean add(Todo newTodo){
-        return schedule.add(newTodo);
+    public boolean add(ToDo newToDo){
+        return schedule.add(newToDo);
     }
 
-    public boolean isAvailable(Todo t) {
+    public boolean isAvailable(ToDo t) {
         boolean isAvailable = true;
-        Iterator<Todo> itr = schedule.iterator();
+        Iterator<ToDo> itr = schedule.iterator();
         while(isAvailable && itr.hasNext()){
             isAvailable &= !(t.isConflict(itr.next()));
         }
@@ -39,17 +39,17 @@ public class Schedule {
 
     public List<Node> getLocations(){
         List<Node> locations = new LinkedList<>();
-        for(Todo event : schedule){
+        for(ToDo event : schedule){
             locations.add(event.getLocation());
         }
         return locations;
     }
 
-    public List<Todo> getSchedule(){
+    public List<ToDo> getSchedule(){
         return schedule;
     }
 
-    public Todo get(int index){
+    public ToDo get(int index){
         return schedule.get(index);
     }
 

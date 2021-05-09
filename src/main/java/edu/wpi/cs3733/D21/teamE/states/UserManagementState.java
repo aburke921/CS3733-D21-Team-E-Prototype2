@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 
 import java.io.IOException;
 
-public class UserManagementState {
+public class UserManagementState implements State{
 
     public void switchScene(ActionEvent event) {
 

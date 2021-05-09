@@ -4,16 +4,20 @@ import com.jfoenix.controls.*;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.Date;
+import edu.wpi.cs3733.D21.teamE.Time;
 import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
 import edu.wpi.cs3733.D21.teamE.states.ServiceRequestState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
@@ -32,14 +36,16 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class ToDoDetails extends ServiceRequestFormComponents{
+public class ToDoDetails {
 
-    RequiredFieldValidator validator = new RequiredFieldValidator();
-    ObservableList<String> userNames;
-    ArrayList<Integer> userIDList;
+    private ToDo todo = null;
 
-    ObservableList<String> longNameList;
-    ArrayList<String> nodeIDList;
+    private RequiredFieldValidator validator = new RequiredFieldValidator();
+    private ObservableList<String> userNames;
+    private ArrayList<Integer> userIDList;
+
+    private ObservableList<String> longNameList;
+    private ArrayList<String> nodeIDList;
 
     @FXML // fx:id="background"
     private ImageView background;
@@ -160,14 +166,19 @@ public class ToDoDetails extends ServiceRequestFormComponents{
         statusInput.setItems(statusOptions);
         priorityInput.setItems(priorityOptions);
 
-        statusInput.setValue("Ongoing");
-        priorityInput.setValue("None");
+        if(todo != null) {
+            populateDetails();
+        } else {
+            statusInput.setValue("Ongoing");
+            priorityInput.setValue("None");
+
+            selfAssign.setSelected(true);
+            userIDInput.setManaged(false);
+        }
 
         assert additionalNotesInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'ToDoDetails.fxml'.";
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'ToDoDetails.fxml'.";
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'ToDoDetails.fxml'.";
-
-        userIDInput.setManaged(false); // unshow user selection until user unchecks the "Assign to myself" checkbox todo
 
         //init appBar
         javafx.scene.Node appBarComponent = null;
@@ -181,6 +192,87 @@ public class ToDoDetails extends ServiceRequestFormComponents{
             appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void initToDo(ToDo passedTodo){
+        todo = passedTodo;
+    }
+
+    @FXML
+    private void populateDetails() {
+        String title = todo.getTitle();
+        int userID = todo.getUserID();
+        int status = todo.getStatus();
+        int priority = todo.getPriority();
+
+        Node location = todo.getLocation();
+        Date scheduledDate = todo.getScheduledDate();
+        Time startTime = todo.getStartTime();
+        Time endTime = todo.getEndTime();
+        String detail = todo.getDetail();
+        Date notificationDate = todo.getNotificationDate();
+        Time notificationTime = todo.getNotificationTime();
+
+        titleInput.setText(title);
+        if(userID == App.userID) {
+            selfAssign.setSelected(true);
+            userIDInput.setManaged(false);
+            userIDInput.setVisible(false);
+        } else {
+            int index = -1;
+            for(int i = 0; i < userIDList.toArray().length; i++) {
+                if (userIDList.get(i) == userID) {
+                    index = i;
+                }
+            }
+            userIDInput.getSelectionModel().select(index);
+        }
+
+        if(status == 1) {
+            statusInput.setValue("Ongoing");
+        } else if (status == 10) {
+            statusInput.setValue("Completed");
+        } else {
+            statusInput.setValue("Deleted");
+        }
+
+        if(priority == 0) {
+            priorityInput.setValue("None");
+        } else if (priority == 1) {
+            priorityInput.setValue("Low");
+        } else if (priority == 2) {
+            priorityInput.setValue("Medium");
+        } else {
+            priorityInput.setValue("High");
+        }
+
+        if(location != null) {
+            int index = -1;
+            for(int i = 0; i < nodeIDList.toArray().length; i++) {
+                if (nodeIDList.get(i).equals(location.get("id"))) {
+                    index = i;
+                }
+            }
+            locationInput.getSelectionModel().select(index);
+        }
+        if(scheduledDate != null) {
+            //
+        }
+        if(startTime != null) {
+
+        }
+        if(endTime != null) {
+
+        }
+        if(detail != null) {
+            additionalNotesInput.setText(detail);
+        }
+        if(notificationDate != null) {
+
+        }
+        if(notificationTime != null) {
+
         }
     }
 
@@ -253,12 +345,12 @@ public class ToDoDetails extends ServiceRequestFormComponents{
             } else if(!DB.updateToDo(todoID, userID, title, statusInt, priorityInt, date, startTime,
                     endTime, nodeID, additionalNotes, notificationDate, notificationTime)) {
                 //todo error
-                System.err.println("DB.updateToDo got " + todoID  + " " + App.userID + " " + title + " " + statusInt + " " + priorityInt + " " + date + " " + startTime
+                System.err.println("DB.updateToDo got " + todoID  + " " + userID + " " + title + " " + statusInt + " " + priorityInt + " " + date + " " + startTime
                         + " " + endTime + " " + nodeID + " " + additionalNotes + " " + notificationDate + " " + notificationTime);
             }
 
-            String email = DB.getEmail(App.userID);
-            String fullName = DB.getUserName(App.userID);
+            String email = DB.getEmail(userID);
+            String fullName = DB.getUserName(userID);
             int position = fullName.indexOf(" ");
 
             String firstName = fullName.substring(0, position);
@@ -270,7 +362,14 @@ public class ToDoDetails extends ServiceRequestFormComponents{
 
             SheetsAndJava.addTodoToSheet(todoID, title, email, firstName, lastName, locationName, taskStartDateAndTime, taskEndDateAndTime, notificationDateAndTime);
 
-            super.handleButtonSubmit(actionEvent);
+            todo = null;
+
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ScheduleList.fxml"));
+                App.changeScene(root);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -297,8 +396,10 @@ public class ToDoDetails extends ServiceRequestFormComponents{
     private void selfAssign(ActionEvent event) {
        if(((JFXCheckBox) event.getSource()).isSelected()) {
            userIDInput.setManaged(false);
+           userIDInput.setVisible(false);
        } else {
            userIDInput.setManaged(true);
+           userIDInput.setVisible(true);
        }
     }
 
@@ -308,8 +409,12 @@ public class ToDoDetails extends ServiceRequestFormComponents{
      */
     @FXML
     private void switchScene(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ScheduleList.fxml"));
+            App.changeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

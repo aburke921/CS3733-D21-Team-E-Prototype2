@@ -9,19 +9,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.newMapEditor">
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.ScheduleMap">
     <children>
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
       <AnchorPane>
          <children>
             <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <JFXButton buttonType="RAISED" minHeight="35.0" prefWidth="600.0" styleClass="todo-button" text="Schedule" HBox.hgrow="ALWAYS">
+                  <JFXButton fx:id="toListButton" buttonType="RAISED" minHeight="40.0" onAction="#switchScene" prefWidth="600.0" styleClass="todo-button" text="Schedule" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="Arial Bold" size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton disable="true" minHeight="35.0" prefWidth="600.0" styleClass="todo-button" text="Map" HBox.hgrow="ALWAYS">
+                  <JFXButton disable="true" minHeight="40.0" prefWidth="600.0" styleClass="todo-button" text="Map" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="Arial Bold" size="15.0" />
                      </font>

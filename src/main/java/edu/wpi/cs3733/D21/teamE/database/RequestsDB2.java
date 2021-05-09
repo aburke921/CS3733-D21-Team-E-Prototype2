@@ -1760,7 +1760,7 @@ public class RequestsDB2 {
 				"quarantine     boolean Not Null, " +
 				"noSymptoms     boolean Not Null, " +
 				"status varchar(31) Not Null," +
-				"userID int" +
+				"userID int references useraccount(userID)" +
 				")";
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.execute();

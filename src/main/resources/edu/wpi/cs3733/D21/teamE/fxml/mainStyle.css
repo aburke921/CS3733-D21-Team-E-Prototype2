@@ -259,6 +259,22 @@ FontAwesomeIconView {
     -fx-fill: -fx--primary;
 }
 
+#todo-icon {
+    -fx-fill: -fx--primary-dark;
+}
+
+#todo-icon:hover {
+    -fx-fill: -fx--primary;
+}
+
+#blue-icon {
+    -fx-fill: -fx--primary;
+}
+
+#blue-icon:hover {
+    -fx-fill: -fx--primary-dark;
+}
+
 #submission-icon {
     -fx-fill: #368509;
 }

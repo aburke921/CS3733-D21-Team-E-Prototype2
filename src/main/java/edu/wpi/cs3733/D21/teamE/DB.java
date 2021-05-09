@@ -809,6 +809,15 @@ public class DB {
 
 
 	/**
+	 * Checks which type is the ToDoID from
+	 * @return 0 for pure, 1 for requests, 2 for appointment, -1 for error
+	 */
+	public static int getToDoType(int ToDoID){
+		return ToDoDB.getToDoType(ToDoID);
+	}
+
+
+	/**
 	 * @param date enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
 	 * @return a List of ToDo_items
 	 */

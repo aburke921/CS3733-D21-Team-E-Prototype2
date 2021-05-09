@@ -190,6 +190,38 @@ public class ToDoDB {
 	}
 
 	/**
+	 * Checks which type is the ToDoID from
+	 * @return 0 for pure, 1 for requests, 2 for appointment, -1 for error
+	 */
+	public static int getToDoType(int ToDoID) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement("Select Count(*) As Count From ToDo, requests Where ToDoID = requestID And ToDoID = ?")) {
+			preparedStatement.setInt(1, ToDoID);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				if (resultSet.getInt("Count") == 1) {
+					return 1;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error querying from ToDo and requests table in getToDoType()");
+		}
+		try (PreparedStatement preparedStatement = connection.prepareStatement("Select Count(*) As Count From ToDo, appointment Where ToDoID = appointmentID And ToDoID = ?")) {
+			preparedStatement.setInt(1, ToDoID);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				if (resultSet.getInt("Count") == 1) {
+					return 2;
+				} else return 0;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error querying from ToDo and appointment table in getToDoType()");
+		}
+		return -1;
+	}
+
+	/**
 	 * @param date   enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
 	 * @param status enter -1 for get all regardless of status, or enter needed status number
 	 * @return a List of ToDo_items

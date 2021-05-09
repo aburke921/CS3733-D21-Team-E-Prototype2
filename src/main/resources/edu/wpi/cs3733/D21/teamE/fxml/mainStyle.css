@@ -330,21 +330,16 @@ JFXButton:hover FontAwesomeIconView {
 
 /* ListView CSS from: https://blog.ngopal.com.np/2012/07/11/customize-scrollbar-via-css/*/
 
-scrollables.directions .jfx-rippler{
+.directions .jfx-rippler{
     -jfx-rippler-fill: rgba(255,255,255,0);
 }
 
-scrollables.directions{
+.directions{
     -fx-border-color: rgba(255,255,255,0);
 }
 
 /* The main scrollbar CSS class of ListView */
-.scroll-bar:horizontal {
-    -fx-pref-width: 12;
-    -fx-background-color:transparent;
-}
-
-.scroll-bar:vertical{
+.scroll-bar:horizontal , .scroll-bar:vertical{
     -fx-pref-width: 12;
     -fx-background-color:transparent;
 

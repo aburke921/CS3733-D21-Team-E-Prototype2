@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
@@ -30,6 +31,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +53,16 @@ public class ScheduleList {
     @FXML // fx:id="goForwardDay"
     private MaterialDesignIconView goForwardDay;
 
+    @FXML // fx:id="dateLabel"
+    private Label dateLabel;
+
     private int currStatus = 1;
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
 
-        System.out.println(datePicker.getValue().toString());
+        datePicker.setValue(LocalDate.now());
+        setDateLabel(new Date(datePicker.getValue()));
 
         prepareToDoTable(treeTableView, currStatus, datePicker.getValue().toString());
 
@@ -67,6 +73,7 @@ public class ScheduleList {
             public void handle(MouseEvent event) {
                 LocalDate currDate = datePicker.getValue();
                 datePicker.setValue(currDate.minusDays(1));
+                setDateLabel(new Date(datePicker.getValue()));
                 prepareToDoTable(treeTableView, currStatus, datePicker.getValue().toString());
             }
         });
@@ -76,6 +83,7 @@ public class ScheduleList {
             public void handle(MouseEvent event) {
                 LocalDate currDate = datePicker.getValue();
                 datePicker.setValue(currDate.plusDays(1));
+                setDateLabel(new Date(datePicker.getValue()));
                 prepareToDoTable(treeTableView, currStatus, datePicker.getValue().toString());
             }
         });
@@ -186,6 +194,7 @@ public class ScheduleList {
 
     @FXML
     private void changeDate(ActionEvent event) {
+        setDateLabel(new Date(datePicker.getValue()));
         prepareToDoTable(treeTableView, currStatus, datePicker.getValue().toString());
     }
 
@@ -198,6 +207,22 @@ public class ScheduleList {
                     todo.getEndTime().toString(), todo.getLocation().get("id"), todo.getDetail(),
                     todo.getNotificationDate().toString(), todo.getNotificationTime().toString());
         }
+    }
+
+    @FXML
+    private void setDateLabel(Date date) {
+        int monthInt = date.getMonth();
+        String month = "wrong";
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        String[] months = dfs.getMonths();
+        if (monthInt >= 0 && monthInt <= 11 ) {
+            month = months[--monthInt];
+        }
+
+        String day = Integer.toString(date.getDay());
+        String year = Integer.toString(date.getYear());
+        String dateFormat = month + " " + day+ ", " + year;
+        dateLabel.setText(dateFormat);
     }
 
 }

@@ -19,23 +19,31 @@
          <children>
             <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <JFXButton buttonType="RAISED" disable="true" minHeight="40.0" prefWidth="600.0" styleClass="todo-button" text="Schedule" HBox.hgrow="ALWAYS">
-                     <font>
-                        <Font name="Arial Bold" size="15.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton fx:id="toMapButton" minHeight="40.0" onAction="#switchScene" prefWidth="600.0" styleClass="todo-button" text="Map" HBox.hgrow="ALWAYS">
-                     <font>
-                        <Font name="Arial Bold" size="15.0" />
-                     </font>
-                  </JFXButton>
+                  <AnchorPane HBox.hgrow="ALWAYS">
+                     <children>
+                        <JFXButton buttonType="RAISED" disable="true" layoutX="15.0" layoutY="11.0" minHeight="40.0" prefWidth="600.0" styleClass="todo-button" text="Schedule" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="Arial Bold" size="15.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane HBox.hgrow="ALWAYS">
+                     <children>
+                        <JFXButton fx:id="toMapButton" minHeight="40.0" onAction="#switchScene" prefWidth="600.0" styleClass="todo-button" text="Map" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="Arial Bold" size="15.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </AnchorPane>
                </children>
             </HBox>
          </children>
       </AnchorPane>
         <AnchorPane prefHeight="723.0">
          <children>
-            <Label fx:id="dateLabel" alignment="CENTER" contentDisplay="CENTER" text="Date" textFill="#006db3" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="20.0">
+            <Label fx:id="dateLabel" alignment="CENTER" contentDisplay="CENTER" minWidth="200.0" text="Date" textFill="#006db3" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="20.0">
                <font>
                   <Font name="Arial Black" size="24.0" />
                </font>

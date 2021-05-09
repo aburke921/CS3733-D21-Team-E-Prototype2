@@ -62,9 +62,10 @@ public class ScheduleList {
     void initialize() {
 
         datePicker.setValue(LocalDate.now());
-        setDateLabel(new Date(datePicker.getValue()));
+        Date date = new Date(datePicker.getValue());
+        setDateLabel(date);
 
-        prepareToDoTable(treeTableView, currStatus, datePicker.getValue().toString());
+        prepareToDoTable(treeTableView, currStatus, date.toString());
 
 
         //set up icons for moving foward and backward a day
@@ -91,7 +92,7 @@ public class ScheduleList {
         //init appBar
         javafx.scene.Node appBarComponent = null;
         try {
-            App.setPageTitle("User Management"); //set AppBar title
+            App.setPageTitle("Schedule List"); //set AppBar title
             App.setShowHelp(false);
             App.setShowLogin(true);
             appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
@@ -104,58 +105,60 @@ public class ScheduleList {
     private void prepareToDoTable(TreeTableView<ToDo> table, int status, String date) {
         System.out.println("preparing schedule...");
 
-//        Schedule schedule = DB.getSchedule(App.userID, status, date);
-//
-//        List<ToDo> array = schedule.getSchedule();
-//
-//        if (table.getRoot() == null) {
-//            ToDo todo0 = new ToDo(0, "", 0, 0, 0, new Node(),
-//                    new Date(0, 0, 0), new Time(0, 0), new Time(0, 0),
-//                    "", new Date(0, 0, 0), new Time(0, 0));
-//            final TreeItem<ToDo> rootUser = new TreeItem<ToDo>(todo0);
-//            table.setRoot(rootUser);
-//
-//            //column 1 - Title
-//            TreeTableColumn<ToDo, String> column1 = new TreeTableColumn<>("Title");
-//            column1.setPrefWidth(100);
-//            column1.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
-//                    new ReadOnlyStringWrapper(Integer.toString(p.getValue().getValue().getTitle())));
-//            table.getColumns().add(column1);
-//
-//            //column 2 - Location
-//            TreeTableColumn<ToDo, String> column2 = new TreeTableColumn<>("Location");
-//            column2.setPrefWidth(100);
-//            column2.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
-//                    new ReadOnlyStringWrapper(p.getValue().getValue().getTitle()));
-//            table.getColumns().add(column2);
-//
-//            //column 3 - Start Time
-//            TreeTableColumn<ToDo, Number> column3 = new TreeTableColumn<>("Start Time");
-//            column3.setPrefWidth(100);
-//            column3.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, Number> p) ->
-//                    new ReadOnlyIntegerWrapper(p.getValue().getValue().getUserID()));
-//            table.getColumns().add(column3);
-//
-//            //column 4 - status
-//            TreeTableColumn<ToDo, String> column4 = new TreeTableColumn<>("Status");
-//            column4.setPrefWidth(100);
-//            column4.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
-//                    new ReadOnlyStringWrapper(p.getValue().getValue().getStatusString()));
-//            table.getColumns().add(column4);
-//
-//            //column 5 - priority
-//            TreeTableColumn<ToDo, String> column5 = new TreeTableColumn<>("Priority");
-//            column5.setPrefWidth(100);
-//            column5.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
-//                    new ReadOnlyStringWrapper(p.getValue().getValue().getPriorityString()));
-//            table.getColumns().add(column5);
-//        }
-//        table.setShowRoot(false);
-//        for (int i = 0; i < array.size(); i++) {
-//            ToDo s = array.get(i);
-//            final TreeItem<ToDo> todo = new TreeItem<>(s);
-//            table.getRoot().getChildren().add(todo);
-//        }
+        Schedule schedule = DB.getSchedule(App.userID, status, date);
+
+        List<ToDo> array = schedule.getTodoList();
+
+        if (table.getRoot() == null) {
+            ToDo todo0 = new ToDo(0, "", 0, 0, 0, new Node(),
+                    new Date(0, 0, 0), new Time(0, 0), new Time(0, 0),
+                    "", new Date(0, 0, 0), new Time(0, 0));
+            final TreeItem<ToDo> rootUser = new TreeItem<ToDo>(todo0);
+            table.setRoot(rootUser);
+
+            //column 1 - Title
+            TreeTableColumn<ToDo, String> column1 = new TreeTableColumn<>("Title");
+            column1.setPrefWidth(300);
+            column1.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getTitle()));
+            table.getColumns().add(column1);
+
+            //column 2 - Location
+            TreeTableColumn<ToDo, String> column2 = new TreeTableColumn<>("Location");
+            column2.setPrefWidth(300);
+            column2.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getLocation().get("longName")));
+            table.getColumns().add(column2);
+
+            //column 3 - Start Time
+            TreeTableColumn<ToDo, String> column3 = new TreeTableColumn<>("Start Time");
+            column3.setPrefWidth(200);
+            column3.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getStartTime().toString()));
+            table.getColumns().add(column3);
+
+            //column 4 - status
+            TreeTableColumn<ToDo, String> column4 = new TreeTableColumn<>("Status");
+            column4.setPrefWidth(200);
+            column4.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getStatusString()));
+            table.getColumns().add(column4);
+
+            //column 5 - priority
+            TreeTableColumn<ToDo, String> column5 = new TreeTableColumn<>("Priority");
+            column5.setPrefWidth(100);
+            column5.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getPriorityString()));
+            table.getColumns().add(column5);
+        }
+        table.setShowRoot(false);
+        System.out.println("size" + array.size());
+        for (int i = 0; i < array.size(); i++) {
+            ToDo s = array.get(i);
+            System.out.println(s.getTitle());
+            TreeItem<ToDo> todo = new TreeItem<>(s);
+            table.getRoot().getChildren().add(todo);
+        }
     }
 
     @FXML

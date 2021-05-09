@@ -89,7 +89,7 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 }
 
 .todo-button:hover {
-    -fx-background-color: -fx--primary;
+    -fx-background-color: -fx--primary-light;
 }
 
 .login-button {

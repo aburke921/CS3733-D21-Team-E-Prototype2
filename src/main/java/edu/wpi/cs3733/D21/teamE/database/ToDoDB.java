@@ -94,15 +94,15 @@ public class ToDoDB {
 	 * @param status           default 1 (normal), 10/0 (complete/deleted)
 	 * @param priority         default 0 (none), 1/2/3 (low/mid/high)
 	 * @param scheduledDate    format: 2021-05-08
-	 * @param scheduledTime    format: 23:17
-	 * @param endTime   	   format: 01:30
+	 * @param startTime        format: 23:17
+	 * @param endTime          format: 01:30
 	 * @param nodeID           has to exist in the node table
 	 * @param detail           maximum 1023 characters
 	 * @param notificationDate format: 2021-05-08 eg. remind me 2 days before this (send email)
 	 * @param notificationTime format: 23:17 eg. remind me 30 mins before this (send email)
 	 * @return true if one line changed successfully, false otherwise
 	 */
-	public static boolean updateToDo(int ToDoID, int userID, String title, int status, int priority, String scheduledDate, String scheduledTime, String endTime, String nodeID, String detail, String notificationDate, String notificationTime) {
+	public static boolean updateToDo(int ToDoID, int userID, String title, int status, int priority, String scheduledDate, String startTime, String endTime, String nodeID, String detail, String notificationDate, String notificationTime) {
 		String sql = "Update ToDo Set userID = ?";
 		if (title != null) {
 			sql += ", title = ?";
@@ -116,17 +116,17 @@ public class ToDoDB {
 		if (scheduledDate != null) {
 			sql += ", scheduledDate = ?";
 		}
-		if (scheduledTime != null) {
+		if (startTime != null) {
 			sql += ", scheduledTime = ?";
+		}
+		if (endTime != null) {
+			sql += ", expectedLength = ?";
 		}
 		if (nodeID != null) {
 			sql += ", nodeID = ?";
 		}
 		if (detail != null) {
 			sql += ", detail = ?";
-		}
-		if (endTime != null) {
-			sql += ", expectedLength = ?";
 		}
 		if (notificationDate != null) {
 			sql += ", notificationDate = ?";
@@ -155,9 +155,13 @@ public class ToDoDB {
 				i++;
 				preparedStatement.setString(i, scheduledDate);
 			}
-			if (scheduledTime != null) {
+			if (startTime != null) {
 				i++;
-				preparedStatement.setString(i, scheduledTime);
+				preparedStatement.setString(i, startTime);
+			}
+			if (endTime != null) {
+				i++;
+				preparedStatement.setString(i, endTime);
 			}
 			if (nodeID != null) {
 				i++;
@@ -166,10 +170,6 @@ public class ToDoDB {
 			if (detail != null) {
 				i++;
 				preparedStatement.setString(i, detail);
-			}
-			if (endTime != null) {
-				i++;
-				preparedStatement.setString(i, endTime);
 			}
 			if (notificationDate != null) {
 				i++;
@@ -227,15 +227,15 @@ public class ToDoDB {
 			while (resultSet.next()) {
 				toDoList.add(new ToDo(
 						resultSet.getInt("ToDoID"),
-						resultSet.getInt("userID"),
 						resultSet.getString("title"),
+						resultSet.getInt("userID"),
 						resultSet.getInt("status"),
 						resultSet.getInt("priority"),
-						resultSet.getString("scheduledDate"),
-						resultSet.getString("scheduledTime"),
 						NodeDB.getNodeInfo(resultSet.getString("nodeID")),
+						resultSet.getString("scheduledDate"),
+						resultSet.getString("startTime"),
+						resultSet.getString("endTime"),
 						resultSet.getString("detail"),
-						resultSet.getString("expectedLength"),
 						resultSet.getString("notificationDate"),
 						resultSet.getString("notificationTime")));
 			}

@@ -159,6 +159,10 @@ public class ToDoDB {
 			if (RequestsDB2.editRequests(ToDoID, userIDInt, statusString) != 1) {
 				return false;
 			}
+		} else if (getToDoType(ToDoID) == 2) {
+			if (appointmentDB.editAppointment(ToDoID, startTime, scheduledDate, userIDInt) != 1) {
+				return false;
+			}
 		}
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

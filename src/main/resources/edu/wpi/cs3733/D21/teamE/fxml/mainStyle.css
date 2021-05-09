@@ -122,7 +122,7 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 /*Toggle buttons*/
 JFXToggleButton  {
     -jfx-toggle-color: -fx--primary;
-    -jfx-untoggle-color: -fx--primary;
+    -jfx-untoggle-color: WHITE;
     -jfx-toggle-line-color: -fx--primary-light;
     -jfx-untoggle-line-color: lightgrey;
     -jfx-size: 10.0;

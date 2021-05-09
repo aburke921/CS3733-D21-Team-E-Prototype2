@@ -16,6 +16,8 @@ import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
 import javafx.animation.PathTransition;
+import javafx.beans.binding.DoubleBinding;
+import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -664,6 +666,7 @@ public class PathFinder {
                 String mapMarkerSize = "25";
 
                 Iterator<Node> legItr = path.iterator();
+                Iterator<Node> legItrCopy = path.iterator();
 
                 Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
@@ -673,9 +676,37 @@ public class PathFinder {
 
                 double distance = 0;
 
+                double dashlength = 10;
+                double lineOffset = -20;
+
                 ObservableList<Double> coordsList = FXCollections.observableArrayList();
 
                 boolean firstNode = true;
+                String firstID = null;
+
+                //loop through list of nodes and add coordinates to Array List (this will be used to create the polyline)
+                while (legItrCopy.hasNext()) {
+                    Node node = legItrCopy.next();
+                    //Resize the coordinates to match the resized image
+                    double xCoord = (double) node.getX() / scale;
+                    double yCoord = (double) node.getY() / scale;
+
+                    coordsList.add(xCoord);
+                    coordsList.add(yCoord);
+                }
+
+                Polyline polyline = new Polyline();
+                polyline.getPoints().addAll(coordsList);
+                polyline.setStroke(Color.web("#006db3"));
+                polyline.setStrokeWidth(2);
+                polyline.getStrokeDashArray().setAll(dashlength, dashlength);
+                pane.getChildren().addAll(polyline);
+
+                Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(polyline.strokeDashOffsetProperty(), 0)),
+                        new KeyFrame(Duration.seconds(1), new KeyValue(polyline.strokeDashOffsetProperty(), lineOffset)));
+                timeline.setCycleCount(Timeline.INDEFINITE);
+                timeline.play();
+
                 while (legItr.hasNext()) { //loop through list
                     //this iterator will return a Node object
                     //which is just a container for all the node info like its coordinates
@@ -724,10 +755,6 @@ public class PathFinder {
                         }
 
                         markerList.add(new MapMarker((xCoord + markerIconXOffset), (yCoord + markerIconYOffset), mapMarkerSize, type));
-
-                        line.setStrokeLineCap(StrokeLineCap.ROUND);
-                        line.setStrokeWidth(strokeWidth);
-                        line.setStroke(Color.RED);
 
                         Label floorLabel = null;
                         FlowPane flowPane = new FlowPane();
@@ -824,14 +851,6 @@ public class PathFinder {
 
                         //else, if current node is not this floors ending node, i.e., path continues
                     } else {
-                        //create a line between this node and the previous node
-                        Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-                        line.setStrokeLineCap(StrokeLineCap.ROUND);
-                        line.setStrokeWidth(strokeWidth);
-                        line.setStroke(Color.RED);
-
-                        g.getChildren().add(line);
-
                         //update the coordinates for the previous node
                         prevXCoord = xCoord;
                         prevYCoord = yCoord;
@@ -842,30 +861,6 @@ public class PathFinder {
                 for (MapMarker marker : markerList) {
                     g.getChildren().add(marker.makeMarker());
                 }
-
-                if (coordsList.size() > 2) { //prevent single element path bug
-                    //Add moving ball along path
-                    Circle ball = new Circle(5, Color.RED);
-                    g.getChildren().add(ball);
-
-                    Polyline polyline = new Polyline();
-                    polyline.getPoints().addAll(coordsList);
-
-                    PathTransition transition = new PathTransition();
-                    transition.setNode(ball);
-
-                    if(distance > 100){
-                        double duration = distance / 150;
-                        transition.setDuration(Duration.seconds(duration));
-                    } else {
-                        transition.setDuration(Duration.seconds(1));
-                    }
-
-                    transition.setPath(polyline);
-                    transition.setCycleCount(PathTransition.INDEFINITE);
-                    transition.play();
-                }
-
 
                 //add all objects to the scene
                 pane.getChildren().addAll(g);

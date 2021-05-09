@@ -14,6 +14,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
@@ -22,11 +24,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.derby.drda.NetworkServerControl;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
@@ -213,6 +213,34 @@ public class App extends Application {
 			e.printStackTrace();
 			Platform.exit();
 		}
+
+		//todo check for successful previous exit
+		File logfile0 = new File("BWHApplication.log.0");
+		String log0Tail = tail(logfile0);
+
+		File logfile1 = new File("BWHApplication.log.1");
+		String log1Tail = tail(logfile1);
+
+		if (log0Tail.equals("INFO: Exiting") || log1Tail.equals("INFO: Exiting")) {
+			//good
+		} else {
+			//bad exit, todo prompt user to report error?
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+			alert.setTitle("Confirmation Dialog");
+			alert.setHeaderText("Look, a Confirmation Dialog");
+			alert.setContentText("Are you ok with this?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK){
+				// todo ... user chose OK
+			} else {
+				// todo ... user chose CANCEL or closed the dialog
+			}
+		}
+
+
+		logger.warning("HERE---" + tail(logfile0) + "---HERE");
+		System.out.println(tail(logfile0));
 	}
 
 	/**
@@ -294,6 +322,58 @@ public class App extends Application {
 	 */
 	public static void changeScene(Parent root) {
 		primaryStage.getScene().setRoot(root);
+	}
+
+
+	//todo
+	/**
+	 * https://stackoverflow.com/questions/686231/quickly-read-the-last-line-of-a-text-file
+	 * @param file
+	 * @return
+	 */
+	public String tail( File file ) {
+		RandomAccessFile fileHandler = null;
+		try {
+			fileHandler = new RandomAccessFile( file, "r" );
+			long fileLength = fileHandler.length() - 1;
+			StringBuilder sb = new StringBuilder();
+
+			for(long filePointer = fileLength; filePointer != -1; filePointer--){
+				fileHandler.seek( filePointer );
+				int readByte = fileHandler.readByte();
+
+				if( readByte == 0xA ) {
+					if( filePointer == fileLength ) {
+						continue;
+					}
+					break;
+
+				} else if( readByte == 0xD ) {
+					if( filePointer == fileLength - 1 ) {
+						continue;
+					}
+					break;
+				}
+
+				sb.append( ( char ) readByte );
+			}
+
+			String lastLine = sb.reverse().toString();
+			return lastLine;
+		} catch( java.io.FileNotFoundException e ) {
+			e.printStackTrace();
+			return null;
+		} catch( java.io.IOException e ) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (fileHandler != null )
+				try {
+					fileHandler.close();
+				} catch (IOException e) {
+					/* ignore */
+				}
+		}
 	}
 
 }

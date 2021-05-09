@@ -112,6 +112,7 @@ public class RequestsDB2 {
 	 */
 	public static int editRequests(int requestID, int assigneeID, String requestStatus) {
 
+		int statusInt = -1;
 		int assigneeInt = -1;
 		boolean added = false;
 		String query = "Update requests ";
@@ -123,6 +124,17 @@ public class RequestsDB2 {
 			added = true;
 		}
 		if (requestStatus != null) {
+			switch (requestStatus) {
+				case "inProgress":  // normal
+					statusInt = 1;
+				case "complete": // complete
+					statusInt = 10;
+				case "canceled":  // delete
+					statusInt = 0;
+					break;
+				default:
+					throw new IllegalStateException("Unexpected value: " + requestStatus);
+			}
 			if (added) {
 				query = query + ", ";
 			}

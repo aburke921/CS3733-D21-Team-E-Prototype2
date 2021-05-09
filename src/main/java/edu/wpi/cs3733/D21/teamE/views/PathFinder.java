@@ -708,7 +708,7 @@ public class PathFinder {
                                 type = MarkerType.END;
                             } else { // end node of just this floor
                                 //place a dot on the location
-                                type = MarkerType.LAST;
+                                type = MarkerType.FIRST;
                             }
                             line = new Line(xCoord, yCoord, xCoord, yCoord); // prevent line from origin
                         } else {
@@ -811,7 +811,7 @@ public class PathFinder {
                             type = MarkerType.END;
                         } else { // end node of just this floor
                             //place a dot on the location
-                            type = MarkerType.LAST;
+                            type = MarkerType.FIRST;
                         }
 
                         markerList.add(new MapMarker((xCoord + markerIconXOffset), (yCoord + markerIconYOffset), mapMarkerSize, type));

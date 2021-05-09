@@ -81,6 +81,17 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
     -fx-background-color: #a2dcfd;
 }
 
+.todo-button {
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-text-fill: WHITE;
+    -fx-background-color:  -fx--primary-dark;
+}
+
+.todo-button:hover {
+    -fx-background-color: -fx--primary;
+}
+
 .login-button {
     -fx-background-color: -fx--primary-dark;
     -fx-border-color: -fx--primary-light;

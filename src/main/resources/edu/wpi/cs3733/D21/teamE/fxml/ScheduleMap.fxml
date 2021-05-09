@@ -2,64 +2,64 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.newMapEditor">
     <children>
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
-      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
-        <tabs>
-          <Tab text="   Check Map   ">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+      <AnchorPane>
+         <children>
+            <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <JFXButton buttonType="RAISED" minHeight="35.0" prefWidth="600.0" styleClass="todo-button" text="Schedule" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="Arial Bold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton disable="true" minHeight="35.0" prefWidth="600.0" styleClass="todo-button" text="Map" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font name="Arial Bold" size="15.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+        <AnchorPane>
+         <children>
+                <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
+               <children>
+                        <HBox prefHeight="37.0" prefWidth="1020.0">
                      <children>
-                          <AnchorPane>
-                           <children>
-                                  <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
-                                 <children>
-                                          <HBox prefHeight="37.0" prefWidth="1020.0">
-                                       <children>
-                                                  <HBox prefHeight="37.0" prefWidth="687.0" />
-                                       </children>
-                                          </HBox>
-                                 </children>
-                                  </HBox>
-                           </children>
-                          </AnchorPane>
-                          <AnchorPane prefHeight="723.0">
-                              <children>
-                                  <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                      <children>
-                                          <StackPane fx:id="stackPane" prefHeight="708.0" prefWidth="1200.0">
-                                              <children>
-                                                  <BorderPane fx:id="rootBorderPane" prefHeight="169.0" prefWidth="979.0">
-                                                      <StackPane.margin>
-                                                          <Insets />
-                                                      </StackPane.margin>
-                                                  </BorderPane>
-                                              </children>
-                                          </StackPane>
-                                      </children>
-                                  </HBox>
-                              </children>
-                          </AnchorPane>
+                                <HBox prefHeight="37.0" prefWidth="687.0" />
                      </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-          <Tab text="   List of Tasks   ">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </Tab>
-        </tabs>
-      </TabPane>
+                        </HBox>
+               </children>
+                </HBox>
+         </children>
+        </AnchorPane>
+        <AnchorPane prefHeight="723.0">
+            <children>
+                <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <StackPane fx:id="stackPane" prefHeight="708.0" prefWidth="1200.0">
+                            <children>
+                                <BorderPane fx:id="rootBorderPane" prefHeight="169.0" prefWidth="979.0">
+                                    <StackPane.margin>
+                                        <Insets />
+                                    </StackPane.margin>
+                                </BorderPane>
+                            </children>
+                        </StackPane>
+                    </children>
+                </HBox>
+            </children>
+        </AnchorPane>
         <AnchorPane fx:id="lowerAnchorPane" prefHeight="59.0" prefWidth="1244.0">
             <children>
                 <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" onAction="#switchScene" prefHeight="29.0" prefWidth="60.0" styleClass="back-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />

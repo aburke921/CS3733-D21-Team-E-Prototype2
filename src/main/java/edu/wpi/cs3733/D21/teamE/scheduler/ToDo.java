@@ -4,7 +4,6 @@ import edu.wpi.cs3733.D21.teamE.Date;
 import edu.wpi.cs3733.D21.teamE.Time;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 
-
 public class ToDo implements Comparable<ToDo>{
     private final int todoID;
     private final String title;
@@ -43,7 +42,6 @@ public class ToDo implements Comparable<ToDo>{
     public ToDo(int _toDoID, String _title, int _userID, int _status, int _priority, Node _location, String _scheduledDate, String _startTime, String _endTime, String _detail, String _notificationDate, String _notificationTime) {
         this(_toDoID, _title, _userID, _status, _priority, _location, Date.parseString(_scheduledDate), Time.parseString(_startTime), Time.parseString(_endTime), _detail, Date.parseString(_notificationDate), Time.parseString(_notificationTime));
     }
-
 
     public int getTodoID() {
         return todoID;
@@ -121,7 +119,7 @@ public class ToDo implements Comparable<ToDo>{
     }
 
     public boolean isConflict(ToDo t) {
-        return (t.startTime.compareTo(startTime) > 0 && t.startTime.compareTo(getEndTime()) < 0) ||
-                (startTime.compareTo(t.startTime) > 0 && startTime.compareTo(t.getEndTime()) < 0);
+        return (t.startTime.compareTo(startTime) > 0 && t.startTime.compareTo(endTime) < 0) ||
+                (startTime.compareTo(t.startTime) > 0 && startTime.compareTo(t.endTime) < 0);
     }
 }

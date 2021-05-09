@@ -3,7 +3,7 @@ package edu.wpi.cs3733.D21.teamE.scheduler;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import java.util.*;
 
-public class Schedule {
+public class Schedule implements Iterable<ToDo>{
     private final List<ToDo> schedule;
 
     public Schedule(List<ToDo> todoList){
@@ -39,7 +39,7 @@ public class Schedule {
         return locations;
     }
 
-    public List<ToDo> getSchedule(){
+    public List<ToDo> getTodoList(){
         return schedule;
     }
 
@@ -47,4 +47,8 @@ public class Schedule {
         return schedule.get(index);
     }
 
+    @Override
+    public Iterator<ToDo> iterator() {
+        return schedule.iterator();
+    }
 }

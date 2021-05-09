@@ -1,8 +1,11 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXToggleButton;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.database.DatabaseService;
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import org.apache.derby.iapi.services.daemon.DaemonService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -64,6 +68,12 @@ public class AppBarComponent {
 
     @FXML
     private JFXButton appLoginButtonLeft;
+
+    @FXML // fx:id="clientToggle"
+    private JFXToggleButton clientToggle;
+
+    @FXML // fx:id="embeddedToggle"
+    private JFXToggleButton embeddedToggle;
 
     @FXML
     void getLoginAppBar(ActionEvent event) {
@@ -138,16 +148,38 @@ public class AppBarComponent {
         if (!App.isShowHelp()) { //if help button shouldn't be shown
             appBarHelpButton.setVisible(false); //remove help button
             appLoginButtonLeft.setVisible(false); //remove left login button
+            clientToggle.setVisible(false);
+            embeddedToggle.setVisible(false);
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButton.setVisible(true); //double check visibility (will be overridden by isShowLogin())
                 appLoginButton.setText("Hello, " + DB.getUserName(App.userID));
+                if(DB.getUserType(App.userID).equals("admin")){
+
+                    if(App.driverURL.equals("jdbc:derby://localhost:1527/bw;create=true")){
+                        embeddedToggle.setVisible(true);
+                    }
+                    else{
+                        clientToggle.setVisible(true);
+                    }
+
+
+                }
+
+
             }
         } else {
             appLoginButton.setVisible(false); //remove right login button
+            clientToggle.setVisible(false);
+            embeddedToggle.setVisible(false);
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButtonLeft.setVisible(true); //double check it is visible
                 appLoginButtonLeft.setText("Hello, " + DB.getUserName(App.userID));
-
+                if(App.driverURL.equals("jdbc:derby://localhost:1527/bw;create=true")){
+                    embeddedToggle.setVisible(true);
+                }
+                else{
+                    clientToggle.setVisible(true);
+                }
             }
         }
         if (!App.isShowLogin()) { //if no login should be shown
@@ -173,4 +205,29 @@ public class AppBarComponent {
 
 
     }
+
+    @FXML
+    void clientToggle(ActionEvent event){
+        if (clientToggle.isSelected()) {
+            String message = "  - To switch to an embedded driven database connection, please restart the application! \n   - If this was a mistake, click the \"Embedded Driven Database\" toggle to continue using the a client driven database in the future";
+            App.databaseChangePopup("Switch to Embedded Driven Database", message, App.getStackPane());
+            App.setNextDriverURL("jdbc:derby://localhost:1527/bw;create=true");
+        }
+        else{
+            App.setNextDriverURL("jdbc:derby:BWDB;create=true");
+        }
+    }
+    @FXML
+    void embeddedToggle(ActionEvent event) {
+        if (embeddedToggle.isSelected()) {
+            String message = "  - To switch to a client driven database connection, please restart the application! \n  - If this was a mistake, click the \"Client Driven Database\" toggle to continue using the a client driven database int the future";
+            App.databaseChangePopup("Switch to Client Driven Database", message, App.getStackPane());
+            App.setNextDriverURL("jdbc:derby:BWDB;create=true");
+        }
+        else{
+            App.setNextDriverURL("jdbc:derby://localhost:1527/bw;create=true");
+        }
+    }
+
+
 }

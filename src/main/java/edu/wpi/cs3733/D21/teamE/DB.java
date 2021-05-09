@@ -25,6 +25,10 @@ import java.util.HashMap;
 
 public class DB {
 
+
+	public static void terminateConnection() {
+		DatabaseService.terminateConnection();
+	}
 	// AppointmentDB:
 
 	public static void createAllTables() {
@@ -801,5 +805,13 @@ public class DB {
 	public static boolean isUserCovidUnmarked(int userID) {
 		return UserAccountDB.isUserCovidUnmarked(userID);
 	}
+
+
+
+	public static void deleteClientBW(File dir) {
+		DatabaseService.deleteDir(dir);
+	}
+
+
 
 }

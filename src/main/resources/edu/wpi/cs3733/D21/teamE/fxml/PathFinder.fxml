@@ -56,7 +56,7 @@
                         <Insets left="20.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floorL1" onAction="#chooseFloor" styleClass="submit-button" text="L1">
+                  <JFXButton fx:id="floorL1" onAction="#chooseFloor" styleClass="transit-button-unselected" text="L1">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>

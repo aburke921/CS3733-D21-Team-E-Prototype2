@@ -690,42 +690,39 @@ public class PathFinder {
                         distance += Math.hypot(xCoord - prevXCoord, yCoord - prevYCoord);
                     }
 
-                    if (firstNode) { //if current node is the starting node
-                        firstNode = false;
+                    if (!legItr.hasNext()) { //if current node is the ending node for this floor
+
+                        //create a line between this node and the previous node
+                        Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
 
                         MarkerType type;
 
-                        if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
-                            //place a dot on the location
-                            type = MarkerType.START;
-                        } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
-                            //place a dot on the location
-                            type = MarkerType.END;
-                        } else { // end node of just this floor
-                            //place a dot on the location
-                            type = MarkerType.LAST;
-                        }
+                        if (firstNode) { //if current node is the first node on floor of path leg
+                            firstNode = false;
 
-                        //update the coordinates for the previous node
-                        prevXCoord = xCoord;
-                        prevYCoord = yCoord;
-
-
-                    } else if (!legItr.hasNext()) { //if current node is the ending node for this floor
-                        MarkerType type;
-
-                        if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
-                            //place a dot on the location
-                            type = MarkerType.END;
-                        } else { // end node of just this floor
-                            //place a dot on the location
-                            type = MarkerType.LAST;
+                            if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
+                                //place a dot on the location
+                                type = MarkerType.START;
+                            } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
+                                //place a dot on the location
+                                type = MarkerType.END;
+                            } else { // end node of just this floor
+                                //place a dot on the location
+                                type = MarkerType.LAST;
+                            }
+                            line = new Line(xCoord, yCoord, xCoord, yCoord); // prevent line from origin
+                        } else {
+                            if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
+                                //place a dot on the location
+                                type = MarkerType.END;
+                            } else { // end node of just this floor
+                                //place a dot on the location
+                                type = MarkerType.LAST;
+                            }
                         }
 
                         markerList.add(new MapMarker((xCoord + markerIconXOffset), (yCoord + markerIconYOffset), mapMarkerSize, type));
 
-                        //create a line between this node and the previous node
-                        Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
                         line.setStrokeLineCap(StrokeLineCap.ROUND);
                         line.setStrokeWidth(strokeWidth);
                         line.setStroke(Color.RED);
@@ -785,23 +782,45 @@ public class PathFinder {
                             }
                         }
 
-                    if(floorLabel != null) {
-                        //if a floor label was made, line and node circle along with the label and its parent flowPane
-                        String finalDestFloor = destFloor;
+                        if(floorLabel != null) {
+                            //if a floor label was made, line and node circle along with the label and its parent flowPane
+                            String finalDestFloor = destFloor;
 
-                        floorLabel.setOnMouseClicked(e -> {
-                            int num = floorMap.get(floorNum);
-                            floorVisits[num] = floorVisits[num] + 1;
-                            setCurrentFloor(finalDestFloor);
-                        });
+                            floorLabel.setOnMouseClicked(e -> {
+                                int num = floorMap.get(floorNum);
+                                floorVisits[num] = floorVisits[num] + 1;
+                                setCurrentFloor(finalDestFloor);
+                            });
 
-                        g.getChildren().addAll(line, flowPane);
-                    } else {
-                        //otherwise, only add the line and node circle
-                        g.getChildren().add(line);
-                    }
+                            g.getChildren().addAll(line, flowPane);
+                        } else {
+                            //otherwise, only add the line and node circle
+                            g.getChildren().add(line);
+                        }
 
-                    //else, if current node is not this floors ending node, i.e., path continues
+                    } else if (firstNode) { //if current node is the starting node
+                        firstNode = false;
+
+                        MarkerType type;
+
+                        if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
+                            //place a dot on the location
+                            type = MarkerType.START;
+                        } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
+                            //place a dot on the location
+                            type = MarkerType.END;
+                        } else { // end node of just this floor
+                            //place a dot on the location
+                            type = MarkerType.LAST;
+                        }
+
+                        markerList.add(new MapMarker((xCoord + markerIconXOffset), (yCoord + markerIconYOffset), mapMarkerSize, type));
+
+                        //update the coordinates for the previous node
+                        prevXCoord = xCoord;
+                        prevYCoord = yCoord;
+
+                        //else, if current node is not this floors ending node, i.e., path continues
                     } else {
                         //create a line between this node and the previous node
                         Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);

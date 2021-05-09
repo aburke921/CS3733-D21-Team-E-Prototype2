@@ -574,7 +574,7 @@ public class newMapEditor {
             SB.append(longName.charAt(9));
             //Elevator names need to start with 'Elevator X xxxxx"
         } else {
-            makeConnection connection = makeConnection.makeConnection();
+            makeConnection connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
             int instance = DB.countNodeTypeOnFloor("e", floor, type) + 1;
             SB.append(String.format("%03d", instance));
         }
@@ -845,7 +845,7 @@ public class newMapEditor {
     public void fileOpenerNode(ActionEvent e) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(App.getPrimaryStage());
-        makeConnection connection = makeConnection.makeConnection();
+        makeConnection connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
         if (file != null) {
             //Have to save edge table so we can get it back after deleting
             DB.getNewCSVFile("hasEdge");

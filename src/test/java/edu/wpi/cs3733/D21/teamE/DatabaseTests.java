@@ -5,9 +5,11 @@ import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.views.CovidSurvey;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.UserManagement;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
+import javafx.application.Application;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
@@ -18,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.util.Pair;
 import org.junit.jupiter.api.*;
 
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ public class DatabaseTests {
 
 	@BeforeAll
 	public void setConnection() {
-		connection = makeConnection.makeConnection();
+		connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
 	}
 
 	@BeforeEach
@@ -175,8 +178,8 @@ public class DatabaseTests {
 				if (returnedNode.get("shortName").equals(correctNode.get("shortName"))) {
 					shortName = true;
 				}
-				if (nodeID && xCoord && yCoord && floor && building && nodeType && longName && !shortName) {
-					allCorrect = false;
+				if (nodeID && xCoord && yCoord && floor && building && nodeType && longName && shortName) {
+					allCorrect = true;
 				}
 			}
 		} else {
@@ -1308,7 +1311,7 @@ public class DatabaseTests {
 		insertUsers.add("Insert Into userAccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', Current Timestamp, '', Null, Null)");
 
 		for (String insertUser : insertUsers) {
-			try (PreparedStatement prepState = makeConnection.makeConnection().connection.prepareStatement(insertUser)) {
+			try (PreparedStatement prepState = makeConnection.makeConnection("jdbc:derby://localhost:1527/BWDB").connection.prepareStatement(insertUser)) {
 				prepState.execute();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -1572,7 +1575,7 @@ public class DatabaseTests {
 	}
 
 	@Test
-	@DisplayName("testGetAllNodes")
+	@DisplayName("testGetAllUsers")
 	public void testGetAllUsers() {
 
 
@@ -1627,7 +1630,7 @@ public class DatabaseTests {
 					email = true;
 				}
 				if (userType && userID && firstName && lastName && email) {
-					allCorrect = false;
+					allCorrect = true;
 				}
 			}
 		} else {

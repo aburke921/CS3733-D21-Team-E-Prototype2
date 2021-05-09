@@ -65,11 +65,7 @@ public class sendEmail {
 		String password;
 
 
-		if (System.getProperty("os.name").substring(0, 3).equals("Mac")) {
-			password = "olpqmnwwpkhihwjs";
-		} else {
-			password = "bwpeledauxsuxqja";
-		}
+
 
 		Properties props = System.getProperties();
 		props.put("mail.smtps.host", "smtp.gmail.com");
@@ -79,7 +75,7 @@ public class sendEmail {
 		//Email information
 		Message msg = new MimeMessage(session);
 		msg.setFrom(new InternetAddress("engineeringsoftware3733@gmail.com"));
-		;
+
 		msg.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(email, false));
 		msg.setSubject(subject);

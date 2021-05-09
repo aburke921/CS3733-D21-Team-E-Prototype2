@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.UserManagement.User;
 
@@ -12,7 +13,7 @@ import java.util.logging.Logger;
 
 public class UserAccountDB {
 
-	static Connection connection = makeConnection.makeConnection().getConnection();
+	static Connection connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true").getConnection();
 
 	/**
 	 * Uses executes the SQL statements required to create the userAccount table.

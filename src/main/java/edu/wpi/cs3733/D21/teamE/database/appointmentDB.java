@@ -1,10 +1,12 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.App;
+
 import java.sql.*;
 
 public class appointmentDB {
 
-	static Connection connection = makeConnection.makeConnection().connection;
+	static Connection connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true").connection;
 
 	public static void createAppointmentTable() {
 		//TODO: before deleting any users, save their information from userAccount into CSV

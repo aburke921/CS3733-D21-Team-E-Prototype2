@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class RequestsDB {
 
-	static Connection connection = makeConnection.makeConnection().connection;
+	static Connection connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true").connection;
 
 
 

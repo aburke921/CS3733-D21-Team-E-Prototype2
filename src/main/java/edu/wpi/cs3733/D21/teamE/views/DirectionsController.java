@@ -126,10 +126,6 @@ public class DirectionsController {
 
         directionsEntity = DirectionsEntity.getInstance();
 
-        car.setStyle("-fx-background-color: -fx--primary");
-        bike.setStyle("-fx-background-color: -fx--primary-light");
-        walking.setStyle("-fx-background-color: -fx--primary-light");
-        transit.setStyle("-fx-background-color: -fx--primary-light");
         currentlySelected = car;
 
         toBWH.disableProperty().bind(address.textProperty().isEmpty());
@@ -173,7 +169,6 @@ public class DirectionsController {
         listView.getItems().addAll(directions);
         listView.setPrefHeight(USE_COMPUTED_SIZE);
         listView.setSelectionModel(new NoSelectionModel<String>());
-        listView.getStyleClass().add("scrollables");
         listView.getStyleClass().add("directions");
 
         listView.setCellFactory(param -> new ListCell<String>() {
@@ -273,9 +268,11 @@ public class DirectionsController {
      * @param button The button to change the highlight to
      */
     private void switchFocusButton(JFXButton button) {
-        currentlySelected.setStyle("-fx-background-color: -fx--primary-light");
+        currentlySelected.getStyleClass().remove("transit-button-selected");
+        currentlySelected.getStyleClass().add("transit-button-unselected");
         currentlySelected = button;
-        currentlySelected.setStyle("-fx-background-color: -fx--primary");
+        currentlySelected.getStyleClass().remove("transit-button-unselected");
+        currentlySelected.getStyleClass().add("transit-button-selected");
     }
 
     /**

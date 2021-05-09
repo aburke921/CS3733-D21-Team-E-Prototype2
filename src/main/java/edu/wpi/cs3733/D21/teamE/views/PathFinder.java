@@ -22,11 +22,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -44,11 +46,52 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class PathFinder {
 
+    // Node setting fields
+
     private static int startNodeIndex = -1;
     private static int endNodeIndex = -1;
 
-    private Node startNode = null;
-    private Node endNode = null;
+    private String startNodeID = null;
+    private String endNodeID = null;
+
+    // stuff for directory
+
+    private final String[] typeNames = {"REST", "INFO", "DEPT", "LABS", "RETL", "SERV", "CONF", "EXIT", "ELEV", "STAI", "PARK"}; // array of types
+    private HashMap<String, HashMap<String, String>> directory = new HashMap<>();
+
+    private final HashMap<String, String> longTypeNames = new HashMap<String, String>(){{
+        put("REST", "Restrooms");
+        put("INFO", "Information Desks");
+        put("DEPT", "Departments");
+        put("LABS", "Laboratories");
+        put("RETL", "Retail");
+        put("SERV", "Services");
+        put("CONF", "Conferences");
+        put("EXIT", "Entrances/Exits");
+        put("ELEV", "Elevators");
+        put("STAI", "Stairs");
+        put("PARK", "Parking");
+    }};
+
+    private JFXTreeView treeView;
+    private StackPane directoryPane;
+
+    @FXML //fx:id="directoryButton"
+    private JFXButton directoryButton;
+
+    private final HashMap<String, String> directoryColor = new HashMap<String, String>(){{
+        put("Restrooms", "#b00404");
+        put("Information Desks", "#dc721c");
+        put("Departments", "#74058c");
+        put("Laboratories", "#c900ae");
+        put("Retail", "#3d4f9d");
+        put("Services", "#005cff");
+        put("Conferences", "#7f5124");
+        put("Entrances/Exits", "#90e430");
+        put("Elevators", "#769557");
+        put("Stairs", "#007f52");
+        put("Parking", "#1299d2");
+    }};
 
     /*
      * FXML Values
@@ -74,6 +117,7 @@ public class PathFinder {
 
     @FXML // fx:id="endLocationList"
     private JFXComboBox<String> endLocationComboBox; // Value injected by FXMLLoader
+
     @FXML
     private JFXToggleButton handicap;
 
@@ -169,11 +213,11 @@ public class PathFinder {
 
     private ArrayList<Node> nodeArrayList;
 
-    private final String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; //list of floorNames
+    private ObservableList<String> longNameArrayList;
+
+    private final String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; // list of floorNames
 
     private int currentFloorNamesIndex = 4; //start # should be init floor index + 1 (variable is actually always one beyond current floor)
-
-    private ObservableList<String> longNameArrayList;
 
     private double stageWidth;
     private double stageHeight;
@@ -226,7 +270,7 @@ public class PathFinder {
         findPathButton.setDisable(startLocationComboBox.getSelectionModel().isEmpty() ||
                 endLocationComboBox.getSelectionModel().isEmpty());
         // clear preset node
-        startNode = null;
+        startNodeID = null;
     }
 
 
@@ -240,7 +284,7 @@ public class PathFinder {
         findPathButton.setDisable(startLocationComboBox.getSelectionModel().isEmpty() ||
                 endLocationComboBox.getSelectionModel().isEmpty());
         // clear preset node
-        endNode = null;
+        endNodeID = null;
     }
 
     /**
@@ -273,7 +317,6 @@ public class PathFinder {
 
         tableView.setSelectionModel(null);
         tableView.setPrefHeight(USE_COMPUTED_SIZE);
-        tableView.getStyleClass().add("scrollables");
         tableView.getStyleClass().add("directions");
         tableView.getStyleClass().add("noheader");
         tableView.getStyleClass().add("table-row-cell");
@@ -343,7 +386,9 @@ public class PathFinder {
 
 
         JFXDialogLayout popup = new JFXDialogLayout();
-        popup.setHeading(new Text("Path Directions"));
+        Text text = new Text("Path Directions");
+        text.setFont(Font.font(null, FontWeight.BOLD, 17));
+        popup.setHeading(text);
         popup.setBody(tableView);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
         JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
@@ -362,7 +407,9 @@ public class PathFinder {
     @FXML
     void clickOnNode(int index){
         JFXDialogLayout error = new JFXDialogLayout();
-        error.setHeading(new Text("Location selection"));
+        Text text = new Text("Location Selection");
+        text.setFont(Font.font(null, FontWeight.BOLD, 17));
+        error.setHeading(text);
         JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
         JFXButton parking = new JFXButton("Set Parking");
         if (App.userID == 0 || !nodeArrayList.get(index).get("type").equals("PARK")) {
@@ -389,20 +436,21 @@ public class PathFinder {
         start.setOnAction(event -> {
             startLocationComboBox.getSelectionModel().select(index);
             // clear preset node
-            startNode = null;
+            startNodeID = null;
             dialog.close();
 
         });
         destination.setOnAction(event -> {
             endLocationComboBox.getSelectionModel().select(index);
             // clear preset node
-            endNode = null;
+            endNodeID = null;
             dialog.close();
 
         });
         bathroom.setOnAction(event -> {
             SearchContext search = new SearchContext();
             startLocationComboBox.getSelectionModel().select(index);
+            endLocationComboBox.setValue("");
             Node bathroom1 = search.findNearest(nodeArrayList.get(index),"REST");
             int endIndex = 0;
             for(int i = 0; i < nodeArrayList.size();i++){
@@ -413,8 +461,8 @@ public class PathFinder {
             }
             endLocationComboBox.getSelectionModel().select(endIndex);
             // clear preset nodes
-            startNode = null;
-            endNode = null;
+            startNodeID = null;
+            endNodeID = null;
             dialog.close();
 
 
@@ -460,8 +508,12 @@ public class PathFinder {
 
         System.out.println("\nFINDING PATH...");
 
-        if (startNode != null) { // if not null, there is a preset start
-            selectedStartNodeID = startNode.get("id");
+        if (directoryPane.isVisible()) {
+            closeDirectory();
+        }
+
+        if (startNodeID != null) { // if not null, there is a preset start
+            selectedStartNodeID = startNodeID;
         } else {
             //get index and ID of selected item in dropdown
             startLocationComboBox.setItems(longNameArrayList);
@@ -470,8 +522,8 @@ public class PathFinder {
             System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + selectedStartNodeID);
         }
 
-        if (endNode != null) { // if not null, there is a preset end
-            selectedEndNodeID = endNode.get("id");
+        if (endNodeID != null) { // if not null, there is a preset end
+            selectedEndNodeID = endNodeID;
         } else {
             //get index of selected item in dropdown
             endLocationComboBox.setItems(longNameArrayList);
@@ -585,6 +637,8 @@ public class PathFinder {
      */
     public void drawMap(Path fullPath, String floorNum) {
 
+        //TODO: fix marker ordering (undo the dumb stuff Matthew did earlier, make a list of "end" nodes with their coords and whether they are start, mid, or end markers)
+
         //clear map
         System.out.print("\nCLEARING MAP...");
         pane.getChildren().clear();
@@ -605,6 +659,8 @@ public class PathFinder {
         for(Path path : paths){
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
 
+                ArrayList<MapMarker> markerList = new ArrayList<>(); // List of markers to place at the end of the drawing of the path
+
                 double markerIconXOffset = -(scale * 3);
                 double markerIconYOffset = -(scale / 2);
                 String mapMarkerSize = "25";
@@ -621,8 +677,7 @@ public class PathFinder {
 
                 ObservableList<Double> coordsList = FXCollections.observableArrayList();
 
-                int firstNode = 1;
-                String firstID = null;
+                boolean firstNode = true;
                 while (legItr.hasNext()) { //loop through list
                     //this iterator will return a Node object
                     //which is just a container for all the node info like its coordinates
@@ -639,82 +694,39 @@ public class PathFinder {
                         distance += Math.hypot(xCoord - prevXCoord, yCoord - prevYCoord);
                     }
 
-                    if (firstNode == 1) { //if current node is the starting node
-                        if (!(prevYCoord < 1) || !(prevXCoord < 1)) {
-                            //technically second node, here to prevent circle from being "under" path line, prev will be fist node
-                            firstNode = 0;
-                            MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
-                            icon.setSize(mapMarkerSize);
-                            icon.setLayoutX(prevXCoord + markerIconXOffset);
-                            icon.setLayoutY(prevYCoord + markerIconYOffset);
-
-                            if (firstID.equalsIgnoreCase(selectedStartNodeID)) {
-                                System.out.println(scale);
-                                // True first node
-                                icon.setId("submission-icon");
-
-                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.GREEN);
-                            } else {
-                                // First on floor
-                                icon.setId("red-icon");
-
-                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
-                            }
-
-
-                            //create a line between this node and the previous node
-                            Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-                            line.setStrokeLineCap(StrokeLineCap.ROUND);
-                            line.setStrokeWidth(strokeWidth);
-                            line.setStroke(Color.RED);
-
-                            g.getChildren().addAll(line, icon);
-                        } else {
-                            //Track true first node's ID, for node color issue
-                            firstID = node.get("id");
-                        }
-                        if (!legItr.hasNext()) { //if current node is the ending node for this floor, e.g. last node is also first node on floor
-
-                            MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
-                            icon.setSize(mapMarkerSize);
-                            icon.setLayoutX(xCoord + markerIconXOffset);
-                            icon.setLayoutY(yCoord + markerIconYOffset);
-
-                            if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
-                                //place a dot on the location
-                                icon.setId("submission-icon");
-                            } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
-                                //place a dot on the location
-                                icon.setId("black-icon");
-                            } else { // end node of just this floor
-                                //place a dot on the location
-                                icon.setId("red-icon");
-                            }
-
-                            g.getChildren().addAll(icon);
-                        }
-                        //update the coordinates for the previous node
-                        prevXCoord = xCoord;
-                        prevYCoord = yCoord;
-
-
-                    } else if (!legItr.hasNext()) { //if current node is the ending node for this floor
-
-                        MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
-                        icon.setSize(mapMarkerSize);
-                        icon.setLayoutX(xCoord + markerIconXOffset);
-                        icon.setLayoutY(yCoord + markerIconYOffset);
-
-                        if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
-                            //place a dot on the location
-                            icon.setId("black-icon");
-                        } else { // end node of just this floor
-                            //place a dot on the location
-                            icon.setId("red-icon");
-                        }
+                    if (!legItr.hasNext()) { //if current node is the ending node for this floor
 
                         //create a line between this node and the previous node
                         Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+
+                        MarkerType type;
+
+                        if (firstNode) { //if current node is the first node on floor of path leg
+                            firstNode = false;
+
+                            if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
+                                //place a dot on the location
+                                type = MarkerType.START;
+                            } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
+                                //place a dot on the location
+                                type = MarkerType.END;
+                            } else { // end node of just this floor
+                                //place a dot on the location
+                                type = MarkerType.FIRST;
+                            }
+                            line = new Line(xCoord, yCoord, xCoord, yCoord); // prevent line from origin
+                        } else {
+                            if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
+                                //place a dot on the location
+                                type = MarkerType.END;
+                            } else { // end node of just this floor
+                                //place a dot on the location
+                                type = MarkerType.LAST;
+                            }
+                        }
+
+                        markerList.add(new MapMarker((xCoord + markerIconXOffset), (yCoord + markerIconYOffset), mapMarkerSize, type));
+
                         line.setStrokeLineCap(StrokeLineCap.ROUND);
                         line.setStrokeWidth(strokeWidth);
                         line.setStroke(Color.RED);
@@ -774,23 +786,45 @@ public class PathFinder {
                             }
                         }
 
-                    if(floorLabel != null) {
-                        //if a floor label was made, line and node circle along with the label and its parent flowPane
-                        String finalDestFloor = destFloor;
+                        if(floorLabel != null) {
+                            //if a floor label was made, line and node circle along with the label and its parent flowPane
+                            String finalDestFloor = destFloor;
 
-                        floorLabel.setOnMouseClicked(e -> {
-                            int num = floorMap.get(floorNum);
-                            floorVisits[num] = floorVisits[num] + 1;
-                            setCurrentFloor(finalDestFloor);
-                        });
+                            floorLabel.setOnMouseClicked(e -> {
+                                int num = floorMap.get(floorNum);
+                                floorVisits[num] = floorVisits[num] + 1;
+                                setCurrentFloor(finalDestFloor);
+                            });
 
-                        g.getChildren().addAll(line, icon, flowPane);
-                    } else {
-                        //otherwise, only add the line and node circle
-                        g.getChildren().addAll(line, icon);
-                    }
+                            g.getChildren().addAll(line, flowPane);
+                        } else {
+                            //otherwise, only add the line and node circle
+                            g.getChildren().add(line);
+                        }
 
-                    //else, if current node is not this floors ending node, i.e., path continues
+                    } else if (firstNode) { //if current node is the starting node
+                        firstNode = false;
+
+                        MarkerType type;
+
+                        if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
+                            //place a dot on the location
+                            type = MarkerType.START;
+                        } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
+                            //place a dot on the location
+                            type = MarkerType.END;
+                        } else { // end node of just this floor
+                            //place a dot on the location
+                            type = MarkerType.FIRST;
+                        }
+
+                        markerList.add(new MapMarker((xCoord + markerIconXOffset), (yCoord + markerIconYOffset), mapMarkerSize, type));
+
+                        //update the coordinates for the previous node
+                        prevXCoord = xCoord;
+                        prevYCoord = yCoord;
+
+                        //else, if current node is not this floors ending node, i.e., path continues
                     } else {
                         //create a line between this node and the previous node
                         Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
@@ -807,26 +841,33 @@ public class PathFinder {
 
                 }
 
-                //Add moving ball along path
-                Circle ball = new Circle(5, Color.RED);
-                g.getChildren().add(ball);
-
-                Polyline polyline = new Polyline();
-                polyline.getPoints().addAll(coordsList);
-
-                PathTransition transition = new PathTransition();
-                transition.setNode(ball);
-
-                if(distance > 100){
-                    double duration = distance / 150;
-                    transition.setDuration(Duration.seconds(duration));
-                } else {
-                    transition.setDuration(Duration.seconds(1));
+                for (MapMarker marker : markerList) {
+                    g.getChildren().add(marker.makeMarker());
                 }
 
-                transition.setPath(polyline);
-                transition.setCycleCount(PathTransition.INDEFINITE);
-                transition.play();
+                if (coordsList.size() > 2) { //prevent single element path bug
+                    //Add moving ball along path
+                    Circle ball = new Circle(5, Color.RED);
+                    g.getChildren().add(ball);
+
+                    Polyline polyline = new Polyline();
+                    polyline.getPoints().addAll(coordsList);
+
+                    PathTransition transition = new PathTransition();
+                    transition.setNode(ball);
+
+                    if(distance > 100){
+                        double duration = distance / 150;
+                        transition.setDuration(Duration.seconds(duration));
+                    } else {
+                        transition.setDuration(Duration.seconds(1));
+                    }
+
+                    transition.setPath(polyline);
+                    transition.setCycleCount(PathTransition.INDEFINITE);
+                    transition.play();
+                }
+
 
                 //add all objects to the scene
                 pane.getChildren().addAll(g);
@@ -973,11 +1014,10 @@ public class PathFinder {
      * @param floorNum floor to change to
      */
     public void setCurrentFloor(String floorNum) {
+        switchFocusButton(floorNum);
         currentFloor = floorNum;
         currFloor.setText("");
         currFloor.setText(currentFloor);
-
-        switchFocusButton(floorNum);
 
         //draw path for new floor
         drawMap(currentFoundPath,currentFloor);
@@ -1048,11 +1088,20 @@ public class PathFinder {
         startLocationComboBox.setItems(longNameArrayList);
         endLocationComboBox.setItems(longNameArrayList);
 
-        startLocationComboBox.getStyleClass().add("scrollables");
-        endLocationComboBox.getStyleClass().add("scrollables");
+        ArrayList<TreeItem> categories = new ArrayList<>();
+
+        for (String type : typeNames) {
+            TreeItem category = new TreeItem(longTypeNames.get(type));
+            ArrayList<TreeItem> nodes = new ArrayList<>();
+            for (Node node : DB.getAllNodesByType(type)) {
+                TreeItem item = new TreeItem(node.get("longName"));
+                nodes.add(item);
+            }
+            category.getChildren().addAll(nodes);
+            categories.add(category);
+        }
 
         System.out.println("done");
-
 
         new AutoCompleteComboBoxListener<>(startLocationComboBox);
         new AutoCompleteComboBoxListener<>(endLocationComboBox);
@@ -1073,12 +1122,6 @@ public class PathFinder {
 
         scale = imageWidth / imageView.getFitWidth();
 
-        floor1.setStyle("-fx-background-color: -fx--primary");
-        floor2.setStyle("-fx-background-color: -fx--primary-light");
-        floor3.setStyle("-fx-background-color: -fx--primary-light");
-        floorG.setStyle("-fx-background-color: -fx--primary-light");
-        floorL1.setStyle("-fx-background-color: -fx--primary-light");
-        floorL2.setStyle("-fx-background-color: -fx--primary-light");
         currentlySelected = floor1;
 
         //Sidebar stuff
@@ -1102,7 +1145,18 @@ public class PathFinder {
         stackPane.scaleXProperty().bind(zoomSlider.valueProperty());
         stackPane.scaleYProperty().bind(zoomSlider.valueProperty());
 
-        rootBorderPane.setCenter(scrollPane);
+        ArrayList<TreeItem> directoryNodes = build();
+        treeView = makeTreeView(directoryNodes);
+
+        directoryPane = new StackPane(treeView);
+        directoryPane.setMaxWidth(330);
+        directoryPane.prefHeightProperty().bind(primaryStage.heightProperty().subtract(appBarAnchorPane.heightProperty()).subtract(lowerAnchorPane.heightProperty()));
+        directoryPane.setVisible(false);
+
+        StackPane outerPane = new StackPane(scrollPane, directoryPane);
+        outerPane.setAlignment(Pos.CENTER_LEFT);
+
+        rootBorderPane.setCenter(outerPane);
         rootBorderPane.setPrefWidth(stageWidth);
         rootBorderPane.setPrefHeight(stageHeight);
 
@@ -1193,16 +1247,18 @@ public class PathFinder {
 
         currFloor.textProperty().addListener(observable -> subject.setState(currFloor.getText()));
 
-        startNode = App.getStartNode();
+        Node startNode = App.getStartNode();
         if (startNode != null) {
             startLocationComboBox.setValue(startNode.get("longName"));
+            startNodeID = startNode.get("id");
             App.setStartNode(null);
             // Reset so user doesn't get this again
         }
 
-        endNode = App.getEndNode();
+        Node endNode = App.getEndNode();
         if (endNode != null) {
             endLocationComboBox.setValue(endNode.get("longName"));
+            endNodeID = endNode.get("id");
             App.setEndNode(null);
             // Reset so user doesn't get this again
         }
@@ -1218,21 +1274,167 @@ public class PathFinder {
     }
 
     /**
+     * Builds the Tree for the directory
+     * @return Categorized and sorted directory
+     */
+    private ArrayList<TreeItem> build() {
+        ArrayList<TreeItem> categories = new ArrayList<>();
+
+        for (String type : typeNames) {
+            String typeName = longTypeNames.get(type);
+            TreeItem category = new TreeItem(typeName);
+            ArrayList<TreeItem> nodes = new ArrayList<>();
+            HashMap<String, String> nameToID = new HashMap<>();
+            ArrayList<Node> nodeList = DB.getAllNodesByType(type);
+            Collections.sort(nodeList);
+            for (Node node : nodeList) {
+                String longName = node.get("longName");
+                nameToID.put(longName, node.get("id"));
+                TreeItem item = new TreeItem(longName);
+                nodes.add(item);
+            }
+            directory.put(typeName, nameToID);
+            category.getChildren().addAll(nodes);
+            categories.add(category);
+        }
+
+        return categories;
+    }
+
+    /**
+     * Creates the TreeView
+     * @param data The directory infor from build();
+     * @return Directory TreeView
+     */
+    private JFXTreeView makeTreeView(ArrayList<TreeItem> data) {
+        JFXTreeView view = new JFXTreeView();
+        TreeItem root = new TreeItem("Locations");
+        root.getChildren().addAll(data);
+        view.setRoot(root);
+        view.setShowRoot(false);
+
+        view.setCellFactory(tree -> {
+            TreeCell<String> cell = new TreeCell<String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty) ;
+                    if (empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        setText(item);
+                        // Matching directory label color
+                        if (directoryColor.containsKey(item)) {
+                            String color = directoryColor.get(item);
+                            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.SQUARE);
+                            icon.setStyle("-fx-fill: " + color);
+                            setGraphic(icon);
+                            setGraphicTextGap(7);
+                        } else {
+                            setGraphic(null);
+                        }
+                    }
+                }
+            };
+            cell.setOnMouseClicked(event -> {
+                if (! cell.isEmpty()) {
+                    TreeItem<String> treeItem = cell.getTreeItem();
+                    TreeItem<String> parent = treeItem.getParent();
+                    if (!parent.equals(root)) { // reject categories, only allow nodes
+                        String name = treeItem.getValue();
+                        String type = parent.getValue();
+                        String nodeID = directory.get(type).get(name);
+                        selectNode(name, nodeID);
+                    }
+
+                }
+            });
+            return cell ;
+        });
+
+        return view;
+    }
+
+    private void selectNode(String name, String id){
+        JFXDialogLayout popup = new JFXDialogLayout();
+        Text text = new Text("Location Selection");
+        text.setFont(Font.font(null, FontWeight.BOLD, 17));
+        popup.setHeading(text);
+        JFXDialog dialog = new JFXDialog(directoryPane, popup,JFXDialog.DialogTransition.CENTER);
+
+        JFXButton start = new JFXButton("Start");
+        JFXButton destination = new JFXButton("Destination");
+        start.setOnAction(event -> {
+            startNodeID = id;
+            startLocationComboBox.setValue(name);
+            dialog.close();
+
+        });
+        destination.setOnAction(event -> {
+            endNodeID = id;
+            endLocationComboBox.setValue(name);
+            dialog.close();
+
+        });
+        popup.setActions(start,destination);
+
+        dialog.setMaxHeight(20);
+        dialog.setMaxWidth(250);
+
+        dialog.show();
+    }
+
+    /**
+     * Opens or closes the directory, based on what needs to happen
+     */
+    public void changeDirectory() {
+        if (directoryPane.visibleProperty().get()) {
+            closeDirectory();
+        } else {
+            openDirectory();
+        }
+    }
+
+    /**
+     * Closes directory
+     */
+    private void closeDirectory() {
+        directoryPane.setVisible(false);
+        startLocationComboBox.setDisable(false);
+        endLocationComboBox.setDisable(false);
+        directoryButton.getStyleClass().remove("directorySelected");
+        directoryButton.getStyleClass().add("directory");
+    }
+
+    /**
+     * Open directory
+     */
+    private void openDirectory() {
+        directoryPane.setVisible(true);
+        startLocationComboBox.setDisable(true);
+        endLocationComboBox.setDisable(true);
+        directoryButton.getStyleClass().remove("directory");
+        directoryButton.getStyleClass().add("directorySelected");
+    }
+
+    /**
      * Switches visible floor
      * @param e Button click action
      */
     public void chooseFloor(ActionEvent e) {
+        Button button = ((Button) e.getSource());
+        String floor = button.getText();
+        currFloor.setText(floor);
+
+        setCurrentFloor(floor);
+
         //clear current floor of markers
         for (Node node : currentMarkers) {
             NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
             nM.getRectangle().setVisible(false);
         }
-        Button button = ((Button) e.getSource());
-        currentMarkers.clear();
-        String floor = button.getText();
-        currFloor.setText(floor);
 
-        setCurrentFloor(floor);
+        currentMarkers.clear();
         //drawMap(currentFoundPath, currentFloor);
 
         System.out.println("Current floor set to " + floor);
@@ -1243,35 +1445,35 @@ public class PathFinder {
      * @param floor Floor to switch to
      */
     private void switchFocusButton(String floor) {
-        currentlySelected.setStyle("-fx-background-color: -fx--primary-light");
-        Button button = currentlySelected;
+        currentlySelected.getStyleClass().remove("transit-button-selected");
+        currentlySelected.getStyleClass().add("transit-button-unselected");
         switch (floor) {
             case "L2":
-                button = floorL2;
+                currentlySelected = floorL2;
                 break;
 
             case "L1":
-                button = floorL1;
+                currentlySelected = floorL1;
                 break;
 
             case "G":
-                button = floorG;
+                currentlySelected = floorG;
                 break;
 
             case "1":
-                button = floor1;
+                currentlySelected = floor1;
                 break;
 
             case "2":
-                button = floor2;
+                currentlySelected = floor2;
                 break;
 
             case "3":
-                button = floor3;
+                currentlySelected = floor3;
                 break;
         }
-        currentlySelected = button;
-        currentlySelected.setStyle("-fx-background-color: -fx--primary");
+        currentlySelected.getStyleClass().remove("transit-button-unselected");
+        currentlySelected.getStyleClass().add("transit-button-selected");
     }
 
     @FXML
@@ -1387,7 +1589,8 @@ public class PathFinder {
         String result = QRCode.scanQR();
         String nodeID = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
         System.out.println("Scanned nodeID: " + nodeID);
-        startNode = DB.getNodeInfo(nodeID);
+        Node startNode = DB.getNodeInfo(nodeID);
+        startNodeID = startNode.get("id");
         startLocationComboBox.setValue(startNode.get("longName"));
     }
 }

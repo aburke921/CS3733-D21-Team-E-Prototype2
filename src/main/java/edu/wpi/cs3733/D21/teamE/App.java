@@ -24,9 +24,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.Scanner;
 
+import org.apache.derby.drda.NetworkServerControl;
+import java.net.InetAddress;
 
 public class App extends Application {
 
@@ -75,6 +77,13 @@ public class App extends Application {
 	private static boolean toEmergency = false;
 
 	private static boolean lockEndPath = false;
+	public static String driverURL;
+	public static String nextDriverURL;
+
+	public App() {
+
+	}
+
 
 	//setters and getters for above variables
 	public static boolean isShowLogin() { return showLogin; }
@@ -99,6 +108,8 @@ public class App extends Application {
 	public static void setToEmergency(boolean toEmergency) { App.toEmergency = toEmergency; }
 	public static boolean isLockEndPath() { return lockEndPath; }
 	public static void setLockEndPath(boolean lockEndPath) { App.lockEndPath = lockEndPath; }
+	public static void setNextDriverURL(String url){ nextDriverURL = url; }
+
 
 	/*---------------------------------
 	 *		JAVAFX APP FUNCTIONS
@@ -113,9 +124,31 @@ public class App extends Application {
 	 *
 	 */
 	@Override
-	public void init() {
+	public void init() throws Exception {
+
+			NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
+			server.start(null);
+
+
+
+		// reading the driverOption.txt file
+		try {
+			File file = new File("src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt");
+			Scanner scanner = new Scanner(file);
+			while (scanner.hasNextLine()) {
+				String data = scanner.nextLine();
+				driverURL = data;
+				nextDriverURL = data;
+			}
+			scanner.close();
+		} catch (FileNotFoundException e) {
+			System.err.println("An error occurred in reading the file.");
+			//e.printStackTrace();
+		}
+
+
 		System.out.println("Starting App Init...");
-		makeConnection connection = makeConnection.makeConnection();
+		makeConnection connection = makeConnection.makeConnection(driverURL);
 		System.out.println("...Connected to the DB");
 		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");
@@ -185,6 +218,18 @@ public class App extends Application {
 	@Override
 	public void stop() {
 		System.out.println("Shutting Down");
+		if(!driverURL.equals(nextDriverURL)){
+			//ovewrite to textfile
+			try {
+				FileWriter myWriter = new FileWriter("src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt");
+				myWriter.write(nextDriverURL);
+				myWriter.close();
+				System.out.println("Successfully wrote to the file.");
+			} catch (IOException e) {
+				System.out.println("An error occurred.");
+				e.printStackTrace();
+			}
+		}
 		System.exit(0);
 	}
 
@@ -216,6 +261,23 @@ public class App extends Application {
 		dialog.show();
 	}
 
+	public static void databaseChangePopup(String heading, String message, StackPane stackPane) {
+		System.out.println("DialogBox Posted");
+		JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+		jfxDialogLayout.setHeading(new Text(heading));
+		jfxDialogLayout.setBody(new Text(message));
+		JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+		JFXButton cancelButton = new JFXButton("Ok");
+		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				dialog.close();
+
+			}
+		});
+		jfxDialogLayout.setActions(cancelButton);
+		dialog.show();
+	}
 
 	/**
 	 * Changes the currently displayed scene.

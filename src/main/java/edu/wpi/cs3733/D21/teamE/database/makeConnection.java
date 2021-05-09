@@ -1,15 +1,22 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import com.google.inject.Singleton;
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.MedicineDeliveryObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.SanitationServiceObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.SecurityServiceObj;
+import org.apache.derby.drda.NetworkServerControl;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
+
+
 
 public class makeConnection {
 
@@ -19,7 +26,7 @@ public class makeConnection {
 	//private MapEditor mapEditor = new MapEditor();
 
 	// private constructor restricted to this class itself
-	public makeConnection() {
+	public makeConnection(String driverString) {
 		// Initialize DB
 		System.out.println("Starting connection to Apache Derby\n");
 		try {
@@ -29,33 +36,53 @@ public class makeConnection {
 			props.put("user", "admin");
 			props.put("password", "admin");
 
-			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+			String forNameURL = "org.apache.derby.jdbc.EmbeddedDriver";
+			if(driverString.contains("localhost")){
+				forNameURL = "org.apache.derby.jdbc.ClientDriver";
+			}
+
+			Class.forName(forNameURL);
 
 			try {
 				/*
-				 * Before making this connectin make sure you're database tab in Intellij
+				 * Before making this connection make sure you're database tab in Intellij
 				 * Is not connected to the database! This will cause the DriverManager to
 				 * Throw an SQLException and goof a bunch of stuff up!
 				 */
-				this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
+
+				this.connection = DriverManager.getConnection(driverString, props);
+				System.out.println("Connected to admin's choice of DB");
 				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
-				// e.printStackTrace();
+				try{
+					this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
+					System.out.println("Connected to Embedded");
+				}
+				catch (SQLException s) {
+					//s.printStackTrace();
+					System.err.println("nothing works");
+				}
+				//e.printStackTrace();
 				System.err.println("error with the DriverManager, check if you have connected to database in IntelliJ");
 			}
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("error with the EmbeddedDriver class.forName thing");
 		}
 	}
 
 	// static method to create instance of Singleton class
-	public static makeConnection makeConnection() {
+	public static makeConnection makeConnection(String driverString) {
 		// To ensure only one instance is created
 		if (singleInstance == null) {
-			singleInstance = new makeConnection();
+			singleInstance = new makeConnection(driverString);
 		}
 		return singleInstance;
+	}
+
+
+	public static void reinitializeSingleton(){
+		singleInstance = null;
 	}
 
 	public Connection getConnection() {
@@ -87,10 +114,6 @@ public class makeConnection {
 			stmt.execute("Drop Table sanitationrequest");
 			stmt.execute("Drop Table floralrequests");
 			stmt.execute("Drop Table requests");
-//			stmt.execute("Drop View visitoraccount");
-//			stmt.execute("Drop View patientaccount");
-//			stmt.execute("Drop View doctoraccount");
-//			stmt.execute("Drop View adminaccount");
 			stmt.execute("Drop Table useraccount");
 			stmt.execute("Drop Table hasedge");
 			stmt.execute("Drop Table node");

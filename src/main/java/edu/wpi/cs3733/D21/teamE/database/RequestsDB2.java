@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
 import org.jsoup.Jsoup;
@@ -17,7 +18,7 @@ import java.util.Set;
 
 public class RequestsDB2 {
 
-	static Connection connection = makeConnection.makeConnection().connection;
+	static Connection connection = makeConnection.makeConnection(App.driverURL).connection;
 
 	//ALL REQUEST STUFF:
 

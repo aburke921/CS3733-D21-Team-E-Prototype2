@@ -4,16 +4,31 @@ import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.ExternalPatient;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.MedicineDelivery;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
+import edu.wpi.cs3733.D21.teamE.database.*;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.io.File;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DB {
 
+
+	public static void terminateConnection() {
+		DatabaseService.terminateConnection();
+	}
 	// AppointmentDB:
 
 	public static void createAllTables() {
@@ -794,4 +809,12 @@ public class DB {
 	public static boolean checkForNoSymptoms(int userID) {
 		return RequestsDB.checkForNoSymptoms(userID);
 	}
+
+
+	public static void deleteClientBW(File dir) {
+		DatabaseService.deleteDir(dir);
+	}
+
+
+
 }

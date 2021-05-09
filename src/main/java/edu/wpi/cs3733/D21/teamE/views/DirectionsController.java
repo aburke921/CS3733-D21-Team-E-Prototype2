@@ -224,6 +224,46 @@ public class DirectionsController {
         WebView webView = new WebView();
         webView.getEngine().loadContent("<iframe width='420' height='315' src=" + URL + " />");
 
+        JFXDialogLayout popup = new JFXDialogLayout();
+        popup.setHeading(new Text(header));
+        popup.setBody(webView);
+        popup.setPrefHeight(USE_COMPUTED_SIZE);
+        popup.getStyleClass().add("jfx-dialog");
+        JFXDialog dialog = new JFXDialog(imageStackPane, popup, JFXDialog.DialogTransition.CENTER);
+        dialog.getStyleClass().add("jfx-dialog");
+
+        dialog.prefWidthProperty().bind(new DoubleBinding() {
+            {
+                super.bind(imageStackPane.widthProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return imageStackPane.widthProperty().getValue() - 150;
+            }
+        });
+        popup.prefWidthProperty().bind(new DoubleBinding() {
+            {
+                super.bind(imageStackPane.widthProperty());
+            }
+
+            @Override
+            protected double computeValue() {
+                return imageStackPane.widthProperty().getValue() - 150;
+            }
+        });
+        dialog.setMaxHeight(600);
+        JFXButton okay = new JFXButton("Close");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        popup.setActions(okay);
+        dialog.show();
+
     }
 
     /**

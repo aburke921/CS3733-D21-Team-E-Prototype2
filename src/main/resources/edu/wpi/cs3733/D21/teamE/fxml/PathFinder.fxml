@@ -3,9 +3,9 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXHamburger?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import com.jfoenix.controls.JFXToggleButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -23,17 +23,13 @@
          <children>
                 <HBox layoutY="1.0" prefHeight="58.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
                     <children>
-                  <JFXButton fx:id="directoryButton" onAction="#changeDirectory" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="30.0" styleClass="hamburgerButton" text="">
-                     <graphic>
-                        <JFXHamburger fx:id="hamburger" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="30.0" styleClass="hamburger">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                        </JFXHamburger>
-                     </graphic>
+                  <JFXButton fx:id="directoryButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#changeDirectory" prefHeight="27.0" prefWidth="27.0" styleClass="directory" text="">
                      <HBox.margin>
-                        <Insets left="15.0" top="13.0" />
+                        <Insets left="15.0" top="10.0" />
                      </HBox.margin>
+                     <graphic>
+                        <MaterialDesignIconView glyphName="MAP_MARKER" size="20" style="-fx-fill: WHITE;" textAlignment="CENTER" />
+                     </graphic>
                   </JFXButton>
                   <JFXComboBox fx:id="startLocationComboBox" onAction="#selectStartNode" prefHeight="25.0" prefWidth="150.0" promptText="Start Location">
                      <HBox.margin>

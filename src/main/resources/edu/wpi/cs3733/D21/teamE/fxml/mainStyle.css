@@ -412,20 +412,18 @@ scrollables.directions{
     -fx-stroke: TRANSPARENT;
 }
 
-.hamburger {
-    -fx-background-color: TRANSPARENT;
+.directory {
+    -fx-background-color: -fx--primary;
 }
 
-.hamburger StackPane {
-    -fx-background-radius: 2 2 2 2;
-    -fx-border-radius: 2 2 2 2;
+.directory:hover {
     -fx-background-color: -fx--primary-dark;
 }
 
-.hamburgerButton {
-    -fx-background-color: TRANSPARENT;
+.directorySelected {
+    -fx-background-color: -fx--primary-dark;
 }
 
-.hamburgerButton:hover .hamburger StackPane{
+.directorySelected:hover {
     -fx-background-color: -fx--primary;
 }

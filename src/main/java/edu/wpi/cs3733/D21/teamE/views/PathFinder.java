@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.*;
-import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
 import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -77,6 +76,9 @@ public class PathFinder {
 
     private JFXTreeView treeView;
     private StackPane directoryPane;
+
+    @FXML //fx:id="directoryButton"
+    private JFXButton directoryButton;
 
     private final HashMap<String, String> directoryColor = new HashMap<String, String>(){{
         put("Restrooms", "#b00404");
@@ -182,12 +184,6 @@ public class PathFinder {
     @FXML // fx:id="floor3"
     private Button floor3;
     private Button currentlySelected;
-
-    @FXML // fx:id="directoryButton"
-    private JFXButton directoryButton;
-    @FXML // fx:id="hamburger"
-    private JFXHamburger hamburger;
-    private HamburgerBasicCloseTransition transition;
 
     @FXML JFXCheckBox rest;
     @FXML JFXCheckBox info;
@@ -508,7 +504,9 @@ public class PathFinder {
 
         System.out.println("\nFINDING PATH...");
 
-        closeDirectory();
+        if (directoryPane.isVisible()) {
+            closeDirectory();
+        }
 
         if (startNodeID != null) { // if not null, there is a preset start
             selectedStartNodeID = startNodeID;
@@ -1162,9 +1160,6 @@ public class PathFinder {
         directoryPane.setMaxWidth(330);
         directoryPane.setVisible(false);
 
-        transition = new HamburgerBasicCloseTransition(hamburger);
-        transition.setRate(1);
-
         StackPane outerPane = new StackPane(scrollPane, directoryPane);
         outerPane.setAlignment(Pos.CENTER_LEFT);
 
@@ -1380,8 +1375,8 @@ public class PathFinder {
         directoryPane.setVisible(false);
         startLocationComboBox.setDisable(false);
         endLocationComboBox.setDisable(false);
-        transition.setRate(-1);
-        transition.play();
+        directoryButton.getStyleClass().remove("directorySelected");
+        directoryButton.getStyleClass().add("directory");
     }
 
     /**
@@ -1391,8 +1386,8 @@ public class PathFinder {
         directoryPane.setVisible(true);
         startLocationComboBox.setDisable(true);
         endLocationComboBox.setDisable(true);
-        transition.setRate(1);
-        transition.play();
+        directoryButton.getStyleClass().remove("directory");
+        directoryButton.getStyleClass().add("directorySelected");
     }
 
     /**

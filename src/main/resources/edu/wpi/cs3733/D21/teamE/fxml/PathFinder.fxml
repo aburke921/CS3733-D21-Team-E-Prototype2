@@ -60,7 +60,7 @@
                         <Insets left="20.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floorL1" onAction="#chooseFloor" styleClass="transit-button-unselected" text="L1">
+                  <JFXButton fx:id="floorL1" onAction="#chooseFloor" styleClass="submit-button" text="L1">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
@@ -228,6 +228,11 @@
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
+                                                <JFXCheckBox fx:id="all" checkedColor="BLACK" onAction="#sortNodesByType" text="Select All">
+                                                   <VBox.margin>
+                                                      <Insets top="8.0" />
+                                                   </VBox.margin>
+                                                </JFXCheckBox>
                                              </children>
                                           </VBox>
                                        </children>
@@ -238,7 +243,7 @@
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin></AnchorPane>
-                        <JFXButton fx:id="clearPath" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="100.0" onAction="#pathClear" prefWidth="100.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Clear Path">
+                        <JFXButton fx:id="clearPath" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="100.0" onAction="#pathClear" prefWidth="100.0" styleClass="back-button" text="Clear Path">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin></JFXButton>

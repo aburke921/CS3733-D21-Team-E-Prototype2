@@ -88,7 +88,7 @@
                                           <Font size="18.0" />
                                        </font>
                                        <HBox.margin>
-                                          <Insets left="20.0" />
+                                          <Insets />
                                        </HBox.margin>
                                        <graphic>
                                           <MaterialDesignIconView fill="WHITE" glyphName="TSHIRT_CREW" size="100" text="" />
@@ -116,6 +116,17 @@
                                           <MaterialDesignIconView fill="WHITE" glyphName="PILL" size="100" />
                                        </graphic>
                                     </JFXButton>
+                                    <JFXButton fx:id="securityGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Security Services" textAlignment="CENTER" textFill="#039be5" wrapText="true">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <graphic>
+                                          <MaterialDesignIconView fill="WHITE" glyphName="SHIELD" size="100" text="" />
+                                       </graphic>
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                    </JFXButton>
                                  </children>
                                  <VBox.margin>
                                     <Insets top="20.0" />
@@ -123,23 +134,12 @@
                               </HBox>
                               <HBox alignment="CENTER">
                                  <children>
-                                    <JFXButton fx:id="securityGoButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Security Services" textAlignment="CENTER" textFill="#039be5" wrapText="true">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                       <graphic>
-                                          <MaterialDesignIconView fill="WHITE" glyphName="SHIELD" size="100" text="" />
-                                       </graphic>
-                                    </JFXButton>
                                     <JFXButton fx:id="maintenanceRequestButton" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Facilities Maintenance" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                        <HBox.margin>
-                                          <Insets left="20.0" />
+                                          <Insets />
                                        </HBox.margin>
                                        <graphic>
                                           <MaterialDesignIconView fill="WHITE" glyphName="WRENCH" size="100" />
@@ -166,6 +166,17 @@
                                        <graphic>
                                           <MaterialDesignIconView fill="WHITE" glyphName="AMBULANCE" size="100" />
                                        </graphic>
+                                    </JFXButton>
+                                    <JFXButton alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Padding" textAlignment="CENTER" textFill="#039be5" visible="false" wrapText="true">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                       <graphic>
+                                          <MaterialDesignIconView fill="WHITE" size="100" />
+                                       </graphic>
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
                                     </JFXButton>
                                  </children>
                                  <VBox.margin>
@@ -211,13 +222,6 @@
                                           <Insets left="20.0" />
                                        </HBox.margin>
                                     </JFXButton>
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                              </HBox>
-                              <HBox alignment="CENTER">
-                                 <children>
                                     <JFXButton fx:id="religionButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Religious Requests" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
@@ -225,17 +229,20 @@
                                        <graphic>
                                           <MaterialDesignIconView fill="WHITE" glyphName="CHURCH" size="100" />
                                        </graphic>
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
                                     </JFXButton>
                                     <JFXButton fx:id="laundryRequestButton1" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="200.0" maxWidth="225.0" minHeight="175.0" minWidth="200.0" mnemonicParsing="false" onAction="#switchScene" prefHeight="175.0" prefWidth="200.0" ripplerFill="WHITE" styleClass="default-button" text="Laundry" textAlignment="CENTER" textFill="#039be5" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
-                                       <HBox.margin>
-                                          <Insets left="20.0" />
-                                       </HBox.margin>
                                        <graphic>
                                           <MaterialDesignIconView fill="WHITE" glyphName="TSHIRT_CREW" size="100" />
                                        </graphic>
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
                                     </JFXButton>
                                  </children>
                                  <VBox.margin>

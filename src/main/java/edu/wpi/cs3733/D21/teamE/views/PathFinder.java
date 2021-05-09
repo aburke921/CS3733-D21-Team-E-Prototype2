@@ -6,6 +6,7 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.QRCode;
@@ -17,6 +18,7 @@ import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
 import javafx.animation.PathTransition;
+import javafx.beans.binding.DoubleBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -173,6 +175,19 @@ public class PathFinder {
     private JFXHamburger hamburger;
     private HamburgerBasicCloseTransition transition;
 
+    @FXML JFXCheckBox rest;
+    @FXML JFXCheckBox info;
+    @FXML JFXCheckBox dept;
+    @FXML JFXCheckBox labs;
+    @FXML JFXCheckBox retl;
+    @FXML JFXCheckBox serv;
+    @FXML JFXCheckBox conf;
+    @FXML JFXCheckBox EXIT;
+    @FXML JFXCheckBox elev;
+    @FXML JFXCheckBox stai;
+    @FXML JFXCheckBox park;
+    @FXML JFXCheckBox all;
+
     /*
      * Additional Variables
      */
@@ -201,6 +216,19 @@ public class PathFinder {
     private double imageWidth;
     private double imageHeight;
 
+    private ScrollPane scrollPane;
+    Stage primaryStage;
+
+    private int[] floorVisits = new int[]{0, 0, 0, 0, 0, 0}; // Number of times each floor has been visited, in order: L2, L1, G, 1, 2, 3
+    private HashMap<String, Integer> floorMap = new HashMap<String, Integer>(){{
+        put("L2", 0);
+        put("L1", 1);
+        put("G", 2);
+        put("1", 3);
+        put("2", 4);
+        put("3", 5);
+    }};
+
     private double scale;
 
     private double radius = 6;
@@ -210,6 +238,8 @@ public class PathFinder {
     private Marker marker = new Marker();
 
     private ArrayList<Node> currentMarkers = new ArrayList<>();
+
+    private String[] nodeTypes = {"CONF", "DEPT", "ELEV", "INFO", "LABS", "REST","RETL", "STAI", "SERV", "EXIT", "PARK"};
 
     /**
      * Switch to a different scene
@@ -459,6 +489,7 @@ public class PathFinder {
      */
     @FXML
     public void findPath(ActionEvent event) {
+        floorVisits = new int[]{0, 0, 0, 0, 0, 0};
 
         System.out.println("\nFINDING PATH...");
 
@@ -603,11 +634,18 @@ public class PathFinder {
             return;
         }
 
+        int legNum = 0;
+
         List<Path> paths = fullPath.splitByFloor();
         for(Path path : paths){
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
 
+                double markerIconXOffset = -(scale * 3);
+                double markerIconYOffset = -(scale / 2);
+                String mapMarkerSize = "25";
+
                 Iterator<Node> legItr = path.iterator();
+
                 Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
                 //Use these variables to keep track of the coordinates of the previous node
@@ -640,13 +678,22 @@ public class PathFinder {
                         if (!(prevYCoord < 1) || !(prevXCoord < 1)) {
                             //technically second node, here to prevent circle from being "under" path line, prev will be fist node
                             firstNode = 0;
-                            Circle circle;
+                            MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
+                            icon.setSize(mapMarkerSize);
+                            icon.setLayoutX(prevXCoord + markerIconXOffset);
+                            icon.setLayoutY(prevYCoord + markerIconYOffset);
+
                             if (firstID.equalsIgnoreCase(selectedStartNodeID)) {
+                                System.out.println(scale);
                                 // True first node
-                                circle = new Circle(prevXCoord, prevYCoord, radius, Color.GREEN);
+                                icon.setId("submission-icon");
+
+                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.GREEN);
                             } else {
                                 // First on floor
-                                circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
+                                icon.setId("red-icon");
+
+                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
                             }
 
 
@@ -656,27 +703,30 @@ public class PathFinder {
                             line.setStrokeWidth(strokeWidth);
                             line.setStroke(Color.RED);
 
-                            g.getChildren().addAll(line, circle);
+                            g.getChildren().addAll(line, icon);
                         } else {
                             //Track true first node's ID, for node color issue
                             firstID = node.get("id");
                         }
                         if (!legItr.hasNext()) { //if current node is the ending node for this floor, e.g. last node is also first node on floor
 
-                            Circle circle;
+                            MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
+                            icon.setSize(mapMarkerSize);
+                            icon.setLayoutX(xCoord + markerIconXOffset);
+                            icon.setLayoutY(yCoord + markerIconYOffset);
 
                             if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
                                 //place a dot on the location
-                                circle = new Circle(xCoord, yCoord, radius, Color.GREEN);
+                                icon.setId("submission-icon");
                             } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
                                 //place a dot on the location
-                                circle = new Circle(xCoord, yCoord, radius, Color.BLACK);
+                                icon.setId("black-icon");
                             } else { // end node of just this floor
                                 //place a dot on the location
-                                circle = new Circle(xCoord, yCoord, radius, Color.RED);
+                                icon.setId("red-icon");
                             }
 
-                            g.getChildren().addAll(circle);
+                            g.getChildren().addAll(icon);
                         }
                         //update the coordinates for the previous node
                         prevXCoord = xCoord;
@@ -685,14 +735,17 @@ public class PathFinder {
 
                     } else if (!legItr.hasNext()) { //if current node is the ending node for this floor
 
-                        Circle circle;
+                        MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
+                        icon.setSize(mapMarkerSize);
+                        icon.setLayoutX(xCoord + markerIconXOffset);
+                        icon.setLayoutY(yCoord + markerIconYOffset);
 
                         if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
                             //place a dot on the location
-                            circle = new Circle(xCoord, yCoord, radius, Color.BLACK);
+                            icon.setId("black-icon");
                         } else { // end node of just this floor
                             //place a dot on the location
-                            circle = new Circle(xCoord, yCoord, radius, Color.RED);
+                            icon.setId("red-icon");
                         }
 
                         //create a line between this node and the previous node
@@ -760,12 +813,16 @@ public class PathFinder {
                         //if a floor label was made, line and node circle along with the label and its parent flowPane
                         String finalDestFloor = destFloor;
 
-                        floorLabel.setOnMouseClicked(e -> setCurrentFloor(finalDestFloor));
+                        floorLabel.setOnMouseClicked(e -> {
+                            int num = floorMap.get(floorNum);
+                            floorVisits[num] = floorVisits[num] + 1;
+                            setCurrentFloor(finalDestFloor);
+                        });
 
-                        g.getChildren().addAll(line, circle, flowPane);
+                        g.getChildren().addAll(line, icon, flowPane);
                     } else {
                         //otherwise, only add the line and node circle
-                        g.getChildren().addAll(line, circle);
+                        g.getChildren().addAll(line, icon);
                     }
 
                     //else, if current node is not this floors ending node, i.e., path continues
@@ -809,10 +866,107 @@ public class PathFinder {
                 //add all objects to the scene
                 pane.getChildren().addAll(g);
 
+                ArrayList<Double> xCoords = new ArrayList<>();
+                ArrayList<Double> yCoords = new ArrayList<>();
+
+                int i = 0;
+                for (Double coord : coordsList) {
+                    if ((i % 2) == 0) {
+                        xCoords.add(coord);
+                    } else {
+                        yCoords.add(coord);
+                    }
+                    i++;
+                }
+
+                // Set to opposites, for comparison
+                double xMin = 5000/scale;
+                double xMax = 0;
+
+                for (Double coord : xCoords) {
+                    if (coord < xMin) {
+                        xMin = coord;
+                    }
+                    if (coord > xMax) {
+                        xMax = coord;
+                    }
+                }
+
+                // Set to opposites, for comparison
+                double yMin = 3400/scale;
+                double yMax = 0;
+
+                for (Double coord : yCoords) {
+                    if (coord < yMin) {
+                        yMin = coord;
+                    }
+                    if (coord > yMax) {
+                        yMax = coord;
+                    }
+                }
+
+                // Descale, back to "original" coords
+                if (legNum == floorVisits[floorMap.get(floorNum)]) {
+                    zoomToPath(xMin * scale, xMax * scale, yMin * scale, yMax * scale);
+                }
+                legNum++;
             } else {
                 System.out.println("No path on this floor");
                 //todo snackbar to say no nodes on this floor?
             }
+        }
+    }
+
+    /**
+     * Zooms into the Path
+     * @param xMin Min X Coordinate
+     * @param xMax Max X Coordinate
+     * @param yMin Min Y Coordinate
+     * @param yMax Max Y Coordinate
+     */
+    private void zoomToPath(double xMin, double xMax, double yMin, double yMax) {
+        double fullScaleX = 5000 * scrollPane.getWidth() / primaryStage.getWidth(); // max number of viewable pixels
+        double fullScaleY = 3400 * scrollPane.getHeight() / primaryStage.getHeight();
+
+        double xDist = xMax - xMin; // Distance between the points (sets zoom)
+        double yDist = yMax - yMin;
+
+        double fullStage = Math.max((xDist / fullScaleX), (yDist / fullScaleY)) + 0.175;
+        double stageAmount = constrain(0.2, 1, fullStage); // Percentage of stage visible
+        double zoomAmount = 1 / stageAmount;
+
+        zoomSlider.setValue(zoomAmount);
+
+        double xCenter = xMax - xDist / 2; // Center of points, sets position
+        double yCenter = yMax - yDist / 2;
+
+        double centerX = fullScaleX * stageAmount / 2; // Center of viewport
+        double centerY = fullScaleY * stageAmount / 2;
+
+        double xOffset = 5000 - fullScaleX * stageAmount; //how many pixels can the map be shifted by
+        double yOffset = 3400 - fullScaleY * stageAmount;
+
+        double x = (xCenter - centerX) / xOffset;
+        double y = (yCenter - centerY) / yOffset;
+
+        scrollPane.setHvalue(x);
+        scrollPane.setVvalue(y);
+    }
+
+    /**
+     * Constrains a value to within a minimum value and maximum value
+     * @param min Minimum value
+     * @param max Maximum value
+     * @param val The value
+     * @return The constrained value
+     */
+    private double constrain(double min, double max, double val) {
+        if (val > max) {
+            return max;
+        } else if (val < min) {
+            return min;
+        } else {
+            return val;
         }
     }
 
@@ -892,7 +1046,7 @@ public class PathFinder {
         }
 
         //get primaryStage
-        Stage primaryStage = App.getPrimaryStage();
+        primaryStage = App.getPrimaryStage();
 
         //get dimensions of stage
         stageWidth = primaryStage.getWidth();
@@ -927,8 +1081,6 @@ public class PathFinder {
         //add ObservableLists to dropdowns
         startLocationComboBox.setItems(longNameArrayList);
         endLocationComboBox.setItems(longNameArrayList);
-
-        // TODO: make combo boxes into search boxes but add dropdowns below
 
         ArrayList<TreeItem> categories = new ArrayList<>();
 
@@ -972,7 +1124,7 @@ public class PathFinder {
 
         StackPane stackPane = new StackPane(imageView, markerPane, borderPane);
 
-        ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
+        scrollPane = new ScrollPane(new Group(stackPane));
         //stackPane.prefWidthProperty().bind(primaryStage.widthProperty());
         //stackPane.prefHeightProperty().bind(primaryStage.heightProperty());
 
@@ -1274,35 +1426,113 @@ public class PathFinder {
         currentlySelected.getStyleClass().add("transit-button-selected");
     }
 
-
+    @FXML
     public void sortNodesByType(ActionEvent event) {
-        String currentType =((CheckBox) event.getSource()).getId().toUpperCase();
-        //create hashcode string for hashmap
-        String typeAndFloorString = currentType + currentFloor;
-        //Get the nodes with the current floor and type
-        ArrayList<Node> nodeList = marker.getTypeAndFloorNode().get(typeAndFloorString);
+        String selectedType =((CheckBox) event.getSource()).getId().toUpperCase();
 
         if (((CheckBox) event.getSource()).isSelected()) {
-            System.out.println(((CheckBox) event.getSource()).getId().toUpperCase());
-            marker.getSelectedCheckBox().replace(((CheckBox) event.getSource()).getId().toUpperCase(), 1);
+            System.out.println(selectedType);
 
-            for (Node node : nodeList) {
-                NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
-                Rectangle r = nM.getRectangle();
-                r.setVisible(true);
-                //r.setFill(marker.getTypeColor().get(currentType));
-                currentMarkers.add(node);
+            if (!selectedType.equals("ALL")) {
+                //create hashcode string for hashmap
+                String typeAndFloorString = selectedType + currentFloor;
+                //Get the nodes with the current floor and type
+                ArrayList<Node> nodeList = marker.getTypeAndFloorNode().get(typeAndFloorString);
+
+                marker.getSelectedCheckBox().replace(((CheckBox) event.getSource()).getId().toUpperCase(), 1);
+
+                for (Node node : nodeList) {
+                    NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                    Rectangle r = nM.getRectangle();
+                    r.setVisible(true);
+                    currentMarkers.add(node);
+                }
+            } else {
+                rest.setSelected(true);
+                info.setSelected(true);
+                dept.setSelected(true);
+                labs.setSelected(true);
+                retl.setSelected(true);
+                serv.setSelected(true);
+                conf.setSelected(true);
+                EXIT.setSelected(true);
+                elev.setSelected(true);
+                stai.setSelected(true);
+                park.setSelected(true);
+
+                for(String type : nodeTypes) {
+                    marker.getSelectedCheckBox().replace(type.toUpperCase(), 1);
+
+                    String typeAndFloorString = type + currentFloor;
+                    ArrayList<Node> nodeList = marker.getTypeAndFloorNode().get(typeAndFloorString);
+
+                    for(Node node : nodeList) {
+                        NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                        Rectangle r = nM.getRectangle();
+                        r.setVisible(true);
+                        currentMarkers.add(DB.getNodeInfo(node.get("id")));
+                    }
+                }
             }
         } else {
-            System.out.println(((CheckBox) event.getSource()).getId().toUpperCase());
-            marker.getSelectedCheckBox().replace(((CheckBox) event.getSource()).getId().toUpperCase(), 0);
+            System.out.println(selectedType);
 
-            for (Node node : nodeList) {
-                NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
-                nM.getRectangle().setVisible(false);
-                currentMarkers.remove(node);
+            if(!selectedType.equals("ALL")) {
+                //create hashcode string for hashmap
+                String typeAndFloorString = selectedType + currentFloor;
+                //Get the nodes with the current floor and type
+                ArrayList<Node> nodeList = marker.getTypeAndFloorNode().get(typeAndFloorString);
+
+                marker.getSelectedCheckBox().replace(((CheckBox) event.getSource()).getId().toUpperCase(), 0);
+
+                for (Node node : nodeList) {
+                    NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                    nM.getRectangle().setVisible(false);
+                    currentMarkers.remove(node);
+                }
+            } else {
+                rest.setSelected(false);
+                info.setSelected(false);
+                dept.setSelected(false);
+                labs.setSelected(false);
+                retl.setSelected(false);
+                serv.setSelected(false);
+                conf.setSelected(false);
+                EXIT.setSelected(false);
+                elev.setSelected(false);
+                stai.setSelected(false);
+                park.setSelected(false);
+
+                for(String type : nodeTypes) {
+                    marker.getSelectedCheckBox().replace(type.toUpperCase(), 0);
+
+                    String typeAndFloorString = type + currentFloor;
+                    ArrayList<Node> nodeList = marker.getTypeAndFloorNode().get(typeAndFloorString);
+
+                    for(Node node : nodeList) {
+                        NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                        nM.getRectangle().setVisible(false);
+                        currentMarkers.remove(DB.getNodeInfo(node.get("id")));
+                    }
+                }
             }
         }
+
+        if(allSelected()) {
+            all.setSelected(true);
+        } else {
+            all.setSelected(false);
+        }
+    }
+
+    public boolean allSelected() {
+        boolean allSelected = true;
+        for (String type : nodeTypes) {
+            if (marker.getSelectedCheckBox().get(type) == 0) {
+                allSelected = false;
+            }
+        }
+        return allSelected;
     }
 
     public void startQRScanning(ActionEvent event) {

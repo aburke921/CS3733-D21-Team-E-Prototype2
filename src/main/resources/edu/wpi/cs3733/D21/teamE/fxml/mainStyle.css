@@ -249,11 +249,19 @@ FontAwesomeIconView {
 }
 
 #submission-icon {
-    -fx-fill: #82cd58;
+    -fx-fill: #368509;
 }
 
 #white-icon {
     -fx-fill: WHITE;
+}
+
+#black-icon {
+    -fx-fill: BLACK;
+}
+
+#red-icon {
+    -fx-fill: RED;
 }
 
 JFXButton:hover MaterialDesignIconView {

@@ -11,19 +11,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.newMapEditor">
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.ScheduleList">
     <children>
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
       <AnchorPane>
          <children>
             <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <JFXButton buttonType="RAISED" disable="true" minHeight="35.0" prefWidth="600.0" styleClass="todo-button" text="Schedule" HBox.hgrow="ALWAYS">
+                  <JFXButton buttonType="RAISED" disable="true" minHeight="40.0" prefWidth="600.0" styleClass="todo-button" text="Schedule" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="Arial Bold" size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton minHeight="35.0" prefWidth="600.0" styleClass="todo-button" text="Map" HBox.hgrow="ALWAYS">
+                  <JFXButton fx:id="toMapButton" minHeight="40.0" onAction="#switchScene" prefWidth="600.0" styleClass="todo-button" text="Map" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="Arial Bold" size="15.0" />
                      </font>
@@ -37,9 +37,9 @@
             <JFXTreeTableView AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
             <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="20.0">
                <children>
-                  <MaterialDesignIconView id="blue-icon" glyphName="CHEVRON_LEFT" size="40" />
-                  <JFXDatePicker id="blue-icon" defaultColor="#039be5" maxWidth="30.0" minHeight="35.0" />
-                  <MaterialDesignIconView id="blue-icon" glyphName="CHEVRON_RIGHT" size="40" />
+                  <MaterialDesignIconView id="blue-icon" fx:id="goBackDay" glyphName="CHEVRON_LEFT" size="40" />
+                  <JFXDatePicker id="blue-icon" fx:id="calendar" defaultColor="#039be5" maxWidth="30.0" minHeight="35.0" onAction="#changeDate" />
+                  <MaterialDesignIconView id="blue-icon" fx:id="goForwardDay" glyphName="CHEVRON_RIGHT" size="40" />
                </children>
             </HBox>
          </children>
@@ -48,19 +48,19 @@
          <children>
             <HBox alignment="CENTER" layoutX="935.0" layoutY="-11.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <JFXButton buttonType="RAISED" minWidth="50.0" styleClass="submit-button" text="Edit">
+                  <JFXButton buttonType="RAISED" minWidth="50.0" onAction="#editToDo" styleClass="submit-button" text="Edit">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton buttonType="RAISED" styleClass="submit-button" text="Mark As Complete">
+                  <JFXButton buttonType="RAISED" onAction="#markComplete" styleClass="submit-button" text="Mark As Complete">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton ripplerFill="WHITE" text=" ">
+                  <JFXButton onAction="#addToDo" ripplerFill="WHITE" text=" ">
                      <graphic>
-                        <FontAwesomeIconView id="todo-icon" glyphName="PLUS_CIRCLE" size="50" />
+                        <FontAwesomeIconView glyphName="PLUS_CIRCLE" size="50" text="" />
                      </graphic>
                      <HBox.margin>
                         <Insets right="20.0" />

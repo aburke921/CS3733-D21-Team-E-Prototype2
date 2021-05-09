@@ -15,6 +15,7 @@ import edu.wpi.cs3733.D21.teamE.map.Path;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.scheduler.Schedule;
 import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
+import edu.wpi.cs3733.D21.teamE.states.ToDoState;
 import javafx.animation.PathTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -660,6 +661,10 @@ public class ScheduleMap {
         rootBorderPane.setPrefHeight(stageHeight);
     }
 
-
+    @FXML
+    private void switchScene(ActionEvent event) {
+        //ToDoState toDoState = new ToDoState();
+        //toDoState.switchScene(event);
+    }
 
 }

@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 
 import java.io.IOException;
 
-public class DefaultState {
+public class DefaultState implements State{
 
     public void switchScene(ActionEvent event) {
 
@@ -58,7 +58,7 @@ public class DefaultState {
                     ex.printStackTrace();
                 }
                 break;
-            case "directions":
+            case "directionsButton":
                 try {
                     Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Directions.fxml"));
                     App.changeScene(root);
@@ -82,6 +82,15 @@ public class DefaultState {
                     ex.printStackTrace();
                 }
                 break;
+            case "todoButton":
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ScheduleList.fxml"));
+                    App.changeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
             }
+
         }
     }

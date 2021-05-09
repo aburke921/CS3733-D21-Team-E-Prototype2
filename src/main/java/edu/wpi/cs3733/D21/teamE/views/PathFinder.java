@@ -78,6 +78,20 @@ public class PathFinder {
     private JFXTreeView treeView;
     private StackPane directoryPane;
 
+    private final HashMap<String, String> directoryColor = new HashMap<String, String>(){{
+        put("Restrooms", "#b00404");
+        put("Information Desks", "#dc721c");
+        put("Departments", "#74058c");
+        put("Laboratories", "#c900ae");
+        put("Retail", "#3d4f9d");
+        put("Services", "#005cff");
+        put("Conferences", "#7f5124");
+        put("Entrances/Exits", "#90e430");
+        put("Elevators", "#769557");
+        put("Stairs", "#007f52");
+        put("Parking", "#1299d2");
+    }};
+
     /*
      * FXML Values
      */
@@ -1284,8 +1298,19 @@ public class PathFinder {
                     super.updateItem(item, empty) ;
                     if (empty) {
                         setText(null);
+                        setGraphic(null);
                     } else {
                         setText(item);
+                        // Matching directory label color
+                        if (directoryColor.containsKey(item)) {
+                            String color = directoryColor.get(item);
+                            FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.SQUARE);
+                            icon.setStyle("-fx-fill: " + color);
+                            setGraphic(icon);
+                            setGraphicTextGap(7);
+                        } else {
+                            setGraphic(null);
+                        }
                     }
                 }
             };
@@ -1354,7 +1379,7 @@ public class PathFinder {
     private void closeDirectory() {
         directoryPane.setVisible(false);
         startLocationComboBox.setDisable(false);
-        startLocationComboBox.setDisable(false);
+        endLocationComboBox.setDisable(false);
         transition.setRate(-1);
         transition.play();
     }

@@ -115,8 +115,9 @@ public class ToDoDetails extends ServiceRequestFormComponents{
         //ObservableList<String> userNames;
         //ArrayList<Integer> userID = new ArrayList<>();
 
-        userIDList = DB.getAssigneeIDs("doctor");
-        userNames = DB.getAssigneeNames("doctor");
+        String userType = DB.getUserType(App.userID);
+        userIDList = DB.getAssigneeIDs(userType);
+        userNames = DB.getAssigneeNames(userType);
 
         longNameList = FXCollections.observableArrayList();
         nodeIDList = new ArrayList<>();
@@ -234,7 +235,15 @@ public class ToDoDetails extends ServiceRequestFormComponents{
             String notificationDate = notificationDateInput.getValue().toString();
             System.out.println("date " + date);
 
-//            DB.addAppointment(App.userID, startTime, date, doctorID);
+            int todoID = DB.addCustomToDo(App.userID, title);
+            if(todoID == 0) {
+                //todo error
+            } else if(!DB.updateToDo(todoID, App.userID, title, statusInt, priorityInt, date, startTime,
+                    endTime, nodeID, additionalNotes, notificationDate, notificationTime)) {
+                //todo error
+                System.err.println("DB.updateToDo got " + todoID  + " " + App.userID + " " + title + " " + statusInt + " " + priorityInt + " " + date + " " + startTime
+                        + " " + endTime + " " + nodeID + " " + additionalNotes + " " + notificationDate + " " + notificationTime);
+            }
 
             String email = DB.getEmail(App.userID);
             String fullName = DB.getUserName(App.userID);
@@ -246,8 +255,6 @@ public class ToDoDetails extends ServiceRequestFormComponents{
             String taskDateAndTime = date + " " + startTime;
             String notificationDateAndTime = notificationDate + " " + notificationTime;
 //            int appointmentID = appointmentDB.getAppointmentID(App.userID, startTime, date);
-
-            int todoID = 0;
 
             //SheetsAndJava.addTodoToSheet(todoID, title, email, firstName, lastName, );
 
@@ -264,20 +271,10 @@ public class ToDoDetails extends ServiceRequestFormComponents{
 
         titleInput.getValidators().add(validator);
         userIDInput.getValidators().add(validator);
-        dateInput.getValidators().add(validator);
-        startTimeInput.getValidators().add(validator);
-        endTimeInput.getValidators().add(validator);
-        locationInput.getValidators().add(validator);
-        additionalNotesInput.getValidators().add(validator);
         statusInput.getValidators().add(validator);
         priorityInput.getValidators().add(validator);
-        notificationDateInput.getValidators().add(validator);
-        notificationTimeInput.getValidators().add(validator);
 
-        return titleInput.validate() && userIDInput.validate() && dateInput.validate()
-                && startTimeInput.validate() && endTimeInput.validate() && locationInput.validate()
-                && additionalNotesInput.validate() && statusInput.validate() && priorityInput.validate()
-                && notificationDateInput.validate() && notificationTimeInput.validate() ;
+        return titleInput.validate() && userIDInput.validate() && statusInput.validate() && priorityInput.validate();
     }
 
     /**

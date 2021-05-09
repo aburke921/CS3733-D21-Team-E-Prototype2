@@ -49,17 +49,16 @@
                                                             <Insets top="20.0" />
                                                          </VBox.margin>
                                                       </JFXComboBox>
-                                                                        <JFXDatePicker fx:id="dateInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="278.0" promptText="Scheduled Date">
-                                                                            <VBox.margin>
-                                                                                <Insets bottom="10.0" top="20.0" />
-                                                                            </VBox.margin>
-                                                                        </JFXDatePicker>
-                                                                        <JFXTimePicker fx:id="startTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="Start Time">
-                                                                            <VBox.margin>
-                                                                                <Insets bottom="10.0" top="20.0" />
-                                                                            </VBox.margin>
-                                                                        </JFXTimePicker>
-                                                      <JFXTimePicker fx:id="endTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="End Time" />
+                                                      <JFXComboBox fx:id="statusInput" prefHeight="27.0" prefWidth="295.0" promptText="Status">
+                                                         <VBox.margin>
+                                                            <Insets top="20.0" />
+                                                         </VBox.margin>
+                                                      </JFXComboBox>
+                                                      <JFXComboBox fx:id="priorityInput" prefHeight="27.0" prefWidth="295.0" promptText="Priority">
+                                                         <VBox.margin>
+                                                            <Insets top="20.0" />
+                                                         </VBox.margin>
+                                                      </JFXComboBox>
                                                                         <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
                                                                             <VBox.margin>
                                                                                 <Insets bottom="10.0" top="20.0" />
@@ -76,21 +75,22 @@
                                                             <children>
                                                                 <VBox prefHeight="221.0" prefWidth="260.0">
                                                                     <children>
+                                                                        <JFXDatePicker fx:id="dateInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="278.0" promptText="Scheduled Date">
+                                                                            <VBox.margin>
+                                                                                <Insets bottom="10.0" top="30.0" />
+                                                                            </VBox.margin>
+                                                                        </JFXDatePicker>
+                                                                        <JFXTimePicker fx:id="startTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="Start Time">
+                                                                            <VBox.margin>
+                                                                                <Insets bottom="10.0" top="10.0" />
+                                                                            </VBox.margin>
+                                                                        </JFXTimePicker>
+                                                      <JFXTimePicker fx:id="endTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="End Time" />
                                                                         <JFXTextArea fx:id="additionalNotesInput" minHeight="100.0" prefHeight="141.0" prefWidth="259.0" promptText="Additional Details...">
                                                                             <VBox.margin>
                                                                                 <Insets top="30.0" />
                                                                             </VBox.margin>
                                                                         </JFXTextArea>
-                                                      <JFXComboBox fx:id="statusInput" prefHeight="27.0" prefWidth="295.0" promptText="Status">
-                                                         <VBox.margin>
-                                                            <Insets top="20.0" />
-                                                         </VBox.margin>
-                                                      </JFXComboBox>
-                                                      <JFXComboBox fx:id="priorityInput" prefHeight="27.0" prefWidth="295.0" promptText="Priority">
-                                                         <VBox.margin>
-                                                            <Insets top="20.0" />
-                                                         </VBox.margin>
-                                                      </JFXComboBox>
                                                       <JFXDatePicker fx:id="notificationDateInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="278.0" promptText="Notification Date">
                                                          <VBox.margin>
                                                             <Insets top="20.0" />

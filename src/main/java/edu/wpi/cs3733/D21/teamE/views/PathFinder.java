@@ -5,7 +5,6 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.QRCode;
@@ -28,7 +27,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -1337,7 +1335,7 @@ public class PathFinder {
                 }
             };
             cell.setOnMouseClicked(event -> {
-                if (! cell.isEmpty()) {
+                if (!cell.isEmpty() && !App.isLockEndPath()) {
                     TreeItem<String> treeItem = cell.getTreeItem();
                     TreeItem<String> parent = treeItem.getParent();
                     if (!parent.equals(root)) { // reject categories, only allow nodes

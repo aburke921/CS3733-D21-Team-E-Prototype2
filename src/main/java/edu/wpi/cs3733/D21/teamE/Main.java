@@ -16,7 +16,7 @@ public class Main {
 
 		try {
 			//define handler
-			FileHandler handler = new FileHandler("BWHApplication.log", true);
+			FileHandler handler = new FileHandler("BWHApplication.log", 1000000,2); //1MB of logs per file, two files.
 			SimpleFormatter formatter = new SimpleFormatter();
 			handler.setFormatter(formatter);
 			handler.setLevel(Level.ALL);

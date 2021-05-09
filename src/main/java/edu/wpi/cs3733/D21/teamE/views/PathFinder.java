@@ -655,6 +655,8 @@ public class PathFinder {
         for(Path path : paths){
             if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
 
+                ArrayList<MapMarker> markerList = new ArrayList<>(); // List of markers to place at the end of the drawing of the path
+
                 double markerIconXOffset = -(scale * 3);
                 double markerIconYOffset = -(scale / 2);
                 String mapMarkerSize = "25";
@@ -671,8 +673,7 @@ public class PathFinder {
 
                 ObservableList<Double> coordsList = FXCollections.observableArrayList();
 
-                int firstNode = 1;
-                String firstID = null;
+                boolean firstNode = true;
                 while (legItr.hasNext()) { //loop through list
                     //this iterator will return a Node object
                     //which is just a container for all the node info like its coordinates
@@ -689,78 +690,39 @@ public class PathFinder {
                         distance += Math.hypot(xCoord - prevXCoord, yCoord - prevYCoord);
                     }
 
-                    if (firstNode == 1) { //if current node is the starting node
-                        if (!(prevYCoord < 1) || !(prevXCoord < 1)) {
-                            //technically second node, here to prevent circle from being "under" path line, prev will be fist node
-                            firstNode = 0;
-                            MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
-                            icon.setSize(mapMarkerSize);
-                            icon.setLayoutX(prevXCoord + markerIconXOffset);
-                            icon.setLayoutY(prevYCoord + markerIconYOffset);
+                    if (firstNode) { //if current node is the starting node
+                        firstNode = false;
 
-                            if (firstID.equalsIgnoreCase(selectedStartNodeID)) {
-                                // True first node
-                                icon.setId("submission-icon");
+                        MarkerType type;
 
-                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.GREEN);
-                            } else {
-                                // First on floor
-                                icon.setId("red-icon");
-
-                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
-                            }
-
-
-                            //create a line between this node and the previous node
-                            Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-                            line.setStrokeLineCap(StrokeLineCap.ROUND);
-                            line.setStrokeWidth(strokeWidth);
-                            line.setStroke(Color.RED);
-
-                            g.getChildren().addAll(line, icon);
-                        } else {
-                            //Track true first node's ID, for node color issue
-                            firstID = node.get("id");
+                        if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
+                            //place a dot on the location
+                            type = MarkerType.START;
+                        } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
+                            //place a dot on the location
+                            type = MarkerType.END;
+                        } else { // end node of just this floor
+                            //place a dot on the location
+                            type = MarkerType.LAST;
                         }
-                        if (!legItr.hasNext()) { //if current node is the ending node for this floor, e.g. last node is also first node on floor
 
-                            MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
-                            icon.setSize(mapMarkerSize);
-                            icon.setLayoutX(xCoord + markerIconXOffset);
-                            icon.setLayoutY(yCoord + markerIconYOffset);
-
-                            if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
-                                //place a dot on the location
-                                icon.setId("submission-icon");
-                            } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
-                                //place a dot on the location
-                                icon.setId("black-icon");
-                            } else { // end node of just this floor
-                                //place a dot on the location
-                                icon.setId("red-icon");
-                            }
-
-                            g.getChildren().addAll(icon);
-                        }
                         //update the coordinates for the previous node
                         prevXCoord = xCoord;
                         prevYCoord = yCoord;
 
 
                     } else if (!legItr.hasNext()) { //if current node is the ending node for this floor
-
-                        MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
-                        icon.setSize(mapMarkerSize);
-                        icon.setLayoutX(xCoord + markerIconXOffset);
-                        icon.setLayoutY(yCoord + markerIconYOffset);
+                        MarkerType type;
 
                         if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
                             //place a dot on the location
-                            icon.setId("black-icon");
+                            type = MarkerType.END;
                         } else { // end node of just this floor
                             //place a dot on the location
-                            icon.setId("red-icon");
+                            type = MarkerType.LAST;
                         }
+
+                        markerList.add(new MapMarker((xCoord + markerIconXOffset), (yCoord + markerIconYOffset), mapMarkerSize, type));
 
                         //create a line between this node and the previous node
                         Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
@@ -833,10 +795,10 @@ public class PathFinder {
                             setCurrentFloor(finalDestFloor);
                         });
 
-                        g.getChildren().addAll(line, icon, flowPane);
+                        g.getChildren().addAll(line, flowPane);
                     } else {
                         //otherwise, only add the line and node circle
-                        g.getChildren().addAll(line, icon);
+                        g.getChildren().add(line);
                     }
 
                     //else, if current node is not this floors ending node, i.e., path continues
@@ -856,26 +818,33 @@ public class PathFinder {
 
                 }
 
-                //Add moving ball along path
-                Circle ball = new Circle(5, Color.RED);
-                g.getChildren().add(ball);
-
-                Polyline polyline = new Polyline();
-                polyline.getPoints().addAll(coordsList);
-
-                PathTransition transition = new PathTransition();
-                transition.setNode(ball);
-
-                if(distance > 100){
-                    double duration = distance / 150;
-                    transition.setDuration(Duration.seconds(duration));
-                } else {
-                    transition.setDuration(Duration.seconds(1));
+                for (MapMarker marker : markerList) {
+                    g.getChildren().add(marker.makeMarker());
                 }
 
-                transition.setPath(polyline);
-                transition.setCycleCount(PathTransition.INDEFINITE);
-                transition.play();
+                if (coordsList.size() > 2) { //prevent single element path bug
+                    //Add moving ball along path
+                    Circle ball = new Circle(5, Color.RED);
+                    g.getChildren().add(ball);
+
+                    Polyline polyline = new Polyline();
+                    polyline.getPoints().addAll(coordsList);
+
+                    PathTransition transition = new PathTransition();
+                    transition.setNode(ball);
+
+                    if(distance > 100){
+                        double duration = distance / 150;
+                        transition.setDuration(Duration.seconds(duration));
+                    } else {
+                        transition.setDuration(Duration.seconds(1));
+                    }
+
+                    transition.setPath(polyline);
+                    transition.setCycleCount(PathTransition.INDEFINITE);
+                    transition.play();
+                }
+
 
                 //add all objects to the scene
                 pane.getChildren().addAll(g);

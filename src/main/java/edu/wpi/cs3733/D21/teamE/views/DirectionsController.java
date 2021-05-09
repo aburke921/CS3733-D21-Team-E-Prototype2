@@ -8,6 +8,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 
@@ -228,17 +229,22 @@ public class DirectionsController {
         listing.setVisible(true);
         topper.setVisible(true);
 
-        Double width = imageStackPane.widthProperty().getValue() - 145;
-        Double height = 385.0;
+        Double width = imageStackPane.widthProperty().getValue() - 135;
+        Double height = 395.0;
 
         WebView webView = new WebView();
         webView.getEngine().loadContent("<iframe width='" + width.toString() + "' height='" + height.toString()  + "' src=" + URL + " />");
+        webView.setStyle("-fx-border-width: 0;" +
+                "-fx-border-insets: 0;" +
+                "-fx-border-radius: 0;" +
+                "-fx-border-color: TRANSPARENT;");
 
         JFXDialogLayout popup = new JFXDialogLayout();
         Text heading = new Text("Map Directions");
         heading.setFont(Font.font(null, FontWeight.BOLD, 18));
         popup.setHeading(heading);
         popup.setBody(webView);
+        popup.setAlignment(Pos.CENTER);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
         popup.getStyleClass().add("jfx-dialog");
         JFXDialog dialog = new JFXDialog(imageStackPane, popup, JFXDialog.DialogTransition.CENTER);

@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.*;
+import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
 import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -27,6 +28,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -164,6 +166,12 @@ public class PathFinder {
     @FXML // fx:id="floor3"
     private Button floor3;
     private Button currentlySelected;
+
+    @FXML // fx:id="directoryButton"
+    private JFXButton directoryButton;
+    @FXML // fx:id="hamburger"
+    private JFXHamburger hamburger;
+    private HamburgerBasicCloseTransition transition;
 
     /*
      * Additional Variables
@@ -453,6 +461,8 @@ public class PathFinder {
     public void findPath(ActionEvent event) {
 
         System.out.println("\nFINDING PATH...");
+
+        closeDirectory();
 
         if (startNodeID != null) { // if not null, there is a preset start
             selectedStartNodeID = startNodeID;
@@ -982,6 +992,9 @@ public class PathFinder {
 
         directoryPane = new StackPane(treeView);
         directoryPane.setMaxWidth(330);
+        directoryPane.setVisible(false);
+
+        transition = new HamburgerBasicCloseTransition(hamburger);
 
         StackPane outerPane = new StackPane(scrollPane, directoryPane);
         outerPane.setAlignment(Pos.CENTER_LEFT);
@@ -1167,6 +1180,39 @@ public class PathFinder {
         dialog.setMaxWidth(250);
 
         dialog.show();
+    }
+
+    /**
+     * Opens or closes the directory, based on what needs to happen
+     */
+    public void changeDirectory() {
+        if (directoryPane.visibleProperty().get()) {
+            closeDirectory();
+        } else {
+            openDirectory();
+        }
+    }
+
+    /**
+     * Closes directory
+     */
+    private void closeDirectory() {
+        directoryPane.setVisible(false);
+        startLocationComboBox.setDisable(false);
+        endLocationComboBox.setDisable(false);
+        transition.setRate(-1);
+        transition.play();
+    }
+
+    /**
+     * Open directory
+     */
+    private void openDirectory() {
+        directoryPane.setVisible(true);
+        startLocationComboBox.setDisable(true);
+        endLocationComboBox.setDisable(true);
+        transition.setRate(1);
+        transition.play();
     }
 
     /**

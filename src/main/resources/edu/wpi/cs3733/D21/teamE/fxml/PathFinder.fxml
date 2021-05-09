@@ -23,16 +23,16 @@
          <children>
                 <HBox layoutY="1.0" prefHeight="58.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
                     <children>
-                  <JFXButton fx:id="directoryButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="25.0" styleClass="hamburgerButton" text="">
+                  <JFXButton fx:id="directoryButton" onAction="#changeDirectory" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="30.0" styleClass="hamburgerButton" text="">
                      <graphic>
-                        <JFXHamburger fx:id="hamburger" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="25.0" styleClass="hamburger">
+                        <JFXHamburger fx:id="hamburger" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="30.0" styleClass="hamburger">
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
                         </JFXHamburger>
                      </graphic>
                      <HBox.margin>
-                        <Insets left="20.0" top="13.0" />
+                        <Insets left="15.0" top="13.0" />
                      </HBox.margin>
                   </JFXButton>
                   <JFXComboBox fx:id="startLocationComboBox" onAction="#selectStartNode" prefHeight="25.0" prefWidth="150.0" promptText="Start Location">

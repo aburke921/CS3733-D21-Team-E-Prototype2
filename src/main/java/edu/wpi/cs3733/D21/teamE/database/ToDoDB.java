@@ -155,8 +155,10 @@ public class ToDoDB {
 		}
 		sql += " Where ToDoID = ?";
 
-		if (RequestsDB2.editRequests(ToDoID, userIDInt, statusString) != 1) {
-			return false;
+		if (getToDoType(ToDoID) == 1) {
+			if (RequestsDB2.editRequests(ToDoID, userIDInt, statusString) != 1) {
+				return false;
+			}
 		}
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {

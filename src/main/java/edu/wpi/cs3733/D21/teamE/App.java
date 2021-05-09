@@ -28,8 +28,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class App extends Application {
+
+	Logger logger = Logger.getLogger("BWH");
 
 	/*-------------------------------------
 	* 	   VARIABLES/SETTERS/GETTERS
@@ -125,10 +128,10 @@ public class App extends Application {
 	@Override
 	public void init() throws Exception {
 
-			NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
-			server.start(null);
+		logger.info("Starting App Initialization");
 
-
+		NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
+		server.start(null);
 
 		// reading the driverOption.txt file
 		try {
@@ -141,20 +144,19 @@ public class App extends Application {
 			}
 			scanner.close();
 		} catch (FileNotFoundException e) {
-			System.err.println("An error occurred in reading the file.");
-			//e.printStackTrace();
+			logger.warning("Could Not find driverOption.txt, " + e);
 		}
 
 
-		System.out.println("Starting App Init...");
+		logger.finer("Connecting to the DB...");
 		makeConnection connection = makeConnection.makeConnection(driverURL);
-		System.out.println("...Connected to the DB");
+		logger.finer("DB connection established");
 		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");
 		File edges = new File("CSVs/MapEAlledges.csv");
 		boolean tablesExist = connection.allTablesThere();
 		if(!tablesExist){
-			System.out.print("...DB missing, repopulating...");
+			logger.info("DB is missing, repopulating...");
 			try {
 				DB.createAllTables();
 				DB.populateTable("node", nodes);
@@ -164,12 +166,12 @@ public class App extends Application {
 				for(int ID : sheetIDs){
 					SheetsAndJava.deleteSheetData(ID);
 				}
-				System.out.println("Done");
+				logger.info("Tables Repopulated");
 			} catch (Exception e) {
-				System.out.println("...Tables already there");
+				logger.warning("Exception in creating tables. Might already be there?, " + e);
 			}
 		}
-		System.out.println("App Initialized.");
+		logger.info("App Initialization Complete.");
 	}
 
 	/**
@@ -192,11 +194,11 @@ public class App extends Application {
 			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
 			//set scene for primaryStage
 			Scene scene = new Scene(root);
-			System.out.println("Scene");
+			logger.finest("Scene Added");
 			Image icon = new Image(getClass().getResourceAsStream("Logo.png"));
-			System.out.println("Logo");
+			logger.finest("Logo Retrieved");
 			primaryStage.getIcons().add(icon);
-			System.out.println("add icon");
+			logger.finest("Icon Added");
 			primaryStage.setScene(scene);
 			//set default sizes
 			primaryStage.setWidth(1200);
@@ -204,8 +206,10 @@ public class App extends Application {
 			//add ResizeListener
 			ResizeHelper.addResizeListener(primaryStage, 1120, 775, Double.MAX_VALUE, Double.MAX_VALUE);
 			//show stage
+			logger.fine("Showing Stage");
 			primaryStage.show();
 		} catch (IOException e) {
+			logger.severe("Could not successfully start JavaFX application, force exiting...");
 			e.printStackTrace();
 			Platform.exit();
 		}
@@ -216,19 +220,20 @@ public class App extends Application {
 	 */
 	@Override
 	public void stop() {
-		System.out.println("Shutting Down");
+		logger.info("App Shutdown Requested");
 		if(!driverURL.equals(nextDriverURL)){
 			//ovewrite to textfile
 			try {
 				FileWriter myWriter = new FileWriter("src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt");
 				myWriter.write(nextDriverURL);
 				myWriter.close();
-				System.out.println("Successfully wrote to the file.");
+				logger.info("Successfully wrote to driverOption.txt");
 			} catch (IOException e) {
-				System.out.println("An error occurred.");
+				logger.severe("Could not successfully write to driverOption.txt on shutdown");
 				e.printStackTrace();
 			}
 		}
+		logger.info("Exiting");
 		System.exit(0);
 	}
 
@@ -243,7 +248,7 @@ public class App extends Application {
 	 * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
 	 */
 	public static void newJFXDialogPopUp(String heading, String button, String message, StackPane stackPane) {
-		System.out.println("DialogBox Posted");
+		Logger.getLogger("BWH").finer("Dialog box posting");
 		JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
 		jfxDialogLayout.setHeading(new Label(heading));
 		jfxDialogLayout.setBody(new Text(message));
@@ -259,10 +264,11 @@ public class App extends Application {
 		});
 		jfxDialogLayout.setActions(okay);
 		dialog.show();
+		Logger.getLogger("BWH").finer("Dialog box posted");
 	}
 
 	public static void databaseChangePopup(String heading, String message, StackPane stackPane) {
-		System.out.println("DialogBox Posted");
+		Logger.getLogger("BWH").finer("Dialog box posting");
 		JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
 		jfxDialogLayout.setHeading(new Label(heading));
 		jfxDialogLayout.setBody(new Text(message));
@@ -277,6 +283,7 @@ public class App extends Application {
 		});
 		jfxDialogLayout.setActions(cancelButton);
 		dialog.show();
+		Logger.getLogger("BWH").finer("Dialog box posted");
 	}
 
 	/**

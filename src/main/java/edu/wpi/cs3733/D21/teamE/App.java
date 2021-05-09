@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
+import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.AppBarComponent;
 import javafx.application.Application;
@@ -24,8 +25,13 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.derby.drda.NetworkServerControl;
 
+import javax.mail.MessagingException;
 import java.io.*;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -214,33 +220,72 @@ public class App extends Application {
 			Platform.exit();
 		}
 
-		//todo check for successful previous exit
+		checkAndSendCrashReport();
+	}
+
+	/**
+	 * @// TODO: 5/9/21 write documentation and test
+	 * @throws IOException
+	 */
+	private void checkAndSendCrashReport() throws IOException {
+		//check for successful previous exit in log 0
 		File logfile0 = new File("BWHApplication.log.0");
 		String log0Tail = tail(logfile0);
+		boolean isSafeExitedLog0 = log0Tail.equals("INFO: Exiting");
 
+		//check for successful previous exit in log 1
 		File logfile1 = new File("BWHApplication.log.1");
 		String log1Tail = tail(logfile1);
+		boolean isSafeExitedLog1 = log1Tail.equals("INFO: Exiting");
 
-		if (log0Tail.equals("INFO: Exiting") || log1Tail.equals("INFO: Exiting")) {
+		if (isSafeExitedLog0 && isSafeExitedLog1) {
 			//good
 		} else {
-			//bad exit, todo prompt user to report error?
+			//bad exit, prompt user to report error
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-			alert.setTitle("Confirmation Dialog");
-			alert.setHeaderText("Look, a Confirmation Dialog");
-			alert.setContentText("Are you ok with this?");
+			alert.setTitle("Crash Report");
+			alert.setHeaderText("The Application Did Not Quit Successfully");
+			alert.setContentText("Would you like to send the crash report this to the developers?");
 
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get() == ButtonType.OK){
-				// todo ... user chose OK
+				// user chose OK
+
+				//send crash report email
+				try {
+					//prep email
+					logger.fine("Preparing To Send Crash Report");
+					List<String> lines;
+
+					if (!isSafeExitedLog0) { //log0 was a crash
+						logger.finer("Reading logfile 0");
+						lines = Files.readAllLines(Paths.get("BWHApplication.log.0"), StandardCharsets.US_ASCII); //read logfile 0
+					} else { //log1 was a crash
+						logger.finer("Reading logfile 1");
+						lines = Files.readAllLines(Paths.get("BWHApplication.log.1"), StandardCharsets.US_ASCII); //read logfile 1
+					}
+
+					//convert logfile into string
+					String crashReport = "";
+					for (String line :
+							lines) {
+						assert crashReport != null;
+						crashReport = crashReport.concat("\n" + line);
+					}
+
+					//send email
+					logger.info("Sending Crash Report Email");
+					sendEmail.sendEmail("engineeringsoftware3733@gmail.com","Crash Report",crashReport);
+
+				} catch (MessagingException e) {
+					logger.warning("Crash Report Sending Failed, " + e);
+					e.printStackTrace();
+				}
 			} else {
-				// todo ... user chose CANCEL or closed the dialog
+				//user chose CANCEL or closed the dialog
+				logger.info("User Ignored Crash Report");
 			}
 		}
-
-
-		logger.warning("HERE---" + tail(logfile0) + "---HERE");
-		System.out.println(tail(logfile0));
 	}
 
 	/**

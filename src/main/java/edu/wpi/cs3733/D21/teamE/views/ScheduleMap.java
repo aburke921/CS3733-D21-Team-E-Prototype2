@@ -564,7 +564,7 @@ public class ScheduleMap {
 
         //retrieves nodes and edges from DB
         List<ToDo> toDoArray;
-        toDoArray = DB.getToDoList(App.userID, currentDate.toString());
+        toDoArray = DB.getToDoList(App.userID, -1, currentDate.toString());
         ArrayList<Edge> edgeArray = new ArrayList<Edge>();
         edgeArray = DB.getAllEdges();
 

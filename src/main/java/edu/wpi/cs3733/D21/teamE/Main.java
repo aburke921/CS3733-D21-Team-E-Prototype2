@@ -35,14 +35,14 @@ public class Main {
 			if (!isNew0) { //if pre-existing log
 				String log0Tail = tail(log0); //get tail
 				if (log0Tail != null) { //if tail isn't empty
-					isSafeExitedLog0 = log0Tail.equals("INFO: Exiting") || log0Tail.contains("crash reported");
+					isSafeExitedLog0 = log0Tail.equals("INFO: Exiting") || log0Tail.contains("crash detected");
 				}
 			} else { //if new log
 				isSafeExitedLog0 = true;
 			}
 			if (!isNew1) {
 				String log1Tail = tail(log1);
-				isSafeExitedLog1 = log1Tail.equals("INFO: Exiting") || log1Tail.contains("crash reported");
+				isSafeExitedLog1 = log1Tail.equals("INFO: Exiting") || log1Tail.contains("crash detected");
 			} else { //if new log
 				isSafeExitedLog1 = true;
 			}
@@ -53,19 +53,23 @@ public class Main {
 
 		//report to all logs that a crash report has been made.
 		//This prevents reading that a log indicates a crash more than once.
-		try { //try log 0
-			Writer bufferedWriterLog0 = new BufferedWriter(new FileWriter("BWHApplication.log.0", true));
-			bufferedWriterLog0.append("crash reported");
-			bufferedWriterLog0.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (!isSafeExitedLog0) {
+			try { //try log 0
+				Writer bufferedWriterLog0 = new BufferedWriter(new FileWriter("BWHApplication.log.0", true));
+				bufferedWriterLog0.append("crash detected");
+				bufferedWriterLog0.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		try {//try log 1
-			Writer bufferedWriterLog1 = new BufferedWriter(new FileWriter("BWHApplication.log.1", true));
-			bufferedWriterLog1.append("crash reported");
-			bufferedWriterLog1.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (!isSafeExitedLog1) {
+			try {//try log 1
+				Writer bufferedWriterLog1 = new BufferedWriter(new FileWriter("BWHApplication.log.1", true));
+				bufferedWriterLog1.append("crash detected");
+				bufferedWriterLog1.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 

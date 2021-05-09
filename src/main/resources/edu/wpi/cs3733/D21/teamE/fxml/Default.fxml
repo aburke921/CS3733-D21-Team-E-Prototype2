@@ -130,7 +130,7 @@
                                                 <Insets right="50.0" />
                                              </HBox.margin>
                                              <children>
-                                                <JFXButton fx:id="covidSurveyStatusButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Covid Survey Status" textFill="#039be5" wrapText="true">
+                                                <JFXButton fx:id="checkInStatusButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Patron Check-In Management" textFill="#039be5" wrapText="true">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>

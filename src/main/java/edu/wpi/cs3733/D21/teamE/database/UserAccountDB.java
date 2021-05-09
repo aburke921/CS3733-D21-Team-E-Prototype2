@@ -4,8 +4,12 @@ import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.UserManagement.User;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class UserAccountDB {
 
@@ -407,8 +411,7 @@ public class UserAccountDB {
 
 	public static boolean isUserCovidUnmarked(int userID) {
 
-
-		String query = "Select covidStatus From userAccount Where userID = ? ";
+		String query = "Select status From entryRequest Where userID = ? ";
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 			preparedStatement.setInt(1, userID);
@@ -416,7 +419,8 @@ public class UserAccountDB {
 			if (rset.next()) {
 				//System.out.println(rset.getString("covidStatus").equals("Needs to Be Reviewed"));
 			}
-			return rset.getString("covidStatus").equals("Needs to Be Reviewed");
+			Logger.getLogger("BWH").fine("Covid Status of user "+ userID + ": " + rset.getString("status"));
+			return rset.getString("status").equals("Needs to be reviewed");
 		} catch (SQLException e) {
 			System.err.println("Error in isUserCovidSafe() from UserAccountDB");
 			e.printStackTrace();

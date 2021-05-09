@@ -6,19 +6,13 @@ import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class RequestsDB {
 
@@ -371,6 +365,25 @@ public class RequestsDB {
 			System.err.println("getEmail() got a SQLException");
 		}
 		return email;
+	}
+
+	public static boolean checkForNoSymptoms(int userID) {
+		boolean noSymptoms = false;
+		String query = "select * from entryRequest where userID = " + userID;
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if(rset.next()) {
+				noSymptoms = rset.getBoolean("noSymptoms");
+			}
+			return noSymptoms;
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			System.err.println("Error in updating markAsCovidSafe");
+			return false;
+		}
+
 	}
 
 

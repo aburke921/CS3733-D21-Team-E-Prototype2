@@ -103,6 +103,7 @@ public class ToDoDB {
 	 * @return true if one line changed successfully, false otherwise
 	 */
 	public static boolean updateToDo(int ToDoID, int userID, String title, int status, int priority, String scheduledDate, String startTime, String endTime, String nodeID, String detail, String notificationDate, String notificationTime) {
+		int userIDInt = 0;
 		String statusString = null;
 		String sql = "Update ToDo Set ToDoID = ?";
 		if (userID != -1) {
@@ -154,7 +155,7 @@ public class ToDoDB {
 		}
 		sql += " Where ToDoID = ?";
 
-		if (RequestsDB2.editRequests(ToDoID, userID, statusString) != 1) {
+		if (RequestsDB2.editRequests(ToDoID, userIDInt, statusString) != 1) {
 			return false;
 		}
 

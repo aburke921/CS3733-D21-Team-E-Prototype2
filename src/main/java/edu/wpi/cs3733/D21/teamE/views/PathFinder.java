@@ -43,11 +43,30 @@ import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 public class PathFinder {
 
+    // Node setting fields
+
     private static int startNodeIndex = -1;
     private static int endNodeIndex = -1;
 
-    private Node startNode = null;
-    private Node endNode = null;
+    private String startNodeID = null;
+    private String endNodeID = null;
+
+    private final String[] typeNames = {"REST", "INFO", "DEPT", "LABS", "RETL", "SERV", "CONF", "EXIT", "ELEV", "STAI", "PARK"}; // array of types
+    private HashMap<String, HashMap<String, String>> directory = new HashMap<>();
+
+    private final HashMap<String, String> longNames = new HashMap<String, String>(){{
+        put("REST", "Restrooms");
+        put("INFO", "Information Desks");
+        put("DEPT", "Departments");
+        put("LABS", "Laboratories");
+        put("RETL", "Retail");
+        put("SERV", "Services");
+        put("CONF", "Conferences");
+        put("EXIT", "Entrances/Exits");
+        put("ELEV", "Elevators");
+        put("STAI", "Stairs");
+        put("PARK", "Parking");
+    }};
 
     /*
      * FXML Values
@@ -158,22 +177,6 @@ public class PathFinder {
 
     private ObservableList<String> longNameArrayList;
 
-    private final String[] typeNames = {"REST", "INFO", "DEPT", "LABS", "RETL", "SERV", "CONF", "EXIT", "ELEV", "STAI", "PARK"}; // array of types
-
-    private final HashMap<String, String> longNames = new HashMap<String, String>(){{
-        put("REST", "Restrooms");
-        put("INFO", "Information Desks");
-        put("DEPT", "Departments");
-        put("LABS", "Laboratories");
-        put("RETL", "Retail");
-        put("SERV", "Services");
-        put("CONF", "Conferences");
-        put("EXIT", "Entrances/Exits");
-        put("ELEV", "Elevators");
-        put("STAI", "Stairs");
-        put("PARK", "Parking");
-    }};
-
     private final String[] floorNames = {"L1", "L2", "G", "1", "2", "3"}; // list of floorNames
 
     private int currentFloorNamesIndex = 4; //start # should be init floor index + 1 (variable is actually always one beyond current floor)
@@ -214,7 +217,7 @@ public class PathFinder {
         findPathButton.setDisable(startLocationComboBox.getSelectionModel().isEmpty() ||
                 endLocationComboBox.getSelectionModel().isEmpty());
         // clear preset node
-        startNode = null;
+        startNodeID = null;
     }
 
 
@@ -228,7 +231,7 @@ public class PathFinder {
         findPathButton.setDisable(startLocationComboBox.getSelectionModel().isEmpty() ||
                 endLocationComboBox.getSelectionModel().isEmpty());
         // clear preset node
-        endNode = null;
+        endNodeID = null;
     }
 
     /**
@@ -330,7 +333,9 @@ public class PathFinder {
 
 
         JFXDialogLayout popup = new JFXDialogLayout();
-        popup.setHeading(new Text("Path Directions"));
+        Text text = new Text("Path Directions");
+        text.setFont(Font.font(null, FontWeight.BOLD, 17));
+        popup.setHeading(text);
         popup.setBody(tableView);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
         JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
@@ -349,7 +354,9 @@ public class PathFinder {
     @FXML
     void clickOnNode(int index){
         JFXDialogLayout error = new JFXDialogLayout();
-        error.setHeading(new Text("Location selection"));
+        Text text = new Text("Location Selection");
+        text.setFont(Font.font(null, FontWeight.BOLD, 17));
+        error.setHeading(text);
         JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
         JFXButton parking = new JFXButton("Set Parking");
         if (App.userID == 0 || !nodeArrayList.get(index).get("type").equals("PARK")) {
@@ -376,14 +383,14 @@ public class PathFinder {
         start.setOnAction(event -> {
             startLocationComboBox.getSelectionModel().select(index);
             // clear preset node
-            startNode = null;
+            startNodeID = null;
             dialog.close();
 
         });
         destination.setOnAction(event -> {
             endLocationComboBox.getSelectionModel().select(index);
             // clear preset node
-            endNode = null;
+            endNodeID = null;
             dialog.close();
 
         });
@@ -400,8 +407,8 @@ public class PathFinder {
             }
             endLocationComboBox.getSelectionModel().select(endIndex);
             // clear preset nodes
-            startNode = null;
-            endNode = null;
+            startNodeID = null;
+            endNodeID = null;
             dialog.close();
 
 
@@ -441,8 +448,8 @@ public class PathFinder {
 
         System.out.println("\nFINDING PATH...");
 
-        if (startNode != null) { // if not null, there is a preset start
-            selectedStartNodeID = startNode.get("id");
+        if (startNodeID != null) { // if not null, there is a preset start
+            selectedStartNodeID = startNodeID;
         } else {
             //get index and ID of selected item in dropdown
             startLocationComboBox.setItems(longNameArrayList);
@@ -451,8 +458,8 @@ public class PathFinder {
             System.out.println("New ID resolution: (index) " + startLocationListSelectedIndex + ", (ID) " + selectedStartNodeID);
         }
 
-        if (endNode != null) { // if not null, there is a preset end
-            selectedEndNodeID = endNode.get("id");
+        if (endNodeID != null) { // if not null, there is a preset end
+            selectedEndNodeID = endNodeID;
         } else {
             //get index of selected item in dropdown
             endLocationComboBox.setItems(longNameArrayList);
@@ -1024,16 +1031,18 @@ public class PathFinder {
 
         currFloor.textProperty().addListener(observable -> subject.setState(currFloor.getText()));
 
-        startNode = App.getStartNode();
+        Node startNode = App.getStartNode();
         if (startNode != null) {
             startLocationComboBox.setValue(startNode.get("longName"));
+            startNodeID = startNode.get("id");
             App.setStartNode(null);
             // Reset so user doesn't get this again
         }
 
-        endNode = App.getEndNode();
+        Node endNode = App.getEndNode();
         if (endNode != null) {
             endLocationComboBox.setValue(endNode.get("longName"));
+            endNodeID = endNode.get("id");
             App.setEndNode(null);
             // Reset so user doesn't get this again
         }
@@ -1043,6 +1052,103 @@ public class PathFinder {
             App.setToEmergency(false);
             // Reset so user doesn't get this again
         }
+    }
+
+    private void load() {
+        for (String type : typeNames) {
+            String longName = longNames.get(type);
+            HashMap<String, String> nameToID = new HashMap<>();
+            for (Node node : DB.getAllNodesByType(type)) {
+
+                nameToID.put(node.get("longName"), node.get("id"));
+            }
+            directory.put(longName, nameToID);
+        }
+    }
+
+    private ArrayList<TreeItem> build() {
+        ArrayList<TreeItem> categories = new ArrayList<>();
+
+        for (String type : directory.keySet()) {
+            TreeItem category = new TreeItem(type);
+            ArrayList<TreeItem> nodes = new ArrayList<>();
+            HashMap<String, String> nameToID = new HashMap<>();
+            for (String longName : directory.get(type).keySet()) {
+                TreeItem item = new TreeItem(longName);
+                nodes.add(item);
+            }
+            category.getChildren().addAll(nodes);
+            categories.add(category);
+        }
+
+        return categories;
+    }
+
+    private TreeView makeTreeView(ArrayList<TreeItem> data) {
+        TreeView view = new TreeView();
+        TreeItem root = new TreeItem("Locations");
+        root.getChildren().addAll(data);
+        view.setRoot(root);
+        view.setShowRoot(false);
+
+        view.setCellFactory(tree -> {
+            TreeCell<String> cell = new TreeCell<String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty) ;
+                    if (empty) {
+                        setText(null);
+                    } else {
+                        setText(item);
+                    }
+                }
+            };
+            cell.setOnMouseClicked(event -> {
+                if (! cell.isEmpty()) {
+                    TreeItem<String> treeItem = cell.getTreeItem();
+                    TreeItem<String> parent = treeItem.getParent();
+                    if (!parent.equals(root)) { // reject categories, only allow nodes
+                        String name = treeItem.getValue();
+                        String type = parent.getValue();
+                        String nodeID = directory.get(type).get(name);
+                        selectNode(name, nodeID);
+                    }
+
+                }
+            });
+            return cell ;
+        });
+
+        return view;
+    }
+
+    private void selectNode(String name, String id){
+        JFXDialogLayout popup = new JFXDialogLayout();
+        Text text = new Text("Location Selection");
+        text.setFont(Font.font(null, FontWeight.BOLD, 17));
+        popup.setHeading(text);
+        JFXDialog dialog = new JFXDialog(stackPane, popup,JFXDialog.DialogTransition.CENTER);
+
+        JFXButton start = new JFXButton("Start");
+        JFXButton destination = new JFXButton("Destination");
+        start.setOnAction(event -> {
+            startNodeID = id;
+            startLocationComboBox.setValue(name);
+            dialog.close();
+
+        });
+        destination.setOnAction(event -> {
+            endNodeID = id;
+            endLocationComboBox.setValue(name);
+            dialog.close();
+
+        });
+        popup.setActions(start,destination);
+
+        dialog.setMaxHeight(20);
+        dialog.setMaxWidth(250);
+
+        dialog.show();
     }
 
     /**
@@ -1139,7 +1245,8 @@ public class PathFinder {
         String result = QRCode.scanQR();
         String nodeID = result.substring(result.lastIndexOf('/') + 1, result.lastIndexOf('.'));
         System.out.println("Scanned nodeID: " + nodeID);
-        startNode = DB.getNodeInfo(nodeID);
+        Node startNode = DB.getNodeInfo(nodeID);
+        startNodeID = startNode.get("id");
         startLocationComboBox.setValue(startNode.get("longName"));
     }
 }

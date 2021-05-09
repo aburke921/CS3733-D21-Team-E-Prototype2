@@ -391,3 +391,33 @@ scrollables.directions{
     -jfx-checked-color: -fx--primary;
     -jfx-unchecked-color: BLACK;
 }
+
+
+/* Styling the animated thumb */
+.slider > .animated-thumb {
+    -fx-background-color: TRANSPARENT;
+}
+
+/* Styling the slider value text inside animated thumb */
+.slider .slider-value {
+    -fx-fill: TRANSPARENT;
+    -fx-stroke: TRANSPARENT;
+}
+
+.hamburger {
+    -fx-background-color: TRANSPARENT;
+}
+
+.hamburger StackPane {
+    -fx-background-radius: 2 2 2 2;
+    -fx-border-radius: 2 2 2 2;
+    -fx-background-color: -fx--primary-dark;
+}
+
+.hamburgerButton {
+    -fx-background-color: TRANSPARENT;
+}
+
+.hamburgerButton:hover .hamburger StackPane{
+    -fx-background-color: -fx--primary;
+}

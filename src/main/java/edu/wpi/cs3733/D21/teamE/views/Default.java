@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class Default {
 
@@ -58,8 +59,8 @@ public class Default {
     @FXML // fx:id="scheduleAppointmentButton"
     private JFXButton scheduleAppointmentButton;
 
-    @FXML // fx:id="covidSurveyStatusButton"
-    private JFXButton covidSurveyStatusButton;
+    @FXML // fx:id="checkInStatusButton"
+    private JFXButton checkInStatusButton;
 
     @FXML // fx:id="algo"
     private JFXComboBox algo;
@@ -84,6 +85,8 @@ public class Default {
 
     private ObservableList<String> algoNames;
 
+    Logger logger = Logger.getLogger("BWH"); //get logger for logging.
+
     /**
      * Change Pathfinding Algorithm
      * @param e
@@ -98,36 +101,45 @@ public class Default {
     private void toPathFinder(ActionEvent event) {
         if(App.userID != 0) {
             if(DB.filledCovidSurveyToday(App.userID)) {
-                if((DB.isUserCovidSafe(App.userID))) {
-                    System.out.println("User is marked as safe");
-                    App.setEndNode(DB.getNodeInfo("FEXIT00201"));
-
-                    try {
-                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                        App.changeScene(root);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+                if ((event.getSource().getClass().getName().equals("javafx.scene.control.Hyperlink"))) {
+                    App.setLockEndPath(true);
+                } else if (DB.isUserCovidUnmarked(App.userID)) { //if (waiting for nurse to perform check-in)
+                    if (DB.checkForNoSymptoms(App.userID)) { //if (survey said no symptoms).
+                        //only allow going to the main entrance
+                        logger.info("User can only go to main entrance - They did not indicate COVID on their survey, but have not yet been permitted full access to hospital");
+                        App.setEndNode(DB.getNodeInfo("FEXIT00201")); //Main Entrance
+                        App.setLockEndPath(true);
+                    } else { //if survey indicated COVID
+                        //only allow going to ER
+                        logger.info("User can only go to ER - They have indicated COVID on their survey, and have not yet been permitted full access to hospital");
+                        App.setEndNode(DB.getNodeInfo("FEXIT00301")); //ER
+                        App.setLockEndPath(true);
                     }
-                } else if(DB.isUserCovidRisk(App.userID)){
-                    System.out.println("User is marked as risk");
-                    App.setEndNode(DB.getNodeInfo("FEXIT00301"));
-                    App.setToEmergency(true);
-                    try {
-                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-                        App.changeScene(root);
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                } else if(DB.isUserCovidUnmarked(App.userID)) {
-                    App.newJFXDialogPopUp("","OK","Your covid survey still needs to be reviewed",stackPane);
-                    System.out.println("Covid submission needs to be reviewed first");
+                } else if (DB.isUserCovidSafe(App.userID)) { //if (check-in result indicated safe)
+                    //no restrictions on pathfinding
+                    logger.info("User can go anywhere - they have been approved at check-in");
+                    App.setEndNode(null);
+                    App.setLockEndPath(false);
+                } else if (DB.isUserCovidRisk(App.userID)) { //if check-in result was user being denied access to hospital
+                    logger.info("User cannot enter the hospital - they have been turned away at check-in");
+                    App.setLockEndPath(true);
+                    //todo do not allow pathfinding
                 } else {
-                    System.out.println("It was none of the three strings");
+                    logger.severe("User is not marked correctly?");
+                    //should only get here if user is not one of: safe, risk, to be reviewed.
                 }
-            } else {
+
+                //route to pathFinder.
+                try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
+                        App.changeScene(root);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+            } else { //else, user has not filled out covid survey today
                 App.newJFXDialogPopUp("","OK","You need to fill out a covid survey each day if you wish to pathfind within the hospital",stackPane);
             }
-        } else {
+        } else { //else, user id is 0 (guest)
             App.newJFXDialogPopUp("","OK","You need to create a guest account if you wish to pathfind within the hospital",stackPane);
         }
     }
@@ -179,18 +191,14 @@ public class Default {
         }
     }
 
+
     @FXML
     private void toParking(ActionEvent e) {
-        ArrayList<Node> indexer = DB.getAllNodes();
+        ArrayList<Node> indexer = DB.getAllNodes(); //todo why is this here? Does nothing?
         String parked = DB.whereDidIPark(App.userID);
         System.out.println(DB.whereDidIPark(App.userID));
         App.setEndNode(DB.getNodeInfo(parked));
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        toPathFinder(e);
     }
 
     /**
@@ -276,7 +284,7 @@ public class Default {
             algo.setVisible(false);
             applyChange.setVisible(false);
             userManagementButton.setVisible(false);
-            covidSurveyStatusButton.setVisible(false);
+            checkInStatusButton.setVisible(false);
         }
 
         if (App.userID == 0) {

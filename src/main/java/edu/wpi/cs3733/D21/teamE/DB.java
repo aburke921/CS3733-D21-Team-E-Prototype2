@@ -806,6 +806,9 @@ public class DB {
 		return UserAccountDB.isUserCovidUnmarked(userID);
 	}
 
+	public static boolean checkForNoSymptoms(int userID) {
+		return RequestsDB.checkForNoSymptoms(userID);
+	}
 
 
 	public static void deleteClientBW(File dir) {

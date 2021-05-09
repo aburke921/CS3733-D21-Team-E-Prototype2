@@ -190,28 +190,38 @@ public class ToDoDB {
 	}
 
 	/**
-	 * @param date enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
+	 * @param date   enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
+	 * @param status enter -1 for get all regardless of status, or enter needed status number
 	 * @return a List of ToDo_items
 	 */
-	public static List<ToDo> getToDoList(int userID, String date) {
+	public static List<ToDo> getToDoList(int userID, int status, String date) {
 		List<ToDo> toDoList = new ArrayList<>();
-		String sql = "Select * From ToDo";
+		String sql = "Select * From ToDo Where userID = ?";
+
+		if (status != -1) {
+			sql += " And status = ?";
+		}
 		switch (date) {
 			case "everything": // all ToDos(including undated ones)
-				sql += " Where userID = ?";
 				break;
 			case "": // undated ToDos
-				sql += " Where userID = ? And scheduledDate Is Null";
+				sql += " And scheduledDate Is Null";
 				break;
 			default:
-				sql += " Where userID = ? And scheduledDate = ?";
+				sql += " And scheduledDate = ?";
 				break;
 		}
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setInt(1, userID);
-			if (!date.equals("everything") && !date.equals("")){
-				preparedStatement.setString(2, date);
+			int i = 1;
+			if (status != -1) {
+				i++;
+				preparedStatement.setInt(i, status);
+			}
+			if (!date.equals("everything") && !date.equals("")) {
+				i++;
+				preparedStatement.setString(i, date);
 			}
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {

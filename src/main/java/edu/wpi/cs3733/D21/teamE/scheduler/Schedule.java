@@ -34,7 +34,7 @@ public class Schedule {
     public List<Node> getLocations(){
         List<Node> locations = new LinkedList<>();
         for(ToDo event : schedule){
-            locations.add(event.getLocation());
+            locations.add(event.getLocation()); // TODO: handle when there's no location for a todo
         }
         return locations;
     }

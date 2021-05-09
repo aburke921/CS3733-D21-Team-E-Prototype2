@@ -103,12 +103,26 @@ public class ToDoDB {
 	 * @return true if one line changed successfully, false otherwise
 	 */
 	public static boolean updateToDo(int ToDoID, int userID, String title, int status, int priority, String scheduledDate, String startTime, String endTime, String nodeID, String detail, String notificationDate, String notificationTime) {
+		String statusString = null;
 		String sql = "Update ToDo Set userID = ?";
 		if (title != null) {
 			sql += ", title = ?";
 		}
 		if (status != -1) {
 			sql += ", status = ?";
+			if (getToDoType(ToDoID) == 1) {
+				switch (status) {
+					case 1:  // normal
+						statusString = "inProgress";
+					case 10: // complete
+						statusString = "complete";
+					case 0:  // delete
+						statusString = "canceled";
+						break;
+					default:
+						throw new IllegalStateException("Unexpected value: " + status);
+				}
+			}
 		}
 		if (priority != -1) {
 			sql += ", priority = ?";
@@ -136,6 +150,10 @@ public class ToDoDB {
 		}
 		sql += " Where ToDoID = ?";
 
+		if (RequestsDB2.editRequests(ToDoID, userID, statusString) != 1) {
+			return false;
+		}
+
 		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 			preparedStatement.setInt(1, userID);
 			int i = 1;
@@ -146,21 +164,6 @@ public class ToDoDB {
 			if (status != -1) {
 				i++;
 				preparedStatement.setInt(i, status);
-				if (getToDoType(ToDoID) == 1) {
-					String statusString;
-					switch (status) {
-						case 1:  // normal
-							statusString = "inProgress";
-						case 10: // complete
-							statusString = "complete";
-						case 0:  // delete
-							statusString = "canceled";
-							break;
-						default:
-							throw new IllegalStateException("Unexpected value: " + status);
-					}
-					RequestsDB2.editRequests(ToDoID, 0, statusString);
-				}
 			}
 			if (priority != -1) {
 				i++;

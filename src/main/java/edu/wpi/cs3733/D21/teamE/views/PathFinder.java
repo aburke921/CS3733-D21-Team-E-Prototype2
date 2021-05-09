@@ -441,6 +441,7 @@ public class PathFinder {
         bathroom.setOnAction(event -> {
             SearchContext search = new SearchContext();
             startLocationComboBox.getSelectionModel().select(index);
+            endLocationComboBox.setValue("");
             Node bathroom1 = search.findNearest(nodeArrayList.get(index),"REST");
             int endIndex = 0;
             for(int i = 0; i < nodeArrayList.size();i++){
@@ -620,6 +621,8 @@ public class PathFinder {
      */
     public void drawMap(Path fullPath, String floorNum) {
 
+        //TODO: fix marker ordering (undo the dumb stuff Matthew did earlier, make a list of "end" nodes with their coords and whether they are start, mid, or end markers)
+
         //clear map
         System.out.print("\nCLEARING MAP...");
         pane.getChildren().clear();
@@ -684,7 +687,6 @@ public class PathFinder {
                             icon.setLayoutY(prevYCoord + markerIconYOffset);
 
                             if (firstID.equalsIgnoreCase(selectedStartNodeID)) {
-                                System.out.println(scale);
                                 // True first node
                                 icon.setId("submission-icon");
 
@@ -1147,6 +1149,7 @@ public class PathFinder {
         directoryPane.setVisible(false);
 
         transition = new HamburgerBasicCloseTransition(hamburger);
+        transition.setRate(1);
 
         StackPane outerPane = new StackPane(scrollPane, directoryPane);
         outerPane.setAlignment(Pos.CENTER_LEFT);
@@ -1351,7 +1354,7 @@ public class PathFinder {
     private void closeDirectory() {
         directoryPane.setVisible(false);
         startLocationComboBox.setDisable(false);
-        endLocationComboBox.setDisable(false);
+        startLocationComboBox.setDisable(false);
         transition.setRate(-1);
         transition.play();
     }

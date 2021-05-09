@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
@@ -35,7 +36,7 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class ToDoDetails extends ServiceRequestFormComponents{
+public class ToDoDetails {
 
     private ToDo todo = null;
 
@@ -170,13 +171,14 @@ public class ToDoDetails extends ServiceRequestFormComponents{
         } else {
             statusInput.setValue("Ongoing");
             priorityInput.setValue("None");
+
+            selfAssign.setSelected(true);
+            userIDInput.setManaged(false);
         }
 
         assert additionalNotesInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'ToDoDetails.fxml'.";
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'ToDoDetails.fxml'.";
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'ToDoDetails.fxml'.";
-
-        userIDInput.setManaged(false); // unshow user selection until user unchecks the "Assign to myself" checkbox todo
 
         //init appBar
         javafx.scene.Node appBarComponent = null;
@@ -216,6 +218,7 @@ public class ToDoDetails extends ServiceRequestFormComponents{
         if(userID == App.userID) {
             selfAssign.setSelected(true);
             userIDInput.setManaged(false);
+            userIDInput.setVisible(false);
         } else {
             int index = -1;
             for(int i = 0; i < userIDList.toArray().length; i++) {
@@ -361,7 +364,12 @@ public class ToDoDetails extends ServiceRequestFormComponents{
 
             todo = null;
 
-            super.handleButtonSubmit(actionEvent);
+            try {
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ScheduleList.fxml"));
+                App.changeScene(root);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -388,8 +396,10 @@ public class ToDoDetails extends ServiceRequestFormComponents{
     private void selfAssign(ActionEvent event) {
        if(((JFXCheckBox) event.getSource()).isSelected()) {
            userIDInput.setManaged(false);
+           userIDInput.setVisible(false);
        } else {
            userIDInput.setManaged(true);
+           userIDInput.setVisible(true);
        }
     }
 
@@ -399,8 +409,12 @@ public class ToDoDetails extends ServiceRequestFormComponents{
      */
     @FXML
     private void switchScene(ActionEvent e) {
-        ServiceRequestState serviceRequestState = new ServiceRequestState();
-        serviceRequestState.switchScene(e);
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ScheduleList.fxml"));
+            App.changeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

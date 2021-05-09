@@ -101,7 +101,9 @@ public class Default {
     private void toPathFinder(ActionEvent event) {
         if(App.userID != 0) {
             if(DB.filledCovidSurveyToday(App.userID)) {
-                if (DB.isUserCovidUnmarked(App.userID)) { //if (waiting for nurse to perform check-in)
+                if ((event.getSource().getClass().getName().equals("javafx.scene.control.Hyperlink"))) {
+                    App.setLockEndPath(true);
+                } else if (DB.isUserCovidUnmarked(App.userID)) { //if (waiting for nurse to perform check-in)
                     if (DB.checkForNoSymptoms(App.userID)) { //if (survey said no symptoms).
                         //only allow going to the main entrance
                         logger.info("User can only go to main entrance - They did not indicate COVID on their survey, but have not yet been permitted full access to hospital");
@@ -189,19 +191,14 @@ public class Default {
         }
     }
 
-    //todo, disable fields as done in toPathFinderAbove so the user can't bypass their restrictions
+
     @FXML
     private void toParking(ActionEvent e) {
-        ArrayList<Node> indexer = DB.getAllNodes();
+        ArrayList<Node> indexer = DB.getAllNodes(); //todo why is this here? Does nothing?
         String parked = DB.whereDidIPark(App.userID);
         System.out.println(DB.whereDidIPark(App.userID));
         App.setEndNode(DB.getNodeInfo(parked));
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/PathFinder.fxml"));
-            App.changeScene(root);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        toPathFinder(e);
     }
 
     /**

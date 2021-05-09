@@ -339,12 +339,7 @@ JFXButton:hover FontAwesomeIconView {
 }
 
 /* The main scrollbar CSS class of ListView */
-.scroll-bar:horizontal {
-    -fx-pref-width: 12;
-    -fx-background-color:transparent;
-}
-
-.scroll-bar:vertical{
+.scroll-bar:horizontal , .scroll-bar:vertical{
     -fx-pref-width: 12;
     -fx-background-color:transparent;
 

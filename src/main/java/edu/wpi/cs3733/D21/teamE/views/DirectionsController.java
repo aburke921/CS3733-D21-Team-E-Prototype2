@@ -20,6 +20,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -121,7 +123,7 @@ public class DirectionsController {
 
             @Override
             protected double computeValue() {
-                return primaryStage.widthProperty().getValue() * 5 / 12;
+                return primaryStage.widthProperty().getValue() * 2 / 5;
             }
         });
 
@@ -132,11 +134,12 @@ public class DirectionsController {
 
             @Override
             protected double computeValue() {
-                return primaryStage.widthProperty().getValue() * 5 / 12;
+                return primaryStage.widthProperty().getValue() * 3 / 5;
             }
         });
 
         imageStackPane.maxHeightProperty().bind(primaryStage.heightProperty().subtract(appBarAnchorPane.heightProperty()));
+        leftAnchorPane.maxHeightProperty().bind(primaryStage.heightProperty().subtract(appBarAnchorPane.heightProperty()));
 
         directionsEntity = DirectionsEntity.getInstance();
 
@@ -151,10 +154,14 @@ public class DirectionsController {
 
         imageAnchorPane.setCenterShape(true);
 
-        imageAnchorPane.minHeightProperty().bind(primaryStage.heightProperty());
-        imageAnchorPane.prefHeightProperty().bind(primaryStage.heightProperty());
+        imageAnchorPane.minHeightProperty().bind(imageStackPane.heightProperty());
+        imageAnchorPane.prefHeightProperty().bind(imageStackPane.heightProperty());
         hospitalImageView.fitHeightProperty().bind(imageAnchorPane.heightProperty());
         primaryStage.setWidth(primaryStage.getWidth() + 0.0001);
+
+        heading.setMaxWidth(370);
+        heading.setWrapText(true);
+
     }
 
     /**
@@ -202,9 +209,9 @@ public class DirectionsController {
 
                 } else {
 
-                    setMaxWidth(listing.getWidth() - 25);
-                    setPrefWidth(listing.getWidth() - 25);
-                    setMinWidth(listing.getWidth() - 25);
+                    setMaxWidth(listing.getWidth()- 30 );
+                    setPrefWidth(listing.getWidth() - 30);
+                    setMinWidth(listing.getWidth() - 30);
 
                     // allow wrapping
                     setWrapText(true);
@@ -221,38 +228,25 @@ public class DirectionsController {
         listing.setVisible(true);
         topper.setVisible(true);
 
+        Double width = imageStackPane.widthProperty().getValue() - 145;
+        Double height = 385.0;
+
         WebView webView = new WebView();
-        webView.getEngine().loadContent("<iframe width='420' height='315' src=" + URL + " />");
+        webView.getEngine().loadContent("<iframe width='" + width.toString() + "' height='" + height.toString()  + "' src=" + URL + " />");
 
         JFXDialogLayout popup = new JFXDialogLayout();
-        popup.setHeading(new Text(header));
+        Text heading = new Text("Map Directions");
+        heading.setFont(Font.font(null, FontWeight.BOLD, 18));
+        popup.setHeading(heading);
         popup.setBody(webView);
         popup.setPrefHeight(USE_COMPUTED_SIZE);
         popup.getStyleClass().add("jfx-dialog");
         JFXDialog dialog = new JFXDialog(imageStackPane, popup, JFXDialog.DialogTransition.CENTER);
         dialog.getStyleClass().add("jfx-dialog");
 
-        dialog.prefWidthProperty().bind(new DoubleBinding() {
-            {
-                super.bind(imageStackPane.widthProperty());
-            }
-
-            @Override
-            protected double computeValue() {
-                return imageStackPane.widthProperty().getValue() - 150;
-            }
-        });
-        popup.prefWidthProperty().bind(new DoubleBinding() {
-            {
-                super.bind(imageStackPane.widthProperty());
-            }
-
-            @Override
-            protected double computeValue() {
-                return imageStackPane.widthProperty().getValue() - 150;
-            }
-        });
-        dialog.setMaxHeight(600);
+        dialog.prefWidthProperty().bind(imageStackPane.widthProperty().subtract(75));
+        popup.prefWidthProperty().bind(imageStackPane.widthProperty().subtract(75));
+        dialog.setMaxHeight(550);
         JFXButton okay = new JFXButton("Close");
         okay.setOnAction(new EventHandler<ActionEvent>() {
             @Override

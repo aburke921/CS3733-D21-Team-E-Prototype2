@@ -285,7 +285,7 @@ public class DirectionsEntity {
     private class DirectionsWrapper {
         private DirectionsResult result;
         private String origin;
-        private String Destination;
+        private String destination;
         private TravelMode mode;
 
         public DirectionsWrapper(TravelMode mode) {
@@ -301,7 +301,7 @@ public class DirectionsEntity {
         }
 
         public String getDestination() {
-            return Destination;
+            return destination;
         }
 
         public TravelMode getMode() {
@@ -317,7 +317,7 @@ public class DirectionsEntity {
         }
 
         public void setDestination(String destination) {
-            Destination = destination;
+            this.destination = destination;
         }
     }
 }

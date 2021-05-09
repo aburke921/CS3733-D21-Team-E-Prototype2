@@ -85,7 +85,10 @@
                                                                                 <Insets bottom="10.0" top="10.0" />
                                                                             </VBox.margin>
                                                                         </JFXTimePicker>
-                                                      <JFXTimePicker fx:id="endTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="End Time" />
+                                                      <JFXTimePicker fx:id="endTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="End Time">
+                                                         <VBox.margin>
+                                                            <Insets top="10.0" />
+                                                         </VBox.margin></JFXTimePicker>
                                                                         <JFXTextArea fx:id="additionalNotesInput" minHeight="100.0" prefHeight="141.0" prefWidth="259.0" promptText="Additional Details...">
                                                                             <VBox.margin>
                                                                                 <Insets top="30.0" />
@@ -93,7 +96,7 @@
                                                                         </JFXTextArea>
                                                       <JFXDatePicker fx:id="notificationDateInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="278.0" promptText="Notification Date">
                                                          <VBox.margin>
-                                                            <Insets top="20.0" />
+                                                            <Insets bottom="10.0" top="20.0" />
                                                          </VBox.margin>
                                                       </JFXDatePicker>
                                                       <JFXTimePicker fx:id="notificationTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="Notification Time">
@@ -119,8 +122,8 @@
                                                     <children>
                                                         <AnchorPane prefHeight="49.0" prefWidth="600.0">
                                                             <children>
-                                                                <JFXButton fx:id="cancel" layoutX="459.0" layoutY="29.0" onAction="#switchScene" styleClass="cancel-button" text="Cancel" />
-                                                                <JFXButton fx:id="submit" layoutX="534.0" layoutY="29.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
+                                                                <JFXButton fx:id="cancel" layoutX="459.0" layoutY="29.0" onAction="#switchScene" styleClass="cancel-button" text="Cancel" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="90.0" />
+                                                                <JFXButton fx:id="submit" layoutX="534.0" layoutY="29.0" onAction="#saveData" styleClass="submit-button" text="Submit" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="20.0" />
                                                             </children>
                                                         </AnchorPane>
                                                     </children>

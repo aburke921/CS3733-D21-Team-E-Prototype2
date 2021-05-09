@@ -1,5 +1,7 @@
 package edu.wpi.cs3733.D21.teamE;
 
+import java.time.LocalDate;
+
 public class Date {
     private int year;
     private int month;
@@ -10,6 +12,13 @@ public class Date {
         month = _month;
         day = _day;
     }
+
+    public Date(LocalDate lDate){
+        year = lDate.getYear();
+        month = lDate.getMonthValue();
+        day = lDate.getDayOfMonth();
+    }
+
 
 
     public static Date parseString(String stringDate){

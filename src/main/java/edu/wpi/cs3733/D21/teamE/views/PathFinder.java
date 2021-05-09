@@ -21,6 +21,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -51,10 +52,12 @@ public class PathFinder {
     private String startNodeID = null;
     private String endNodeID = null;
 
+    // stuff for directory
+
     private final String[] typeNames = {"REST", "INFO", "DEPT", "LABS", "RETL", "SERV", "CONF", "EXIT", "ELEV", "STAI", "PARK"}; // array of types
     private HashMap<String, HashMap<String, String>> directory = new HashMap<>();
 
-    private final HashMap<String, String> longNames = new HashMap<String, String>(){{
+    private final HashMap<String, String> longTypeNames = new HashMap<String, String>(){{
         put("REST", "Restrooms");
         put("INFO", "Information Desks");
         put("DEPT", "Departments");
@@ -67,6 +70,9 @@ public class PathFinder {
         put("STAI", "Stairs");
         put("PARK", "Parking");
     }};
+
+    private JFXTreeView treeView;
+    private StackPane directoryPane;
 
     /*
      * FXML Values
@@ -917,7 +923,7 @@ public class PathFinder {
         ArrayList<TreeItem> categories = new ArrayList<>();
 
         for (String type : typeNames) {
-            TreeItem category = new TreeItem(longNames.get(type));
+            TreeItem category = new TreeItem(longTypeNames.get(type));
             ArrayList<TreeItem> nodes = new ArrayList<>();
             for (Node node : DB.getAllNodesByType(type)) {
                 TreeItem item = new TreeItem(node.get("longName"));
@@ -971,7 +977,16 @@ public class PathFinder {
         stackPane.scaleXProperty().bind(zoomSlider.valueProperty());
         stackPane.scaleYProperty().bind(zoomSlider.valueProperty());
 
-        rootBorderPane.setCenter(scrollPane);
+        ArrayList<TreeItem> directoryNodes = build();
+        treeView = makeTreeView(directoryNodes);
+
+        directoryPane = new StackPane(treeView);
+        directoryPane.setMaxWidth(330);
+
+        StackPane outerPane = new StackPane(scrollPane, directoryPane);
+        outerPane.setAlignment(Pos.CENTER_LEFT);
+
+        rootBorderPane.setCenter(outerPane);
         rootBorderPane.setPrefWidth(stageWidth);
         rootBorderPane.setPrefHeight(stageHeight);
 
@@ -1054,29 +1069,27 @@ public class PathFinder {
         }
     }
 
-    private void load() {
-        for (String type : typeNames) {
-            String longName = longNames.get(type);
-            HashMap<String, String> nameToID = new HashMap<>();
-            for (Node node : DB.getAllNodesByType(type)) {
-
-                nameToID.put(node.get("longName"), node.get("id"));
-            }
-            directory.put(longName, nameToID);
-        }
-    }
-
+    /**
+     * Builds the Tree for the directory
+     * @return Categorized and sorted directory
+     */
     private ArrayList<TreeItem> build() {
         ArrayList<TreeItem> categories = new ArrayList<>();
 
-        for (String type : directory.keySet()) {
-            TreeItem category = new TreeItem(type);
+        for (String type : typeNames) {
+            String typeName = longTypeNames.get(type);
+            TreeItem category = new TreeItem(typeName);
             ArrayList<TreeItem> nodes = new ArrayList<>();
             HashMap<String, String> nameToID = new HashMap<>();
-            for (String longName : directory.get(type).keySet()) {
+            ArrayList<Node> nodeList = DB.getAllNodesByType(type);
+            Collections.sort(nodeList);
+            for (Node node : nodeList) {
+                String longName = node.get("longName");
+                nameToID.put(longName, node.get("id"));
                 TreeItem item = new TreeItem(longName);
                 nodes.add(item);
             }
+            directory.put(typeName, nameToID);
             category.getChildren().addAll(nodes);
             categories.add(category);
         }
@@ -1084,8 +1097,13 @@ public class PathFinder {
         return categories;
     }
 
-    private TreeView makeTreeView(ArrayList<TreeItem> data) {
-        TreeView view = new TreeView();
+    /**
+     * Creates the TreeView
+     * @param data The directory infor from build();
+     * @return Directory TreeView
+     */
+    private JFXTreeView makeTreeView(ArrayList<TreeItem> data) {
+        JFXTreeView view = new JFXTreeView();
         TreeItem root = new TreeItem("Locations");
         root.getChildren().addAll(data);
         view.setRoot(root);
@@ -1127,7 +1145,7 @@ public class PathFinder {
         Text text = new Text("Location Selection");
         text.setFont(Font.font(null, FontWeight.BOLD, 17));
         popup.setHeading(text);
-        JFXDialog dialog = new JFXDialog(stackPane, popup,JFXDialog.DialogTransition.CENTER);
+        JFXDialog dialog = new JFXDialog(directoryPane, popup,JFXDialog.DialogTransition.CENTER);
 
         JFXButton start = new JFXButton("Start");
         JFXButton destination = new JFXButton("Destination");

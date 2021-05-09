@@ -36,7 +36,7 @@ public class ToDoDetails extends ServiceRequestFormComponents{
 
     RequiredFieldValidator validator = new RequiredFieldValidator();
     ObservableList<String> userNames;
-    ArrayList<Integer> userID;
+    ArrayList<Integer> userIDList;
 
     ObservableList<String> longNameList;
     ArrayList<String> nodeIDList;
@@ -81,8 +81,6 @@ public class ToDoDetails extends ServiceRequestFormComponents{
     @FXML // fx:id="priorityInput"
     private JFXComboBox<String> priorityInput; // Value injected by FXMLLoader
 
-    @FXML // fx:id="sendNotification"
-    private JFXCheckBox sendNotification; // Value injected by FXMLLoader
     @FXML // fx:id="notificationDate"
     private JFXDatePicker notificationDateInput; // Value injected by FXMLLoader
     @FXML // fx:id="notificationTime"
@@ -117,7 +115,7 @@ public class ToDoDetails extends ServiceRequestFormComponents{
         //ObservableList<String> userNames;
         //ArrayList<Integer> userID = new ArrayList<>();
 
-        userID = DB.getAssigneeIDs("doctor");
+        userIDList = DB.getAssigneeIDs("doctor");
         userNames = DB.getAssigneeNames("doctor");
 
         longNameList = FXCollections.observableArrayList();
@@ -224,9 +222,9 @@ public class ToDoDetails extends ServiceRequestFormComponents{
             System.out.println("locationIndex " + locationIndex);
             String nodeID = nodeIDList.get(locationIndex);
 
-//            int userIndex = doctorInput.getSelectionModel().getSelectedIndex();
-//            System.out.println("doctorIndex " + doctorIndex);
-//            Integer doctorID = userID.get(doctorIndex);
+            int userIndex = userIDInput.getSelectionModel().getSelectedIndex();
+            System.out.println("userIndex " + userIndex);
+            Integer userID = userIDList.get(userIndex);
 
             String additionalNotes = additionalNotesInput.getText();
             System.out.println("additionalNotes " + additionalNotes);
@@ -251,9 +249,7 @@ public class ToDoDetails extends ServiceRequestFormComponents{
 
             int todoID = 0;
 
-            if (sendNotification.isSelected()) {
-                //SheetsAndJava.addTodoToSheet(todoID, title, email, firstName, lastName, );
-            }
+            //SheetsAndJava.addTodoToSheet(todoID, title, email, firstName, lastName, );
 
             super.handleButtonSubmit(actionEvent);
         }
@@ -275,21 +271,13 @@ public class ToDoDetails extends ServiceRequestFormComponents{
         additionalNotesInput.getValidators().add(validator);
         statusInput.getValidators().add(validator);
         priorityInput.getValidators().add(validator);
+        notificationDateInput.getValidators().add(validator);
+        notificationTimeInput.getValidators().add(validator);
 
         return titleInput.validate() && userIDInput.validate() && dateInput.validate()
                 && startTimeInput.validate() && endTimeInput.validate() && locationInput.validate()
-                && additionalNotesInput.validate() && statusInput.validate() && priorityInput.validate();
-    }
-
-    @FXML
-    private void sendNotification(ActionEvent event) {
-        if(((JFXCheckBox)(event.getSource())).isSelected()) {
-            notificationTimeInput.setVisible(true);
-            notificationDateInput.setVisible(true);
-        } else {
-            notificationTimeInput.setVisible(false);
-            notificationDateInput.setVisible(false);
-        }
+                && additionalNotesInput.validate() && statusInput.validate() && priorityInput.validate()
+                && notificationDateInput.validate() && notificationTimeInput.validate() ;
     }
 
     /**

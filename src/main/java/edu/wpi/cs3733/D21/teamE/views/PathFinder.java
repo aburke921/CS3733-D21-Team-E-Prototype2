@@ -1158,6 +1158,7 @@ public class PathFinder {
 
         directoryPane = new StackPane(treeView);
         directoryPane.setMaxWidth(330);
+        directoryPane.prefHeightProperty().bind(primaryStage.heightProperty().subtract(appBarAnchorPane.heightProperty()).subtract(lowerAnchorPane.heightProperty()));
         directoryPane.setVisible(false);
 
         StackPane outerPane = new StackPane(scrollPane, directoryPane);

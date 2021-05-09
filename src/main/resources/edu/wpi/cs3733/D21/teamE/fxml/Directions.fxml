@@ -27,7 +27,7 @@
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane fx:id="leftAnchorPane" minWidth="-Infinity" prefWidth="451.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <VBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
+                                    <VBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
                                         <JFXTextField fx:id="address" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="325.0" promptText="Address" />
                                         <HBox alignment="CENTER">
                                             <children>

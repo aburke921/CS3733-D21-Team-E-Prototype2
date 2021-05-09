@@ -110,7 +110,7 @@ public class DirectionsController {
 
             @Override
             protected double computeValue() {
-                return primaryStage.widthProperty().getValue() * 2 / 5;
+                return primaryStage.widthProperty().getValue() * 3 / 7;
             }
         });
 
@@ -121,7 +121,7 @@ public class DirectionsController {
 
             @Override
             protected double computeValue() {
-                return primaryStage.widthProperty().getValue() * 3 / 5;
+                return primaryStage.widthProperty().getValue() * 4 / 7;
             }
         });
 

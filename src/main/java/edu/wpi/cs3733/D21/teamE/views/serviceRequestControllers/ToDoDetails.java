@@ -68,6 +68,8 @@ public class ToDoDetails extends ServiceRequestFormComponents{
     @FXML // fx:id="endTimeInput"
     private JFXTimePicker endTimeInput; // Value injected by FXMLLoader
 
+    @FXML // fx:id="selfAssign"
+    private JFXCheckBox selfAssign;
     @FXML // fx:id="userIDInput"
     private JFXComboBox<String> userIDInput; // Value injected by FXMLLoader
     @FXML // fx:id="additionalNotesInput"
@@ -85,6 +87,7 @@ public class ToDoDetails extends ServiceRequestFormComponents{
     private JFXDatePicker notificationDateInput; // Value injected by FXMLLoader
     @FXML // fx:id="notificationTime"
     private JFXTimePicker notificationTimeInput; // Value injected by FXMLLoader
+
 
     @FXML
     public AnchorPane appBarAnchorPane;
@@ -157,6 +160,9 @@ public class ToDoDetails extends ServiceRequestFormComponents{
         statusInput.setItems(statusOptions);
         priorityInput.setItems(priorityOptions);
 
+        statusInput.setValue("Ongoing");
+        priorityInput.setValue("None");
+
         assert additionalNotesInput != null : "fx:id=\"descriptionInput\" was not injected: check your FXML file 'ToDoDetails.fxml'.";
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'ToDoDetails.fxml'.";
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'ToDoDetails.fxml'.";
@@ -225,9 +231,13 @@ public class ToDoDetails extends ServiceRequestFormComponents{
             System.out.println("locationIndex " + locationIndex);
             String nodeID = nodeIDList.get(locationIndex);
 
-            int userIndex = userIDInput.getSelectionModel().getSelectedIndex();
-            System.out.println("userIndex " + userIndex);
-            Integer userID = userIDList.get(userIndex);
+            int userID = App.userID;
+            if(!selfAssign.isSelected()) {
+                int userIndex = userIDInput.getSelectionModel().getSelectedIndex();
+                System.out.println("userIndex " + userIndex);
+                Integer userIDFromList = userIDList.get(userIndex);
+                userID = userIDFromList;
+            }
 
             String additionalNotes = additionalNotesInput.getText();
             System.out.println("additionalNotes " + additionalNotes);
@@ -237,10 +247,10 @@ public class ToDoDetails extends ServiceRequestFormComponents{
             String notificationDate = notificationDateInput.getValue().toString();
             System.out.println("date " + date);
 
-            int todoID = DB.addCustomToDo(App.userID, title);
+            int todoID = DB.addCustomToDo(userID, title);
             if(todoID == 0) {
                 //todo error
-            } else if(!DB.updateToDo(todoID, App.userID, title, statusInt, priorityInt, date, startTime,
+            } else if(!DB.updateToDo(todoID, userID, title, statusInt, priorityInt, date, startTime,
                     endTime, nodeID, additionalNotes, notificationDate, notificationTime)) {
                 //todo error
                 System.err.println("DB.updateToDo got " + todoID  + " " + App.userID + " " + title + " " + statusInt + " " + priorityInt + " " + date + " " + startTime
@@ -249,16 +259,16 @@ public class ToDoDetails extends ServiceRequestFormComponents{
 
             String email = DB.getEmail(App.userID);
             String fullName = DB.getUserName(App.userID);
-//            sendEmail.sendAppointmentConfirmation(email, startTime, fullName);
             int position = fullName.indexOf(" ");
 
             String firstName = fullName.substring(0, position);
             String lastName = fullName.substring(position);
-            String taskDateAndTime = date + " " + startTime;
+            String locationName = DB.getNodeInfo(nodeID).get("longName");
+            String taskStartDateAndTime = date + " " + startTime;
+            String taskEndDateAndTime = date + " " + endTime;
             String notificationDateAndTime = notificationDate + " " + notificationTime;
-//            int appointmentID = appointmentDB.getAppointmentID(App.userID, startTime, date);
 
-            //SheetsAndJava.addTodoToSheet(todoID, title, email, firstName, lastName, );
+            SheetsAndJava.addTodoToSheet(todoID, title, email, firstName, lastName, locationName, taskStartDateAndTime, taskEndDateAndTime, notificationDateAndTime);
 
             super.handleButtonSubmit(actionEvent);
         }
@@ -272,11 +282,24 @@ public class ToDoDetails extends ServiceRequestFormComponents{
         validator.setMessage("Input required");
 
         titleInput.getValidators().add(validator);
-        userIDInput.getValidators().add(validator);
         statusInput.getValidators().add(validator);
         priorityInput.getValidators().add(validator);
 
-        return titleInput.validate() && userIDInput.validate() && statusInput.validate() && priorityInput.validate();
+        if(!selfAssign.isSelected()) {
+            userIDInput.getValidators().add(validator);
+            return titleInput.validate() && userIDInput.validate() && statusInput.validate() && priorityInput.validate();
+        } else {
+            return titleInput.validate() && statusInput.validate() && priorityInput.validate();
+        }
+    }
+
+    @FXML
+    private void selfAssign(ActionEvent event) {
+       if(((JFXCheckBox) event.getSource()).isSelected()) {
+           userIDInput.setManaged(false);
+       } else {
+           userIDInput.setManaged(true);
+       }
     }
 
     /**

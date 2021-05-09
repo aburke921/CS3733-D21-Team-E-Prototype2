@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextArea?>
@@ -44,9 +45,14 @@
                                                             <Insets top="30.0" />
                                                          </VBox.margin>
                                                       </JFXTextField>
-                                                      <JFXComboBox fx:id="userIDInput" prefHeight="27.0" prefWidth="295.0" promptText="Users">
+                                                      <JFXCheckBox fx:id="selfAssign" onAction="#selfAssign" text="Assign to Myself">
                                                          <VBox.margin>
                                                             <Insets top="20.0" />
+                                                         </VBox.margin>
+                                                      </JFXCheckBox>
+                                                      <JFXComboBox fx:id="userIDInput" prefHeight="27.0" prefWidth="295.0" promptText="Users">
+                                                         <VBox.margin>
+                                                            <Insets top="10.0" />
                                                          </VBox.margin>
                                                       </JFXComboBox>
                                                       <JFXComboBox fx:id="statusInput" prefHeight="27.0" prefWidth="295.0" promptText="Status">

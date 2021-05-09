@@ -57,6 +57,7 @@ public class ServiceRequestStatus {
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
             DB.editRequests(id, 0, "canceled");
+            DB.updateToDo(id,-1, null, 0, -1, null, null, null, null, null, null, null);
             System.out.println("The request was cancelled");
         }
     }
@@ -71,6 +72,7 @@ public class ServiceRequestStatus {
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
             DB.editRequests(id,0, "complete");
+            DB.updateToDo(id,-1, null, 10, -1, null, null, null, null, null, null, null);
             System.out.println("The request was completed");
         }
     }

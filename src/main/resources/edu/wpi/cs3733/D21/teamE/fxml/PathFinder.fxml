@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import com.jfoenix.controls.JFXToggleButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -22,6 +23,14 @@
          <children>
                 <HBox layoutY="1.0" prefHeight="58.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
                     <children>
+                  <JFXButton fx:id="directoryButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#changeDirectory" prefHeight="27.0" prefWidth="27.0" styleClass="directory" text="">
+                     <HBox.margin>
+                        <Insets left="15.0" top="10.0" />
+                     </HBox.margin>
+                     <graphic>
+                        <MaterialDesignIconView glyphName="MAP_MARKER" size="20" style="-fx-fill: WHITE;" textAlignment="CENTER" />
+                     </graphic>
+                  </JFXButton>
                   <JFXComboBox fx:id="startLocationComboBox" onAction="#selectStartNode" prefHeight="25.0" prefWidth="150.0" promptText="Start Location">
                      <HBox.margin>
                         <Insets left="20.0" top="10.0" />
@@ -37,37 +46,37 @@
                         <Insets left="15.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" indicatorPosition="LEFT" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
+                  <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
                      <HBox.margin>
                         <Insets left="20.0" top="17.0" />
                      </HBox.margin>
                   </JFXSlider>
-                  <JFXButton fx:id="floorL2" onAction="#chooseFloor" styleClass="submit-button" text="L2">
+                  <JFXButton fx:id="floorL2" onAction="#chooseFloor" styleClass="transit-button-unselected" text="L2">
                      <HBox.margin>
                         <Insets left="20.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floorL1" onAction="#chooseFloor" styleClass="submit-button" text="L1">
+                  <JFXButton fx:id="floorL1" onAction="#chooseFloor" styleClass="transit-button-unselected" text="L1">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floorG" onAction="#chooseFloor" styleClass="submit-button" text="G">
+                  <JFXButton fx:id="floorG" onAction="#chooseFloor" styleClass="transit-button-unselected" text="G">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floor1" minWidth="26.0" onAction="#chooseFloor" styleClass="submit-button" text="1">
+                  <JFXButton fx:id="floor1" minWidth="26.0" onAction="#chooseFloor" styleClass="transit-button-selected" text="1">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floor2" onAction="#chooseFloor" styleClass="submit-button" text="2">
+                  <JFXButton fx:id="floor2" onAction="#chooseFloor" styleClass="transit-button-unselected" text="2">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floor3" onAction="#chooseFloor" styleClass="submit-button" text="3">
+                  <JFXButton fx:id="floor3" onAction="#chooseFloor" styleClass="transit-button-unselected" text="3">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
@@ -195,7 +204,7 @@
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="EXIT" checkedColor="#90e430" onAction="#sortNodesByType" text="Exits/Entrances">
+                                                <JFXCheckBox fx:id="EXIT" checkedColor="#90e430" onAction="#sortNodesByType" text="Entrances/Exits">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>

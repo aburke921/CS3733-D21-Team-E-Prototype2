@@ -1924,6 +1924,28 @@ public class DatabaseTests {
 		assertTrue(allCorrect);
 	}
 
+	@Test
+	@DisplayName("testGetCovidSurveys")
+	public void testCheckForNoSymptoms() {
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		DB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
 
+
+		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
+		DB.addSpecialUserType("ameliak@yahoo.com", "doctor02", "doctor", "Amelia", "Knight");
+
+		CovidSurveyObj covidSurveyObjSafe1 = new CovidSurveyObj(1, 4, false, false, false, false, true, "Needs to be reviewed");
+		CovidSurveyObj covidSurveyObjSafe2 = new CovidSurveyObj(2, 5, true, true, true, true, false, "Needs to be reviewed");
+
+		DB.addEntryRequest(covidSurveyObjSafe1);
+		DB.addEntryRequest(covidSurveyObjSafe2);
+
+		boolean safe = DB.checkForNoSymptoms(1);
+		boolean risk = DB.checkForNoSymptoms(2);
+
+		assertTrue(safe == true);
+
+		assertTrue(risk == false);
+	}
 
 }

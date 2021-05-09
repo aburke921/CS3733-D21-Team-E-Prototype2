@@ -1,12 +1,9 @@
 package edu.wpi.cs3733.D21.teamE;
 
-import edu.wpi.cs3733.D21.teamE.database.makeConnection;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
-
-
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.AppBarComponent;
@@ -17,21 +14,22 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.derby.drda.NetworkServerControl;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Scanner;
 
-import org.apache.derby.drda.NetworkServerControl;
-import java.net.InetAddress;
-
 public class App extends Application {
-
 
 	/*-------------------------------------
 	* 	   VARIABLES/SETTERS/GETTERS
@@ -77,14 +75,13 @@ public class App extends Application {
 	private static Node endNode = null;
 	private static boolean toEmergency = false;
 
+	private static boolean lockEndPath = false;
 	public static String driverURL;
 	public static String nextDriverURL;
 
 	public App() {
 
 	}
-
-
 
 
 	//setters and getters for above variables
@@ -108,6 +105,8 @@ public class App extends Application {
 	public static void setEndNode(Node endNode) { App.endNode = endNode; }
 	public static boolean isToEmergency() { return toEmergency; }
 	public static void setToEmergency(boolean toEmergency) { App.toEmergency = toEmergency; }
+	public static boolean isLockEndPath() { return lockEndPath; }
+	public static void setLockEndPath(boolean lockEndPath) { App.lockEndPath = lockEndPath; }
 	public static void setNextDriverURL(String url){ nextDriverURL = url; }
 
 
@@ -171,7 +170,6 @@ public class App extends Application {
 			}
 		}
 		System.out.println("App Initialized.");
-
 	}
 
 	/**
@@ -247,10 +245,11 @@ public class App extends Application {
 	public static void newJFXDialogPopUp(String heading, String button, String message, StackPane stackPane) {
 		System.out.println("DialogBox Posted");
 		JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
-		jfxDialogLayout.setHeading(new Text(heading));
+		jfxDialogLayout.setHeading(new Label(heading));
 		jfxDialogLayout.setBody(new Text(message));
 		JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
 		JFXButton okay = new JFXButton(button);
+		okay.getStyleClass().add("dialog-accept");
 		okay.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -265,7 +264,7 @@ public class App extends Application {
 	public static void databaseChangePopup(String heading, String message, StackPane stackPane) {
 		System.out.println("DialogBox Posted");
 		JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
-		jfxDialogLayout.setHeading(new Text(heading));
+		jfxDialogLayout.setHeading(new Label(heading));
 		jfxDialogLayout.setBody(new Text(message));
 		JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
 		JFXButton cancelButton = new JFXButton("Ok");
@@ -289,6 +288,5 @@ public class App extends Application {
 	public static void changeScene(Parent root) {
 		primaryStage.getScene().setRoot(root);
 	}
-
 
 }

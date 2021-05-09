@@ -224,21 +224,12 @@ public class App extends Application {
 	}
 
 	/**
-	 * @// TODO: 5/9/21 write documentation and test
+	 * @// TODO: 5/9/21 write documentation and test. Runs into many problems if no log files yet.
 	 * @throws IOException
 	 */
 	private void checkAndSendCrashReport() throws IOException {
-		//check for successful previous exit in log 0
-		File logfile0 = new File("BWHApplication.log.0");
-		String log0Tail = tail(logfile0);
-		boolean isSafeExitedLog0 = log0Tail.equals("INFO: Exiting");
 
-		//check for successful previous exit in log 1
-		File logfile1 = new File("BWHApplication.log.1");
-		String log1Tail = tail(logfile1);
-		boolean isSafeExitedLog1 = log1Tail.equals("INFO: Exiting");
-
-		if (isSafeExitedLog0 && isSafeExitedLog1) {
+		if (Main.isSafeExitedLog0 && Main.isSafeExitedLog1) {
 			//good
 		} else {
 			//bad exit, prompt user to report error
@@ -257,7 +248,7 @@ public class App extends Application {
 					logger.fine("Preparing To Send Crash Report");
 					List<String> lines;
 
-					if (!isSafeExitedLog0) { //log0 was a crash
+					if (!Main.isSafeExitedLog0) { //log0 was a crash
 						logger.finer("Reading logfile 0");
 						lines = Files.readAllLines(Paths.get("BWHApplication.log.0"), StandardCharsets.US_ASCII); //read logfile 0
 					} else { //log1 was a crash
@@ -406,9 +397,11 @@ public class App extends Application {
 			String lastLine = sb.reverse().toString();
 			return lastLine;
 		} catch( java.io.FileNotFoundException e ) {
+			logger.warning("File was not found, " + e);
 			e.printStackTrace();
 			return null;
 		} catch( java.io.IOException e ) {
+			logger.warning("IO EXception, " + e);
 			e.printStackTrace();
 			return null;
 		} finally {

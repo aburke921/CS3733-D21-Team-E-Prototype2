@@ -25,7 +25,7 @@ public class PathFindingTests {
     @BeforeAll
     public static void setupExpected() {
         System.out.println("STARTING UP!!!");
-        makeConnection con = makeConnection.makeConnection();
+        makeConnection con = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
         File nodes = new File("CSVs/MapEAllnodes.csv");
         File edges = new File("CSVs/MapEAlledges.csv");
         try {

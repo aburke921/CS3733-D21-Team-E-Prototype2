@@ -340,7 +340,7 @@ FHALL02601,2026,1239,1,Tower,HALL,Lobby Hallway 4,Hallway F02601
 FHALL02701,2066,1239,1,Tower,HALL,Lobby Hallway 7,Hallway F02701
 FDEPT00501,2128,1300,1,Tower,DEPT,Emergency Department,Emergency
 FHALL02801,1748,1280,1,Tower,HALL,Lobby Entrance Hallway,HallwayF02801
-FEXIT00201,1748,1321,1,Tower,EXIT,75 Francis Lobby Entrance,75 Francis Exit
+FEXIT00201,1748,1320,1,Tower,EXIT,75 Francis Lobby Entrance,75 Francis Exit
 FHALL02901,1700,1280,1,Tower,HALL,75 Lobby,75 Lobby
 FINFO00101,1700,1226,1,Tower,INFO,75 Lobby Information Desk,Lobby Info Desk
 FSERV00501,1645,1280,1,Tower,SERV,75 Lobby Valet Cashier,Valet Cashier
@@ -625,11 +625,11 @@ eWALK01701,3185,1292,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01801,3338,1352,1,Parking,WALK,Right Parking Lot Walkway,Walkway
 eWALK01901,1789,1757,1,Parking,WALK,Shapiro Lobby Entrance Sidewalk,Walkway
 eHALL00101,1758,1083,1,Tower,HALL,Tower Hallway e1,Tower Hall eHALL00101
-eSTAI001L2,1586,2195,L2,Shapiro,STAI,Shapiro Stairs Floor L2 Stairs 1,Shapiro Stair eSTAI001L2
-eSTAI001L1,1643,2190,L1,Shapiro,STAI,Shapiro Stairs Floor L1 Stairs 1,Shapiro Stair eSTAI001L1
-eSTAI00101,1673,2179,1,Shapiro,STAI,Shapiro Stairs Floor 1 Stairs 1,Shapiro Stair eSTAI00101
-eSTAI00102,1592,2154,2,Shapiro,STAI,Shapiro Stairs Floor 2 Stairs 1,Shapiro Stair eSTAI00102
-eSTAI00103,1595,2181,3,Shapiro,STAI,Shapiro Stairs Floor 3 Stairs 1,Shapiro Stair eSTAI00103
+eSTAI001L2,1586,2195,L2,Shapiro,STAI,Shapiro Stairs Floor L2 Stairs 1,Shapiro Stair 1 Floor L2
+eSTAI001L1,1643,2190,L1,Shapiro,STAI,Shapiro Stairs Floor L1 Stairs 1,Shapiro Stair 1 Floor L1
+eSTAI00101,1673,2179,1,Shapiro,STAI,Shapiro Stairs Floor 1 Stairs 1,Shapiro Stair 1 Floor 1
+eSTAI00102,1592,2154,2,Shapiro,STAI,Shapiro Stairs Floor 2 Stairs 1,Shapiro Stair 1 Floor 2
+eSTAI00103,1595,2181,3,Shapiro,STAI,Shapiro Stairs Floor 3 Stairs 1,Shapiro Stair 1 Floor 3
 eDEPT001GG,1565,2863,G,BTM,DEPT,Infusion Station, Infusion
 eDEPT002GG,1548,2821,G,BTM,DEPT,Blood Work Waiting Room, Blood Waiting Room
 eDEPT003GG,1527,2500,G,BTM,DEPT,Neurosciences Testing Waiting Room, Neuro Waiting Room

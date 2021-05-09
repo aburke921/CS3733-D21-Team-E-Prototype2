@@ -249,11 +249,19 @@ FontAwesomeIconView {
 }
 
 #submission-icon {
-    -fx-fill: #82cd58;
+    -fx-fill: #368509;
 }
 
 #white-icon {
     -fx-fill: WHITE;
+}
+
+#black-icon {
+    -fx-fill: BLACK;
+}
+
+#red-icon {
+    -fx-fill: RED;
 }
 
 JFXButton:hover MaterialDesignIconView {
@@ -298,10 +306,6 @@ JFXButton:hover FontAwesomeIconView {
     -jfx-rippler-fill: -fx--primary-dark;
 }
 
-.transit-button-selected:hover {
-    -fx-background-color: -fx--primary-dark;
-}
-
 .transit-button-unselected{
     -jfx-button-type: RAISED;
     -fx-text-fill: WHITE;
@@ -312,8 +316,6 @@ JFXButton:hover FontAwesomeIconView {
 .transit-button-unselected:hover {
     -fx-background-color: -fx--primary-dark;
 }
-
-
 
 .floor-change Label{
     -fx-font-size: 10px;
@@ -349,7 +351,7 @@ JFXButton:hover FontAwesomeIconView {
 }
 
 /* The increment and decrement button CSS class of scrollbar */
-.increment-button ,scrollables .decrement-button {
+.increment-button , .decrement-button {
     -fx-background-color:transparent;
     -fx-border-color:derive(gray,80%);
 }
@@ -396,4 +398,32 @@ JFXButton:hover FontAwesomeIconView {
 .custom-jfx-check-box {
     -jfx-checked-color: -fx--primary;
     -jfx-unchecked-color: BLACK;
+}
+
+
+/* Styling the animated thumb */
+.slider > .animated-thumb {
+    -fx-background-color: TRANSPARENT;
+}
+
+/* Styling the slider value text inside animated thumb */
+.slider .slider-value {
+    -fx-fill: TRANSPARENT;
+    -fx-stroke: TRANSPARENT;
+}
+
+.directory {
+    -fx-background-color: -fx--primary;
+}
+
+.directory:hover {
+    -fx-background-color: -fx--primary-dark;
+}
+
+.directorySelected {
+    -fx-background-color: -fx--primary-dark;
+}
+
+.directorySelected:hover {
+    -fx-background-color: -fx--primary;
 }

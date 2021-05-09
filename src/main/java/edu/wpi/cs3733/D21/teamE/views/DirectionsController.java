@@ -29,9 +29,6 @@ import java.util.*;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
-//TODO: move ListView of directions to beneath buttons
-//TODO: make
-
 /**
  * Class to display directions to/from BWH using the Google Maps API
  */
@@ -114,6 +111,8 @@ public class DirectionsController {
         }
 
         Stage primaryStage = App.getPrimaryStage();
+
+        
 
         leftAnchorPane.prefWidthProperty().bind(new DoubleBinding() {
             {
@@ -221,7 +220,7 @@ public class DirectionsController {
         listing.getChildren().add(dirList);
         listing.setVisible(true);
         topper.setVisible(true);
-        
+
         WebView webView = new WebView();
         webView.getEngine().loadContent("<iframe width='420' height='315' src=" + URL + " />");
 

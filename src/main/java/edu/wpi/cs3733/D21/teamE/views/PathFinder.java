@@ -17,7 +17,6 @@ import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
 import javafx.animation.PathTransition;
-import javafx.beans.binding.DoubleBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -420,7 +419,12 @@ public class PathFinder {
 
 
         });
-        error.setActions(parking,start,bathroom,destination);
+
+        if (App.isLockEndPath()) { //if end path is locked don't allow user to set an end-path
+            error.setActions(parking,start);
+        } else {
+            error.setActions(parking,start,bathroom,destination);
+        }
 
         dialog.show();
     }
@@ -1107,6 +1111,37 @@ public class PathFinder {
         markerPane.getChildren().add(marker.getMarkerGroup());
 
         System.out.println("Finish PathFinder Init.");
+
+        //don't allow user to select end location if end location is locked
+        if (App.isLockEndPath()) {
+            //remove all selector
+            rest.setManaged(false);
+            info.setManaged(false);
+            labs.setManaged(false);
+            dept.setManaged(false);
+            retl.setManaged(false);
+            serv.setManaged(false);
+            conf.setManaged(false);
+            EXIT.setManaged(false);
+            elev.setManaged(false);
+            stai.setManaged(false);
+            all.setManaged(false);
+
+
+            //hide all selectors
+            rest.setVisible(false);
+            info.setVisible(false);
+            labs.setVisible(false);
+            dept.setVisible(false);
+            retl.setVisible(false);
+            serv.setVisible(false);
+            conf.setVisible(false);
+            EXIT.setVisible(false);
+            elev.setVisible(false);
+            stai.setVisible(false);
+            all.setVisible(false);
+        }
+
         pane.setOnMouseClicked(e -> {
             /*double xCoord = e.getX();
             double yCoord = e.getY();

@@ -3,6 +3,7 @@ package edu.wpi.cs3733.D21.teamE;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.scheduler.Schedule;
 import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
@@ -823,6 +824,15 @@ public class DB {
 	 */
 	public static List<ToDo> getToDoList(int userID, int status, String date) {
 		return ToDoDB.getToDoList(userID, status, date);
+	}
+
+
+	/**
+	 * @param date enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
+	 * @return a Schedule item that contains a list of ToDo_items
+	 */
+	public static Schedule getSchedule(int userID, int status, String date) {
+		return new Schedule(new ArrayList<>());
 	}
 
 }

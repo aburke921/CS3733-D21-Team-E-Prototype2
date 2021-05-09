@@ -90,7 +90,7 @@ public class ToDoDB {
 	/**
 	 * Updates an entered ToDo_item with the following fields, input null to ignore String attributes and -1 to ignore int attributes
 	 * @param ToDoID           mandatory
-	 * @param userID           mandatory, changes the owner of the item to this userID, use App.userID if no change
+	 * @param userID           changes the owner of the item to this userID, use -1 if no change
 	 * @param status           default 1 (normal), 10/0 (complete/deleted)
 	 * @param priority         default 0 (none), 1/2/3 (low/mid/high)
 	 * @param scheduledDate    format: 2021-05-08
@@ -104,7 +104,11 @@ public class ToDoDB {
 	 */
 	public static boolean updateToDo(int ToDoID, int userID, String title, int status, int priority, String scheduledDate, String startTime, String endTime, String nodeID, String detail, String notificationDate, String notificationTime) {
 		String statusString = null;
-		String sql = "Update ToDo Set userID = ?";
+		String sql = "Update ToDo Set ToDoID = ?";
+		if (userID != -1) {
+			sql += ", userID = ?";
+			userIDInt = userID;
+		}
 		if (title != null) {
 			sql += ", title = ?";
 		}
@@ -155,8 +159,12 @@ public class ToDoDB {
 		}
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-			preparedStatement.setInt(1, userID);
+			preparedStatement.setInt(1, ToDoID);
 			int i = 1;
+			if (userID != -1) {
+				i++;
+				preparedStatement.setString(i, title);
+			}
 			if (title != null) {
 				i++;
 				preparedStatement.setString(i, title);

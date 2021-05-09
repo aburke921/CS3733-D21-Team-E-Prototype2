@@ -142,17 +142,13 @@ public class RequestsDB2 {
 
 		}
 
-		if (!ToDoDB.updateToDo(requestID, assigneeInt, null, statusInt, -1, null, null, null, null, null, null, null)) {
-			return 0;
-		}
-
 		query = query + " Where requestID = " + requestID;
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.executeUpdate();
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.err.println("Error in updating request table");
 			return 0;
 		}

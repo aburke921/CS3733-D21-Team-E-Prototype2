@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.scheduler.Schedule;
 import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
 
 import java.sql.Connection;
@@ -259,7 +260,7 @@ public class ToDoDB {
 	 * @param status enter -1 for get all regardless of status, or enter needed status number
 	 * @return a List of ToDo_items
 	 */
-	public static List<ToDo> getToDoList(int userID, int status, String date) {
+	public static Schedule getSchedule(int userID, int status, String date) {
 		List<ToDo> toDoList = new ArrayList<>();
 		String sql = "Select * From ToDo Where userID = ?";
 
@@ -308,6 +309,6 @@ public class ToDoDB {
 			e.printStackTrace();
 			System.err.println("SQL error in getToDoList()");
 		}
-		return toDoList;
+		return new Schedule(toDoList);
 	}
 }

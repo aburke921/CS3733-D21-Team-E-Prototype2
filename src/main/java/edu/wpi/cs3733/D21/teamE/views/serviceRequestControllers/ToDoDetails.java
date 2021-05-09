@@ -161,6 +161,8 @@ public class ToDoDetails extends ServiceRequestFormComponents{
         assert cancel != null : "fx:id=\"cancel\" was not injected: check your FXML file 'ToDoDetails.fxml'.";
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'ToDoDetails.fxml'.";
 
+        userIDInput.setManaged(false); // unshow user selection until user unchecks the "Assign to myself" checkbox todo
+
         //init appBar
         javafx.scene.Node appBarComponent = null;
         try {

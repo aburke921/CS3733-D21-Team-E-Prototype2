@@ -62,7 +62,7 @@ public class RequestsDB2 {
 	 */
 	public static void addRequest(int userID, int assigneeID, String requestType) {
 		// Not multi-user safe, but hey we only have one client accessing the db at a time
-		ToDoDB.addCustomToDo(assigneeID, UserAccountDB.getUserName(userID) + "'s " + requestType + " Request #" + ToDoDB.getMaxToDoID() + 1);
+		ToDoDB.addCustomToDo(assigneeID,  requestType + " Request #" + (ToDoDB.getMaxToDoID() + 1) + " with " + UserAccountDB.getUserName(userID));
 
 		String insertRequest = "Insert Into requests " +
 				"Values (" + ToDoDB.getMaxToDoID() + ", ?, Current Timestamp, ?, 'inProgress', ?)";

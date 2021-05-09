@@ -34,11 +34,11 @@
       </AnchorPane>
         <AnchorPane prefHeight="723.0">
          <children>
-            <JFXTreeTableView AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+            <JFXTreeTableView fx:id="treeTableView" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
             <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="20.0">
                <children>
                   <MaterialDesignIconView id="blue-icon" fx:id="goBackDay" glyphName="CHEVRON_LEFT" size="40" />
-                  <JFXDatePicker id="blue-icon" fx:id="calendar" defaultColor="#039be5" maxWidth="30.0" minHeight="35.0" onAction="#changeDate" />
+                  <JFXDatePicker id="blue-icon" fx:id="datePicker" defaultColor="#039be5" maxWidth="30.0" minHeight="35.0" onAction="#changeDate" />
                   <MaterialDesignIconView id="blue-icon" fx:id="goForwardDay" glyphName="CHEVRON_RIGHT" size="40" />
                </children>
             </HBox>

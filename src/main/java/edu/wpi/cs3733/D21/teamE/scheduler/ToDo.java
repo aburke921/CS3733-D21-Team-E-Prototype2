@@ -61,8 +61,30 @@ public class ToDo implements Comparable<ToDo>{
         return status;
     }
 
+    public String getStatusString() {
+        if(status == 1) {
+            return "Ongoing";
+        } else if (status == 10) {
+            return "Completed";
+        } else {
+            return "Deleted";
+        }
+    }
+
     public int getPriority() {
         return priority;
+    }
+
+    public String getPriorityString() {
+        if(priority == 0) {
+            return "None";
+        } else if (priority == 1) {
+            return "Low";
+        } else if (priority == 2) {
+            return "Medium";
+        } else {
+            return "High";
+        }
     }
 
     public Time getNotificationTime() {

@@ -197,6 +197,9 @@ public class PathFinder {
     @FXML JFXCheckBox park;
     @FXML JFXCheckBox all;
 
+    @FXML // fx:id="reverse"
+    private JFXButton reverse;
+
     /*
      * Additional Variables
      */
@@ -271,6 +274,8 @@ public class PathFinder {
                 endLocationComboBox.getSelectionModel().isEmpty());
         // clear preset node
         startNodeID = null;
+        reverse.setDisable(startLocationComboBox.getSelectionModel().isEmpty() ||
+                endLocationComboBox.getSelectionModel().isEmpty());
     }
 
 
@@ -285,6 +290,8 @@ public class PathFinder {
                 endLocationComboBox.getSelectionModel().isEmpty());
         // clear preset node
         endNodeID = null;
+        reverse.setDisable(startLocationComboBox.getSelectionModel().isEmpty() ||
+                endLocationComboBox.getSelectionModel().isEmpty());
     }
 
     /**
@@ -1585,5 +1592,14 @@ public class PathFinder {
         Node startNode = DB.getNodeInfo(nodeID);
         startNodeID = startNode.get("id");
         startLocationComboBox.setValue(startNode.get("longName"));
+    }
+
+    public void swap(ActionEvent actionEvent) {
+        String tempName = startLocationComboBox.getValue();
+        String tempID = startNodeID;
+        startLocationComboBox.setValue(endLocationComboBox.getValue());
+        startNodeID = endNodeID;
+        endLocationComboBox.setValue(tempName);
+        endNodeID = tempID;
     }
 }

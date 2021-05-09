@@ -112,10 +112,12 @@ public class RequestsDB2 {
 	 */
 	public static int editRequests(int requestID, int assigneeID, String requestStatus) {
 
+		int assigneeInt = -1;
 		boolean added = false;
 		String query = "Update requests ";
 
 		if (assigneeID != 0) {
+			assigneeInt = assigneeID;
 			query = query + "Set assigneeID = '" + assigneeID + "'";
 
 			added = true;
@@ -126,6 +128,10 @@ public class RequestsDB2 {
 			}
 			query = query + "Set requestStatus = '" + requestStatus + "'";
 
+		}
+
+		if (!ToDoDB.updateToDo(requestID, assigneeInt, null, statusInt, -1, null, null, null, null, null, null, null)) {
+			return 0;
 		}
 
 		query = query + " Where requestID = " + requestID;

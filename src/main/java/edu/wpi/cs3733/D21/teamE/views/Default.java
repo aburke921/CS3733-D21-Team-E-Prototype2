@@ -98,6 +98,15 @@ public class Default {
     }
 
     @FXML
+    private void toCovidSurvey(ActionEvent event) {
+        if(App.userID != 0) {
+            switchScene(event);
+        } else {
+            App.newJFXDialogPopUp("","Ok","You need to create a guest account before filling out the survey", stackPane);
+        }
+    }
+
+    @FXML
     private void toPathFinder(ActionEvent event) {
         if(App.userID != 0) {
             if(DB.filledCovidSurveyToday(App.userID)) {

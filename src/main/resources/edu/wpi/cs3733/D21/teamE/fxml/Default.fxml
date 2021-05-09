@@ -40,7 +40,7 @@
                                     </ImageView>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <JFXButton fx:id="covidSurvey" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="COVID Survey" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="covidSurvey" minWidth="200.0" onAction="#toCovidSurvey" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="COVID Survey" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>

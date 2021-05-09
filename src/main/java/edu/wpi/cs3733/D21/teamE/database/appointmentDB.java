@@ -1,6 +1,9 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class appointmentDB {
 
@@ -38,6 +41,7 @@ public class appointmentDB {
 	public static int addAppointment(int patientID, String startTime, String date, Integer doctorID) {
 		// Not multi-user safe, but hey we only have one client accessing the db at a time
 		ToDoDB.addCustomToDo(doctorID, "Appointment #" + (ToDoDB.getMaxToDoID() + 1) + " with " + UserAccountDB.getUserName(patientID));
+		ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), -1, null, -1, -1, date, startTime, null, null, null, null, null);
 
 		String insertAddApt = "Insert Into appointment Values(" + ToDoDB.getMaxToDoID() + ", ?, ?, ?, ?)";
 
@@ -150,7 +154,7 @@ public class appointmentDB {
 	}
 
 	public static int getAppointmentID(int patientID, String startTime, String date) {
-		String getAppointmentID = "select * from appointment where patientID = ? AND startTime = ? AND appointmentDate = ?";
+		String getAppointmentID = "Select * From appointment Where patientID = ? And startTime = ? And appointmentDate = ?";
 		int appointmentID = 0;
 		try (PreparedStatement prepState = connection.prepareStatement(getAppointmentID)) {
 
@@ -160,8 +164,8 @@ public class appointmentDB {
 
 			ResultSet rset = prepState.executeQuery();
 
-			while(rset.next()) {
-				appointmentID =  rset.getInt("appointmentID");
+			while (rset.next()) {
+				appointmentID = rset.getInt("appointmentID");
 			}
 
 

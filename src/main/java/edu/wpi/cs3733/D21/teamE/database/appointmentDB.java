@@ -39,7 +39,7 @@ public class appointmentDB {
 		// Not multi-user safe, but hey we only have one client accessing the db at a time
 		ToDoDB.addCustomToDo(doctorID, "Appointment #" + (ToDoDB.getMaxToDoID() + 1) + " with " + UserAccountDB.getUserName(patientID));
 
-		String insertAddApt = "Insert Into appointment Values(" + ToDoDB.getMaxToDoID() + ",?, ?, ?, ?)";
+		String insertAddApt = "Insert Into appointment Values(" + ToDoDB.getMaxToDoID() + ", ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertAddApt)) {
 			prepState.setInt(1, patientID);

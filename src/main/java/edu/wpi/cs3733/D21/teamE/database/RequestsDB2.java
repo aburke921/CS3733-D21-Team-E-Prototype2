@@ -1,7 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.MedicineDelivery;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,7 +10,6 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Set;
@@ -56,13 +54,13 @@ public class RequestsDB2 {
 
 	/**
 	 * adds a request to the requests table in the database
-	 * @param userID this is the userID of the person filling out the request
-	 * @param assigneeID this is the userID of the person who is assigned to this request
+	 * @param userID      this is the userID of the person filling out the request
+	 * @param assigneeID  this is the userID of the person who is assigned to this request
 	 * @param requestType this is the type of request that is being created
 	 */
 	public static void addRequest(int userID, int assigneeID, String requestType) {
 		// Not multi-user safe, but hey we only have one client accessing the db at a time
-		ToDoDB.addCustomToDo(assigneeID,  requestType + " Request #" + (ToDoDB.getMaxToDoID() + 1) + " with " + UserAccountDB.getUserName(userID));
+		ToDoDB.addCustomToDo(assigneeID, requestType + " Request #" + (ToDoDB.getMaxToDoID() + 1) + " with " + UserAccountDB.getUserName(userID));
 
 		String insertRequest = "Insert Into requests " +
 				"Values (" + ToDoDB.getMaxToDoID() + ", ?, Current Timestamp, ?, 'inProgress', ?)";
@@ -79,30 +77,31 @@ public class RequestsDB2 {
 
 	}
 
-	/**
-	 * Gets the largest requestID, which can be used to increment and make a the next one
-	 * @return the largest requestID in the request table
-	 */
-	public static int getMaxRequestID() {
-		int maxID = 0;
-
-		String query = "Select Max(requestID) As maxRequestID From food";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			ResultSet rset = prepState.executeQuery();
-
-			if (rset.next()) {
-				maxID = rset.getInt("maxRequestID");
-			}
-
-			prepState.close();
-			return maxID;
-		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("Error in getMaxRequestID()");
-			return 0;
-		}
-	}
+//	/**
+//	 * // outdated because requests extend ToDo_now, it will use ToDoDB.getMaxToDoID()
+//	 * Gets the largest requestID, which can be used to increment and make a the next one
+//	 * @return the largest requestID in the request table
+//	 */
+//	public static int getMaxRequestID() {
+//		int maxID = 0;
+//
+//		String query = "Select Max(requestID) As maxRequestID From food";
+//
+//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+//			ResultSet rset = prepState.executeQuery();
+//
+//			if (rset.next()) {
+//				maxID = rset.getInt("maxRequestID");
+//			}
+//
+//			prepState.close();
+//			return maxID;
+//		} catch (SQLException e) {
+//			//			e.printStackTrace();
+//			System.err.println("Error in getMaxRequestID()");
+//			return 0;
+//		}
+//	}
 
 	/**
 	 * Can change the assigneeID or the request status to any request
@@ -140,10 +139,6 @@ public class RequestsDB2 {
 			return 0;
 		}
 	}
-
-
-
-
 
 
 	//FLORAL REQUEST STUFF:
@@ -194,7 +189,7 @@ public class RequestsDB2 {
 	public static void addFloralRequest(FloralObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "floral");
 
-		String insertFloralRequest = "Insert Into floralrequests Values ((Select MAX(requestID) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String insertFloralRequest = "Insert Into floralrequests Values ((Select Max(requestID) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
 			prepState.setString(1, request.getNodeID());
@@ -300,9 +295,6 @@ public class RequestsDB2 {
 	}
 
 
-
-
-
 	//LANGUAGE REQUEST STUFF:
 
 	/**
@@ -399,10 +391,6 @@ public class RequestsDB2 {
 	}
 
 
-
-
-
-
 	// RELIGIOUS REQUESTS STUFF:
 
 	/**
@@ -492,9 +480,6 @@ public class RequestsDB2 {
 			return 0;
 		}
 	}
-
-
-
 
 
 	//EXTERNAL PATIENT REQUEST STUFF:
@@ -667,9 +652,6 @@ public class RequestsDB2 {
 	}
 
 
-
-
-
 	//LAUNDRY REQUEST STUFF:
 
 	/**
@@ -776,7 +758,6 @@ public class RequestsDB2 {
 			return 0;
 		}
 	}
-
 
 
 	//SECURITY REQUEST STUFF:
@@ -900,8 +881,6 @@ public class RequestsDB2 {
 	}
 
 
-
-
 	//SECURITY REQUEST STUFF:
 
 	/**
@@ -1002,10 +981,6 @@ public class RequestsDB2 {
 			return 0;
 		}
 	}
-
-
-
-
 
 
 	//SANITATION REQUEST STUFF:
@@ -1122,11 +1097,6 @@ public class RequestsDB2 {
 
 
 	}
-
-
-
-
-
 
 
 	//MEDICINE REQUEST STUFF:
@@ -1273,8 +1243,6 @@ public class RequestsDB2 {
 	}
 
 
-
-
 	//FOOD REQUEST STUFF:
 
 	/**
@@ -1311,6 +1279,7 @@ public class RequestsDB2 {
 	}
 
 	//TODO: Not tested
+
 	/**
 	 * adds a food delivery request to the foodDelivery table
 	 * @param request this is all of the information needed, in a food delivery request object.
@@ -1337,6 +1306,7 @@ public class RequestsDB2 {
 
 
 	//TODO: Not tested
+
 	/**
 	 * edits food delivery request which is already in DB
 	 * @param request this the information that the user wants to change stored in a food delivery request object. (If int = 0 --> do not change, If String = null --> do not change)
@@ -1416,7 +1386,7 @@ public class RequestsDB2 {
 	 * adds a menuItem to the aubonPainMenu database table
 	 * @param menuItem this is all of the information needed, in a security request object.
 	 */
-	public static void addAubonPainMenuItem(AubonPainItem menuItem){
+	public static void addAubonPainMenuItem(AubonPainItem menuItem) {
 
 		String query = "Insert Into aubonPainMenu Values(?,?,?,?,?) ";
 
@@ -1517,13 +1487,6 @@ public class RequestsDB2 {
 	}
 
 
-
-
-
-
-
-
-
 	//TODO: uncomment this when Internal Patient Object is completed
 	// fix anything which needs to be fixed and write tests
 	// add this table to deleteAllTables and createAllTables
@@ -1558,7 +1521,7 @@ public class RequestsDB2 {
 	 * adds a internal patient transport to the internalPatientRequest database table
 	 * @param request object holding internal patient transport req. fields
 	 */
- 	public static void addInternalPatientRequest(InternalPatientObj request) {
+	public static void addInternalPatientRequest(InternalPatientObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "internalPatientRequest");
 
 		String insertInternalPatientReq = "Insert Into internalPatientRequest Values ((Select Max(requestID) From requests), ?, ?, ?, ?, ?, ?)";
@@ -1636,12 +1599,6 @@ public class RequestsDB2 {
 			return 0;
 		}
 	}
-
-
-
-
-
-
 
 
 //	public static void addInternalPatientRequest(InternalPatientObj internalPatientObj) {
@@ -1733,16 +1690,7 @@ public class RequestsDB2 {
 //	}
 
 
-
-
 	// ENTRY REQUEST STUFF:
-
-
-
-
-
-
-
 
 
 	//COVID SURVEY STUFF:
@@ -1803,7 +1751,6 @@ public class RequestsDB2 {
 	}
 
 	/**
-	 *
 	 * @param covidSurveyObj
 	 * @return 1 if the update was successful, 0 if it failed
 	 */

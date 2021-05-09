@@ -427,3 +427,14 @@ scrollables.directions{
 .directorySelected:hover {
     -fx-background-color: -fx--primary;
 }
+
+/*JFX Dialog styles*/
+.dialog-accept {
+    -fx-text-fill: #03A9F4;
+    -fx-font-weight: BOLD;
+    -fx-padding: 0.7em 0.8em;
+}
+
+.jfx-layout-heading .label {
+    -fx-font-size: 20.0px;
+}

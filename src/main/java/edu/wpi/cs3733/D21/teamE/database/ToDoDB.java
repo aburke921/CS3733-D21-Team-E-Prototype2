@@ -146,6 +146,21 @@ public class ToDoDB {
 			if (status != -1) {
 				i++;
 				preparedStatement.setInt(i, status);
+				if (getToDoType(ToDoID) == 1) {
+					String statusString;
+					switch (status) {
+						case 1:  // normal
+							statusString = "inProgress";
+						case 10: // complete
+							statusString = "complete";
+						case 0:  // delete
+							statusString = "canceled";
+							break;
+						default:
+							throw new IllegalStateException("Unexpected value: " + status);
+					}
+					RequestsDB2.editRequests(ToDoID, 0, statusString);
+				}
 			}
 			if (priority != -1) {
 				i++;

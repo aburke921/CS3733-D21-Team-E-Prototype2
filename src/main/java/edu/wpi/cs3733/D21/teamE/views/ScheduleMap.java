@@ -563,10 +563,14 @@ public class ScheduleMap {
         Group g = new Group();
 
         //retrieves nodes and edges from DB
-        List<ToDo> toDoArray;
-        toDoArray = DB.getToDoList(App.userID, -1, currentDate.toString());
-        ArrayList<Edge> edgeArray = new ArrayList<Edge>();
-        edgeArray = DB.getAllEdges();
+        ArrayList<Edge> edgeArray = DB.getAllEdges();
+
+        Schedule schedule = DB.getSchedule(App.userID, -1, currentDate.toString());
+        List<ToDo> toDoArray = schedule.getTodoList();
+
+        for(ToDo toDo : schedule){
+            //stuff
+        }
 
         //display all edges
         scale = imageWidth / imageView.getFitWidth();
@@ -659,7 +663,5 @@ public class ScheduleMap {
         rootBorderPane.setPrefWidth(stageWidth);
         rootBorderPane.setPrefHeight(stageHeight);
     }
-
-
 
 }

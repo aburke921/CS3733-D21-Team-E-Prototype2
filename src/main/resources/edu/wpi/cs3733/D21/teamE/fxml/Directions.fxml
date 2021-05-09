@@ -2,8 +2,10 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.pannable.PannablePane?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -11,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.DirectionsController">
+<VBox prefHeight="736.0" prefWidth="1038.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.DirectionsController">
     <children>
         <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" />
         <AnchorPane VBox.vgrow="ALWAYS">
@@ -27,7 +29,7 @@
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane fx:id="leftAnchorPane" minWidth="-Infinity" prefWidth="451.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <VBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+                                    <VBox alignment="CENTER" AnchorPane.bottomAnchor="140.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
                                         <JFXTextField fx:id="address" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="325.0" promptText="Address" />
                                         <HBox alignment="CENTER">
                                             <children>
@@ -82,7 +84,7 @@
                                                 <Insets top="25.0" />
                                             </VBox.margin>
                                         </HBox>
-                                        <HBox alignment="CENTER">
+                                        <HBox alignment="CENTER" prefWidth="729.0">
                                             <JFXButton fx:id="toBWH" disable="true" minWidth="110.0" onAction="#toBWH" prefHeight="35.0" prefWidth="105.0" styleClass="submit-button" text="To BWH">
                                                 <font>
                                                     <Font size="15" />
@@ -106,6 +108,24 @@
                                                 <Insets top="25.0" />
                                             </VBox.margin>
                                         </HBox>
+                              <VBox fx:id="topper" visible="false">
+                                 <children>
+                                    <Label fx:id="heading" />
+                                    <Label fx:id="info">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets left="40.0" right="40.0" top="30.0" />
+                                 </VBox.margin>
+                              </VBox>
+                              <PannablePane fx:id="listing" visible="false" VBox.vgrow="ALWAYS">
+                                 <VBox.margin>
+                                    <Insets left="30.0" right="30.0" top="20.0" />
+                                 </VBox.margin>
+                              </PannablePane>
                                     </VBox>
                                     <AnchorPane fx:id="lowerAnchorPane" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="100.0" AnchorPane.bottomAnchor="65.0">
                                         <children>

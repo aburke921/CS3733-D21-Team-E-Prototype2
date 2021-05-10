@@ -663,6 +663,116 @@ public class ScheduleMap {
         rootBorderPane.setCenter(scrollPane);
         rootBorderPane.setPrefWidth(stageWidth);
         rootBorderPane.setPrefHeight(stageHeight);
+        drawMap(currentFloor);
+    }
+
+    /**
+     * displays map of current floor
+     * @param floorNum current floor number
+     */
+    public void drawMap(String floorNum) {
+
+        //clear map
+        System.out.print("\nCLEARING MAP...");
+        pane.getChildren().clear();
+        System.out.println(" DONE");
+
+        //create group to contain all the shapes before we add them to the scene
+        Group g = new Group();
+
+        //retrieves nodes and edges from DB
+        ArrayList<Node> nodeArray = new ArrayList<Node>();
+        nodeArray = DB.getAllNodesByFloor(floorNum);
+        ArrayList<Edge> edgeArray = new ArrayList<Edge>();
+        edgeArray = DB.getAllEdges();
+
+        //display all edges
+        scale = imageWidth / imageView.getFitWidth();
+        ArrayList<String> lineList = new ArrayList<String>();
+        //display all edges
+        for(int i = 0; i < edgeArray.size(); i++) {
+            double startX = -1;
+            double startY = -1;
+            double endX = -1;
+            double endY = -1;
+            //get start and end node for each edge
+            String start = edgeArray.get(i).getStartNodeId();
+            String end = edgeArray.get(i).getEndNodeId();
+            //parse through nodes, when you reach ones that match start and end of this
+            //edge, retrieve coordinates
+            for (int j = 0; j < nodeArray.size(); j++) {
+                if (nodeArray.get(j).get("floor").equals(floorNum)) {
+                    if (nodeArray.get(j).get("id").equals(start)) {
+                        startX = nodeArray.get(j).getX() / scale;
+                        startY = nodeArray.get(j).getY() / scale;
+                    }
+                    if (nodeArray.get(j).get("id").equals(end)) {
+                        endX = nodeArray.get(j).getX() / scale;
+                        endY = nodeArray.get(j).getY() / scale;
+                    }
+                }
+                //if you've retrieved the edge, create a line
+                if (startX != -1 && startY != -1 && endX != -1 && endY != -1) {
+                    Line line = new Line(startX, startY, endX, endY);
+                    line.setStroke(Color.color(1,0,0,0.4));
+                    //don't add same edge twice
+                    if(!lineList.contains(line.toString())) {
+                        line.setStrokeLineCap(StrokeLineCap.ROUND);
+                        line.setStrokeWidth(1);
+                        g.getChildren().add(line);
+                        lineList.add(line.toString());
+                    }
+
+                }
+            }
+        }
+        //display all nodes
+        for (int i = 0; i < nodeArray.size(); i++) {
+            double xCoord = nodeArray.get(i).getX() / scale;
+            double yCoord = nodeArray.get(i).getY() / scale;
+            Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+            if(nodeArray.get(i).get("type").equals("HALL")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#7c7c7c"));
+            }
+            if(nodeArray.get(i).get("type").equals("CONF")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#7f5124"));
+            }
+            if(nodeArray.get(i).get("type").equals("DEPT")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#74058c"));
+            }
+            if(nodeArray.get(i).get("type").equals("ELEV")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#769557"));
+            }
+            if(nodeArray.get(i).get("type").equals("INFO")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#dc721c"));
+            }
+            if(nodeArray.get(i).get("type").equals("LABS")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#c900ae"));
+            }
+            if(nodeArray.get(i).get("type").equals("REST")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#b00404"));
+            }
+            if(nodeArray.get(i).get("type").equals("RETL")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#3d4f9d"));
+            }
+            if(nodeArray.get(i).get("type").equals("STAI")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#007f52"));
+            }
+            if(nodeArray.get(i).get("type").equals("SERV")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#005cff"));
+            }
+            if(nodeArray.get(i).get("type").equals("EXIT")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#90e430"));
+            }
+            if(nodeArray.get(i).get("type").equals("PARK")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.web("#1299d2"));
+            }
+            if(nodeArray.get(i).get("type").equals("WALK")) {
+                circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+            }
+            g.getChildren().add(circle);
+        }
+        pane.getChildren().add(g);
     }
 
     @FXML

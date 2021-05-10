@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXSnackbarLayout;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -20,6 +21,7 @@ import javafx.animation.PathTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -28,6 +30,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -37,6 +40,7 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,6 +66,18 @@ public class ScheduleMap {
 
     @FXML // fx:id="dist"
     private Label dist;
+
+    @FXML // fx:id="datePicker"
+    private JFXDatePicker datePicker;
+
+    @FXML // fx:id="dateLabel"
+    private Label dateLabel;
+
+    @FXML // fx:id="goBackDay"
+    private MaterialDesignIconView goBackDay;
+
+    @FXML // fx:id="goForwardDay"
+    private MaterialDesignIconView goForwardDay;
 
     //private Schedule;
 
@@ -107,7 +123,7 @@ public class ScheduleMap {
      * @param event calling function's (Find Path Button) event info.
      */
     @FXML
-    public void findPath(ActionEvent event) {
+    public void findPath() {
         floorVisits = new int[]{0, 0, 0, 0, 0, 0};
 
         System.out.println("\nFINDING PATH...");
@@ -227,13 +243,7 @@ public class ScheduleMap {
         System.out.println(" DONE");
     }
 
-    /**
-     * Draws map path given a complete {@link Path}.
-     * RED - Start & End for floor only.
-     * GREEN - start of entire path.
-     * BLACK - end node of entire path.
-     * @param fullPath the path to be drawn on the map.
-     */
+
     public void drawMap(Path fullPath, String floorNum) {
 
         //clear map
@@ -246,6 +256,7 @@ public class ScheduleMap {
 
         //if path is null
         if (fullPath == null) {
+            System.out.println("NULL PATH");
             //todo snackbar to say no path set
             return;
         }
@@ -300,7 +311,7 @@ public class ScheduleMap {
                             icon.setLayoutY(prevYCoord + markerIconYOffset);
 
                             if (firstID.equalsIgnoreCase(selectedStartNodeID)) {
-                                System.out.println(scale);
+                                System.out.println("SCALE: " + scale);
                                 // True first node
                                 icon.setId("submission-icon");
 
@@ -533,6 +544,21 @@ public class ScheduleMap {
         }
     }
 
+    @FXML
+    private void setDateLabel(Date date) {
+        int monthInt = date.getMonth();
+        String month = "wrong";
+        DateFormatSymbols dfs = new DateFormatSymbols();
+        String[] months = dfs.getMonths();
+        if (monthInt >= 0 && monthInt <= 11 ) {
+            month = months[--monthInt];
+        }
+
+        String day = Integer.toString(date.getDay());
+        String year = Integer.toString(date.getYear());
+        String dateFormat = month + " " + day+ ", " + year;
+        dateLabel.setText(dateFormat);
+    }
 
     /**
      * Changes the displayed map, and path; sets {@link #currentFloor}.
@@ -549,79 +575,7 @@ public class ScheduleMap {
         System.out.println("Current floor set to " + floorNum);
     }
 
-    /**
-     * displays map of current floor
-     * @param floorNum current floor number
-     */
-    public void drawMap2(String floorNum) {
 
-        //clear map
-        System.out.print("\nCLEARING MAP...");
-        pane.getChildren().clear();
-        System.out.println(" DONE");
-
-        //create group to contain all the shapes before we add them to the scene
-        Group g = new Group();
-
-        //retrieves nodes and edges from DB
-        ArrayList<Edge> edgeArray = DB.getAllEdges();
-
-        Schedule schedule = DB.getSchedule(App.userID, -1, currentDate.toString());
-        List<ToDo> toDoArray = schedule.getTodoList();
-
-        for(ToDo toDo : schedule){
-            //stuff
-        }
-
-        //display all edges
-        scale = imageWidth / imageView.getFitWidth();
-        ArrayList<String> lineList = new ArrayList<String>();
-        //display all edges
-        for(int i = 0; i < edgeArray.size(); i++) {
-            double startX = -1;
-            double startY = -1;
-            double endX = -1;
-            double endY = -1;
-            //get start and end node for each edge
-            String start = edgeArray.get(i).getStartNodeId();
-            String end = edgeArray.get(i).getEndNodeId();
-            //parse through nodes, when you reach ones that match start and end of this
-            //edge, retrieve coordinates
-            for (int j = 0; j < toDoArray.size(); j++) {
-                if (toDoArray.get(j).getLocation().get("floor").equals(floorNum)) {
-                    if (toDoArray.get(j).getLocation().equals(start)) {
-                        startX = toDoArray.get(j).getLocation().getX() / scale;
-                        startY = toDoArray.get(j).getLocation().getY() / scale;
-                    }
-                    if (toDoArray.get(j).getLocation().get("id").equals(end)) {
-                        endX = toDoArray.get(j).getLocation().getX() / scale;
-                        endY = toDoArray.get(j).getLocation().getY() / scale;
-                    }
-                }
-                //if you've retrieved the edge, create a line
-                if (startX != -1 && startY != -1 && endX != -1 && endY != -1) {
-                    Line line = new Line(startX, startY, endX, endY);
-                    line.setStroke(Color.color(1,0,0,0.4));
-                    //don't add same edge twice
-                    if(!lineList.contains(line.toString())) {
-                        line.setStrokeLineCap(StrokeLineCap.ROUND);
-                        line.setStrokeWidth(1);
-                        g.getChildren().add(line);
-                        lineList.add(line.toString());
-                    }
-
-                }
-            }
-        }
-        //display all nodes
-        for (int i = 0; i < toDoArray.size(); i++) {
-            double xCoord = toDoArray.get(i).getLocation().getX() / scale;
-            double yCoord = toDoArray.get(i).getLocation().getY() / scale;
-            Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
-            g.getChildren().add(circle);
-        }
-        pane.getChildren().add(g);
-    }
 
     @FXML
     void initialize() {
@@ -646,6 +600,8 @@ public class ScheduleMap {
         imageView.setPreserveRatio(true);
         imageView.setFitWidth(primaryStage.getWidth());
 
+        scale = imageWidth / imageView.getFitWidth();
+
         StackPane stackPane = new StackPane(imageView, borderPane);
         ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
 
@@ -663,117 +619,57 @@ public class ScheduleMap {
         rootBorderPane.setCenter(scrollPane);
         rootBorderPane.setPrefWidth(stageWidth);
         rootBorderPane.setPrefHeight(stageHeight);
-        drawMap(currentFloor);
-    }
 
-    /**
-     * displays map of current floor
-     * @param floorNum current floor number
-     */
-    public void drawMap(String floorNum) {
+        datePicker.setValue(LocalDate.now());
+        Date date = new Date(datePicker.getValue());
+        setDateLabel(date);
 
-        //clear map
-        System.out.print("\nCLEARING MAP...");
-        pane.getChildren().clear();
-        System.out.println(" DONE");
+        //set up icons for moving foward and backward a day
+        goBackDay.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                LocalDate currDate = datePicker.getValue();
+                datePicker.setValue(currDate.minusDays(1));
+                setDateLabel(new Date(datePicker.getValue()));
+                //prepareToDoTable(treeTableView, datePicker.getValue().toString());
+            }
+        });
 
-        //create group to contain all the shapes before we add them to the scene
-        Group g = new Group();
+        goForwardDay.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                LocalDate currDate = datePicker.getValue();
+                datePicker.setValue(currDate.plusDays(1));
+                setDateLabel(new Date(datePicker.getValue()));
+                //prepareToDoTable(treeTableView, datePicker.getValue().toString());
+            }
+        });
 
-        //retrieves nodes and edges from DB
-        ArrayList<Node> nodeArray = new ArrayList<Node>();
-        nodeArray = DB.getAllNodesByFloor(floorNum);
-        ArrayList<Edge> edgeArray = new ArrayList<Edge>();
-        edgeArray = DB.getAllEdges();
+        Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
+        Schedule scheduleCompleted = DB.getSchedule(App.userID, 10, datePicker.getValue().toString());
 
-        //display all edges
-        scale = imageWidth / imageView.getFitWidth();
-        ArrayList<String> lineList = new ArrayList<String>();
-        //display all edges
-        for(int i = 0; i < edgeArray.size(); i++) {
-            double startX = -1;
-            double startY = -1;
-            double endX = -1;
-            double endY = -1;
-            //get start and end node for each edge
-            String start = edgeArray.get(i).getStartNodeId();
-            String end = edgeArray.get(i).getEndNodeId();
-            //parse through nodes, when you reach ones that match start and end of this
-            //edge, retrieve coordinates
-            for (int j = 0; j < nodeArray.size(); j++) {
-                if (nodeArray.get(j).get("floor").equals(floorNum)) {
-                    if (nodeArray.get(j).get("id").equals(start)) {
-                        startX = nodeArray.get(j).getX() / scale;
-                        startY = nodeArray.get(j).getY() / scale;
-                    }
-                    if (nodeArray.get(j).get("id").equals(end)) {
-                        endX = nodeArray.get(j).getX() / scale;
-                        endY = nodeArray.get(j).getY() / scale;
-                    }
+
+        ArrayList<Node> nodeArray = DB.getAllNodes();
+        List<ToDo> array = scheduleOngoing.getTodoList();
+            for(int j = 0; j < nodeArray.size(); j++) {
+                if(array.get(0).getLocationString().equals(nodeArray.get(j).get("longName"))) {
+                    startNode = nodeArray.get(j);
                 }
-                //if you've retrieved the edge, create a line
-                if (startX != -1 && startY != -1 && endX != -1 && endY != -1) {
-                    Line line = new Line(startX, startY, endX, endY);
-                    line.setStroke(Color.color(1,0,0,0.4));
-                    //don't add same edge twice
-                    if(!lineList.contains(line.toString())) {
-                        line.setStrokeLineCap(StrokeLineCap.ROUND);
-                        line.setStrokeWidth(1);
-                        g.getChildren().add(line);
-                        lineList.add(line.toString());
-                    }
-
+                if(array.get(array.size()-1).getLocationString().equals(nodeArray.get(j).get("longName"))) {
+                    endNode = nodeArray.get(j);
                 }
             }
-        }
-        //display all nodes
-        for (int i = 0; i < nodeArray.size(); i++) {
-            double xCoord = nodeArray.get(i).getX() / scale;
-            double yCoord = nodeArray.get(i).getY() / scale;
-            Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
-            if(nodeArray.get(i).get("type").equals("HALL")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.web("#7c7c7c"));
-            }
-            if(nodeArray.get(i).get("type").equals("CONF")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.web("#7f5124"));
-            }
-            if(nodeArray.get(i).get("type").equals("DEPT")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.web("#74058c"));
-            }
-            if(nodeArray.get(i).get("type").equals("ELEV")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.web("#769557"));
-            }
-            if(nodeArray.get(i).get("type").equals("INFO")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.web("#dc721c"));
-            }
-            if(nodeArray.get(i).get("type").equals("LABS")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.web("#c900ae"));
-            }
-            if(nodeArray.get(i).get("type").equals("REST")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.web("#b00404"));
-            }
-            if(nodeArray.get(i).get("type").equals("RETL")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.web("#3d4f9d"));
-            }
-            if(nodeArray.get(i).get("type").equals("STAI")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.web("#007f52"));
-            }
-            if(nodeArray.get(i).get("type").equals("SERV")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.web("#005cff"));
-            }
-            if(nodeArray.get(i).get("type").equals("EXIT")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.web("#90e430"));
-            }
-            if(nodeArray.get(i).get("type").equals("PARK")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.web("#1299d2"));
-            }
-            if(nodeArray.get(i).get("type").equals("WALK")) {
-                circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
-            }
-            g.getChildren().add(circle);
-        }
-        pane.getChildren().add(g);
+            findPath();
     }
+
+
+    @FXML
+    private void changeDate(ActionEvent event) {
+        setDateLabel(new Date(datePicker.getValue()));
+        drawMap(currentFoundPath, datePicker.getValue().toString());
+    }
+
+
 
     @FXML
     private void switchScene(ActionEvent event) {

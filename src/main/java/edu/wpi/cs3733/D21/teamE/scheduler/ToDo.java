@@ -103,7 +103,7 @@ public class ToDo implements Comparable<ToDo>{
 
     public String getStartTimeString() {
         if(startTime != null) {
-            return startTime.toString();
+            return startTime.hourMinString();
         } else {
             return "";
         }

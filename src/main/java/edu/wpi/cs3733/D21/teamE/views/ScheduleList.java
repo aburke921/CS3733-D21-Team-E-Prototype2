@@ -143,7 +143,7 @@ public class ScheduleList {
             TreeTableColumn<ToDo, String> column3 = new TreeTableColumn<>("Start Time");
             column3.setPrefWidth(200);
             column3.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
-                    new ReadOnlyStringWrapper(p.getValue().getValue().getStartTime().toString()));
+                    new ReadOnlyStringWrapper(p.getValue().getValue().getStartTime().hourMinString()));
             table.getColumns().add(column3);
 
             //column 4 - status

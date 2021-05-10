@@ -230,7 +230,7 @@ public class DirectionsController {
         topper.setVisible(true);
 
         Double width = imageStackPane.widthProperty().getValue() - 135;
-        Double height = 395.0;
+        Double height = 390.0;
 
         WebView webView = new WebView();
         webView.getEngine().loadContent("<iframe width='" + width.toString() + "' height='" + height.toString()  + "' src=" + URL + " />");

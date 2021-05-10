@@ -57,4 +57,12 @@ public class Date {
         }
     }
 
+    public String toString(){
+        return String.format("%04d-%02d-%02d", year, month, day);
+    }
+
+    public boolean equals(String stringDate){
+        return toString().equalsIgnoreCase(stringDate);
+    }
+
 }

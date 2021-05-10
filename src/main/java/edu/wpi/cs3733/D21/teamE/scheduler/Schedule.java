@@ -43,7 +43,9 @@ public class Schedule implements Iterable<ToDo>{
     public List<Node> getLocations(){
         List<Node> locations = new LinkedList<>();
         for(ToDo event : schedule){
-            locations.add(event.getLocation()); // TODO: handle when there's no location for a todo
+            if(event.getLocation() != null) {
+                locations.add(event.getLocation());
+            }
         }
         return locations;
     }

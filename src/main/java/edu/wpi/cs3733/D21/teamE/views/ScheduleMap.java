@@ -23,6 +23,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -40,12 +41,14 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 
 public class ScheduleMap {
 
@@ -78,6 +81,9 @@ public class ScheduleMap {
 
     @FXML // fx:id="goForwardDay"
     private MaterialDesignIconView goForwardDay;
+
+    @FXML // fx:id="appBarAnchorPane"
+    private AnchorPane appBarAnchorPane;
 
     //private Schedule;
 
@@ -120,7 +126,6 @@ public class ScheduleMap {
      * given the two current start and end positions ({@link #selectedStartNodeID} and {@link #selectedEndNodeID}).
      * Then calls {@link #drawMap(Path, String)}.
      * Sets {@link #currentFoundPath}. Returns a SnackBar when path is null.
-     * @param event calling function's (Find Path Button) event info.
      */
     @FXML
     public void findPath() {
@@ -624,6 +629,18 @@ public class ScheduleMap {
         Date date = new Date(datePicker.getValue());
         setDateLabel(date);
 
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setPageTitle("Schedule List"); //set AppBar title
+            App.setShowHelp(false);
+            App.setShowLogin(true);
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's sideBarVBox element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //set up icons for moving foward and backward a day
         goBackDay.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -645,21 +662,29 @@ public class ScheduleMap {
             }
         });
 
+        preparePathDisplay();
+    }
+
+    private void preparePathDisplay() {
         Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
         Schedule scheduleCompleted = DB.getSchedule(App.userID, 10, datePicker.getValue().toString());
 
 
         ArrayList<Node> nodeArray = DB.getAllNodes();
         List<ToDo> array = scheduleOngoing.getTodoList();
-            for(int j = 0; j < nodeArray.size(); j++) {
-                if(array.get(0).getLocationString().equals(nodeArray.get(j).get("longName"))) {
+        if(array.size() > 0) {
+            for (int j = 0; j < nodeArray.size(); j++) {
+                if (array.get(0).getLocationString().equals(nodeArray.get(j).get("longName"))) {
                     startNode = nodeArray.get(j);
                 }
-                if(array.get(array.size()-1).getLocationString().equals(nodeArray.get(j).get("longName"))) {
+                if (array.get(array.size() - 1).getLocationString().equals(nodeArray.get(j).get("longName"))) {
                     endNode = nodeArray.get(j);
                 }
             }
+        }
+        if(startNode != null && endNode != null) {
             findPath();
+        }
     }
 
 
@@ -673,8 +698,8 @@ public class ScheduleMap {
 
     @FXML
     private void switchScene(ActionEvent event) {
-        //ToDoState toDoState = new ToDoState();
-        //toDoState.switchScene(event);
+        ToDoState toDoState = new ToDoState();
+        toDoState.switchScene(event);
     }
 
 }

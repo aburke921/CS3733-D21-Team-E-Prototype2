@@ -35,6 +35,7 @@ import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class ScheduleList {
 
@@ -104,6 +105,19 @@ public class ScheduleList {
 
     private void prepareToDoTable(TreeTableView<ToDo> table, int status, String date) {
         System.out.println("preparing schedule...");
+
+        /*CLEAR TABLE*/
+
+        //get list size
+        int size  = treeTableView.getRoot().getChildren().size();
+
+        //if list isn't empty, clear all contents
+        if (treeTableView.getRoot().getChildren().size() > 0) {
+            treeTableView.getRoot().getChildren().subList(0, size).clear();
+            Logger.getLogger("BWH").fine("Table Content Removed");
+        }
+
+        /*POPULATE TABLE*/
 
         Schedule schedule = DB.getSchedule(App.userID, status, date);
 

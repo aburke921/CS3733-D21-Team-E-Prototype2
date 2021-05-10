@@ -145,7 +145,6 @@ public class ToDoDetails {
         ObservableList<String> statusOptions = FXCollections.observableArrayList();
         statusOptions.add("Ongoing");
         statusOptions.add("Completed");
-        statusOptions.add("Deleted");
 
         ObservableList<String> priorityOptions = FXCollections.observableArrayList();
         priorityOptions.add("None");
@@ -364,7 +363,7 @@ public class ToDoDetails {
             int todoID = DB.addCustomToDo(userID, title);
             if(todoID == 0) {
                 //todo error
-            } else if(!DB.updateToDo(todoID, userID, title, statusInt, priorityInt, date, startTime,
+            } else if(!DB.updateToDo(todoID, title, userID, statusInt, priorityInt, date, startTime,
                     endTime, nodeID, additionalNotes, notificationDate, notificationTime)) {
                 //todo error
                 System.err.println("DB.updateToDo got " + todoID  + " " + userID + " " + title + " " + statusInt + " " + priorityInt + " " + date + " " + startTime

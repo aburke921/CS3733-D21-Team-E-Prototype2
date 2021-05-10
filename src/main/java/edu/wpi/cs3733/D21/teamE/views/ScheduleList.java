@@ -51,8 +51,6 @@ public class ScheduleList {
     @FXML // fx:id="dateLabel"
     private Label dateLabel;
 
-    private int currStatus = 1;
-
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
 
@@ -60,7 +58,7 @@ public class ScheduleList {
         Date date = new Date(datePicker.getValue());
         setDateLabel(date);
 
-        prepareToDoTable(treeTableView, currStatus, date.toString());
+        prepareToDoTable(treeTableView, date.toString());
 
 
         //set up icons for moving foward and backward a day
@@ -70,7 +68,7 @@ public class ScheduleList {
                 LocalDate currDate = datePicker.getValue();
                 datePicker.setValue(currDate.minusDays(1));
                 setDateLabel(new Date(datePicker.getValue()));
-                prepareToDoTable(treeTableView, currStatus, datePicker.getValue().toString());
+                prepareToDoTable(treeTableView, datePicker.getValue().toString());
             }
         });
 
@@ -80,7 +78,7 @@ public class ScheduleList {
                 LocalDate currDate = datePicker.getValue();
                 datePicker.setValue(currDate.plusDays(1));
                 setDateLabel(new Date(datePicker.getValue()));
-                prepareToDoTable(treeTableView, currStatus, datePicker.getValue().toString());
+                prepareToDoTable(treeTableView, datePicker.getValue().toString());
             }
         });
 
@@ -97,25 +95,28 @@ public class ScheduleList {
         }
     }
 
-    private void prepareToDoTable(TreeTableView<ToDo> table, int status, String date) {
+    private void prepareToDoTable(TreeTableView<ToDo> table, String date) {
         System.out.println("preparing schedule...");
 
-        /*CLEAR TABLE*/
+        if(table.getRoot() != null) {
+            /*CLEAR TABLE*/
+            //get list size
+            int size = table.getRoot().getChildren().size();
 
-        //get list size
-        int size  = treeTableView.getRoot().getChildren().size();
-
-        //if list isn't empty, clear all contents
-        if (treeTableView.getRoot().getChildren().size() > 0) {
-            treeTableView.getRoot().getChildren().subList(0, size).clear();
-            Logger.getLogger("BWH").fine("Table Content Removed");
+            //if list isn't empty, clear all contents
+            if (table.getRoot().getChildren().size() > 0) {
+                table.getRoot().getChildren().subList(0, size).clear();
+                Logger.getLogger("BWH").fine("Table Content Removed");
+            }
         }
 
         /*POPULATE TABLE*/
 
-        Schedule schedule = DB.getSchedule(App.userID, status, date);
+        Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, date);
+        Schedule scheduleCompleted = DB.getSchedule(App.userID, 10, date);
 
-        List<ToDo> array = schedule.getTodoList();
+        List<ToDo> array = scheduleOngoing.getTodoList();
+        array.addAll(scheduleCompleted.getTodoList());
 
         if (table.getRoot() == null) {
             ToDo todo0 = new ToDo(0, "", 0, 0, 0, new Node(),
@@ -206,7 +207,7 @@ public class ScheduleList {
     @FXML
     private void changeDate(ActionEvent event) {
         setDateLabel(new Date(datePicker.getValue()));
-        prepareToDoTable(treeTableView, currStatus, datePicker.getValue().toString());
+        prepareToDoTable(treeTableView, datePicker.getValue().toString());
     }
 
     @FXML

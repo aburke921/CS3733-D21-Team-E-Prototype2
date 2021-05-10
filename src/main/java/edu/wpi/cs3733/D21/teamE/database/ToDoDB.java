@@ -18,19 +18,19 @@ public class ToDoDB {
 	public static int createToDoTable() {
 		try (PreparedStatement prepState = connection.prepareStatement("Create Table ToDo " +
 				"( " +
-				"ToDoID           int Primary Key, " +
-				"userID           int References userAccount Not Null," +
-				"title            varchar(63) Not Null," +
-				"status           int Not Null Default 1," + // default 1 (normal), 10/0 (complete/deleted)
-				"priority         int Not Null Default 0," + // default 0 (none), 1/2/3 (low/mid/high)
-				//optional:
-				"scheduledDate    Varchar(31) Default Null," + // format:
-				"scheduledTime    Varchar(31) Default Null," + // format: 23:17:00
-				"nodeID           varchar(31) References node," +
-				"detail           varchar(1023)," +
-				"expectedLength   Varchar(31)," + // how long it would take, format: 23:17:00
-				"notificationDate Varchar(31)," + // eg. remind me 2 days before this (send email)
-				"notificationTime Varchar(31)" +  // format: 23:17:00 eg. remind me 30 mins before this (send email)
+				"ToDoID           Int Primary Key, " +
+				"title            Varchar(63)                Not Null, " +
+				"userID           Int References userAccount Not Null, " +
+				"status           Int                        Not Null Default 1, " +    // default 1 (normal), 10/0 (complete/deleted)
+				"priority         Int                        Not Null Default 0, " +    // default 0 (none), 1/2/3 (low/mid/high)
+				// optional
+				"nodeID           Varchar(31) References node         Default Null, " +
+				"scheduledDate    Varchar(31)                         Default Null, " + // format:
+				"startTime        Varchar(31)                         Default Null, " + // format: 23:17:00
+				"endTime          Varchar(31)                         Default Null, " + // how long it would take, format: 23:17:00
+				"detail           Varchar(1023)                       Default Null, " +
+				"notificationDate Varchar(31)                         Default Null, " + // eg. remind me 2 days before this (send email)
+				"notificationTime Varchar(31)                         Default Null " +  // format: 23:17:00 eg. remind me 30 mins before this (send email)
 				")")) {
 			prepState.execute();
 		} catch (SQLException e) {
@@ -95,16 +95,16 @@ public class ToDoDB {
 	 * @param userID           changes the owner of the item to this userID, use -1 if no change
 	 * @param status           default 1 (normal), 10/0 (complete/deleted)
 	 * @param priority         default 0 (none), 1/2/3 (low/mid/high)
+	 * @param nodeID           has to exist in the node table
 	 * @param scheduledDate    format: 2021-05-08
 	 * @param startTime        format: 23:17
 	 * @param endTime          format: 01:30
-	 * @param nodeID           has to exist in the node table
 	 * @param detail           maximum 1023 characters
 	 * @param notificationDate format: 2021-05-08 eg. remind me 2 days before this (send email)
 	 * @param notificationTime format: 23:17 eg. remind me 30 mins before this (send email)
 	 * @return true if one line changed successfully, false otherwise
 	 */
-	public static boolean updateToDo(int ToDoID, int userID, String title, int status, int priority, String scheduledDate, String startTime, String endTime, String nodeID, String detail, String notificationDate, String notificationTime) {
+	public static boolean updateToDo(int ToDoID, String title, int userID, int status, int priority, String nodeID, String scheduledDate, String startTime, String endTime, String detail, String notificationDate, String notificationTime) {
 		int userIDInt = 0;
 		String statusString = null;
 		String sql = "Update ToDo Set ToDoID = ?";
@@ -134,17 +134,17 @@ public class ToDoDB {
 		if (priority != -1) {
 			sql += ", priority = ?";
 		}
+		if (nodeID != null) {
+			sql += ", nodeID = ?";
+		}
 		if (scheduledDate != null) {
 			sql += ", scheduledDate = ?";
 		}
 		if (startTime != null) {
-			sql += ", scheduledTime = ?";
+			sql += ", startTime = ?";
 		}
 		if (endTime != null) {
-			sql += ", expectedLength = ?";
-		}
-		if (nodeID != null) {
-			sql += ", nodeID = ?";
+			sql += ", endTime = ?";
 		}
 		if (detail != null) {
 			sql += ", detail = ?";
@@ -186,6 +186,10 @@ public class ToDoDB {
 				i++;
 				preparedStatement.setInt(i, priority);
 			}
+			if (nodeID != null) {
+				i++;
+				preparedStatement.setString(i, nodeID);
+			}
 			if (scheduledDate != null) {
 				i++;
 				preparedStatement.setString(i, scheduledDate);
@@ -197,10 +201,6 @@ public class ToDoDB {
 			if (endTime != null) {
 				i++;
 				preparedStatement.setString(i, endTime);
-			}
-			if (nodeID != null) {
-				i++;
-				preparedStatement.setString(i, nodeID);
 			}
 			if (detail != null) {
 				i++;
@@ -292,20 +292,21 @@ public class ToDoDB {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
 				System.out.println("Adding todo to the toDoList");
-				int todoID = resultSet.getInt("ToDoID");;
+				int todoID = resultSet.getInt("ToDoID");
 				int todoUserID = resultSet.getInt("userID");
 				String title = resultSet.getString("title");
 				int todoStatus = resultSet.getInt("status");
 				int priority = resultSet.getInt("priority");
 
 				//possibly null
-				String scheduledDate = resultSet.getString("scheduledDate");
-				String startTime = resultSet.getString("scheduledTime");
 				Node location = NodeDB.getNodeInfo(resultSet.getString("nodeID"));
+				String scheduledDate = resultSet.getString("scheduledDate");
+				String startTime = resultSet.getString("startTime");
+				String endTime = resultSet.getString("endTime");
 				String detail = resultSet.getString("detail");
-				String endTime = resultSet.getString("expectedLength");
 				String notificationDate = resultSet.getString("notificationDate");
 				String notificationTime = resultSet.getString("notificationTime");
+
 				toDoList.add(new ToDo(todoID, title, todoUserID, todoStatus, priority, location, scheduledDate, startTime, endTime, detail, notificationDate, notificationTime));
 			}
 		} catch (SQLException e) {

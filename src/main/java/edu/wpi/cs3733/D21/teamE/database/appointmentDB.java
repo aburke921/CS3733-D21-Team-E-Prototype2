@@ -41,7 +41,7 @@ public class appointmentDB {
 	public static int addAppointment(int patientID, String startTime, String date, Integer doctorID) {
 		// Not multi-user safe, but hey we only have one client accessing the db at a time
 		ToDoDB.addCustomToDo(doctorID, "Appointment #" + (ToDoDB.getMaxToDoID() + 1) + " with " + UserAccountDB.getUserName(patientID));
-		ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), -1, null, -1, -1, date, startTime, null, null, null, null, null);
+		ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, null, date, startTime, null, null, null, null);
 
 		String insertAddApt = "Insert Into appointment Values(" + ToDoDB.getMaxToDoID() + ", ?, ?, ?, ?)";
 

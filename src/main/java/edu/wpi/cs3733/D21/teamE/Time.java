@@ -42,7 +42,13 @@ public class Time implements Comparable<Time>{
      */
     @Override
     public String toString() {
-        return (hour + ":" + min + ":" + sec);
+        return hour + ":" + min + ":" + sec;
+    }
+    public String hourMinString(){
+        return hour + ":" + min;
+    }
+    public String minSecString(){
+        return min + ":" + sec;
     }
 
     /**

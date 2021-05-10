@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXDialogLayout;
 
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
 import edu.wpi.cs3733.D21.teamE.views.AppBarComponent;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -74,6 +75,8 @@ public class App extends Application {
 	private static Node endNode = null;
 	private static boolean toEmergency = false;
 
+	private static ToDo editToDo = null;
+
 
 	//setters and getters for above variables
 	public static boolean isShowLogin() { return showLogin; }
@@ -96,6 +99,9 @@ public class App extends Application {
 	public static void setEndNode(Node endNode) { App.endNode = endNode; }
 	public static boolean isToEmergency() { return toEmergency; }
 	public static void setToEmergency(boolean toEmergency) { App.toEmergency = toEmergency; }
+	public static ToDo getToDo() { return App.editToDo; }
+	public static void setToDo(ToDo todo) { App.editToDo = todo; }
+
 
 	/*---------------------------------
 	 *		JAVAFX APP FUNCTIONS

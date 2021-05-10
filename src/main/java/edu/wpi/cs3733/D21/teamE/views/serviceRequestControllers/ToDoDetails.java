@@ -33,6 +33,8 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -116,13 +118,7 @@ public class ToDoDetails {
         Image backgroundImage = backgroundImg;
         background.setImage(backgroundImage);
         background.setEffect(new GaussianBlur());
-
-        //background.setPreserveRatio(true);
         background.fitWidthProperty().bind(primaryStage.widthProperty());
-        //background.fitHeightProperty().bind(primaryStage.heightProperty());
-
-        //ObservableList<String> userNames;
-        //ArrayList<Integer> userID = new ArrayList<>();
 
         String userType = DB.getUserType(App.userID);
         userIDList = DB.getAssigneeIDs(userType);
@@ -164,6 +160,7 @@ public class ToDoDetails {
         locationInput.setItems(longNameList);
         statusInput.setItems(statusOptions);
         priorityInput.setItems(priorityOptions);
+        todo = App.getToDo();
 
         if(todo != null) {
             populateDetails();
@@ -213,37 +210,45 @@ public class ToDoDetails {
         Date notificationDate = todo.getNotificationDate();
         Time notificationTime = todo.getNotificationTime();
 
-        titleInput.setText(title);
-        if(userID == App.userID) {
-            selfAssign.setSelected(true);
-            userIDInput.setManaged(false);
-            userIDInput.setVisible(false);
-        } else {
-            int index = -1;
-            for(int i = 0; i < userIDList.toArray().length; i++) {
-                if (userIDList.get(i) == userID) {
-                    index = i;
+        if(title != null) {
+            titleInput.setText(title);
+        }
+        if((Integer) userID != null) {
+            if (userID == App.userID) {
+                selfAssign.setSelected(true);
+                userIDInput.setManaged(false);
+                userIDInput.setVisible(false);
+            } else {
+                int index = -1;
+                for (int i = 0; i < userIDList.toArray().length; i++) {
+                    if (userIDList.get(i) == userID) {
+                        index = i;
+                    }
                 }
+                userIDInput.getSelectionModel().select(index);
             }
-            userIDInput.getSelectionModel().select(index);
         }
 
-        if(status == 1) {
-            statusInput.setValue("Ongoing");
-        } else if (status == 10) {
-            statusInput.setValue("Completed");
-        } else {
-            statusInput.setValue("Deleted");
+        if((Integer) status != null) {
+            if (status == 1) {
+                statusInput.setValue("Ongoing");
+            } else if (status == 10) {
+                statusInput.setValue("Completed");
+            } else {
+                statusInput.setValue("Deleted");
+            }
         }
 
-        if(priority == 0) {
-            priorityInput.setValue("None");
-        } else if (priority == 1) {
-            priorityInput.setValue("Low");
-        } else if (priority == 2) {
-            priorityInput.setValue("Medium");
-        } else {
-            priorityInput.setValue("High");
+        if((Integer) priority != null) {
+            if (priority == 0) {
+                priorityInput.setValue("None");
+            } else if (priority == 1) {
+                priorityInput.setValue("Low");
+            } else if (priority == 2) {
+                priorityInput.setValue("Medium");
+            } else {
+                priorityInput.setValue("High");
+            }
         }
 
         if(location != null) {
@@ -255,33 +260,37 @@ public class ToDoDetails {
             }
             locationInput.getSelectionModel().select(index);
         }
+
         if(scheduledDate != null) {
-            //
+            LocalDate date = LocalDate.of(scheduledDate.getYear(), scheduledDate.getMonth(), scheduledDate.getDay());
+            dateInput.setValue(date);
         }
         if(startTime != null) {
-
+            LocalTime time = LocalTime.of(startTime.getHour(), startTime.getMin(), startTime.getSec());
+            startTimeInput.setValue(time);
         }
         if(endTime != null) {
-
+            LocalTime time = LocalTime.of(endTime.getHour(), endTime.getMin(), endTime.getSec());
+            endTimeInput.setValue(time);
         }
         if(detail != null) {
             additionalNotesInput.setText(detail);
         }
         if(notificationDate != null) {
-
+            LocalDate date = LocalDate.of(notificationDate.getYear(), notificationDate.getMonth(), notificationDate.getDay());
+            notificationDateInput.setValue(date);
         }
         if(notificationTime != null) {
-
+            LocalTime time = LocalTime.of(notificationTime.getHour(), notificationTime.getMin(), notificationTime.getSec());
+            notificationTimeInput.setValue(time);
         }
     }
 
     /**
      * records inputs from user into a series of String variables and returns to the main page
-     * @param actionEvent
      */
     @FXML
-    private void saveData(ActionEvent actionEvent) throws MessagingException, IOException, GeneralSecurityException {
-
+    private void saveData() throws MessagingException, IOException, GeneralSecurityException {
 
         if (validateInput()) {
 

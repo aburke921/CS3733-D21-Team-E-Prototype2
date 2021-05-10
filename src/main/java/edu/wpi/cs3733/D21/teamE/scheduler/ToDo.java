@@ -60,12 +60,16 @@ public class ToDo implements Comparable<ToDo>{
     }
 
     public String getStatusString() {
-        if(status == 1) {
-            return "Ongoing";
-        } else if (status == 10) {
-            return "Completed";
+        if ((Integer) status != null) {
+            if (status == 1) {
+                return "Ongoing";
+            } else if (status == 10) {
+                return "Completed";
+            } else {
+                return "Deleted";
+            }
         } else {
-            return "Deleted";
+            return "";
         }
     }
 
@@ -74,14 +78,18 @@ public class ToDo implements Comparable<ToDo>{
     }
 
     public String getPriorityString() {
-        if(priority == 0) {
-            return "None";
-        } else if (priority == 1) {
-            return "Low";
-        } else if (priority == 2) {
-            return "Medium";
+        if((Integer) priority != null) {
+            if (priority == 0) {
+                return "None";
+            } else if (priority == 1) {
+                return "Low";
+            } else if (priority == 2) {
+                return "Medium";
+            } else {
+                return "High";
+            }
         } else {
-            return "High";
+            return "";
         }
     }
 
@@ -93,12 +101,28 @@ public class ToDo implements Comparable<ToDo>{
         return startTime;
     }
 
+    public String getStartTimeString() {
+        if(startTime != null) {
+            return startTime.toString();
+        } else {
+            return "";
+        }
+    }
+
     public Time getEndTime() {
         return endTime;
     }
 
     public Node getLocation() {
         return location;
+    }
+
+    public String getLocationString() {
+        if (location != null) {
+            return location.get("longName");
+        } else {
+            return "";
+        }
     }
 
     public Date getScheduledDate() {

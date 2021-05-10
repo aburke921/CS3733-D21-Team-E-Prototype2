@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class ScheduleList {
@@ -129,39 +131,38 @@ public class ScheduleList {
             TreeTableColumn<ToDo, String> column1 = new TreeTableColumn<>("Title");
             column1.setPrefWidth(300);
             column1.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
-                    new ReadOnlyStringWrapper(p.getValue().getValue().getTitle()));
+                    new ReadOnlyStringWrapper(blankIfNull(p.getValue().getValue().getTitle())));
             table.getColumns().add(column1);
 
             //column 2 - Location
             TreeTableColumn<ToDo, String> column2 = new TreeTableColumn<>("Location");
             column2.setPrefWidth(300);
             column2.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
-                    new ReadOnlyStringWrapper(p.getValue().getValue().getLocation().get("longName")));
+                    new ReadOnlyStringWrapper(blankIfNull(p.getValue().getValue().getLocationString())));
             table.getColumns().add(column2);
 
             //column 3 - Start Time
             TreeTableColumn<ToDo, String> column3 = new TreeTableColumn<>("Start Time");
             column3.setPrefWidth(200);
             column3.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
-                    new ReadOnlyStringWrapper(p.getValue().getValue().getStartTime().toString()));
+                    new ReadOnlyStringWrapper(blankIfNull(p.getValue().getValue().getStartTimeString())));
             table.getColumns().add(column3);
 
             //column 4 - status
             TreeTableColumn<ToDo, String> column4 = new TreeTableColumn<>("Status");
             column4.setPrefWidth(200);
             column4.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
-                    new ReadOnlyStringWrapper(p.getValue().getValue().getStatusString()));
+                    new ReadOnlyStringWrapper(blankIfNull(p.getValue().getValue().getStatusString())));
             table.getColumns().add(column4);
 
             //column 5 - priority
             TreeTableColumn<ToDo, String> column5 = new TreeTableColumn<>("Priority");
             column5.setPrefWidth(100);
             column5.setCellValueFactory((TreeTableColumn.CellDataFeatures<ToDo, String> p) ->
-                    new ReadOnlyStringWrapper(p.getValue().getValue().getPriorityString()));
+                    new ReadOnlyStringWrapper(blankIfNull(p.getValue().getValue().getPriorityString())));
             table.getColumns().add(column5);
         }
         table.setShowRoot(false);
-        System.out.println("size" + array.size());
         for (int i = 0; i < array.size(); i++) {
             ToDo s = array.get(i);
             System.out.println(s.getTitle());
@@ -170,15 +171,18 @@ public class ScheduleList {
         }
     }
 
+    private static String blankIfNull(String s) {
+        return s == null ? "" : s;
+    }
+
+
     @FXML
     private void editToDo (ActionEvent event){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ToDoDetails.fxml"));
-            ToDoDetails controller = loader.getController();
-            Stage primaryStage =  App.getPrimaryStage();
-            primaryStage.setScene(new Scene(loader.load()));
-            //controller.initToDo();
-            primaryStage.show();
+            ToDo todo = treeTableView.getSelectionModel().getSelectedItem().getValue();
+            App.setToDo(todo);
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ToDoDetails.fxml"));
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -187,12 +191,9 @@ public class ScheduleList {
     @FXML
     private void addToDo (ActionEvent event) {
         try {
-            System.out.println("here");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ToDoDetails.fxml"));
-            ToDoDetails controller = loader.getController();
-            Stage primaryStage =  App.getPrimaryStage();
-            primaryStage.setScene(new Scene(loader.load()));
-            primaryStage.show();
+            App.setToDo(null);
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ToDoDetails.fxml"));
+            App.changeScene(root);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

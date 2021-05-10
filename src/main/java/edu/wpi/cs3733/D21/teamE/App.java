@@ -240,8 +240,8 @@ public class App extends Application {
 			//bad exit, prompt user to report error
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setTitle("Crash Report");
-			alert.setHeaderText("The Application Did Not Quit Successfully");
-			alert.setContentText("Would you like to send the crash report this to the developers?");
+			alert.setHeaderText("The application did not quit successfully");
+			alert.setContentText("Would you like to send a crash report to the developers?");
 
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get() == ButtonType.OK){

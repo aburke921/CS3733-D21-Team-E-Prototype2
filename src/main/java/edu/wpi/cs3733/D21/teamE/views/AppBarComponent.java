@@ -1,6 +1,7 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXToggleButton;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import javafx.event.ActionEvent;
@@ -64,6 +65,12 @@ public class AppBarComponent {
 
     @FXML
     private JFXButton appLoginButtonLeft;
+
+    @FXML // fx:id="clientToggle"
+    private JFXToggleButton clientToggle;
+
+    @FXML // fx:id="embeddedToggle"
+    private JFXToggleButton embeddedToggle;
 
     @FXML
     void getLoginAppBar(ActionEvent event) {
@@ -134,20 +141,23 @@ public class AppBarComponent {
 
         System.out.println("user ID is " + App.userID);
 
-        //todo add option for logged in user with and without help
+        //options for logged in user with and without help
         if (!App.isShowHelp()) { //if help button shouldn't be shown
             appBarHelpButton.setVisible(false); //remove help button
             appLoginButtonLeft.setVisible(false); //remove left login button
+            clientToggle.setVisible(false);
+            embeddedToggle.setVisible(false);
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButton.setVisible(true); //double check visibility (will be overridden by isShowLogin())
                 appLoginButton.setText("Hello, " + DB.getUserName(App.userID));
             }
-        } else {
+        } else { //if help shouldn't be shown
             appLoginButton.setVisible(false); //remove right login button
+            clientToggle.setVisible(false);
+            embeddedToggle.setVisible(false);
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButtonLeft.setVisible(true); //double check it is visible
                 appLoginButtonLeft.setText("Hello, " + DB.getUserName(App.userID));
-
             }
         }
         if (!App.isShowLogin()) { //if no login should be shown
@@ -156,6 +166,19 @@ public class AppBarComponent {
             appLoginButton.setVisible(false);
 
         }
+
+        //show the toggle switch if the logged in user is an admin
+        if(DB.getUserType(App.userID).equals("admin")){
+            //show either the embedded or client toggle.
+
+            if(App.driverURL.equals("jdbc:derby://localhost:1527/bw;create=true")){
+                embeddedToggle.setVisible(true);
+            }
+            else{
+                clientToggle.setVisible(true);
+            }
+        }
+
         /*
          * Sets the App bar top left title text.
          * Must be set by the App class setter. If none was set, none will be printed
@@ -173,4 +196,29 @@ public class AppBarComponent {
 
 
     }
+
+    @FXML
+    void clientToggle(ActionEvent event){
+        if (clientToggle.isSelected()) {
+            String message = "  - To switch to an embedded driven database connection, please restart the application! \n   - If this was a mistake, click the \"Embedded Driven Database\" toggle to continue using the a client driven database in the future";
+            App.databaseChangePopup("Switch to Embedded Driven Database", message, App.getStackPane());
+            App.setNextDriverURL("jdbc:derby://localhost:1527/bw;create=true");
+        }
+        else{
+            App.setNextDriverURL("jdbc:derby:BWDB;create=true");
+        }
+    }
+    @FXML
+    void embeddedToggle(ActionEvent event) {
+        if (embeddedToggle.isSelected()) {
+            String message = "  - To switch to a client driven database connection, please restart the application! \n  - If this was a mistake, click the \"Client Driven Database\" toggle to continue using the a client driven database int the future";
+            App.databaseChangePopup("Switch to Client Driven Database", message, App.getStackPane());
+            App.setNextDriverURL("jdbc:derby:BWDB;create=true");
+        }
+        else{
+            App.setNextDriverURL("jdbc:derby://localhost:1527/bw;create=true");
+        }
+    }
+
+
 }

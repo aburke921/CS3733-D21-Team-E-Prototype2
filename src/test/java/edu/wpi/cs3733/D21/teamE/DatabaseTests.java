@@ -6,13 +6,22 @@ import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.user.User;
+import edu.wpi.cs3733.D21.teamE.views.CovidSurvey;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
+import edu.wpi.cs3733.D21.teamE.views.UserManagement;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
+import javafx.application.Application;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 import org.junit.jupiter.api.*;
 
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,7 +36,7 @@ public class DatabaseTests {
 
 	@BeforeAll
 	public void setConnection() {
-		connection = makeConnection.makeConnection();
+		connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
 	}
 
 	@BeforeEach
@@ -170,8 +179,8 @@ public class DatabaseTests {
 				if (returnedNode.get("shortName").equals(correctNode.get("shortName"))) {
 					shortName = true;
 				}
-				if (nodeID && xCoord && yCoord && floor && building && nodeType && longName && !shortName) {
-					allCorrect = false;
+				if (nodeID && xCoord && yCoord && floor && building && nodeType && longName && shortName) {
+					allCorrect = true;
 				}
 			}
 		} else {
@@ -1301,7 +1310,7 @@ public class DatabaseTests {
 		insertUsers.add("Insert Into userAccount Values (10000, 'guest', 'guest', 'patient', 'guest', 'visitor', Current Timestamp, '', Null, Null)");
 
 		for (String insertUser : insertUsers) {
-			try (PreparedStatement prepState = makeConnection.makeConnection().connection.prepareStatement(insertUser)) {
+			try (PreparedStatement prepState = makeConnection.makeConnection("jdbc:derby://localhost:1527/BWDB").connection.prepareStatement(insertUser)) {
 				prepState.execute();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -1619,7 +1628,7 @@ public class DatabaseTests {
 					email = true;
 				}
 				if (userType && userID && firstName && lastName && email) {
-					allCorrect = false;
+					allCorrect = true;
 				}
 			}
 		} else {
@@ -1932,5 +1941,29 @@ public class DatabaseTests {
 
 		// transfer to user and complete
 		assertTrue(DB.updateToDo(1, 2, "testCustomToDoTransfer", 2, -1, null, "scheduledTime", null, "this is a thing", null, "notificationDate", null));
+	}
+
+	@Test
+	@DisplayName("testGetCovidSurveys")
+	public void testCheckForNoSymptoms() {
+		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
+		DB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
+
+
+		DB.addSpecialUserType("billb@gmail.com", "doctor01", "doctor", "Bill", "Byrd");
+		DB.addSpecialUserType("ameliak@yahoo.com", "doctor02", "doctor", "Amelia", "Knight");
+
+		CovidSurveyObj covidSurveyObjSafe1 = new CovidSurveyObj(1, 4, false, false, false, false, true, "Needs to be reviewed");
+		CovidSurveyObj covidSurveyObjSafe2 = new CovidSurveyObj(2, 5, true, true, true, true, false, "Needs to be reviewed");
+
+		DB.addEntryRequest(covidSurveyObjSafe1);
+		DB.addEntryRequest(covidSurveyObjSafe2);
+
+		boolean safe = DB.checkForNoSymptoms(1);
+		boolean risk = DB.checkForNoSymptoms(2);
+
+		assertTrue(safe == true);
+
+		assertTrue(risk == false);
 	}
 }

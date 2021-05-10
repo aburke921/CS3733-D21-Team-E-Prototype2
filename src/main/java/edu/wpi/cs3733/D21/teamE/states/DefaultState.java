@@ -1,9 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.states;
 
 import edu.wpi.cs3733.D21.teamE.App;
-import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.cs3733.D21.teamE.views.ChangeScene;
-import edu.wpi.cs3733.D21.teamE.views.CovidSurvey;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -74,9 +71,9 @@ public class DefaultState implements State{
                     ex.printStackTrace();
                 }
                 break;
-            case "covidSurveyStatusButton":
+            case "checkInStatusButton":
                 try {
-                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CovidSurveyStatus.fxml"));
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/CheckInStatus.fxml"));
                     App.changeScene(root);
                 } catch (IOException ex) {
                     ex.printStackTrace();

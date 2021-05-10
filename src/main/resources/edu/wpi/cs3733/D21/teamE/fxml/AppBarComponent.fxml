@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import java.lang.Double?>
-<?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-
+<?import java.lang.*?>
 <VBox id="app-bar-top" fx:id="mainVBox" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.AppBarComponent">
    <children>
       <HBox id="app-bar-top-upper" maxHeight="25.0" minHeight="25.0" prefHeight="25.0">
@@ -59,15 +55,21 @@
                   </Label>
                </children>
             </FlowPane>
-            <FlowPane alignment="CENTER_RIGHT" columnHalignment="RIGHT" style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
+            <FlowPane alignment="CENTER_RIGHT" columnHalignment="RIGHT" prefWidth="430.0" style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
                <padding>
                   <Insets right="30.0" />
                </padding>
                <children>
-                  <StackPane alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="308.0">
+                  <StackPane alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="466.0">
                      <children>
-                        <HBox alignment="CENTER_RIGHT">
+                        <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="38.0" prefWidth="388.0">
                            <children>
+                              <StackPane prefHeight="60.0" prefWidth="234.0">
+                                 <children>
+                                    <JFXToggleButton fx:id="clientToggle" onAction="#clientToggle" prefHeight="60.0" prefWidth="225.0" text="Client Driven Database" textFill="WHITE" />
+                                    <JFXToggleButton fx:id="embeddedToggle" onAction="#embeddedToggle" prefHeight="60.0" prefWidth="298.0" text="Embedded Driven Database" textFill="WHITE" />
+                                 </children>
+                              </StackPane>
                               <JFXButton fx:id="appLoginButtonLeft" onAction="#getLoginAppBar" style="-fx-background-color: -fx--primary-dark;" text="Login" textFill="WHITE">
                                  <HBox.margin>
                                     <Insets right="20.0" />

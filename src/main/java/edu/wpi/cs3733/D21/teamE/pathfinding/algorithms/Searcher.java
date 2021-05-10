@@ -87,9 +87,9 @@ public abstract class Searcher {
     public Path search(List stops){
         Path fullPath = new Path();
         Iterator itr = stops.iterator();
-
         if(itr.hasNext()){
             Object prev = itr.next();
+            fullPath.add(search(prev, prev));
             while(itr.hasNext()){
                 Object current = itr.next();
                 Path leg = search(prev, current);

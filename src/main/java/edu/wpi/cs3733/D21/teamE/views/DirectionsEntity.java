@@ -240,7 +240,8 @@ public class DirectionsEntity {
      */
     private static void init() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(".env"));
+            InputStream env = DirectionsEntity.class.getClassLoader().getResourceAsStream("edu/wpi/cs3733/D21/teamE/.env");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(env));
             String keyLine = reader.readLine();
             String key = keyLine.replace("MAPS_API_KEY=", "");
             API_KEY = key;

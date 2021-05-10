@@ -461,9 +461,8 @@ public class PathFinder {
             startLocationComboBox.getSelectionModel().select(index);
             endLocationComboBox.setValue("");
             Node bathroom1 = search.findNearest(nodeArrayList.get(index),"REST");
-
             if (bathroom1 == null){
-                System.out.println("DEBUG: PATH NOT found");
+                System.err.println("Nearest Bathroom: Path not found");
             }else {
 
                 int endIndex = 0;
@@ -479,8 +478,6 @@ public class PathFinder {
             startNodeID = null;
             endNodeID = null;
             dialog.close();
-
-
         });
 
         if (App.isLockEndPath()) { //if end path is locked don't allow user to set an end-path

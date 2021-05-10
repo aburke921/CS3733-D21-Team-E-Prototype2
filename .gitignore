@@ -166,6 +166,6 @@ src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt
 tokens/StoredCredential
 
 # Do Not make this public
-.env
+src/main/resources/edu/wpi/cs3733/D21/teamE/.env
 
 /BWHApplication.log.lck

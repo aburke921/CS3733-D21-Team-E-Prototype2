@@ -40,7 +40,7 @@
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXComboBox>
-                  <JFXButton fx:id="reverse" disable="true" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#swap" prefHeight="27.0" prefWidth="27.0" styleClass="directory" text="">
+                  <JFXButton fx:id="reverse" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#swap" prefHeight="27.0" prefWidth="27.0" styleClass="directory" text="">
                      <graphic>
                         <MaterialDesignIconView glyphName="SWAP_HORIZONTAL" size="20" style="-fx-fill: WHITE;" textAlignment="CENTER" />
                      </graphic>
@@ -53,11 +53,25 @@
                         <Insets left="12.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
+                  <JFXButton fx:id="minus" alignment="CENTER" contentDisplay="CENTER" maxHeight="20.0" maxWidth="25.0" minHeight="20.0" minWidth="25.0" onAction="#zoom" prefHeight="20.0" prefWidth="25.0" style="-fx-background-color: TRANSPARENT;" styleClass="directions" text="">
+                     <HBox.margin>
+                        <Insets left="20.0" right="5.0" top="14.4" />
+                     </HBox.margin>
+                     <graphic>
+                        <MaterialDesignIconView glyphName="MINUS" size="25" styleClass="directory" />
+                     </graphic></JFXButton>
                   <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
                      <HBox.margin>
-                        <Insets left="20.0" top="17.0" />
+                        <Insets top="17.0" />
                      </HBox.margin>
                   </JFXSlider>
+                  <JFXButton fx:id="plus" alignment="CENTER" contentDisplay="CENTER" maxHeight="20.0" maxWidth="25.0" minHeight="20.0" minWidth="25.0" onAction="#zoom" prefHeight="20.0" prefWidth="25.0" style="-fx-background-color: TRANSPARENT;" styleClass="directions" text="">
+                     <HBox.margin>
+                        <Insets left="5.0" top="14.4" />
+                     </HBox.margin>
+                     <graphic>
+                        <MaterialDesignIconView glyphName="PLUS" size="25" styleClass="directory" />
+                     </graphic></JFXButton>
                   <JFXButton fx:id="floorL2" onAction="#chooseFloor" styleClass="transit-button-unselected" text="L2">
                      <HBox.margin>
                         <Insets left="20.0" top="10.0" />

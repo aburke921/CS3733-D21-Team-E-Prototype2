@@ -18,6 +18,8 @@ import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -203,6 +205,12 @@ public class PathFinder {
 
     @FXML // fx:id="reverse"
     private JFXButton reverse;
+
+
+    @FXML // fx:id="minus"
+    private JFXButton minus;
+    @FXML // fx:id="plus"
+    private JFXButton plus;
 
     /*
      * Additional Variables
@@ -500,7 +508,7 @@ public class PathFinder {
 
         //clear map
         System.out.print("\nCLEARING MAP...");
-        currentFoundPath = new Path(); // empty path
+        currentFoundPath = null; // empty path
         pane.getChildren().clear();
         minETA.setText("00");
         secETA.setText("00");
@@ -1278,6 +1286,22 @@ public class PathFinder {
         endLocationComboBox.setDisable(App.isLockEndPath()); //lock path
 
         populateCheckboxes();
+
+        zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if (zoomSlider.getValue() < 1.01) {
+                    minus.setDisable(true);
+                    plus.setDisable(false);
+                } else if (zoomSlider.getValue() > 4.99) {
+                    minus.setDisable(false);
+                    plus.setDisable(true);
+                } else {
+                    minus.setDisable(false);
+                    plus.setDisable(false);
+                }
+            }
+        });
     }
 
     /**
@@ -1651,5 +1675,14 @@ public class PathFinder {
         checkBoxes.put("ELEV", elev);
         checkBoxes.put("STAI", stai);
         checkBoxes.put("PARK", park);
+    }
+
+    public void zoom(ActionEvent e) {
+        Button button = ((Button) e.getSource());
+        if (button.getId().equals("plus")) {
+            zoomSlider.setValue(zoomSlider.getValue() + 0.5);
+        } else {
+            zoomSlider.setValue(zoomSlider.getValue() - 0.5);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.scheduler;
 
+import edu.wpi.cs3733.D21.teamE.Time;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import java.util.*;
 
@@ -23,12 +24,20 @@ public class Schedule implements Iterable<ToDo>{
     }
 
     public boolean isAvailable(ToDo t) {
+        return isAvailable(t.getStartTime(), t.getEndTime());
+    }
+
+    public boolean isAvailable(Time startTime, Time endTime){
         boolean isAvailable = true;
         Iterator<ToDo> itr = schedule.iterator();
-        while(isAvailable && itr.hasNext()){
-            isAvailable &= !(t.isConflict(itr.next()));
+        if(startTime.isEmpty() || endTime.isEmpty()){
+            return true;
+        } else {
+            while(isAvailable && itr.hasNext()){
+                isAvailable &= !(itr.next().isConflict(startTime, endTime));
+            }
+            return isAvailable;
         }
-        return isAvailable;
     }
 
     public List<Node> getLocations(){

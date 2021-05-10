@@ -360,12 +360,12 @@ public class ToDoDetails {
                 System.out.println("notificationDate " + notificationDate);
             }
 
-            int todoID = DB.addCustomToDo(userID, title);
-            if(todoID == 0) {
-                //todo error
-            } else if(!DB.updateToDo(todoID, title, userID, statusInt, priorityInt, date, startTime,
-                    endTime, nodeID, additionalNotes, notificationDate, notificationTime)) {
-                //todo error
+			int todoID = DB.addCustomToDo(userID, title);
+			if (todoID == 0) {
+				//todo error
+			} else if (!DB.updateToDo(todoID, title, userID, statusInt, priorityInt, nodeID, date, startTime, endTime,
+					additionalNotes, notificationDate, notificationTime)) {
+				//todo error
                 System.err.println("DB.updateToDo got " + todoID  + " " + userID + " " + title + " " + statusInt + " " + priorityInt + " " + date + " " + startTime
                         + " " + endTime + " " + nodeID + " " + additionalNotes + " " + notificationDate + " " + notificationTime);
             }

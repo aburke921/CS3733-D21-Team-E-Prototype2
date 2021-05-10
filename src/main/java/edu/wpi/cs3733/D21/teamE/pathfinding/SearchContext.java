@@ -12,7 +12,7 @@ import java.util.List;
 public class SearchContext {
     private Searcher search;
     private final CompositeConstraint constraints;
-    private List<Path> searchHistory;
+    private final List<Path> searchHistory;
 
     public SearchContext(String _search, String _type){
         constraints = new CompositeConstraint();
@@ -80,10 +80,6 @@ public class SearchContext {
     }
 
     private Searcher translateAlgo(String algo){
-
-
-        System.out.println("DEBUG:   alg: " + algo);
-
         if(algo.equalsIgnoreCase("A*")){
             return new AStarSearcher();
         } else if(algo.equalsIgnoreCase("DFS")){
@@ -115,4 +111,9 @@ public class SearchContext {
     public Node getNode(String id){
         return search.getNode(id);
     }
+
+    public List<String> getNeighbors(String id){
+        return search.getNeighbors(id);
+    }
+
 }

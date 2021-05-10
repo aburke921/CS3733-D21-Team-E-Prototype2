@@ -145,12 +145,8 @@ public class Default {
                 App.newJFXDialogPopUp("","OK","You need to fill out a covid survey each day if you wish to pathfind within the hospital",stackPane);
             }
         } else { //else, user id is 0 (guest)
-            if(App.guestSurvey != null) {
                 App.guestGoingToPathfinder = true;
                 switchScene(event);
-            } else {
-                App.newJFXDialogPopUp("","Okay", "You must fill out a covid survey before entering the hospital", stackPane);
-            }
         }
     }
 

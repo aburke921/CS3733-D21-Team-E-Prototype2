@@ -106,7 +106,6 @@ public class CovidSurvey extends ServiceRequests {
 				DB.updateUserAccountCovidStatus(App.userID, "Needs to Be Reviewed");
 			} else {
 				App.guestSurvey = newSurvey;
-				App.guestPossibleRisk = newSurvey.checkIfRisk();
 			}
 			exit();
 		} else {

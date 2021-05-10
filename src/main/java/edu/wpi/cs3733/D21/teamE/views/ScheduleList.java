@@ -116,9 +116,12 @@ public class ScheduleList {
 
         Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, date);
         Schedule scheduleCompleted = DB.getSchedule(App.userID, 10, date);
+        Schedule scheduleUndated = DB.getSchedule(App.userID, 1, "");
+
 
         List<ToDo> array = scheduleOngoing.getTodoList();
         array.addAll(scheduleCompleted.getTodoList());
+        array.addAll(scheduleUndated.getTodoList());
 
         if (table.getRoot() == null) {
             ToDo todo0 = new ToDo(0, "", 0, 0, 0, new Node(),
@@ -179,10 +182,14 @@ public class ScheduleList {
     @FXML
     private void editToDo (ActionEvent event){
         try {
-            ToDo todo = treeTableView.getSelectionModel().getSelectedItem().getValue();
-            App.setToDo(todo);
-            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ToDoDetails.fxml"));
-            App.changeScene(root);
+            if(treeTableView.getSelectionModel().getSelectedItem() == null){
+                addToDo(event);
+            } else {
+                ToDo todo = treeTableView.getSelectionModel().getSelectedItem().getValue();
+                App.setToDo(todo);
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ToDoDetails.fxml"));
+                App.changeScene(root);
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }

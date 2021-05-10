@@ -663,27 +663,27 @@ public class ScheduleMap {
         Schedule scheduleCompleted = DB.getSchedule(App.userID, 10, datePicker.getValue().toString());
 
 
-        ArrayList<Node> nodeArray = DB.getAllNodes();
-        List<ToDo> array = scheduleOngoing.getTodoList();
-        //add all nodes that are in between first and last task to list for stops on pathfinder
-        if(array.size() > 0) {
-            for(int j = 1; j < array.size()-1; j++) {
-                for (int i = 0; i < nodeArray.size(); i++) {
-                    if (array.get(j).getLocationString().equals(nodeArray.get(i).get("longName"))) {
-                        stopList.add(nodeArray.get(i));
-                    }
-                }
-            }
-        }
-        if(startNode != null && endNode != null) {
-            findPath();
-        }
+//        ArrayList<Node> nodeArray = DB.getAllNodes();
+//        List<ToDo> array = scheduleOngoing.getTodoList();
+//        //add all nodes that are in between first and last task to list for stops on pathfinder
+//        if(array.size() > 0) {
+//            for(int j = 1; j < array.size()-1; j++) {
+//                for (int i = 0; i < nodeArray.size(); i++) {
+//                    if (array.get(j).getLocationString().equals(nodeArray.get(i).get("longName"))) {
+//                        stopList.add(nodeArray.get(i));
+//                    }
+//                }
+//            }
+//        }
+
+        findPath();
     }
 
 
     @FXML
     private void changeDate(ActionEvent event) {
         setDateLabel(new Date(datePicker.getValue()));
+        //todo passing date as floor parameter breaks it
         drawMap(currentFoundPath, datePicker.getValue().toString());
     }
 

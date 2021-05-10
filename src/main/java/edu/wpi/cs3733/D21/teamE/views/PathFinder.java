@@ -1034,6 +1034,10 @@ public class PathFinder {
 
         System.out.println("Begin PathFinder Page Init");
 
+        if(App.guestGoingToPathfinder) {
+            App.newJFXDialogPopUp("","Okay","Please pathfind to the main lobby to be check in", stackPane);
+        }
+
 
         //init appBar
         javafx.scene.Node appBarComponent;

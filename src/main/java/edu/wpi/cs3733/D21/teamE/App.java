@@ -69,6 +69,11 @@ public class App extends Application {
 	/**@// todo document this*/
 	public static boolean noCleanSurveyYet = true;
 
+	/**
+	 * Used by pathfinder to note whether it is a guest user using pathfinder or someone with an ID
+	 */
+	public static boolean guestGoingToPathfinder = false;
+
 	/** Nodes and info for pathfinder to get on init
 	 * No nodes on default, no emergency on default */
 	private static Node startNode = null;

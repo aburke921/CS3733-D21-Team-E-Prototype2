@@ -149,7 +149,8 @@ public class Default {
                 App.newJFXDialogPopUp("","OK","You need to fill out a covid survey each day if you wish to pathfind within the hospital",stackPane);
             }
         } else { //else, user id is 0 (guest)
-            App.newJFXDialogPopUp("","OK","You need to create a guest account if you wish to pathfind within the hospital",stackPane);
+            App.guestGoingToPathfinder = true;
+            switchScene(event);
         }
     }
 

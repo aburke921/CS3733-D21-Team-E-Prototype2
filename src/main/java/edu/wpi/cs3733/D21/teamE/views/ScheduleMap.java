@@ -44,10 +44,7 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 public class ScheduleMap {
@@ -112,7 +109,7 @@ public class ScheduleMap {
 
     ArrayList<Node> stopList = new ArrayList<Node>();
 
-    private Date currentDate = new Date(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth());
+    private Date currentDate = new Date(LocalDate.now());
 
     private HashMap<String, Integer> floorMap = new HashMap<String, Integer>(){{
         put("L2", 0);
@@ -164,51 +161,45 @@ public class ScheduleMap {
                 break;
         }
         search.setAlgo(algoType);
+        //search.setConstraint("SAFE");
         System.out.println(algoType + " Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
 
+        //Call the path search function
+        Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
 
-        //Check if starting and ending node are the same
-        if (selectedStartNodeID.equals(selectedEndNodeID)) { //error
-            //Print error message and don't allow the program to call the path search function
-            System.out.println("Cannot choose the same starting and ending location. Try again");
+        List<Node> locations = scheduleOngoing.getLocations();
+
+        Path foundPath = search.search(locations);
+
+        //draw map, unless path is null
+        if (foundPath == null) { //path is null
+
+            //remove drawn line
+            pane.getChildren().clear();
+
             //SnackBar popup
             JFXSnackbar bar = new JFXSnackbar(lowerAnchorPane);
-            bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Cannot choose the same starting and ending location. Try again")));
+            bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Sorry, something has gone wrong. Please try again.")));
 
-        } else { // run search
-            //Call the path search function
-            Path foundPath = search.search(selectedStartNodeID, selectedEndNodeID);
+        } else { //path is not null
 
-            //draw map, unless path is null
-            if (foundPath == null) { //path is null
+            currentFoundPath = null;
 
-                //remove drawn line
-                pane.getChildren().clear();
+            minETA.setText(Integer.toString(foundPath.getETA().getMin()));
+            secETA.setText(String.format("%02d", (foundPath.getETA().getSec())));
+            int len = (int) Math.round(foundPath.getPathLengthFeet());
+            dist.setText(Integer.toString(len) + " Feet");
 
-                //SnackBar popup
-                JFXSnackbar bar = new JFXSnackbar(lowerAnchorPane);
-                bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Sorry, something has gone wrong. Please try again.")));
+            //save found path for when floors are switched
+            currentFoundPath = foundPath;
 
-            } else { //path is not null
-
-                currentFoundPath = null;
-
-                minETA.setText(Integer.toString(foundPath.getETA().getMin()));
-                secETA.setText(String.format("%02d", (foundPath.getETA().getSec())));
-                int len = (int) Math.round(foundPath.getPathLengthFeet());
-                dist.setText(Integer.toString(len) + " Feet");
-
-                //save found path for when floors are switched
-                currentFoundPath = foundPath;
-
-                // Set map image to starting floor
-                String startFloor = foundPath.getStart().get("floor");
-                currentFloor = startFloor;
+            // Set map image to starting floor
+            String startFloor = foundPath.getStart().get("floor");
+            currentFloor = startFloor;
 
 
-                //draw the map for the current floor
-                drawMap(foundPath, currentFloor);
-            }
+            //draw the map for the current floor
+            drawMap(foundPath, currentFloor);
         }
     }
 

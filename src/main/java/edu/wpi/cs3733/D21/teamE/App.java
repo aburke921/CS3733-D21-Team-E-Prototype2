@@ -191,9 +191,9 @@ public class App extends Application {
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
 				DB.populateAbonPainTable();
-				for(int ID : sheetIDs){
-					SheetsAndJava.deleteSheetData(ID);
-				}
+//				for(int ID : sheetIDs){
+//					SheetsAndJava.deleteSheetData(ID);
+//				}
 				logger.info("Tables Repopulated");
 			} catch (Exception e) {
 				logger.warning("Exception in creating tables. Might already be there?, " + e);

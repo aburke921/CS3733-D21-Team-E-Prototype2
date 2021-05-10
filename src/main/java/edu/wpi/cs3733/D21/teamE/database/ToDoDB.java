@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.scheduler.Schedule;
 import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class ToDoDB {
 
-	static Connection connection = makeConnection.makeConnection().connection;
+	static Connection connection = makeConnection.makeConnection(App.driverURL).connection;
 
 	public static int createToDoTable() {
 		try (PreparedStatement prepState = connection.prepareStatement("Create Table ToDo " +

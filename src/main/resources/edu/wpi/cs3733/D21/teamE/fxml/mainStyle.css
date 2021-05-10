@@ -352,14 +352,14 @@ JFXButton:hover FontAwesomeIconView {
 }
 
 /* The main scrollbar **track** CSS class  */
-.scroll-bar:vertical .track{
+.scroll-bar:vertical .track , .scroll-bar:horizontal .track{
     -fx-background-color: transparent;
     -fx-border-color:derive(gray,80%);
     -fx-background-radius: 0em;
 }
 
 /* The main scrollbar **thumb** CSS class which we drag every time (movable) */
-.scroll-bar:vertical .thumb {
+.scroll-bar:vertical .thumb , .scroll-bar:horizontal .thumb {
     -fx-background-color: -fx--primary;
     -fx-background-insets: 2, 0, 0;
     -fx-background-radius: 2em;

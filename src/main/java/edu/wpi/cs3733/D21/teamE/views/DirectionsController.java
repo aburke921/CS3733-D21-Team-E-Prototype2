@@ -89,6 +89,7 @@ public class DirectionsController {
     @FXML // fx:id="topper"
     public VBox topper;
 
+    Stage primaryStage;
 
     /**
      * Singleton object
@@ -113,7 +114,7 @@ public class DirectionsController {
             e.printStackTrace();
         }
 
-        Stage primaryStage = App.getPrimaryStage();
+        primaryStage = App.getPrimaryStage();
 
         
 
@@ -158,10 +159,12 @@ public class DirectionsController {
         imageAnchorPane.minHeightProperty().bind(imageStackPane.heightProperty());
         imageAnchorPane.prefHeightProperty().bind(imageStackPane.heightProperty());
         hospitalImageView.fitHeightProperty().bind(imageAnchorPane.heightProperty());
-        primaryStage.setWidth(primaryStage.getWidth() + 0.0001);
-
         heading.setMaxWidth(370);
+        heading.setPrefWidth(370);
+        heading.setMinWidth(370);
         heading.setWrapText(true);
+
+        primaryStage.setWidth(primaryStage.getWidth() + 0.00001);
 
     }
 
@@ -238,6 +241,8 @@ public class DirectionsController {
                 "-fx-border-insets: 0;" +
                 "-fx-border-radius: 0;" +
                 "-fx-border-color: TRANSPARENT;");
+
+        webView.getStyleClass().add("scroll-bar");
 
         JFXDialogLayout popup = new JFXDialogLayout();
         Text heading = new Text("Map Directions");

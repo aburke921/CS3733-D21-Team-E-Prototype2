@@ -138,12 +138,15 @@ public abstract class Searcher {
         Node nearestSF = null;
         Path shortestSF = new Path();
         for(Node stop : stops){
-            Path p = search(location, stop);
-            if(shortestSF.isEmpty() || p.getPathLength() < shortestSF.getPathLength()){
-                shortestSF = p;
-                nearestSF = stop;
+            Path p = search(location, stop); //this method returns null if no path found
+             if (p != null) {
+                if (shortestSF.isEmpty() || p.getPathLength() < shortestSF.getPathLength()) {
+                    shortestSF = p;
+                    nearestSF = stop;
+                }
             }
         }
+
         return nearestSF;
     }
 

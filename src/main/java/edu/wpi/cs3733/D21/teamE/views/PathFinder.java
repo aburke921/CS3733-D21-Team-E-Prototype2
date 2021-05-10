@@ -461,14 +461,20 @@ public class PathFinder {
             startLocationComboBox.getSelectionModel().select(index);
             endLocationComboBox.setValue("");
             Node bathroom1 = search.findNearest(nodeArrayList.get(index),"REST");
-            int endIndex = 0;
-            for(int i = 0; i < nodeArrayList.size();i++){
-                if(nodeArrayList.get(i).get("id").equals(bathroom1.get("id"))){
-                    endIndex = i;
-                }
 
+            if (bathroom1 == null){
+                System.out.println("DEBUG: PATH NOT found");
+            }else {
+
+                int endIndex = 0;
+                for (int i = 0; i < nodeArrayList.size(); i++) {
+                    if (nodeArrayList.get(i).get("id").equals(bathroom1.get("id"))) {
+                        endIndex = i;
+                    }
+
+                }
+                endLocationComboBox.getSelectionModel().select(endIndex);
             }
-            endLocationComboBox.getSelectionModel().select(endIndex);
             // clear preset nodes
             startNodeID = null;
             endNodeID = null;

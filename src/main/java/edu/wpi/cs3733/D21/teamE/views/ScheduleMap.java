@@ -110,6 +110,8 @@ public class ScheduleMap {
 
     private double strokeWidth = 3;
 
+    ArrayList<Node> stopList = new ArrayList<Node>();
+
     private Date currentDate = new Date(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth());
 
     private HashMap<String, Integer> floorMap = new HashMap<String, Integer>(){{
@@ -672,13 +674,13 @@ public class ScheduleMap {
 
         ArrayList<Node> nodeArray = DB.getAllNodes();
         List<ToDo> array = scheduleOngoing.getTodoList();
+        //add all nodes that are in between first and last task to list for stops on pathfinder
         if(array.size() > 0) {
-            for (int j = 0; j < nodeArray.size(); j++) {
-                if (array.get(0).getLocationString().equals(nodeArray.get(j).get("longName"))) {
-                    startNode = nodeArray.get(j);
-                }
-                if (array.get(array.size() - 1).getLocationString().equals(nodeArray.get(j).get("longName"))) {
-                    endNode = nodeArray.get(j);
+            for(int j = 1; j < array.size()-1; j++) {
+                for (int i = 0; i < nodeArray.size(); i++) {
+                    if (array.get(j).getLocationString().equals(nodeArray.get(i).get("longName"))) {
+                        stopList.add(nodeArray.get(i));
+                    }
                 }
             }
         }

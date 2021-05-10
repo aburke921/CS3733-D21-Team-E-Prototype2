@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
-import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.AppBarComponent;
@@ -107,7 +106,6 @@ public class App extends Application {
 	private static boolean lockEndPath = false;
 	public static String driverURL;
 	public static String nextDriverURL;
-	public static boolean sheetsDeleted;
 
 	public App() {
 
@@ -180,7 +178,6 @@ public class App extends Application {
 		System.out.println("...Connected to the DB");
 		//int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		logger.finer("DB connection established");
-		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");
 		File edges = new File("CSVs/MapEAlledges.csv");
 		boolean tablesExist = connection.allTablesThere();
@@ -192,10 +189,6 @@ public class App extends Application {
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
 				DB.populateAbonPainTable();
-				sheetsDeleted = false;
-//				for(int ID : sheetIDs){
-//					SheetsAndJava.deleteSheetData(ID);
-//				}
 				logger.info("Tables Repopulated");
 			} catch (Exception e) {
 				logger.warning("Exception in creating tables. Might already be there?, " + e);

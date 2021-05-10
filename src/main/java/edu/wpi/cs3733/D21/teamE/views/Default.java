@@ -99,11 +99,7 @@ public class Default {
 
     @FXML
     private void toCovidSurvey(ActionEvent event) {
-        if(App.userID != 0) {
-            switchScene(event);
-        } else {
-            App.newJFXDialogPopUp("","Ok","You need to create a guest account before filling out the survey", stackPane);
-        }
+        switchScene(event);
     }
 
     @FXML
@@ -149,7 +145,8 @@ public class Default {
                 App.newJFXDialogPopUp("","OK","You need to fill out a covid survey each day if you wish to pathfind within the hospital",stackPane);
             }
         } else { //else, user id is 0 (guest)
-            App.newJFXDialogPopUp("","OK","You need to create a guest account if you wish to pathfind within the hospital",stackPane);
+                App.guestGoingToPathfinder = true;
+                switchScene(event);
         }
     }
 

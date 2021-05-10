@@ -8,6 +8,7 @@ import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.AppBarComponent;
+import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -80,6 +81,21 @@ public class App extends Application {
 
 	/**@// todo document this*/
 	public static boolean noCleanSurveyYet = true;
+
+	/**
+	 * Used by pathfinder to note whether it is a guest user using pathfinder or someone with an ID
+	 */
+	public static boolean guestGoingToPathfinder = false;
+
+	/**
+	 * used to handle guest covid surveys because they don't have their own row within the table
+	 */
+	public static CovidSurveyObj guestSurvey = null;
+
+	/**
+	 *
+	 */
+	public static boolean guestPossibleRisk = false;
 
 	/** Nodes and info for pathfinder to get on init
 	 * No nodes on default, no emergency on default */

@@ -16,6 +16,8 @@ public class AStarSearcher extends Searcher{
     @Override
     public Path search(Node start, Node end){
 
+
+
         PriorityQueue<Node> potentials = new PriorityQueue<>();
         HashMap<Node, Double> prevCost = new HashMap<>();
         HashMap<Node, Node> cameFrom = new HashMap<>();

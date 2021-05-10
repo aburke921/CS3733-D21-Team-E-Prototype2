@@ -22,6 +22,14 @@
          <children>
                 <HBox layoutY="1.0" prefHeight="58.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
                     <children>
+                  <JFXButton fx:id="directoryButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#changeDirectory" prefHeight="27.0" prefWidth="27.0" styleClass="directory" text="">
+                     <HBox.margin>
+                        <Insets left="15.0" top="10.0" />
+                     </HBox.margin>
+                     <graphic>
+                        <MaterialDesignIconView glyphName="MAP_MARKER" size="20" style="-fx-fill: WHITE;" textAlignment="CENTER" />
+                     </graphic>
+                  </JFXButton>
                   <JFXComboBox fx:id="startLocationComboBox" onAction="#selectStartNode" prefHeight="25.0" prefWidth="150.0" promptText="Start Location">
                      <HBox.margin>
                         <Insets left="20.0" top="10.0" />
@@ -32,42 +40,64 @@
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXComboBox>
-                  <JFXButton fx:id="findPathButton" disable="true" onAction="#findPath" styleClass="submit-button" text="Find Path">
+                  <JFXButton fx:id="reverse" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#swap" prefHeight="27.0" prefWidth="27.0" styleClass="directory" text="">
+                     <graphic>
+                        <MaterialDesignIconView glyphName="SWAP_HORIZONTAL" size="20" style="-fx-fill: WHITE;" textAlignment="CENTER" />
+                     </graphic>
                      <HBox.margin>
-                        <Insets left="15.0" top="10.0" />
+                        <Insets left="12.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" indicatorPosition="LEFT" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
+                  <JFXButton fx:id="findPathButton" disable="true" onAction="#findPath" styleClass="submit-button" text="Find Path">
                      <HBox.margin>
-                        <Insets left="20.0" top="17.0" />
+                        <Insets left="12.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="minus" alignment="CENTER" contentDisplay="CENTER" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" onAction="#zoom" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: TRANSPARENT;" styleClass="directions" text="">
+                     <HBox.margin>
+                        <Insets left="20.0" right="5.0" top="12.0" />
+                     </HBox.margin>
+                     <graphic>
+                        <MaterialDesignIconView glyphName="MINUS" size="25" styleClass="directory" />
+                     </graphic></JFXButton>
+                  <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
+                     <HBox.margin>
+                        <Insets top="17.0" />
                      </HBox.margin>
                   </JFXSlider>
-                  <JFXButton fx:id="floorL2" onAction="#chooseFloor" styleClass="submit-button" text="L2">
+                  <JFXButton fx:id="plus" alignment="CENTER" contentDisplay="CENTER" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" onAction="#zoom" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: TRANSPARENT;" styleClass="directions" text="">
+                     <HBox.margin>
+                        <Insets left="5.0" top="12.0" />
+                     </HBox.margin>
+                     <graphic>
+                        <MaterialDesignIconView glyphName="PLUS" size="25" styleClass="directory" />
+                     </graphic></JFXButton>
+                  <JFXButton fx:id="floorL2" onAction="#chooseFloor" styleClass="transit-button-unselected" text="L2">
                      <HBox.margin>
                         <Insets left="20.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floorL1" onAction="#chooseFloor" styleClass="submit-button" text="L1">
+                  <JFXButton fx:id="floorL1" onAction="#chooseFloor" styleClass="transit-button-unselected" text="L1">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floorG" onAction="#chooseFloor" styleClass="submit-button" text="G">
+                  <JFXButton fx:id="floorG" onAction="#chooseFloor" styleClass="transit-button-unselected" text="G">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floor1" minWidth="26.0" onAction="#chooseFloor" styleClass="submit-button" text="1">
+                  <JFXButton fx:id="floor1" minWidth="26.0" onAction="#chooseFloor" styleClass="transit-button-selected" text="1">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floor2" onAction="#chooseFloor" styleClass="submit-button" text="2">
+                  <JFXButton fx:id="floor2" onAction="#chooseFloor" styleClass="transit-button-unselected" text="2">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floor3" onAction="#chooseFloor" styleClass="submit-button" text="3">
+                  <JFXButton fx:id="floor3" onAction="#chooseFloor" styleClass="transit-button-unselected" text="3">
                      <HBox.margin>
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
@@ -195,7 +225,7 @@
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="EXIT" checkedColor="#90e430" onAction="#sortNodesByType" text="Exits/Entrances">
+                                                <JFXCheckBox fx:id="exit" checkedColor="#90e430" onAction="#sortNodesByType" text="Entrances/Exits">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>

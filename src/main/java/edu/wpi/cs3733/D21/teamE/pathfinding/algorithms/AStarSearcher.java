@@ -9,6 +9,10 @@ import java.util.PriorityQueue;
 
 public class AStarSearcher extends Searcher{
 
+    public AStarSearcher(){
+        super();
+    }
+
     @Override
     public Path search(Node start, Node end){
 
@@ -34,7 +38,7 @@ public class AStarSearcher extends Searcher{
                 continue;
             }
 
-            List<String> neighbors = current.getNeighbors();
+            List<String> neighbors = getNeighbors(current.get("id"));
 
             for(String neighborId : neighbors){
                 Node neighbor = getNode(neighborId);

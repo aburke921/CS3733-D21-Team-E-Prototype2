@@ -1040,6 +1040,7 @@ public class PathFinder {
 
         if(App.guestGoingToPathfinder) {
             App.newJFXDialogPopUp("","Okay","Pathfinding while not signed in is for remote view purpose only", stackPane);
+            App.guestGoingToPathfinder = false;
         }
 
 

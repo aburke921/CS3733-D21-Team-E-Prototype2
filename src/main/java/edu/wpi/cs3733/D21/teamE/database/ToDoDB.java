@@ -171,7 +171,7 @@ public class ToDoDB {
 			int i = 1;
 			if (userID != -1) {
 				i++;
-				preparedStatement.setString(i, title);
+				preparedStatement.setInt(i, userID);
 			}
 			if (title != null) {
 				i++;
@@ -291,19 +291,22 @@ public class ToDoDB {
 			}
 			ResultSet resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				toDoList.add(new ToDo(
-						resultSet.getInt("ToDoID"),
-						resultSet.getString("title"),
-						resultSet.getInt("userID"),
-						resultSet.getInt("status"),
-						resultSet.getInt("priority"),
-						NodeDB.getNodeInfo(resultSet.getString("nodeID")),
-						resultSet.getString("scheduledDate"),
-						resultSet.getString("startTime"),
-						resultSet.getString("endTime"),
-						resultSet.getString("detail"),
-						resultSet.getString("notificationDate"),
-						resultSet.getString("notificationTime")));
+				System.out.println("Adding todo to the toDoList");
+				int todoID = resultSet.getInt("ToDoID");;
+				int todoUserID = resultSet.getInt("userID");
+				String title = resultSet.getString("title");
+				int todoStatus = resultSet.getInt("status");
+				int priority = resultSet.getInt("priority");
+
+				//possibly null
+				String scheduledDate = resultSet.getString("scheduledDate");
+				String startTime = resultSet.getString("scheduledTime");
+				Node location = NodeDB.getNodeInfo(resultSet.getString("nodeID"));
+				String detail = resultSet.getString("detail");
+				String endTime = resultSet.getString("expectedLength");
+				String notificationDate = resultSet.getString("notificationDate");
+				String notificationTime = resultSet.getString("notificationTime");
+				toDoList.add(new ToDo(todoID, title, todoUserID, todoStatus, priority, location, scheduledDate, startTime, endTime, detail, notificationDate, notificationTime));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

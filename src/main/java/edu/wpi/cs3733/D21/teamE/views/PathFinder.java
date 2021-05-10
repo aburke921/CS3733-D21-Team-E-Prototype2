@@ -500,6 +500,7 @@ public class PathFinder {
 
         //clear map
         System.out.print("\nCLEARING MAP...");
+        currentFoundPath = new Path(); // empty path
         pane.getChildren().clear();
         minETA.setText("00");
         secETA.setText("00");

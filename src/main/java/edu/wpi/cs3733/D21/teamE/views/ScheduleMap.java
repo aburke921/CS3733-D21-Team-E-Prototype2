@@ -952,6 +952,8 @@ public class ScheduleMap {
 
         List<ToDo> array = scheduleOngoing.getTodoList();
         array.addAll(scheduleCompleted.getTodoList());
+        selectedStartNodeID = array.get(0).getLocationString();
+        selectedEndNodeID = array.get(array.size()-1).getLocationString();
         drawMap(currentFloor);
     }
 

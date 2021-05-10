@@ -5,7 +5,6 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import com.jfoenix.controls.JFXToggleButton?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -41,9 +40,17 @@
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXComboBox>
+                  <JFXButton fx:id="reverse" disable="true" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#swap" prefHeight="27.0" prefWidth="27.0" styleClass="directory" text="">
+                     <graphic>
+                        <MaterialDesignIconView glyphName="SWAP_HORIZONTAL" size="20" style="-fx-fill: WHITE;" textAlignment="CENTER" />
+                     </graphic>
+                     <HBox.margin>
+                        <Insets left="12.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
                   <JFXButton fx:id="findPathButton" disable="true" onAction="#findPath" styleClass="submit-button" text="Find Path">
                      <HBox.margin>
-                        <Insets left="15.0" top="10.0" />
+                        <Insets left="12.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
                   <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">

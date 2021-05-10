@@ -24,7 +24,7 @@ public class DirectionsEntity {
     private TravelMode mode = TravelMode.DRIVING;
 
     // Destinations
-    private static final String MAIN = "Brigham and Womens'";
+    private static final String MAIN = "75 Francis St, Boston, MA 02115";
     private static final String LEFT = "80 Francis St, Boston, MA 02115";
     private static final String RIGHT = "15-51 New Whitney St, Boston, MA 02115";
 
@@ -61,13 +61,14 @@ public class DirectionsEntity {
      * Gets the directions to/from BWH from/to the origin location
      * @param origin The origin location as a string
      * @param toBWH Whether it is to or from BWH
-     * @return The directions as a list of string, first string is the header
+     * @return The directions as a list of string, first string is the URL, second is the header
      */
     public List<String> getDirections(String origin, Boolean toBWH) {
         try {
-            DirectionsResult result = getDir(origin, toBWH);
-            DirectionsLeg trip = result.routes[0].legs[0];
+            DirectionsWrapper result = getDir(origin, toBWH);
+            DirectionsLeg trip = result.getResult().routes[0].legs[0];
             List<String> listing = directionsListing(trip, toBWH);
+            listing.add(0, getURL(result.getOrigin(),result.getDestination(),result.getMode()));
             return listing;
         } catch (IOException exception) {
             System.err.println("IO Exception: " + exception.getMessage());
@@ -90,13 +91,17 @@ public class DirectionsEntity {
      * @throws InterruptedException API exceptions
      * @throws ApiException API exceptions
      */
-    private DirectionsResult getDir(String origin, Boolean toBWH) throws IOException, InterruptedException, ApiException {
+    private DirectionsWrapper getDir(String origin, Boolean toBWH) throws IOException, InterruptedException, ApiException {
         DirectionsApiRequest request = new DirectionsApiRequest(geoContext);
         request.mode(instance.mode).departureTimeNow();
         DirectionsResult result;
 
+        DirectionsWrapper wrapper = new DirectionsWrapper(mode);
+
         if (toBWH) {
+            String BWH = MAIN;
             request.origin(origin);
+            wrapper.setOrigin(origin);
             if (instance.mode == TravelMode.DRIVING) {
                 request.destination(LEFT);
                 DirectionsResult left = request.await();
@@ -110,18 +115,31 @@ public class DirectionsEntity {
                 long leftDur = left.routes[0].legs[0].duration.inSeconds;
                 long rightDur = right.routes[0].legs[0].duration.inSeconds;
 
-                result = ( leftDur < rightDur) ? (left) : (right);
+                if (leftDur < rightDur) {
+                    result = left;
+                    BWH = LEFT;
+                } else {
+                    result = right;
+                    BWH = RIGHT;
+                }
+
             } else {
                 request.destination(MAIN);
                 result = request.await();
             }
+
+            wrapper.setDestination(BWH);
         } else {
             request.origin(MAIN);
             request.destination(origin);
+            wrapper.setOrigin(MAIN);
+            wrapper.setDestination(origin);
             result = request.await();
         }
 
-        return result;
+        wrapper.setResult(result);
+
+        return wrapper;
     }
 
     /**
@@ -189,6 +207,32 @@ public class DirectionsEntity {
         return str;
     }
 
+    private String getURL(String origin, String destination, TravelMode mode) {
+        StringBuilder URL = new StringBuilder("https://www.google.com/maps/embed/v1/directions?key=");
+        URL.append(API_KEY);
+        URL.append("&origin=").append(origin.trim().replaceAll(" ", "+").replaceAll(",", ""));
+        URL.append("&destination=").append(destination.trim().replaceAll(" ", "+").replaceAll(",", ""));
+
+        String modeName;
+        switch (mode) {
+            case BICYCLING:
+                modeName = "bicycling";
+                break;
+            case WALKING:
+                modeName = "walking";
+                break;
+            case TRANSIT:
+                modeName = "transit";
+                break;
+            default:
+                modeName = "driving";
+                break;
+        }
+        URL.append("&mode=").append(modeName);
+
+        return URL.toString();
+    }
+
     /**
      * Init method
      * Loads the API Key from the `.env` file in the project root directory
@@ -234,4 +278,48 @@ public class DirectionsEntity {
             geoContext.shutdown();
         }
     }
+
+    /**
+     * Private class to wrap directions and store origin and destination as well
+     */
+    private class DirectionsWrapper {
+        private DirectionsResult result;
+        private String origin;
+        private String destination;
+        private TravelMode mode;
+
+        public DirectionsWrapper(TravelMode mode) {
+            this.mode = mode;
+        }
+
+        public DirectionsResult getResult() {
+            return result;
+        }
+
+        public String getOrigin() {
+            return origin;
+        }
+
+        public String getDestination() {
+            return destination;
+        }
+
+        public TravelMode getMode() {
+            return mode;
+        }
+
+        public void setResult(DirectionsResult result) {
+            this.result = result;
+        }
+
+        public void setOrigin(String origin) {
+            this.origin = origin;
+        }
+
+        public void setDestination(String destination) {
+            this.destination = destination;
+        }
+    }
 }
+
+

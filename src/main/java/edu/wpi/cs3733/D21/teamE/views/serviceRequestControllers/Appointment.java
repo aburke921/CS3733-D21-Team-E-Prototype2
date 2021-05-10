@@ -9,7 +9,6 @@ import com.jfoenix.controls.*;
 import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -17,7 +16,6 @@ import com.jfoenix.validation.RequiredFieldValidator;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
@@ -42,6 +40,8 @@ import javax.mail.MessagingException;
 
 public class Appointment extends ServiceRequestFormComponents{
 
+
+	int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 
 	RequiredFieldValidator validator = new RequiredFieldValidator();
 	ObservableList<String> userNames;
@@ -167,6 +167,19 @@ public class Appointment extends ServiceRequestFormComponents{
 	 */
 	@FXML
 	private void saveData(ActionEvent actionEvent) throws MessagingException, IOException, GeneralSecurityException {
+
+
+		if(App.sheetsDeleted == false) {
+			try {
+				for (int ID : sheetIDs) {
+					SheetsAndJava.deleteSheetData(ID);
+				}
+				App.sheetsDeleted = true;
+			}
+			catch (Exception e){
+				System.err.println("cannot delete sheets which are not there");
+			}
+		}
 
 
 		if (validateInput()) {

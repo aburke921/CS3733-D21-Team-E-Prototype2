@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Scanner;
 
+
 public class App extends Application {
 
 	/*-------------------------------------
@@ -78,6 +79,7 @@ public class App extends Application {
 	private static boolean lockEndPath = false;
 	public static String driverURL;
 	public static String nextDriverURL;
+	public static boolean sheetsDeleted;
 
 	public App() {
 
@@ -149,7 +151,7 @@ public class App extends Application {
 		System.out.println("Starting App Init...");
 		makeConnection connection = makeConnection.makeConnection(driverURL);
 		System.out.println("...Connected to the DB");
-		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
+		//int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");
 		File edges = new File("CSVs/MapEAlledges.csv");
 		boolean tablesExist = connection.allTablesThere();
@@ -161,9 +163,10 @@ public class App extends Application {
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
 				DB.populateAbonPainTable();
-				for(int ID : sheetIDs){
-					SheetsAndJava.deleteSheetData(ID);
-				}
+				sheetsDeleted = false;
+//				for(int ID : sheetIDs){
+//					SheetsAndJava.deleteSheetData(ID);
+//				}
 				System.out.println("Done");
 			} catch (Exception e) {
 				System.out.println("...Tables already there");

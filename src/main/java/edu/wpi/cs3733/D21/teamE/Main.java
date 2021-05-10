@@ -2,6 +2,10 @@ package edu.wpi.cs3733.D21.teamE;
 
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,9 +64,64 @@ public class Main {
 			e.printStackTrace();
 		}
 
+		//if (there is a crash), generate crash report
+		if (!Main.isSafeExitedLog0 || !Main.isSafeExitedLog1) {
+			//create crash report
+			try {
+				File crashReportFile = new File("BWHCrash.log");
+
+				//clean file contents
+				crashReportFile.createNewFile();
+				crashReportFile.delete();
+				crashReportFile.createNewFile();
+
+				//fill with crash report
+
+				List<String> lines;
+
+
+				//convert logfile into string
+				PrintWriter writer = new PrintWriter(crashReportFile);
+
+				String crashReportContents;
+				//get correct logfile, write crash report header
+				if (!isSafeExitedLog0) { //log0 was a crash
+					System.out.println("Reading logfile 0");
+					lines = Files.readAllLines(Paths.get("BWHApplication.log.0"), StandardCharsets.US_ASCII); //read logfile 0
+					writer.write("---BEGIN CRASH REPORT [LOG " + 0 + " ]---" + System.lineSeparator());
+				} else if (!isSafeExitedLog1){ //log1 was a crash
+					System.out.println("Reading logfile 1");
+					lines = Files.readAllLines(Paths.get("BWHApplication.log.1"), StandardCharsets.US_ASCII); //read logfile 1
+					writer.write("---BEGIN CRASH REPORT [LOG " + 1 + " ]---" + System.lineSeparator());
+				} else {
+					System.err.println("Something went wrong");
+					return;
+				}
+
+				//write logfile to crash report
+				for (String line :
+						lines) {
+					writer.write(line + System.lineSeparator());
+				}
+				//write ending note
+				writer.write("---END CRASH REPORT---");
+
+				//closer writer
+				writer.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		System.out.println("log0 exited safely? : "+ isSafeExitedLog0);
+		System.out.println("log1 exited safely? : "+ isSafeExitedLog1);
+
+
 		//report a new line of contents to crashed logs so they no longer indicate a crash
 		//This prevents reading that a log indicates a crash more than once.
 		if (!isSafeExitedLog0 || isNew0) {
+			System.out.println("isNew0 or is not safe 0");
 			try { //try log 0
 				Writer bufferedWriterLog0 = new BufferedWriter(new FileWriter("BWHApplication.log.0", true));
 				bufferedWriterLog0.append("crash detected or new file created");
@@ -72,6 +131,7 @@ public class Main {
 			}
 		}
 		if (!isSafeExitedLog1 || isNew1) {
+			System.out.println("isNew1 or is not safe 1");
 			try {//try log 1
 				Writer bufferedWriterLog1 = new BufferedWriter(new FileWriter("BWHApplication.log.1", true));
 				bufferedWriterLog1.append("crash detected or new file created");
@@ -80,7 +140,6 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
-
 
 
 		//setting up logger

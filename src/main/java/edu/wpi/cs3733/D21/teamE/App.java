@@ -247,32 +247,26 @@ public class App extends Application {
 			if (result.get() == ButtonType.OK){
 				// user chose OK
 
+				//get crash report
+				String crashReportContents = "";
+				List<String> lines = Files.readAllLines(Paths.get("BWHCrash.log"), StandardCharsets.US_ASCII);
+
+				//read crash report contents string
+				for (String line :
+						lines) {
+					assert crashReportContents != null;
+					crashReportContents = crashReportContents.concat("\n" + line);
+				}
+
 				//send crash report email
 				try {
 					//prep email
 					logger.fine("Preparing To Send Crash Report");
-					List<String> lines;
 
-					if (!Main.isSafeExitedLog0) { //log0 was a crash
-						logger.finer("Reading logfile 0");
-						lines = Files.readAllLines(Paths.get("BWHApplication.log.0"), StandardCharsets.US_ASCII); //read logfile 0
-					} else { //log1 was a crash
-						logger.finer("Reading logfile 1");
-						lines = Files.readAllLines(Paths.get("BWHApplication.log.1"), StandardCharsets.US_ASCII); //read logfile 1
-					}
-
-					//convert logfile into string
-					String crashReport = "---BEGIN CRASH REPORT---";
-					for (String line :
-							lines) {
-						assert crashReport != null;
-						crashReport = crashReport.concat("\n" + line);
-					}
-					crashReport.concat("\n---END CRASH REPORT---");
 
 					//send email
 					logger.info("Sending Crash Report Email");
-					sendEmail.sendEmail("engineeringsoftware3733@gmail.com","Crash Report",crashReport);
+					sendEmail.sendEmail("engineeringsoftware3733@gmail.com","Crash Report",crashReportContents);
 
 				} catch (MessagingException e) {
 					logger.warning("Crash Report Sending Failed, " + e);

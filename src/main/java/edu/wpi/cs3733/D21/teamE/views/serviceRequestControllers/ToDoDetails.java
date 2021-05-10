@@ -287,13 +287,24 @@ public class ToDoDetails {
         if (validateInput()) {
 
             String title = titleInput.getText();
-            System.out.println("title " + title);
-            String date = dateInput.getValue().toString();
-            System.out.println("date " + date);
-            String startTime = startTimeInput.getValue().toString();
-            System.out.println("startTime " + startTime);
-            String endTime = endTimeInput.getValue().toString();
-            System.out.println("endTime " + endTime);
+            if(title != null) {
+                System.out.println("title " + title);
+            }
+            String date = null;
+            if(dateInput.getValue() != null) {
+                date = dateInput.getValue().toString();
+                System.out.println("date " + date);
+            }
+            String startTime = null;
+            if(startTimeInput.getValue() != null) {
+                startTime = startTimeInput.getValue().toString();
+                System.out.println("startTime " + startTime);
+            }
+            String endTime = null;
+            if(endTimeInput.getValue() != null) {
+                endTime = endTimeInput.getValue().toString();
+                System.out.println("endTime " + endTime);
+            }
 
             String status = statusInput.getSelectionModel().getSelectedItem();
             int statusInt;
@@ -319,9 +330,12 @@ public class ToDoDetails {
             }
             System.out.println("priority " + priority + " " + priorityInt);
 
-            int locationIndex = locationInput.getSelectionModel().getSelectedIndex();
-            System.out.println("locationIndex " + locationIndex);
-            String nodeID = nodeIDList.get(locationIndex);
+            String nodeID = null;
+            if(locationInput.getSelectionModel() != null) {
+                int locationIndex = locationInput.getSelectionModel().getSelectedIndex();
+                System.out.println("locationIndex " + locationIndex);
+                nodeID = nodeIDList.get(locationIndex);
+            }
 
             int userID = App.userID;
             if(!selfAssign.isSelected()) {
@@ -332,12 +346,20 @@ public class ToDoDetails {
             }
 
             String additionalNotes = additionalNotesInput.getText();
-            System.out.println("additionalNotes " + additionalNotes);
+            if(additionalNotes != null) {
+                System.out.println("additionalNotes " + additionalNotes);
+            }
 
-            String notificationTime = notificationTimeInput.getValue().toString();
-            System.out.println("notificationTime " + notificationTime);
-            String notificationDate = notificationDateInput.getValue().toString();
-            System.out.println("date " + date);
+            String notificationTime = null;
+            if (notificationTimeInput.getValue() != null) {
+                notificationTime = notificationTimeInput.getValue().toString();
+                System.out.println("notificationTime " + notificationTime);
+            }
+            String notificationDate = null;
+            if (notificationDateInput.getValue() != null) {
+                notificationDate = notificationDateInput.getValue().toString();
+                System.out.println("notificationDate " + notificationDate);
+            }
 
             int todoID = DB.addCustomToDo(userID, title);
             if(todoID == 0) {
@@ -360,7 +382,7 @@ public class ToDoDetails {
             String taskEndDateAndTime = date + " " + endTime;
             String notificationDateAndTime = notificationDate + " " + notificationTime;
 
-            SheetsAndJava.addTodoToSheet(todoID, title, email, firstName, lastName, locationName, taskStartDateAndTime, taskEndDateAndTime, notificationDateAndTime);
+            //SheetsAndJava.addTodoToSheet(todoID, title, email, firstName, lastName, locationName, taskStartDateAndTime, taskEndDateAndTime, notificationDateAndTime);
 
             todo = null;
 

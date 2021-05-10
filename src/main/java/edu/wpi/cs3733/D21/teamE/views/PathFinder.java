@@ -1035,7 +1035,11 @@ public class PathFinder {
         System.out.println("Begin PathFinder Page Init");
 
         if(App.guestGoingToPathfinder) {
-            App.newJFXDialogPopUp("","Okay","Please pathfind to the main lobby to be check in", stackPane);
+            if(App.guestPossibleRisk) {
+                App.newJFXDialogPopUp("", "Okay", "Please pathfind to the emergency room entrance to be checked for COVID", stackPane);
+            } else {
+                App.newJFXDialogPopUp("", "Okay", "Please pathfind to the main lobby to be check in", stackPane);
+            }
         }
 
 

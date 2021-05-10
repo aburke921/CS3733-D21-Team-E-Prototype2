@@ -58,6 +58,13 @@ public class CovidSurveyObj extends RecursiveTreeObject<CovidSurveyObj> {
         this.status = null;
     }
 
+    public boolean checkIfRisk() {
+        if(this.quarantine || this.symptoms || this.closeContact || this.positiveTest) {
+            return true;
+        }
+        return false;
+    }
+
     public Integer getUser() {
         return this.user;
     }

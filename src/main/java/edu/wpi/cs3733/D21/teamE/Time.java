@@ -1,5 +1,7 @@
 package edu.wpi.cs3733.D21.teamE;
 
+import java.time.LocalTime;
+
 public class Time implements Comparable<Time>{
 
     public static final int DAY_START = 0;
@@ -8,6 +10,7 @@ public class Time implements Comparable<Time>{
     private int sec;
     private int min;
     private int hour;
+    private boolean isEmpty = true;
 
     /**
      * Constructor with already known minutes and seconds
@@ -18,12 +21,14 @@ public class Time implements Comparable<Time>{
         this.min = _min;
         this.sec = _sec;
         this.hour = 0;
+        isEmpty = false;
     }
 
     public Time(int _hour, int _min, int _sec){
         this.hour = _hour;
         this.min = _min;
         this.sec = _sec;
+        isEmpty = false;
     }
 
     /**
@@ -34,6 +39,16 @@ public class Time implements Comparable<Time>{
         this.hour = _sec / 60 / 60;
         this.min = _sec / 60 % 60;
         this.sec = _sec % 60 % 60;
+        isEmpty = false;
+    }
+
+    public Time(LocalTime lTime){
+        if(lTime != null){
+            hour = lTime.getHour();
+            min = lTime.getMinute();
+            sec = lTime.getSecond();
+            isEmpty = false;
+        }
     }
 
     /**
@@ -42,14 +57,31 @@ public class Time implements Comparable<Time>{
      */
     @Override
     public String toString() {
-        return hour + ":" + min + ":" + sec;
+        if(isEmpty){
+            return "";
+        } else {
+            return String.format("%02d:%02d:%02d", hour, min, sec);
+        }
     }
     public String hourMinString(){
-        return hour + ":" + min;
+        if(isEmpty){
+            return "";
+        } else {
+            return String.format("%02d:%02d", hour, min);
+        }
     }
     public String minSecString(){
-        return min + ":" + sec;
+        if(isEmpty){
+            return "";
+        } else {
+            return String.format("%02d:%02d", min, sec);
+        }
     }
+
+    public boolean isEmpty(){
+        return isEmpty;
+    }
+
 
     /**
      * Get Seconds
@@ -60,14 +92,6 @@ public class Time implements Comparable<Time>{
     }
 
     /**
-     * Seconds setter
-     * @param sec Number of seconds
-     */
-    public void setSec(int sec) {
-        this.sec = sec;
-    }
-
-    /**
      * Get Minutes
      * @return Minutes field as an int
      */
@@ -75,20 +99,8 @@ public class Time implements Comparable<Time>{
         return min;
     }
 
-    /**
-     * Minutes setter
-     * @param min Number of minutes
-     */
-    public void setMin(int min) {
-        this.min = min;
-    }
-
     public int getHour(){
         return hour;
-    }
-
-    public void setHour(int _hour){
-        hour = _hour;
     }
 
     /**
@@ -131,7 +143,7 @@ public class Time implements Comparable<Time>{
             return new Time(hours, mins, secs);
         } catch(Exception e){
             System.out.println("Could not parse String " + stringTime + " into a time");
-            return null;
+            return new Time(null);
         }
     }
 
@@ -140,7 +152,8 @@ public class Time implements Comparable<Time>{
         return Integer.compare(getTotalSeconds(), t.getTotalSeconds());
     }
 
-    public Time add(Time t){
-        return getTime(getTotalSeconds()+t.getTotalSeconds());
+    public LocalTime toLocalTime(){
+        return LocalTime.of(hour, min, sec);
     }
+
 }

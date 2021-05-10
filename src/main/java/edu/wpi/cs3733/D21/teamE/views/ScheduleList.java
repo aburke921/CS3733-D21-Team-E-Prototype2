@@ -85,7 +85,7 @@ public class ScheduleList {
                 LocalDate currDate = datePicker.getValue();
                 datePicker.setValue(currDate.plusDays(1));
                 setDateLabel(new Date(datePicker.getValue()));
-                prepareToDoTable(treeTableView, currStatus, datePicker.getValue().toString());
+                //prepareToDoTable(treeTableView, currStatus, datePicker.getValue().toString());
             }
         });
 

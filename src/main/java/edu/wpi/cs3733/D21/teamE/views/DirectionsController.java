@@ -1,17 +1,16 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.google.maps.model.TravelMode;
-
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733.D21.teamE.App;
 import javafx.beans.binding.DoubleBinding;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
@@ -19,16 +18,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.event.ActionEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
 
 import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
@@ -245,7 +242,7 @@ public class DirectionsController {
         webView.getStyleClass().add("scroll-bar");
 
         JFXDialogLayout popup = new JFXDialogLayout();
-        Text heading = new Text("Map Directions");
+        Label heading = new Label("Map Directions");
         heading.setFont(Font.font(null, FontWeight.BOLD, 18));
         popup.setHeading(heading);
         popup.setBody(webView);

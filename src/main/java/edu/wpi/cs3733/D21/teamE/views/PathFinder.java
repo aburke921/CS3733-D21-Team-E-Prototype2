@@ -15,9 +15,9 @@ import edu.wpi.cs3733.D21.teamE.observer.MarkerObserver;
 import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
-import javafx.animation.PathTransition;
-import javafx.beans.binding.DoubleBinding;
-import javafx.animation.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,7 +31,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -393,7 +395,7 @@ public class PathFinder {
 
 
         JFXDialogLayout popup = new JFXDialogLayout();
-        Text text = new Text("Path Directions");
+        Label text = new Label("Path Directions");
         text.setFont(Font.font(null, FontWeight.BOLD, 17));
         popup.setHeading(text);
         popup.setBody(tableView);
@@ -414,7 +416,7 @@ public class PathFinder {
     @FXML
     void clickOnNode(int index){
         JFXDialogLayout error = new JFXDialogLayout();
-        Text text = new Text("Location Selection");
+        Label text = new Label("Location Selection");
         text.setFont(Font.font(null, FontWeight.BOLD, 17));
         error.setHeading(text);
         JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
@@ -1357,7 +1359,7 @@ public class PathFinder {
 
     private void selectNode(String name, String id){
         JFXDialogLayout popup = new JFXDialogLayout();
-        Text text = new Text("Location Selection");
+        Label text = new Label("Location Selection");
         text.setFont(Font.font(null, FontWeight.BOLD, 17));
         popup.setHeading(text);
         JFXDialog dialog = new JFXDialog(directoryPane, popup,JFXDialog.DialogTransition.CENTER);

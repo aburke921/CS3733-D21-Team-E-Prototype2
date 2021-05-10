@@ -6,21 +6,16 @@ import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.Date;
 import edu.wpi.cs3733.D21.teamE.Time;
-import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.scheduler.Schedule;
 import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
-import edu.wpi.cs3733.D21.teamE.states.DefaultState;
 import edu.wpi.cs3733.D21.teamE.states.ToDoState;
-import edu.wpi.cs3733.D21.teamE.user.User;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.ToDoDetails;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
@@ -33,7 +28,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduleList {
@@ -205,10 +199,7 @@ public class ScheduleList {
     private void markComplete(ActionEvent event) {
         if(treeTableView.getSelectionModel().getSelectedItem() != null) {
             ToDo todo = treeTableView.getSelectionModel().getSelectedItem().getValue();
-            DB.updateToDo(todo.getTodoID(), todo.getUserID(), todo.getTitle(), 10,
-                    todo.getPriority(), todo.getScheduledDate().toString(), todo.getStartTime().toString(),
-                    todo.getEndTime().toString(), todo.getLocation().get("id"), todo.getDetail(),
-                    todo.getNotificationDate().toString(), todo.getNotificationTime().toString());
+            DB.updateToDo(todo.getTodoID(), null, -1, 10, -1, null, null, null, null, null, null, null);
         }
     }
 

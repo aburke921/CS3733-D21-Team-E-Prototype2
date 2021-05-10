@@ -5,8 +5,10 @@ import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
+import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.views.AppBarComponent;
+import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -14,6 +16,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
@@ -22,15 +26,24 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.derby.drda.NetworkServerControl;
 
+import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 
 public class App extends Application {
+
+	Logger logger = Logger.getLogger("BWH");
 
 	/*-------------------------------------
 	* 	   VARIABLES/SETTERS/GETTERS
@@ -69,6 +82,21 @@ public class App extends Application {
 
 	/**@// todo document this*/
 	public static boolean noCleanSurveyYet = true;
+
+	/**
+	 * Used by pathfinder to note whether it is a guest user using pathfinder or someone with an ID
+	 */
+	public static boolean guestGoingToPathfinder = false;
+
+	/**
+	 * used to handle guest covid surveys because they don't have their own row within the table
+	 */
+	public static CovidSurveyObj guestSurvey = null;
+
+	/**
+	 *
+	 */
+	public static boolean guestPossibleRisk = false;
 
 	/** Nodes and info for pathfinder to get on init
 	 * No nodes on default, no emergency on default */
@@ -127,10 +155,10 @@ public class App extends Application {
 	@Override
 	public void init() throws Exception {
 
-			NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
-			server.start(null);
+		logger.info("Starting App Initialization");
 
-
+		NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
+		server.start(null);
 
 		// reading the driverOption.txt file
 		try {
@@ -143,20 +171,21 @@ public class App extends Application {
 			}
 			scanner.close();
 		} catch (FileNotFoundException e) {
-			System.err.println("An error occurred in reading the file.");
-			//e.printStackTrace();
+			logger.warning("Could Not find driverOption.txt, " + e);
 		}
 
 
-		System.out.println("Starting App Init...");
+		logger.finer("Connecting to the DB...");
 		makeConnection connection = makeConnection.makeConnection(driverURL);
 		System.out.println("...Connected to the DB");
 		//int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
+		logger.finer("DB connection established");
+		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");
 		File edges = new File("CSVs/MapEAlledges.csv");
 		boolean tablesExist = connection.allTablesThere();
 		if(!tablesExist){
-			System.out.print("...DB missing, repopulating...");
+			logger.info("DB is missing, repopulating...");
 			try {
 				DB.createAllTables();
 				DB.populateTable("node", nodes);
@@ -167,12 +196,12 @@ public class App extends Application {
 //				for(int ID : sheetIDs){
 //					SheetsAndJava.deleteSheetData(ID);
 //				}
-				System.out.println("Done");
+				logger.info("Tables Repopulated");
 			} catch (Exception e) {
-				System.out.println("...Tables already there");
+				logger.warning("Exception in creating tables. Might already be there?, " + e);
 			}
 		}
-		System.out.println("App Initialized.");
+		logger.info("App Initialization Complete.");
 	}
 
 	/**
@@ -195,11 +224,11 @@ public class App extends Application {
 			primaryStage.initStyle(StageStyle.UNDECORATED); //set undecorated
 			//set scene for primaryStage
 			Scene scene = new Scene(root);
-			System.out.println("Scene");
+			logger.finest("Scene Added");
 			Image icon = new Image(getClass().getResourceAsStream("Logo.png"));
-			System.out.println("Logo");
+			logger.finest("Logo Retrieved");
 			primaryStage.getIcons().add(icon);
-			System.out.println("add icon");
+			logger.finest("Icon Added");
 			primaryStage.setScene(scene);
 			//set default sizes
 			primaryStage.setWidth(1200);
@@ -207,10 +236,67 @@ public class App extends Application {
 			//add ResizeListener
 			ResizeHelper.addResizeListener(primaryStage, 1120, 775, Double.MAX_VALUE, Double.MAX_VALUE);
 			//show stage
+			logger.fine("Showing Stage");
 			primaryStage.show();
 		} catch (IOException e) {
+			logger.severe("Could not successfully start JavaFX application, force exiting...");
 			e.printStackTrace();
 			Platform.exit();
+		}
+
+		checkAndSendCrashReport();
+	}
+
+	/**
+	 * Uses {@link Main#isSafeExitedLog0} & {@link Main#isSafeExitedLog1} to check for a crash.
+	 * If there was a crash, asks the user if they would like to report it.
+	 * @throws IOException
+	 */
+	private void checkAndSendCrashReport() throws IOException {
+
+		//if both logs exited safely
+		if (Main.isSafeExitedLog0 && Main.isSafeExitedLog1) {
+			logger.info("No crashes were detected");
+		} else { //else, a log indicates an unexpected exit
+			//bad exit, prompt user to report error
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+			alert.setTitle("Crash Report");
+			alert.setHeaderText("The application did not quit successfully");
+			alert.setContentText("Would you like to send a crash report to the developers?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK){
+				// user chose OK
+
+				//get crash report
+				String crashReportContents = "";
+				List<String> lines = Files.readAllLines(Paths.get("BWHCrash.log"), StandardCharsets.US_ASCII);
+
+				//read crash report contents string
+				for (String line :
+						lines) {
+					assert crashReportContents != null;
+					crashReportContents = crashReportContents.concat("\n" + line);
+				}
+
+				//send crash report email
+				try {
+					//prep email
+					logger.fine("Preparing To Send Crash Report");
+
+
+					//send email
+					logger.info("Sending Crash Report Email");
+					sendEmail.sendEmail("engineeringsoftware3733@gmail.com","Crash Report",crashReportContents);
+
+				} catch (MessagingException e) {
+					logger.warning("Crash Report Sending Failed, " + e);
+					e.printStackTrace();
+				}
+			} else {
+				//user chose CANCEL or closed the dialog
+				logger.info("User Ignored Crash Report");
+			}
 		}
 	}
 
@@ -219,19 +305,20 @@ public class App extends Application {
 	 */
 	@Override
 	public void stop() {
-		System.out.println("Shutting Down");
+		logger.info("App Shutdown Requested");
 		if(!driverURL.equals(nextDriverURL)){
 			//ovewrite to textfile
 			try {
 				FileWriter myWriter = new FileWriter("src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt");
 				myWriter.write(nextDriverURL);
 				myWriter.close();
-				System.out.println("Successfully wrote to the file.");
+				logger.info("Successfully wrote to driverOption.txt");
 			} catch (IOException e) {
-				System.out.println("An error occurred.");
+				logger.severe("Could not successfully write to driverOption.txt on shutdown");
 				e.printStackTrace();
 			}
 		}
+		logger.info("Exiting"); //DO NOT CHANGE THIS LINE. It is used for crash reporting. DO NOT CHANGE THIS LINE
 		System.exit(0);
 	}
 
@@ -246,7 +333,7 @@ public class App extends Application {
 	 * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
 	 */
 	public static void newJFXDialogPopUp(String heading, String button, String message, StackPane stackPane) {
-		System.out.println("DialogBox Posted");
+		Logger.getLogger("BWH").finer("Dialog box posting");
 		JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
 		jfxDialogLayout.setHeading(new Label(heading));
 		jfxDialogLayout.setBody(new Text(message));
@@ -262,10 +349,11 @@ public class App extends Application {
 		});
 		jfxDialogLayout.setActions(okay);
 		dialog.show();
+		Logger.getLogger("BWH").finer("Dialog box posted");
 	}
 
 	public static void databaseChangePopup(String heading, String message, StackPane stackPane) {
-		System.out.println("DialogBox Posted");
+		Logger.getLogger("BWH").finer("Dialog box posting");
 		JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
 		jfxDialogLayout.setHeading(new Label(heading));
 		jfxDialogLayout.setBody(new Text(message));
@@ -280,6 +368,7 @@ public class App extends Application {
 		});
 		jfxDialogLayout.setActions(cancelButton);
 		dialog.show();
+		Logger.getLogger("BWH").finer("Dialog box posted");
 	}
 
 	/**
@@ -291,5 +380,4 @@ public class App extends Application {
 	public static void changeScene(Parent root) {
 		primaryStage.getScene().setRoot(root);
 	}
-
 }

@@ -135,7 +135,7 @@ public class ToDoDetails {
         for (int i = 0; i < nodeArrayList.size(); i++) {
             Node node = nodeArrayList.get(i);
             if (node.get("type").equalsIgnoreCase("HALL") || node.get("type").equalsIgnoreCase("WALK")) {
-                nodeArrayList.remove(i--);
+
             } else {
                 longNameList.add(node.get("longName"));
                 nodeIDList.add(node.get("id"));
@@ -330,7 +330,7 @@ public class ToDoDetails {
             System.out.println("priority " + priority + " " + priorityInt);
 
             String nodeID = null;
-            if(locationInput.getSelectionModel() != null) {
+            if(locationInput.getSelectionModel().getSelectedItem() != null) {
                 int locationIndex = locationInput.getSelectionModel().getSelectedIndex();
                 System.out.println("locationIndex " + locationIndex);
                 nodeID = nodeIDList.get(locationIndex);
@@ -370,18 +370,18 @@ public class ToDoDetails {
                         + " " + endTime + " " + nodeID + " " + additionalNotes + " " + notificationDate + " " + notificationTime);
             }
 
-            String email = DB.getEmail(userID);
-            String fullName = DB.getUserName(userID);
-            int position = fullName.indexOf(" ");
-
-            String firstName = fullName.substring(0, position);
-            String lastName = fullName.substring(position);
-            String locationName = DB.getNodeInfo(nodeID).get("longName");
-            String taskStartDateAndTime = date + " " + startTime;
-            String taskEndDateAndTime = date + " " + endTime;
-            String notificationDateAndTime = notificationDate + " " + notificationTime;
-
-            //SheetsAndJava.addTodoToSheet(todoID, title, email, firstName, lastName, locationName, taskStartDateAndTime, taskEndDateAndTime, notificationDateAndTime);
+//            String email = DB.getEmail(userID);
+//            String fullName = DB.getUserName(userID);
+//            int position = fullName.indexOf(" ");
+//
+//            String firstName = fullName.substring(0, position);
+//            String lastName = fullName.substring(position);
+//            String locationName = DB.getNodeInfo(nodeID).get("longName");
+//            String taskStartDateAndTime = date + " " + startTime;
+//            String taskEndDateAndTime = date + " " + endTime;
+//            String notificationDateAndTime = notificationDate + " " + notificationTime;
+//
+//              SheetsAndJava.addTodoToSheet(todoID, title, email, firstName, lastName, locationName, taskStartDateAndTime, taskEndDateAndTime, notificationDateAndTime);
 
             todo = null;
 

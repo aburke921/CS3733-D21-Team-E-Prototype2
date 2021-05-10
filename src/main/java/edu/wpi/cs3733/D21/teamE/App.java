@@ -26,7 +26,10 @@ import javafx.stage.StageStyle;
 import org.apache.derby.drda.NetworkServerControl;
 
 import javax.mail.MessagingException;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -224,14 +227,16 @@ public class App extends Application {
 	}
 
 	/**
-	 * @// TODO: 5/9/21 write documentation and test. Runs into many problems if no log files yet.
+	 * Uses {@link Main#isSafeExitedLog0} & {@link Main#isSafeExitedLog1} to check for a crash.
+	 * If there was a crash, asks the user if they would like to report it.
 	 * @throws IOException
 	 */
 	private void checkAndSendCrashReport() throws IOException {
 
+		//if both logs exited safely
 		if (Main.isSafeExitedLog0 && Main.isSafeExitedLog1) {
-			//good
-		} else {
+			logger.info("No crashes were detected");
+		} else { //else, a log indicates an unexpected exit
 			//bad exit, prompt user to report error
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setTitle("Crash Report");
@@ -359,59 +364,4 @@ public class App extends Application {
 	public static void changeScene(Parent root) {
 		primaryStage.getScene().setRoot(root);
 	}
-
-
-	//todo
-	/**
-	 * https://stackoverflow.com/questions/686231/quickly-read-the-last-line-of-a-text-file
-	 * @param file
-	 * @return
-	 */
-	public String tail( File file ) {
-		RandomAccessFile fileHandler = null;
-		try {
-			fileHandler = new RandomAccessFile( file, "r" );
-			long fileLength = fileHandler.length() - 1;
-			StringBuilder sb = new StringBuilder();
-
-			for(long filePointer = fileLength; filePointer != -1; filePointer--){
-				fileHandler.seek( filePointer );
-				int readByte = fileHandler.readByte();
-
-				if( readByte == 0xA ) {
-					if( filePointer == fileLength ) {
-						continue;
-					}
-					break;
-
-				} else if( readByte == 0xD ) {
-					if( filePointer == fileLength - 1 ) {
-						continue;
-					}
-					break;
-				}
-
-				sb.append( ( char ) readByte );
-			}
-
-			String lastLine = sb.reverse().toString();
-			return lastLine;
-		} catch( java.io.FileNotFoundException e ) {
-			logger.warning("File was not found, " + e);
-			e.printStackTrace();
-			return null;
-		} catch( java.io.IOException e ) {
-			logger.warning("IO EXception, " + e);
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (fileHandler != null )
-				try {
-					fileHandler.close();
-				} catch (IOException e) {
-					/* ignore */
-				}
-		}
-	}
-
 }

@@ -12,13 +12,22 @@ public class Main {
 	//define logger
 	static Logger logger = Logger.getLogger("BWH");
 
-	static boolean isNew0;
-	static boolean isNew1;
+	/**
+	 * Used to indicate if a certain log indicates a crash
+	 */
 	static boolean isSafeExitedLog0;
 	static boolean isSafeExitedLog1;
 
 
+	/**
+	 * Checks log files for indications of a crash or unexpected exit.
+	 * Sets up logger. Due to the nature of checking for a crash,
+	 * events cannot be logged until after the check is complete
+	 * @param args
+	 */
 	public static void main(String[] args) {
+		boolean isNew0; //used to indicate if logfile 0 is new
+		boolean isNew1; //user to indicate if logfile 1 is new
 
 		//determine if log files have already been created or not. Necessary for detecting crashes.
 		try {
@@ -51,7 +60,7 @@ public class Main {
 			e.printStackTrace();
 		}
 
-		//report to all logs that a crash report has been made.
+		//report a new line of contents to crashed logs so they no longer indicate a crash
 		//This prevents reading that a log indicates a crash more than once.
 		if (!isSafeExitedLog0) {
 			try { //try log 0

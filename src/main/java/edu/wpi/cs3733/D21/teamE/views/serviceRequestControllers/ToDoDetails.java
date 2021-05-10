@@ -1,7 +1,10 @@
 package edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers;
 
 import com.jfoenix.controls.*;
+import com.jfoenix.controls.base.IFXValidatableControl;
+import com.jfoenix.validation.IntegerValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
+import com.jfoenix.validation.base.ValidatorBase;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.Date;
@@ -10,6 +13,7 @@ import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.scheduler.Schedule;
 import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
 import edu.wpi.cs3733.D21.teamE.states.ServiceRequestState;
 import javafx.collections.FXCollections;
@@ -19,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Control;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,6 +41,8 @@ import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ToDoDetails {
@@ -261,27 +268,27 @@ public class ToDoDetails {
             locationInput.getSelectionModel().select(index);
         }
 
-        if(scheduledDate != null) {
-            LocalDate date = LocalDate.of(scheduledDate.getYear(), scheduledDate.getMonth(), scheduledDate.getDay());
-            dateInput.setValue(date);
-        }
-        if(startTime != null) {
-            LocalTime time = LocalTime.of(startTime.getHour(), startTime.getMin(), startTime.getSec());
-            startTimeInput.setValue(time);
-        }
-        if(endTime != null) {
-            LocalTime time = LocalTime.of(endTime.getHour(), endTime.getMin(), endTime.getSec());
-            endTimeInput.setValue(time);
-        }
         if(detail != null) {
             additionalNotesInput.setText(detail);
         }
-        if(notificationDate != null) {
-            LocalDate date = LocalDate.of(notificationDate.getYear(), notificationDate.getMonth(), notificationDate.getDay());
+        if(!scheduledDate.isEmpty()) {
+            LocalDate date = scheduledDate.toLocalDate();
+            dateInput.setValue(date);
+        }
+        if(!startTime.isEmpty()) {
+            LocalTime time = startTime.toLocalTime();
+            startTimeInput.setValue(time);
+        }
+        if(!endTime.isEmpty()) {
+            LocalTime time = endTime.toLocalTime();
+            endTimeInput.setValue(time);
+        }
+        if(!notificationDate.isEmpty()) {
+            LocalDate date = notificationDate.toLocalDate();
             notificationDateInput.setValue(date);
         }
-        if(notificationTime != null) {
-            LocalTime time = LocalTime.of(notificationTime.getHour(), notificationTime.getMin(), notificationTime.getSec());
+        if(!notificationTime.isEmpty()) {
+            LocalTime time = notificationTime.toLocalTime();
             notificationTimeInput.setValue(time);
         }
     }
@@ -369,15 +376,15 @@ public class ToDoDetails {
                 System.out.println("notificationDate " + notificationDate);
             }
 
-			int todoID = DB.addCustomToDo(userID, title);
-			if (todoID == 0) {
-				//todo error
-			} else if (!DB.updateToDo(todoID, title, userID, statusInt, priorityInt, nodeID, date, startTime, endTime,
-					additionalNotes, notificationDate, notificationTime)) {
-				//todo error
-                System.err.println("DB.updateToDo got " + todoID  + " " + userID + " " + title + " " + statusInt + " " + priorityInt + " " + date + " " + startTime
-                        + " " + endTime + " " + nodeID + " " + additionalNotes + " " + notificationDate + " " + notificationTime);
+            int todoID;
+            if(todo == null){
+                todoID = DB.addCustomToDo(userID, title);
+            } else {
+                todoID = todo.getTodoID();
             }
+            DB.updateToDo(todoID, title, userID, statusInt, priorityInt, nodeID, date, startTime, endTime,
+                    additionalNotes, notificationDate, notificationTime);
+
 
 //            String email = DB.getEmail(userID);
 //            String fullName = DB.getUserName(userID);
@@ -400,6 +407,8 @@ public class ToDoDetails {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+        } else {
+            //todo invalid input popup
         }
     }
 
@@ -408,18 +417,48 @@ public class ToDoDetails {
      */
     private boolean validateInput() {
 
+        boolean valid = true;
         validator.setMessage("Input required");
+        List<IFXValidatableControl> validatedControls = new LinkedList<IFXValidatableControl>(){
+            @Override
+            public boolean add(IFXValidatableControl control) {
+                if(super.add(control)){
+                    control.getValidators().add(validator);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
+        validatedControls.add(titleInput);
+        validatedControls.add(statusInput);
+        validatedControls.add(priorityInput);
 
-        titleInput.getValidators().add(validator);
-        statusInput.getValidators().add(validator);
-        priorityInput.getValidators().add(validator);
-
-        if(!selfAssign.isSelected()) {
-            userIDInput.getValidators().add(validator);
-            return titleInput.validate() && userIDInput.validate() && statusInput.validate() && priorityInput.validate();
+        int assignedUserID;
+        if(!selfAssign.isSelected()){
+            validatedControls.add(userIDInput);
+            assignedUserID = Integer.parseInt(userIDInput.getValue());
         } else {
-            return titleInput.validate() && statusInput.validate() && priorityInput.validate();
+            assignedUserID = App.userID;
         }
+
+        for(IFXValidatableControl control : validatedControls){
+            valid &= control.validate();
+        }
+
+        Date date = new Date(dateInput.getValue());
+        Time startTime = new Time(startTimeInput.getValue());
+        Time endTime = new Time(endTimeInput.getValue());
+
+        if(!(startTime.isEmpty() || endTime.isEmpty())){
+            valid &= startTime.compareTo(endTime) < 0;
+            if(!(date.isEmpty())){
+                Schedule schedule = DB.getSchedule(assignedUserID, 1, date.toString());
+                valid &= schedule.isAvailable(startTime, endTime);
+            }
+        }
+
+        return valid;
     }
 
     @FXML

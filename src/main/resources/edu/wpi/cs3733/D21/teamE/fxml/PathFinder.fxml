@@ -211,7 +211,7 @@
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="EXIT" checkedColor="#90e430" onAction="#sortNodesByType" text="Entrances/Exits">
+                                                <JFXCheckBox fx:id="exit" checkedColor="#90e430" onAction="#sortNodesByType" text="Entrances/Exits">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>

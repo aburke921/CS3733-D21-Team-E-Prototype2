@@ -15,9 +15,9 @@ import edu.wpi.cs3733.D21.teamE.observer.MarkerObserver;
 import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.states.PathFinderState;
-import javafx.animation.PathTransition;
-import javafx.beans.binding.DoubleBinding;
-import javafx.animation.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,7 +31,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -191,11 +193,13 @@ public class PathFinder {
     @FXML JFXCheckBox retl;
     @FXML JFXCheckBox serv;
     @FXML JFXCheckBox conf;
-    @FXML JFXCheckBox EXIT;
+    @FXML JFXCheckBox exit;
     @FXML JFXCheckBox elev;
     @FXML JFXCheckBox stai;
     @FXML JFXCheckBox park;
     @FXML JFXCheckBox all;
+
+    private HashMap<String, JFXCheckBox> checkBoxes = new HashMap<>();
 
     @FXML // fx:id="reverse"
     private JFXButton reverse;
@@ -232,7 +236,7 @@ public class PathFinder {
     Stage primaryStage;
 
     private int[] floorVisits = new int[]{0, 0, 0, 0, 0, 0}; // Number of times each floor has been visited, in order: L2, L1, G, 1, 2, 3
-    private HashMap<String, Integer> floorMap = new HashMap<String, Integer>(){{
+    private final HashMap<String, Integer> floorMap = new HashMap<String, Integer>(){{
         put("L2", 0);
         put("L1", 1);
         put("G", 2);
@@ -250,8 +254,6 @@ public class PathFinder {
     private Marker marker = new Marker();
 
     private ArrayList<Node> currentMarkers = new ArrayList<>();
-
-    private String[] nodeTypes = {"CONF", "DEPT", "ELEV", "INFO", "LABS", "REST","RETL", "STAI", "SERV", "EXIT", "PARK"};
 
     /**
      * Switch to a different scene
@@ -393,7 +395,7 @@ public class PathFinder {
 
 
         JFXDialogLayout popup = new JFXDialogLayout();
-        Text text = new Text("Path Directions");
+        Label text = new Label("Path Directions");
         text.setFont(Font.font(null, FontWeight.BOLD, 17));
         popup.setHeading(text);
         popup.setBody(tableView);
@@ -414,7 +416,7 @@ public class PathFinder {
     @FXML
     void clickOnNode(int index){
         JFXDialogLayout error = new JFXDialogLayout();
-        Text text = new Text("Location Selection");
+        Label text = new Label("Location Selection");
         text.setFont(Font.font(null, FontWeight.BOLD, 17));
         error.setHeading(text);
         JFXDialog dialog = new JFXDialog(stackPane, error,JFXDialog.DialogTransition.CENTER);
@@ -459,20 +461,23 @@ public class PathFinder {
             startLocationComboBox.getSelectionModel().select(index);
             endLocationComboBox.setValue("");
             Node bathroom1 = search.findNearest(nodeArrayList.get(index),"REST");
-            int endIndex = 0;
-            for(int i = 0; i < nodeArrayList.size();i++){
-                if(nodeArrayList.get(i).get("id").equals(bathroom1.get("id"))){
-                    endIndex = i;
-                }
+            if (bathroom1 == null){
+                System.err.println("Nearest Bathroom: Path not found");
+            }else {
 
+                int endIndex = 0;
+                for (int i = 0; i < nodeArrayList.size(); i++) {
+                    if (nodeArrayList.get(i).get("id").equals(bathroom1.get("id"))) {
+                        endIndex = i;
+                    }
+
+                }
+                endLocationComboBox.getSelectionModel().select(endIndex);
             }
-            endLocationComboBox.getSelectionModel().select(endIndex);
             // clear preset nodes
             startNodeID = null;
             endNodeID = null;
             dialog.close();
-
-
         });
 
         if (App.isLockEndPath()) { //if end path is locked don't allow user to set an end-path
@@ -644,8 +649,6 @@ public class PathFinder {
      */
     public void drawMap(Path fullPath, String floorNum) {
 
-        //TODO: fix marker ordering (undo the dumb stuff Matthew did earlier, make a list of "end" nodes with their coords and whether they are start, mid, or end markers)
-
         //clear map
         System.out.print("\nCLEARING MAP...");
         pane.getChildren().clear();
@@ -653,6 +656,7 @@ public class PathFinder {
 
         System.out.println("drawMap() is Finding path for floor " + floorNum);
 
+        updateMarkers();
 
         //if path is null
         if (fullPath == null) {
@@ -1184,7 +1188,7 @@ public class PathFinder {
             retl.setManaged(false);
             serv.setManaged(false);
             conf.setManaged(false);
-            EXIT.setManaged(false);
+            exit.setManaged(false);
             elev.setManaged(false);
             stai.setManaged(false);
             all.setManaged(false);
@@ -1198,7 +1202,7 @@ public class PathFinder {
             retl.setVisible(false);
             serv.setVisible(false);
             conf.setVisible(false);
-            EXIT.setVisible(false);
+            exit.setVisible(false);
             elev.setVisible(false);
             stai.setVisible(false);
             all.setVisible(false);
@@ -1279,6 +1283,8 @@ public class PathFinder {
 
         //if combobox is restricted - dont allow access to changing it.
         endLocationComboBox.setDisable(App.isLockEndPath()); //lock path
+
+        populateCheckboxes();
     }
 
     /**
@@ -1365,7 +1371,7 @@ public class PathFinder {
 
     private void selectNode(String name, String id){
         JFXDialogLayout popup = new JFXDialogLayout();
-        Text text = new Text("Location Selection");
+        Label text = new Label("Location Selection");
         text.setFont(Font.font(null, FontWeight.BOLD, 17));
         popup.setHeading(text);
         JFXDialog dialog = new JFXDialog(directoryPane, popup,JFXDialog.DialogTransition.CENTER);
@@ -1435,17 +1441,6 @@ public class PathFinder {
         currFloor.setText(floor);
 
         setCurrentFloor(floor);
-
-        //clear current floor of markers
-        for (Node node : currentMarkers) {
-            NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
-            nM.getRectangle().setVisible(false);
-        }
-
-        currentMarkers.clear();
-        //drawMap(currentFoundPath, currentFloor);
-
-        System.out.println("Current floor set to " + floor);
     }
 
     /**
@@ -1513,12 +1508,12 @@ public class PathFinder {
                 retl.setSelected(true);
                 serv.setSelected(true);
                 conf.setSelected(true);
-                EXIT.setSelected(true);
+                exit.setSelected(true);
                 elev.setSelected(true);
                 stai.setSelected(true);
                 park.setSelected(true);
 
-                for(String type : nodeTypes) {
+                for(String type : typeNames) {
                     marker.getSelectedCheckBox().replace(type.toUpperCase(), 1);
 
                     String typeAndFloorString = type + currentFloor;
@@ -1556,12 +1551,12 @@ public class PathFinder {
                 retl.setSelected(false);
                 serv.setSelected(false);
                 conf.setSelected(false);
-                EXIT.setSelected(false);
+                exit.setSelected(false);
                 elev.setSelected(false);
                 stai.setSelected(false);
                 park.setSelected(false);
 
-                for(String type : nodeTypes) {
+                for(String type : typeNames) {
                     marker.getSelectedCheckBox().replace(type.toUpperCase(), 0);
 
                     String typeAndFloorString = type + currentFloor;
@@ -1585,7 +1580,7 @@ public class PathFinder {
 
     public boolean allSelected() {
         boolean allSelected = true;
-        for (String type : nodeTypes) {
+        for (String type : typeNames) {
             if (marker.getSelectedCheckBox().get(type) == 0) {
                 allSelected = false;
             }
@@ -1609,5 +1604,59 @@ public class PathFinder {
         startNodeID = endNodeID;
         endLocationComboBox.setValue(tempName);
         endNodeID = tempID;
+    }
+
+    /**
+     * Updates the current floor with already selected markers
+     */
+    private void updateMarkers() {
+        //clear current floor of markers
+        for (Node node : currentMarkers) {
+            NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+            nM.getRectangle().setVisible(false);
+        }
+
+        currentMarkers.clear();
+
+        ArrayList<String> selectedTypes = new ArrayList<>();
+
+        if (all.isSelected()) {
+            selectedTypes.addAll(Arrays.asList(typeNames));
+        } else {
+            for (String type : typeNames) {
+                if (checkBoxes.get(type).isSelected()) {
+                    selectedTypes.add(type);
+                }
+            }
+        }
+
+        for (String type : selectedTypes) {
+            String typeAndFloorString = type + currentFloor;
+            //Get the nodes with the current floor and type
+            ArrayList<Node> nodeList = marker.getTypeAndFloorNode().get(typeAndFloorString);
+            for (Node node : nodeList) {
+                NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
+                Rectangle r = nM.getRectangle();
+                r.setVisible(true);
+                currentMarkers.add(node);
+            }
+        }
+    }
+
+    /**
+     * Populates the checkboxes hashmap post FXML loading
+     */
+    private void populateCheckboxes() {
+        checkBoxes.put("REST", rest);
+        checkBoxes.put("INFO", info);
+        checkBoxes.put("DEPT", dept);
+        checkBoxes.put("LABS", labs);
+        checkBoxes.put("RETL", retl);
+        checkBoxes.put("SERV", serv);
+        checkBoxes.put("CONF", conf);
+        checkBoxes.put("EXIT", exit);
+        checkBoxes.put("ELEV", elev);
+        checkBoxes.put("STAI", stai);
+        checkBoxes.put("PARK", park);
     }
 }

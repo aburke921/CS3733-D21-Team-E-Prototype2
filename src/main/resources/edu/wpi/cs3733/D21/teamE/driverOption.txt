@@ -1,1 +1,1 @@
-asdfjasdlk
+jdbc:derby:BWDB;create=true

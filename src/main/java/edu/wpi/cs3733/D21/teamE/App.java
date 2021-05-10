@@ -262,12 +262,13 @@ public class App extends Application {
 					}
 
 					//convert logfile into string
-					String crashReport = "";
+					String crashReport = "---BEGIN CRASH REPORT---";
 					for (String line :
 							lines) {
 						assert crashReport != null;
 						crashReport = crashReport.concat("\n" + line);
 					}
+					crashReport.concat("\n---END CRASH REPORT---");
 
 					//send email
 					logger.info("Sending Crash Report Email");
@@ -302,7 +303,7 @@ public class App extends Application {
 				e.printStackTrace();
 			}
 		}
-		logger.info("Exiting");
+		logger.info("Exiting"); //DO NOT CHANGE THIS LINE. It is used for crash reporting. DO NOT CHANGE THIS LINE
 		System.exit(0);
 	}
 

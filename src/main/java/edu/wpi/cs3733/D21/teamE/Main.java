@@ -26,8 +26,8 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		boolean isNew0; //used to indicate if logfile 0 is new
-		boolean isNew1; //user to indicate if logfile 1 is new
+		boolean isNew0 = true; //used to indicate if logfile 0 is new
+		boolean isNew1 = true; //user to indicate if logfile 1 is new
 
 		//determine if log files have already been created or not. Necessary for detecting crashes.
 		try {
@@ -62,19 +62,19 @@ public class Main {
 
 		//report a new line of contents to crashed logs so they no longer indicate a crash
 		//This prevents reading that a log indicates a crash more than once.
-		if (!isSafeExitedLog0) {
+		if (!isSafeExitedLog0 || isNew0) {
 			try { //try log 0
 				Writer bufferedWriterLog0 = new BufferedWriter(new FileWriter("BWHApplication.log.0", true));
-				bufferedWriterLog0.append("crash detected");
+				bufferedWriterLog0.append("crash detected or new file created");
 				bufferedWriterLog0.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		if (!isSafeExitedLog1) {
+		if (!isSafeExitedLog1 || isNew1) {
 			try {//try log 1
 				Writer bufferedWriterLog1 = new BufferedWriter(new FileWriter("BWHApplication.log.1", true));
-				bufferedWriterLog1.append("crash detected");
+				bufferedWriterLog1.append("crash detected or new file created");
 				bufferedWriterLog1.close();
 			} catch (IOException e) {
 				e.printStackTrace();

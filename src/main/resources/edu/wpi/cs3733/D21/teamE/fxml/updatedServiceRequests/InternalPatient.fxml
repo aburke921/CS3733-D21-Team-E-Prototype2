@@ -45,22 +45,22 @@
                                              <children>
                                                 <JFXComboBox fx:id="pickupInput" prefHeight="27.0" prefWidth="295.0" promptText="Pick-Up Location">
                                                    <VBox.margin>
-                                                      <Insets top="20.0" />
+                                                      <Insets bottom="5.0" top="25.0" />
                                                    </VBox.margin>
                                                 </JFXComboBox>
                                                 <JFXComboBox fx:id="dropoffInput" prefHeight="27.0" prefWidth="295.0" promptText="Drop-off Location">
                                                 <VBox.margin>
-                                                   <Insets top="20.0" />
+                                                   <Insets bottom="5.0" top="25.0" />
                                                 </VBox.margin>
                                                 </JFXComboBox>
                                                 <JFXTextField fx:id="departmentInput" prefHeight="27.0" prefWidth="295.0" promptText="Transfer to Department">
                                                    <VBox.margin>
-                                                      <Insets bottom="5.0" top="20.0" />
+                                                      <Insets bottom="5.0" top="25.0" />
                                                    </VBox.margin>
                                                 </JFXTextField>
                                                 <JFXComboBox fx:id="severityInput" prefHeight="27.0" prefWidth="291.0" promptText="Severity">
                                                    <VBox.margin>
-                                                      <Insets bottom="5.0" top="20.0"/>
+                                                      <Insets bottom="5.0" top="25.0"/>
                                                    </VBox.margin>
                                                    <items>
                                                       <FXCollections fx:factory="observableArrayList">
@@ -72,12 +72,12 @@
                                                 </JFXComboBox>
                                                 <JFXTextField fx:id="patientIdInput" prefHeight="27.0" prefWidth="280.0" promptText="Patient ID #">
                                                    <VBox.margin>
-                                                      <Insets bottom="5.0" top="20.0" />
+                                                      <Insets bottom="5.0" top="25.0" />
                                                    </VBox.margin>
                                                 </JFXTextField>
                                                 <JFXComboBox fx:id="assignedPersonnel" prefHeight="27.0" prefWidth="280.0" promptText="Assigned Personnel">
                                                    <VBox.margin>
-                                                      <Insets top="20.0" />
+                                                      <Insets top="25.0" />
                                                    </VBox.margin>
                                                 </JFXComboBox>
                                              </children>
@@ -93,7 +93,7 @@
                                              <children>
                                                 <JFXTextArea fx:id="descriptionInput" prefHeight="141.0" prefWidth="259.0" promptText="Reason for Transportation">
                                                    <VBox.margin>
-                                                      <Insets bottom="5.0" top="20.0" />
+                                                      <Insets bottom="5.0" top="25.0" />
                                                    </VBox.margin>
                                                 </JFXTextArea>
                                                 <GridPane>

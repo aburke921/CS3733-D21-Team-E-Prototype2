@@ -344,6 +344,8 @@ public class PathFinder {
 
         boolean floorChangeFlag = true;
 
+        String stop = directions.remove(directions.size() - 1);
+
         for (String dir : directions) {
             if (floorChangeFlag) {
                 Text floorHeader = new Text(Character.toString(MaterialDesignIcon.PLAY_CIRCLE.getChar()));
@@ -401,6 +403,13 @@ public class PathFinder {
             }
         }
 
+        Text stopIcon = new Text(Character.toString(MaterialDesignIcon.ALERT_OCTAGON.getChar()));
+        stopIcon.setStyle("-fx-fill: -fx--primary-dark");
+
+        Text stopText = new Text(stop);
+        stopText.setFont(Font.font(null, FontWeight.BOLD, 16));
+
+        tableView.getItems().add(new TextualDirectionStep(stopIcon, stopText));
 
         JFXDialogLayout popup = new JFXDialogLayout();
         Label text = new Label("Path Directions");
@@ -1292,6 +1301,7 @@ public class PathFinder {
 
         populateCheckboxes();
 
+        // Disable zoom buttons under certain cases
         zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -1682,6 +1692,9 @@ public class PathFinder {
         checkBoxes.put("PARK", park);
     }
 
+    /**
+     * Zoom Button handling
+     */
     public void zoom(ActionEvent e) {
         Button button = ((Button) e.getSource());
         if (button.getId().equals("plus")) {

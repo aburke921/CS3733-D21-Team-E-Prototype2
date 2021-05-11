@@ -457,6 +457,10 @@ public class ToDoDetails {
             validatedControls.add(notificationTimeInput);
         }
 
+        if(endTimeInput.getValue() != null){
+            validatedControls.add(startTimeInput);
+        }
+
         for(IFXValidatableControl control : validatedControls){
             valid &= control.validate();
         }
@@ -465,17 +469,20 @@ public class ToDoDetails {
         Time startTime = new Time(startTimeInput.getValue());
         Time endTime = new Time(endTimeInput.getValue());
 
-        if(!(startTime.isEmpty() || endTime.isEmpty())){
+        if(!(startTime.isEmpty() || date.isEmpty())){
             valid &= startTime.compareTo(endTime) < 0;
-            if(!(date.isEmpty())){
-                Schedule schedule = DB.getSchedule(assignedUserID, 1, date.toString());
-                if(!schedule.isAvailable(startTime, endTime)) {
-                    App.newJFXDialogPopUp("Time Conflict", "Try Again","There is a time conflict in your schedule.", stackPane);
-                    System.out.println("Time Conflict in Schedule");
-                } else {
-                    valid &= schedule.isAvailable(startTime, endTime);
-                }
+
+            Schedule schedule = DB.getSchedule(assignedUserID, 1, date.toString());
+            boolean noScheduleConflict = true;
+            if(todo != null){
+                //editing, check to see if existing can change
+                noScheduleConflict = schedule.canChange(todo, startTime, endTime);
+            } else {
+                //adding, check to see if new can be placed
+                noScheduleConflict = schedule.canAdd(startTime, endTime);
             }
+
+            valid &= noScheduleConflict;
         }
 
         return valid;

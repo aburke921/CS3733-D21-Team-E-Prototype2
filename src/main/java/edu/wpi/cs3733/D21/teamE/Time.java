@@ -4,8 +4,8 @@ import java.time.LocalTime;
 
 public class Time implements Comparable<Time>{
 
-    public static final int DAY_START = 0;
-    public static final int DAY_END = 24 * 60 * 60 - 1; //11:59:59 in seconds
+    public static final Time DAY_START = new Time(0);
+    public static final Time DAY_END = new Time(23, 59, 59);
 
     private int sec;
     private int min;

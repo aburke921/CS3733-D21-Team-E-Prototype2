@@ -1292,17 +1292,15 @@ public class RequestsDB2 {
 	public static void addFoodDeliveryRequest(FoodDeliveryObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "foodDeliveryRequest");
 
-		int requestID = ToDoDB.getMaxToDoID();
-
-		String insertFoodDeliveryReq = "Insert Into foodDelivery Values (?, ?, ?, ?, ?)";
+		String insertFoodDeliveryReq = "Insert Into foodDelivery Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFoodDeliveryReq)) {
-			prepState.setInt(1, requestID);
-			prepState.setString(2, request.getNodeID());
-			prepState.setString(3, request.getDeliveryService());
-			prepState.setString(4, request.getOrderNumber());
-			prepState.setString(5, request.getDescription());
+			prepState.setString(1, request.getNodeID());
+			prepState.setString(2, request.getDeliveryService());
+			prepState.setString(3, request.getOrderNumber());
+			prepState.setString(4, request.getDescription());
 			prepState.execute();
+			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Delivery Service: " + request.getDeliveryService() + "\nOrder Number: " + request.getOrderNumber() + "\nDescription: " + request.getDescription(), null, null);
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into foodDeliveryRequest inside function addFoodDeliveryRequest()");

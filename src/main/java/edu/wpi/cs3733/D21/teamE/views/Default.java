@@ -47,6 +47,9 @@ public class Default {
     @FXML // fx:id="stackPane"
     private StackPane stackPane; //main stack pane used for JFXDialog popups
 
+    @FXML // fx:id="pathFinderButton"
+    private JFXButton pathFinderButton;
+
     @FXML // fx:id="mapEditorButton"
     private JFXButton mapEditorButton;
 
@@ -174,7 +177,7 @@ public class Default {
             case "n":
                 Node selected = DB.getNodeInfo(code);
                 App.setStartNode(selected);
-                toPathFinder(new ActionEvent());
+                pathFinderButton.fire();
                 break;
             case "p":
                 if (App.userID == 0) {

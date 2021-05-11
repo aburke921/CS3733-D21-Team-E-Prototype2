@@ -101,7 +101,7 @@ public class ServiceRequestStatus {
 
         ArrayList<String> idArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestID");
         ArrayList<String> statusArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
-        ArrayList<String> locationArray = DB.getRequestLocations(tableName, App.userID);
+        ArrayList<String> creationTimeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "creationTime");
         ArrayList<String> assigneeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "AssigneeID");
         if(idArray.size() > 0) {
             System.out.println("Array size" + idArray.size());
@@ -116,7 +116,7 @@ public class ServiceRequestStatus {
             }
             for (int i = 0; i < idArray.size(); i++) {
                 System.out.println("Before");
-                TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), locationArray.get(i), assigneeArray.get(i), statusArray.get(i)));
+                TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), creationTimeArray.get(i), assigneeArray.get(i), statusArray.get(i)));
                 System.out.println(request.getValue().getId());
                 if (request.getValue().getStatus().equals("inProgress")) {
                     inProgress.getChildren().add(request);

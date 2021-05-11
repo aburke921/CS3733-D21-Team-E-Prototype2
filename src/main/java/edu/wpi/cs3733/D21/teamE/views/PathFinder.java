@@ -725,9 +725,6 @@ public class PathFinder {
 
                     if (!legItr.hasNext()) { //if current node is the ending node for this floor
 
-                        //create a line between this node and the previous node
-                        Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-
                         MarkerType type;
 
                         if (firstNode) { //if current node is the first node on floor of path leg
@@ -743,7 +740,7 @@ public class PathFinder {
                                 //place a dot on the location
                                 type = MarkerType.FIRST;
                             }
-                            line = new Line(xCoord, yCoord, xCoord, yCoord); // prevent line from origin
+
                         } else {
                             if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
                                 //place a dot on the location
@@ -821,10 +818,7 @@ public class PathFinder {
                                 setCurrentFloor(finalDestFloor);
                             });
 
-                            g.getChildren().addAll(line, flowPane);
-                        } else {
-                            //otherwise, only add the line and node circle
-                            g.getChildren().add(line);
+                            g.getChildren().addAll(flowPane);
                         }
 
                     } else if (firstNode) { //if current node is the starting node

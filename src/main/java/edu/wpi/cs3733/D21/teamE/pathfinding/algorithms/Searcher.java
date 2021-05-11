@@ -2,6 +2,7 @@ package edu.wpi.cs3733.D21.teamE.pathfinding.algorithms;
 
 import java.util.*;
 
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
@@ -27,7 +28,7 @@ public abstract class Searcher {
      */
     public Searcher(){
         graph = new HashMap<>();
-        con = makeConnection.makeConnection();
+        con = makeConnection.makeConnection("jdbc:derby:BWDB;create=true");
 
         refreshGraph();
     }
@@ -137,12 +138,17 @@ public abstract class Searcher {
         Node nearestSF = null;
         Path shortestSF = new Path();
         for(Node stop : stops){
-            Path p = search(location, stop);
-            if(shortestSF.isEmpty() || p.getPathLength() < shortestSF.getPathLength()){
-                shortestSF = p;
-                nearestSF = stop;
+
+            Path p = search(getNode(location.get("id")),
+                    getNode(stop.get("id"))); //this method returns null if no path found
+             if (p != null) {
+                if (shortestSF.isEmpty() || p.getPathLength() < shortestSF.getPathLength()) {
+                    shortestSF = p;
+                    nearestSF = stop;
+                }
             }
         }
+
         return nearestSF;
     }
 

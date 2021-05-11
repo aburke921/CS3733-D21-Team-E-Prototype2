@@ -17,6 +17,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -25,6 +26,9 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MenuPage {
+
+    @FXML // fx:id="appBarAnchorPane"
+    private AnchorPane appBarAnchorPane;
 
     @FXML
     private JFXTreeTableView menuTable;
@@ -152,6 +156,18 @@ public class MenuPage {
 
     @FXML
     void initialize() {
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setShowHelp(false);
+            App.setShowLogin(true);
+            App.setPageTitle("Au Bon Pain Menu");
+            App.setHelpText(""); //todo help text
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         prepareTable(menuTable);
     }
 

@@ -53,7 +53,7 @@ public class Marker {
             }
         }
 
-        checkBoxSelected.put("HALL", 0);
+        //checkBoxSelected.put("HALL", 0);
         checkBoxSelected.put("CONF", 0);
         checkBoxSelected.put("DEPT", 0);
         checkBoxSelected.put("ELEV", 0);
@@ -65,9 +65,9 @@ public class Marker {
         checkBoxSelected.put("SERV", 0);
         checkBoxSelected.put("EXIT", 0);
         checkBoxSelected.put("PARK", 0);
-        checkBoxSelected.put("WALK", 0);
+        //checkBoxSelected.put("WALK", 0);
 
-        typeColor.put("HALL", Color.web("#7c7c7c"));
+        //typeColor.put("HALL", Color.web("#7c7c7c"));
         typeColor.put("CONF", Color.web("#7f5124"));
         typeColor.put("DEPT", Color.web("#74058c"));
         typeColor.put("ELEV", Color.web("#769557"));
@@ -79,7 +79,7 @@ public class Marker {
         typeColor.put("SERV", Color.web("#005cff"));
         typeColor.put("EXIT", Color.web("#90e430"));
         typeColor.put("PARK", Color.web("#1299d2"));
-        typeColor.put("WALK", Color.BLACK);
+       // typeColor.put("WALK", Color.BLACK);
     }
 
     public void populateLocationMarkerMarkerGroup(Double scale) {
@@ -93,7 +93,9 @@ public class Marker {
             rectangle.setStroke(Color.BLACK);
             rectangle.setFill(typeColor.get(nodeArrayList.get(i).get("type")));
             rectangle.setVisible(false);
-            //rectangle.setOpacity(0.25);
+            rectangle.setOpacity(0.75);
+            rectangle.setArcHeight(sideLength/2);
+            rectangle.setArcWidth(sideLength/2);
 
             NodeMarker nodeMarker = new NodeMarker(nodeArrayList.get(i), rectangle);
 

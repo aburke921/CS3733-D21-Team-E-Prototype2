@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.Default">
    <children>
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
@@ -35,7 +40,7 @@
                                     </ImageView>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <JFXButton fx:id="covidSurvey" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="COVID Survey" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="covidSurvey" minWidth="200.0" onAction="#toCovidSurvey" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="COVID Survey" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -46,7 +51,7 @@
                                                 <Insets right="50.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton fx:id="pathFinderButton" alignment="CENTER" minWidth="200.0" onAction="#toPathFinder" prefWidth="200.0" styleClass="default-button" text="Path Finder" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="pathFinderButton" minWidth="200.0" onAction="#toPathFinder" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Path Finder" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -64,7 +69,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <JFXButton fx:id="ScanQRCodeButton" alignment="CENTER" minWidth="200.0" onAction="#toScanQRCode" prefWidth="200.0" styleClass="default-button" text="Scan QR Code" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="ScanQRCodeButton" minWidth="200.0" onAction="#toScanQRCode" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Scan QR Code" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -75,7 +80,7 @@
                                                 <Insets right="50.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton fx:id="DirectionsButton" alignment="CENTER" minWidth="200.0" onAction="#toDirections" prefWidth="200.0" styleClass="default-button" text="Directions to BWH" textFill="#039be5" wrapText="true">
+                                          <JFXButton fx:id="DirectionsButton" minWidth="200.0" onAction="#toDirections" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Directions to BWH" textFill="#039be5" wrapText="true">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -93,7 +98,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <JFXButton fx:id="scheduleAppointmentButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Schedule Appointment" textFill="#039be5" wrapText="true">
+                                          <JFXButton fx:id="scheduleAppointmentButton" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Schedule Appointment" textFill="#039be5" wrapText="true">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -104,7 +109,7 @@
                                                 <Insets right="50.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton fx:id="serviceRequestButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Service Requests" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="serviceRequestButton" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Service Requests" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
@@ -130,7 +135,7 @@
                                                 <Insets right="50.0" />
                                              </HBox.margin>
                                              <children>
-                                                <JFXButton fx:id="covidSurveyStatusButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Covid Survey Status" textFill="#039be5" wrapText="true">
+                                                <JFXButton fx:id="checkInStatusButton" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Patron Check-In Management" textFill="#039be5" wrapText="true">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
@@ -138,7 +143,7 @@
                                                       <FontAwesomeIconView glyphName="CLIPBOARD" size="40" />
                                                    </graphic>
                                                 </JFXButton>
-                                                <JFXButton fx:id="userManagementButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="User Management" textFill="#039be5" wrapText="true">
+                                                <JFXButton fx:id="userManagementButton" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="User Management" textFill="#039be5" wrapText="true">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>
@@ -149,7 +154,7 @@
                                                       <Insets top="20.0" />
                                                    </VBox.margin>
                                                 </JFXButton>
-                                                <JFXButton fx:id="mapEditorButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="Map Editor" textFill="#039be5" wrapText="true">
+                                                <JFXButton fx:id="mapEditorButton" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Map Editor" textFill="#039be5" wrapText="true">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>

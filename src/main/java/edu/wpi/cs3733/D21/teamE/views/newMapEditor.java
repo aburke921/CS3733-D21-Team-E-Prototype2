@@ -637,8 +637,6 @@ public class newMapEditor {
                     if (array.get(i).get("id").equals(idInput.getValue().toString())) {
                         s = DB.deleteNode(array.get(i).get("id"));
                     }
-
-
                 }
             }
         }
@@ -651,7 +649,7 @@ public class newMapEditor {
      * @param e
      */
     @FXML
-    public void deleteNodeButton (ActionEvent e){
+    public void deleteNodeButton(ActionEvent e) {
         JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
         jfxDialogLayout.setBody(new Text("Are you sure you want to delete node?"));
         JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);

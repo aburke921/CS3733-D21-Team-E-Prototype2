@@ -28,6 +28,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
+
 public class SecurityService extends ServiceRequestFormComponents {
 
     ObservableList<String> locations;
@@ -87,7 +89,7 @@ public class SecurityService extends ServiceRequestFormComponents {
                 System.out.println(event); //Print the ActionEvent to console
                 Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Default.fxml"));
                 App.getPrimaryStage().getScene().setRoot(root);
-            } catch (IOException ex) {
+            } catch (IOException | MessagingException ex) {
                 ex.printStackTrace();
             }
         }
@@ -110,7 +112,7 @@ public class SecurityService extends ServiceRequestFormComponents {
     }
 
     @FXML
-    private void saveData(ActionEvent actionEvent){
+    private void saveData(ActionEvent actionEvent) throws MessagingException {
         if(validateInput()){
 
             String securityLevel = levelOfSecurity.getSelectionModel().getSelectedItem();
@@ -125,26 +127,20 @@ public class SecurityService extends ServiceRequestFormComponents {
             DB.addSecurityRequest(object);
 
             //For email implementation later
-//            String email = DB.getEmail(App.userID);
-//            String fullName = DB.getUserName(App.userID);
-//            String assigneeName = userNames.get(assigneeIDIndex);
-//            String locationName = locations.get(nodeIDIndex);
-//            String body = "Hello " + fullName + ", \n\n" + "Thank you for making an External Patient Transport request." +
-//                    "Here is the summary of your request: \n\n" +
-//                    " - Type: " + type + "\n" +
-//                    " - Severity: " + severity + "\n" +
-//                    " - PatientID: " + patientID + "\n" +
-//                    " - ETA: " + ETA + "\n" +
-//                    " - Blood Pressure: " + bloodPressure + "\n" +
-//                    " - Temperature: " + temperature + "\n" +
-//                    " - Oxygen Level: " + oxygenLevel + "\n" +
-//                    " - Details: " + details + "\n" +
-//                    " - Assignee Name: " + assigneeName + "\n" +
-//                    " - Location: " + locationName + "\n\n" +
-//                    "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
-//                    "- Emerald Emus BWH";
-//
-//            sendEmail.sendRequestConfirmation(email, body);
+            String email = DB.getEmail(App.userID);
+            String fullName = DB.getUserName(App.userID);
+            String assigneeName = userNames.get(assigneeIndex);
+            String body = "Hello " + fullName + ", \n\n" + "Thank you for making an Security Service request." +
+                    "Here is the summary of your request: \n\n" +
+                    " - Location: " + node + "\n" +
+                    " - Assignee Name: " + assigneeName + "\n" +
+                    " - Security Level: " + securityLevel + "\n" +
+                    " - Urgency Level: " + urgencyLevel + "\n" +
+                    " - Reason: " + reason + "\n\n" +
+                    "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+                    "- Emerald Emus BWH";
+
+            sendEmail.sendRequestConfirmation(email, body);
             super.handleButtonSubmit(actionEvent);
         }
     }
@@ -179,13 +175,13 @@ public class SecurityService extends ServiceRequestFormComponents {
         userID = DB.getAssigneeIDs("security");
         assignedPersonnel.setItems(userNames);
 
-        assert helpSecurityService != null : "fx:id=\"helpSecurityService\" was not injected: check your FXML file 'SecurityService.fxml'.";
-        assert locationInput != null : "fx:id=\"locationOfDelivery\" was not injected: check your FXML file 'SecurityService.fxml'.";
-        assert levelOfSecurity != null : "fx:id=\"levelOfSecurity\" was not injected: check your FXML file 'SecurityService.fxml'.";
-        assert levelOfUrgency != null : "fx:id=\"levelOfUrgency\" was not injected: check your FXML file 'SecurityService.fxml'.";
-        assert reasonForRequest != null : "fx:id=\"reasonForRequest\" was not injected: check your FXML file 'SecurityService.fxml'.";
-        assert cancelSecurityRequest != null : "fx:id=\"cancelSecurityRequest\" was not injected: check your FXML file 'SecurityService.fxml'.";
-        assert submitSecurityRequest != null : "fx:id=\"submitSecurityRequest\" was not injected: check your FXML file 'SecurityService.fxml'.";
+        assert helpSecurityService != null : "fx:id=\"helpSecurityService\" was not injected: check your FXML file 'SecurityV2.fxml'.";
+        assert locationInput != null : "fx:id=\"locationOfDelivery\" was not injected: check your FXML file 'SecurityV2.fxml'.";
+        assert levelOfSecurity != null : "fx:id=\"levelOfSecurity\" was not injected: check your FXML file 'SecurityV2.fxml'.";
+        assert levelOfUrgency != null : "fx:id=\"levelOfUrgency\" was not injected: check your FXML file 'SecurityV2.fxml'.";
+        assert reasonForRequest != null : "fx:id=\"reasonForRequest\" was not injected: check your FXML file 'SecurityV2.fxml'.";
+        assert cancelSecurityRequest != null : "fx:id=\"cancelSecurityRequest\" was not injected: check your FXML file 'SecurityV2.fxml'.";
+        assert submitSecurityRequest != null : "fx:id=\"submitSecurityRequest\" was not injected: check your FXML file 'SecurityV2.fxml'.";
 
         //init appBar
         javafx.scene.Node appBarComponent = null;

@@ -116,8 +116,8 @@
                                             <children>
                                                 <AnchorPane prefHeight="71.0" prefWidth="1200.0">
                                                     <children>
-                                                        <JFXButton fx:id="cancel" layoutX="455.0" layoutY="45.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" />
-                                                        <JFXButton fx:id="submit" layoutX="532.0" layoutY="46.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
+                                                        <JFXButton fx:id="cancel" layoutX="455.0" layoutY="45.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="86.0"/>
+                                                        <JFXButton fx:id="submit" layoutX="532.0" layoutY="46.0" onAction="#saveData" styleClass="submit-button" text="Submit" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="11.0"/>
                                                     </children>
                                                 </AnchorPane>
                                             </children>

@@ -6,7 +6,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
-import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
@@ -49,6 +48,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.logging.Logger;
+
 
 public class App extends Application {
 
@@ -193,7 +193,6 @@ public class App extends Application {
 		logger.finer("Connecting to the DB...");
 		makeConnection connection = makeConnection.makeConnection(driverURL);
 		logger.finer("DB connection established");
-		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");
 		File edges = new File("CSVs/MapEAlledges.csv");
 		boolean tablesExist = connection.allTablesThere();
@@ -205,10 +204,6 @@ public class App extends Application {
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
 				DB.populateAbonPainTable();
-//				for(int ID : sheetIDs){
-//					SheetsAndJava.deleteSheetData(ID);
-//				}
-
 				logger.info("Tables Repopulated");
 			} catch (Exception e) {
 				logger.warning("Exception in creating tables. Might already be there?, " + e);

@@ -12,8 +12,6 @@ import javax.mail.internet.*;
 public class sendEmail {
 
 
-
-
 	public static void sendAppointmentConfirmation(String email, String time, String fullName) throws MessagingException {
 
 		String subject = "BWH Appointment Confirmation!!";

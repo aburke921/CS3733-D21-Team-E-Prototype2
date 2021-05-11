@@ -1,21 +1,12 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
-import com.google.inject.Singleton;
-import edu.wpi.cs3733.D21.teamE.App;
-import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.MedicineDeliveryObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.SanitationServiceObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.SecurityServiceObj;
-import org.apache.derby.drda.NetworkServerControl;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
-
 
 
 public class makeConnection {
@@ -37,7 +28,7 @@ public class makeConnection {
 			props.put("password", "admin");
 
 			String forNameURL = "org.apache.derby.jdbc.EmbeddedDriver";
-			if(driverString.contains("localhost")){
+			if (driverString.contains("localhost")) {
 				forNameURL = "org.apache.derby.jdbc.ClientDriver";
 			}
 
@@ -54,11 +45,10 @@ public class makeConnection {
 				System.out.println("Connected to admin's choice of DB");
 				// this.connection.setAutoCommit(false);
 			} catch (SQLException e) {
-				try{
+				try {
 					this.connection = DriverManager.getConnection("jdbc:derby:BWDB;create=true", props);
 					System.out.println("Connected to Embedded");
-				}
-				catch (SQLException s) {
+				} catch (SQLException s) {
 					//s.printStackTrace();
 					System.err.println("nothing works");
 				}
@@ -81,7 +71,7 @@ public class makeConnection {
 	}
 
 
-	public static void reinitializeSingleton(){
+	public static void reinitializeSingleton() {
 		singleInstance = null;
 	}
 
@@ -92,7 +82,7 @@ public class makeConnection {
 
 	/**
 	 * Deletes node,hasEdge, userAccount, requests, floralRequests, sanitationRequest and extTransport tables.
-//	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
+	 * //	 * Also deletes adminAccount, doctorAccount, patientAccount, visitorAccount views
 	 * try/catch phrase set up in case the tables all ready do not exist
 	 */
 	public void deleteAllTables() {
@@ -114,6 +104,7 @@ public class makeConnection {
 			stmt.execute("Drop Table sanitationrequest");
 			stmt.execute("Drop Table floralrequests");
 			stmt.execute("Drop Table requests");
+			stmt.execute("Drop Table ToDo");
 			stmt.execute("Drop Table useraccount");
 			stmt.execute("Drop Table hasedge");
 			stmt.execute("Drop Table node");
@@ -150,7 +141,7 @@ public class makeConnection {
 	/**
 	 * Calls all of the functions that creates each individual table
 	 * Tables Created: node, hasEdge, userAccount, requests, floralRequests, sanitationRequest, extTransport, medDelivery, securityServ
-//	 * Views Created (which are like tables): visitorAccount, patientAccount, doctorAccount, adminAccount
+	 * //	 * Views Created (which are like tables): visitorAccount, patientAccount, doctorAccount, adminAccount
 	 */
 
 
@@ -211,16 +202,15 @@ public class makeConnection {
 
 
 		//Floral Requests: //RequestID: 1-9
-		FloralObj floralRequest1 = new FloralObj(0,13, 31, "ADEPT00101", "Adam", "Roses", 1, "None", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
-		FloralObj floralRequest2 = new FloralObj(0,13, 32, "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
-		FloralObj floralRequest3 = new FloralObj(0,14, 33, "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate","Get well soon");
-		FloralObj floralRequest4 = new FloralObj(0,15, 34, "ADEPT00301", "Nikki", "Assortment", 1, "None", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Feel Better!");
-		FloralObj floralRequest5 = new FloralObj(0,15, 35, "ADEPT00101", "Monica", "Roses", 6, "Tall", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate","Love and miss you!!");
-		FloralObj floralRequest6 = new FloralObj(0,17, 36, "DDEPT00102", "Amy", "Tulips", 12, "Square", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate","Enjoy the flowers");
-		FloralObj floralRequest7 = new FloralObj(0,17, 37, "ADEPT00102", "Alfred", "Carnations", 1, "Tall", "Include arrangement", "Include stuffed Animal", "Include Chocolate","Miss you!");
-		FloralObj floralRequest8 = new FloralObj(0,19, 38, "ADEPT00101", "Caroline", "Assortment", 6, "Round", "do not Include arrangement", "do not Include stuffed Animal", "do not Include Chocolate","Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
-		FloralObj floralRequest9 = new FloralObj(0,19, 39, "ADEPT00301", "Carrie", "Assortment", 12, "Round", "Include arrangement", "Include stuffed Animal", "Include Chocolate","Miss you!");
-
+		FloralObj floralRequest1 = new FloralObj(0, 13, 31, "ADEPT00101", "Adam", "Roses", 1, "None", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!");
+		FloralObj floralRequest2 = new FloralObj(0, 13, 32, "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Include arrangement", "Include stuffed Animal", "do not Include Chocolate", "Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship");
+		FloralObj floralRequest3 = new FloralObj(0, 14, 33, "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Get well soon");
+		FloralObj floralRequest4 = new FloralObj(0, 15, 34, "ADEPT00301", "Nikki", "Assortment", 1, "None", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate", "Feel Better!");
+		FloralObj floralRequest5 = new FloralObj(0, 15, 35, "ADEPT00101", "Monica", "Roses", 6, "Tall", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Love and miss you!!");
+		FloralObj floralRequest6 = new FloralObj(0, 17, 36, "DDEPT00102", "Amy", "Tulips", 12, "Square", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate", "Enjoy the flowers");
+		FloralObj floralRequest7 = new FloralObj(0, 17, 37, "ADEPT00102", "Alfred", "Carnations", 1, "Tall", "Include arrangement", "Include stuffed Animal", "Include Chocolate", "Miss you!");
+		FloralObj floralRequest8 = new FloralObj(0, 19, 38, "ADEPT00101", "Caroline", "Assortment", 6, "Round", "do not Include arrangement", "do not Include stuffed Animal", "do not Include Chocolate", "Sorry I forgot to warn you about the slippery stairs, I hope these flowers can make you feel better!");
+		FloralObj floralRequest9 = new FloralObj(0, 19, 39, "ADEPT00301", "Carrie", "Assortment", 12, "Round", "Include arrangement", "Include stuffed Animal", "Include Chocolate", "Miss you!");
 
 
 		DB.addFloralRequest(floralRequest1);
@@ -287,11 +277,11 @@ public class makeConnection {
 		DB.addSpecialUserType("alans@gmail.com", "EMT000009", "EMT", "Alan", "Singh");
 
 
-		DB.editRequests(1, 0, "canceled");
-		DB.editRequests(4, 0, "canceled");
-		DB.editRequests(5, 0, "complete");
-		DB.editRequests(6, 0, "canceled");
-		DB.editRequests(7, 0, "complete");
+		DB.updateToDoStatus(1, 10);
+		DB.updateToDoStatus(4, 0);
+		DB.updateToDoStatus(5, 10);
+		DB.updateToDoStatus(6, 0);
+		DB.updateToDoStatus(7, 10);
 
 
 		//Sanitation Requests: //RequestID: 10 - 18
@@ -306,15 +296,15 @@ public class makeConnection {
 		DB.addSanitationRequest(new SanitationServiceObj(18, 23, 48, "IREST00403", "Trash Removal", "", "Low"));
 
 
-		DB.editRequests(11, 0, "canceled");
-		DB.editRequests(14, 0, "canceled");
-		DB.editRequests(15, 0, "complete");
-		DB.editRequests(16, 0, "canceled");
-		DB.editRequests(17, 0, "complete");
+		DB.updateToDoStatus(11, 10);
+		DB.updateToDoStatus(14, 0);
+		DB.updateToDoStatus(15, 10);
+		DB.updateToDoStatus(16, 0);
+		DB.updateToDoStatus(17, 10);
 
 
 		//Medicine Delivery Request //RequestID: 19 - 30
-		DB.addMedicineRequest(new MedicineDeliveryObj(19,20, 49, "BLABS00102", "Atorvastatin", 30, 20, "Once a day by mouth", "Bill Byrd"));
+		DB.addMedicineRequest(new MedicineDeliveryObj(19, 20, 49, "BLABS00102", "Atorvastatin", 30, 20, "Once a day by mouth", "Bill Byrd"));
 		DB.addMedicineRequest(new MedicineDeliveryObj(20, 20, 50, "BLABS00202", "Lisinopril", 90, 20, "Once a day by mouth", "Bill Byrd"));
 		DB.addMedicineRequest(new MedicineDeliveryObj(21, 21, 51, "IDEPT00103", "Levothyroxine", 90, 125, "Once a day my bouth", "Amelia Knight"));
 		DB.addMedicineRequest(new MedicineDeliveryObj(22, 24, 52, "BLABS00102", "Metformin", 30, 850, "Twice a day by mouth", "Taylor Ramos"));
@@ -328,11 +318,11 @@ public class makeConnection {
 		DB.addMedicineRequest(new MedicineDeliveryObj(30, 23, 60, "BLABS00102", "Metformin", 30, 5, "Twice a day with meals.", "Victoria Erickson"));
 
 
-		DB.editRequests(20, 0, "canceled");
-		DB.editRequests(24, 0, "canceled");
-		DB.editRequests(25, 0, "complete");
-		DB.editRequests(26, 0, "canceled");
-		DB.editRequests(27, 0, "complete");
+		DB.updateToDoStatus(20, 10);
+		DB.updateToDoStatus(24, 0);
+		DB.updateToDoStatus(25, 10);
+		DB.updateToDoStatus(26, 0);
+		DB.updateToDoStatus(27, 10);
 
 
 		//Security Requests: //RequestID: 31 - 38
@@ -346,24 +336,23 @@ public class makeConnection {
 		DB.addSecurityRequest(new SecurityServiceObj(38, 29, 68, "eWALK00701", "Medium", "Medium", null));
 
 
-		DB.editRequests(31, 0, "canceled");
-		DB.editRequests(34, 0, "canceled");
-		DB.editRequests(35, 0, "complete");
-		DB.editRequests(36, 0, "canceled");
-		DB.editRequests(37, 0, "complete");
+		DB.updateToDoStatus(31, 10);
+		DB.updateToDoStatus(34, 0);
+		DB.updateToDoStatus(35, 10);
+		DB.updateToDoStatus(36, 0);
+		DB.updateToDoStatus(37, 10);
 
 
 		//RequestID: 39 - 47
 		DB.addExternalPatientRequest(new ExternalPatientObj(39, 27, 70, "EEXIT00101", "High Severity", "Ambulance", "12334567", "High", "Low", "Low", "Patient dropped down into a state of unconsciousness randomly at the store. Patient is still unconscious and unresponsive but has a pulse. No friends or family around during the incident."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(40, 30, 71, "EEXIT00101", "High Severity", "Ambulance", "4093380", "Low", "High", "High","Patient coming in with cut on right hand. Needs stitches. Bleeding is stable."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(41, 22, 72, "FDEPT00501", "High Severity", "Helicopter", "92017693", "High", "High", "Low","Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(42, 20, 73, "FDEPT00501", "High Severity", "Helicopter", "93754789", "High", "High", "Low","Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(43, 24, 74, "EEXIT00101", "High Severity", "Ambulance", "417592",  "Low", "Low", "High","Smoke inhalation due to a fire. No burns but difficult time breathing."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(44, 28, 75, "FDEPT00501", "High Severity", "Helicopter", "44888936",  "High", "High", "Low","Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition"));
-		DB.addExternalPatientRequest(new ExternalPatientObj(45,24, 76, "EEXIT00101", "High Severity", "Ambulance", "33337861",  "High", "Low", "High","Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(46,27, 77, "EEXIT00101", "High Severity", "Ambulance", "40003829",  "Low", "High", "Low","Relocating a patient with lung cancer from Mt.Auburn Hospital."));
-		DB.addExternalPatientRequest(new ExternalPatientObj(47,24, 77, "FDEPT00501", "High Severity", "Plane", "38739983",  "Low", "Low", "High","Heart transplant organ in route"));
-
+		DB.addExternalPatientRequest(new ExternalPatientObj(40, 30, 71, "EEXIT00101", "High Severity", "Ambulance", "4093380", "Low", "High", "High", "Patient coming in with cut on right hand. Needs stitches. Bleeding is stable."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(41, 22, 72, "FDEPT00501", "High Severity", "Helicopter", "92017693", "High", "High", "Low", "Car crash on the highway. 7 year old child in the backseat with no seatbelt on in critical condition. Blood pressure is low and has major trauma to the head."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(42, 20, 73, "FDEPT00501", "High Severity", "Helicopter", "93754789", "High", "High", "Low", "Skier hit tree and lost consciousness. Has been unconscious for 30 minutes. Still has a pulse."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(43, 24, 74, "EEXIT00101", "High Severity", "Ambulance", "417592", "Low", "Low", "High", "Smoke inhalation due to a fire. No burns but difficult time breathing."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(44, 28, 75, "FDEPT00501", "High Severity", "Helicopter", "44888936", "High", "High", "Low", "Major car crash on highway. Middle aged woman ejected from the passenger's seat. Awake and unresponsive and in critical condition"));
+		DB.addExternalPatientRequest(new ExternalPatientObj(45, 24, 76, "EEXIT00101", "High Severity", "Ambulance", "33337861", "High", "Low", "High", "Patient passed out for 30 seconds. Is responsive and aware of their surroundings. Has no history of passing out."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(46, 27, 77, "EEXIT00101", "High Severity", "Ambulance", "40003829", "Low", "High", "Low", "Relocating a patient with lung cancer from Mt.Auburn Hospital."));
+		DB.addExternalPatientRequest(new ExternalPatientObj(47, 24, 77, "FDEPT00501", "High Severity", "Plane", "38739983", "Low", "Low", "High", "Heart transplant organ in route"));
 
 
 		//RELIGIOUS:
@@ -392,7 +381,6 @@ public class makeConnection {
 		DB.addSpecialUserType("pA@gmail.com", "I000009", "interpreter", "Pri", "Alan");
 
 
-
 		//NURSE:
 		//96 - 104
 		DB.addSpecialUserType("asmith123@gmail.com", "N000001", "nurse", "Andrew", "Smith");
@@ -406,16 +394,25 @@ public class makeConnection {
 		DB.addSpecialUserType("fwe@gmail.com", "N000009", "nurse", "Alan", "Alan");
 
 
+		DB.updateToDoStatus(40, 10);
+		DB.updateToDoStatus(42, 10);
+		DB.updateToDoStatus(44, 10);
+		DB.updateToDoStatus(45, 10);
+		DB.updateToDoStatus(47, 10);
 
-		DB.editRequests(40, 0, "complete");
-		DB.editRequests(42, 0, "complete");
-		DB.editRequests(44, 0, "complete");
-		DB.editRequests(45, 0, "complete");
-		DB.editRequests(47, 0, "complete");
-
-
-
-
+		//ToDo_app:
+		DB.addSpecialUserType("floralDude@mail.com", "WeGotThis", "floralPerson", "Darren", "Rossi");
+		//DB.updateToDo(DB.addCustomToDo(105, "Visit Smith's child and bring her flowers when off duty"), null, -1, -1, 1, "GLABS003L2", "2021-05-12", "12:15", null, "I think she would like roses? IDK, poor kid", null, null);
+		DB.addFloralRequest(new FloralObj(0, 13, 105, "ADEPT00101", "Adam", "Roses", 1, "None", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!"));
+		DB.addFloralRequest(new FloralObj(0, 14, 105, "ADEPT00102", "Abraham", "Tulips", 6, "Round", "Include arrangement", "Include stuffed Animal", "do not Include Chocolate", "Dear Abraham, hope these flowers help you feel better. The team really misses you and hope you will be ready to go by the championship"));
+		DB.addFloralRequest(new FloralObj(0, 15, 105, "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Get well soon"));
+		DB.addFloralRequest(new FloralObj(0, 16, 105, "ADEPT00301", "Nikki", "Assortment", 1, "None", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate", "Feel Better!"));
+		DB.addFloralRequest(new FloralObj(0, 17, 105, "ADEPT00101", "Monica", "Roses", 6, "Tall", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Love and miss you!!"));
+		DB.updateToDo(48, null, -1, 10, 3, null, "2021-05-12", "9:15", "9:40", null, null, null);
+		DB.updateToDo(49, null, -1, 10, 2, null, "2021-05-12", "10:30", "11:00", null, null, null);
+		DB.updateToDo(50, null, -1, -1, 1, null, "2021-05-12", "13:30", null, null, null, null);
+		DB.updateToDo(51, null, -1, -1, 1, null, "2021-05-12", "15:45", "16:15", null, null, null);
+		DB.updateToDo(52, null, -1, -1, 3, null, "2021-05-12", "21:15", "21:20", null, null, null);
 
 
 		//Special Accounts:

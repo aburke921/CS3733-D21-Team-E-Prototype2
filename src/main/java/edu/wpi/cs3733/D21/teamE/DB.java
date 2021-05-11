@@ -3,23 +3,13 @@ package edu.wpi.cs3733.D21.teamE;
 import edu.wpi.cs3733.D21.teamE.database.*;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.scheduler.Schedule;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.ExternalPatient;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.MedicineDelivery;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
-import edu.wpi.cs3733.D21.teamE.database.*;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
 import java.io.File;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,13 +25,14 @@ public class DB {
 		NodeDB.createNodeTable();
 		EdgeDB.createEdgeTable();
 		UserAccountDB.createUserAccountTable();
+		ToDoDB.createToDoTable();
+		appointmentDB.createAppointmentTable();
 		RequestsDB2.createRequestsTable();
 		RequestsDB2.createFloralRequestsTable();
 		RequestsDB2.createSanitationTable();
 		RequestsDB2.createExtTransportTable();
 		RequestsDB2.createMedDeliveryTable();
 		RequestsDB2.createSecurityServTable();
-		appointmentDB.createAppointmentTable();
 		RequestsDB2.createLanguageRequestTable();
 		RequestsDB2.createLaundryRequestTable();
 		RequestsDB2.createMaintenanceRequestTable();
@@ -53,12 +44,14 @@ public class DB {
 	}
 
 	/**
-	 * adds a request to the requests table in the databse
-	 * @param userID this is the userID of the person filling out the request
-	 * @param assigneeID this is the userID of the person who is assigned to this request
+	 * adds a request to the requests table in the database
+	 * @param userID      this is the userID of the person filling out the request
+	 * @param assigneeID  this is the userID of the person who is assigned to this request
 	 * @param requestType this is the type of request that is being created
 	 */
-	public static void addRequest(int userID, int assigneeID, String requestType) { RequestsDB2.addRequest(userID, assigneeID, requestType); }
+	public static void addRequest(int userID, int assigneeID, String requestType) {
+		RequestsDB2.addRequest(userID, assigneeID, requestType);
+	}
 
 	/**
 	 * Can change the assigneeID or the request status to any request
@@ -67,163 +60,212 @@ public class DB {
 	 * @param requestStatus is the status that you want to change it to
 	 * @return a 1 if one line changed successfully, and 0 or other numbers for failure
 	 */
-	public static int editRequests(int requestID, int assigneeID, String requestStatus) { return RequestsDB2.editRequests(requestID, assigneeID, requestStatus); }
+	public static int editRequests(int requestID, int assigneeID, String requestStatus) {
+		return RequestsDB2.editRequests(requestID, assigneeID, requestStatus);
+	}
 
 	/**
 	 * This adds a floral request to the database that the user is making
 	 * @param request this is all of the information needed, in a floral request object.
 	 */
-	public static void addFloralRequest(FloralObj request) { RequestsDB2.addFloralRequest(request); }
+	public static void addFloralRequest(FloralObj request) {
+		RequestsDB2.addFloralRequest(request);
+	}
 
 	/**
 	 * This edits a floral request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a floral request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editFloralRequest(FloralObj request) { return RequestsDB2.editFloralRequest(request); }
+	public static int editFloralRequest(FloralObj request) {
+		return RequestsDB2.editFloralRequest(request);
+	}
 
 	/**
 	 * adds a language request to the languageRequest table
 	 * @param request this is all of the information needed, in a language request object.
 	 */
-	public static void addLanguageRequest(LanguageInterpreterObj request) { RequestsDB2.addLanguageRequest(request); }
+	public static void addLanguageRequest(LanguageInterpreterObj request) {
+		RequestsDB2.addLanguageRequest(request);
+	}
 
 	/**
 	 * This edits a language request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a language request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editLanguageRequest(LanguageInterpreterObj request) { return RequestsDB2.editLanguageRequest(request); }
+	public static int editLanguageRequest(LanguageInterpreterObj request) {
+		return RequestsDB2.editLanguageRequest(request);
+	}
 
 	/**
 	 * adds a language request to the religiousRequest table
 	 * @param request this is all of the information needed, in a religious request object.
 	 */
-	public static void addReligiousRequest(ReligiousRequestObj request) { RequestsDB2.addReligiousRequest(request); }
+	public static void addReligiousRequest(ReligiousRequestObj request) {
+		RequestsDB2.addReligiousRequest(request);
+	}
 
 	/**
 	 * This edits a religious request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a religious request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editReligiousRequest(ReligiousRequestObj request) { return RequestsDB2.editReligiousRequest(request); }
+	public static int editReligiousRequest(ReligiousRequestObj request) {
+		return RequestsDB2.editReligiousRequest(request);
+	}
 
 	/**
 	 * This function needs to add a external patient form to the table for external patient forms
 	 * //@param form this is the form that we will create and send to the database
 	 */
-	public static void addExternalPatientRequest(ExternalPatientObj externalPatientObj) { RequestsDB2.addExternalPatientRequest(externalPatientObj); }
+	public static void addExternalPatientRequest(ExternalPatientObj externalPatientObj) {
+		RequestsDB2.addExternalPatientRequest(externalPatientObj);
+	}
 
 	/**
 	 * This edits a External Transport Services form that is already in the database
 	 * takes in an External Patient Object
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editExternalPatientRequest(ExternalPatientObj externalPatientObj) { return RequestsDB2.editExternalPatientRequest(externalPatientObj); }
+	public static int editExternalPatientRequest(ExternalPatientObj externalPatientObj) {
+		return RequestsDB2.editExternalPatientRequest(externalPatientObj);
+	}
 
 	/**
 	 * adds a laundry request to the laundryRequest table
 	 * @param request this is all of the information needed, in a religious request object.
 	 */
-	public static void addLaundryRequest(LaundryObj request) { RequestsDB2.addLaundryRequest(request); }
+	public static void addLaundryRequest(LaundryObj request) {
+		RequestsDB2.addLaundryRequest(request);
+	}
 
 	/**
 	 * This edits a laundry request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a laundry request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editLaundryRequest(LaundryObj request) { return RequestsDB2.editLaundryRequest(request); }
+	public static int editLaundryRequest(LaundryObj request) {
+		return RequestsDB2.editLaundryRequest(request);
+	}
 
 	/**
 	 * adds a maintenance request to the maintenanceRequest table
 	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
 	 */
-	public static void addMaintenanceRequest(MaintenanceObj maintenanceObj) { RequestsDB2.addMaintenanceRequest(maintenanceObj); }
+	public static void addMaintenanceRequest(MaintenanceObj maintenanceObj) {
+		RequestsDB2.addMaintenanceRequest(maintenanceObj);
+	}
 
 	/**
 	 * This edits a maintenance request which is already in the db
 	 * @param maintenanceObj this is all of the information needed, in a maintenance request object.
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editMaintenanceRequest(MaintenanceObj maintenanceObj) { return RequestsDB2.editMaintenanceRequest(maintenanceObj); }
+	public static int editMaintenanceRequest(MaintenanceObj maintenanceObj) {
+		return RequestsDB2.editMaintenanceRequest(maintenanceObj);
+	}
 
 	/**
 	 * adds a security request to the securityServ table
 	 * @param request this is all of the information needed, in a security request object.
 	 */
-	public static void addSecurityRequest(SecurityServiceObj request) { RequestsDB2.addSecurityRequest(request); }
+	public static void addSecurityRequest(SecurityServiceObj request) {
+		RequestsDB2.addSecurityRequest(request);
+	}
 
 	/**
 	 * This edits a laundry request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a laundry request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editSecurityRequest(SecurityServiceObj request) { return RequestsDB2.editSecurityRequest(request); }
+	public static int editSecurityRequest(SecurityServiceObj request) {
+		return RequestsDB2.editSecurityRequest(request);
+	}
 
 	/**
 	 * adds a sanitation request to the sanitationRequest table
 	 * @param request this is all of the information needed, in a sanitation request object.
 	 */
-	public static void addSanitationRequest(SanitationServiceObj request) { RequestsDB2.addSanitationRequest(request); }
+	public static void addSanitationRequest(SanitationServiceObj request) {
+		RequestsDB2.addSanitationRequest(request);
+	}
 
 	/**
 	 * This edits a sanitation request form that is already in the database
 	 * @param request this the information that the user wants to change stored in a sanitation request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editSanitationRequest(SanitationServiceObj request) { return RequestsDB2.editSanitationRequest(request); }
+	public static int editSanitationRequest(SanitationServiceObj request) {
+		return RequestsDB2.editSanitationRequest(request);
+	}
 
 	/**
 	 * This adds a medicine request form to the table for medicine request forms
 	 * @param medicineDeliveryObj object holding medicine req. fields
 	 */
-	public static void addMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) { RequestsDB2.addMedicineRequest(medicineDeliveryObj); }
+	public static void addMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
+		RequestsDB2.addMedicineRequest(medicineDeliveryObj);
+	}
 
 	/**
 	 * edits medicine request which is already in DB
 	 * @param medicineDeliveryObj object holding medicine req. fields
-	 * @return
 	 */
-	public static int editMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) { return RequestsDB2.editMedicineRequest(medicineDeliveryObj); }
+	public static int editMedicineRequest(MedicineDeliveryObj medicineDeliveryObj) {
+		return RequestsDB2.editMedicineRequest(medicineDeliveryObj);
+	}
 
 	/**
 	 * adds a food delivery request to the foodDelivery table
 	 * @param request this is all of the information needed, in a food delivery request object.
 	 */
-	public static void addFoodDeliveryRequest(FoodDeliveryObj request) { RequestsDB2.addFoodDeliveryRequest(request); }
+	public static void addFoodDeliveryRequest(FoodDeliveryObj request) {
+		RequestsDB2.addFoodDeliveryRequest(request);
+	}
 
 	/**
 	 * edits medicine request which is already in DB
 	 * @param request this the information that the user wants to change stored in a security request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editFoodDeliveryRequest(FoodDeliveryObj request) { return RequestsDB2.editFoodDeliveryRequest(request); }
+	public static int editFoodDeliveryRequest(FoodDeliveryObj request) {
+		return RequestsDB2.editFoodDeliveryRequest(request);
+	}
 
 	/**
 	 * adds a menuItem to the aubonPainMenu database table
 	 * @param menuItem this is all of the information needed, in a security request object.
 	 */
-	public static void addAubonPainMenuItem(AubonPainItem menuItem) { RequestsDB2.addAubonPainMenuItem(menuItem); }
+	public static void addAubonPainMenuItem(AubonPainItem menuItem) {
+		RequestsDB2.addAubonPainMenuItem(menuItem);
+	}
 
 	/**
 	 * This parses through the Abon Pain website at BH and adds each item, its image, calories, price, and
 	 * description to the aubonPainMenu table
 	 * The link to the website being read is: https://order.aubonpain.com/menu/brigham-womens-hospital
 	 */
-	public static void populateAbonPainTable() { RequestsDB2.populateAbonPainTable(); }
+	public static void populateAbonPainTable() {
+		RequestsDB2.populateAbonPainTable();
+	}
 
 	/**
 	 * adds a internal patient transport to the internalPatientRequest database table
 	 * @param request object holding internal patient transport req. fields
 	 */
-	public static void addInternalPatientRequest(InternalPatientObj request) { RequestsDB2.addInternalPatientRequest(request); }
+	public static void addInternalPatientRequest(InternalPatientObj request) {
+		RequestsDB2.addInternalPatientRequest(request);
+	}
 
 	/**
 	 * edits internal patient transport delivery request which is already in DB
 	 * @param request this the information that the user wants to change stored in a food delivery request object. (If int = 0 --> do not change, If String = null --> do not change)
 	 * @return 1 if the update was successful, 0 if it failed
 	 */
-	public static int editInternalPatientRequest(InternalPatientObj request) { return RequestsDB2.editInternalPatientRequest(request); }
+	public static int editInternalPatientRequest(InternalPatientObj request) {
+		return RequestsDB2.editInternalPatientRequest(request);
+	}
 
 	/**
 	 * This adds a entry request form to the table
@@ -236,20 +278,6 @@ public class DB {
 	public static int editEntryRequest(CovidSurveyObj covidSurveyObj) {
 		return RequestsDB2.editEntryRequest(covidSurveyObj);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	public static void createNodeTable() {
@@ -526,66 +554,10 @@ public class DB {
 	// Creating Tables:
 
 
-
-
-
 	// Adding To Tables:
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		// Querying Tables:
+	// Querying Tables:
 
 	/**
 	 * Gets a list of all the "assigneeIDs", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID
@@ -645,10 +617,6 @@ public class DB {
 	}
 
 
-
-
-
-
 	// UserAccountDB:
 
 
@@ -658,7 +626,7 @@ public class DB {
 	 * @param password  this is a password that the user will use to log into the account
 	 * @param firstName this is the user's first name that is associated with the account
 	 * @param lastName  this is the user's last name that is associated with the account
-	 * // TODO: 4/27/21 Return success or fail status?
+	 *                  // TODO: 4/27/21 Return success or fail status?
 	 */
 	public static void addUserAccount(String email, String password, String firstName, String lastName) {
 		UserAccountDB.addUserAccount(email, password, firstName, lastName);
@@ -687,7 +655,7 @@ public class DB {
 	 * @param userType  this is the type of account that the individual is being assigned to
 	 * @param firstName this is the user's first name that is associated with the account
 	 * @param lastName  this is the user's last name that is associated with the account
-	 * // TODO: 4/27/21 JavaDoc return explanation, also, consider bool return?
+	 *                  // TODO: 4/27/21 JavaDoc return explanation, also, consider bool return?
 	 */
 	public static int editUserAccount(int userID, String email, String password, String userType, String firstName, String lastName) {
 		return UserAccountDB.editUserAccount(userID, email, password, userType, firstName, lastName);
@@ -725,7 +693,7 @@ public class DB {
 	/**
 	 * Submits a Covid Survey to the server
 	 * @param covidSurveyObj is the result int that we are submitting
-	 * @param userID        is the user's ID that we are submitting
+	 * @param userID         is the user's ID that we are submitting
 	 * @return true if successfully changed one row, false otherwise
 	 */
 	public static boolean submitCovidSurvey(CovidSurveyObj covidSurveyObj, int userID) {
@@ -748,6 +716,7 @@ public class DB {
 	public static String getEmail(int userID) {
 		return RequestsDB.getEmail(userID);
 	}
+
 	/**
 	 * Checks if a user have filled their COVID survey today
 	 * @param userID is the user's ID that we are checking
@@ -760,6 +729,7 @@ public class DB {
 	public static String getUserName(int userID) {
 		return UserAccountDB.getUserName(userID);
 	}
+
 	/**
 	 * Submits a Parking Slot to the server
 	 * @param nodeID is the result nodeID that we are submitting
@@ -816,5 +786,64 @@ public class DB {
 	}
 
 
+	// ToDoDB:
 
+
+	/**
+	 * adds a ToDo_row to the ToDo_table in the database
+	 * @param userID this is the userID of the person associated with the ToDo_item
+	 * @param title  this is the todo_name of the custom todo_item
+	 * @return the ToDoID, 0 if failed
+	 */
+	public static int addCustomToDo(int userID, String title) {
+		return ToDoDB.addCustomToDo(userID, title);
+	}
+
+
+	/**
+	 * Updates an entered ToDo_item with the following fields, input null to ignore String attributes and -1 to ignore int attributes
+	 * @param ToDoID           mandatory
+	 * @param userID           mandatory, changes the owner of the item to this userID, use App.userID if no change
+	 * @param status           default 1 (normal), 10/0 (complete/deleted)
+	 * @param priority         default 0 (none), 1/2/3 (low/mid/high)
+	 * @param nodeID           has to exist in the node table
+	 * @param scheduledDate    format: 2021-05-08
+	 * @param startTime        format: 23:17
+	 * @param endTime          format: 23:17
+	 * @param detail           maximum 1023 characters
+	 * @param notificationDate format: 2021-05-08 eg. remind me 2 days before this (send email)
+	 * @param notificationTime format: 23:17 eg. remind me 30 mins before this (send email)
+	 * @return true if one line changed successfully, false otherwise
+	 */
+	public static boolean updateToDo(int ToDoID, String title, int userID, int status, int priority, String nodeID, String scheduledDate, String startTime, String endTime, String detail, String notificationDate, String notificationTime) {
+		return ToDoDB.updateToDo(ToDoID, title, userID, status, priority, nodeID, scheduledDate, startTime, endTime, detail, notificationDate, notificationTime);
+	}
+
+	/**
+	 * Changes a ToDo_item's status and it's associated request's status if it is a request
+	 * @param status default 1 (normal), 10/0 (complete/deleted)
+	 * @return whether the update succeed
+	 */
+	public static boolean updateToDoStatus(int ToDoID, int status) {
+		return ToDoDB.updateToDo(ToDoID, null, -1, status, -1, null, null, null, null, null, null, null);
+	}
+
+
+	/**
+	 * Checks which type is the ToDoID from
+	 * @return 0 for pure, 1 for requests, 2 for appointment, -1 for error
+	 */
+	public static int getToDoType(int ToDoID) {
+		return ToDoDB.getToDoType(ToDoID);
+	}
+
+
+	/**
+	 * @param date   enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
+	 * @param status enter -1 for get all regardless of status, or enter needed status number
+	 * @return a Schedule item that contains a List of ToDo_items
+	 */
+	public static Schedule getSchedule(int userID, int status, String date) {
+		return ToDoDB.getSchedule(userID, status, date);
+	}
 }

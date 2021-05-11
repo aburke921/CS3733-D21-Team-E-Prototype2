@@ -47,6 +47,9 @@ public class Default {
     @FXML // fx:id="stackPane"
     private StackPane stackPane; //main stack pane used for JFXDialog popups
 
+    @FXML // fx:id="pathFinderButton"
+    private JFXButton pathFinderButton;
+
     @FXML // fx:id="mapEditorButton"
     private JFXButton mapEditorButton;
 
@@ -61,6 +64,9 @@ public class Default {
 
     @FXML // fx:id="checkInStatusButton"
     private JFXButton checkInStatusButton;
+
+    @FXML // fx:id="todoButton"
+    private JFXButton todoButton;
 
     @FXML // fx:id="algo"
     private JFXComboBox algo;
@@ -171,6 +177,7 @@ public class Default {
             case "n":
                 Node selected = DB.getNodeInfo(code);
                 App.setStartNode(selected);
+                pathFinderButton.fire();
                 break;
             case "p":
                 if (App.userID == 0) {
@@ -200,7 +207,6 @@ public class Default {
 
     @FXML
     private void toParking(ActionEvent e) {
-        ArrayList<Node> indexer = DB.getAllNodes(); //todo why is this here? Does nothing?
         String parked = DB.whereDidIPark(App.userID);
         System.out.println(DB.whereDidIPark(App.userID));
         App.setEndNode(DB.getNodeInfo(parked));
@@ -217,16 +223,6 @@ public class Default {
         defaultState.switchScene(e);
     }
 
-//    @FXML
-//    private void toAppointmentPage(ActionEvent e) {
-//        try {
-//            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Appointment.fxml"));
-//            App.setDraggableAndChangeScene(root);
-//        } catch (IOException ex) {
-//            System.out.println("Hi");
-//            ex.printStackTrace();
-//        }
-//    }
 
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {
@@ -297,6 +293,10 @@ public class Default {
             scheduleAppointmentButton.setVisible(false);
         }
 
+        if (App.userID == 0 || userType.equals("visitor") || userType.equals("patient")) {
+            todoButton.setVisible(false);
+        }
+
         if (App.userID == 0 || DB.whereDidIPark(App.userID) == null){
             carParkedText.setVisible(false);
             LinkToParking.setVisible(false);
@@ -332,4 +332,6 @@ public class Default {
         }
     }
 }
+    
+
 

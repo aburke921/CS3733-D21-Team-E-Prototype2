@@ -149,7 +149,15 @@ public class Time implements Comparable<Time>{
 
     @Override
     public int compareTo(Time t) {
-        return Integer.compare(getTotalSeconds(), t.getTotalSeconds());
+        if(isEmpty && t.isEmpty){
+            return 0;
+        } else if(isEmpty){
+            return 1;
+        } else if(t.isEmpty){
+            return -1;
+        } else {
+            return Integer.compare(getTotalSeconds(), t.getTotalSeconds());
+        }
     }
 
     public LocalTime toLocalTime(){

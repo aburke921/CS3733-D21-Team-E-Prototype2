@@ -28,6 +28,37 @@
                         </FlowPane>
                     </children>
                 </AnchorPane>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                      <center>
+                          <VBox BorderPane.alignment="CENTER">
+                              <children>
+                                  <JFXTreeTableView fx:id="covidSurveyTable" prefHeight="296.0" prefWidth="591.0">
+                                      <VBox.margin>
+                                          <Insets left="20.0" right="20.0" top="20.0" />
+                                      </VBox.margin>
+                                  </JFXTreeTableView>
+                                  <HBox>
+                                      <children>
+                                          <JFXButton fx:id="markAsRiskButton" onAction="#markAsRisk" styleClass="submit-button" text="Deny" />
+                                          <JFXButton fx:id="refreshButton" onAction="#refresh" styleClass="submit-button" text="Refresh">
+                                              <HBox.margin>
+                                                  <Insets left="30.0" />
+                                              </HBox.margin>
+                                          </JFXButton>
+                                          <JFXButton fx:id="markAsSafeButton" onAction="#markAsSafe" styleClass="submit-button" text="Check-In">
+                                              <HBox.margin>
+                                                  <Insets left="30.0" />
+                                              </HBox.margin>
+                                          </JFXButton>
+                                      </children>
+                                      <VBox.margin>
+                                          <Insets left="20.0" top="20.0" />
+                                      </VBox.margin>
+                                  </HBox>
+                              </children>
+                          </VBox>
+                      </center>
+                  </BorderPane>
                 <AnchorPane>
                     <children>
                         <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="600.0">
@@ -48,37 +79,6 @@
                         </GridPane>
                     </children>
                 </AnchorPane>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-                      <center>
-                          <VBox BorderPane.alignment="CENTER">
-                              <children>
-                                  <JFXTreeTableView fx:id="covidSurveyTable" prefHeight="296.0" prefWidth="591.0">
-                                      <VBox.margin>
-                                          <Insets left="20.0" right="20.0" top="20.0" />
-                                      </VBox.margin>
-                                  </JFXTreeTableView>
-                                  <HBox>
-                                      <children>
-                                          <JFXButton fx:id="markAsRiskButton" onAction="#markAsRisk" styleClass="submit-button" text="Mark as Risk" />
-                                          <JFXButton fx:id="refreshButton" onAction="#refresh" styleClass="submit-button" text="Refresh">
-                                              <HBox.margin>
-                                                  <Insets left="30.0" />
-                                              </HBox.margin>
-                                          </JFXButton>
-                                          <JFXButton fx:id="markAsSafeButton" onAction="#markAsSafe" styleClass="submit-button" text="Mark As Safe">
-                                              <HBox.margin>
-                                                  <Insets left="30.0" />
-                                              </HBox.margin>
-                                          </JFXButton>
-                                      </children>
-                                      <VBox.margin>
-                                          <Insets left="20.0" top="20.0" />
-                                      </VBox.margin>
-                                  </HBox>
-                              </children>
-                          </VBox>
-                      </center>
-                  </BorderPane>
             </children>
         </StackPane>
     </children>

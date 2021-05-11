@@ -122,7 +122,7 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
 /*Toggle buttons*/
 JFXToggleButton  {
     -jfx-toggle-color: -fx--primary;
-    -jfx-untoggle-color: -fx--primary;
+    -jfx-untoggle-color: WHITE;
     -jfx-toggle-line-color: -fx--primary-light;
     -jfx-untoggle-line-color: lightgrey;
     -jfx-size: 10.0;
@@ -295,6 +295,26 @@ JFXButton:hover FontAwesomeIconView {
 
 .transit-button{
     -jfx-button-type: RAISED;
+    -fx-text-fill: WHITE;
+    -jfx-rippler-fill: -fx--primary-dark;
+}
+
+.transit-button-selected{
+    -jfx-button-type: RAISED;
+    -fx-text-fill: WHITE;
+    -fx-background-color: -fx--primary;
+    -jfx-rippler-fill: -fx--primary-dark;
+}
+
+.transit-button-unselected{
+    -jfx-button-type: RAISED;
+    -fx-text-fill: WHITE;
+    -fx-background-color: -fx--primary-light;
+    -jfx-rippler-fill: -fx--primary-dark;
+}
+
+.transit-button-unselected:hover {
+    -fx-background-color: -fx--primary-dark;
 }
 
 .floor-change Label{
@@ -310,41 +330,36 @@ JFXButton:hover FontAwesomeIconView {
 
 /* ListView CSS from: https://blog.ngopal.com.np/2012/07/11/customize-scrollbar-via-css/*/
 
-scrollables.directions .jfx-rippler{
+.directions .jfx-rippler{
     -jfx-rippler-fill: rgba(255,255,255,0);
 }
 
-scrollables.directions{
+.directions{
     -fx-border-color: rgba(255,255,255,0);
 }
 
 /* The main scrollbar CSS class of ListView */
-.scrollables .scroll-bar:horizontal {
-    -fx-pref-width: 12;
-    -fx-background-color:transparent;
-}
-
-.scrollables  .scroll-bar:vertical{
+.scroll-bar:horizontal , .scroll-bar:vertical{
     -fx-pref-width: 12;
     -fx-background-color:transparent;
 
 }
 
 /* The increment and decrement button CSS class of scrollbar */
-.scrollables .increment-button ,.scrollables .decrement-button {
+.increment-button , .decrement-button {
     -fx-background-color:transparent;
     -fx-border-color:derive(gray,80%);
 }
 
 /* The main scrollbar **track** CSS class  */
-.scrollables .scroll-bar:vertical .track{
+.scroll-bar:vertical .track , .scroll-bar:horizontal .track{
     -fx-background-color: transparent;
     -fx-border-color:derive(gray,80%);
     -fx-background-radius: 0em;
 }
 
 /* The main scrollbar **thumb** CSS class which we drag every time (movable) */
-.scrollables .scroll-bar:vertical .thumb {
+.scroll-bar:vertical .thumb , .scroll-bar:horizontal .thumb {
     -fx-background-color: -fx--primary;
     -fx-background-insets: 2, 0, 0;
     -fx-background-radius: 2em;
@@ -378,4 +393,43 @@ scrollables.directions{
 .custom-jfx-check-box {
     -jfx-checked-color: -fx--primary;
     -jfx-unchecked-color: BLACK;
+}
+
+
+/* Styling the animated thumb */
+.slider > .animated-thumb {
+    -fx-background-color: TRANSPARENT;
+}
+
+/* Styling the slider value text inside animated thumb */
+.slider .slider-value {
+    -fx-fill: TRANSPARENT;
+    -fx-stroke: TRANSPARENT;
+}
+
+.directory {
+    -fx-background-color: -fx--primary;
+}
+
+.directory:hover {
+    -fx-background-color: -fx--primary-dark;
+}
+
+.directorySelected {
+    -fx-background-color: -fx--primary-dark;
+}
+
+.directorySelected:hover {
+    -fx-background-color: -fx--primary;
+}
+
+/*JFX Dialog styles*/
+.dialog-accept {
+    -fx-text-fill: #03A9F4;
+    -fx-font-weight: BOLD;
+    -fx-padding: 0.7em 0.8em;
+}
+
+.jfx-layout-heading .label {
+    -fx-font-size: 20.0px;
 }

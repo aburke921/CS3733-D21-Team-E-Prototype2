@@ -5,10 +5,7 @@ import com.jfoenix.controls.JFXTreeTableView;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.states.DefaultState;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ServiceRequestForm;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,11 +13,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CovidSurveyStatus {
+public class CheckInStatus {
 
     @FXML
     private JFXTreeTableView<CovidSurveyObj> covidSurveyTable;
@@ -36,6 +34,9 @@ public class CovidSurveyStatus {
 
     @FXML
     private JFXButton backButton;
+
+    @FXML
+    private AnchorPane appBarAnchorPane;
 
     @FXML
     private void markAsSafe() {
@@ -165,8 +166,8 @@ public class CovidSurveyStatus {
 
         //Setting up sub-root nodes
         TreeItem<CovidSurveyObj> unChecked = new TreeItem<>(new CovidSurveyObj("To Be Reviewed"));
-        TreeItem<CovidSurveyObj> markedAsRisk = new TreeItem<>(new CovidSurveyObj("Marked as Risk"));
-        TreeItem<CovidSurveyObj> markedAsSafe = new TreeItem<>(new CovidSurveyObj("Marked as Safe"));
+        TreeItem<CovidSurveyObj> markedAsRisk = new TreeItem<>(new CovidSurveyObj("Denied"));
+        TreeItem<CovidSurveyObj> markedAsSafe = new TreeItem<>(new CovidSurveyObj("Checked-In"));
 
         //Adding sub-roots to nodes
         rootNode.getChildren().addAll(unChecked,markedAsRisk,markedAsSafe);
@@ -179,6 +180,20 @@ public class CovidSurveyStatus {
 
     @FXML
     void initialize() {
+        //init appBar
+        javafx.scene.Node appBarComponent = null;
+        try {
+            App.setShowHelp(false);
+            App.setShowLogin(true);
+            App.setPageTitle("Check-In Management");
+            App.setHelpText("");
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         prepareTable(covidSurveyTable);
     }
 

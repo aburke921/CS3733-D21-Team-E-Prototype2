@@ -26,10 +26,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -467,15 +464,28 @@ public class ScheduleMap {
                     g.getChildren().add(circle);
                 }
 
-
-
                 g.setOnMouseEntered(e -> {
+                    double X = e.getX();
+                    System.out.println(X);
+                    int xInt = (int) X;
+                    double Y = e.getY();
+                    int yInt = (int) Y;
+                    ObservableList<String> observableNodeInfo = FXCollections.observableArrayList();
+                    for (int i = 0; i < locationArray.size(); i++) {
+                            double nodeX = locationArray.get(i).getX() / scale;
+                            int nodeXInt = (int) nodeX;
+                            double nodeY = locationArray.get(i).getY() / scale;
+                            int nodeYInt = (int) nodeY;
+                            //if node coordinates match click coordinates +- 1, autofill fields with node info
+                            if (Math.abs(nodeXInt - xInt) <= 5 && Math.abs(nodeYInt - yInt) <= 5) {
+                                observableNodeInfo.add(locationArray.get(i).get("id"));
+                            }
+                        }
+
                     JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
                     JFXListView listView = new JFXListView();
-                    ArrayList<String> nodeInfo = new ArrayList<String>();
-                    ObservableList<String> observableNodeInfo = FXCollections.observableArrayList();
-                    nodeInfo.addAll(observableNodeInfo);
-                    jfxDialogLayout.setBody(new Text("Hi!"));
+                    listView.setItems(observableNodeInfo);
+                    jfxDialogLayout.setBody(listView);
                     JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
                     dialog.show();
                 });

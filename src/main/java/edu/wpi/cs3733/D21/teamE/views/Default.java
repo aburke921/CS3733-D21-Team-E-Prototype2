@@ -174,6 +174,7 @@ public class Default {
             case "n":
                 Node selected = DB.getNodeInfo(code);
                 App.setStartNode(selected);
+                toPathFinder(new ActionEvent());
                 break;
             case "p":
                 if (App.userID == 0) {
@@ -203,7 +204,6 @@ public class Default {
 
     @FXML
     private void toParking(ActionEvent e) {
-        ArrayList<Node> indexer = DB.getAllNodes(); //todo why is this here? Does nothing?
         String parked = DB.whereDidIPark(App.userID);
         System.out.println(DB.whereDidIPark(App.userID));
         App.setEndNode(DB.getNodeInfo(parked));

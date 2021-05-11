@@ -236,6 +236,15 @@ public class ScheduleList {
     }
 
     @FXML
+    private void markDelete(ActionEvent event) {
+        if(treeTableView.getSelectionModel().getSelectedItem() != null) {
+            ToDo todo = treeTableView.getSelectionModel().getSelectedItem().getValue();
+            DB.updateToDo(todo.getTodoID(), null, -1, 0, -1, null, null, null, null, null, null, null);
+        }
+        prepareToDoTable(treeTableView, datePicker.getValue().toString());
+    }
+
+    @FXML
     private void setDateLabel(Date date) {
         int monthInt = date.getMonth();
         String month = "wrong";

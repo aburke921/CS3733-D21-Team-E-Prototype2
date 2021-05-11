@@ -200,8 +200,8 @@ public class AppBarComponent {
     @FXML
     void clientToggle(ActionEvent event){
         if (clientToggle.isSelected()) {
-            String message = "  - To switch to an embedded driven database connection, please restart the application! \n   - If this was a mistake, click the \"Embedded Driven Database\" toggle to continue using the a client driven database in the future";
-            App.databaseChangePopup("Switch to Embedded Driven Database", message, App.getStackPane());
+            String message = "  - To switch to an Client Driven database connection, please restart the application! \n   - If this was a mistake, click the \"Embedded Driven Database\" toggle to continue using the a client driven database in the future";
+            App.databaseChangePopup("Switch to Client Driven Database", message, App.getStackPane());
             App.setNextDriverURL("jdbc:derby://localhost:1527/bw;create=true");
         }
         else{
@@ -211,8 +211,8 @@ public class AppBarComponent {
     @FXML
     void embeddedToggle(ActionEvent event) {
         if (embeddedToggle.isSelected()) {
-            String message = "  - To switch to a client driven database connection, please restart the application! \n  - If this was a mistake, click the \"Client Driven Database\" toggle to continue using the a client driven database int the future";
-            App.databaseChangePopup("Switch to Client Driven Database", message, App.getStackPane());
+            String message = "  - To switch to an Embedded Driven database connection, please restart the application! \n  - If this was a mistake, click the \"Client Driven Database\" toggle to continue using the a client driven database int the future";
+            App.databaseChangePopup("Switch to Embedded Driven Database", message, App.getStackPane());
             App.setNextDriverURL("jdbc:derby:BWDB;create=true");
         }
         else{

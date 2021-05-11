@@ -695,7 +695,7 @@ public class RequestsDB2 {
 //		addRequest(userID, assigneeID, "laundryRequest");
 		addRequest(request.getUserID(), request.getAssigneeID(), "laundryRequest");
 
-		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Max(requestID) From requests), ?, ?, ?, ?)";
+		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertLaundryReq)) {
 //			prepState.setString(1, roomID);
@@ -708,6 +708,7 @@ public class RequestsDB2 {
 			prepState.setString(4, request.getDescription());
 
 			prepState.execute();
+			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Wash Load: " + request.getWashLoadAmount() + "\nDry Load: " + request.getDryLoadAmount() + "\nDescription: " + request.getDescription(), null, null);
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into laundryRequest inside function addLanguageRequest()");

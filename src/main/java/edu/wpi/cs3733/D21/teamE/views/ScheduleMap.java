@@ -747,7 +747,16 @@ public class ScheduleMap {
                                 if(scheduleOngoing.get(j).getStatus() == 1) {
                                     observableNodeInfo.add("Status: Incomplete");
                                 }
-                                observableNodeInfo.add("Priority: " + Integer.toString(scheduleOngoing.get(j).getPriority()));
+                                switch (scheduleOngoing.get(j).getPriority()) {
+                                    case 1:
+                                        observableNodeInfo.add("Low Priority");
+                                    case 2:
+                                        observableNodeInfo.add("Medium Priority");
+                                    case 3:
+                                        observableNodeInfo.add("High Priority");
+                                    default:
+                                        break;
+                                }
                             }
                         }
                     }

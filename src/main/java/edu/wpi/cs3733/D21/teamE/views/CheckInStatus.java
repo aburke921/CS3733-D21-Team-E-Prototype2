@@ -166,8 +166,8 @@ public class CheckInStatus {
 
         //Setting up sub-root nodes
         TreeItem<CovidSurveyObj> unChecked = new TreeItem<>(new CovidSurveyObj("To Be Reviewed"));
-        TreeItem<CovidSurveyObj> markedAsRisk = new TreeItem<>(new CovidSurveyObj("Marked as Risk"));
-        TreeItem<CovidSurveyObj> markedAsSafe = new TreeItem<>(new CovidSurveyObj("Marked as Safe"));
+        TreeItem<CovidSurveyObj> markedAsRisk = new TreeItem<>(new CovidSurveyObj("Denied"));
+        TreeItem<CovidSurveyObj> markedAsSafe = new TreeItem<>(new CovidSurveyObj("Checked-In"));
 
         //Adding sub-roots to nodes
         rootNode.getChildren().addAll(unChecked,markedAsRisk,markedAsSafe);

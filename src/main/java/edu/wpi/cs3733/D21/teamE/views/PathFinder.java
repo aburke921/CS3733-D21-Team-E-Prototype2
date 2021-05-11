@@ -1047,6 +1047,11 @@ public class PathFinder {
 
         System.out.println("Begin PathFinder Page Init");
 
+        if(App.guestGoingToPathfinder) {
+            App.newJFXDialogPopUp("","Okay","Pathfinding while not signed in is for remote view purpose only", stackPane);
+            App.guestGoingToPathfinder = false;
+        }
+
 
         //init appBar
         javafx.scene.Node appBarComponent;

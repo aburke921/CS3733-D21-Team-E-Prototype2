@@ -177,6 +177,7 @@ public class ScheduleMap {
 
         if (startNode != null) { // if not null, there is a preset start
             selectedStartNodeID = startNode.get("id");
+            currentFloor = startNode.get("floor");
         }
 
         if (endNode != null) { // if not null, there is a preset end
@@ -210,8 +211,20 @@ public class ScheduleMap {
         //Call the path search function
         Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
 
+        /*
+        for(int i = 0; i < scheduleOngoing.getLocations().size(); i++) {
+            if(scheduleOngoing.get(i).getStatus() == 0) {
+                scheduleOngoing.
+            }
+        }
+
+         */
+
         List<Node> locations = scheduleOngoing.getLocations();
         locationArray = new ArrayList<Node>(locations);
+        Node node = DB.getNodeInfo("FEXIT00201");
+        locationArray.add(0, node);
+        locations.add(0, node);
 
         Path foundPath = search.search(locations);
 
@@ -415,54 +428,6 @@ public class ScheduleMap {
     }
 
 
-    /*
-    private void zoomToPath(double xMin, double xMax, double yMin, double yMax) {
-        double fullScaleX = 5000 * scrollPane.getWidth() / primaryStage.getWidth(); // max number of viewable pixels
-        double fullScaleY = 3400 * scrollPane.getHeight() / primaryStage.getHeight();
-
-        double xDist = xMax - xMin; // Distance between the points (sets zoom)
-        double yDist = yMax - yMin;
-
-        double fullStage = Math.max((xDist / fullScaleX), (yDist / fullScaleY)) + 0.175;
-        double stageAmount = constrain(0.2, 1, fullStage); // Percentage of stage visible
-        double zoomAmount = 1 / stageAmount;
-
-        zoomSlider.setValue(zoomAmount);
-
-        double xCenter = xMax - xDist / 2; // Center of points, sets position
-        double yCenter = yMax - yDist / 2;
-
-        double centerX = fullScaleX * stageAmount / 2; // Center of viewport
-        double centerY = fullScaleY * stageAmount / 2;
-
-        double xOffset = 5000 - fullScaleX * stageAmount; //how many pixels can the map be shifted by
-        double yOffset = 3400 - fullScaleY * stageAmount;
-
-        double x = (xCenter - centerX) / xOffset;
-        double y = (yCenter - centerY) / yOffset;
-
-        scrollPane.setHvalue(x);
-        scrollPane.setVvalue(y);
-    }
-
-    /**
-     * Constrains a value to within a minimum value and maximum value
-     * @param min Minimum value
-     * @param max Maximum value
-     * @param val The value
-     * @return The constrained value
-
-    private double constrain(double min, double max, double val) {
-        if (val > max) {
-            return max;
-        } else if (val < min) {
-            return min;
-        } else {
-            return val;
-        }
-    }
-
-     */
 
 
     public void drawMap(Path fullPath, String floorNum) {
@@ -739,10 +704,21 @@ public class ScheduleMap {
                 double Y = e.getY();
                 int yInt = (int) Y;
                 for (int i = 0; i < locationArray.size(); i++) {
+                    System.out.println(locationArray.get(i).get("longName"));
                     double nodeX = locationArray.get(i).getX() / scale;
                     int nodeXInt = (int) nodeX;
                     double nodeY = locationArray.get(i).getY() / scale;
                     int nodeYInt = (int) nodeY;
+                    /*
+                    double firstNodeX = locationArray.get(0).getX() / scale;
+                    int firstNodeXInt = (int) firstNodeX;
+                    double firstNodeY = locationArray.get(0).getY() / scale;
+                    int firstNodeYInt = (int) firstNodeY;
+                    if (Math.abs(firstNodeXInt - xInt) <= 7 && Math.abs(firstNodeYInt - yInt) <= 7) {
+                        stickyNotesStage.hide();
+                    }
+
+                     */
                     //if node coordinates match click coordinates +- 1, autofill fields with node info
                     if (Math.abs(nodeXInt - xInt) <= 7 && Math.abs(nodeYInt - yInt) <= 7) {
                         for (int j = 0; j < scheduleOngoing.getLocations().size(); j++) {
@@ -750,7 +726,7 @@ public class ScheduleMap {
                             int schedXInt = (int) schedX;
                             double schedY = scheduleOngoing.getLocations().get(j).getY() / scale;
                             int schedYInt = (int) schedY;
-                            if (Math.abs(schedXInt - xInt) <= 7 && Math.abs(schedXInt - xInt) <= 7) {
+                            if (Math.abs(schedXInt - xInt) <= 7 && Math.abs(schedYInt - yInt) <= 7) {
                                 observableNodeInfo.add("Title: " + scheduleOngoing.get(j).getTitle());
                                 observableNodeInfo.add("Location: " + scheduleOngoing.get(j).getLocationString());
                                 observableNodeInfo.add("Time: " + scheduleOngoing.get(j).getStartTime().toString());

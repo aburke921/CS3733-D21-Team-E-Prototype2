@@ -75,16 +75,10 @@ public class ScheduleMap {
     private BorderPane rootBorderPane;
     @FXML
     private AnchorPane lowerAnchorPane;
-    @FXML // fx:id="minETA"
-    private Label minETA;
-    @FXML // fx:id="secETA"
-    private Label secETA;
 
     @FXML // fx:id="pane"
     private Pane markerPane = new Pane();
 
-    @FXML // fx:id="dist"
-    private Label dist;
 
     @FXML // fx:id="currFloor"
     private Label currFloor;
@@ -107,7 +101,7 @@ public class ScheduleMap {
     private ScrollPane scrollPane;
 
     @FXML
-    private StackPane stackPane;
+    private static StackPane stackPane;
 
     //private Schedule;
 
@@ -125,6 +119,10 @@ public class ScheduleMap {
     private ArrayList<Node> currentMarkers = new ArrayList<>();
 
     Stage primaryStage;
+
+    private static String minETA;
+    private static String secETA;
+    private static String dist;
 
     private double scale;
 
@@ -220,10 +218,10 @@ public class ScheduleMap {
 
             currentFoundPath = null;
 
-            minETA.setText(Integer.toString(foundPath.getETA().getMin()) + " Seconds");
-            secETA.setText(String.format("%02d", (foundPath.getETA().getSec())) + " Minutes");
+            minETA = (Integer.toString(foundPath.getETA().getMin()) + " Minutes");
+            secETA = (String.format("%02d", (foundPath.getETA().getSec())) + " Seconds");
             int len = (int) Math.round(foundPath.getPathLengthFeet());
-            dist.setText(Integer.toString(len) + " Feet");
+            dist = (Integer.toString(len) + " Feet");
 
             //save found path for when floors are switched
             currentFoundPath = foundPath;
@@ -236,6 +234,30 @@ public class ScheduleMap {
             //draw the map for the current floor
             drawMap(foundPath, currentFloor);
         }
+    }
+
+
+    /**
+     * Creates a new JFX Dialog on the current page.
+     * @param message Message to display in the dialog box.
+     * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
+     */
+    public static void newJFXDialogPopUp(String min, String sec, String dist, StackPane stP) {
+        System.out.println("DialogBox Posted");
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setHeading(new Text("Time Details"));
+        jfxDialogLayout.setBody(new Text("Time Estimate: " + min + " " + sec +"\n" + "Distance Estimate: " + dist));
+        JFXDialog dialog = new JFXDialog(stP, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Okay");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
+
+            }
+        });
+        jfxDialogLayout.setActions(okay);
+        dialog.show();
     }
 
     /**
@@ -262,9 +284,9 @@ public class ScheduleMap {
         //clear map
         System.out.print("\nCLEARING MAP...");
         pane.getChildren().clear();
-        minETA.setText("00");
-        secETA.setText("00");
-        dist.setText("");
+        minETA = ("00");
+        secETA = ("00");
+        dist = ("");
         System.out.println(" DONE");
     }
 
@@ -1088,7 +1110,7 @@ public class ScheduleMap {
 
         scale = imageWidth / imageView.getFitWidth();
 
-        StackPane stackPane = new StackPane(imageView, borderPane);
+        stackPane = new StackPane(imageView, borderPane);
         ScrollPane scrollPane = new ScrollPane(new Group(stackPane));
 
         //make scroll pane pannable
@@ -1241,4 +1263,7 @@ public class ScheduleMap {
         toDoState.switchScene(event);
     }
 
+    public void timeButton(ActionEvent actionEvent) {
+        newJFXDialogPopUp(minETA, secETA, dist, stackPane);
+    }
 }

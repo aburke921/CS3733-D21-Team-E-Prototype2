@@ -103,24 +103,22 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
             MedicineDeliveryObj object = new MedicineDeliveryObj(0, App.userID, assigned, location, name, doseQuantity, doseMeasureI, specialInstructions, signature);
             DB.addMedicineRequest(object);
 
-            //For email implementation later
-//        String email = DB.getEmail(App.userID);
-//        String fullName = DB.getUserName(App.userID);
-//        String assigneeName = userNames.get(assigned);
-//        String locationName = locations.get(nodeIDIndex);
-//        String body = "Hello " + fullName + ", \n\n" + "Thank you for making an External Patient Transport request." +
-//                "Here is the summary of your request: \n\n" +
-//                " - Location: " + location + "\n" +
-//                " - Medicine Name: " + name + "\n" +
-//                " - Medicine Dosage: " + doseMeasure + "\n" +
-//                " - Does Quantity: " + doseQuantity + "\n" +
-//                " - Assignee Name: " + assigned + "\n" +
-//                " - Special Instructions: " + specialInstructions + "\n" +
-//                " - Signature: " + signatureInput + "\n\n" +
-//                "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
-//                "- Emerald Emus BWH";
-//
-//        sendEmail.sendRequestConfirmation(email, body);
+        //For email implementation later
+        String email = DB.getEmail(App.userID);
+        String fullName = DB.getUserName(App.userID);
+        String body = "Hello " + fullName + ", \n\n" + "Thank you for making an Medicine Delivery request." +
+                "Here is the summary of your request: \n\n" +
+                " - Location: " + location + "\n" +
+                " - Assignee Name: " + assigned + "\n" +
+                " - Medicine Name: " + name + "\n" +
+                " - Medicine Dosage: " + doseMeasure + "\n" +
+                " - Supply: " + doseQuantity + "\n" +
+                " - Special Instructions: " + specialInstructions + "\n" +
+                " - Signature: " + signatureInput + "\n\n" +
+                "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+                "- Emerald Emus BWH";
+
+        sendEmail.sendRequestConfirmation(email, body);
 
             super.handleButtonSubmit(e);
         }

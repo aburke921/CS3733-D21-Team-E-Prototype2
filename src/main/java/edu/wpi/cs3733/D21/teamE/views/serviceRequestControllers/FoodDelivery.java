@@ -126,9 +126,9 @@ public class FoodDelivery extends ServiceRequestFormComponents {
 			String fullName = DB.getUserName(App.userID);
 			String assigneeName = userNames.get(userIndex);
 
-			String body = "Hello " + fullName + ", \n\n" + "Thank you for making an External Patient Transport request." +
-					"Here is the summary of your request: \n" +
-					" - Location: " + node + "\n\n" +
+			String body = "Hello " + fullName + ", \n\n" + "Thank you for making an Food Delivery request." +
+					"Here is the summary of your request: \n\n" +
+					" - Location: " + node + "\n" +
 					" - Assignee Name: " + assigneeName + "\n" +
 					" - Delivery Service: " + deliverer + "\n" +
 					" - Order Number: " + orderNum + "\n" +

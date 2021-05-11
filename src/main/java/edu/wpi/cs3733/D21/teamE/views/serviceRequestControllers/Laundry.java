@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LaundryObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,6 +33,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+
+import javax.mail.MessagingException;
 
 public class Laundry extends ServiceRequestFormComponents {
 
@@ -86,7 +89,7 @@ public class Laundry extends ServiceRequestFormComponents {
     }
 
     @FXML
-    void saveData(ActionEvent event) {
+    void saveData(ActionEvent event) throws MessagingException {
         if(validateInput()) {
             //setting up indexes
             int nodeIndex = locationInput.getSelectionModel().getSelectedIndex();
@@ -102,6 +105,24 @@ public class Laundry extends ServiceRequestFormComponents {
             //Creating object and passing to database
             LaundryObj object = new LaundryObj(0, node, user, App.userID, wash, dry, desc);
             DB.addLaundryRequest(object);
+
+            //For email implementation later
+            String email = DB.getEmail(App.userID);
+            String fullName = DB.getUserName(App.userID);
+            String assigneeName = userNames.get(userIndex);
+
+            String body = "Hello " + fullName + ", \n\n" + "Thank you for making a Language Interpretation request." +
+                    "Here is the summary of your request: \n\n" +
+                    " - Location: " + node + "\n" +
+                    " - Assignee Name: " + assigneeName + "\n" +
+                    " - Number of loads to be washed: " + wash + "\n" +
+                    " - Number of loads to be dryed: " + dry + "\n" +
+                    " - Description: " + desc + "\n\n" +
+                    "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+                    "- Emerald Emus BWH";
+
+            sendEmail.sendRequestConfirmation(email, body);
+
             super.handleButtonSubmit(event);
         }
     }

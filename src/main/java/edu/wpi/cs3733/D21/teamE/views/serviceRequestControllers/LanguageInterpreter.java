@@ -98,21 +98,21 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 			DB.addLanguageRequest(object);
 
 
-			//For email implementation later
-//		String email = DB.getEmail(App.userID);
-//		String fullName = DB.getUserName(App.userID);
-////		String assigneeName = userNames.get(assigneeIDIndex);
-//		String locationName = locations.get(index);
-//		String body = "Hello " + fullName + ", \n\n" + "Thank you for making a Language Interpretation request." +
-//				"Here is the summary of your request: \n\n" +
-//				" - Location: " + locationName + "\n" +
-//				" - Assignee Name: " + assignee + "\n\n" +
-//				" - descrip: " + descrip + "\n" +
-//				" - language: " + language + "\n\n" +
-//				"If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
-//				"- Emerald Emus BWH";
-//
-//		sendEmail.sendRequestConfirmation(email, body);
+		//For email implementation later
+		String email = DB.getEmail(App.userID);
+		String fullName = DB.getUserName(App.userID);
+		String assigneeName = userNames.get(assignee);
+
+		String body = "Hello " + fullName + ", \n\n" + "Thank you for making a Language Interpretation request." +
+				"Here is the summary of your request: \n\n" +
+				" - Location: " + node + "\n" +
+				" - Assignee Name: " + assigneeName + "\n" +
+				" - Description: " + descrip + "\n" +
+				" - Language: " + language + "\n\n" +
+				"If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+				"- Emerald Emus BWH";
+
+		sendEmail.sendRequestConfirmation(email, body);
 			super.handleButtonSubmit(event);
 		}
 	}

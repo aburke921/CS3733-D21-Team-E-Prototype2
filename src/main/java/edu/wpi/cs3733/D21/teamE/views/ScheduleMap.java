@@ -32,6 +32,9 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -46,10 +49,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import java.awt.*;
 import java.io.IOException;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.List;
 
 import static javax.swing.SwingConstants.CENTER;
 
@@ -274,7 +279,7 @@ public class ScheduleMap {
         int legNum = 0;
 
         List<Path> paths = fullPath.splitByFloor();
-        for(Path path : paths) {
+        for (Path path : paths) {
             if (path.getStart().get("floor").equalsIgnoreCase(floorNum)) {
 
                 double markerIconXOffset = -(scale * 3);
@@ -472,7 +477,6 @@ public class ScheduleMap {
                     g.getChildren().add(circle);
                 }
                 Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
-                ArrayList<ToDo> popUpAdd = new ArrayList<ToDo>();
                 ObservableList<String> observableNodeInfo = FXCollections.observableArrayList();
 
                 JFXListView listView = new JFXListView();
@@ -481,12 +485,20 @@ public class ScheduleMap {
                 stickyNotesStage.initOwner(App.getPrimaryStage());
                 stickyNotesStage.initStyle(StageStyle.UNDECORATED);
                 StackPane stickyNotesPane = new StackPane();
-                stickyNotesPane.setStyle("-fx-background-color: white;");
+                stickyNotesPane.setPrefHeight(200);
+                stickyNotesPane.setPrefWidth(300);
+                listView.setStyle("-fx-text-fill: WHITE");
+                listView.setStyle("-fx-background-color: -fx--primary");
+                listView.setStyle("-fx-font-family: Roboto");
                 stickyNotesPane.getChildren().add(listView);
                 stickyNotesStage.setScene(new Scene(stickyNotesPane));
                 g.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
                     if (newValue) {
+                        Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+                        stickyNotesStage.setX(mouseLocation.getX()+10);
+                        stickyNotesStage.setY(mouseLocation.getY()-10);
                         stickyNotesStage.show();
+
                     } else {
                         stickyNotesStage.hide();
                     }
@@ -494,8 +506,9 @@ public class ScheduleMap {
 
                 g.setOnMouseEntered(e -> {
                     stickyNotesPane.getChildren().removeAll();
+                    observableNodeInfo.removeAll();
+                    listView.getItems().clear();
                     double X = e.getX();
-                    System.out.println(X);
                     int xInt = (int) X;
                     double Y = e.getY();
                     int yInt = (int) Y;
@@ -505,31 +518,25 @@ public class ScheduleMap {
                         double nodeY = locationArray.get(i).getY() / scale;
                         int nodeYInt = (int) nodeY;
                         //if node coordinates match click coordinates +- 1, autofill fields with node info
-                        if (Math.abs(nodeXInt - xInt) <= 5 && Math.abs(nodeYInt - yInt) <= 5) {
+                        if (Math.abs(nodeXInt - xInt) <= 7 && Math.abs(nodeYInt - yInt) <= 7) {
                             for (int j = 0; j < scheduleOngoing.getLocations().size(); j++) {
                                 double schedX = scheduleOngoing.getLocations().get(j).getX() / scale;
                                 int schedXInt = (int) schedX;
                                 double schedY = scheduleOngoing.getLocations().get(j).getY() / scale;
                                 int schedYInt = (int) schedY;
-                                if(Math.abs(schedXInt - xInt) <= 5 && Math.abs(schedXInt - xInt) <= 5)  {
-                                    observableNodeInfo.add(scheduleOngoing.get(j).getTitle());
-                                    observableNodeInfo.add(scheduleOngoing.get(j).getLocationString());
-                                    observableNodeInfo.add(scheduleOngoing.get(j).getStartTime().toString());
-                                    observableNodeInfo.add(Integer.toString(scheduleOngoing.get(j).getStatus()));
-                                    observableNodeInfo.add(Integer.toString(scheduleOngoing.get(j).getPriority()));
+                                if (Math.abs(schedXInt - xInt) <= 7 && Math.abs(schedXInt - xInt) <= 7) {
+                                    observableNodeInfo.add("Title: " + scheduleOngoing.get(j).getTitle());
+                                    observableNodeInfo.add("Location: " + scheduleOngoing.get(j).getLocationString());
+                                    observableNodeInfo.add("Time: " + scheduleOngoing.get(j).getStartTime().toString());
+                                    if(scheduleOngoing.get(j).getStatus() == 1) {
+                                        observableNodeInfo.add("Status: Incomplete");
+                                    }
+                                    observableNodeInfo.add("Priority: " + Integer.toString(scheduleOngoing.get(j).getPriority()));
                                 }
                             }
                         }
                     }
                 });
-
-                    /*
-                    jfxDialogLayout.setBody(listView);
-                    JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
-                    dialog.show();
-
-                     */
-
 
                 Polyline polyline = new Polyline();
                 polyline.getPoints().addAll(coordsList);

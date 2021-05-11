@@ -13,6 +13,8 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
+import edu.wpi.cs3733.D21.teamE.user.User;
+import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import edu.wpi.cs3733.D21.teamE.states.UserManagementState;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
@@ -239,86 +241,6 @@ public class UserManagement {
     }
 
 
-    /**
-     * firstName, lastName, userID, userType, email
-     * @// todo, temp user class, should be moved elsewhere.
-     */
-    public static final class User {
-        final StringProperty firstName;
-        final StringProperty lastName;
-        final IntegerProperty userID;
-        final StringProperty userType;
-        final StringProperty email;
-
-        public String getFirstName() {
-            return firstName.get();
-        }
-
-        public StringProperty firstNameProperty() {
-            return firstName;
-        }
-
-        public void setFirstName(String firstName) {
-            this.firstName.set(firstName);
-        }
-
-        public String getLastName() {
-            return lastName.get();
-        }
-
-        public StringProperty lastNameProperty() {
-            return lastName;
-        }
-
-        public void setLastName(String lastName) {
-            this.lastName.set(lastName);
-        }
-
-        public int getUserID() {
-            return userID.get();
-        }
-
-        public IntegerProperty userIDProperty() {
-            return userID;
-        }
-
-        public void setUserID(int userID) {
-            this.userID.set(userID);
-        }
-
-        public String getUserType() {
-            return userType.get();
-        }
-
-        public StringProperty userTypeProperty() {
-            return userType;
-        }
-
-        public void setUserType(String userType) {
-            this.userType.set(userType);
-        }
-
-        public String getEmail() {
-            return email.get();
-        }
-
-        public StringProperty emailProperty() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email.set(email);
-        }
-
-        public User(String userType, int userID, String firstName, String lastName, String email) {
-
-            this.userType = new SimpleStringProperty(userType);
-            this.userID = new SimpleIntegerProperty(userID);
-            this.firstName = new SimpleStringProperty(firstName);
-            this.lastName = new SimpleStringProperty(lastName);
-            this.email = new SimpleStringProperty(email);
-        }
-    }
 
     /**
      * Adds and populates table with users from DB.

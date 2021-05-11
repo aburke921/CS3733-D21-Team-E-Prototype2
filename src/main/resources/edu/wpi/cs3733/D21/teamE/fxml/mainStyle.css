@@ -81,6 +81,17 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
     -fx-background-color: #a2dcfd;
 }
 
+.todo-button {
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-text-fill: WHITE;
+    -fx-background-color:  -fx--primary-dark;
+}
+
+.todo-button:hover {
+    -fx-background-color: -fx--primary-light;
+}
+
 .login-button {
     -fx-background-color: -fx--primary-dark;
     -fx-border-color: -fx--primary-light;
@@ -246,6 +257,22 @@ MaterialDesignIconViewAlt {
 
 FontAwesomeIconView {
     -fx-fill: -fx--primary;
+}
+
+#todo-icon {
+    -fx-fill: -fx--primary-dark;
+}
+
+#todo-icon:hover {
+    -fx-fill: -fx--primary;
+}
+
+#blue-icon {
+    -fx-fill: -fx--primary;
+}
+
+#blue-icon:hover {
+    -fx-fill: -fx--primary-dark;
 }
 
 #submission-icon {

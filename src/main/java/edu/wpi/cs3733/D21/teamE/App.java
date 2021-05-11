@@ -9,6 +9,7 @@ import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
 import edu.wpi.cs3733.D21.teamE.views.AppBarComponent;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import javafx.application.Application;
@@ -27,10 +28,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+
 import java.io.*;
 import java.util.Scanner;
 
 import org.apache.derby.drda.NetworkServerControl;
+
 
 import javax.mail.MessagingException;
 import java.io.File;
@@ -41,6 +44,7 @@ import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -109,6 +113,9 @@ public class App extends Application {
 	private static Node endNode = null;
 	private static boolean toEmergency = false;
 
+	private static ToDo editToDo = null;
+	private static LocalDate toDoDate = null;
+
 	private static boolean lockEndPath = false;
 	public static String driverURL;
 	public static String nextDriverURL;
@@ -139,6 +146,11 @@ public class App extends Application {
 	public static void setEndNode(Node endNode) { App.endNode = endNode; }
 	public static boolean isToEmergency() { return toEmergency; }
 	public static void setToEmergency(boolean toEmergency) { App.toEmergency = toEmergency; }
+	public static ToDo getToDo() { return App.editToDo; }
+	public static void setToDo(ToDo todo) { App.editToDo = todo; }
+	public static LocalDate getToDoDate() { return App.toDoDate; }
+	public static void setToDoDate(LocalDate date) { App.toDoDate = date; }
+
 	public static boolean isLockEndPath() { return lockEndPath; }
 	public static void setLockEndPath(boolean lockEndPath) { App.lockEndPath = lockEndPath; }
 	public static void setNextDriverURL(String url){ nextDriverURL = url; }
@@ -162,8 +174,6 @@ public class App extends Application {
 
 		logger.info("Starting App Initialization");
 
-		NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
-		server.start(null);
 
 		// reading the driverOption.txt file
 		try {
@@ -195,6 +205,10 @@ public class App extends Application {
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
 				DB.populateAbonPainTable();
+//				for(int ID : sheetIDs){
+//					SheetsAndJava.deleteSheetData(ID);
+//				}
+
 				logger.info("Tables Repopulated");
 			} catch (Exception e) {
 				logger.warning("Exception in creating tables. Might already be there?, " + e);

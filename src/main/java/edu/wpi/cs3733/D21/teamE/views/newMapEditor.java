@@ -639,39 +639,39 @@ public class newMapEditor {
                 }
             }
         }
-            refresh();
-            return s;
-        }
+        refresh();
+        return s;
+    }
 
-        /**
-         * calls the deleteNode fcn when the delete button is clicked
-         * @param e
-         */
-        @FXML
-        public void deleteNodeButton (ActionEvent e){
-            JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
-            jfxDialogLayout.setBody(new Text("Are you sure you want to delete node?"));
-            JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
-            JFXButton okay = new JFXButton("Yes");
-            JFXButton cancel = new JFXButton("Cancel");
-            okay.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    deleteNode(nodeTreeTable);
-                    dialog.close();
+    /**
+     * calls the deleteNode fcn when the delete button is clicked
+     * @param e
+     */
+    @FXML
+    public void deleteNodeButton (ActionEvent e){
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        jfxDialogLayout.setBody(new Text("Are you sure you want to delete node?"));
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+        JFXButton okay = new JFXButton("Yes");
+        JFXButton cancel = new JFXButton("Cancel");
+        okay.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                deleteNode(nodeTreeTable);
+                dialog.close();
 
-                }
-            });
-            cancel.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    dialog.close();
+            }
+        });
+        cancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dialog.close();
 
-                }
-            });
-            jfxDialogLayout.setActions(okay, cancel);
-            dialog.show();
-        }
+            }
+        });
+        jfxDialogLayout.setActions(okay, cancel);
+        dialog.show();
+    }
 
     public void editNode(TreeTableView<Node> table) {
         String id = null;
@@ -1088,40 +1088,40 @@ public class newMapEditor {
 
 
 
-                System.out.println("No drag");
+                    System.out.println("No drag");
 
-                ObservableList groups = pane.getChildren();
+                    ObservableList groups = pane.getChildren();
 
-                ObservableList shapes = FXCollections.observableArrayList();
-                if(groups.get(0) instanceof Group){
-                    shapes = ((Group) groups.get(0)).getChildren();
-
-                }
-
-                System.out.println(clickedX);
-
-                for(int i = 0; i < shapes.size();i++){
-                    if(shapes.get(i) instanceof Circle){
-                        if((int)((Circle) shapes.get(i)).getCenterX() == clickedX && (int)((Circle) shapes.get(i)).getCenterY() == clickedY){
-                            Circle circle = ((Circle) shapes.get(i));
-                            System.out.println("Yay");
-                            circle.setOnMouseDragged(event ->{
-                                scrollPane.setPannable(false);
-                                circle.setCenterX((int)event.getX());
-                                circle.setCenterY((int)event.getY());
-                                DB.modifyNode(clickedID,(int)(circle.getCenterX() * scale),(int)(circle.getCenterY()*scale),currentFloor,clickedBuilding,clickedType,clickedLongName, clickedShortname);
-                            });
-                            circle.setOnMouseReleased(mouseEvent ->{
-                                refresh();
-                                scrollPane.setPannable(true);
-                            });
-
-                        }
+                    ObservableList shapes = FXCollections.observableArrayList();
+                    if(groups.get(0) instanceof Group){
+                        shapes = ((Group) groups.get(0)).getChildren();
 
                     }
 
+                    System.out.println(clickedX);
 
-                }
+                    for(int i = 0; i < shapes.size();i++){
+                        if(shapes.get(i) instanceof Circle){
+                            if((int)((Circle) shapes.get(i)).getCenterX() == clickedX && (int)((Circle) shapes.get(i)).getCenterY() == clickedY){
+                                Circle circle = ((Circle) shapes.get(i));
+                                System.out.println("Yay");
+                                circle.setOnMouseDragged(event ->{
+                                    scrollPane.setPannable(false);
+                                    circle.setCenterX((int)event.getX());
+                                    circle.setCenterY((int)event.getY());
+                                    DB.modifyNode(clickedID,(int)(circle.getCenterX() * scale),(int)(circle.getCenterY()*scale),currentFloor,clickedBuilding,clickedType,clickedLongName, clickedShortname);
+                                });
+                                circle.setOnMouseReleased(mouseEvent ->{
+                                    refresh();
+                                    scrollPane.setPannable(true);
+                                });
+
+                            }
+
+                        }
+
+
+                    }
                 });
             } else {
                 //populates fields with information of selected node or edge in table
@@ -1554,26 +1554,24 @@ public class newMapEditor {
                 ID = startInput + "_" + endInput;
                 reverseID = endInput + "_" + startInput;
             }
-                //check duplicate
-                for (int j = 0; j < edgeList.size(); j++) {
-                    if (edgeList.get(j).getId().equals(ID) || edgeList.get(j).getId().equals(reverseID)  ) {
-                        System.out.println("duplicate!");
-                        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
-                        jfxDialogLayout.setBody(new Text("This edge already exists!"));
-                        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
-                        JFXButton cancel = new JFXButton("Cancel");
-                        cancel.setOnAction(new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent event) {
-                                dialog.close();
+            //check duplicate
+            if(edgeList.contains(ID) || edgeList.contains(reverseID)) {
+                System.out.println("duplicate!");
+                JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+                jfxDialogLayout.setBody(new Text("This edge already exists!"));
+                JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+                JFXButton cancel = new JFXButton("Cancel");
+                cancel.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        dialog.close();
 
-                            }
-                        });
-                        jfxDialogLayout.setActions(cancel);
-                        dialog.show();
-                        return;
                     }
-                }
+                });
+                jfxDialogLayout.setActions(cancel);
+                dialog.show();
+                return;
+            }
             //creates node ID
             if (startInput != null && endInput != null) {
                 ID = startInput + "_" + endInput;
@@ -1681,7 +1679,7 @@ public class newMapEditor {
         retrieveEdge.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                    edgeFileOpener(event);
+                edgeFileOpener(event);
                 dialog.close();
 
             }

@@ -117,25 +117,23 @@ public class SheetsAndJava {
     }
 
 
-    public static void deleteSheetData(int sheetID) throws GeneralSecurityException, IOException {
+    public static void addTodoToSheet(int todoID, String title, String email, String firstName, String lastName, String location, String taskStartDateTime, String taskEndDateTime, String notificationDateTime) throws IOException, GeneralSecurityException {
+
         sheetsService = getSheetService();
 
-        DeleteDimensionRequest deleteDateCell = new DeleteDimensionRequest()
-                .setRange(
-                        new DimensionRange()
-                                .setSheetId(sheetID)
-                                .setDimension("ROWS")
-                                .setStartIndex(2)
-                );
+        ValueRange appendBody = new ValueRange()
+                .setValues(Arrays.asList(
+                        Arrays.asList(todoID, title, email, firstName, lastName, location, taskStartDateTime, taskEndDateTime, notificationDateTime)
+                ));
 
-        List<Request> requests = new ArrayList<>();
-        requests.add(new Request().setDeleteDimension(deleteDateCell));
+        AppendValuesResponse appendResult = sheetsService.spreadsheets().values()
+                .append((SPREADSHEET_ID), "Todo", appendBody)
+                .setValueInputOption("USER_ENTERED")
+                .setInsertDataOption("INSERT_ROWS")
+                .setIncludeValuesInResponse(true)
+                .execute();
 
-        BatchUpdateSpreadsheetRequest body = new BatchUpdateSpreadsheetRequest().setRequests(requests);
-
-        sheetsService.spreadsheets().batchUpdate(SPREADSHEET_ID, body).execute();
     }
-
 
 
 

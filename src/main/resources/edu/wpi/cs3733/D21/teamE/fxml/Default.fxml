@@ -165,6 +165,17 @@
                                                       <Insets top="20.0" />
                                                    </VBox.margin>
                                                 </JFXButton>
+                                                <JFXButton fx:id="todoButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefWidth="200.0" styleClass="default-button" text="To Do Scheduler" textFill="#039be5" wrapText="true">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <FontAwesomeIconView glyphName="CALENDAR_CHECK_ALT" size="40" />
+                                                   </graphic>
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </JFXButton>
                                              </children>
                                           </VBox>
                                           <VBox alignment="TOP_CENTER" prefWidth="200.0">

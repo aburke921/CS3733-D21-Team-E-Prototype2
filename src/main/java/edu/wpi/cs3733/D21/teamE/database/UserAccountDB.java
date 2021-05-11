@@ -2,7 +2,7 @@ package edu.wpi.cs3733.D21.teamE.database;
 
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
-import edu.wpi.cs3733.D21.teamE.views.UserManagement.User;
+import edu.wpi.cs3733.D21.teamE.user.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

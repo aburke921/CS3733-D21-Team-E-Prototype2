@@ -7,17 +7,13 @@ import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RequestsDB {
 
 	static Connection connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true").connection;
-
 
 
 	/**
@@ -49,6 +45,9 @@ public class RequestsDB {
 				} else if (infoType.equals("AssigneeID")) {
 					int ID = rset.getInt(infoType);
 					listOfInfo.add(UserAccountDB.getUserName(ID));
+				} else if (infoType.equals("creationTime")) {
+					Timestamp timestamp = rset.getTimestamp(infoType);
+					listOfInfo.add(String.valueOf(timestamp));
 				} else {
 					String ID = rset.getString(infoType); // potential issue // -TO-DO-: won't work with int AssigneeIDs? Fixed by translating IDs to String, should it return a pair of Assignee ID and name?
 					listOfInfo.add(ID);
@@ -105,31 +104,12 @@ public class RequestsDB {
 	public static ArrayList<String> getRequestLocations(String tableType, int userID) {
 		ArrayList<String> listOfLongNames = new ArrayList<>();
 
-		String tableName = "";
-		switch (tableType) {
-			case "floralRequests":
-				tableName = "floralRequests";
-				break;
-			case "medDelivery":
-				tableName = "medDelivery";
-				break;
-			case "sanitationRequest":
-				tableName = "sanitationRequest";
-				break;
-			case "securityServ":
-				tableName = "securityServ";
-				break;
-			case "extTransport":
-				tableName = "extTransport";
-				break;
-		}
-
 		String query;
 
 		if (!DB.getUserType(userID).equals("admin")) {
-			query = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
+			query = "Select longName from node,(Select roomID From " + tableType + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableType + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
 		} else {
-			query = "Select requestid, longname From node,(Select requestid, roomid From " + tableName + ") correctTable Where node.nodeid = correctTable.roomid Order By requestid";
+			query = "Select longname From node,(Select requestid, roomid From " + tableType + ") correctTable Where node.nodeid = correctTable.roomid Order By requestid";
 		}
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
@@ -273,31 +253,31 @@ public class RequestsDB {
 
 	public static ArrayList<CovidSurveyObj> getCovidSurveys() {
 
-	ArrayList<CovidSurveyObj> covidSurveys = new ArrayList<>();
+		ArrayList<CovidSurveyObj> covidSurveys = new ArrayList<>();
 
-	String query = "Select * From entryRequest";
+		String query = "Select * From entryRequest";
 
-	try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
 
-		ResultSet rset = prepStat.executeQuery();
+			ResultSet rset = prepStat.executeQuery();
 
-		while (rset.next()) {
+			while (rset.next()) {
 
-			int requestID = rset.getInt("entryRequestID");
-			boolean positiveTest = rset.getBoolean("positiveTest");
-			boolean symptoms = rset.getBoolean("symptoms");
-			boolean closeContact = rset.getBoolean("closeContact");
-			boolean quarantine = rset.getBoolean("quarantine");
-			boolean noSymptoms = rset.getBoolean("noSymptoms");
-			String status = rset.getString("status");
-			covidSurveys.add(new CovidSurveyObj(App.userID, requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms, status));
+				int requestID = rset.getInt("entryRequestID");
+				boolean positiveTest = rset.getBoolean("positiveTest");
+				boolean symptoms = rset.getBoolean("symptoms");
+				boolean closeContact = rset.getBoolean("closeContact");
+				boolean quarantine = rset.getBoolean("quarantine");
+				boolean noSymptoms = rset.getBoolean("noSymptoms");
+				String status = rset.getString("status");
+				covidSurveys.add(new CovidSurveyObj(App.userID, requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms, status));
+			}
+
+			rset.close();
+
+		} catch (SQLException e) {
+			System.err.println("getCovidSurveys Error : " + e);
 		}
-
-		rset.close();
-
-	} catch (SQLException e) {
-		System.err.println("getCovidSurveys Error : " + e);
-	}
 		return covidSurveys;
 
 	}
@@ -314,7 +294,6 @@ public class RequestsDB {
 			System.err.println("Error in updating markAsCovidSafe");
 			return 0;
 		}
-
 
 
 	}
@@ -374,7 +353,7 @@ public class RequestsDB {
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
 
-			if(rset.next()) {
+			if (rset.next()) {
 				noSymptoms = rset.getBoolean("noSymptoms");
 			}
 			return noSymptoms;

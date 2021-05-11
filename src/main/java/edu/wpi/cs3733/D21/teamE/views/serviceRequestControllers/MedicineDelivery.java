@@ -95,6 +95,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
             int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
             String specialInstructions = specialInstructInput.getText();
 
+            String assigneeName = userNames.get(userIndex);
 
             MedicineDeliveryObj object = new MedicineDeliveryObj(0, App.userID, assigned, location, name, doseQuantity, doseMeasureI, specialInstructions, "");
             DB.addMedicineRequest(object);
@@ -105,12 +106,11 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         String body = "Hello " + fullName + ", \n\n" + "Thank you for making an Medicine Delivery request." +
                 "Here is the summary of your request: \n\n" +
                 " - Location: " + location + "\n" +
-                " - Assignee Name: " + assigned + "\n" +
+                " - Assignee Name: " + assigneeName + "\n" +
                 " - Medicine Name: " + name + "\n" +
                 " - Medicine Dosage: " + doseMeasure + "\n" +
                 " - Supply: " + doseQuantity + "\n" +
-                " - Special Instructions: " + specialInstructions + "\n" +
-                " - Signature: " + signatureInput + "\n\n" +
+                " - Special Instructions: " + specialInstructions + "\n\n" +
                 "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
                 "- Emerald Emus BWH";
 

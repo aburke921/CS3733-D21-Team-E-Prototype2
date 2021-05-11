@@ -98,10 +98,10 @@ public class SanitationServices extends ServiceRequestFormComponents {
       //For email implementation later
       String email = DB.getEmail(App.userID);
       String fullName = DB.getUserName(App.userID);
-//      String assigneeName = userNames.get(assigneeIDIndex);
+      String assigneeName = userNames.get(assigneeIndex);
       String body = "Hello " + fullName + ", \n\n" + "Thank you for making an Sanitation request." +
               "Here is the summary of your request: \n\n" +
-              " - Assignee Name: " + severity + "\n" +
+              " - Assignee Name: " + assigneeName + "\n" +
               " - Type of sanitation: " + serviceKind + "\n" +
               " - Location: " + node + "\n" +
               " - Severity: " + severity + "\n" +

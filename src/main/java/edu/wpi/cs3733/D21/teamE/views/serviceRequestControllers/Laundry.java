@@ -111,7 +111,7 @@ public class Laundry extends ServiceRequestFormComponents {
             String fullName = DB.getUserName(App.userID);
             String assigneeName = userNames.get(userIndex);
 
-            String body = "Hello " + fullName + ", \n\n" + "Thank you for making a Language Interpretation request." +
+            String body = "Hello " + fullName + ", \n\n" + "Thank you for making a Laundry request." +
                     "Here is the summary of your request: \n\n" +
                     " - Location: " + node + "\n" +
                     " - Assignee Name: " + assigneeName + "\n" +

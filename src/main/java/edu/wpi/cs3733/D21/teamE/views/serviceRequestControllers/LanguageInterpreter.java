@@ -101,7 +101,7 @@ public class LanguageInterpreter extends ServiceRequestFormComponents {
 		//For email implementation later
 		String email = DB.getEmail(App.userID);
 		String fullName = DB.getUserName(App.userID);
-		String assigneeName = userNames.get(assignee);
+		String assigneeName = userNames.get(userIndex);
 
 		String body = "Hello " + fullName + ", \n\n" + "Thank you for making a Language Interpretation request." +
 				"Here is the summary of your request: \n\n" +

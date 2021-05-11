@@ -116,7 +116,7 @@ public class InternalPatient extends ServiceRequestFormComponents{
                     "Here is the summary of your request: \n\n" +
                     " - Assignee Name: " + assigneeName + "\n" +
                     " - Pick-up Location: " + pickUp + "\n" +
-                    " - Drop-off Location: " + assigneeName + "\n" +
+                    " - Drop-off Location: " + dropOff + "\n" +
                     " - Department: " + dept + "\n" +
                     " - Severity: " + sever + "\n" +
                     " - Patient ID: " + patientID + "\n" +

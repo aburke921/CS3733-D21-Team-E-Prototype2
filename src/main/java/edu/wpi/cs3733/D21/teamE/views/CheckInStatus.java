@@ -50,7 +50,7 @@ public class CheckInStatus {
         CovidSurveyObj formNumber = covidSurveyTable.getSelectionModel().getSelectedItem().getValue();
         int formNum = formNumber.getFormNumber();
         DB.markAsCovidSafe(formNum);
-        DB.updateUserAccountCovidStatus(App.userID, "Safe");
+        DB.updateUserAccountCovidStatus(formNumber.getUser(), "Safe");
         refresh();
     }
 
@@ -59,7 +59,7 @@ public class CheckInStatus {
         CovidSurveyObj formNumber = covidSurveyTable.getSelectionModel().getSelectedItem().getValue();
         int formNum = formNumber.getFormNumber();
         DB.markAsCovidRisk(formNum);
-        DB.updateUserAccountCovidStatus(App.userID, "Unsafe");
+        DB.updateUserAccountCovidStatus(formNumber.getUser(), "Unsafe");
         refresh();
     }
 

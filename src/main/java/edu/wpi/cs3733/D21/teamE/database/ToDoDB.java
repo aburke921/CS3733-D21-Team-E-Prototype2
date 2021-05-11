@@ -158,11 +158,11 @@ public class ToDoDB {
 		}
 		sql += " Where ToDoID = ?";
 
-		if (getToDoType(ToDoID) == 1) {
+		if (getToDoType(ToDoID) == 1 && (userID != -1 || status != -1)) {
 			if (RequestsDB2.editRequests(ToDoID, userIDInt, statusString) != 1) {
 				return false;
 			}
-		} else if (getToDoType(ToDoID) == 2) {
+		} else if (getToDoType(ToDoID) == 2 && (startTime != null || scheduledDate != null || userID != -1)) {
 			if (appointmentDB.editAppointment(ToDoID, startTime, scheduledDate, userIDInt) != 1) {
 				return false;
 			}

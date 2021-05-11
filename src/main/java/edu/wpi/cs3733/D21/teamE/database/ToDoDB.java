@@ -260,7 +260,7 @@ public class ToDoDB {
 	/**
 	 * @param date   enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
 	 * @param status enter -1 for get all regardless of status, or enter needed status number
-	 * @return a List of ToDo_items
+	 * @return a Schedule item that contains a List of ToDo_items
 	 */
 	public static Schedule getSchedule(int userID, int status, String date) {
 		List<ToDo> toDoList = new ArrayList<>();

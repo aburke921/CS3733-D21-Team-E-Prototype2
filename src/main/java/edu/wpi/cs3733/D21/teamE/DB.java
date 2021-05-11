@@ -5,15 +5,7 @@ import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.scheduler.Schedule;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.ExternalPatient;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.MedicineDelivery;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
-import edu.wpi.cs3733.D21.teamE.database.*;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
@@ -794,8 +786,6 @@ public class DB {
 	}
 
 
-
-
 	// ToDoDB:
 
 
@@ -829,6 +819,11 @@ public class DB {
 		return ToDoDB.updateToDo(ToDoID, title, userID, status, priority, nodeID, scheduledDate, startTime, endTime, detail, notificationDate, notificationTime);
 	}
 
+	/**
+	 * Changes a ToDo_item's status and it's associated request's status if it is a request
+	 * @param status default 1 (normal), 10/0 (complete/deleted)
+	 * @return whether the update succeed
+	 */
 	public static boolean updateToDoStatus(int ToDoID, int status) {
 		return ToDoDB.updateToDo(ToDoID, null, -1, status, -1, null, null, null, null, null, null, null);
 	}
@@ -844,8 +839,9 @@ public class DB {
 
 
 	/**
-	 * @param date enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
-	 * @return a List of ToDo_items
+	 * @param date   enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
+	 * @param status enter -1 for get all regardless of status, or enter needed status number
+	 * @return a Schedule item that contains a List of ToDo_items
 	 */
 	public static Schedule getSchedule(int userID, int status, String date) {
 		return ToDoDB.getSchedule(userID, status, date);

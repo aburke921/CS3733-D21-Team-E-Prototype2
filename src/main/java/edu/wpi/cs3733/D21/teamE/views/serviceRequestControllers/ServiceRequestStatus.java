@@ -97,7 +97,7 @@ public class ServiceRequestStatus {
 
         ArrayList<String> idArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestID");
         ArrayList<String> statusArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
-        ArrayList<String> locationArray = DB.getRequestLocations(tableName, App.userID);
+        ArrayList<String> creationTimeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "creationTime");
         ArrayList<String> assigneeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "AssigneeID");
         if(idArray.size() > 0) {
             System.out.println("Array size" + idArray.size());
@@ -112,7 +112,7 @@ public class ServiceRequestStatus {
             }
             for (int i = 0; i < idArray.size(); i++) {
                 System.out.println("Before");
-                TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), locationArray.get(i), assigneeArray.get(i), statusArray.get(i)));
+                TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), creationTimeArray.get(i), assigneeArray.get(i), statusArray.get(i)));
                 System.out.println(request.getValue().getId());
                 if (request.getValue().getStatus().equals("inProgress")) {
                     inProgress.getChildren().add(request);
@@ -203,7 +203,7 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> sanitationServicesCompleted = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
         TreeItem<ServiceRequestForm> securityServiceCompleted = new TreeItem<>(new ServiceRequestForm("Security Service Form"));
         TreeItem<ServiceRequestForm> foodDeliveryCompleted = new TreeItem<>(new ServiceRequestForm("Food Delivery Form"));
-        //TreeItem<ServiceRequestForm> internalPatientCompleted = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
+        TreeItem<ServiceRequestForm> internalPatientCompleted = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
         TreeItem<ServiceRequestForm> languageInterpreterCompleted = new TreeItem<>(new ServiceRequestForm("Language Interpreter Form"));
         TreeItem<ServiceRequestForm> laundryCompleted = new TreeItem<>(new ServiceRequestForm("Laundry Form"));
         TreeItem<ServiceRequestForm> maintenanceCompleted = new TreeItem<>(new ServiceRequestForm("Facilities Maintenance Form"));
@@ -216,7 +216,7 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> sanitationServicesInProgress = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
         TreeItem<ServiceRequestForm> securityServiceInProgress = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
         TreeItem<ServiceRequestForm> foodDeliveryInProgress = new TreeItem<>(new ServiceRequestForm("Food Delivery Form"));
-        //TreeItem<ServiceRequestForm> internalPatientInProgress = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
+        TreeItem<ServiceRequestForm> internalPatientInProgress = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
         TreeItem<ServiceRequestForm> languageInterpreterInProgress = new TreeItem<>(new ServiceRequestForm("Language Interpreter Form"));
         TreeItem<ServiceRequestForm> laundryInProgress = new TreeItem<>(new ServiceRequestForm("Laundry Form"));
         TreeItem<ServiceRequestForm> maintenanceInProgress = new TreeItem<>(new ServiceRequestForm("Facilities Maintenance Form"));
@@ -229,7 +229,7 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> sanitationServicesCancelled = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
         TreeItem<ServiceRequestForm> securityServiceCancelled = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
         TreeItem<ServiceRequestForm> foodDeliveryCancelled = new TreeItem<>(new ServiceRequestForm("Food Delivery Form"));
-        //TreeItem<ServiceRequestForm> internalPatientCancelled = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
+        TreeItem<ServiceRequestForm> internalPatientCancelled = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
         TreeItem<ServiceRequestForm> languageInterpreterCancelled = new TreeItem<>(new ServiceRequestForm("Language Interpreter Form"));
         TreeItem<ServiceRequestForm> laundryCancelled = new TreeItem<>(new ServiceRequestForm("Laundry Form"));
         TreeItem<ServiceRequestForm> maintenanceCancelled = new TreeItem<>(new ServiceRequestForm("Facilities Maintenance Form"));
@@ -242,7 +242,7 @@ public class ServiceRequestStatus {
         addToTable("sanitationRequest", sanitationServicesInProgress, sanitationServicesCompleted, sanitationServicesCancelled);
         addToTable("medDelivery", medicineDeliveryInProgress, medicineDeliveryCompleted, medicineDeliveryCancelled);
         addToTable("foodDelivery",foodDeliveryInProgress,foodDeliveryCompleted,foodDeliveryCancelled);
-        //addToTable("internalPatientRequest",internalPatientInProgress,internalPatientCompleted,internalPatientCancelled);
+        addToTable("internalPatientRequest",internalPatientInProgress,internalPatientCompleted,internalPatientCancelled);
         addToTable("languageRequest",languageInterpreterInProgress,languageInterpreterCompleted,languageInterpreterCancelled);
         addToTable("laundryRequest",laundryInProgress,laundryCompleted,laundryCancelled);
         addToTable("maintenanceRequest",maintenanceInProgress,maintenanceCompleted,maintenanceCancelled);

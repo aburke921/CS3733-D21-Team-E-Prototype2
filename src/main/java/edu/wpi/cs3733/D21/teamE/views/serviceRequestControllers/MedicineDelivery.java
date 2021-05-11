@@ -81,7 +81,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         //Quantity validator
         RegexValidator quantityValidator = new RegexValidator();
         quantityValidator.setMessage("Must be a number");
-        quantityValidator.setRegexPattern("^(0|[1-9][0-9]*)$"); //todo, if a different special char is inputted, will error out. Eg: ~^-+
+        quantityValidator.setRegexPattern("^(0|[1-9][0-9]*)$");
 
         doseQuantityInput.getValidators().add(quantityValidator);
         doseQuantityInput.focusedProperty().addListener((o, oldVal, newVal) -> {
@@ -93,7 +93,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         //Quantity validator
         RegexValidator dosageValidator = new RegexValidator();
         dosageValidator.setMessage("Must be a number");
-        dosageValidator.setRegexPattern("^(0|[1-9][0-9]*)$"); //todo, if a different special char is inputted, will error out. Eg: ~^-+
+        dosageValidator.setRegexPattern("^(0|[1-9][0-9]*)$");
 
         doseMeasureInput.getValidators().add(dosageValidator);
         doseMeasureInput.focusedProperty().addListener((o, oldVal, newVal) -> {

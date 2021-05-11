@@ -39,6 +39,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -48,6 +49,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -60,6 +63,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 import static javax.swing.SwingConstants.CENTER;
 
 
@@ -236,11 +240,123 @@ public class ScheduleMap {
         }
     }
 
+    /**
+     * Get textual directions from {@link Path#makeDirections()}, and prints them out onto
+     * a popup dialog.
+     * Populates them with icons corresponding to each step in the directions
+     * @param event the calling event's info
+     */
+    @FXML
+    void showDirections(ActionEvent event) {
+        //get directions
+        if (currentFoundPath == null) return;
+
+        List<String> directions = currentFoundPath.makeDirectionsWithDist();
+        String floor = "Floor " + currentFoundPath.getStart().get("floor");
+
+        TableView tableView = new TableView();
+
+        TableColumn<TextualDirectionStep, Text> column1 = new TableColumn<>();
+        column1.setCellValueFactory(new PropertyValueFactory<>("icon"));
+        column1.getStyleClass().add("iconTable");
+        column1.setStyle("-fx-alignment: CENTER-LEFT");
+        column1.setPrefWidth(40);
+        column1.setMinWidth(40);
+        column1.setMaxWidth(40);
+
+        TableColumn<TextualDirectionStep, String> column2 = new TableColumn<>();
+        column2.setCellValueFactory(new PropertyValueFactory<>("direction"));
+        column2.setStyle("-fx-alignment: CENTER-LEFT");
+
+        tableView.setSelectionModel(null);
+        tableView.setPrefHeight(USE_COMPUTED_SIZE);
+        tableView.getStyleClass().add("directions");
+        tableView.getStyleClass().add("noheader");
+        tableView.getStyleClass().add("table-row-cell");
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        tableView.getColumns().add(column1);
+        tableView.getColumns().add(column2);
+
+        boolean floorChangeFlag = true;
+
+        for (String dir : directions) {
+            if (floorChangeFlag) {
+                Text floorHeader = new Text(Character.toString(MaterialDesignIcon.PLAY_CIRCLE.getChar()));
+                floorHeader.setStyle("-fx-fill: -fx--primary-dark");
+
+                Text floorText = new Text(floor);
+                floorText.setFont(javafx.scene.text.Font.font(null, FontWeight.BOLD, 16));
+
+                tableView.getItems().add(new TextualDirectionStep(floorHeader, floorText));
+
+                floorChangeFlag = false;
+            }
+            char step;
+            Text text;
+            int rotate = 0;
+            step = MaterialDesignIcon.ARROW_UP_BOLD_CIRCLE_OUTLINE.getChar();
+            if (dir.contains("straight")) {
+                // no change, but needs to be here for elevator checks
+            } else if (dir.contains("Stairs")) {
+                step = MaterialDesignIcon.STAIRS.getChar();
+            } else if (dir.contains("left")) {
+                if (dir.contains("sharp")) {
+                    rotate = -135;
+                } else if (dir.contains("shallow")){
+                    rotate = -45;
+                } else if (dir.contains("Bend")){
+                    rotate = -25;
+                } else {
+                    rotate = -90;
+                }
+            } else if (dir.contains("right")) {
+                if (dir.contains("sharp")) {
+                    rotate = 135;
+                } else if (dir.contains("shallow")){
+                    rotate = 45;
+                } else if (dir.contains("Bend")){
+                    rotate = 25;
+                } else {
+                    rotate = 90;
+                }
+            } else { // else is elevator
+                step = MaterialDesignIcon.ELEVATOR.getChar();
+            }
+
+            text = new Text(Character.toString(step));
+            text.setRotate(rotate);
+            text.setStyle("-fx-fill: -fx--primary-dark");
+            tableView.getItems().add(new TextualDirectionStep(text, new Text("   "+ dir)));
+            if (dir.contains("Floor")) {
+                String s1 = dir.substring(dir.indexOf("Floor"));
+                s1 = s1.replace("Floor", "");
+                s1 = s1.replaceAll("\\s", "");
+                floor = "Floor " + s1;
+                floorChangeFlag = true;
+            }
+        }
+
+
+        JFXDialogLayout popup = new JFXDialogLayout();
+        Label text = new Label("Path Directions");
+        text.setFont(Font.font(null, FontWeight.BOLD, 17));
+        popup.setHeading(text);
+        popup.setBody(tableView);
+        popup.setPrefHeight(USE_COMPUTED_SIZE);
+        JFXDialog dialog = new JFXDialog(stackPane, popup, JFXDialog.DialogTransition.CENTER);
+        dialog.setMaxWidth(400);
+        int fullSize = tableView.getItems().size() * 41 + 120;
+        dialog.setMaxHeight(Math.min(fullSize, 425));
+        JFXButton okay = new JFXButton("Done");
+        okay.setOnAction(event1 -> dialog.close());
+        popup.setActions(okay);
+        dialog.show();
+    }
+
 
     /**
      * Creates a new JFX Dialog on the current page.
-     * @param message Message to display in the dialog box.
-     * @param stackPane stack pane needed for Dialog to appear on top of. Will be centered on this pane.
      */
     public static void newJFXDialogPopUp(String min, String sec, String dist, StackPane stP) {
         System.out.println("DialogBox Posted");

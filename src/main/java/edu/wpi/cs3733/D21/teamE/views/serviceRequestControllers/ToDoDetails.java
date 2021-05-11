@@ -56,9 +56,6 @@ public class ToDoDetails {
     private ObservableList<String> longNameList;
     private ArrayList<String> nodeIDList;
 
-    @FXML // fx:id="background"
-    private ImageView background;
-
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
@@ -99,10 +96,16 @@ public class ToDoDetails {
     private JFXComboBox<String> priorityInput; // Value injected by FXMLLoader
 
     @FXML // fx:id="notificationDate"
+    private JFXCheckBox sendNotification; // Value injected by FXMLLoader
+    @FXML // fx:id="notificationDate"
     private JFXDatePicker notificationDateInput; // Value injected by FXMLLoader
     @FXML // fx:id="notificationTime"
     private JFXTimePicker notificationTimeInput; // Value injected by FXMLLoader
 
+
+
+    @FXML // fx:id="background"
+    private ImageView background;
 
     @FXML
     public AnchorPane appBarAnchorPane;
@@ -321,7 +324,7 @@ public class ToDoDetails {
                 System.out.println("endTime " + endTime);
             }
 
-            String status = statusInput.getSelectionModel().getSelectedItem();
+            String status = statusInput.getValue();
             int statusInt;
             if(status.equals("Ongoing")) {
                 statusInt = 1;
@@ -332,7 +335,7 @@ public class ToDoDetails {
             }
             System.out.println("status " + status + " " + statusInt);
 
-            String priority = priorityInput.getSelectionModel().getSelectedItem();
+            String priority = priorityInput.getValue();
             int priorityInt;
             if(status.equals("None")) {
                 priorityInt = 0;
@@ -386,18 +389,24 @@ public class ToDoDetails {
                     additionalNotes, notificationDate, notificationTime);
 
 
-//            String email = DB.getEmail(userID);
-//            String fullName = DB.getUserName(userID);
-//            int position = fullName.indexOf(" ");
-//
-//            String firstName = fullName.substring(0, position);
-//            String lastName = fullName.substring(position);
-//            String locationName = DB.getNodeInfo(nodeID).get("longName");
-//            String taskStartDateAndTime = date + " " + startTime;
-//            String taskEndDateAndTime = date + " " + endTime;
-//            String notificationDateAndTime = notificationDate + " " + notificationTime;
-//
-//              SheetsAndJava.addTodoToSheet(todoID, title, email, firstName, lastName, locationName, taskStartDateAndTime, taskEndDateAndTime, notificationDateAndTime);
+            if(sendNotification.isSelected()) {
+                String email = DB.getEmail(userID);
+                String fullName = DB.getUserName(userID);
+                int position = fullName.indexOf(" ");
+
+                String firstName = fullName.substring(0, position);
+                String lastName = fullName.substring(position);
+                Node node = DB.getNodeInfo(nodeID);
+                String locationName = "";
+                if (node != null) {
+                    locationName = node.get("longName");
+                }
+                String taskStartDateAndTime = date + " " + startTime;
+                String taskEndDateAndTime = date + " " + endTime;
+                String notificationDateAndTime = notificationDate + " " + notificationTime;
+
+                SheetsAndJava.addTodoToSheet(todoID, blankIfNull(title), email, firstName, lastName, blankIfNull(locationName), blankIfNull(taskStartDateAndTime), blankIfNull(taskEndDateAndTime), blankIfNull(notificationDateAndTime));
+            }
 
             todo = null;
 
@@ -407,9 +416,11 @@ public class ToDoDetails {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        } else {
-            //todo invalid input popup
         }
+    }
+
+    private String blankIfNull(String s) {
+        return s == null ? "" : s;
     }
 
     /**
@@ -442,6 +453,11 @@ public class ToDoDetails {
             assignedUserID = App.userID;
         }
 
+        if(sendNotification.isSelected()){
+            validatedControls.add(notificationDateInput);
+            validatedControls.add(notificationTimeInput);
+        }
+
         for(IFXValidatableControl control : validatedControls){
             valid &= control.validate();
         }
@@ -454,7 +470,12 @@ public class ToDoDetails {
             valid &= startTime.compareTo(endTime) < 0;
             if(!(date.isEmpty())){
                 Schedule schedule = DB.getSchedule(assignedUserID, 1, date.toString());
-                valid &= schedule.isAvailable(startTime, endTime);
+                if(!schedule.isAvailable(startTime, endTime)) {
+                    App.newJFXDialogPopUp("Time Conflict", "Try Again","There is a time conflict in your schedule.", stackPane);
+                    System.out.println("Time Conflict in Schedule");
+                } else {
+                    valid &= schedule.isAvailable(startTime, endTime);
+                }
             }
         }
 
@@ -470,6 +491,17 @@ public class ToDoDetails {
            userIDInput.setManaged(true);
            userIDInput.setVisible(true);
        }
+    }
+
+    @FXML
+    private void sendNotification(ActionEvent event) {
+        if(((JFXCheckBox) event.getSource()).isSelected()) {
+            notificationDateInput.setVisible(true);
+            notificationTimeInput.setVisible(true);
+        } else {
+            notificationDateInput.setVisible(false);
+            notificationTimeInput.setVisible(false);
+        }
     }
 
     /**

@@ -1,28 +1,12 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
 import com.jfoenix.controls.*;
-
+import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
-
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-
-import java.net.URL;
-
-import java.util.ArrayList;
-
-import java.util.ResourceBundle;
-
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
-
-
-import edu.wpi.cs3733.D21.teamE.App;
-import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import edu.wpi.cs3733.D21.teamE.states.MapEditorState;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -34,25 +18,27 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-
 import javafx.scene.Group;
-import javafx.scene.Parent;
-
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Text;
-
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 
 public class newMapEditor {
@@ -910,10 +896,10 @@ public class newMapEditor {
         //init appBar
         javafx.scene.Node appBarComponent;
         try {
-            App.setPageTitle("Map Ediotr"); //set AppBar title
-            App.setHelpText("To use the pathfinder, first select a starting location and end location you would like " +
-                    "to find the paths to.\n You may search to find what you are looking for as well. " +
-                    "\n..."); //todo add help text for Map Editor
+            App.setPageTitle("Map Editor"); //set AppBar title
+            App.setHelpText("To enter drag and drop mode select the Drag and Drop button, then select a node and move it to the desired location.\n" +
+                    "To edit a node on the map select the Edit Nodes button. \nSelect the desired node and modify the desired field. \nWhen you are finished modifying the desired field or fields click on the Edit Node button. " +
+                    "If you truly wish to edit this node on the pop up select Yes if not select Cancel.");
             App.setStackPane(stackPane);
             App.setShowHelp(true);
             App.setShowLogin(true);

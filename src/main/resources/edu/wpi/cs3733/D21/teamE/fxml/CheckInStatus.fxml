@@ -28,26 +28,6 @@
                         </FlowPane>
                     </children>
                 </AnchorPane>
-                <AnchorPane>
-                    <children>
-                        <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="600.0">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <children>
-                                <JFXButton fx:id="backButton" maxHeight="30.0" onAction="#goBack" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back">
-                                    <GridPane.margin>
-                                        <Insets bottom="20.0" left="20.0" />
-                                    </GridPane.margin>
-                                </JFXButton>
-                            </children>
-                        </GridPane>
-                    </children>
-                </AnchorPane>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                       <center>
                           <VBox BorderPane.alignment="CENTER">
@@ -79,6 +59,26 @@
                           </VBox>
                       </center>
                   </BorderPane>
+                <AnchorPane>
+                    <children>
+                        <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="600.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            </rowConstraints>
+                            <children>
+                                <JFXButton fx:id="backButton" maxHeight="30.0" onAction="#goBack" prefHeight="29.0" prefWidth="60.0" style="-fx-background-color: -fx--primary-dark; -fx-border-color: -fx--primary-light;" styleClass="submit-button" text="Back">
+                                    <GridPane.margin>
+                                        <Insets bottom="20.0" left="20.0" />
+                                    </GridPane.margin>
+                                </JFXButton>
+                            </children>
+                        </GridPane>
+                    </children>
+                </AnchorPane>
             </children>
         </StackPane>
     </children>

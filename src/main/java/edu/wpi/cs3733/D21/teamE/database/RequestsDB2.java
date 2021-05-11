@@ -113,34 +113,19 @@ public class RequestsDB2 {
 	 */
 	public static int editRequests(int requestID, int assigneeID, String requestStatus) {
 
-		int statusInt = -1;
-		int assigneeInt = -1;
 		boolean added = false;
-		String query = "Update requests ";
+		String query = "Update requests Set ";
 
-		if (assigneeID != 0) {
-			assigneeInt = assigneeID;
-			query = query + "Set assigneeID = '" + assigneeID + "'";
-
-			added = true;
+		if (assigneeID != 0 || requestStatus != null) {
+			return 1;
 		}
-		if (requestStatus != null) {
-			switch (requestStatus) {
-				case "inProgress":  // normal
-					statusInt = 1;
-				case "complete": // complete
-					statusInt = 10;
-				case "canceled":  // delete
-					statusInt = 0;
-					break;
-				default:
-					throw new IllegalStateException("Unexpected value: " + requestStatus);
+		if (assigneeID != 0) {
+			query += "assigneeID = " + assigneeID;
+			if (requestStatus != null) {
+				query += ", requestStatus = '" + requestStatus + "'";
 			}
-			if (added) {
-				query = query + ", ";
-			}
-			query = query + "Set requestStatus = '" + requestStatus + "'";
-
+		} else if (requestStatus != null) {
+			query += "requestStatus = '" + requestStatus + "'";
 		}
 
 		query = query + " Where requestID = " + requestID;
@@ -1726,7 +1711,7 @@ public class RequestsDB2 {
 				"quarantine     boolean Not Null, " +
 				"noSymptoms     boolean Not Null, " +
 				"status varchar(31) Not Null," +
-				"userID int references useraccount(userID)" +
+				"userID int References useraccount(userID)" +
 				")";
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.execute();

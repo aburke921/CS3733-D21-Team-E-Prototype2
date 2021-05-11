@@ -829,6 +829,10 @@ public class DB {
 		return ToDoDB.updateToDo(ToDoID, title, userID, status, priority, nodeID, scheduledDate, startTime, endTime, detail, notificationDate, notificationTime);
 	}
 
+	public static boolean updateToDoStatus(int ToDoID, int status) {
+		return ToDoDB.updateToDo(ToDoID, null, -1, status, -1, null, null, null, null, null, null, null);
+	}
+
 
 	/**
 	 * Checks which type is the ToDoID from

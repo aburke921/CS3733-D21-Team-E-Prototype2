@@ -118,18 +118,18 @@ public class ToDoDB {
 		}
 		if (status != -1) {
 			sql += ", status = ?";
-			if (getToDoType(ToDoID) == 1) {
-				switch (status) {
-					case 1:  // normal
-						statusString = "inProgress";
-					case 10: // complete
-						statusString = "complete";
-					case 0:  // delete
-						statusString = "canceled";
-						break;
-					default:
-						throw new IllegalStateException("Unexpected value: " + status);
-				}
+			switch (status) {
+				case 1:  // normal
+					statusString = "inProgress";
+					break;
+				case 10: // complete
+					statusString = "complete";
+					break;
+				case 0:  // delete
+					statusString = "canceled";
+					break;
+				default:
+					throw new IllegalStateException("Unexpected value: " + status);
 			}
 		}
 		if (priority != -1) {
@@ -158,11 +158,11 @@ public class ToDoDB {
 		}
 		sql += " Where ToDoID = ?";
 
-		if (getToDoType(ToDoID) == 1 && (userID != -1 || status != -1)) {
+		if ((userID != -1 || status != -1) && getToDoType(ToDoID) == 1) {
 			if (RequestsDB2.editRequests(ToDoID, userIDInt, statusString) != 1) {
 				return false;
 			}
-		} else if (getToDoType(ToDoID) == 2 && (startTime != null || scheduledDate != null || userID != -1)) {
+		} else if ((startTime != null || scheduledDate != null || userID != -1) && getToDoType(ToDoID) == 2) {
 			if (appointmentDB.editAppointment(ToDoID, startTime, scheduledDate, userIDInt) != 1) {
 				return false;
 			}

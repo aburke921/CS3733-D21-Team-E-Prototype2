@@ -36,7 +36,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
   @FXML private JFXComboBox<String> assignee;
   @FXML private JFXTextArea detailedInstructionsInput;
   @FXML private JFXComboBox<String> locationInput;
-  @FXML private JFXComboBox<String> ServiceTypeinput;
+  @FXML private JFXComboBox<String> requestTypeInput;
   @FXML private JFXComboBox<String> Severity;
   @FXML private JFXButton cancel;
   @FXML private JFXButton submit;
@@ -62,14 +62,14 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
     validator.setMessage("Input required");
 
-    ServiceTypeinput.getValidators().add(validator);
+    requestTypeInput.getValidators().add(validator);
     assignee.getValidators().add(validator);
     locationInput.getValidators().add(validator);
 
     detailedInstructionsInput.getValidators().add(validator);
     Severity.getValidators().add(validator);
 
-    return locationInput.validate() && ServiceTypeinput.validate() && assignee.validate() && detailedInstructionsInput.validate() && Severity.validate();
+    return locationInput.validate() && requestTypeInput.validate() && assignee.validate() && detailedInstructionsInput.validate() && Severity.validate();
 
 
   }
@@ -84,7 +84,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
     if(validateInput()){
 
-      String serviceKind = ServiceTypeinput.getValue();
+      String serviceKind = requestTypeInput.getValue();
       int assigneeIndex = assignee.getSelectionModel().getSelectedIndex();
       int assigneeID = userID.get(assigneeIndex);
       String details = detailedInstructionsInput.getText();
@@ -138,7 +138,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
     userID = DB.getAssigneeIDs("custodian");
     assignee.setItems(userNames);
 
-    assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
+    assert requestTypeInput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
     assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
     assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
     assert assignee != null : "fx:id=\"assignee\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";

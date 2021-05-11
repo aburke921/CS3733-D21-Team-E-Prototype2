@@ -54,9 +54,6 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     private JFXTextArea specialInstructInput;
 
     @FXML
-    private JFXTextField signatureInput;
-
-    @FXML
     private JFXButton cancel;
 
     @FXML
@@ -79,9 +76,8 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         doseQuantityInput.getValidators().add(validator);
         assignee.getValidators().add(validator);
         specialInstructInput.getValidators().add(validator);
-        signatureInput.getValidators().add(validator);
 
-        return  locationInput.validate() && medicineNameInput.validate() && doseMeasureInput.validate() && doseQuantityInput.validate() && assignee.validate() && specialInstructInput.validate() && signatureInput.validate();
+        return  locationInput.validate() && medicineNameInput.validate() && doseMeasureInput.validate() && doseQuantityInput.validate() && assignee.validate() && specialInstructInput.validate();
 
     }
 
@@ -98,9 +94,9 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
             int doseMeasureI = Integer.parseInt(doseMeasure);
             int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
             String specialInstructions = specialInstructInput.getText();
-            String signature = signatureInput.getText();
 
-            MedicineDeliveryObj object = new MedicineDeliveryObj(0, App.userID, assigned, location, name, doseQuantity, doseMeasureI, specialInstructions, signature);
+
+            MedicineDeliveryObj object = new MedicineDeliveryObj(0, App.userID, assigned, location, name, doseQuantity, doseMeasureI, specialInstructions, "");
             DB.addMedicineRequest(object);
 
         //For email implementation later
@@ -151,7 +147,6 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         assert doseQuantityInput != null;
         assert doseMeasureInput != null;
         assert specialInstructInput != null;
-        assert signatureInput != null;
         assert submit != null;
         assert cancel != null;
 

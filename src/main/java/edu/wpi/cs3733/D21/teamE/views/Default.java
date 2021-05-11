@@ -315,9 +315,9 @@ public class Default {
                     previousScannedResult = null;
                     carParkedText.setVisible(true);
                     LinkToParking.setVisible(true);
-                    // TODO get popup to say ur parking slot saved
+                    App.newJFXDialogPopUp("","Okay","Your parking spot was saved", stackPane);
                 } else {
-                    // TODO get popup to say ur parking slot was not saved
+                    App.newJFXDialogPopUp("","Okay","Your parking spot failed to save", stackPane);
                 }
             }
         }

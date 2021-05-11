@@ -302,7 +302,7 @@ public class ToDoDetails {
     @FXML
     private void saveData() throws MessagingException, IOException, GeneralSecurityException {
 
-        if (validateInput()) {
+        if (validateInput() && validateTimeConflict()) {
 
             String title = titleInput.getText();
             if(title != null) {
@@ -444,14 +444,8 @@ public class ToDoDetails {
         validatedControls.add(statusInput);
         validatedControls.add(priorityInput);
 
-        int assignedUserID;
         if(!selfAssign.isSelected()){
             validatedControls.add(userIDInput);
-            int userIndex = userIDInput.getSelectionModel().getSelectedIndex();
-            Integer userIDFromList = userIDList.get(userIndex);
-            assignedUserID = userIDFromList;
-        } else {
-            assignedUserID = App.userID;
         }
 
         if(sendNotification.isSelected()){
@@ -467,9 +461,29 @@ public class ToDoDetails {
             valid &= control.validate();
         }
 
+        return valid;
+    }
+
+    /**
+     * Check if there are any time conflicts
+     */
+    private boolean validateTimeConflict() {
+        boolean valid = true;
+
+        int assignedUserID;
+        if(!selfAssign.isSelected()){
+            int userIndex = userIDInput.getSelectionModel().getSelectedIndex();
+            Integer userIDFromList = userIDList.get(userIndex);
+            assignedUserID = userIDFromList;
+        } else {
+            assignedUserID = App.userID;
+        }
+
         Date date = new Date(dateInput.getValue());
         Time startTime = new Time(startTimeInput.getValue());
         Time endTime = new Time(endTimeInput.getValue());
+
+        String errorMessage = "";
 
         if(!(startTime.isEmpty() || date.isEmpty())){
             valid &= startTime.compareTo(endTime) < 0;
@@ -482,11 +496,17 @@ public class ToDoDetails {
             } else {
                 //adding, check to see if new can be placed
                 noScheduleConflict = schedule.canAdd(startTime, endTime);
+
+                if(noScheduleConflict == false) {
+                    errorMessage += schedule.canAddErrorMessage(startTime, endTime);
+                }
             }
 
             valid &= noScheduleConflict;
         }
-
+        if(valid == false) {
+            App.newJFXDialogPopUp("Time Conflict", "Try Again", errorMessage, stackPane);
+        }
         return valid;
     }
 

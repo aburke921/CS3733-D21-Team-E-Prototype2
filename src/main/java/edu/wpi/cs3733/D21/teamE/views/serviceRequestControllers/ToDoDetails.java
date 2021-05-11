@@ -328,20 +328,19 @@ public class ToDoDetails {
             int statusInt;
             if(status.equals("Ongoing")) {
                 statusInt = 1;
-            } else if (status.equals("Completed")) {
-                statusInt = 10;
             } else {
-                statusInt = 0;
+                statusInt = 10;
             }
+
             System.out.println("status " + status + " " + statusInt);
 
             String priority = priorityInput.getValue();
             int priorityInt;
-            if(status.equals("None")) {
+            if(priority.equals("None")) {
                 priorityInt = 0;
-            } else if (status.equals("Low")) {
+            } else if (priority.equals("Low")) {
                 priorityInt = 1;
-            } else if (status.equals("Medium")) {
+            } else if (priority.equals("Medium")) {
                 priorityInt = 2;
             } else {
                 priorityInt = 3;

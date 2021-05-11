@@ -62,6 +62,9 @@ public class Default {
     @FXML // fx:id="checkInStatusButton"
     private JFXButton checkInStatusButton;
 
+    @FXML // fx:id="todoButton"
+    private JFXButton todoButton;
+
     @FXML // fx:id="algo"
     private JFXComboBox algo;
 
@@ -217,16 +220,6 @@ public class Default {
         defaultState.switchScene(e);
     }
 
-//    @FXML
-//    private void toAppointmentPage(ActionEvent e) {
-//        try {
-//            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/Appointment.fxml"));
-//            App.setDraggableAndChangeScene(root);
-//        } catch (IOException ex) {
-//            System.out.println("Hi");
-//            ex.printStackTrace();
-//        }
-//    }
 
     @FXML
     public void getHelpDefault(ActionEvent actionEvent) {
@@ -295,6 +288,10 @@ public class Default {
 
         if (App.userID == 0) {
             scheduleAppointmentButton.setVisible(false);
+        }
+
+        if (App.userID == 0 || userType.equals("visitor") || userType.equals("patient")) {
+            todoButton.setVisible(false);
         }
 
         if (App.userID == 0 || DB.whereDidIPark(App.userID) == null){

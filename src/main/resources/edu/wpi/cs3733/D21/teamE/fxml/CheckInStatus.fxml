@@ -59,13 +59,13 @@
                                   </JFXTreeTableView>
                                   <HBox>
                                       <children>
-                                          <JFXButton fx:id="markAsRiskButton" onAction="#markAsRisk" styleClass="submit-button" text="Mark as Risk" />
+                                          <JFXButton fx:id="markAsRiskButton" onAction="#markAsRisk" styleClass="submit-button" text="Deny" />
                                           <JFXButton fx:id="refreshButton" onAction="#refresh" styleClass="submit-button" text="Refresh">
                                               <HBox.margin>
                                                   <Insets left="30.0" />
                                               </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton fx:id="markAsSafeButton" onAction="#markAsSafe" styleClass="submit-button" text="Mark As Safe">
+                                          <JFXButton fx:id="markAsSafeButton" onAction="#markAsSafe" styleClass="submit-button" text="Check-In">
                                               <HBox.margin>
                                                   <Insets left="30.0" />
                                               </HBox.margin>

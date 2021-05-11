@@ -16,7 +16,6 @@ public class RequestsDB {
 	static Connection connection = makeConnection.makeConnection("jdbc:derby:BWDB;create=true").connection;
 
 
-
 	/**
 	 * Gets a list of all the "assigneeIDs", "requestIDs", or "requestStatus" from the requests with the given type done by the given userID
 	 * Use "AssigneeID" to get the full name of the assignee, use "assigneeID" to get the ID of the assignee
@@ -46,6 +45,9 @@ public class RequestsDB {
 				} else if (infoType.equals("AssigneeID")) {
 					int ID = rset.getInt(infoType);
 					listOfInfo.add(UserAccountDB.getUserName(ID));
+				} else if (infoType.equals("creationTime")) {
+					Timestamp timestamp = rset.getTimestamp(infoType);
+					listOfInfo.add(String.valueOf(timestamp));
 				} else {
 					String ID = rset.getString(infoType); // potential issue // -TO-DO-: won't work with int AssigneeIDs? Fixed by translating IDs to String, should it return a pair of Assignee ID and name?
 					listOfInfo.add(ID);
@@ -251,31 +253,31 @@ public class RequestsDB {
 
 	public static ArrayList<CovidSurveyObj> getCovidSurveys() {
 
-	ArrayList<CovidSurveyObj> covidSurveys = new ArrayList<>();
+		ArrayList<CovidSurveyObj> covidSurveys = new ArrayList<>();
 
-	String query = "Select * From entryRequest";
+		String query = "Select * From entryRequest";
 
-	try (PreparedStatement prepStat = connection.prepareStatement(query)) {
+		try (PreparedStatement prepStat = connection.prepareStatement(query)) {
 
-		ResultSet rset = prepStat.executeQuery();
+			ResultSet rset = prepStat.executeQuery();
 
-		while (rset.next()) {
+			while (rset.next()) {
 
-			int requestID = rset.getInt("entryRequestID");
-			boolean positiveTest = rset.getBoolean("positiveTest");
-			boolean symptoms = rset.getBoolean("symptoms");
-			boolean closeContact = rset.getBoolean("closeContact");
-			boolean quarantine = rset.getBoolean("quarantine");
-			boolean noSymptoms = rset.getBoolean("noSymptoms");
-			String status = rset.getString("status");
-			covidSurveys.add(new CovidSurveyObj(App.userID, requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms, status));
+				int requestID = rset.getInt("entryRequestID");
+				boolean positiveTest = rset.getBoolean("positiveTest");
+				boolean symptoms = rset.getBoolean("symptoms");
+				boolean closeContact = rset.getBoolean("closeContact");
+				boolean quarantine = rset.getBoolean("quarantine");
+				boolean noSymptoms = rset.getBoolean("noSymptoms");
+				String status = rset.getString("status");
+				covidSurveys.add(new CovidSurveyObj(App.userID, requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms, status));
+			}
+
+			rset.close();
+
+		} catch (SQLException e) {
+			System.err.println("getCovidSurveys Error : " + e);
 		}
-
-		rset.close();
-
-	} catch (SQLException e) {
-		System.err.println("getCovidSurveys Error : " + e);
-	}
 		return covidSurveys;
 
 	}
@@ -292,7 +294,6 @@ public class RequestsDB {
 			System.err.println("Error in updating markAsCovidSafe");
 			return 0;
 		}
-
 
 
 	}
@@ -352,7 +353,7 @@ public class RequestsDB {
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();
 
-			if(rset.next()) {
+			if (rset.next()) {
 				noSymptoms = rset.getBoolean("noSymptoms");
 			}
 			return noSymptoms;

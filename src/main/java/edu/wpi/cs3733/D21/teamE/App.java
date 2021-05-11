@@ -1,5 +1,7 @@
 package edu.wpi.cs3733.D21.teamE;
 
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
@@ -25,6 +27,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+
+import java.io.*;
+import java.util.Scanner;
+
+import org.apache.derby.drda.NetworkServerControl;
+
 
 import javax.mail.MessagingException;
 import java.io.File;
@@ -162,12 +171,13 @@ public class App extends Application {
 	@Override
 	public void init() throws Exception {
 
+
 		logger.info("Starting App Initialization");
 
 
 		// reading the driverOption.txt file
 		try {
-			File file = new File("src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt");
+			File file = new File("driverOption.txt");
 			Scanner scanner = new Scanner(file);
 			while (scanner.hasNextLine()) {
 				String data = scanner.nextLine();
@@ -198,6 +208,7 @@ public class App extends Application {
 //				for(int ID : sheetIDs){
 //					SheetsAndJava.deleteSheetData(ID);
 //				}
+
 				logger.info("Tables Repopulated");
 			} catch (Exception e) {
 				logger.warning("Exception in creating tables. Might already be there?, " + e);
@@ -311,7 +322,7 @@ public class App extends Application {
 		if(!driverURL.equals(nextDriverURL)){
 			//ovewrite to textfile
 			try {
-				FileWriter myWriter = new FileWriter("src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt");
+				FileWriter myWriter = new FileWriter("driverOption.txt");
 				myWriter.write(nextDriverURL);
 				myWriter.close();
 				logger.info("Successfully wrote to driverOption.txt");

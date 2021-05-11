@@ -11,14 +11,7 @@ import javax.mail.internet.*;
 
 public class sendEmail {
 
-//	public static void main(String args[]) throws MessagingException {
-//
-//
-////		String email = DB.getEmail(App.userID);
-//		//sendAppointmentRemind("aburke@wpi.edu", "May 5th 2021");
-//
-//
-//	}
+
 
 
 	public static void sendAppointmentConfirmation(String email, String time, String fullName) throws MessagingException {

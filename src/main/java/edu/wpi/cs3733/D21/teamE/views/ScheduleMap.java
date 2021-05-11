@@ -217,6 +217,7 @@ public class ScheduleMap {
 
         //draw map, unless path is null
         if (foundPath == null) { //path is null
+            System.out.println("NULL PATH!");
 
             //remove drawn line
             pane.getChildren().clear();
@@ -554,7 +555,7 @@ public class ScheduleMap {
                 if (!legItr.hasNext()) { //if current node is the ending node for this floor
 
                     //create a line between this node and the previous node
-                    Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
+                    //Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
 
 
                     Label floorLabel = null;
@@ -622,11 +623,13 @@ public class ScheduleMap {
                             setCurrentFloor(finalDestFloor);
                         });
 
-                        g.getChildren().addAll(line, flowPane);
-                    } else {
+                        //g.getChildren().addAll(line, flowPane);
+                        g.getChildren().addAll(flowPane);
+                    } /*else {
                         //otherwise, only add the line and node circle
                         g.getChildren().add(line);
                     }
+                    */
 
                 } else if (firstNode) { //if current node is the starting node
                     firstNode = false;
@@ -824,363 +827,6 @@ public class ScheduleMap {
     }
 }
 
-/*
-    public void drawMap(Path fullPath, String floorNum) {
-
-        //clear map
-        System.out.print("\nCLEARING MAP...");
-        pane.getChildren().clear();
-        System.out.println(" DONE");
-
-        System.out.println("drawMap() is Finding path for floor " + floorNum);
-
-
-        //if path is null
-        if (fullPath == null) {
-            System.out.println("NULL PATH");
-            //todo snackbar to say no path set
-            return;
-        }
-
-        int legNum = 0;
-
-        List<Path> paths = fullPath.splitByFloor();
-        for (Path path : paths) {
-            if (path.getStart().get("floor").equalsIgnoreCase(floorNum)) {
-
-                ArrayList<MapMarker> markerList = new ArrayList<>(); // List of markers to place at the end of the drawing of the path
-
-                FlowPane flowPane = new FlowPane();
-                String destFloor = "";
-
-                double markerIconXOffset = -(scale * 3);
-                double markerIconYOffset = -(scale / 2);
-                String mapMarkerSize = "25";
-
-                Iterator<Node> legItr = path.iterator();
-
-                Group g = new Group(); //create group to contain all the shapes before we add them to the scene
-
-                //Use these variables to keep track of the coordinates of the previous node
-                double prevXCoord = 0;
-                double prevYCoord = 0;
-
-                double distance = 0;
-
-                double dashlength = 10;
-                double lineOffset = -20;
-
-                ObservableList<Double> coordsList = FXCollections.observableArrayList();
-
-                boolean firstNode = true;
-                String firstID = null;
-                while (legItr.hasNext()) { //loop through list
-                    //this iterator will return a Node object
-                    //which is just a container for all the node info like its coordinates
-                    Node node = legItr.next();
-
-                    //Resize the coordinates to match the resized image
-                    double xCoord = (double) node.getX() / scale;
-                    double yCoord = (double) node.getY() / scale;
-
-                    coordsList.add(xCoord);
-                    coordsList.add(yCoord);
-
-                    if (prevXCoord >= 1 && prevYCoord >= 1) {
-                        distance += Math.hypot(xCoord - prevXCoord, yCoord - prevYCoord);
-                    }
-
-                    if (firstNode) { //if current node is the starting node
-                        if (!(prevYCoord < 1) || !(prevXCoord < 1)) {
-                            //technically second node, here to prevent circle from being "under" path line, prev will be fist node
-                            firstNode = false;
-
-                            MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
-                            icon.setSize(mapMarkerSize);
-                            icon.setLayoutX(prevXCoord + markerIconXOffset);
-                            icon.setLayoutY(prevYCoord + markerIconYOffset);
-
-
-
-                            if (firstID.equalsIgnoreCase(selectedStartNodeID)) {
-                                System.out.println("SCALE: " + scale);
-                                // True first node
-                                //icon.setId("submission-icon");
-
-                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.GREEN);
-                            } else {
-                                // First on floor
-                                //icon.setId("red-icon");
-
-                                //circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
-                            }
-
-                        } else {
-                            //Track true first node's ID, for node color issue
-                            firstID = node.get("id");
-                        }
-                        //update the coordinates for the previous node
-                        prevXCoord = xCoord;
-                        prevYCoord = yCoord;
-
-                        //if the current node is a stair or an elevator, add a label
-                        if (node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV")) {
-
-                            //iterate through the path
-                            Iterator<Node> fullItr = fullPath.iterator();
-                            while(fullItr.hasNext()) {
-
-                                Node nodeCopy = fullItr.next();
-
-                                if(node.equals(nodeCopy) && fullItr.hasNext()) {
-
-                                    Node nextNode = fullItr.next();
-
-                                    if(nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV")) {
-                                        //create string for label
-                                        String toFloor = "Go to Floor " + nextNode.get("floor");
-                                        destFloor = nextNode.get("floor");
-
-
-                                        //if current node is on a greater floor than the next
-                                        if (Node.calculateZ(node.get("floor")) > Node.calculateZ(nextNode.get("floor"))) {
-                                            //add down icon
-                                            FontAwesomeIconView iconDown = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_DOWN);
-                                            iconDown.setSize("15");
-                                        } else { //current node is on a lower floor than next node
-                                            //add up icon
-                                            FontAwesomeIconView iconUP = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_UP);
-                                            iconUP.setSize("15");
-                                        }
-
-                                        //position the flowPane next to the node
-                                        double xCoordLabel = (nextNode.getX() / scale) + 4;
-                                        double yCoordLabel = (nextNode.getY() / scale) - 4;
-                                        flowPane.setLayoutX(xCoordLabel);
-                                        flowPane.setLayoutY(yCoordLabel);
-
-                                        flowPane.getStyleClass().add("floor-change"); //add floor-change css so the child label disappears on hover
-                                        flowPane.setPrefWrapLength(0); //shrink flowPane to be as small as child
-                                    }
-
-                                }
-                            }
-                        }
-
-                    } else if (firstNode) { //if current node is the starting node
-                        firstNode = false;
-
-                        MarkerType type;
-
-                        if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
-                            //place a dot on the location
-                            type = MarkerType.START;
-                        } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
-                            //place a dot on the location
-                            type = MarkerType.END;
-                        } else { // end node of just this floor
-                            //place a dot on the location
-                            type = MarkerType.FIRST;
-                        }
-
-                        markerList.add(new MapMarker((xCoord + markerIconXOffset), (yCoord + markerIconYOffset), mapMarkerSize, type));
-
-                        //update the coordinates for the previous node
-                        prevXCoord = xCoord;
-                        prevYCoord = yCoord;
-
-                        //else, if current node is not this floors ending node, i.e., path continues
-                    } else {
-                        //update the coordinates for the previous node
-                        prevXCoord = xCoord;
-                        prevYCoord = yCoord;
-                    }
-
-                }
-
-                for (MapMarker marker : markerList) {
-                    g.getChildren().add(marker.makeMarker());
-                }
-
-
-                //display nodes
-                for (int i = 0; i < locationArray.size(); i++) {
-                    if(locationArray.get(i).get("floor").equals(currentFloor)) {
-                        double xCoord = locationArray.get(i).getX() / scale;
-                        double yCoord = locationArray.get(i).getY() / scale;
-                        Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
-                        if (locationArray.get(i).get("type").equals("HALL")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.web("#7c7c7c"));
-                        }
-                        if (locationArray.get(i).get("type").equals("CONF")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.web("#7f5124"));
-                        }
-                        if (locationArray.get(i).get("type").equals("DEPT")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.web("#74058c"));
-                        }
-                        if (locationArray.get(i).get("type").equals("ELEV")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.web("#769557"));
-                        }
-                        if (locationArray.get(i).get("type").equals("INFO")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.web("#dc721c"));
-                        }
-                        if (locationArray.get(i).get("type").equals("LABS")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.web("#c900ae"));
-                        }
-                        if (locationArray.get(i).get("type").equals("REST")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.web("#b00404"));
-                        }
-                        if (locationArray.get(i).get("type").equals("RETL")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.web("#3d4f9d"));
-                        }
-                        if (locationArray.get(i).get("type").equals("STAI")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.web("#007f52"));
-                        }
-                        if (locationArray.get(i).get("type").equals("SERV")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.web("#005cff"));
-                        }
-                        if (locationArray.get(i).get("type").equals("EXIT")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.web("#90e430"));
-                        }
-                        if (locationArray.get(i).get("type").equals("PARK")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.web("#1299d2"));
-                        }
-                        if (locationArray.get(i).get("type").equals("WALK")) {
-                            circle = new Circle(xCoord, yCoord, 5, Color.BLACK);
-                        }
-                        g.getChildren().add(circle);
-                    }
-                }
-                Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
-                ObservableList<String> observableNodeInfo = FXCollections.observableArrayList();
-
-                JFXListView listView = new JFXListView();
-                listView.setItems(observableNodeInfo);
-                Stage stickyNotesStage = new Stage();
-                stickyNotesStage.initOwner(App.getPrimaryStage());
-                stickyNotesStage.initStyle(StageStyle.UNDECORATED);
-                StackPane stickyNotesPane = new StackPane();
-                stickyNotesPane.setPrefHeight(200);
-                stickyNotesPane.setPrefWidth(300);
-                listView.setStyle("-fx-text-fill: WHITE");
-                listView.setStyle("-fx-background-color: -fx--primary");
-                listView.setStyle("-fx-font-family: Roboto");
-                stickyNotesPane.getChildren().add(listView);
-                stickyNotesStage.setScene(new Scene(stickyNotesPane));
-                g.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-                    if (newValue) {
-                        Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-                        stickyNotesStage.setX(mouseLocation.getX()+10);
-                        stickyNotesStage.setY(mouseLocation.getY()-10);
-                        stickyNotesStage.show();
-
-                    } else {
-                        stickyNotesStage.hide();
-                    }
-                });
-
-                g.setOnMouseEntered(e -> {
-                    stickyNotesPane.getChildren().removeAll();
-                    observableNodeInfo.removeAll();
-                    listView.getItems().clear();
-                    double X = e.getX();
-                    int xInt = (int) X;
-                    double Y = e.getY();
-                    int yInt = (int) Y;
-                    for (int i = 0; i < locationArray.size(); i++) {
-                        double nodeX = locationArray.get(i).getX() / scale;
-                        int nodeXInt = (int) nodeX;
-                        double nodeY = locationArray.get(i).getY() / scale;
-                        int nodeYInt = (int) nodeY;
-                        //if node coordinates match click coordinates +- 1, autofill fields with node info
-                        if (Math.abs(nodeXInt - xInt) <= 7 && Math.abs(nodeYInt - yInt) <= 7) {
-                            for (int j = 0; j < scheduleOngoing.getLocations().size(); j++) {
-                                double schedX = scheduleOngoing.getLocations().get(j).getX() / scale;
-                                int schedXInt = (int) schedX;
-                                double schedY = scheduleOngoing.getLocations().get(j).getY() / scale;
-                                int schedYInt = (int) schedY;
-                                if (Math.abs(schedXInt - xInt) <= 7 && Math.abs(schedXInt - xInt) <= 7) {
-                                    observableNodeInfo.add("Title: " + scheduleOngoing.get(j).getTitle());
-                                    observableNodeInfo.add("Location: " + scheduleOngoing.get(j).getLocationString());
-                                    observableNodeInfo.add("Time: " + scheduleOngoing.get(j).getStartTime().toString());
-                                    if(scheduleOngoing.get(j).getStatus() == 1) {
-                                        observableNodeInfo.add("Status: Incomplete");
-                                    }
-                                    observableNodeInfo.add("Priority: " + Integer.toString(scheduleOngoing.get(j).getPriority()));
-                                }
-                            }
-                        }
-                    }
-                });
-
-
-                Polyline polyline = new Polyline();
-                polyline.getPoints().addAll(coordsList);
-                polyline.setStroke(Color.web("#006db3"));
-                polyline.setStrokeWidth(2);
-                polyline.getStrokeDashArray().setAll(dashlength, dashlength);
-                pane.getChildren().addAll(polyline);
-
-                Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(polyline.strokeDashOffsetProperty(), 0)),
-                        new KeyFrame(Duration.seconds(1), new KeyValue(polyline.strokeDashOffsetProperty(), lineOffset)));
-                timeline.setCycleCount(Timeline.INDEFINITE);
-                timeline.play();
-
-                //add all objects to the scene
-                pane.getChildren().addAll(g);
-
-                ArrayList<Double> xCoords = new ArrayList<>();
-                ArrayList<Double> yCoords = new ArrayList<>();
-
-                int i = 0;
-                for (Double coord : coordsList) {
-                    if ((i % 2) == 0) {
-                        xCoords.add(coord);
-                    } else {
-                        yCoords.add(coord);
-                    }
-                    i++;
-                }
-
-                // Set to opposites, for comparison
-                double xMin = 5000/scale;
-                double xMax = 0;
-
-                for (Double coord : xCoords) {
-                    if (coord < xMin) {
-                        xMin = coord;
-                    }
-                    if (coord > xMax) {
-                        xMax = coord;
-                    }
-                }
-
-                // Set to opposites, for comparison
-                double yMin = 3400/scale;
-                double yMax = 0;
-
-                for (Double coord : yCoords) {
-                    if (coord < yMin) {
-                        yMin = coord;
-                    }
-                    if (coord > yMax) {
-                        yMax = coord;
-                    }
-                }
-
-                // Descale, back to "original" coords
-                if (legNum == floorVisits[floorMap.get(floorNum)]) {
-                    //zoomToPath(xMin * scale, xMax * scale, yMin * scale, yMax * scale);
-                }
-                legNum++;
-            } else {
-                System.out.println("No path on this floor");
-                //todo snackbar to say no nodes on this floor?
-            }
-        }
-    }
-
- */
 
     @FXML
     private void setDateLabel(Date date) {
@@ -1218,6 +864,15 @@ public class ScheduleMap {
 
     @FXML
     void initialize() {
+
+        if(App.getToDoDate() == null) {
+            datePicker.setValue(LocalDate.now());
+        } else {
+            datePicker.setValue(App.getToDoDate());
+        }
+
+        Date date = new Date(datePicker.getValue());
+        setDateLabel(date);
 
         //get primaryStage
         Stage primaryStage = App.getPrimaryStage();
@@ -1260,9 +915,6 @@ public class ScheduleMap {
         rootBorderPane.setPrefWidth(stageWidth);
         rootBorderPane.setPrefHeight(stageHeight);
 
-        datePicker.setValue(LocalDate.now());
-        Date date = new Date(datePicker.getValue());
-        setDateLabel(date);
 
         //init appBar
         javafx.scene.Node appBarComponent = null;
@@ -1283,7 +935,7 @@ public class ScheduleMap {
                 LocalDate currDate = datePicker.getValue();
                 datePicker.setValue(currDate.minusDays(1));
                 setDateLabel(new Date(datePicker.getValue()));
-                //prepareToDoTable(treeTableView, datePicker.getValue().toString());
+                findPath();
             }
         });
 
@@ -1293,12 +945,12 @@ public class ScheduleMap {
                 LocalDate currDate = datePicker.getValue();
                 datePicker.setValue(currDate.plusDays(1));
                 setDateLabel(new Date(datePicker.getValue()));
-                //prepareToDoTable(treeTableView, datePicker.getValue().toString());
+                findPath();
             }
         });
 
 
-        preparePathDisplay();
+        findPath();
 
         //Observer Design Pattern: update page based on floor change
         Subject subject = new Subject();
@@ -1374,33 +1026,12 @@ public class ScheduleMap {
         }
     }
 
-    private void preparePathDisplay() {
-        Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
-        Schedule scheduleCompleted = DB.getSchedule(App.userID, 10, datePicker.getValue().toString());
-
-
-//        ArrayList<Node> nodeArray = DB.getAllNodes();
-//        List<ToDo> array = scheduleOngoing.getTodoList();
-//        //add all nodes that are in between first and last task to list for stops on pathfinder
-//        if(array.size() > 0) {
-//            for(int j = 1; j < array.size()-1; j++) {
-//                for (int i = 0; i < nodeArray.size(); i++) {
-//                    if (array.get(j).getLocationString().equals(nodeArray.get(i).get("longName"))) {
-//                        stopList.add(nodeArray.get(i));
-//                    }
-//                }
-//            }
-//        }
-
-        findPath();
-    }
-
 
     @FXML
     private void changeDate(ActionEvent event) {
         setDateLabel(new Date(datePicker.getValue()));
         //todo passing date as floor parameter breaks it
-        findPath();
+        drawMap(currentFoundPath, currentFloor);
     }
 
 

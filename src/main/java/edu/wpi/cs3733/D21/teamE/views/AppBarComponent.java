@@ -63,27 +63,12 @@ public class AppBarComponent {
     @FXML
     private JFXButton appLoginButton;
 
-    @FXML
-    private JFXButton appLoginButtonLeft;
-
     @FXML // fx:id="clientToggle"
     private JFXToggleButton clientToggle;
 
     @FXML // fx:id="embeddedToggle"
     private JFXToggleButton embeddedToggle;
 
-
-    @FXML // fx:id="clientToggle"
-    private JFXToggleButton clientToggleLeft;
-
-    @FXML // fx:id="embeddedToggle"
-    private JFXToggleButton embeddedToggleLeft;
-
-    @FXML
-    private JFXButton myToDoButton;
-
-    @FXML // fx:id="myToDoButtonLeft"
-    private JFXButton myToDoButtonLeft;
 
     @FXML
     void getLoginAppBar(ActionEvent event) {
@@ -155,62 +140,37 @@ public class AppBarComponent {
         System.out.println("user ID is " + App.userID);
 
         //options for logged in user with and without help
-        if (!App.isShowHelp()) { //if help button shouldn't be shown
-            appBarHelpButton.setVisible(false); //remove help button
-            appLoginButtonLeft.setVisible(false); //remove left login button
-            clientToggle.setVisible(false);
-            embeddedToggle.setVisible(false);
-            clientToggleLeft.setVisible(false);
-            embeddedToggleLeft.setVisible(false);
-            myToDoButton.setVisible(false);
-            myToDoButtonLeft.setVisible(false);
-            if (App.userID != 0) { //if a user is logged in, hide remaining login button
-                appLoginButton.setVisible(true); //double check visibility (will be overridden by isShowLogin())
-                myToDoButton.setVisible(true);
-                appLoginButton.setText("Hello, " + DB.getUserName(App.userID));
-            }
-        } else { //if help shouldn't be shown
-            appLoginButton.setVisible(false); //remove right login button
-            clientToggle.setVisible(false);
-            embeddedToggle.setVisible(false);
-            clientToggleLeft.setVisible(false);
-            embeddedToggleLeft.setVisible(false);
-            myToDoButton.setVisible(false);
-            myToDoButtonLeft.setVisible(false);
-            if (App.userID != 0) { //if a user is logged in, hide remaining login button
-                appLoginButtonLeft.setVisible(true); //double check it is visible
-                myToDoButtonLeft.setVisible(true);
-                appLoginButtonLeft.setText("Hello, " + DB.getUserName(App.userID));
-            }
+        if (!App.isShowHelp()) {
+            appBarHelpButton.setManaged(false);
         }
-        if (!App.isShowLogin()) { //if no login should be shown
-            //remove login buttons
-            appLoginButtonLeft.setVisible(false);
-            appLoginButton.setVisible(false);
+        if (!App.isShowLogin()) {
+            appLoginButton.setManaged(false);
+        }
 
+        if (App.userID != 0) { //if a user is logged in, hide remaining login button
+            appLoginButton.setText("Hello, " + DB.getUserName(App.userID));
         }
+
 
         //show the toggle switch if the logged in user is an admin
         if(DB.getUserType(App.userID).equals("admin")){
             //show either the embedded or client toggle.
 
-            if(App.driverURL.equals("jdbc:derby://localhost:1527/bw;create=true")){
-
-                if(myToDoButtonLeft.isVisible()){
-                    embeddedToggleLeft.setVisible(true);
-                }
-                else{
-                    embeddedToggle.setVisible(true);
-                }
+            if(App.driverURL.equals("jdbc:derby://localhost:1527/bw;create=true")){ //if driver is embedded
+                //hide client
+                clientToggle.setManaged(false);
+                clientToggle.setVisible(false); //toggle have issues with setManaged, so need visibility set as well
             }
-            else{
-                if(myToDoButtonLeft.isVisible()) {
-                    clientToggleLeft.setVisible(true);
-                }
-                else{
-                    clientToggle.setVisible(true);
-                }
+            else { //driver is embedded
+                embeddedToggle.setManaged(false);
+                embeddedToggle.setVisible(false);
             }
+        } else { //normal user can't see any toggles
+            //disable all
+            clientToggle.setManaged(false);
+            clientToggle.setVisible(false);
+            embeddedToggle.setManaged(false);
+            embeddedToggle.setVisible(false);
         }
 
         /*

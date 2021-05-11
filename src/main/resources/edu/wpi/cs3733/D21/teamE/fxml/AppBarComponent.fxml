@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXToggleButton?>
-<?import java.lang.Double?>
-<?import javafx.geometry.Insets?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-
+<?import java.lang.*?>
 <VBox id="app-bar-top" fx:id="mainVBox" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.AppBarComponent">
    <children>
       <HBox id="app-bar-top-upper" maxHeight="25.0" minHeight="25.0" prefHeight="25.0">
@@ -69,41 +64,31 @@
                      <children>
                         <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="38.0">
                            <children>
-                              <StackPane alignment="CENTER_RIGHT" maxHeight="38.0" minHeight="38.0" prefHeight="38.0">
-                                 <children>
-                                    <JFXToggleButton fx:id="clientToggle" onAction="#clientToggle" text="Client Driven Database" textFill="WHITE" />
-                                    <JFXToggleButton fx:id="embeddedToggle" onAction="#embeddedToggle" text="Embedded Driven Database" textFill="WHITE" />
-                                    <JFXButton fx:id="myToDoButtonLeft" style="-fx-background-color: -fx--primary-dark;" text="My To Do" textFill="WHITE" />
-                                    <JFXToggleButton fx:id="embeddedToggleLeft" onAction="#embeddedToggle" text="Embedded Driven Database" textFill="WHITE">
-                                       <StackPane.margin>
-                                          <Insets right="91.0" />
-                                       </StackPane.margin>
-                                    </JFXToggleButton>
-                                    <JFXToggleButton fx:id="clientToggleLeft" onAction="#clientToggle" text="Client Driven Database" textFill="WHITE">
-                                       <StackPane.margin>
-                                          <Insets right="91.0" />
-                                       </StackPane.margin>
-                                    </JFXToggleButton>
-                                 </children>
+                              <JFXToggleButton fx:id="clientToggle" onAction="#clientToggle" text="Client Driven Database" textFill="WHITE">
                                  <HBox.margin>
-                                    <Insets right="20.0" />
+                                    <Insets left="10.0" />
                                  </HBox.margin>
-                              </StackPane>
-                              <StackPane>
-                                 <children>
-                                    <JFXButton fx:id="appLoginButtonLeft" onAction="#getLoginAppBar" style="-fx-background-color: -fx--primary-dark;" text="Login" textFill="WHITE" />
-                                    <JFXButton fx:id="myToDoButton" style="-fx-background-color: -fx--primary-dark;" text="My To Do" textFill="WHITE" />
-                                 </children>
+                              </JFXToggleButton>
+                              <JFXToggleButton fx:id="embeddedToggle" onAction="#embeddedToggle" text="Embedded Driven Database" textFill="WHITE">
                                  <HBox.margin>
-                                    <Insets right="20.0" />
+                                    <Insets left="10.0" />
                                  </HBox.margin>
-                              </StackPane>
-                              <StackPane>
-                                 <children>
-                                    <JFXButton fx:id="appLoginButton" onAction="#getLoginAppBar" style="-fx-background-color: -fx--primary-dark;" text="Login" textFill="WHITE" />
-                                    <JFXButton fx:id="appBarHelpButton" onAction="#getHelpAppBar" style="-fx-background-color: -fx--primary-dark;" text="Help" textFill="WHITE" />
-                                 </children>
-                              </StackPane>
+                              </JFXToggleButton>
+                              <JFXButton fx:id="myToDoButton" style="-fx-background-color: -fx--primary-dark;" text="My To Do" textFill="WHITE">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton fx:id="appLoginButton" onAction="#getLoginAppBar" style="-fx-background-color: -fx--primary-dark;" text="Login" textFill="WHITE">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton fx:id="appBarHelpButton" onAction="#getHelpAppBar" style="-fx-background-color: -fx--primary-dark;" text="Help" textFill="WHITE">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </JFXButton>
                            </children>
                         </HBox>
                      </children>

@@ -1,16 +1,15 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import edu.wpi.cs3733.D21.teamE.states.LoginState;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,7 +18,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -79,7 +77,7 @@ public class Login {
             App.setShowHelp(true); //show help button
             App.setPageTitle(null); //set AppBar title
             App.setShowLogin(false); //dont show login button
-            App.setHelpText("Continue as a guest or login to an existing account. If you have no account... "); //todo set help text
+            App.setHelpText("Continue as a guest or login to an existing account. If you have no account click \"Create an Account\"");
             App.setStackPane(stackPane); // required for dialog boxes, otherwise set null?
             appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
             appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's anchorPane element

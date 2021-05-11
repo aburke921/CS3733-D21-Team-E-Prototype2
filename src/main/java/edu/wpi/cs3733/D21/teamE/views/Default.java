@@ -22,7 +22,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class Default {
@@ -64,9 +63,6 @@ public class Default {
 
     @FXML // fx:id="checkInStatusButton"
     private JFXButton checkInStatusButton;
-
-    @FXML // fx:id="todoButton"
-    private JFXButton todoButton;
 
     @FXML // fx:id="algo"
     private JFXComboBox algo;
@@ -293,9 +289,6 @@ public class Default {
             scheduleAppointmentButton.setVisible(false);
         }
 
-        if (App.userID == 0 || userType.equals("visitor") || userType.equals("patient")) {
-            todoButton.setVisible(false);
-        }
 
         if (App.userID == 0 || DB.whereDidIPark(App.userID) == null){
             carParkedText.setVisible(false);

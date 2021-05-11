@@ -3,10 +3,10 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextArea?>
-<?import com.jfoenix.controls.JFXTimePicker?>
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -16,7 +16,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.image.ImageView?>
 
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.LanguageInterpreter">
    <children>
@@ -33,7 +32,7 @@
                <center>
                   <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="785.0" BorderPane.alignment="CENTER">
                      <children>
-                        <VBox  maxWidth="600.0" prefHeight="513.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-radius: 25px; -fx-background-radius: 25px;">
+                        <VBox maxWidth="600.0" prefHeight="513.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-radius: 25px; -fx-background-radius: 25px;">
                            <children>
                               <HBox alignment="TOP_CENTER" maxWidth="600.0" prefHeight="433.0" prefWidth="600.0" styleClass="centerPane">
                                  <children>
@@ -109,8 +108,8 @@
                                  <children>
                                     <AnchorPane prefHeight="71.0" prefWidth="1200.0">
                                        <children>
-                                          <JFXButton fx:id="cancel" layoutX="452.0" layoutY="1.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" />
-                                          <JFXButton fx:id="submit" layoutX="532.0" layoutY="2.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
+                                          <JFXButton fx:id="cancel" layoutX="452.0" layoutY="1.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="86.0" />
+                                          <JFXButton fx:id="submit" layoutX="532.0" layoutY="2.0" onAction="#saveData" styleClass="submit-button" text="Submit" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="11.0" />
                                        </children>
                                     </AnchorPane>
                                  </children>

@@ -79,14 +79,6 @@ public class DefaultState implements State{
                     ex.printStackTrace();
                 }
                 break;
-            case "todoButton":
-                try {
-                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ScheduleList.fxml"));
-                    App.changeScene(root);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                break;
             }
 
         }

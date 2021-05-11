@@ -1937,10 +1937,10 @@ public class DatabaseTests {
 		assertEquals(1, DB.addCustomToDo(1, "testCustomToDo"));
 
 		// update
-		assertTrue(DB.updateToDo(1, null, 1,-1, 3, "scheduledDate", null, "test", null, "expectedLength", null, "notificationTime"));
+		assertTrue(DB.updateToDo(1, null, 1,-1, 3, "test", "scheduledDate", "test", null, "expectedLength", null, "notificationTime"));
 
 		// transfer to user and complete
-		assertTrue(DB.updateToDo(1, "testCustomToDoTransfer", 1, 2, -1, null, "scheduledTime", null, "this is a thing", null, "notificationDate", null));
+		assertTrue(DB.updateToDo(1, "testCustomToDoTransfer", 1, 1, -1, "test", "scheduledTime", null, "this is a thing", null, "notificationDate", null));
 	}
 
 	@Test

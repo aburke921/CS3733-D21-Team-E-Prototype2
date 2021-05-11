@@ -55,6 +55,9 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     private JFXTextArea specialInstructInput;
 
     @FXML
+    private JFXTextField signatureInput;
+
+    @FXML
     private JFXButton cancel;
 
     @FXML
@@ -77,6 +80,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         doseQuantityInput.getValidators().add(validator);
         assignee.getValidators().add(validator);
         specialInstructInput.getValidators().add(validator);
+        signatureInput.getValidators().add(validator);
 
         //Quantity validator
         RegexValidator quantityValidator = new RegexValidator();
@@ -105,6 +109,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
 
         return  locationInput.validate() && medicineNameInput.validate() && doseMeasureInput.validate() && doseQuantityInput.validate() && assignee.validate() && specialInstructInput.validate();
 
+
     }
 
     @FXML
@@ -120,6 +125,8 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
             int doseMeasureI = Integer.parseInt(doseMeasure);
             int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
             String specialInstructions = specialInstructInput.getText();
+            String signature = signatureInput.getText();
+
 
             String assigneeName = userNames.get(userIndex);
 
@@ -173,6 +180,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         assert doseQuantityInput != null;
         assert doseMeasureInput != null;
         assert specialInstructInput != null;
+        assert signatureInput != null;
         assert submit != null;
         assert cancel != null;
 

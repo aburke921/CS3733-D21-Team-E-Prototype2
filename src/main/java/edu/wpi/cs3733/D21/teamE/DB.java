@@ -829,6 +829,11 @@ public class DB {
 		return ToDoDB.updateToDo(ToDoID, title, userID, status, priority, nodeID, scheduledDate, startTime, endTime, detail, notificationDate, notificationTime);
 	}
 
+	/**
+	 * Changes a ToDo_item's status and it's associated request's status if it is a request
+	 * @param status default 1 (normal), 10/0 (complete/deleted)
+	 * @return whether the update succeed
+	 */
 	public static boolean updateToDoStatus(int ToDoID, int status) {
 		return ToDoDB.updateToDo(ToDoID, null, -1, status, -1, null, null, null, null, null, null, null);
 	}

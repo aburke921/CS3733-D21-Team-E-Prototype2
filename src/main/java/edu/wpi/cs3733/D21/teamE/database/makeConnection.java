@@ -278,15 +278,10 @@ public class makeConnection {
 
 
 		DB.updateToDoStatus(1, 10);
-		DB.editRequests(1, 0, "complete");
 		DB.updateToDoStatus(4, 0);
-		DB.editRequests(4, 0, "canceled");
 		DB.updateToDoStatus(5, 10);
-		DB.editRequests(5, 0, "complete");
 		DB.updateToDoStatus(6, 0);
-		DB.editRequests(6, 0, "canceled");
 		DB.updateToDoStatus(7, 10);
-		DB.editRequests(7, 0, "complete");
 
 
 		//Sanitation Requests: //RequestID: 10 - 18
@@ -302,15 +297,10 @@ public class makeConnection {
 
 
 		DB.updateToDoStatus(11, 10);
-		DB.editRequests(11, 0, "complete");
 		DB.updateToDoStatus(14, 0);
-		DB.editRequests(14, 0, "canceled");
 		DB.updateToDoStatus(15, 10);
-		DB.editRequests(15, 0, "complete");
 		DB.updateToDoStatus(16, 0);
-		DB.editRequests(16, 0, "canceled");
 		DB.updateToDoStatus(17, 10);
-		DB.editRequests(17, 0, "complete");
 
 
 		//Medicine Delivery Request //RequestID: 19 - 30
@@ -329,15 +319,10 @@ public class makeConnection {
 
 
 		DB.updateToDoStatus(20, 10);
-		DB.editRequests(20, 0, "complete");
 		DB.updateToDoStatus(24, 0);
-		DB.editRequests(24, 0, "canceled");
 		DB.updateToDoStatus(25, 10);
-		DB.editRequests(25, 0, "complete");
 		DB.updateToDoStatus(26, 0);
-		DB.editRequests(26, 0, "canceled");
 		DB.updateToDoStatus(27, 10);
-		DB.editRequests(27, 0, "complete");
 
 
 		//Security Requests: //RequestID: 31 - 38
@@ -352,15 +337,10 @@ public class makeConnection {
 
 
 		DB.updateToDoStatus(31, 10);
-		DB.editRequests(31, 0, "complete");
 		DB.updateToDoStatus(34, 0);
-		DB.editRequests(34, 0, "canceled");
 		DB.updateToDoStatus(35, 10);
-		DB.editRequests(35, 0, "complete");
 		DB.updateToDoStatus(36, 0);
-		DB.editRequests(36, 0, "canceled");
 		DB.updateToDoStatus(37, 10);
-		DB.editRequests(37, 0, "complete");
 
 
 		//RequestID: 39 - 47
@@ -415,15 +395,10 @@ public class makeConnection {
 
 
 		DB.updateToDoStatus(40, 10);
-		DB.editRequests(40, 0, "complete");
 		DB.updateToDoStatus(42, 10);
-		DB.editRequests(42, 0, "complete");
 		DB.updateToDoStatus(44, 10);
-		DB.editRequests(44, 0, "complete");
 		DB.updateToDoStatus(45, 10);
-		DB.editRequests(45, 0, "complete");
 		DB.updateToDoStatus(47, 10);
-		DB.editRequests(47, 0, "complete");
 
 
 		//Special Accounts:

@@ -78,10 +78,10 @@ public class ScheduleList {
 
         prepareToDoTable(treeTableView, date.toString());
 
-        editButton.setTooltip(new Tooltip("Edit ToDo"));
-        completeButton.setTooltip(new Tooltip("Mark ToDo as Complete"));
-        deleteButton.setTooltip(new Tooltip("Delete ToDo"));
-        addButton.setTooltip(new Tooltip("Add ToDo"));
+        editButton.setTooltip(new Tooltip("Edit Task"));
+        completeButton.setTooltip(new Tooltip("Mark Task as Complete"));
+        deleteButton.setTooltip(new Tooltip("Delete Task"));
+        addButton.setTooltip(new Tooltip("Add Task"));
 
         //set up icons for moving foward and backward a day
         goBackDay.setOnMousePressed(new EventHandler<MouseEvent>() {

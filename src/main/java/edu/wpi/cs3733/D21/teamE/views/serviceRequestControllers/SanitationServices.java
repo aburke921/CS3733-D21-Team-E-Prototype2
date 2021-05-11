@@ -19,6 +19,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
   @FXML private JFXComboBox<String> assignee;
   @FXML private JFXTextArea detailedInstructionsInput;
   @FXML private JFXComboBox<String> locationInput;
-  @FXML private JFXComboBox<String> requestTypeInput;
+  @FXML private JFXComboBox<String> ServiceTypeinput;
   @FXML private JFXComboBox<String> Severity;
   @FXML private JFXButton cancel;
   @FXML private JFXButton submit;
@@ -61,14 +62,14 @@ public class SanitationServices extends ServiceRequestFormComponents {
 
     validator.setMessage("Input required");
 
-    requestTypeInput.getValidators().add(validator);
+    ServiceTypeinput.getValidators().add(validator);
     assignee.getValidators().add(validator);
     locationInput.getValidators().add(validator);
 
     detailedInstructionsInput.getValidators().add(validator);
     Severity.getValidators().add(validator);
 
-    return locationInput.validate() && requestTypeInput.validate() && assignee.validate() && detailedInstructionsInput.validate() && Severity.validate();
+    return locationInput.validate() && ServiceTypeinput.validate() && assignee.validate() && detailedInstructionsInput.validate() && Severity.validate();
 
 
   }
@@ -79,11 +80,11 @@ public class SanitationServices extends ServiceRequestFormComponents {
    * @param actionEvent
    */
   @FXML
-  private void saveData(ActionEvent actionEvent){
+  private void saveData(ActionEvent actionEvent) throws MessagingException {
 
     if(validateInput()){
 
-      String serviceKind = requestTypeInput.getValue();
+      String serviceKind = ServiceTypeinput.getValue();
       int assigneeIndex = assignee.getSelectionModel().getSelectedIndex();
       int assigneeID = userID.get(assigneeIndex);
       String details = detailedInstructionsInput.getText();
@@ -95,26 +96,20 @@ public class SanitationServices extends ServiceRequestFormComponents {
       DB.addSanitationRequest(object);
 
       //For email implementation later
-//      String email = DB.getEmail(App.userID);
-//      String fullName = DB.getUserName(App.userID);
-////      String assigneeName = userNames.get(assigneeIDIndex);
-//      String locationName = locations.get(nodeID);
-//      String body = "Hello " + fullName + ", \n\n" + "Thank you for making an External Patient Transport request." +
-//              "Here is the summary of your request: \n\n" +
-//              " - Type: " + type + "\n" +
-//              " - Severity: " + severity + "\n" +
-//              " - PatientID: " + patientID + "\n" +
-//              " - ETA: " + ETA + "\n" +
-//              " - Blood Pressure: " + bloodPressure + "\n" +
-//              " - Temperature: " + temperature + "\n" +
-//              " - Oxygen Level: " + oxygenLevel + "\n" +
-//              " - Details: " + details + "\n" +
-//              " - Assignee Name: " + assigneeName + "\n" +
-//              " - Location: " + locationName + "\n\n" +
-//              "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
-//              "- Emerald Emus BWH";
-//
-//      sendEmail.sendRequestConfirmation(email, body);
+      String email = DB.getEmail(App.userID);
+      String fullName = DB.getUserName(App.userID);
+      String assigneeName = userNames.get(assigneeIndex);
+      String body = "Hello " + fullName + ", \n\n" + "Thank you for making an Sanitation request." +
+              "Here is the summary of your request: \n\n" +
+              " - Assignee Name: " + assigneeName + "\n" +
+              " - Type of sanitation: " + serviceKind + "\n" +
+              " - Location: " + node + "\n" +
+              " - Severity: " + severity + "\n" +
+              " - Details: " + details + "\n" +
+              "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+              "- Emerald Emus BWH";
+
+      sendEmail.sendRequestConfirmation(email, body);
 
       super.handleButtonSubmit(actionEvent);
     }
@@ -143,10 +138,10 @@ public class SanitationServices extends ServiceRequestFormComponents {
     userID = DB.getAssigneeIDs("custodian");
     assignee.setItems(userNames);
 
-    assert requestTypeInput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-    assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-    assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-    assert assignee != null : "fx:id=\"assignee\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
+    assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SanitationV2.fxml'.";
+    assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SanitationV2.fxml'.";
+    assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SanitationV2.fxml'.";
+    assert assignee != null : "fx:id=\"assignee\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SanitationV2.fxml'.";
 
     //init appBar
     javafx.scene.Node appBarComponent = null;

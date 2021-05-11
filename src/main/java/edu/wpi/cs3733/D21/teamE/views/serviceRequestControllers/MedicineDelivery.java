@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RegexValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
@@ -54,6 +55,9 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
     private JFXTextArea specialInstructInput;
 
     @FXML
+    private JFXTextField signatureInput;
+
+    @FXML
     private JFXButton cancel;
 
     @FXML
@@ -76,8 +80,35 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         doseQuantityInput.getValidators().add(validator);
         assignee.getValidators().add(validator);
         specialInstructInput.getValidators().add(validator);
+        signatureInput.getValidators().add(validator);
+
+        //Quantity validator
+        RegexValidator quantityValidator = new RegexValidator();
+        quantityValidator.setMessage("Must be a number");
+        quantityValidator.setRegexPattern("^(0|[1-9][0-9]*)$");
+
+        doseQuantityInput.getValidators().add(quantityValidator);
+        doseQuantityInput.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                doseQuantityInput.validate();
+            }
+        });
+
+        //Quantity validator
+        RegexValidator dosageValidator = new RegexValidator();
+        dosageValidator.setMessage("Must be a number");
+        dosageValidator.setRegexPattern("^(0|[1-9][0-9]*)$");
+
+        doseMeasureInput.getValidators().add(dosageValidator);
+        doseMeasureInput.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                doseMeasureInput.validate();
+            }
+        });
+
 
         return  locationInput.validate() && medicineNameInput.validate() && doseMeasureInput.validate() && doseQuantityInput.validate() && assignee.validate() && specialInstructInput.validate();
+
 
     }
 
@@ -94,29 +125,29 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
             int doseMeasureI = Integer.parseInt(doseMeasure);
             int doseQuantity = Integer.parseInt(doseQuantityInput.getText());
             String specialInstructions = specialInstructInput.getText();
+            String signature = signatureInput.getText();
 
+
+            String assigneeName = userNames.get(userIndex);
 
             MedicineDeliveryObj object = new MedicineDeliveryObj(0, App.userID, assigned, location, name, doseQuantity, doseMeasureI, specialInstructions, "");
             DB.addMedicineRequest(object);
 
-            //For email implementation later
-//        String email = DB.getEmail(App.userID);
-//        String fullName = DB.getUserName(App.userID);
-//        String assigneeName = userNames.get(assigned);
-//        String locationName = locations.get(nodeIDIndex);
-//        String body = "Hello " + fullName + ", \n\n" + "Thank you for making an External Patient Transport request." +
-//                "Here is the summary of your request: \n\n" +
-//                " - Location: " + location + "\n" +
-//                " - Medicine Name: " + name + "\n" +
-//                " - Medicine Dosage: " + doseMeasure + "\n" +
-//                " - Does Quantity: " + doseQuantity + "\n" +
-//                " - Assignee Name: " + assigned + "\n" +
-//                " - Special Instructions: " + specialInstructions + "\n" +
-//                " - Signature: " + signatureInput + "\n\n" +
-//                "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
-//                "- Emerald Emus BWH";
-//
-//        sendEmail.sendRequestConfirmation(email, body);
+        //For email implementation later
+        String email = DB.getEmail(App.userID);
+        String fullName = DB.getUserName(App.userID);
+        String body = "Hello " + fullName + ", \n\n" + "Thank you for making an Medicine Delivery request." +
+                "Here is the summary of your request: \n\n" +
+                " - Location: " + location + "\n" +
+                " - Assignee Name: " + assigneeName + "\n" +
+                " - Medicine Name: " + name + "\n" +
+                " - Medicine Dosage: " + doseMeasure + "\n" +
+                " - Supply: " + doseQuantity + "\n" +
+                " - Special Instructions: " + specialInstructions + "\n\n" +
+                "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+                "- Emerald Emus BWH";
+
+        sendEmail.sendRequestConfirmation(email, body);
 
             super.handleButtonSubmit(e);
         }
@@ -149,6 +180,7 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         assert doseQuantityInput != null;
         assert doseMeasureInput != null;
         assert specialInstructInput != null;
+        assert signatureInput != null;
         assert submit != null;
         assert cancel != null;
 

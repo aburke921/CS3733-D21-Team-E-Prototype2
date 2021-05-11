@@ -177,6 +177,7 @@ public class ScheduleMap {
 
         if (startNode != null) { // if not null, there is a preset start
             selectedStartNodeID = startNode.get("id");
+            currentFloor = startNode.get("floor");
         }
 
         if (endNode != null) { // if not null, there is a preset end
@@ -210,8 +211,20 @@ public class ScheduleMap {
         //Call the path search function
         Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
 
+        /*
+        for(int i = 0; i < scheduleOngoing.getLocations().size(); i++) {
+            if(scheduleOngoing.get(i).getStatus() == 0) {
+                scheduleOngoing.
+            }
+        }
+
+         */
+
         List<Node> locations = scheduleOngoing.getLocations();
         locationArray = new ArrayList<Node>(locations);
+        Node node = DB.getNodeInfo("FEXIT00201");
+        locationArray.add(0, node);
+        locations.add(0, node);
 
         Path foundPath = search.search(locations);
 
@@ -259,7 +272,7 @@ public class ScheduleMap {
         //get directions
         if (currentFoundPath == null) return;
 
-        List<String> directions = currentFoundPath.makeDirectionsWithDist();
+        List<String> directions = currentFoundPath.makeDirectionsStops(locationArray);
         String floor = "Floor " + currentFoundPath.getStart().get("floor");
 
         TableView tableView = new TableView();
@@ -287,61 +300,70 @@ public class ScheduleMap {
         tableView.getColumns().add(column2);
 
         boolean floorChangeFlag = true;
-
         for (String dir : directions) {
-            if (floorChangeFlag) {
-                Text floorHeader = new Text(Character.toString(MaterialDesignIcon.PLAY_CIRCLE.getChar()));
-                floorHeader.setStyle("-fx-fill: -fx--primary-dark");
+            if (!dir.contains("Appointment")) {
+                if (floorChangeFlag) {
+                    Text floorHeader = new Text(Character.toString(MaterialDesignIcon.PLAY_CIRCLE.getChar()));
+                    floorHeader.setStyle("-fx-fill: -fx--primary-dark");
 
-                Text floorText = new Text(floor);
-                floorText.setFont(javafx.scene.text.Font.font(null, FontWeight.BOLD, 16));
+                    Text floorText = new Text(floor);
+                    floorText.setFont(javafx.scene.text.Font.font(null, FontWeight.BOLD, 16));
 
-                tableView.getItems().add(new TextualDirectionStep(floorHeader, floorText));
+                    tableView.getItems().add(new TextualDirectionStep(floorHeader, floorText));
 
-                floorChangeFlag = false;
-            }
-            char step;
-            Text text;
-            int rotate = 0;
-            step = MaterialDesignIcon.ARROW_UP_BOLD_CIRCLE_OUTLINE.getChar();
-            if (dir.contains("straight")) {
-                // no change, but needs to be here for elevator checks
-            } else if (dir.contains("Stairs")) {
-                step = MaterialDesignIcon.STAIRS.getChar();
-            } else if (dir.contains("left")) {
-                if (dir.contains("sharp")) {
-                    rotate = -135;
-                } else if (dir.contains("shallow")){
-                    rotate = -45;
-                } else if (dir.contains("Bend")){
-                    rotate = -25;
-                } else {
-                    rotate = -90;
+                    floorChangeFlag = false;
                 }
-            } else if (dir.contains("right")) {
-                if (dir.contains("sharp")) {
-                    rotate = 135;
-                } else if (dir.contains("shallow")){
-                    rotate = 45;
-                } else if (dir.contains("Bend")){
-                    rotate = 25;
-                } else {
-                    rotate = 90;
+                char step;
+                Text text;
+                int rotate = 0;
+                step = MaterialDesignIcon.ARROW_UP_BOLD_CIRCLE_OUTLINE.getChar();
+                if (dir.contains("straight")) {
+                    // no change, but needs to be here for elevator checks
+                } else if (dir.contains("Stairs")) {
+                    step = MaterialDesignIcon.STAIRS.getChar();
+                } else if (dir.contains("left")) {
+                    if (dir.contains("sharp")) {
+                        rotate = -135;
+                    } else if (dir.contains("shallow")) {
+                        rotate = -45;
+                    } else if (dir.contains("Bend")) {
+                        rotate = -25;
+                    } else {
+                        rotate = -90;
+                    }
+                } else if (dir.contains("right")) {
+                    if (dir.contains("sharp")) {
+                        rotate = 135;
+                    } else if (dir.contains("shallow")) {
+                        rotate = 45;
+                    } else if (dir.contains("Bend")) {
+                        rotate = 25;
+                    } else {
+                        rotate = 90;
+                    }
+                } else { // else is elevator
+                    step = MaterialDesignIcon.ELEVATOR.getChar();
                 }
-            } else { // else is elevator
-                step = MaterialDesignIcon.ELEVATOR.getChar();
-            }
 
-            text = new Text(Character.toString(step));
-            text.setRotate(rotate);
-            text.setStyle("-fx-fill: -fx--primary-dark");
-            tableView.getItems().add(new TextualDirectionStep(text, new Text("   "+ dir)));
-            if (dir.contains("Floor")) {
-                String s1 = dir.substring(dir.indexOf("Floor"));
-                s1 = s1.replace("Floor", "");
-                s1 = s1.replaceAll("\\s", "");
-                floor = "Floor " + s1;
-                floorChangeFlag = true;
+                text = new Text(Character.toString(step));
+                text.setRotate(rotate);
+                text.setStyle("-fx-fill: -fx--primary-dark");
+                tableView.getItems().add(new TextualDirectionStep(text, new Text("   " + dir)));
+                if (dir.contains("Floor")) {
+                    String s1 = dir.substring(dir.indexOf("Floor"));
+                    s1 = s1.replace("Floor", "");
+                    s1 = s1.replaceAll("\\s", "");
+                    floor = "Floor " + s1;
+                    floorChangeFlag = true;
+                }
+            } else {
+                Text stopIcon = new Text(Character.toString(MaterialDesignIcon.ALERT_OCTAGON.getChar()));
+                stopIcon.setStyle("-fx-fill: -fx--primary-dark");
+
+                Text stopText = new Text(dir);
+                stopText.setFont(Font.font(null, FontWeight.BOLD, 16));
+
+                tableView.getItems().add(new TextualDirectionStep(stopIcon, stopText));
             }
         }
 
@@ -415,54 +437,6 @@ public class ScheduleMap {
     }
 
 
-    /*
-    private void zoomToPath(double xMin, double xMax, double yMin, double yMax) {
-        double fullScaleX = 5000 * scrollPane.getWidth() / primaryStage.getWidth(); // max number of viewable pixels
-        double fullScaleY = 3400 * scrollPane.getHeight() / primaryStage.getHeight();
-
-        double xDist = xMax - xMin; // Distance between the points (sets zoom)
-        double yDist = yMax - yMin;
-
-        double fullStage = Math.max((xDist / fullScaleX), (yDist / fullScaleY)) + 0.175;
-        double stageAmount = constrain(0.2, 1, fullStage); // Percentage of stage visible
-        double zoomAmount = 1 / stageAmount;
-
-        zoomSlider.setValue(zoomAmount);
-
-        double xCenter = xMax - xDist / 2; // Center of points, sets position
-        double yCenter = yMax - yDist / 2;
-
-        double centerX = fullScaleX * stageAmount / 2; // Center of viewport
-        double centerY = fullScaleY * stageAmount / 2;
-
-        double xOffset = 5000 - fullScaleX * stageAmount; //how many pixels can the map be shifted by
-        double yOffset = 3400 - fullScaleY * stageAmount;
-
-        double x = (xCenter - centerX) / xOffset;
-        double y = (yCenter - centerY) / yOffset;
-
-        scrollPane.setHvalue(x);
-        scrollPane.setVvalue(y);
-    }
-
-    /**
-     * Constrains a value to within a minimum value and maximum value
-     * @param min Minimum value
-     * @param max Maximum value
-     * @param val The value
-     * @return The constrained value
-
-    private double constrain(double min, double max, double val) {
-        if (val > max) {
-            return max;
-        } else if (val < min) {
-            return min;
-        } else {
-            return val;
-        }
-    }
-
-     */
 
 
     public void drawMap(Path fullPath, String floorNum) {
@@ -473,6 +447,9 @@ public class ScheduleMap {
         System.out.println(" DONE");
 
         System.out.println("drawMap() is Finding path for floor " + floorNum);
+
+        //for double icons
+        ArrayList<String> doubleIconList = new ArrayList<>();
 
     //updateMarkers();
 
@@ -553,62 +530,67 @@ public class ScheduleMap {
                 }
 
                 if (!legItr.hasNext()) { //if current node is the ending node for this floor
-
-                    //create a line between this node and the previous node
-                    //Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-
-
                     Label floorLabel = null;
                     FlowPane flowPane = new FlowPane();
                     String destFloor = "";
 
-                    //if the current node is a stair or an elevator, add a label
-                    if (node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV")) {
+                    String nodeS = Integer.toString(node.getX()) + "." + Integer.toString(node.getY());
 
-                        //iterate through the path
-                        Iterator<Node> fullItr = fullPath.iterator();
-                        while(fullItr.hasNext()) {
+                    if(!doubleIconList.contains(nodeS)) {
+                        //if the current node is a stair or an elevator, add a label
+                        if ((node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV"))) {
 
-                            Node nodeCopy = fullItr.next();
 
-                            if(node.equals(nodeCopy) && fullItr.hasNext()) {
+                            //iterate through the path
+                            Iterator<Node> fullItr = fullPath.iterator();
+                            while (fullItr.hasNext()) {
 
-                                Node nextNode = fullItr.next();
+                                Node nodeCopy = fullItr.next();
 
-                                if(nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV")) {
-                                    //create string for label
-                                    String toFloor = "Go to Floor " + nextNode.get("floor");
-                                    destFloor = nextNode.get("floor");
+                                if (node.equals(nodeCopy) && fullItr.hasNext()) {
 
-                                    //add string to label
-                                    floorLabel = new Label(toFloor);
+                                    Node nextNode = fullItr.next();
 
-                                    //if current node is on a greater floor than the next
-                                    if (Node.calculateZ(node.get("floor")) > Node.calculateZ(nextNode.get("floor"))) {
-                                        //add down icon
-                                        FontAwesomeIconView iconDown = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_DOWN);
-                                        iconDown.setSize("15");
-                                        floorLabel.setGraphic(iconDown);
-                                    } else { //current node is on a lower floor than next node
-                                        //add up icon
-                                        FontAwesomeIconView iconUP = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_UP);
-                                        iconUP.setSize("15");
-                                        floorLabel.setGraphic(iconUP);
+                                    if (!doubleIconList.contains(nodeS) && (nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV"))) {
+
+                                        //create string for label
+                                        String toFloor = "Go to Floor " + nextNode.get("floor");
+                                        destFloor = nextNode.get("floor");
+
+                                        //add string to label
+                                        floorLabel = new Label(toFloor);
+
+                                        //if current node is on a greater floor than the next
+                                        if (Node.calculateZ(node.get("floor")) > Node.calculateZ(nextNode.get("floor"))) {
+                                            //add down icon
+                                            FontAwesomeIconView iconDown = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_DOWN);
+                                            iconDown.setSize("15");
+                                            floorLabel.setGraphic(iconDown);
+                                        } else { //current node is on a lower floor than next node
+                                            //add up icon
+                                            FontAwesomeIconView iconUP = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_UP);
+                                            iconUP.setSize("15");
+                                            floorLabel.setGraphic(iconUP);
+                                        }
+                                        if (!doubleIconList.contains(nodeS)) {
+                                            doubleIconList.add(nodeS);
+                                            System.out.println("ICON PRINTING");
+
+                                            //put the label inside the flowPane
+                                            flowPane.getChildren().add(floorLabel);
+
+                                            //position the flowPane next to the node
+                                            double xCoordLabel = (nextNode.getX() / scale) + 4;
+                                            double yCoordLabel = (nextNode.getY() / scale) - 4;
+                                            flowPane.setLayoutX(xCoordLabel);
+                                            flowPane.setLayoutY(yCoordLabel);
+
+                                            flowPane.getStyleClass().add("floor-change"); //add floor-change css so the child label disappears on hover
+                                            flowPane.setPrefWrapLength(0); //shrink flowPane to be as small as child
+                                        }
                                     }
 
-                                    //put the label inside the flowPane
-                                    flowPane.getChildren().add(floorLabel);
-
-                                    //position the flowPane next to the node
-                                    double xCoordLabel = (nextNode.getX() / scale) + 4;
-                                    double yCoordLabel = (nextNode.getY() / scale) - 4;
-                                    flowPane.setLayoutX(xCoordLabel);
-                                    flowPane.setLayoutY(yCoordLabel);
-
-                                    flowPane.getStyleClass().add("floor-change"); //add floor-change css so the child label disappears on hover
-                                    flowPane.setPrefWrapLength(0); //shrink flowPane to be as small as child
                                 }
-
                             }
                         }
                     }
@@ -719,7 +701,9 @@ public class ScheduleMap {
             stickyNotesPane.getChildren().add(listView);
             stickyNotesStage.setScene(new Scene(stickyNotesPane));
             s.hoverProperty().addListener((ChangeListener<Boolean>) (Circle, oldValue, newValue) -> {
+                //todo if not start
                 if (newValue) {
+                    System.out.println("ZERO");
                     Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
                     stickyNotesStage.setX(mouseLocation.getX()+10);
                     stickyNotesStage.setY(mouseLocation.getY()-10);
@@ -732,47 +716,50 @@ public class ScheduleMap {
 
             s.setOnMouseEntered(e -> {
                 stickyNotesPane.getChildren().removeAll();
-                observableNodeInfo.removeAll();
                 listView.getItems().clear();
+                observableNodeInfo.removeAll();
                 double X = e.getX();
                 int xInt = (int) X;
                 double Y = e.getY();
                 int yInt = (int) Y;
-                for (int i = 0; i < locationArray.size(); i++) {
-                    double nodeX = locationArray.get(i).getX() / scale;
-                    int nodeXInt = (int) nodeX;
-                    double nodeY = locationArray.get(i).getY() / scale;
-                    int nodeYInt = (int) nodeY;
-                    //if node coordinates match click coordinates +- 1, autofill fields with node info
-                    if (Math.abs(nodeXInt - xInt) <= 7 && Math.abs(nodeYInt - yInt) <= 7) {
-                        for (int j = 0; j < scheduleOngoing.getLocations().size(); j++) {
-                            double schedX = scheduleOngoing.getLocations().get(j).getX() / scale;
-                            int schedXInt = (int) schedX;
-                            double schedY = scheduleOngoing.getLocations().get(j).getY() / scale;
-                            int schedYInt = (int) schedY;
-                            if (Math.abs(schedXInt - xInt) <= 7 && Math.abs(schedXInt - xInt) <= 7) {
-                                observableNodeInfo.add("Title: " + scheduleOngoing.get(j).getTitle());
-                                observableNodeInfo.add("Location: " + scheduleOngoing.get(j).getLocationString());
-                                observableNodeInfo.add("Time: " + scheduleOngoing.get(j).getStartTime().hourMinString());
-                                if(scheduleOngoing.get(j).getStatus() == 1) {
-                                    observableNodeInfo.add("Status: Incomplete");
-                                }
-                                switch (scheduleOngoing.get(j).getPriority()) {
-                                    case 1:
-                                        observableNodeInfo.add("Low Priority");
-                                        break;
-                                    case 2:
-                                        observableNodeInfo.add("Medium Priority");
-                                        break;
-                                    case 3:
-                                        observableNodeInfo.add("High Priority");
-                                        break;
-                                    default:
-                                        break;
+                for (int i = 1; i < locationArray.size(); i++) {
+                        System.out.println(locationArray.get(i).get("longName"));
+                        double nodeX = locationArray.get(i).getX() / scale;
+                        int nodeXInt = (int) nodeX;
+                        double nodeY = locationArray.get(i).getY() / scale;
+                        int nodeYInt = (int) nodeY;
+                        //if node coordinates match click coordinates +- 1, autofill fields with node info
+                        if (Math.abs(nodeXInt - xInt) <= 5 && Math.abs(nodeYInt - yInt) <= 5) {
+                            for (int j = 0; j < scheduleOngoing.getLocations().size(); j++) {
+                                    double schedX = scheduleOngoing.getLocations().get(j).getX() / scale;
+                                    int schedXInt = (int) schedX;
+                                    double schedY = scheduleOngoing.getLocations().get(j).getY() / scale;
+                                    int schedYInt = (int) schedY;
+                                    if (Math.abs(schedXInt - xInt) <= 5 && Math.abs(schedYInt - yInt) <= 5) {
+                                        if(scheduleOngoing.getLocations().get(j).get("floor").equals(currentFloor)) {
+                                        observableNodeInfo.add("Title: " + scheduleOngoing.get(j).getTitle());
+                                        observableNodeInfo.add("Location: " + scheduleOngoing.get(j).getLocationString());
+                                        observableNodeInfo.add("Time: " + scheduleOngoing.get(j).getStartTime().hourMinString());
+                                        if (scheduleOngoing.get(j).getStatus() == 1) {
+                                            observableNodeInfo.add("Status: Incomplete");
+                                        }
+                                        switch (scheduleOngoing.get(j).getPriority()) {
+                                            case 1:
+                                                observableNodeInfo.add("Low Priority");
+                                                break;
+                                            case 2:
+                                                observableNodeInfo.add("Medium Priority");
+                                                break;
+                                            case 3:
+                                                observableNodeInfo.add("High Priority");
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
                 }
             });
 
@@ -922,7 +909,7 @@ public class ScheduleMap {
         //init appBar
         javafx.scene.Node appBarComponent = null;
         try {
-            App.setPageTitle("Schedule List"); //set AppBar title
+            App.setPageTitle("Schedule Map"); //set AppBar title
             App.setShowHelp(false);
             App.setShowLogin(true);
             appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));

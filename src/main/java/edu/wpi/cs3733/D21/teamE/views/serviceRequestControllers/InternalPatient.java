@@ -4,9 +4,11 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RegexValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
+import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.InternalPatientObj;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -66,13 +69,25 @@ public class InternalPatient extends ServiceRequestFormComponents{
         assignedPersonnel.getValidators().add(validator);
         descriptionInput.getValidators().add(validator);
 
+        //patientID validator
+        RegexValidator patientIDValidator = new RegexValidator();
+        patientIDValidator.setMessage("Must be a number");
+        patientIDValidator.setRegexPattern("^(0|[1-9][0-9]*)$"); //todo, if a different special char is inputted, will error out. Eg: ~^-+
+
+        patientIdInput.getValidators().add(patientIDValidator);
+        patientIdInput.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                patientIdInput.validate();
+            }
+        });
+
         return pickupInput.validate() && dropoffInput.validate() && departmentInput.validate()
                 && severityInput.validate() && patientIdInput.validate() && assignedPersonnel.validate()
                 && descriptionInput.validate();
     }
 
     @FXML
-    public void saveData(ActionEvent actionEvent) {
+    public void saveData(ActionEvent actionEvent) throws MessagingException {
         if(validateInput()) {
             //Setting up indexes for getting id
             int nodePickupIndex = pickupInput.getSelectionModel().getSelectedIndex();
@@ -91,6 +106,27 @@ public class InternalPatient extends ServiceRequestFormComponents{
             //Setting up object and adding it to database
             InternalPatientObj object = new InternalPatientObj(0, App.userID, pickUp, dropOff, user, patientID, dept, sever, desc);
             DB.addInternalPatientRequest(object);
+
+            //For email implementation later
+            String email = DB.getEmail(App.userID);
+            String fullName = DB.getUserName(App.userID);
+            String assigneeName = userNames.get(userIndex);
+
+            String body = "Hello " + fullName + ", \n\n" + "Thank you for making a Internal Patient Transport request." +
+                    "Here is the summary of your request: \n\n" +
+                    " - Assignee Name: " + assigneeName + "\n" +
+                    " - Pick-up Location: " + pickUp + "\n" +
+                    " - Drop-off Location: " + dropOff + "\n" +
+                    " - Department: " + dept + "\n" +
+                    " - Severity: " + sever + "\n" +
+                    " - Patient ID: " + patientID + "\n" +
+                    " - Description: " + desc + "\n\n" +
+                    "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+                    "- Emerald Emus BWH";
+
+            sendEmail.sendRequestConfirmation(email, body);
+
+
             super.handleButtonSubmit(actionEvent);
         }
     }

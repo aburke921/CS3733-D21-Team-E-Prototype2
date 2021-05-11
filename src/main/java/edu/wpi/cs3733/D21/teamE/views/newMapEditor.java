@@ -59,6 +59,9 @@ public class newMapEditor {
      * FXML Values
      */
 
+    @FXML // fx:id="appBarAnchorPane"
+    private AnchorPane appBarAnchorPane; // Value injected by FXMLLoader
+
 
     @FXML // fx:id="zoomSlider"
     private Slider zoomSlider;
@@ -886,6 +889,22 @@ public class newMapEditor {
     @FXML
     void initialize() {
 
+        //init appBar
+        javafx.scene.Node appBarComponent;
+        try {
+            App.setPageTitle("Map Ediotr"); //set AppBar title
+            App.setHelpText("To use the pathfinder, first select a starting location and end location you would like " +
+                    "to find the paths to.\n You may search to find what you are looking for as well. " +
+                    "\n..."); //todo add help text for Map Editor
+            App.setStackPane(stackPane);
+            App.setShowHelp(true);
+            App.setShowLogin(true);
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's sideBarVBox element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //Creating ID dropdown
         ArrayList<String> idList = DB.getListOfNodeIDS();
         ObservableList<String> listOfIDS = FXCollections.observableArrayList();
@@ -939,12 +958,6 @@ public class newMapEditor {
 
         //get primaryStage
         Stage primaryStage = App.getPrimaryStage();
-
-        //If exit button is clicked, exit app
-        exit.setOnMouseClicked(event -> {
-            App app = new App();
-            app.stop();
-        });
 
         //get dimensions of stage
         stageWidth = primaryStage.getWidth();

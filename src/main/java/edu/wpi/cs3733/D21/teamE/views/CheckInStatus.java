@@ -51,6 +51,7 @@ public class CheckInStatus {
         int formNum = formNumber.getFormNumber();
         DB.markAsCovidSafe(formNum);
         DB.updateUserAccountCovidStatus(App.userID, "Safe");
+        refresh();
     }
 
     @FXML
@@ -59,6 +60,7 @@ public class CheckInStatus {
         int formNum = formNumber.getFormNumber();
         DB.markAsCovidRisk(formNum);
         DB.updateUserAccountCovidStatus(App.userID, "Unsafe");
+        refresh();
     }
 
     public void removeChildren(TreeItem<CovidSurveyObj> treeItem) {

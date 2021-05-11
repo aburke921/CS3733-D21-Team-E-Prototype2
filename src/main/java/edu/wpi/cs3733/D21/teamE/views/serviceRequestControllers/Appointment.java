@@ -16,7 +16,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
-
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
 import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
@@ -25,9 +24,7 @@ import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.states.ServiceRequestState;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-
 import javafx.fxml.FXML;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -42,11 +39,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
+import java.net.URL;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class Appointment extends ServiceRequestFormComponents{
 
-
-	int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 
 	RequiredFieldValidator validator = new RequiredFieldValidator();
 	ObservableList<String> userNames;

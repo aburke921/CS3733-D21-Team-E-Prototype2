@@ -10,9 +10,13 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -34,6 +38,9 @@ public class CovidSurvey extends ServiceRequests {
 	private AnchorPane appBarAnchorPane;
 	@FXML
 	private StackPane stackPane;
+
+	@FXML // fx:id="background"
+	private ImageView background;
 
 	public static void exitPopUp(String heading, String button, String message, StackPane stackPane) {
 		System.out.println("DialogBox Posted");
@@ -125,6 +132,18 @@ public class CovidSurvey extends ServiceRequests {
 
 	@FXML
 	public void initialize() {
+
+		Stage primaryStage = App.getPrimaryStage();
+		Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+		Image backgroundImage = backgroundImg;
+		background.setImage(backgroundImage);
+		background.setEffect(new GaussianBlur());
+		background.setPreserveRatio(false);
+		background.setFitWidth(primaryStage.getWidth());
+		background.setFitHeight(primaryStage.getHeight());
+
+		background.fitWidthProperty().bind(primaryStage.widthProperty());
+		background.fitHeightProperty().bind(primaryStage.heightProperty());
 
 		//init appBar
 		javafx.scene.Node appBarComponent = null;

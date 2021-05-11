@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 
 import java.io.IOException;
 
-public class MapEditorState {
+public class MapEditorState implements State{
 
     public void switchScene(ActionEvent event) {
 

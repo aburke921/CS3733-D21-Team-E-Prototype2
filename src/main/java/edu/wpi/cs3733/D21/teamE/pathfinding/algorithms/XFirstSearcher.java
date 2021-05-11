@@ -73,7 +73,7 @@ public class XFirstSearcher extends Searcher {
             //move to current (pop off stack and add to visited)
             visited.add(current);
 
-            List<String> neighbors = current.getNeighbors();
+            List<String> neighbors = getNeighbors(current.get("id"));
             //for each neighbor, add to potentials if
             //it hasnt been visited and isn't already a potential
             for(String neighborId : neighbors){

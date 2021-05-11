@@ -1,11 +1,14 @@
 package edu.wpi.cs3733.D21.teamE;
 
+import edu.wpi.cs3733.D21.teamE.database.makeConnection;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.map.Node;
+import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
 import edu.wpi.cs3733.D21.teamE.views.AppBarComponent;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
 import javafx.application.Application;
@@ -23,7 +26,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+
+import java.io.*;
+import java.util.Scanner;
+
 import org.apache.derby.drda.NetworkServerControl;
+
 
 import javax.mail.MessagingException;
 import java.io.File;
@@ -34,6 +43,7 @@ import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -103,6 +113,9 @@ public class App extends Application {
 	private static Node endNode = null;
 	private static boolean toEmergency = false;
 
+	private static ToDo editToDo = null;
+	private static LocalDate toDoDate = null;
+
 	private static boolean lockEndPath = false;
 	public static String driverURL;
 	public static String nextDriverURL;
@@ -133,6 +146,11 @@ public class App extends Application {
 	public static void setEndNode(Node endNode) { App.endNode = endNode; }
 	public static boolean isToEmergency() { return toEmergency; }
 	public static void setToEmergency(boolean toEmergency) { App.toEmergency = toEmergency; }
+	public static ToDo getToDo() { return App.editToDo; }
+	public static void setToDo(ToDo todo) { App.editToDo = todo; }
+	public static LocalDate getToDoDate() { return App.toDoDate; }
+	public static void setToDoDate(LocalDate date) { App.toDoDate = date; }
+
 	public static boolean isLockEndPath() { return lockEndPath; }
 	public static void setLockEndPath(boolean lockEndPath) { App.lockEndPath = lockEndPath; }
 	public static void setNextDriverURL(String url){ nextDriverURL = url; }
@@ -153,14 +171,13 @@ public class App extends Application {
 	@Override
 	public void init() throws Exception {
 
+
 		logger.info("Starting App Initialization");
 
-		NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
-		server.start(null);
 
 		// reading the driverOption.txt file
 		try {
-			File file = new File("src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt");
+			File file = new File("driverOption.txt");
 			Scanner scanner = new Scanner(file);
 			while (scanner.hasNextLine()) {
 				String data = scanner.nextLine();
@@ -175,8 +192,6 @@ public class App extends Application {
 
 		logger.finer("Connecting to the DB...");
 		makeConnection connection = makeConnection.makeConnection(driverURL);
-		System.out.println("...Connected to the DB");
-		//int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		logger.finer("DB connection established");
 		File nodes = new File("CSVs/MapEAllnodes.csv");
 		File edges = new File("CSVs/MapEAlledges.csv");
@@ -302,7 +317,7 @@ public class App extends Application {
 		if(!driverURL.equals(nextDriverURL)){
 			//ovewrite to textfile
 			try {
-				FileWriter myWriter = new FileWriter("src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt");
+				FileWriter myWriter = new FileWriter("driverOption.txt");
 				myWriter.write(nextDriverURL);
 				myWriter.close();
 				logger.info("Successfully wrote to driverOption.txt");

@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RegexValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
@@ -76,6 +77,31 @@ public class MedicineDelivery extends ServiceRequestFormComponents {
         doseQuantityInput.getValidators().add(validator);
         assignee.getValidators().add(validator);
         specialInstructInput.getValidators().add(validator);
+
+        //Quantity validator
+        RegexValidator quantityValidator = new RegexValidator();
+        quantityValidator.setMessage("Must be a number");
+        quantityValidator.setRegexPattern("^(0|[1-9][0-9]*)$"); //todo, if a different special char is inputted, will error out. Eg: ~^-+
+
+        doseQuantityInput.getValidators().add(quantityValidator);
+        doseQuantityInput.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                doseQuantityInput.validate();
+            }
+        });
+
+        //Quantity validator
+        RegexValidator dosageValidator = new RegexValidator();
+        dosageValidator.setMessage("Must be a number");
+        dosageValidator.setRegexPattern("^(0|[1-9][0-9]*)$"); //todo, if a different special char is inputted, will error out. Eg: ~^-+
+
+        doseMeasureInput.getValidators().add(dosageValidator);
+        doseMeasureInput.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                doseMeasureInput.validate();
+            }
+        });
+
 
         return  locationInput.validate() && medicineNameInput.validate() && doseMeasureInput.validate() && doseQuantityInput.validate() && assignee.validate() && specialInstructInput.validate();
 

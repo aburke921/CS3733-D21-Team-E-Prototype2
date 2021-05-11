@@ -1,8 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
-import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXSnackbar;
-import com.jfoenix.controls.JFXSnackbarLayout;
+import com.jfoenix.controls.*;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
@@ -38,6 +36,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -82,6 +81,9 @@ public class ScheduleMap {
     @FXML // fx:id="appBarAnchorPane"
     private AnchorPane appBarAnchorPane;
 
+    @FXML
+    private StackPane stackPane;
+
     //private Schedule;
 
     private Node startNode = null;
@@ -107,7 +109,8 @@ public class ScheduleMap {
 
     private double strokeWidth = 3;
 
-    ArrayList<Node> stopList = new ArrayList<Node>();
+    private ArrayList<Node> locationArray = new ArrayList<Node>();
+
 
     private Date currentDate = new Date(LocalDate.now());
 
@@ -168,6 +171,7 @@ public class ScheduleMap {
         Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
 
         List<Node> locations = scheduleOngoing.getLocations();
+        locationArray = new ArrayList<Node>(locations);
 
         Path foundPath = search.search(locations);
 
@@ -262,8 +266,8 @@ public class ScheduleMap {
         int legNum = 0;
 
         List<Path> paths = fullPath.splitByFloor();
-        for(Path path : paths){
-            if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
+        for(Path path : paths) {
+            if (path.getStart().get("floor").equalsIgnoreCase(floorNum)) {
 
                 double markerIconXOffset = -(scale * 3);
                 double markerIconYOffset = -(scale / 2);
@@ -295,7 +299,7 @@ public class ScheduleMap {
                     coordsList.add(xCoord);
                     coordsList.add(yCoord);
 
-                    if(prevXCoord >= 1 && prevYCoord >= 1) {
+                    if (prevXCoord >= 1 && prevYCoord >= 1) {
                         distance += Math.hypot(xCoord - prevXCoord, yCoord - prevYCoord);
                     }
 
@@ -388,15 +392,15 @@ public class ScheduleMap {
 
                             //iterate through the path
                             Iterator<Node> fullItr = fullPath.iterator();
-                            while(fullItr.hasNext()) {
+                            while (fullItr.hasNext()) {
 
                                 Node nodeCopy = fullItr.next();
 
-                                if(node.equals(nodeCopy) && fullItr.hasNext()) {
+                                if (node.equals(nodeCopy) && fullItr.hasNext()) {
 
                                     Node nextNode = fullItr.next();
 
-                                    if(nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV")) {
+                                    if (nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV")) {
                                         //create string for label
                                         String toFloor = "Go to Floor " + nextNode.get("floor");
                                         destFloor = nextNode.get("floor");
@@ -434,7 +438,7 @@ public class ScheduleMap {
                             }
                         }
 
-                        if(floorLabel != null) {
+                        if (floorLabel != null) {
                             //if a floor label was made, line and node circle along with the label and its parent flowPane
                             String finalDestFloor = destFloor;
 
@@ -465,6 +469,53 @@ public class ScheduleMap {
                         prevYCoord = yCoord;
                     }
 
+                }
+
+                //display nodes
+                for (int i = 0; i < locationArray.size(); i++) {
+                    double xCoord = locationArray.get(i).getX() / scale;
+                    double yCoord = locationArray.get(i).getY() / scale;
+                    Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+                    if (locationArray.get(i).get("type").equals("HALL")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.web("#7c7c7c"));
+                    }
+                    if (locationArray.get(i).get("type").equals("CONF")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.web("#7f5124"));
+                    }
+                    if (locationArray.get(i).get("type").equals("DEPT")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.web("#74058c"));
+                    }
+                    if (locationArray.get(i).get("type").equals("ELEV")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.web("#769557"));
+                    }
+                    if (locationArray.get(i).get("type").equals("INFO")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.web("#dc721c"));
+                    }
+                    if (locationArray.get(i).get("type").equals("LABS")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.web("#c900ae"));
+                    }
+                    if (locationArray.get(i).get("type").equals("REST")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.web("#b00404"));
+                    }
+                    if (locationArray.get(i).get("type").equals("RETL")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.web("#3d4f9d"));
+                    }
+                    if (locationArray.get(i).get("type").equals("STAI")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.web("#007f52"));
+                    }
+                    if (locationArray.get(i).get("type").equals("SERV")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.web("#005cff"));
+                    }
+                    if (locationArray.get(i).get("type").equals("EXIT")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.web("#90e430"));
+                    }
+                    if (locationArray.get(i).get("type").equals("PARK")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.web("#1299d2"));
+                    }
+                    if (locationArray.get(i).get("type").equals("WALK")) {
+                        circle = new Circle(xCoord, yCoord, 5, Color.BLACK);
+                    }
+                    g.getChildren().add(circle);
                 }
 
                 //Add moving ball along path
@@ -685,6 +736,16 @@ public class ScheduleMap {
         setDateLabel(new Date(datePicker.getValue()));
         //todo passing date as floor parameter breaks it
         drawMap(currentFoundPath, datePicker.getValue().toString());
+    }
+
+    private void hoverNode() {
+        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+        JFXListView listView = new JFXListView();
+        ArrayList<String> nodeInfo = new ArrayList<String>();
+        ObservableList<String> observableNodeInfo = FXCollections.observableArrayList();
+        nodeInfo.addAll(observableNodeInfo);
+        jfxDialogLayout.setBody(listView);
+        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
     }
 
 

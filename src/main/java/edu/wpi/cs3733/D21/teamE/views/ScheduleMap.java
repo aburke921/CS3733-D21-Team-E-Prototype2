@@ -272,7 +272,7 @@ public class ScheduleMap {
         //get directions
         if (currentFoundPath == null) return;
 
-        List<String> directions = currentFoundPath.makeDirectionsWithDist();
+        List<String> directions = currentFoundPath.makeDirectionsStops(locationArray);
         String floor = "Floor " + currentFoundPath.getStart().get("floor");
 
         TableView tableView = new TableView();
@@ -300,61 +300,70 @@ public class ScheduleMap {
         tableView.getColumns().add(column2);
 
         boolean floorChangeFlag = true;
-
         for (String dir : directions) {
-            if (floorChangeFlag) {
-                Text floorHeader = new Text(Character.toString(MaterialDesignIcon.PLAY_CIRCLE.getChar()));
-                floorHeader.setStyle("-fx-fill: -fx--primary-dark");
+            if (!dir.contains("Appointment")) {
+                if (floorChangeFlag) {
+                    Text floorHeader = new Text(Character.toString(MaterialDesignIcon.PLAY_CIRCLE.getChar()));
+                    floorHeader.setStyle("-fx-fill: -fx--primary-dark");
 
-                Text floorText = new Text(floor);
-                floorText.setFont(javafx.scene.text.Font.font(null, FontWeight.BOLD, 16));
+                    Text floorText = new Text(floor);
+                    floorText.setFont(javafx.scene.text.Font.font(null, FontWeight.BOLD, 16));
 
-                tableView.getItems().add(new TextualDirectionStep(floorHeader, floorText));
+                    tableView.getItems().add(new TextualDirectionStep(floorHeader, floorText));
 
-                floorChangeFlag = false;
-            }
-            char step;
-            Text text;
-            int rotate = 0;
-            step = MaterialDesignIcon.ARROW_UP_BOLD_CIRCLE_OUTLINE.getChar();
-            if (dir.contains("straight")) {
-                // no change, but needs to be here for elevator checks
-            } else if (dir.contains("Stairs")) {
-                step = MaterialDesignIcon.STAIRS.getChar();
-            } else if (dir.contains("left")) {
-                if (dir.contains("sharp")) {
-                    rotate = -135;
-                } else if (dir.contains("shallow")){
-                    rotate = -45;
-                } else if (dir.contains("Bend")){
-                    rotate = -25;
-                } else {
-                    rotate = -90;
+                    floorChangeFlag = false;
                 }
-            } else if (dir.contains("right")) {
-                if (dir.contains("sharp")) {
-                    rotate = 135;
-                } else if (dir.contains("shallow")){
-                    rotate = 45;
-                } else if (dir.contains("Bend")){
-                    rotate = 25;
-                } else {
-                    rotate = 90;
+                char step;
+                Text text;
+                int rotate = 0;
+                step = MaterialDesignIcon.ARROW_UP_BOLD_CIRCLE_OUTLINE.getChar();
+                if (dir.contains("straight")) {
+                    // no change, but needs to be here for elevator checks
+                } else if (dir.contains("Stairs")) {
+                    step = MaterialDesignIcon.STAIRS.getChar();
+                } else if (dir.contains("left")) {
+                    if (dir.contains("sharp")) {
+                        rotate = -135;
+                    } else if (dir.contains("shallow")) {
+                        rotate = -45;
+                    } else if (dir.contains("Bend")) {
+                        rotate = -25;
+                    } else {
+                        rotate = -90;
+                    }
+                } else if (dir.contains("right")) {
+                    if (dir.contains("sharp")) {
+                        rotate = 135;
+                    } else if (dir.contains("shallow")) {
+                        rotate = 45;
+                    } else if (dir.contains("Bend")) {
+                        rotate = 25;
+                    } else {
+                        rotate = 90;
+                    }
+                } else { // else is elevator
+                    step = MaterialDesignIcon.ELEVATOR.getChar();
                 }
-            } else { // else is elevator
-                step = MaterialDesignIcon.ELEVATOR.getChar();
-            }
 
-            text = new Text(Character.toString(step));
-            text.setRotate(rotate);
-            text.setStyle("-fx-fill: -fx--primary-dark");
-            tableView.getItems().add(new TextualDirectionStep(text, new Text("   "+ dir)));
-            if (dir.contains("Floor")) {
-                String s1 = dir.substring(dir.indexOf("Floor"));
-                s1 = s1.replace("Floor", "");
-                s1 = s1.replaceAll("\\s", "");
-                floor = "Floor " + s1;
-                floorChangeFlag = true;
+                text = new Text(Character.toString(step));
+                text.setRotate(rotate);
+                text.setStyle("-fx-fill: -fx--primary-dark");
+                tableView.getItems().add(new TextualDirectionStep(text, new Text("   " + dir)));
+                if (dir.contains("Floor")) {
+                    String s1 = dir.substring(dir.indexOf("Floor"));
+                    s1 = s1.replace("Floor", "");
+                    s1 = s1.replaceAll("\\s", "");
+                    floor = "Floor " + s1;
+                    floorChangeFlag = true;
+                }
+            } else {
+                Text stopIcon = new Text(Character.toString(MaterialDesignIcon.ALERT_OCTAGON.getChar()));
+                stopIcon.setStyle("-fx-fill: -fx--primary-dark");
+
+                Text stopText = new Text(dir);
+                stopText.setFont(Font.font(null, FontWeight.BOLD, 16));
+
+                tableView.getItems().add(new TextualDirectionStep(stopIcon, stopText));
             }
         }
 
@@ -898,7 +907,7 @@ public class ScheduleMap {
         //init appBar
         javafx.scene.Node appBarComponent = null;
         try {
-            App.setPageTitle("Schedule List"); //set AppBar title
+            App.setPageTitle("Schedule Map"); //set AppBar title
             App.setShowHelp(false);
             App.setShowLogin(true);
             appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));

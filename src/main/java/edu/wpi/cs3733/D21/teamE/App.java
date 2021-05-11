@@ -126,14 +126,10 @@ public class App extends Application {
 	@Override
 	public void init() throws Exception {
 
-			NetworkServerControl server = new NetworkServerControl(InetAddress.getByName("localhost"), 1527);
-			server.start(null);
-
-
 
 		// reading the driverOption.txt file
 		try {
-			File file = new File("src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt");
+			File file = new File("driverOption.txt");
 			Scanner scanner = new Scanner(file);
 			while (scanner.hasNextLine()) {
 				String data = scanner.nextLine();
@@ -150,7 +146,6 @@ public class App extends Application {
 		System.out.println("Starting App Init...");
 		makeConnection connection = makeConnection.makeConnection(driverURL);
 		System.out.println("...Connected to the DB");
-		int[] sheetIDs = {0, 2040772276, 1678365078, 129696308, 1518069362};
 		File nodes = new File("CSVs/MapEAllnodes.csv");
 		File edges = new File("CSVs/MapEAlledges.csv");
 		boolean tablesExist = connection.allTablesThere();
@@ -162,9 +157,6 @@ public class App extends Application {
 				DB.populateTable("hasEdge", edges);
 				connection.addDataForPresentation();
 				DB.populateAbonPainTable();
-				for(int ID : sheetIDs){
-					SheetsAndJava.deleteSheetData(ID);
-				}
 				System.out.println("Done");
 			} catch (Exception e) {
 				System.out.println("...Tables already there");
@@ -222,7 +214,7 @@ public class App extends Application {
 		if(!driverURL.equals(nextDriverURL)){
 			//ovewrite to textfile
 			try {
-				FileWriter myWriter = new FileWriter("src/main/resources/edu/wpi/cs3733/D21/teamE/driverOption.txt");
+				FileWriter myWriter = new FileWriter("driverOption.txt");
 				myWriter.write(nextDriverURL);
 				myWriter.close();
 				System.out.println("Successfully wrote to the file.");

@@ -33,12 +33,12 @@ public class ServiceRequestStatus {
 
     /**
      * Switch to a different scene
-     * @param e tells which button was pressed
+     * @param event tells which button was pressed
      */
     @FXML
-    private void switchScene(ActionEvent e) {
+    private void switchScene(ActionEvent event) {
         ServiceRequestStatusState serviceRequestStatusState = new ServiceRequestStatusState();
-        serviceRequestStatusState.switchScene(e);
+        serviceRequestStatusState.switchScene(event);
     }
 
     @FXML

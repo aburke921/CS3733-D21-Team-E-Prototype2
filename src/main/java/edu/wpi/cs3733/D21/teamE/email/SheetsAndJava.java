@@ -116,6 +116,7 @@ public class SheetsAndJava {
 
     }
 
+
     public static void addTodoToSheet(int todoID, String title, String email, String firstName, String lastName, String location, String taskStartDateTime, String taskEndDateTime, String notificationDateTime) throws IOException, GeneralSecurityException {
 
         sheetsService = getSheetService();
@@ -133,27 +134,6 @@ public class SheetsAndJava {
                 .execute();
 
     }
-
-
-    public static void deleteSheetData(int sheetID) throws GeneralSecurityException, IOException {
-        sheetsService = getSheetService();
-
-        DeleteDimensionRequest deleteDateCell = new DeleteDimensionRequest()
-                .setRange(
-                        new DimensionRange()
-                                .setSheetId(sheetID)
-                                .setDimension("ROWS")
-                                .setStartIndex(2)
-                );
-
-        List<Request> requests = new ArrayList<>();
-        requests.add(new Request().setDeleteDimension(deleteDateCell));
-
-        BatchUpdateSpreadsheetRequest body = new BatchUpdateSpreadsheetRequest().setRequests(requests);
-
-        sheetsService.spreadsheets().batchUpdate(SPREADSHEET_ID, body).execute();
-    }
-
 
 
 

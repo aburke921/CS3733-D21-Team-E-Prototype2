@@ -729,17 +729,20 @@ public class ScheduleMap {
                             if (Math.abs(schedXInt - xInt) <= 7 && Math.abs(schedYInt - yInt) <= 7) {
                                 observableNodeInfo.add("Title: " + scheduleOngoing.get(j).getTitle());
                                 observableNodeInfo.add("Location: " + scheduleOngoing.get(j).getLocationString());
-                                observableNodeInfo.add("Time: " + scheduleOngoing.get(j).getStartTime().toString());
+                                observableNodeInfo.add("Time: " + scheduleOngoing.get(j).getStartTime().hourMinString());
                                 if(scheduleOngoing.get(j).getStatus() == 1) {
                                     observableNodeInfo.add("Status: Incomplete");
                                 }
                                 switch (scheduleOngoing.get(j).getPriority()) {
                                     case 1:
                                         observableNodeInfo.add("Low Priority");
+                                        break;
                                     case 2:
                                         observableNodeInfo.add("Medium Priority");
+                                        break;
                                     case 3:
                                         observableNodeInfo.add("High Priority");
+                                        break;
                                     default:
                                         break;
                                 }

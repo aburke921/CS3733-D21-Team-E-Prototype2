@@ -428,7 +428,7 @@ public class RequestsDB2 {
 	public static void addReligiousRequest(ReligiousRequestObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "religiousRequest");
 
-		String insertMaintenanceReq = "Insert Into religiousRequest Values ((Select Max(requestID) From requests), ?, ?, ?)";
+		String insertMaintenanceReq = "Insert Into religiousRequest Values ((Select Max(ToDoID) From ToDo), ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
 			prepState.setString(1, request.getNodeID());
@@ -436,6 +436,7 @@ public class RequestsDB2 {
 			prepState.setString(3, request.getDescription());
 
 			prepState.execute();
+			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Religion: " + request.getReligion() + "\nDescription: " + request.getDescription(), null, null);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error inserting into religiousRequest inside function addReligiousRequest()");

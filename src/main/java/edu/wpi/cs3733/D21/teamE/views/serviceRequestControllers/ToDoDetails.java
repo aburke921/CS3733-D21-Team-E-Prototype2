@@ -493,6 +493,11 @@ public class ToDoDetails {
             if(todo != null){
                 //editing, check to see if existing can change
                 noScheduleConflict = schedule.canChange(todo, startTime, endTime);
+
+                if(noScheduleConflict == false) {
+                    errorMessage += schedule.canChangeErrorMessage(todo, startTime, endTime);
+                }
+
             } else {
                 //adding, check to see if new can be placed
                 noScheduleConflict = schedule.canAdd(startTime, endTime);

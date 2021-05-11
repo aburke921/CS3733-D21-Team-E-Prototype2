@@ -11,6 +11,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Set;
@@ -34,7 +35,7 @@ public class RequestsDB2 {
 	public static void createRequestsTable() {
 
 		String query = "Create Table requests(" +
-				"requestID     int Primary Key References ToDo, " +
+				"requestID     int Primary Key, " +
 				"creatorID     int References useraccount On Delete Cascade," +
 				"creationTime  timestamp, " +
 				"requestType   varchar(31), " +
@@ -54,17 +55,15 @@ public class RequestsDB2 {
 	}
 
 	/**
-	 * adds a request to the requests table in the database
-	 * @param userID      this is the userID of the person filling out the request
-	 * @param assigneeID  this is the userID of the person who is assigned to this request
+	 * adds a request to the requests table in the databse
+	 * @param userID this is the userID of the person filling out the request
+	 * @param assigneeID this is the userID of the person who is assigned to this request
 	 * @param requestType this is the type of request that is being created
 	 */
 	public static void addRequest(int userID, int assigneeID, String requestType) {
-		// Not multi-user safe, but hey we only have one client accessing the db at a time
-		ToDoDB.addCustomToDo(assigneeID, requestType + " Request #" + (ToDoDB.getMaxToDoID() + 1) + " with " + UserAccountDB.getUserName(userID));
-
 		String insertRequest = "Insert Into requests " +
-				"Values (" + ToDoDB.getMaxToDoID() + ", ?, Current Timestamp, ?, 'inProgress', ?)";
+				"Values ((Select Count(*) " +
+				"         From requests) + 1, ?, Current Timestamp, ?, 'inProgress', ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertRequest)) {
 			prepState.setInt(1, userID);
@@ -78,31 +77,30 @@ public class RequestsDB2 {
 
 	}
 
-//	/**
-//	 * // outdated because requests extend ToDo_now, it will use ToDoDB.getMaxToDoID()
-//	 * Gets the largest requestID, which can be used to increment and make a the next one
-//	 * @return the largest requestID in the request table
-//	 */
-//	public static int getMaxRequestID() {
-//		int maxID = 0;
-//
-//		String query = "Select Max(requestID) As maxRequestID From food";
-//
-//		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-//			ResultSet rset = prepState.executeQuery();
-//
-//			if (rset.next()) {
-//				maxID = rset.getInt("maxRequestID");
-//			}
-//
-//			prepState.close();
-//			return maxID;
-//		} catch (SQLException e) {
-//			//			e.printStackTrace();
-//			System.err.println("Error in getMaxRequestID()");
-//			return 0;
-//		}
-//	}
+	/**
+	 * Gets the largest requestID, which can be used to increment and make a the next one
+	 * @return the largest requestID in the request table
+	 */
+	public static int getMaxRequestID() {
+		int maxID = 0;
+
+		String query = "Select Max(requestID) As maxRequestID From food";
+
+		try (PreparedStatement prepState = connection.prepareStatement(query)) {
+			ResultSet rset = prepState.executeQuery();
+
+			if (rset.next()) {
+				maxID = rset.getInt("maxRequestID");
+			}
+
+			prepState.close();
+			return maxID;
+		} catch (SQLException e) {
+//			e.printStackTrace();
+			System.err.println("Error in getMaxRequestID()");
+			return 0;
+		}
+	}
 
 	/**
 	 * Can change the assigneeID or the request status to any request
@@ -114,18 +112,19 @@ public class RequestsDB2 {
 	public static int editRequests(int requestID, int assigneeID, String requestStatus) {
 
 		boolean added = false;
-		String query = "Update requests Set ";
+		String query = "Update requests ";
 
-		if (assigneeID == 0 && requestStatus == null) {
-			return 1;
-		}
 		if (assigneeID != 0) {
-			query += "assigneeID = " + assigneeID;
-			if (requestStatus != null) {
-				query += ", requestStatus = '" + requestStatus + "'";
+			query = query + "Set assigneeID = '" + assigneeID + "'";
+
+			added = true;
+		}
+		if (requestStatus != null) {
+			if (added) {
+				query = query + ", ";
 			}
-		} else if (requestStatus != null) {
-			query += "requestStatus = '" + requestStatus + "'";
+			query = query + "Set requestStatus = '" + requestStatus + "'";
+
 		}
 
 		query = query + " Where requestID = " + requestID;
@@ -134,11 +133,15 @@ public class RequestsDB2 {
 			prepState.close();
 			return 1;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.err.println("Error in updating request table");
 			return 0;
 		}
 	}
+
+
+
+
 
 
 	//FLORAL REQUEST STUFF:
@@ -189,7 +192,7 @@ public class RequestsDB2 {
 	public static void addFloralRequest(FloralObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "floral");
 
-		String insertFloralRequest = "Insert Into floralrequests Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String insertFloralRequest = "Insert Into floralrequests Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
 			prepState.setString(1, request.getNodeID());
@@ -203,7 +206,6 @@ public class RequestsDB2 {
 			prepState.setString(9, request.getMessage());
 
 			prepState.execute();
-			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Recipient: " + request.getRecipient() + "\nFlower: " + request.getFlower() + "\nCount: " + request.getCount() + "\nVase: " + request.getVase() + "\nArrangement: " + request.getArrangement() + "\nStuffed Animal: " + request.getStuffedAnimal() + "\nChocolate: " + request.getChocolate() + "\nMessage: " + request.getMessage(), null, null);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
@@ -280,6 +282,7 @@ public class RequestsDB2 {
 				query = query + ", ";
 			}
 			query = query + " message = '" + request.getMessage() + "'";
+			added = true;
 		}
 
 		query = query + " where requestID = " + request.getRequestID();
@@ -293,6 +296,9 @@ public class RequestsDB2 {
 			return 0;
 		}
 	}
+
+
+
 
 
 	//LANGUAGE REQUEST STUFF:
@@ -335,7 +341,7 @@ public class RequestsDB2 {
 //		addRequest(userID, assigneeID, "languageRequest");
 		addRequest(request.getUserID(), request.getAssigneeID(), "languageRequest");
 
-		String insertLanguageReq = "Insert Into languageRequest Values ((Select Max(ToDoID) From ToDo), ?, ?, ?)";
+		String insertLanguageReq = "Insert Into languageRequest Values ((Select Count(*) From requests), ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertLanguageReq)) {
 			prepState.setString(1, request.getNodeID());
@@ -343,7 +349,6 @@ public class RequestsDB2 {
 			prepState.setString(3, request.getDescription());
 
 			prepState.execute();
-			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Language: " + request.getLanguage() + "\nDescription: " + request.getDescription(), null, null);
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into languageRequest inside function addLanguageRequest()");
@@ -392,6 +397,10 @@ public class RequestsDB2 {
 	}
 
 
+
+
+
+
 	// RELIGIOUS REQUESTS STUFF:
 
 	/**
@@ -428,7 +437,7 @@ public class RequestsDB2 {
 	public static void addReligiousRequest(ReligiousRequestObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "religiousRequest");
 
-		String insertMaintenanceReq = "Insert Into religiousRequest Values ((Select Max(ToDoID) From ToDo), ?, ?, ?)";
+		String insertMaintenanceReq = "Insert Into religiousRequest Values ((Select Count(*) From requests), ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
 			prepState.setString(1, request.getNodeID());
@@ -436,7 +445,6 @@ public class RequestsDB2 {
 			prepState.setString(3, request.getDescription());
 
 			prepState.execute();
-			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Religion: " + request.getReligion() + "\nDescription: " + request.getDescription(), null, null);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error inserting into religiousRequest inside function addReligiousRequest()");
@@ -482,6 +490,9 @@ public class RequestsDB2 {
 			return 0;
 		}
 	}
+
+
+
 
 
 	//EXTERNAL PATIENT REQUEST STUFF:
@@ -543,7 +554,8 @@ public class RequestsDB2 {
 		addRequest(userID, assigneeID, "extTransport");
 
 		String insertExtTransport = "Insert Into exttransport " +
-				"Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?, ?, ?, ?, ?)";
+				"Values ((Select Count(*) " +
+				"         From requests), ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
 			prepState.setString(1, roomID);
@@ -556,7 +568,7 @@ public class RequestsDB2 {
 			prepState.setString(8, description);
 
 			prepState.execute();
-			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, roomID, null, null, null, "Type: " + requestType + "\nSeverity: " + severity + "\nPatient ID: " + patientID + "\nBlood Pressure: " + bloodPressure + "\nTemperature: " + temperature + "\nOxygen Level: " + oxygenLevel + "\nDescription: " + description, null, null);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error inserting into extTransport inside function addExternalPatientRequest()");
@@ -653,6 +665,9 @@ public class RequestsDB2 {
 	}
 
 
+
+
+
 	//LAUNDRY REQUEST STUFF:
 
 	/**
@@ -695,7 +710,7 @@ public class RequestsDB2 {
 //		addRequest(userID, assigneeID, "laundryRequest");
 		addRequest(request.getUserID(), request.getAssigneeID(), "laundryRequest");
 
-		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?)";
+		String insertLaundryReq = "Insert Into laundryRequest Values ((Select Count(*) From requests), ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertLaundryReq)) {
 //			prepState.setString(1, roomID);
@@ -708,7 +723,6 @@ public class RequestsDB2 {
 			prepState.setString(4, request.getDescription());
 
 			prepState.execute();
-			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Wash Load: " + request.getWashLoadAmount() + "\nDry Load: " + request.getDryLoadAmount() + "\nDescription: " + request.getDescription(), null, null);
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into laundryRequest inside function addLanguageRequest()");
@@ -762,6 +776,7 @@ public class RequestsDB2 {
 	}
 
 
+
 	//SECURITY REQUEST STUFF:
 
 	/**
@@ -813,7 +828,7 @@ public class RequestsDB2 {
 
 		addRequest(userID, assigneeID, "maintenanceRequest");
 
-		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?)";
+		String insertMaintenanceReq = "Insert Into maintenanceRequest Values ((Select Count(*) From requests), ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertMaintenanceReq)) {
 			prepState.setString(1, roomID);
@@ -822,7 +837,6 @@ public class RequestsDB2 {
 			prepState.setString(4, description);
 
 			prepState.execute();
-			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, roomID, null, null, null, "Type: " + type + "\nSeverity: " + severity + "\nDescription: " + description, null, null);
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into maintenanceRequest inside function addMaintenanceRequest()");
@@ -884,6 +898,8 @@ public class RequestsDB2 {
 	}
 
 
+
+
 	//SECURITY REQUEST STUFF:
 
 	/**
@@ -923,7 +939,7 @@ public class RequestsDB2 {
 	public static void addSecurityRequest(SecurityServiceObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "security");
 
-		String insertSecurityRequest = "Insert Into securityServ Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?)";
+		String insertSecurityRequest = "Insert Into securityServ Values ((Select Count(*) From requests), ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertSecurityRequest)) {
 			prepState.setString(1, request.getNodeID());
@@ -932,7 +948,6 @@ public class RequestsDB2 {
 			prepState.setString(4, request.getReason());
 
 			prepState.execute();
-			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Security Level: " + request.getSecurityLevel() + "\nUrgency Level: " + request.getUrgencyLevel() + "\nReason: " + request.getReason(), null, null);
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into securityRequest inside function addSecurityRequest()");
@@ -987,6 +1002,10 @@ public class RequestsDB2 {
 	}
 
 
+
+
+
+
 	//SANITATION REQUEST STUFF:
 
 	/**
@@ -1031,7 +1050,8 @@ public class RequestsDB2 {
 		addRequest(request.getUserID(), request.getAssigneeID(), "sanitation");
 
 		String insertSanitationRequest = "Insert Into sanitationRequest " +
-				"Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?)";
+				"Values ((Select Count(*) " +
+				"         From requests), ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertSanitationRequest)) {
 			prepState.setString(1, request.getNodeID());
@@ -1040,7 +1060,6 @@ public class RequestsDB2 {
 			prepState.setString(4, request.getSeverity());
 
 			prepState.execute();
-			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Detail: " + request.getDetail() + "\nService: " + request.getService() + "\nSeverity: " + request.getSeverity(), null, null);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error inserting into sanitationRequest inside function addSanitationRequest()");
@@ -1103,6 +1122,11 @@ public class RequestsDB2 {
 	}
 
 
+
+
+
+
+
 	//MEDICINE REQUEST STUFF:
 
 	/**
@@ -1153,7 +1177,7 @@ public class RequestsDB2 {
 
 		addRequest(userID, assigneeID, "medDelivery");
 
-		String insertMedRequest = "Insert Into meddelivery Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?, ?, ?)";
+		String insertMedRequest = "Insert Into meddelivery Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertMedRequest)) {
 			prepState.setString(1, roomID);
@@ -1164,7 +1188,6 @@ public class RequestsDB2 {
 			prepState.setString(6, signature);
 
 			prepState.execute();
-			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, roomID, null, null, null, "Medicine Name: " + medicineName + "\nQuantity: " + quantity + "\nDosage: " + dosage + "\nSpecial Instructions: " + specialInstructions + "\nSignature: " + signature, null, null);
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into medicineRequest inside function addMedicineRequest()");
@@ -1248,6 +1271,8 @@ public class RequestsDB2 {
 	}
 
 
+
+
 	//FOOD REQUEST STUFF:
 
 	/**
@@ -1284,7 +1309,6 @@ public class RequestsDB2 {
 	}
 
 	//TODO: Not tested
-
 	/**
 	 * adds a food delivery request to the foodDelivery table
 	 * @param request this is all of the information needed, in a food delivery request object.
@@ -1292,15 +1316,17 @@ public class RequestsDB2 {
 	public static void addFoodDeliveryRequest(FoodDeliveryObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "foodDeliveryRequest");
 
-		String insertFoodDeliveryReq = "Insert Into foodDelivery Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?)";
+		int requestID = getMaxRequestID();
+
+		String insertFoodDeliveryReq = "Insert Into foodDelivery Values (?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFoodDeliveryReq)) {
-			prepState.setString(1, request.getNodeID());
-			prepState.setString(2, request.getDeliveryService());
-			prepState.setString(3, request.getOrderNumber());
-			prepState.setString(4, request.getDescription());
+			prepState.setInt(1, requestID);
+			prepState.setString(2, request.getNodeID());
+			prepState.setString(3, request.getDeliveryService());
+			prepState.setString(4, request.getOrderNumber());
+			prepState.setString(5, request.getDescription());
 			prepState.execute();
-			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Delivery Service: " + request.getDeliveryService() + "\nOrder Number: " + request.getOrderNumber() + "\nDescription: " + request.getDescription(), null, null);
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into foodDeliveryRequest inside function addFoodDeliveryRequest()");
@@ -1309,7 +1335,6 @@ public class RequestsDB2 {
 
 
 	//TODO: Not tested
-
 	/**
 	 * edits food delivery request which is already in DB
 	 * @param request this the information that the user wants to change stored in a food delivery request object. (If int = 0 --> do not change, If String = null --> do not change)
@@ -1389,7 +1414,7 @@ public class RequestsDB2 {
 	 * adds a menuItem to the aubonPainMenu database table
 	 * @param menuItem this is all of the information needed, in a security request object.
 	 */
-	public static void addAubonPainMenuItem(AubonPainItem menuItem) {
+	public static void addAubonPainMenuItem(AubonPainItem menuItem){
 
 		String query = "Insert Into aubonPainMenu Values(?,?,?,?,?) ";
 
@@ -1490,6 +1515,13 @@ public class RequestsDB2 {
 	}
 
 
+
+
+
+
+
+
+
 	//TODO: uncomment this when Internal Patient Object is completed
 	// fix anything which needs to be fixed and write tests
 	// add this table to deleteAllTables and createAllTables
@@ -1524,10 +1556,10 @@ public class RequestsDB2 {
 	 * adds a internal patient transport to the internalPatientRequest database table
 	 * @param request object holding internal patient transport req. fields
 	 */
-	public static void addInternalPatientRequest(InternalPatientObj request) {
+ 	public static void addInternalPatientRequest(InternalPatientObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "internalPatientRequest");
 
-		String insertInternalPatientReq = "Insert Into internalPatientRequest Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?, ?, ?)";
+		String insertInternalPatientReq = "Insert Into internalPatientRequest Values ((Select Count(*) From requests), ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertInternalPatientReq)) {
 			prepState.setInt(1, request.getPatientID());
@@ -1537,7 +1569,6 @@ public class RequestsDB2 {
 			prepState.setString(5, request.getSeverity());
 			prepState.setString(6, request.getDescription());
 			prepState.execute();
-			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Patient ID: " + request.getPatientID() + "\nNode ID: " + request.getNodeID() + "\nDrop Off Node ID: " + request.getDropOffNodeID() + "\nDepartment: " + request.getDepartment() + "\nSeverity: " + request.getSeverity() + "\nDescription: " + request.getDescription(), null, null);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error inserting into internalPatientRequest inside function addInternalPatientRequest()");
@@ -1605,6 +1636,12 @@ public class RequestsDB2 {
 	}
 
 
+
+
+
+
+
+
 //	public static void addInternalPatientRequest(InternalPatientObj internalPatientObj) {
 //
 //		int userID = internalPatientObj.getUserID();
@@ -1617,7 +1654,7 @@ public class RequestsDB2 {
 //
 //		addRequest(userID, assigneeID, "internalPatient");
 //
-//		String insertInternPatient = "Insert Into internalPatient Values ((Select Max(requestID) From requests), ?, ?, ?, ?, ?)";
+//		String insertInternPatient = "Insert Into internalPatient Values ((Select Count(*) From requests), ?, ?, ?, ?, ?)";
 //
 //		try (PreparedStatement prepState = connection.prepareStatement(insertInternPatient)) {
 //			prepState.setString(1, roomID);
@@ -1694,7 +1731,16 @@ public class RequestsDB2 {
 //	}
 
 
+
+
 	// ENTRY REQUEST STUFF:
+
+
+
+
+
+
+
 
 
 	//COVID SURVEY STUFF:
@@ -1715,7 +1761,7 @@ public class RequestsDB2 {
 				"quarantine     boolean Not Null, " +
 				"noSymptoms     boolean Not Null, " +
 				"status varchar(31) Not Null," +
-				"userID int References useraccount(userID)" +
+				"userID int references useraccount(userID)" +
 				")";
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			prepState.execute();
@@ -1757,6 +1803,7 @@ public class RequestsDB2 {
 	}
 
 	/**
+	 *
 	 * @param covidSurveyObj
 	 * @return 1 if the update was successful, 0 if it failed
 	 */

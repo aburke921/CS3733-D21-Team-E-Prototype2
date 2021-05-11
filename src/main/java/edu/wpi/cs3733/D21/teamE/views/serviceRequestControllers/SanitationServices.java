@@ -19,6 +19,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -79,7 +80,7 @@ public class SanitationServices extends ServiceRequestFormComponents {
    * @param actionEvent
    */
   @FXML
-  private void saveData(ActionEvent actionEvent){
+  private void saveData(ActionEvent actionEvent) throws MessagingException {
 
     if(validateInput()){
 
@@ -95,26 +96,20 @@ public class SanitationServices extends ServiceRequestFormComponents {
       DB.addSanitationRequest(object);
 
       //For email implementation later
-//      String email = DB.getEmail(App.userID);
-//      String fullName = DB.getUserName(App.userID);
-////      String assigneeName = userNames.get(assigneeIDIndex);
-//      String locationName = locations.get(nodeID);
-//      String body = "Hello " + fullName + ", \n\n" + "Thank you for making an External Patient Transport request." +
-//              "Here is the summary of your request: \n\n" +
-//              " - Type: " + type + "\n" +
-//              " - Severity: " + severity + "\n" +
-//              " - PatientID: " + patientID + "\n" +
-//              " - ETA: " + ETA + "\n" +
-//              " - Blood Pressure: " + bloodPressure + "\n" +
-//              " - Temperature: " + temperature + "\n" +
-//              " - Oxygen Level: " + oxygenLevel + "\n" +
-//              " - Details: " + details + "\n" +
-//              " - Assignee Name: " + assigneeName + "\n" +
-//              " - Location: " + locationName + "\n\n" +
-//              "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
-//              "- Emerald Emus BWH";
-//
-//      sendEmail.sendRequestConfirmation(email, body);
+      String email = DB.getEmail(App.userID);
+      String fullName = DB.getUserName(App.userID);
+      String assigneeName = userNames.get(assigneeIndex);
+      String body = "Hello " + fullName + ", \n\n" + "Thank you for making an Sanitation request." +
+              "Here is the summary of your request: \n\n" +
+              " - Assignee Name: " + assigneeName + "\n" +
+              " - Type of sanitation: " + serviceKind + "\n" +
+              " - Location: " + node + "\n" +
+              " - Severity: " + severity + "\n" +
+              " - Details: " + details + "\n" +
+              "If you need to edit any details, please visit our app to do so. We look forward to seeing you soon!\n\n" +
+              "- Emerald Emus BWH";
+
+      sendEmail.sendRequestConfirmation(email, body);
 
       super.handleButtonSubmit(actionEvent);
     }

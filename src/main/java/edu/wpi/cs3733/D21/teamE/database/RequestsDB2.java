@@ -116,7 +116,7 @@ public class RequestsDB2 {
 		boolean added = false;
 		String query = "Update requests Set ";
 
-		if (assigneeID != 0 || requestStatus != null) {
+		if (assigneeID == 0 && requestStatus == null) {
 			return 1;
 		}
 		if (assigneeID != 0) {

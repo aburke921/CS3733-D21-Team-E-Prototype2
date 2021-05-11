@@ -5,15 +5,7 @@ import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.scheduler.Schedule;
 import edu.wpi.cs3733.D21.teamE.views.CovidSurveyObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.ExternalPatient;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.MedicineDelivery;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.*;
-import edu.wpi.cs3733.D21.teamE.database.*;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ExternalPatientObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.FloralObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.LanguageInterpreterObj;
-import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ReligiousRequestObj;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 
@@ -794,8 +786,6 @@ public class DB {
 	}
 
 
-
-
 	// ToDoDB:
 
 
@@ -849,8 +839,9 @@ public class DB {
 
 
 	/**
-	 * @param date enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
-	 * @return a List of ToDo_items
+	 * @param date   enter "" for undated ToDos, enter "everything" for all ToDos(including undated ones)
+	 * @param status enter -1 for get all regardless of status, or enter needed status number
+	 * @return a Schedule item that contains a List of ToDo_items
 	 */
 	public static Schedule getSchedule(int userID, int status, String date) {
 		return ToDoDB.getSchedule(userID, status, date);

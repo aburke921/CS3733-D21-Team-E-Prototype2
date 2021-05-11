@@ -4,9 +4,8 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -14,10 +13,8 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
 
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.FoodDelivery">
     <children>
@@ -34,7 +31,7 @@
                     <center>
                         <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="785.0" BorderPane.alignment="CENTER">
                             <children>
-                                <VBox  maxWidth="600.0" prefHeight="513.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-radius: 25px; -fx-background-radius: 25px;">
+                                <VBox maxWidth="600.0" prefHeight="513.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-radius: 25px; -fx-background-radius: 25px;">
                                     <children>
                                         <HBox alignment="TOP_CENTER" maxWidth="600.0" prefHeight="433.0" prefWidth="600.0" styleClass="centerPane">
                                             <children>
@@ -44,7 +41,7 @@
                                                             <children>
                                                                 <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
                                                                     <VBox.margin>
-                                                                        <Insets  bottom="5.0" top="20.0" />
+                                                                        <Insets bottom="5.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXComboBox>
                                                 <JFXComboBox fx:id="assigneeInput" layoutX="10.0" layoutY="30.0" prefHeight="27.0" prefWidth="295.0" promptText="Assignee">
@@ -78,7 +75,7 @@
                                                                         <Insets bottom="5.0" top="20.0" />
                                                                     </VBox.margin>
                                                                 </JFXTextArea>
-                                                <JFXButton fx:id="AubonPainButton" onAction="#toAubonPainMenu" text="Au bon Pain" />
+                                                <JFXButton fx:id="AubonPainButton" onAction="#toAubonPainMenu" styleClass="submit-button" text="Au bon Pain" />
                                                                 <GridPane>
                                                                     <columnConstraints>
                                                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="190.0" />
@@ -104,8 +101,8 @@
                                             <children>
                                                 <AnchorPane prefHeight="71.0" prefWidth="1200.0">
                                                     <children>
-                                                        <JFXButton fx:id="cancel" layoutX="455.0" layoutY="45.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" />
-                                                        <JFXButton fx:id="submit" layoutX="532.0" layoutY="46.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
+                                                        <JFXButton fx:id="cancel" layoutX="455.0" layoutY="45.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="86.0"/>
+                                                        <JFXButton fx:id="submit" layoutX="532.0" layoutY="46.0" onAction="#saveData" styleClass="submit-button" text="Submit" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="11.0"/>
                                                     </children>
                                                 </AnchorPane>
                                             </children>

@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXTreeTableView;
 //import edu.wpi.cs3733.D21.teamE.map.Node;
 
 
-import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import edu.wpi.cs3733.D21.teamE.states.ServiceRequestStatusState;
 import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.ServiceRequestForm;
 import edu.wpi.cs3733.D21.teamE.App;
@@ -19,10 +18,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
+
 public class ServiceRequestStatus {
+
+    @FXML // fx:id="appBarAnchorPane"
+    private AnchorPane appBarAnchorPane; // Value injected by FXMLLoader
 
     @FXML
     JFXTreeTableView serviceRequestTable;
@@ -56,7 +60,7 @@ public class ServiceRequestStatus {
 
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            DB.editRequests(id, 0, "canceled");
+            DB.updateToDo(id, null, -1, 0, -1, null, null, null, null, null, null, null);
             System.out.println("The request was cancelled");
         }
     }
@@ -70,7 +74,7 @@ public class ServiceRequestStatus {
     private void complete(TreeTableView<ServiceRequestForm> table) {
         if(table.getSelectionModel().getSelectedItem() != null) {
             int id = Integer.valueOf(table.getSelectionModel().getSelectedItem().getValue().getId());
-            DB.editRequests(id,0, "complete");
+            DB.updateToDo(id, null, -1, 10, -1, null, null, null, null, null, null, null);
             System.out.println("The request was completed");
         }
     }
@@ -97,7 +101,7 @@ public class ServiceRequestStatus {
 
         ArrayList<String> idArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestID");
         ArrayList<String> statusArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "requestStatus");
-        ArrayList<String> locationArray = DB.getRequestLocations(tableName, App.userID);
+        ArrayList<String> creationTimeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "creationTime");
         ArrayList<String> assigneeArray = DB.getMyCreatedRequestInfo(tableName, App.userID, "AssigneeID");
         if(idArray.size() > 0) {
             System.out.println("Array size" + idArray.size());
@@ -112,7 +116,7 @@ public class ServiceRequestStatus {
             }
             for (int i = 0; i < idArray.size(); i++) {
                 System.out.println("Before");
-                TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), locationArray.get(i), assigneeArray.get(i), statusArray.get(i)));
+                TreeItem<ServiceRequestForm> request = new TreeItem<>(new ServiceRequestForm(idArray.get(i), creationTimeArray.get(i), assigneeArray.get(i), statusArray.get(i)));
                 System.out.println(request.getValue().getId());
                 if (request.getValue().getStatus().equals("inProgress")) {
                     inProgress.getChildren().add(request);
@@ -266,6 +270,19 @@ public class ServiceRequestStatus {
 
     @FXML
     void initialize() {
+
+        //init appBar
+        javafx.scene.Node appBarComponent;
+        try {
+            App.setPageTitle("Service Request Status"); //set AppBar title
+            App.setHelpText("TODO"); //todo add help text for Map Editor
+            App.setShowHelp(true);
+            App.setShowLogin(true);
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's sideBarVBox element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         prepareTable(serviceRequestTable);
 

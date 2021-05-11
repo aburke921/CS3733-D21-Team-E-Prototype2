@@ -13,12 +13,19 @@ import javafx.scene.Parent;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class CheckInStatus {
+
+    @FXML // fx:id="background"
+    private ImageView background;
 
     @FXML
     private JFXTreeTableView<CovidSurveyObj> covidSurveyTable;
@@ -43,7 +50,8 @@ public class CheckInStatus {
         CovidSurveyObj formNumber = covidSurveyTable.getSelectionModel().getSelectedItem().getValue();
         int formNum = formNumber.getFormNumber();
         DB.markAsCovidSafe(formNum);
-        DB.updateUserAccountCovidStatus(App.userID, "Safe");
+        DB.updateUserAccountCovidStatus(formNumber.getUser(), "Safe");
+        refresh();
     }
 
     @FXML
@@ -51,7 +59,8 @@ public class CheckInStatus {
         CovidSurveyObj formNumber = covidSurveyTable.getSelectionModel().getSelectedItem().getValue();
         int formNum = formNumber.getFormNumber();
         DB.markAsCovidRisk(formNum);
-        DB.updateUserAccountCovidStatus(App.userID, "Unsafe");
+        DB.updateUserAccountCovidStatus(formNumber.getUser(), "Unsafe");
+        refresh();
     }
 
     public void removeChildren(TreeItem<CovidSurveyObj> treeItem) {
@@ -166,8 +175,8 @@ public class CheckInStatus {
 
         //Setting up sub-root nodes
         TreeItem<CovidSurveyObj> unChecked = new TreeItem<>(new CovidSurveyObj("To Be Reviewed"));
-        TreeItem<CovidSurveyObj> markedAsRisk = new TreeItem<>(new CovidSurveyObj("Marked as Risk"));
-        TreeItem<CovidSurveyObj> markedAsSafe = new TreeItem<>(new CovidSurveyObj("Marked as Safe"));
+        TreeItem<CovidSurveyObj> markedAsRisk = new TreeItem<>(new CovidSurveyObj("Denied"));
+        TreeItem<CovidSurveyObj> markedAsSafe = new TreeItem<>(new CovidSurveyObj("Checked-In"));
 
         //Adding sub-roots to nodes
         rootNode.getChildren().addAll(unChecked,markedAsRisk,markedAsSafe);
@@ -180,6 +189,21 @@ public class CheckInStatus {
 
     @FXML
     void initialize() {
+
+        Stage primaryStage = App.getPrimaryStage();
+        Image backgroundImg = new Image("edu/wpi/cs3733/D21/teamE/hospital.jpg");
+        Image backgroundImage = backgroundImg;
+        background.setImage(backgroundImage);
+        background.setEffect(new GaussianBlur());
+        background.setPreserveRatio(false);
+        background.setFitWidth(primaryStage.getWidth());
+        background.setFitHeight(primaryStage.getHeight());
+
+        background.fitWidthProperty().bind(primaryStage.widthProperty());
+        background.fitHeightProperty().bind(primaryStage.heightProperty());
+
+
+
         //init appBar
         javafx.scene.Node appBarComponent = null;
         try {

@@ -8,26 +8,26 @@ import com.jfoenix.controls.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.security.GeneralSecurityException;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.jfoenix.validation.RequiredFieldValidator;
-
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
-import edu.wpi.cs3733.D21.teamE.database.UserAccountDB;
 import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
 import edu.wpi.cs3733.D21.teamE.email.SheetsAndJava;
 import edu.wpi.cs3733.D21.teamE.email.sendEmail;
 import edu.wpi.cs3733.D21.teamE.states.ServiceRequestState;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-
 import javafx.fxml.FXML;
-
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -39,6 +39,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
+import java.net.URL;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class Appointment extends ServiceRequestFormComponents{
 
@@ -168,65 +173,82 @@ public class Appointment extends ServiceRequestFormComponents{
 	@FXML
 	private void saveData(ActionEvent actionEvent) throws MessagingException, IOException, GeneralSecurityException {
 
-
 		if (validateInput()) {
 
 			String date = dateInput.getValue().toString();
-			System.out.println("date " + date);
+
 			String startTime = startTimeInput.getValue().toString();
-			System.out.println("startTime " + startTime);
 
 			int doctorIndex = doctorInput.getSelectionModel().getSelectedIndex();
-			System.out.println("doctorIndex " + doctorIndex);
 
 			Integer doctorID = userID.get(doctorIndex);
 
 			String additionalNotes = additionalNotesInput.getText();
-			System.out.println("additionalNotes " + additionalNotes);
 
 			boolean oneMonthPrior = oneMonthPriorInput.isSelected();
-			System.out.println("oneMonthPrior " + oneMonthPrior);
-			boolean twoWeeksPrior = twoWeeksPriorInput.isSelected();
-			System.out.println("twoWeeksPrior " + twoWeeksPrior);
-			boolean oneWeekPrior = oneWeekPriorInput.isSelected();
-			System.out.println("oneWeekPrior " + oneWeekPrior);
-			boolean twoDaysPrior = twoDaysPriorInput.isSelected();
-			System.out.println("twoDaysPrior " + twoDaysPrior);
-			boolean oneDayPrior = oneDayPriorInput.isSelected();
-			System.out.println("oneDayPrior " + oneDayPrior);
 
-			super.handleButtonSubmit(actionEvent);
+			boolean twoWeeksPrior = twoWeeksPriorInput.isSelected();
+
+			boolean oneWeekPrior = oneWeekPriorInput.isSelected();
+
+			boolean twoDaysPrior = twoDaysPriorInput.isSelected();
+
+			boolean oneDayPrior = oneDayPriorInput.isSelected();
+
 
 			DB.addAppointment(App.userID, startTime, date, doctorID);
 
 			String email = DB.getEmail(App.userID);
 			String fullName = DB.getUserName(App.userID);
+
 			sendEmail.sendAppointmentConfirmation(email, startTime, fullName);
-			int position = fullName.indexOf(" ");
 
-			String firstName = fullName.substring(0, position);
-			String lastName = fullName.substring(position);
-			String dateAndTime = date + " " + startTime;
-			int appointmentID = appointmentDB.getAppointmentID(App.userID, startTime, date);
+			if(oneMonthPrior || twoWeeksPrior || oneWeekPrior || twoDaysPrior || oneDayPrior) {
+				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+				alert.setTitle("Please Login To Our Gmail Account To Verify This App");
+				alert.setHeaderText("Unfortunately, to receive a reminder for your appointment, you will need to approve this app on your local machine.");
+				alert.setContentText("Would you like to log in to our Software Engineering Gmail Account?");
 
-			if (oneMonthPrior == true) {
-				SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "1 Month Prior");
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK){
+					// user chose OK
+
+					int position = fullName.indexOf(" ");
+
+					String firstName = fullName.substring(0, position);
+					String lastName = fullName.substring(position);
+					String dateAndTime = date + " " + startTime;
+					int appointmentID = appointmentDB.getAppointmentID(App.userID, startTime, date);
+
+					if (oneMonthPrior == true) {
+						SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "1 Month Prior");
+					}
+					if (twoWeeksPrior == true) {
+						SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "2 Weeks Prior");
+					}
+					if (oneWeekPrior == true) {
+						SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "1 Week Prior");
+					}
+					if (twoDaysPrior == true) {
+						SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "48 Hours Prior");
+					}
+					if (oneDayPrior == true) {
+						SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "24 Hours Prior");
+					}
+
+					super.handleButtonSubmit(actionEvent);
+
+				}
 			}
-			if (twoWeeksPrior == true) {
-				SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "2 Weeks Prior");
-			}
-			if (oneWeekPrior == true) {
-				SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "1 Week Prior");
-			}
-			if (twoDaysPrior == true) {
-				SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "48 Hours Prior");
-			}
-			if (oneDayPrior == true) {
-				SheetsAndJava.addAppointmentToSheet(appointmentID, email, firstName, lastName, userNames.get(doctorIndex), dateAndTime, "24 Hours Prior");
+			else{
+				super.handleButtonSubmit(actionEvent);
 			}
 
 		}
+
+
 	}
+
 
 	/**
 	 * Detects if the user has entered all required fields

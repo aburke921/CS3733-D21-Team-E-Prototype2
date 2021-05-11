@@ -5,7 +5,6 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXSlider?>
 <?import com.jfoenix.controls.JFXToggleButton?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -21,8 +20,8 @@
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefWidth="1012.0" />
       <AnchorPane>
          <children>
-                <HBox layoutY="1.0" prefHeight="58.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
-                    <children>
+            <HBox layoutY="1.0" prefHeight="58.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
+               <children>
                   <JFXButton fx:id="directoryButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#changeDirectory" prefHeight="27.0" prefWidth="27.0" styleClass="directory" text="">
                      <HBox.margin>
                         <Insets left="15.0" top="10.0" />
@@ -41,16 +40,38 @@
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXComboBox>
-                  <JFXButton fx:id="findPathButton" disable="true" onAction="#findPath" styleClass="submit-button" text="Find Path">
+                  <JFXButton fx:id="reverse" alignment="CENTER" contentDisplay="CENTER" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#swap" prefHeight="27.0" prefWidth="27.0" styleClass="directory" text="">
+                     <graphic>
+                        <MaterialDesignIconView glyphName="SWAP_HORIZONTAL" size="20" style="-fx-fill: WHITE;" textAlignment="CENTER" />
+                     </graphic>
                      <HBox.margin>
-                        <Insets left="15.0" top="10.0" />
+                        <Insets left="12.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
+                  <JFXButton fx:id="findPathButton" disable="true" onAction="#findPath" styleClass="submit-button" text="Find Path">
+                     <HBox.margin>
+                        <Insets left="12.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="minus" disable = "true" alignment="CENTER" contentDisplay="CENTER" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" onAction="#zoom" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: TRANSPARENT;" styleClass="directions" text="">
+                     <HBox.margin>
+                        <Insets left="20.0" right="5.0" top="12.0" />
+                     </HBox.margin>
+                     <graphic>
+                        <MaterialDesignIconView glyphName="MINUS" size="25" styleClass="directory" />
+                     </graphic></JFXButton>
                   <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
                      <HBox.margin>
-                        <Insets left="20.0" top="17.0" />
+                        <Insets top="17.0" />
                      </HBox.margin>
                   </JFXSlider>
+                  <JFXButton fx:id="plus" alignment="CENTER" contentDisplay="CENTER" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" onAction="#zoom" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: TRANSPARENT;" styleClass="directions" text="">
+                     <HBox.margin>
+                        <Insets left="5.0" top="12.0" />
+                     </HBox.margin>
+                     <graphic>
+                        <MaterialDesignIconView glyphName="PLUS" size="25" styleClass="directory" />
+                     </graphic></JFXButton>
                   <JFXButton fx:id="floorL2" onAction="#chooseFloor" styleClass="transit-button-unselected" text="L2">
                      <HBox.margin>
                         <Insets left="20.0" top="10.0" />
@@ -81,16 +102,16 @@
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                       <JFXButton fx:id="qrButton" onAction="#startQRScanning" style="-fx-text-fill: -fx--primary;" styleClass="cancel-button" text="QR Code">
-                          <graphic>
-                             <MaterialDesignIconView glyphName="QRCODE" size="18" />
-                          </graphic>
-                          <HBox.margin>
-                             <Insets left="15.0" top="10.0" />
-                          </HBox.margin>
-                       </JFXButton>
-                    </children>
-                </HBox>
+                  <JFXButton fx:id="qrButton" onAction="#startQRScanning" style="-fx-text-fill: -fx--primary;" styleClass="cancel-button" text="QR Code">
+                     <graphic>
+                        <MaterialDesignIconView glyphName="QRCODE" size="18" />
+                     </graphic>
+                     <HBox.margin>
+                        <Insets left="15.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="723.0" VBox.vgrow="ALWAYS">
@@ -204,7 +225,7 @@
                                                       <Insets top="8.0" />
                                                    </VBox.margin>
                                                 </JFXCheckBox>
-                                                <JFXCheckBox fx:id="EXIT" checkedColor="#90e430" onAction="#sortNodesByType" text="Entrances/Exits">
+                                                <JFXCheckBox fx:id="exit" checkedColor="#90e430" onAction="#sortNodesByType" text="Entrances/Exits">
                                                    <VBox.margin>
                                                       <Insets top="8.0" />
                                                    </VBox.margin>

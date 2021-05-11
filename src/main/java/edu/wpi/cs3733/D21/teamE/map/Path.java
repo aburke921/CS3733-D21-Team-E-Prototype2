@@ -82,9 +82,11 @@ public class Path implements Comparable<Path>, Iterable<Node>{
      */
     public void add(Path p) {
         if(!p.isEmpty()) {
-            length += p.getPathLength() + pathEnd.dist(p.getStart());
-            pathEnd.setNext(p.getStart());
-            pathEnd = p.pathEnd;
+            if(p.getStart() != null) {
+                length += p.getPathLength() + pathEnd.dist(p.getStart());
+                pathEnd.setNext(p.getStart());
+                pathEnd = p.pathEnd;
+            }
         }
     }
 
@@ -421,7 +423,204 @@ public class Path implements Comparable<Path>, Iterable<Node>{
                 }
             }
         }
+        directions.add(" You Have Arrived At Your Destination");
+        return directions;
 
+    }
+
+    /**
+
+     * A method(no parameters) in our path class that returns a collection of
+     * strings(array, array list), iterate through its list and
+     * figures out how to turn the list nodes into a list of strings that describe it.
+     * Figures out current line(coordinates), next line, and then make an angle.
+     * Bend left, turn left, by angle (small or large) decide direction after.
+     * Has Stops support
+     *
+     * @return the list of strings as directions
+     */
+    public List<String> makeDirectionsStops(ArrayList<Node> stops){
+
+        List<String> directions = new ArrayList<>();
+
+        //iterate the list
+        Iterator<Node> itr = this.iterator();
+
+        if(itr.hasNext()){
+
+            //node 1
+            Node node1 = itr.next();
+
+            if(itr.hasNext()){
+
+                //node 2
+                Node node2 = itr.next();
+                double len = node1.dist(node2);
+                int dist = (int) (Math.round((len * SCALE) / 10) * 10);
+                if (dist == 0) {
+                    dist = 5;
+                }
+                if(node2.get("type").equalsIgnoreCase("ELEV") && node1.get("type").equalsIgnoreCase("ELEV")) {
+                    if (!itr.hasNext()) {
+                        directions.add("Take Elevator " + node1.get("longName").charAt(9) + " to Floor " + node2.get("floor"));
+                    }
+                } else if (node2.get("type").equalsIgnoreCase("STAI") && node1.get("type").equalsIgnoreCase("STAI")) {
+                    if (!itr.hasNext()) {
+                        if (Node.calculateZ(node1.get("floor")) > Node.calculateZ(node2.get("floor"))) {
+                            directions.add("Take the Stairs down to Floor " + node2.get("floor"));
+                        } else {
+                            directions.add("Take the Stairs up to Floor " + node2.get("floor"));
+                        }
+                    }
+                } else {
+                    directions.add("Go straight for " + dist + " feet");
+                }
+
+                int floorChangeState = 0;
+                // 0 = normal
+                // 1 = elev in 2 and 3
+                // 2 = elev in 1 and 2
+                // 3 = stairs in 2 and 3
+                // 4 = stairs in 1 and 2
+
+                while (itr.hasNext()){
+                    floorChangeState = 0;
+                    //node 3
+                    Node node3 = itr.next();
+
+                    if(node2.get("type").equalsIgnoreCase("ELEV")) {
+                        if (node3.get("type").equalsIgnoreCase("ELEV")) {
+                            floorChangeState = 1;
+                        } else if (node1.get("type").equalsIgnoreCase("ELEV")) {
+                            floorChangeState = 2;
+                        }
+                    } else if (node2.get("type").equalsIgnoreCase("STAI")) {
+                        if (node3.get("type").equalsIgnoreCase("STAI")) {
+                            floorChangeState = 3;
+                        } else if (node1.get("type").equalsIgnoreCase("STAI")) {
+                            floorChangeState = 4;
+                        }
+                    }
+
+                    for (int i = 1; i < stops.size(); i++) {
+                        if(node2.equals(stops.get(i))) {
+                            directions.add(" You Have Arrived At Your Appointment");
+                        }
+                    }
+                    switch (floorChangeState){
+                        case 1:
+                            break;
+                        case 2:
+                            len = node3.dist(node2);
+                            dist = (int) (Math.round((len * SCALE) / 10) * 10);
+                            if (dist == 0) {
+                                dist = 5;
+                            }
+                            directions.add("Take Elevator " + node1.get("longName").charAt(9) + " to Floor " + node2.get("floor"));
+                            directions.add("Exit the Elevator and go straight for " + dist + " feet");
+                            break;
+                        case 3:
+                            String floor = "";
+                            while(node3.get("type").equalsIgnoreCase("STAI")) {
+                                floor = node3.get("floor");
+                                if (itr.hasNext()) {
+                                    node2 = node3;
+                                    node3 = itr.next();
+                                } else {
+                                    System.out.println("Last Stairs Found");
+                                    break;
+                                }
+                            }
+                            if (Node.calculateZ(node1.get("floor")) > Node.calculateZ(node2.get("floor"))) {
+                                directions.add("Take the Stairs down to Floor " + floor);
+                            } else {
+                                directions.add("Take the Stairs up to Floor " + floor);
+                            }
+                        case 4:
+                            if (!node3.get("type").equalsIgnoreCase("STAI")) {
+                                len = node3.dist(node2);
+                                dist = (int) (Math.round((len * SCALE) / 5) * 5);
+                                if (dist == 0) {
+                                    dist = 5;
+                                }
+                                directions.add("Exit the Stairwell and go straight for " + dist + " feet");
+                            }
+                            break;
+                        default:
+
+                            double len1_2 = node1.dist(node2);
+                            double len2_3 = node2.dist(node3);
+
+                            //vectors
+                            //p3 defined by p1m (p1-p3 vector components)
+                            Point p3p1 = new Point(node3.getX() - node1.getX(), node3.getY() - node1.getY());
+                            //p2 defined by p1 (p1-p2 vector components)
+                            Point p1p2 = new Point(node2.getX() - node1.getX(), node2.getY() - node1.getY());
+                            //p3 defined by p2 (p2-p3 vector components)
+                            Point p2p3 = new Point(node3.getX() - node2.getX(), node3.getY() - node2.getY());
+
+                            //calculate the cross product
+                            double crossProduct = p3p1.getX() * p1p2.getY() - p1p2.getX() * p3p1.getY();
+                            //find angle
+                            double angle = 0;
+                            //dot product p1p2 x p2p3
+                            double dotProduct = p1p2.getX() * p2p3.getX() + p1p2.getY() * p2p3.getY();
+
+                            angle = Math.acos(dotProduct / (len1_2 * len2_3));
+                            angle = 180 * angle / Math.PI;//convert radian to degree
+
+                            String turn;
+                            int angleComp = (int) Math.abs(angle);
+
+                            if (angleComp < 35) {
+                                turn = "Bend to the";
+                            } else if (angleComp < 65) {
+                                turn = "Take a shallow turn to the";
+                            } else if (angleComp < 115) {
+                                turn = "Turn to the";
+                            } else {
+                                turn = "Take a sharp turn to the";
+                            }
+
+                            dist = (int) (Math.round((len2_3 * SCALE) / 10) * 10);
+
+                            if (dist == 0) {
+                                dist = 5;
+                            }
+
+                            // straight "tolerance"
+                            if (angleComp > 10) {
+                                if (crossProduct < 0 ){
+                                    directions.add(turn + " right");
+                                    directions.add("Go straight for " + dist + " feet");
+                                } else {
+                                    directions.add(turn + " left");
+                                    directions.add("Go straight for " + dist + " feet");
+                                }
+                            } else {
+                                int index = directions.size() - 1;
+                                String lastDir = directions.get(index);
+                                if (lastDir.contains("straight")){
+                                    directions.remove(index);
+                                    String clean = lastDir.replaceAll("\\D+","");
+                                    dist += Integer.parseInt(clean);
+                                    String result = lastDir.split("straight")[0];
+                                    directions.add(result + "straight for " + dist + " feet");
+                                } else {
+                                    directions.add("Go straight for " + dist + " feet");
+                                }
+
+                            }
+                            break;
+                    }
+
+                    //continue for next node
+                    node1 = node2;
+                    node2 = node3;
+                }
+            }
+        }
+        directions.add(" You Have Arrived At Your Appointment");
         return directions;
 
     }

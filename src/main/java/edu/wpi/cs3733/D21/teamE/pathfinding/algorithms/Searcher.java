@@ -63,6 +63,11 @@ public abstract class Searcher {
         return graph.get(nodeId);
     }
 
+    public List<String> getNeighbors(String nodeId){
+        return graph.get(nodeId).getNeighbors();
+    }
+
+
     public Path search(String startId, String endId){
         Node start = getNode(startId);
         Node end = getNode(endId);
@@ -82,13 +87,16 @@ public abstract class Searcher {
     public Path search(List stops){
         Path fullPath = new Path();
         Iterator itr = stops.iterator();
-
         if(itr.hasNext()){
             Object prev = itr.next();
+            fullPath.add(search(prev, prev));
             while(itr.hasNext()){
                 Object current = itr.next();
                 Path leg = search(prev, current);
-                if(fullPath.getEnd().equals(leg.getStart())){
+                if(leg == null){
+                    //cannot find a path between all stops
+                    return null;
+                } else if(fullPath.getEnd().equals(leg.getStart())){
                     leg.pop();
                 }
                 fullPath.add(leg);
@@ -138,12 +146,17 @@ public abstract class Searcher {
         Node nearestSF = null;
         Path shortestSF = new Path();
         for(Node stop : stops){
-            Path p = search(location, stop);
-            if(shortestSF.isEmpty() || p.getPathLength() < shortestSF.getPathLength()){
-                shortestSF = p;
-                nearestSF = stop;
+
+            Path p = search(getNode(location.get("id")),
+                    getNode(stop.get("id"))); //this method returns null if no path found
+             if (p != null) {
+                if (shortestSF.isEmpty() || p.getPathLength() < shortestSF.getPathLength()) {
+                    shortestSF = p;
+                    nearestSF = stop;
+                }
             }
         }
+
         return nearestSF;
     }
 
@@ -157,27 +170,17 @@ public abstract class Searcher {
      * @return Path of nodes following start
      * start is not included because it didn't 'comeFrom' any node so it's value in map is null
      */
-    protected Path reconstructPath(HashMap<Node, Node> cameFrom, Node end) {
+    Path reconstructPath(HashMap<Node, Node> cameFrom, Node end) {
         LinkedList<Node> stack = new LinkedList<>();
-
-        //int cur = 0;
 
         //push onto stack
         for(Node current = end; current != null && cameFrom.containsKey(current);
                 current = cameFrom.get(current)){
             stack.push(current);
-
-            System.out.println(current.getX() + "." + current.getY());
-//
-//            cur++;
-//
-//            if (cur > 40){
-//                break;
-//            }
         }
 
         Path path = new Path();
-        //pop off of stack onto linked list
+        //pop off of stack
         while(!stack.isEmpty()){
             path.add(stack.pop());
         }

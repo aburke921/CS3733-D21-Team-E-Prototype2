@@ -81,6 +81,17 @@ JFXTextField:pressed, JFXTextArea:pressed, JFXComboBox:pressed, JFXPasswordField
     -fx-background-color: #a2dcfd;
 }
 
+.todo-button {
+    -fx-border-radius: 0px;
+    -fx-background-radius: 0px;
+    -fx-text-fill: WHITE;
+    -fx-background-color:  -fx--primary-dark;
+}
+
+.todo-button:hover {
+    -fx-background-color: -fx--primary-light;
+}
+
 .login-button {
     -fx-background-color: -fx--primary-dark;
     -fx-border-color: -fx--primary-light;
@@ -248,6 +259,22 @@ FontAwesomeIconView {
     -fx-fill: -fx--primary;
 }
 
+#todo-icon {
+    -fx-fill: -fx--primary-dark;
+}
+
+#todo-icon:hover {
+    -fx-fill: -fx--primary;
+}
+
+#blue-icon {
+    -fx-fill: -fx--primary;
+}
+
+#blue-icon:hover {
+    -fx-fill: -fx--primary-dark;
+}
+
 #submission-icon {
     -fx-fill: #368509;
 }
@@ -330,21 +357,16 @@ JFXButton:hover FontAwesomeIconView {
 
 /* ListView CSS from: https://blog.ngopal.com.np/2012/07/11/customize-scrollbar-via-css/*/
 
-scrollables.directions .jfx-rippler{
+.directions .jfx-rippler{
     -jfx-rippler-fill: rgba(255,255,255,0);
 }
 
-scrollables.directions{
+.directions{
     -fx-border-color: rgba(255,255,255,0);
 }
 
 /* The main scrollbar CSS class of ListView */
-.scroll-bar:horizontal {
-    -fx-pref-width: 12;
-    -fx-background-color:transparent;
-}
-
-.scroll-bar:vertical{
+.scroll-bar:horizontal , .scroll-bar:vertical{
     -fx-pref-width: 12;
     -fx-background-color:transparent;
 
@@ -357,14 +379,14 @@ scrollables.directions{
 }
 
 /* The main scrollbar **track** CSS class  */
-.scroll-bar:vertical .track{
+.scroll-bar:vertical .track , .scroll-bar:horizontal .track{
     -fx-background-color: transparent;
     -fx-border-color:derive(gray,80%);
     -fx-background-radius: 0em;
 }
 
 /* The main scrollbar **thumb** CSS class which we drag every time (movable) */
-.scroll-bar:vertical .thumb {
+.scroll-bar:vertical .thumb , .scroll-bar:horizontal .thumb {
     -fx-background-color: -fx--primary;
     -fx-background-insets: 2, 0, 0;
     -fx-background-radius: 2em;

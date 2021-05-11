@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 
 import java.io.IOException;
 
-public class SubmissionState {
+public class SubmissionState implements State{
 
     public void switchScene(ActionEvent event) {
 

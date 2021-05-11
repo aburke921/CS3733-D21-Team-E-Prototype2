@@ -26,6 +26,8 @@ import edu.wpi.cs3733.D21.teamE.states.CreateAccountState;
 import edu.wpi.cs3733.D21.teamE.states.MapEditorState;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -59,6 +61,8 @@ public class newMapEditor {
      * FXML Values
      */
 
+    @FXML // fx:id="appBarAnchorPane"
+    private AnchorPane appBarAnchorPane; // Value injected by FXMLLoader
 
     @FXML // fx:id="zoomSlider"
     private Slider zoomSlider;
@@ -84,8 +88,6 @@ public class newMapEditor {
     private JFXButton directionsButton; // Value injected by FXMLLoader
     @FXML // fx:id="stackPane"
     private StackPane stackPane; // Value injected by FXMLLoader
-    @FXML // fx:id="exit"
-    private Polygon exit;
     @FXML // fx:id="lowerAnchorPane"
     private AnchorPane lowerAnchorPane; // Value injected by FXMLLoader
     @FXML
@@ -131,7 +133,24 @@ public class newMapEditor {
     @FXML
     private JFXButton editNodeButton;
 
+    @FXML // fx:id="minus"
+    private JFXButton minus;
+    @FXML // fx:id="plus"
+    private JFXButton plus;
 
+    @FXML // fx:id="floorL2"
+    private Button floorL2;
+    @FXML // fx:id="floorL1"
+    private Button floorL1;
+    @FXML // fx:id="floorG"
+    private Button floorG;
+    @FXML // fx:id="floor1"
+    private Button floor1;
+    @FXML // fx:id="floor2"
+    private Button floor2;
+    @FXML // fx:id="floor3"
+    private Button floor3;
+    private Button currentlySelected;
 
 
     /*
@@ -141,6 +160,9 @@ public class newMapEditor {
     private String startID = "test";
 
     private String endID = "test";
+
+    private String nodeStartID;
+    private String nodeEndID;
 
     private String currentFloor = "1"; // set based on button presses
 
@@ -616,7 +638,6 @@ public class newMapEditor {
                         s = DB.deleteNode(array.get(i).get("id"));
                     }
                 }
-
             }
         }
         refresh();
@@ -886,6 +907,22 @@ public class newMapEditor {
     @FXML
     void initialize() {
 
+        //init appBar
+        javafx.scene.Node appBarComponent;
+        try {
+            App.setPageTitle("Map Ediotr"); //set AppBar title
+            App.setHelpText("To use the pathfinder, first select a starting location and end location you would like " +
+                    "to find the paths to.\n You may search to find what you are looking for as well. " +
+                    "\n..."); //todo add help text for Map Editor
+            App.setStackPane(stackPane);
+            App.setShowHelp(true);
+            App.setShowLogin(true);
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's sideBarVBox element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //Creating ID dropdown
         ArrayList<String> idList = DB.getListOfNodeIDS();
         ObservableList<String> listOfIDS = FXCollections.observableArrayList();
@@ -935,16 +972,9 @@ public class newMapEditor {
         floorInput.setItems(listOfFloors);
         buildingInput.setItems(listOfBuildings);
         idInput.setItems(listOfIDS);
-        floorSelector.setItems(listOfFloors);
 
         //get primaryStage
         Stage primaryStage = App.getPrimaryStage();
-
-        //If exit button is clicked, exit app
-        exit.setOnMouseClicked(event -> {
-            App app = new App();
-            app.stop();
-        });
 
         //get dimensions of stage
         stageWidth = primaryStage.getWidth();
@@ -977,9 +1007,6 @@ public class newMapEditor {
         edgeID.setItems(edgeIDArrayList);
         startLocation.setItems(longNameArrayList);
         endLocation.setItems(longNameArrayList);
-
-        //set initial combobox value
-        floorSelector.getSelectionModel().select("1"); //floor 1
         System.out.println("done");
 
         new AutoCompleteComboBoxListener<>(endLocation);
@@ -1062,40 +1089,40 @@ public class newMapEditor {
 
 
 
-                System.out.println("No drag");
+                    System.out.println("No drag");
 
-                ObservableList groups = pane.getChildren();
+                    ObservableList groups = pane.getChildren();
 
-                ObservableList shapes = FXCollections.observableArrayList();
-                if(groups.get(0) instanceof Group){
-                    shapes = ((Group) groups.get(0)).getChildren();
-
-                }
-
-                System.out.println(clickedX);
-
-                for(int i = 0; i < shapes.size();i++){
-                    if(shapes.get(i) instanceof Circle){
-                        if((int)((Circle) shapes.get(i)).getCenterX() == clickedX && (int)((Circle) shapes.get(i)).getCenterY() == clickedY){
-                            Circle circle = ((Circle) shapes.get(i));
-                            System.out.println("Yay");
-                            circle.setOnMouseDragged(event ->{
-                                scrollPane.setPannable(false);
-                                circle.setCenterX((int)event.getX());
-                                circle.setCenterY((int)event.getY());
-                                DB.modifyNode(clickedID,(int)(circle.getCenterX() * scale),(int)(circle.getCenterY()*scale),currentFloor,clickedBuilding,clickedType,clickedLongName, clickedShortname);
-                            });
-                            circle.setOnMouseReleased(mouseEvent ->{
-                                refresh();
-                                scrollPane.setPannable(true);
-                            });
-
-                        }
+                    ObservableList shapes = FXCollections.observableArrayList();
+                    if(groups.get(0) instanceof Group){
+                        shapes = ((Group) groups.get(0)).getChildren();
 
                     }
 
+                    System.out.println(clickedX);
 
-                }
+                    for(int i = 0; i < shapes.size();i++){
+                        if(shapes.get(i) instanceof Circle){
+                            if((int)((Circle) shapes.get(i)).getCenterX() == clickedX && (int)((Circle) shapes.get(i)).getCenterY() == clickedY){
+                                Circle circle = ((Circle) shapes.get(i));
+                                System.out.println("Yay");
+                                circle.setOnMouseDragged(event ->{
+                                    scrollPane.setPannable(false);
+                                    circle.setCenterX((int)event.getX());
+                                    circle.setCenterY((int)event.getY());
+                                    DB.modifyNode(clickedID,(int)(circle.getCenterX() * scale),(int)(circle.getCenterY()*scale),currentFloor,clickedBuilding,clickedType,clickedLongName, clickedShortname);
+                                });
+                                circle.setOnMouseReleased(mouseEvent ->{
+                                    refresh();
+                                    scrollPane.setPannable(true);
+                                });
+
+                            }
+
+                        }
+
+
+                    }
                 });
             } else {
                 //populates fields with information of selected node or edge in table
@@ -1114,7 +1141,23 @@ public class newMapEditor {
         //for clicks interacting with map
         startMapClickHandler();
 
+        currentlySelected = floor1;
 
+        zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if (zoomSlider.getValue() < 1.01) {
+                    minus.setDisable(true);
+                    plus.setDisable(false);
+                } else if (zoomSlider.getValue() > 4.99) {
+                    minus.setDisable(false);
+                    plus.setDisable(true);
+                } else {
+                    minus.setDisable(false);
+                    plus.setDisable(false);
+                }
+            }
+        });
 
 
 
@@ -1429,12 +1472,32 @@ public class newMapEditor {
      * deletes edge if ID in the dropdown matches ID of an edge in DB
      */
     public void deleteEdge() {
+        ArrayList<Node> nodeArray = DB.getAllNodes();
         ArrayList<Edge> array = DB.getAllEdges();
         if(edgeID.getValue() != null && startLocation.getValue() != null && endLocation.getValue() != null) {
+            //retrieves start and end node of new edge
+            String ID = null;
+            String startInput = null;
+            String endInput = null;
+            for(int i = 0; i < nodeArray.size(); i++) {
+                if (nodeArray.get(i).get("id").equals(startID)) {
+                    startInput = nodeArray.get(i).get("id");
+                }
+                if (nodeArray.get(i).get("id").equals(endID)) {
+                    endInput = nodeArray.get(i).get("id");
+                }
+                ID = startInput + "_" + endInput;
+            }
+            //if edge found, delete
             for(int i = 0; i < array.size(); i++) {
-                if(array.get(i).getId().equals(edgeID.getValue().toString())) {
+                if (array.get(i).getId().equals(ID)) {
                     System.out.println("This lies between " + startLocation.getValue() + " and " + endLocation.getValue());
-                    DB.deleteEdge(array.get(i).getStartNodeId(), array.get(i).getEndNodeId());
+                    System.out.println("correct delete");
+                    DB.deleteEdge(startInput, endInput);
+                }
+                //if reverse edge found, alert user and ask if they want to delete correct edge
+                if (array.get(i).getId().equals(endInput + "_" + startInput)) {
+                    DB.deleteEdge(startInput, endInput);
                 }
             }
         }
@@ -1474,29 +1537,50 @@ public class newMapEditor {
      * creates an edge using information taken from fields
      */
     public void addEdge() {
+        ArrayList<Edge> edgeList = DB.getAllEdges();
         ArrayList<Node> array = DB.getAllNodes();
         String startInput = null;
         String endInput = null;
         if(startLocation.getValue() != null && endLocation.getValue() != null) {
-            System.out.println(startLocation.getValue());
             String ID = null;
+            String reverseID = null;
             //retrieves start and end node of new edge
+            startLocation.getSelectionModel().getSelectedIndex();
+
             for(int i = 0; i < array.size(); i++) {
-                if(array.get(i).get("longName").equals(startLocation.getValue())) {
+                if (array.get(i).get("id").equals(startID)) {
                     startInput = array.get(i).get("id");
                 }
-                if(array.get(i).get("longName").equals(endLocation.getValue())) {
+                if (array.get(i).get("id").equals(endID)) {
                     endInput = array.get(i).get("id");
                 }
+                ID = startInput + "_" + endInput;
+                reverseID = endInput + "_" + startInput;
+            }
+            //check duplicate
+            if(edgeList.contains(ID) || edgeList.contains(reverseID)) {
+                System.out.println("duplicate!");
+                JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+                jfxDialogLayout.setBody(new Text("This edge already exists!"));
+                JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+                JFXButton cancel = new JFXButton("Cancel");
+                cancel.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        dialog.close();
+
+                    }
+                });
+                jfxDialogLayout.setActions(cancel);
+                dialog.show();
+                return;
             }
             //creates node ID
-            if(startInput != null && endInput != null) {
+            if (startInput != null && endInput != null) {
                 ID = startInput + "_" + endInput;
+                DB.addEdge(ID, startInput, endInput);
+                refresh();
             }
-            //adds edge, populates edge ID field with new ID
-            DB.addEdge(ID, startInput, endInput);
-            edgeID.setValue(ID);
-            refresh();
         }
     }
 
@@ -1578,10 +1662,32 @@ public class newMapEditor {
         jfxDialogLayout.setHeading(new Text("CSV Handler"));
         jfxDialogLayout.setBody(new Text("What action would you like to take?"));
         JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
-        JFXButton upload = new JFXButton("Upload CSV");
-        JFXButton retrieve = new JFXButton("Retrieve CSV");
+        JFXButton uploadNode = new JFXButton("Upload Node CSV");
+        JFXButton retrieveNode = new JFXButton("Retrieve Node CSV");
+        JFXButton uploadEdge = new JFXButton("Upload Edge CSV");
+        JFXButton retrieveEdge = new JFXButton("Retrieve Edge CSV");
         JFXButton cancel = new JFXButton("Cancel");
-        upload.setOnAction(new EventHandler<ActionEvent>() {
+        retrieveEdge.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    openEdgeFile(event);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                dialog.close();
+
+            }
+        });
+        retrieveEdge.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                edgeFileOpener(event);
+                dialog.close();
+
+            }
+        });
+        uploadNode.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 fileOpenerNode(event);
@@ -1589,7 +1695,7 @@ public class newMapEditor {
 
             }
         });
-        retrieve.setOnAction(new EventHandler<ActionEvent>() {
+        retrieveNode.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 try {
@@ -1608,18 +1714,41 @@ public class newMapEditor {
 
             }
         });
-        jfxDialogLayout.setActions(upload, retrieve, cancel);
+        jfxDialogLayout.setActions(retrieveEdge, uploadEdge, uploadNode, retrieveNode, cancel);
         dialog.show();
     }
 
+    @FXML
+    public void edgeFileOpener(ActionEvent e) {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(App.getPrimaryStage());
+
+        if (file != null) {
+            DB.deleteEdgeTable();
+            DB.createEdgeTable();
+            DB.populateTable("hasEdge", file);
+            System.out.println("Success");
+        }
+        prepareEdges(edgeTreeTable);
+    }
+
+    @FXML
+    private void openEdgeFile(ActionEvent e) throws IOException {
+
+
+        DB.getNewCSVFile("hasEdge");
+        File file = new File("CSVs/outputEdge.csv");
+        Desktop desktop = Desktop.getDesktop();
+        desktop.open(file);
+        prepareEdges(edgeTreeTable);
+    }
     /**
-     * function for floor dropdown, allows user to change which floor's
+     * function for floor buttons, allows user to change which floor's
      * map they are currently viewing
      */
     public void selectFloor() {
         //set image
-        currentFloor = floorSelector.getValue().toString();
-        Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/" + floorSelector.getValue().toString() + ".png");
+        Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/" + currentFloor + ".png");
         imageView.setImage(image);
 
         //draw path for new floor
@@ -1654,6 +1783,63 @@ public class newMapEditor {
         });
         jfxDialogLayout.setActions(okay, cancel);
         dialog.show();
+    }
+
+    /**
+     * Switches visible floor
+     * @param e Button click action
+     */
+    public void chooseFloor(ActionEvent e) {
+        Button button = ((Button) e.getSource());
+        String floor = button.getText();
+        currentFloor = floor;
+        switchFocusButton(floor);
+        selectFloor();
+    }
+
+    /**
+     * Switch highlighted floor button
+     * @param floor Floor to switch to
+     */
+    private void switchFocusButton(String floor) {
+        currentlySelected.getStyleClass().remove("transit-button-selected");
+        currentlySelected.getStyleClass().add("transit-button-unselected");
+        switch (floor) {
+            case "L2":
+                currentlySelected = floorL2;
+                break;
+
+            case "L1":
+                currentlySelected = floorL1;
+                break;
+
+            case "G":
+                currentlySelected = floorG;
+                break;
+
+            case "1":
+                currentlySelected = floor1;
+                break;
+
+            case "2":
+                currentlySelected = floor2;
+                break;
+
+            case "3":
+                currentlySelected = floor3;
+                break;
+        }
+        currentlySelected.getStyleClass().remove("transit-button-unselected");
+        currentlySelected.getStyleClass().add("transit-button-selected");
+    }
+
+    public void zoom(ActionEvent e) {
+        Button button = ((Button) e.getSource());
+        if (button.getId().equals("plus")) {
+            zoomSlider.setValue(zoomSlider.getValue() + 0.5);
+        } else {
+            zoomSlider.setValue(zoomSlider.getValue() - 0.5);
+        }
     }
 }
 

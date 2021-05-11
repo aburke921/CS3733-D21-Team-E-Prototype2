@@ -1482,10 +1482,10 @@ public class newMapEditor {
             String startInput = null;
             String endInput = null;
             for(int i = 0; i < nodeArray.size(); i++) {
-                if(nodeArray.get(i).get("longName").equals(startLocation.getValue())) {
+                if (nodeArray.get(i).get("id").equals(startID)) {
                     startInput = nodeArray.get(i).get("id");
                 }
-                if(nodeArray.get(i).get("longName").equals(endLocation.getValue())) {
+                if (nodeArray.get(i).get("id").equals(endID)) {
                     endInput = nodeArray.get(i).get("id");
                 }
                 ID = startInput + "_" + endInput;
@@ -1547,11 +1547,13 @@ public class newMapEditor {
             String ID = null;
             String reverseID = null;
             //retrieves start and end node of new edge
+            startLocation.getSelectionModel().getSelectedIndex();
+
             for(int i = 0; i < array.size(); i++) {
-                if (array.get(i).get("longName").equals(startLocation.getValue())) {
+                if (array.get(i).get("id").equals(startID)) {
                     startInput = array.get(i).get("id");
                 }
-                if (array.get(i).get("longName").equals(endLocation.getValue())) {
+                if (array.get(i).get("id").equals(endID)) {
                     endInput = array.get(i).get("id");
                 }
                 ID = startInput + "_" + endInput;

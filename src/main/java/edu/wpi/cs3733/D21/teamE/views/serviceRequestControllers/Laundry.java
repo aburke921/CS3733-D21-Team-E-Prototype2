@@ -128,10 +128,8 @@ public class Laundry extends ServiceRequestFormComponents {
         assert submit != null : "fx:id=\"submit\" was not injected: check your FXML file 'Laundry.fxml'.";
 
         locations = DB.getAllNodeLongNames();
-        nodeID = DB.getListOfNodeIDS();
         locationInput.setItems(locations);
         userNames = DB.getAssigneeNames("custodian");
-        userID = DB.getAssigneeIDs("custodian");
         assignedPersonnel.setItems(userNames);
 
         //init appBar

@@ -1,5 +1,9 @@
 package edu.wpi.cs3733.D21.teamE.database;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import edu.wpi.cs3733.D21.teamE.App;
 
 import java.sql.*;
@@ -11,7 +15,7 @@ public class appointmentDB {
 	public static void createAppointmentTable() {
 		//TODO: before deleting any users, save their information from userAccount into CSV
 		String query = "Create Table appointment( " +
-				"    appointmentID Int Primary Key, " +
+				"    appointmentID Int Primary Key References ToDo, " +
 				"    patientID Int References useraccount (userid) On Delete Cascade , " +
 				"    doctorID Int References useraccount (userid) On Delete Cascade, " +
 				"    appointmentDate varchar(31) Not Null, " +
@@ -38,8 +42,11 @@ public class appointmentDB {
 	 * @return an int (0 if add fails, 1 if add succeeded)
 	 */
 	public static int addAppointment(int patientID, String startTime, String date, Integer doctorID) {
+		// Not multi-user safe, but hey we only have one client accessing the db at a time
+		ToDoDB.addCustomToDo(doctorID, "Appointment #" + (ToDoDB.getMaxToDoID() + 1) + " with " + UserAccountDB.getUserName(patientID));
+		ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, null, date, startTime, null, null, null, null);
 
-		String insertAddApt = "insert into appointment values(" + (getMaxAppointmentID() + 1) + ",?, ?, ?, ?)";
+		String insertAddApt = "Insert Into appointment Values(" + ToDoDB.getMaxToDoID() + ", ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertAddApt)) {
 			prepState.setInt(1, patientID);
@@ -150,7 +157,7 @@ public class appointmentDB {
 	}
 
 	public static int getAppointmentID(int patientID, String startTime, String date) {
-		String getAppointmentID = "select * from appointment where patientID = ? AND startTime = ? AND appointmentDate = ?";
+		String getAppointmentID = "Select * From appointment Where patientID = ? And startTime = ? And appointmentDate = ?";
 		int appointmentID = 0;
 		try (PreparedStatement prepState = connection.prepareStatement(getAppointmentID)) {
 
@@ -160,8 +167,8 @@ public class appointmentDB {
 
 			ResultSet rset = prepState.executeQuery();
 
-			while(rset.next()) {
-				appointmentID =  rset.getInt("appointmentID");
+			while (rset.next()) {
+				appointmentID = rset.getInt("appointmentID");
 			}
 
 

@@ -1292,6 +1292,7 @@ public class PathFinder {
 
         populateCheckboxes();
 
+        // Disable zoom buttons under certain cases
         zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -1682,6 +1683,9 @@ public class PathFinder {
         checkBoxes.put("PARK", park);
     }
 
+    /**
+     * Zoom Button handling
+     */
     public void zoom(ActionEvent e) {
         Button button = ((Button) e.getSource());
         if (button.getId().equals("plus")) {

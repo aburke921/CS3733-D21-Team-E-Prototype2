@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 
 import java.io.IOException;
 
-public class ServiceRequestState {
+public class ServiceRequestState implements State{
 
     public void switchScene(ActionEvent event) {
 

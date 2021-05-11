@@ -263,6 +263,7 @@ public class RequestsDB {
 
 			while (rset.next()) {
 
+				int userID = rset.getInt("userID");
 				int requestID = rset.getInt("entryRequestID");
 				boolean positiveTest = rset.getBoolean("positiveTest");
 				boolean symptoms = rset.getBoolean("symptoms");
@@ -270,7 +271,7 @@ public class RequestsDB {
 				boolean quarantine = rset.getBoolean("quarantine");
 				boolean noSymptoms = rset.getBoolean("noSymptoms");
 				String status = rset.getString("status");
-				covidSurveys.add(new CovidSurveyObj(App.userID, requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms, status));
+				covidSurveys.add(new CovidSurveyObj(userID, requestID, positiveTest, symptoms, closeContact, quarantine, noSymptoms, status));
 			}
 
 			rset.close();

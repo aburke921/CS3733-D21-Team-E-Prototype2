@@ -78,18 +78,15 @@ public class ToDo implements Comparable<ToDo>{
     }
 
     public String getPriorityString() {
-        if((Integer) priority != null) {
-            if (priority == 0) {
-                return "None";
-            } else if (priority == 1) {
+        switch (priority) {
+            case 1:
                 return "Low";
-            } else if (priority == 2) {
+            case 2:
                 return "Medium";
-            } else {
+            case 3:
                 return "High";
-            }
-        } else {
-            return "";
+            default:
+                return "";
         }
     }
 

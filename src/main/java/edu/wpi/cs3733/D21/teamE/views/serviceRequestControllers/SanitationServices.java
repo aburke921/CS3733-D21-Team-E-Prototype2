@@ -143,10 +143,10 @@ public class SanitationServices extends ServiceRequestFormComponents {
     userID = DB.getAssigneeIDs("custodian");
     assignee.setItems(userNames);
 
-    assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-    assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-    assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
-    assert assignee != null : "fx:id=\"assignee\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/Sanitation.fxml'.";
+    assert ServiceTypeinput != null : "fx:id=\"ServiceTypeinput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SanitationV2.fxml'.";
+    assert  locationInput != null : "fx:id=\"locationInput\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SanitationV2.fxml'.";
+    assert Severity != null : "fx:id=\"Severity\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SanitationV2.fxml'.";
+    assert assignee != null : "fx:id=\"assignee\" was not injected: check your FXML file '/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/SanitationV2.fxml'.";
 
     //init appBar
     javafx.scene.Node appBarComponent = null;

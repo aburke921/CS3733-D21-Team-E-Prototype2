@@ -1533,7 +1533,7 @@ public class RequestsDB2 {
 		String query = "Create Table internalPatientRequest " +
 				"( " +
 				"    requestID int Primary Key References requests On Delete Cascade, " +
-				"    patientID int References userAccount(userID) On Delete Cascade, " +
+				"    patientID int, " +
 				"    pickUpLocation varchar(31) Not Null References node On Delete Cascade, " +
 				"    dropOffLocation varchar(31) Not Null References node On Delete Cascade, " +
 				"    department varchar(31), " +

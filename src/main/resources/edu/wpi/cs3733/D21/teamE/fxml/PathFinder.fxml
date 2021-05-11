@@ -20,8 +20,8 @@
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" prefWidth="1012.0" />
       <AnchorPane>
          <children>
-                <HBox layoutY="1.0" prefHeight="58.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
-                    <children>
+            <HBox layoutY="1.0" prefHeight="58.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
+               <children>
                   <JFXButton fx:id="directoryButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#changeDirectory" prefHeight="27.0" prefWidth="27.0" styleClass="directory" text="">
                      <HBox.margin>
                         <Insets left="15.0" top="10.0" />
@@ -102,16 +102,16 @@
                         <Insets left="10.0" top="10.0" />
                      </HBox.margin>
                   </JFXButton>
-                       <JFXButton fx:id="qrButton" onAction="#startQRScanning" style="-fx-text-fill: -fx--primary;" styleClass="cancel-button" text="QR Code">
-                          <graphic>
-                             <MaterialDesignIconView glyphName="QRCODE" size="18" />
-                          </graphic>
-                          <HBox.margin>
-                             <Insets left="15.0" top="10.0" />
-                          </HBox.margin>
-                       </JFXButton>
-                    </children>
-                </HBox>
+                  <JFXButton fx:id="qrButton" onAction="#startQRScanning" style="-fx-text-fill: -fx--primary;" styleClass="cancel-button" text="QR Code">
+                     <graphic>
+                        <MaterialDesignIconView glyphName="QRCODE" size="18" />
+                     </graphic>
+                     <HBox.margin>
+                        <Insets left="15.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="723.0" VBox.vgrow="ALWAYS">

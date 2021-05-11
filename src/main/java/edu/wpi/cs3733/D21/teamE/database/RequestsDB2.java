@@ -335,7 +335,7 @@ public class RequestsDB2 {
 //		addRequest(userID, assigneeID, "languageRequest");
 		addRequest(request.getUserID(), request.getAssigneeID(), "languageRequest");
 
-		String insertLanguageReq = "Insert Into languageRequest Values ((Select Max(requestID) From requests), ?, ?, ?)";
+		String insertLanguageReq = "Insert Into languageRequest Values ((Select Max(ToDoID) From ToDo), ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertLanguageReq)) {
 			prepState.setString(1, request.getNodeID());
@@ -343,6 +343,7 @@ public class RequestsDB2 {
 			prepState.setString(3, request.getDescription());
 
 			prepState.execute();
+			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Language: " + request.getLanguage() + "\nDescription: " + request.getDescription(), null, null);
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			System.err.println("Error inserting into languageRequest inside function addLanguageRequest()");

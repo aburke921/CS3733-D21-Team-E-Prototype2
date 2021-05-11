@@ -15,45 +15,45 @@
 
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.ScheduleMap">
     <children>
-      <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
-      <AnchorPane>
-         <children>
-            <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <AnchorPane HBox.hgrow="ALWAYS">
-                     <children>
-                        <JFXButton fx:id="toListButton" buttonType="RAISED" layoutX="15.0" layoutY="11.0" minHeight="40.0" onAction="#switchScene" prefWidth="600.0" styleClass="todo-button" text="Schedule" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font name="Arial Bold" size="15.0" />
-                           </font>
-                        </JFXButton>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane HBox.hgrow="ALWAYS">
-                     <children>
-                        <JFXButton disable="true" minHeight="40.0" prefWidth="600.0" styleClass="todo-button" text="Map" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font name="Arial Bold" size="15.0" />
-                           </font>
-                        </JFXButton>
-                     </children>
-                  </AnchorPane>
-               </children>
-            </HBox>
-         </children>
-      </AnchorPane>
+        <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
         <AnchorPane>
-         <children>
-                <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
-               <children>
-                        <HBox prefHeight="37.0" prefWidth="1020.0">
-                     <children>
-                                <HBox prefHeight="37.0" prefWidth="687.0" />
-                     </children>
-                        </HBox>
-               </children>
+            <children>
+                <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <AnchorPane HBox.hgrow="ALWAYS">
+                            <children>
+                                <JFXButton fx:id="toListButton" buttonType="RAISED" layoutX="15.0" layoutY="11.0" minHeight="40.0" onAction="#switchScene" prefWidth="600.0" styleClass="todo-button" text="Schedule" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <font>
+                                        <Font name="Arial Bold" size="15.0" />
+                                    </font>
+                                </JFXButton>
+                            </children>
+                        </AnchorPane>
+                        <AnchorPane HBox.hgrow="ALWAYS">
+                            <children>
+                                <JFXButton disable="true" minHeight="40.0" prefWidth="600.0" styleClass="todo-button" text="Map" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <font>
+                                        <Font name="Arial Bold" size="15.0" />
+                                    </font>
+                                </JFXButton>
+                            </children>
+                        </AnchorPane>
+                    </children>
                 </HBox>
-         </children>
+            </children>
+        </AnchorPane>
+        <AnchorPane>
+            <children>
+                <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0">
+                    <children>
+                        <HBox prefHeight="37.0" prefWidth="1020.0">
+                            <children>
+                                <HBox prefHeight="37.0" prefWidth="687.0" />
+                            </children>
+                        </HBox>
+                    </children>
+                </HBox>
+            </children>
         </AnchorPane>
         <AnchorPane prefHeight="723.0">
             <children>
@@ -74,27 +74,47 @@
         </AnchorPane>
         <AnchorPane fx:id="lowerAnchorPane" prefHeight="51.0" prefWidth="1200.0">
             <children>
-                <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" onAction="#switchScene" prefHeight="29.0" prefWidth="60.0" styleClass="back-button" text="Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
-            <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" layoutX="134.0" layoutY="18.0" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0" />
-            <MaterialDesignIconView id="blue-icon" fx:id="goForwardDay" glyphName="CHEVRON_RIGHT" layoutX="1150.0" layoutY="46.0" size="40" wrappingWidth="35.9999842941761" />
-            <MaterialDesignIconView id="blue-icon" fx:id="goBackDay" glyphName="CHEVRON_LEFT" layoutX="1074.0" layoutY="46.0" size="40" />
-            <JFXDatePicker id="blue-icon" fx:id="datePicker" defaultColor="#039be5" layoutX="1114.0" layoutY="12.0" maxWidth="30.0" minHeight="35.0" onAction="#changeDate" />
-            <Label fx:id="dateLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="342.0" layoutY="11.0" minWidth="200.0" text="Date" textFill="#006db3">
-               <font>
-                  <Font name="Arial Black" size="24.0" />
-               </font>
-            </Label>
-            <Label fx:id="currFloor" layoutX="1016.0" layoutY="15.0" prefHeight="29.0" prefWidth="36.0">
-               <font>
-                  <Font name="Arial Bold" size="14.0" />
-               </font></Label>
-            <JFXButton layoutX="749.0" layoutY="15.0" onAction="#timeButton" prefHeight="29.0" prefWidth="103.0" styleClass="submit-button" text="Time Details" />
-            <Label layoutX="908.0" layoutY="15.0" prefHeight="29.0" prefWidth="95.0" text="Current Floor:">
-               <font>
-                  <Font name="Arial Bold" size="14.0" />
-               </font>
-            </Label>
-            <JFXButton layoutX="627.0" layoutY="15.0" onAction="#showDirections" prefHeight="29.0" prefWidth="103.0" styleClass="submit-button" text="Directions" />
+                <JFXButton fx:id="backButton" layoutX="31.0" layoutY="15.0" onAction="#switchScene" prefHeight="29.0" prefWidth="60.0" styleClass="back-button" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="15.0" />
+            <HBox layoutX="-3.0" layoutY="-1.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="120.0">
+               <children>
+                      <JFXButton fx:id="minus" alignment="CENTER" contentDisplay="CENTER" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" onAction="#zoom" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: TRANSPARENT;" styleClass="directions" text="">
+                          <graphic>
+                              <MaterialDesignIconView glyphName="MINUS" size="25" styleClass="directory" />
+                          </graphic>
+                  </JFXButton>
+                      <JFXSlider fx:id="zoomSlider" blockIncrement="0.1" majorTickUnit="1.0" max="5.0" min="1.0" value="1.0">
+                     <padding>
+                        <Insets left="5.0" top="5.0" />
+                     </padding>
+                      </JFXSlider>
+                      <JFXButton fx:id="plus" alignment="CENTER" contentDisplay="CENTER" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" onAction="#zoom" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: TRANSPARENT;" styleClass="directions" text="">
+                          <graphic>
+                              <MaterialDesignIconView glyphName="PLUS" size="25" styleClass="directory" />
+                          </graphic>
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                  </JFXButton>
+               </children>
+            </HBox><MaterialDesignIconView id="blue-icon" fx:id="goForwardDay" glyphName="CHEVRON_RIGHT" layoutX="1150.0" layoutY="46.0" size="40" wrappingWidth="35.9999842941761" />
+                <MaterialDesignIconView id="blue-icon" fx:id="goBackDay" glyphName="CHEVRON_LEFT" layoutX="1074.0" layoutY="46.0" size="40" />
+                <JFXDatePicker id="blue-icon" fx:id="datePicker" defaultColor="#039be5" layoutX="1114.0" layoutY="12.0" maxWidth="30.0" minHeight="35.0" onAction="#changeDate" />
+                <Label fx:id="dateLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="342.0" layoutY="11.0" minWidth="200.0" text="Date" textFill="#006db3">
+                    <font>
+                        <Font name="Arial Black" size="24.0" />
+                    </font>
+                </Label>
+                <Label fx:id="currFloor" layoutX="1016.0" layoutY="15.0" prefHeight="29.0" prefWidth="36.0">
+                    <font>
+                        <Font name="Arial Bold" size="14.0" />
+                    </font></Label>
+                <JFXButton layoutX="749.0" layoutY="15.0" onAction="#timeButton" prefHeight="29.0" prefWidth="103.0" styleClass="submit-button" text="Time Details" />
+                <Label layoutX="908.0" layoutY="15.0" prefHeight="29.0" prefWidth="95.0" text="Current Floor:">
+                    <font>
+                        <Font name="Arial Bold" size="14.0" />
+                    </font>
+                </Label>
+                <JFXButton layoutX="627.0" layoutY="15.0" onAction="#showDirections" prefHeight="29.0" prefWidth="103.0" styleClass="submit-button" text="Directions" />
             </children>
         </AnchorPane>
     </children>

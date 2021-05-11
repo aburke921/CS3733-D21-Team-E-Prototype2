@@ -69,6 +69,9 @@ public class AppBarComponent {
     @FXML // fx:id="embeddedToggle"
     private JFXToggleButton embeddedToggle;
 
+    @FXML
+    public JFXButton myToDoButton;
+
 
     @FXML
     void getLoginAppBar(ActionEvent event) {
@@ -149,6 +152,8 @@ public class AppBarComponent {
 
         if (App.userID != 0) { //if a user is logged in, hide remaining login button
             appLoginButton.setText("Hello, " + DB.getUserName(App.userID));
+        } else {
+            myToDoButton.setManaged(false);
         }
 
 

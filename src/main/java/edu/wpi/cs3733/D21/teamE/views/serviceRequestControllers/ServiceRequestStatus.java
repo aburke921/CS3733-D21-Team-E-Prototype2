@@ -19,10 +19,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
 public class ServiceRequestStatus {
+
+    @FXML // fx:id="appBarAnchorPane"
+    private AnchorPane appBarAnchorPane; // Value injected by FXMLLoader
 
     @FXML
     JFXTreeTableView serviceRequestTable;
@@ -266,6 +270,19 @@ public class ServiceRequestStatus {
 
     @FXML
     void initialize() {
+
+        //init appBar
+        javafx.scene.Node appBarComponent;
+        try {
+            App.setPageTitle("Service Request Status"); //set AppBar title
+            App.setHelpText("TODO"); //todo add help text for Map Editor
+            App.setShowHelp(true);
+            App.setShowLogin(true);
+            appBarComponent = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/AppBarComponent.fxml"));
+            appBarAnchorPane.getChildren().add(appBarComponent); //add FXML to this page's sideBarVBox element
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         prepareTable(serviceRequestTable);
 

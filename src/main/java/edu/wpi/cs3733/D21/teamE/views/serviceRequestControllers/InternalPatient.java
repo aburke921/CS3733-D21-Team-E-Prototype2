@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RegexValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
 import edu.wpi.cs3733.D21.teamE.App;
 import edu.wpi.cs3733.D21.teamE.DB;
@@ -67,6 +68,18 @@ public class InternalPatient extends ServiceRequestFormComponents{
         patientIdInput.getValidators().add(validator);
         assignedPersonnel.getValidators().add(validator);
         descriptionInput.getValidators().add(validator);
+
+        //patientID validator
+        RegexValidator patientIDValidator = new RegexValidator();
+        patientIDValidator.setMessage("Must be a number");
+        patientIDValidator.setRegexPattern("^(0|[1-9][0-9]*)$"); //todo, if a different special char is inputted, will error out. Eg: ~^-+
+
+        patientIdInput.getValidators().add(patientIDValidator);
+        patientIdInput.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                patientIdInput.validate();
+            }
+        });
 
         return pickupInput.validate() && dropoffInput.validate() && departmentInput.validate()
                 && severityInput.validate() && patientIdInput.validate() && assignedPersonnel.validate()

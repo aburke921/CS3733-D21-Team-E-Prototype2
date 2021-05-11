@@ -439,6 +439,9 @@ public class ScheduleMap {
 
         System.out.println("drawMap() is Finding path for floor " + floorNum);
 
+        //for double icons
+        ArrayList<String> doubleIconList = new ArrayList<>();
+
     //updateMarkers();
 
     //if path is null
@@ -518,62 +521,67 @@ public class ScheduleMap {
                 }
 
                 if (!legItr.hasNext()) { //if current node is the ending node for this floor
-
-                    //create a line between this node and the previous node
-                    //Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-
-
                     Label floorLabel = null;
                     FlowPane flowPane = new FlowPane();
                     String destFloor = "";
 
-                    //if the current node is a stair or an elevator, add a label
-                    if (node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV")) {
+                    String nodeS = Integer.toString(node.getX()) + "." + Integer.toString(node.getY());
 
-                        //iterate through the path
-                        Iterator<Node> fullItr = fullPath.iterator();
-                        while(fullItr.hasNext()) {
+                    if(!doubleIconList.contains(nodeS)) {
+                        //if the current node is a stair or an elevator, add a label
+                        if ((node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV"))) {
 
-                            Node nodeCopy = fullItr.next();
 
-                            if(node.equals(nodeCopy) && fullItr.hasNext()) {
+                            //iterate through the path
+                            Iterator<Node> fullItr = fullPath.iterator();
+                            while (fullItr.hasNext()) {
 
-                                Node nextNode = fullItr.next();
+                                Node nodeCopy = fullItr.next();
 
-                                if(nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV")) {
-                                    //create string for label
-                                    String toFloor = "Go to Floor " + nextNode.get("floor");
-                                    destFloor = nextNode.get("floor");
+                                if (node.equals(nodeCopy) && fullItr.hasNext()) {
 
-                                    //add string to label
-                                    floorLabel = new Label(toFloor);
+                                    Node nextNode = fullItr.next();
 
-                                    //if current node is on a greater floor than the next
-                                    if (Node.calculateZ(node.get("floor")) > Node.calculateZ(nextNode.get("floor"))) {
-                                        //add down icon
-                                        FontAwesomeIconView iconDown = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_DOWN);
-                                        iconDown.setSize("15");
-                                        floorLabel.setGraphic(iconDown);
-                                    } else { //current node is on a lower floor than next node
-                                        //add up icon
-                                        FontAwesomeIconView iconUP = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_UP);
-                                        iconUP.setSize("15");
-                                        floorLabel.setGraphic(iconUP);
+                                    if (!doubleIconList.contains(nodeS) && (nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV"))) {
+
+                                        //create string for label
+                                        String toFloor = "Go to Floor " + nextNode.get("floor");
+                                        destFloor = nextNode.get("floor");
+
+                                        //add string to label
+                                        floorLabel = new Label(toFloor);
+
+                                        //if current node is on a greater floor than the next
+                                        if (Node.calculateZ(node.get("floor")) > Node.calculateZ(nextNode.get("floor"))) {
+                                            //add down icon
+                                            FontAwesomeIconView iconDown = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_DOWN);
+                                            iconDown.setSize("15");
+                                            floorLabel.setGraphic(iconDown);
+                                        } else { //current node is on a lower floor than next node
+                                            //add up icon
+                                            FontAwesomeIconView iconUP = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_UP);
+                                            iconUP.setSize("15");
+                                            floorLabel.setGraphic(iconUP);
+                                        }
+                                        if (!doubleIconList.contains(nodeS)) {
+                                            doubleIconList.add(nodeS);
+                                            System.out.println("ICON PRINTING");
+
+                                            //put the label inside the flowPane
+                                            flowPane.getChildren().add(floorLabel);
+
+                                            //position the flowPane next to the node
+                                            double xCoordLabel = (nextNode.getX() / scale) + 4;
+                                            double yCoordLabel = (nextNode.getY() / scale) - 4;
+                                            flowPane.setLayoutX(xCoordLabel);
+                                            flowPane.setLayoutY(yCoordLabel);
+
+                                            flowPane.getStyleClass().add("floor-change"); //add floor-change css so the child label disappears on hover
+                                            flowPane.setPrefWrapLength(0); //shrink flowPane to be as small as child
+                                        }
                                     }
 
-                                    //put the label inside the flowPane
-                                    flowPane.getChildren().add(floorLabel);
-
-                                    //position the flowPane next to the node
-                                    double xCoordLabel = (nextNode.getX() / scale) + 4;
-                                    double yCoordLabel = (nextNode.getY() / scale) - 4;
-                                    flowPane.setLayoutX(xCoordLabel);
-                                    flowPane.setLayoutY(yCoordLabel);
-
-                                    flowPane.getStyleClass().add("floor-change"); //add floor-change css so the child label disappears on hover
-                                    flowPane.setPrefWrapLength(0); //shrink flowPane to be as small as child
                                 }
-
                             }
                         }
                     }
@@ -684,7 +692,9 @@ public class ScheduleMap {
             stickyNotesPane.getChildren().add(listView);
             stickyNotesStage.setScene(new Scene(stickyNotesPane));
             s.hoverProperty().addListener((ChangeListener<Boolean>) (Circle, oldValue, newValue) -> {
+                //todo if not start
                 if (newValue) {
+                    System.out.println("ZERO");
                     Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
                     stickyNotesStage.setX(mouseLocation.getX()+10);
                     stickyNotesStage.setY(mouseLocation.getY()-10);
@@ -697,58 +707,50 @@ public class ScheduleMap {
 
             s.setOnMouseEntered(e -> {
                 stickyNotesPane.getChildren().removeAll();
-                observableNodeInfo.removeAll();
                 listView.getItems().clear();
+                observableNodeInfo.removeAll();
                 double X = e.getX();
                 int xInt = (int) X;
                 double Y = e.getY();
                 int yInt = (int) Y;
-                for (int i = 0; i < locationArray.size(); i++) {
-                    System.out.println(locationArray.get(i).get("longName"));
-                    double nodeX = locationArray.get(i).getX() / scale;
-                    int nodeXInt = (int) nodeX;
-                    double nodeY = locationArray.get(i).getY() / scale;
-                    int nodeYInt = (int) nodeY;
-                    /*
-                    double firstNodeX = locationArray.get(0).getX() / scale;
-                    int firstNodeXInt = (int) firstNodeX;
-                    double firstNodeY = locationArray.get(0).getY() / scale;
-                    int firstNodeYInt = (int) firstNodeY;
-                    if (Math.abs(firstNodeXInt - xInt) <= 7 && Math.abs(firstNodeYInt - yInt) <= 7) {
-                        stickyNotesStage.hide();
-                    }
-
-                     */
-                    //if node coordinates match click coordinates +- 1, autofill fields with node info
-                    if (Math.abs(nodeXInt - xInt) <= 7 && Math.abs(nodeYInt - yInt) <= 7) {
-                        for (int j = 0; j < scheduleOngoing.getLocations().size(); j++) {
-                            double schedX = scheduleOngoing.getLocations().get(j).getX() / scale;
-                            int schedXInt = (int) schedX;
-                            double schedY = scheduleOngoing.getLocations().get(j).getY() / scale;
-                            int schedYInt = (int) schedY;
-                            if (Math.abs(schedXInt - xInt) <= 7 && Math.abs(schedYInt - yInt) <= 7) {
-                                observableNodeInfo.add("Title: " + scheduleOngoing.get(j).getTitle());
-                                observableNodeInfo.add("Location: " + scheduleOngoing.get(j).getLocationString());
-                                observableNodeInfo.add("Time: " + scheduleOngoing.get(j).getStartTime().hourMinString());
-                                if(scheduleOngoing.get(j).getStatus() == 1) {
-                                    observableNodeInfo.add("Status: Incomplete");
-                                }
-                                switch (scheduleOngoing.get(j).getPriority()) {
-                                    case 1:
-                                        observableNodeInfo.add("Low Priority");
-                                        break;
-                                    case 2:
-                                        observableNodeInfo.add("Medium Priority");
-                                        break;
-                                    case 3:
-                                        observableNodeInfo.add("High Priority");
-                                        break;
-                                    default:
-                                        break;
+                for (int i = 1; i < locationArray.size(); i++) {
+                        System.out.println(locationArray.get(i).get("longName"));
+                        double nodeX = locationArray.get(i).getX() / scale;
+                        int nodeXInt = (int) nodeX;
+                        double nodeY = locationArray.get(i).getY() / scale;
+                        int nodeYInt = (int) nodeY;
+                        //if node coordinates match click coordinates +- 1, autofill fields with node info
+                        if (Math.abs(nodeXInt - xInt) <= 5 && Math.abs(nodeYInt - yInt) <= 5) {
+                            for (int j = 0; j < scheduleOngoing.getLocations().size(); j++) {
+                                    double schedX = scheduleOngoing.getLocations().get(j).getX() / scale;
+                                    int schedXInt = (int) schedX;
+                                    double schedY = scheduleOngoing.getLocations().get(j).getY() / scale;
+                                    int schedYInt = (int) schedY;
+                                    if (Math.abs(schedXInt - xInt) <= 5 && Math.abs(schedYInt - yInt) <= 5) {
+                                        if(scheduleOngoing.getLocations().get(j).get("floor").equals(currentFloor)) {
+                                        observableNodeInfo.add("Title: " + scheduleOngoing.get(j).getTitle());
+                                        observableNodeInfo.add("Location: " + scheduleOngoing.get(j).getLocationString());
+                                        observableNodeInfo.add("Time: " + scheduleOngoing.get(j).getStartTime().hourMinString());
+                                        if (scheduleOngoing.get(j).getStatus() == 1) {
+                                            observableNodeInfo.add("Status: Incomplete");
+                                        }
+                                        switch (scheduleOngoing.get(j).getPriority()) {
+                                            case 1:
+                                                observableNodeInfo.add("Low Priority");
+                                                break;
+                                            case 2:
+                                                observableNodeInfo.add("Medium Priority");
+                                                break;
+                                            case 3:
+                                                observableNodeInfo.add("High Priority");
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
                 }
             });
 

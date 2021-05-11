@@ -82,9 +82,11 @@ public class Path implements Comparable<Path>, Iterable<Node>{
      */
     public void add(Path p) {
         if(!p.isEmpty()) {
-            length += p.getPathLength() + pathEnd.dist(p.getStart());
-            pathEnd.setNext(p.getStart());
-            pathEnd = p.pathEnd;
+            if(p.getStart() != null) {
+                length += p.getPathLength() + pathEnd.dist(p.getStart());
+                pathEnd.setNext(p.getStart());
+                pathEnd = p.pathEnd;
+            }
         }
     }
 

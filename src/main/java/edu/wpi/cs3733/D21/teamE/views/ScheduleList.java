@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import edu.wpi.cs3733.D21.teamE.App;
@@ -18,10 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -53,6 +51,18 @@ public class ScheduleList {
     @FXML // fx:id="dateLabel"
     private Label dateLabel;
 
+    @FXML // fx:id="editButton"
+    private JFXButton editButton;
+
+    @FXML // fx:id="completeButton"
+    private JFXButton completeButton;
+
+    @FXML // fx:id="deleteButton"
+    private JFXButton deleteButton;
+
+    @FXML // fx:id="addButton"
+    private JFXButton addButton;
+
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
 
@@ -68,6 +78,10 @@ public class ScheduleList {
 
         prepareToDoTable(treeTableView, date.toString());
 
+        editButton.setTooltip(new Tooltip("Edit ToDo"));
+        completeButton.setTooltip(new Tooltip("Mark ToDo as Complete"));
+        deleteButton.setTooltip(new Tooltip("Delete ToDo"));
+        addButton.setTooltip(new Tooltip("Add ToDo"));
 
         //set up icons for moving foward and backward a day
         goBackDay.setOnMousePressed(new EventHandler<MouseEvent>() {

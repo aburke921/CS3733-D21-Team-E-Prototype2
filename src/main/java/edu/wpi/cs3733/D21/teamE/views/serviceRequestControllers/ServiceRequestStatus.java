@@ -203,7 +203,7 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> sanitationServicesCompleted = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
         TreeItem<ServiceRequestForm> securityServiceCompleted = new TreeItem<>(new ServiceRequestForm("Security Service Form"));
         TreeItem<ServiceRequestForm> foodDeliveryCompleted = new TreeItem<>(new ServiceRequestForm("Food Delivery Form"));
-        TreeItem<ServiceRequestForm> internalPatientCompleted = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
+        //TreeItem<ServiceRequestForm> internalPatientCompleted = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
         TreeItem<ServiceRequestForm> languageInterpreterCompleted = new TreeItem<>(new ServiceRequestForm("Language Interpreter Form"));
         TreeItem<ServiceRequestForm> laundryCompleted = new TreeItem<>(new ServiceRequestForm("Laundry Form"));
         TreeItem<ServiceRequestForm> maintenanceCompleted = new TreeItem<>(new ServiceRequestForm("Facilities Maintenance Form"));
@@ -216,7 +216,7 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> sanitationServicesInProgress = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
         TreeItem<ServiceRequestForm> securityServiceInProgress = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
         TreeItem<ServiceRequestForm> foodDeliveryInProgress = new TreeItem<>(new ServiceRequestForm("Food Delivery Form"));
-        TreeItem<ServiceRequestForm> internalPatientInProgress = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
+        //TreeItem<ServiceRequestForm> internalPatientInProgress = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
         TreeItem<ServiceRequestForm> languageInterpreterInProgress = new TreeItem<>(new ServiceRequestForm("Language Interpreter Form"));
         TreeItem<ServiceRequestForm> laundryInProgress = new TreeItem<>(new ServiceRequestForm("Laundry Form"));
         TreeItem<ServiceRequestForm> maintenanceInProgress = new TreeItem<>(new ServiceRequestForm("Facilities Maintenance Form"));
@@ -229,7 +229,7 @@ public class ServiceRequestStatus {
         TreeItem<ServiceRequestForm> sanitationServicesCancelled = new TreeItem<>(new ServiceRequestForm("Sanitation Services Form"));
         TreeItem<ServiceRequestForm> securityServiceCancelled = new TreeItem<>(new ServiceRequestForm("Security Services Form"));
         TreeItem<ServiceRequestForm> foodDeliveryCancelled = new TreeItem<>(new ServiceRequestForm("Food Delivery Form"));
-        TreeItem<ServiceRequestForm> internalPatientCancelled = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
+        //TreeItem<ServiceRequestForm> internalPatientCancelled = new TreeItem<>(new ServiceRequestForm("Internal Patient Transportation Form"));
         TreeItem<ServiceRequestForm> languageInterpreterCancelled = new TreeItem<>(new ServiceRequestForm("Language Interpreter Form"));
         TreeItem<ServiceRequestForm> laundryCancelled = new TreeItem<>(new ServiceRequestForm("Laundry Form"));
         TreeItem<ServiceRequestForm> maintenanceCancelled = new TreeItem<>(new ServiceRequestForm("Facilities Maintenance Form"));
@@ -242,7 +242,7 @@ public class ServiceRequestStatus {
         addToTable("sanitationRequest", sanitationServicesInProgress, sanitationServicesCompleted, sanitationServicesCancelled);
         addToTable("medDelivery", medicineDeliveryInProgress, medicineDeliveryCompleted, medicineDeliveryCancelled);
         addToTable("foodDelivery",foodDeliveryInProgress,foodDeliveryCompleted,foodDeliveryCancelled);
-        addToTable("internalPatientRequest",internalPatientInProgress,internalPatientCompleted,internalPatientCancelled);
+        //addToTable("internalPatientRequest",internalPatientInProgress,internalPatientCompleted,internalPatientCancelled);
         addToTable("languageRequest",languageInterpreterInProgress,languageInterpreterCompleted,languageInterpreterCancelled);
         addToTable("laundryRequest",laundryInProgress,laundryCompleted,laundryCancelled);
         addToTable("maintenanceRequest",maintenanceInProgress,maintenanceCompleted,maintenanceCancelled);

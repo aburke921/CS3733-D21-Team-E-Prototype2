@@ -11,6 +11,9 @@ import edu.wpi.cs3733.D21.teamE.Date;
 import edu.wpi.cs3733.D21.teamE.map.Edge;
 import edu.wpi.cs3733.D21.teamE.map.Node;
 import edu.wpi.cs3733.D21.teamE.map.Path;
+import edu.wpi.cs3733.D21.teamE.observer.ImageObserver;
+import edu.wpi.cs3733.D21.teamE.observer.MarkerObserver;
+import edu.wpi.cs3733.D21.teamE.observer.Subject;
 import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.scheduler.Schedule;
 import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
@@ -30,6 +33,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -76,8 +80,14 @@ public class ScheduleMap {
     @FXML // fx:id="secETA"
     private Label secETA;
 
+    @FXML // fx:id="pane"
+    private Pane markerPane = new Pane();
+
     @FXML // fx:id="dist"
     private Label dist;
+
+    @FXML // fx:id="currFloor"
+    private Label currFloor;
 
     @FXML // fx:id="datePicker"
     private JFXDatePicker datePicker;
@@ -109,6 +119,10 @@ public class ScheduleMap {
 
     private double imageWidth;
     private double imageHeight;
+
+    private Marker marker = new Marker();
+
+    private ArrayList<Node> currentMarkers = new ArrayList<>();
 
     Stage primaryStage;
 
@@ -229,19 +243,11 @@ public class ScheduleMap {
      * @param e Button click action
      */
     public void chooseFloor(ActionEvent e) {
-        //clear current floor of markers
-        /*for (Node node : currentMarkers) {
-            NodeMarker nM = marker.getLocationMarker().get(node.get("id"));
-            nM.getRectangle().setVisible(false);
-        }*/
         Button button = ((Button) e.getSource());
-        //currentMarkers.clear();
         String floor = button.getText();
+        currFloor.setText(floor);
 
         setCurrentFloor(floor);
-        //drawMap(currentFoundPath, currentFloor);
-
-        System.out.println("Current floor set to " + floor);
     }
 
 
@@ -262,13 +268,7 @@ public class ScheduleMap {
         System.out.println(" DONE");
     }
 
-    /**
-     * Zooms into the Path
-     * @param xMin Min X Coordinate
-     * @param xMax Max X Coordinate
-     * @param yMin Min Y Coordinate
-     * @param yMax Max Y Coordinate
-     */
+
     /*
     private void zoomToPath(double xMin, double xMax, double yMin, double yMax) {
         double fullScaleX = 5000 * scrollPane.getWidth() / primaryStage.getWidth(); // max number of viewable pixels
@@ -411,33 +411,6 @@ public class ScheduleMap {
                     //create a line between this node and the previous node
                     Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
 
-                    MarkerType type;
-
-                    if (firstNode) { //if current node is the first node on floor of path leg
-                        firstNode = false;
-
-                        if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
-                            //place a dot on the location
-                            type = MarkerType.START;
-                        } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
-                            //place a dot on the location
-                            type = MarkerType.END;
-                        } else { // end node of just this floor
-                            //place a dot on the location
-                            type = MarkerType.FIRST;
-                        }
-                        line = new Line(xCoord, yCoord, xCoord, yCoord); // prevent line from origin
-                    } else {
-                        if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
-                            //place a dot on the location
-                            type = MarkerType.END;
-                        } else { // end node of just this floor
-                            //place a dot on the location
-                            type = MarkerType.LAST;
-                        }
-                    }
-
-                    markerList.add(new MapMarker((xCoord + markerIconXOffset), (yCoord + markerIconYOffset), mapMarkerSize, type));
 
                     Label floorLabel = null;
                     FlowPane flowPane = new FlowPane();
@@ -513,20 +486,6 @@ public class ScheduleMap {
                 } else if (firstNode) { //if current node is the starting node
                     firstNode = false;
 
-                    MarkerType type;
-
-                    if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
-                        //place a dot on the location
-                        type = MarkerType.START;
-                    } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
-                        //place a dot on the location
-                        type = MarkerType.END;
-                    } else { // end node of just this floor
-                        //place a dot on the location
-                        type = MarkerType.FIRST;
-                    }
-
-                    markerList.add(new MapMarker((xCoord + markerIconXOffset), (yCoord + markerIconYOffset), mapMarkerSize, type));
 
                     //update the coordinates for the previous node
                     prevXCoord = xCoord;
@@ -1090,9 +1049,10 @@ public class ScheduleMap {
      * @param floorNum floor to change to
      */
     public void setCurrentFloor(String floorNum) {
-        currentFloor = floorNum;
-
         //switchFocusButton(floorNum);
+        currentFloor = floorNum;
+        currFloor.setText("");
+        currFloor.setText(currentFloor);
 
         //draw path for new floor
         drawMap(currentFoundPath,currentFloor);
@@ -1118,6 +1078,7 @@ public class ScheduleMap {
 
         //set default/initial floor for map
         Image image = new Image("edu/wpi/cs3733/D21/teamE/maps/1.png");
+        currFloor.setText(currentFloor);
         imageWidth = image.getWidth();
         imageHeight = image.getHeight();
         imageView.setImage(image);
@@ -1184,6 +1145,61 @@ public class ScheduleMap {
 
 
         preparePathDisplay();
+
+        //Observer Design Pattern: update page based on floor change
+        Subject subject = new Subject();
+
+        new MarkerObserver(subject, markerPane, marker, currentMarkers);
+        new ImageObserver(subject, imageView);
+        //new PathObserver(subject, pane, currentFoundPath, scale, selectedStartNodeID, selectedEndNodeID);
+
+        currFloor.textProperty().addListener(observable -> subject.setState(currFloor.getText()));
+        clickHandler();
+    }
+
+    private void clickHandler() {
+        pane.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 1) {
+                System.out.println("inSelected");
+                //coordinates of click
+                double X = e.getX();
+                int xInt = (int) X;
+                double Y = e.getY();
+                int yInt = (int) Y;
+                for (int i = 0; i < locationArray.size(); i++) {
+                    if (locationArray.get(i).get("floor").equals(currentFloor)) {
+                        //coordinates of current node
+                        double nodeX = locationArray.get(i).getX() / scale;
+                        int nodeXInt = (int) nodeX;
+                        double nodeY = locationArray.get(i).getY() / scale;
+                        int nodeYInt = (int) nodeY;
+
+                        //if node coordinates match click coordinates +- 1, autofill fields with node info
+                        if (Math.abs(nodeXInt - xInt) <= 7 && Math.abs(nodeYInt - yInt) <= 7) {
+                            editToDo(locationArray.get(i).get("longName"));
+
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    @FXML
+    private void editToDo (String location){
+        Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
+        try {
+            for(int i = 0; i < scheduleOngoing.getLocations().size(); i++) {
+                if(scheduleOngoing.get(i).getLocationString().equals(location)) {
+                    ToDo todo = scheduleOngoing.get(i);
+                    App.setToDo(todo);
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/updatedServiceRequests/ToDoDetails.fxml"));
+                    App.changeScene(root);
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void preparePathDisplay() {

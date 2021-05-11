@@ -22,6 +22,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
 import javafx.scene.effect.GaussianBlur;
@@ -40,10 +42,7 @@ import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ToDoDetails {
 
@@ -389,22 +388,43 @@ public class ToDoDetails {
 
 
             if(sendNotification.isSelected()) {
-                String email = DB.getEmail(userID);
-                String fullName = DB.getUserName(userID);
-                int position = fullName.indexOf(" ");
 
-                String firstName = fullName.substring(0, position);
-                String lastName = fullName.substring(position);
-                Node node = DB.getNodeInfo(nodeID);
-                String locationName = "";
-                if (node != null) {
-                    locationName = node.get("longName");
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Please Login To Our Gmail Account To Verify This App");
+                alert.setHeaderText("Unfortunately, to receive a reminder for your ToDo, you will need to approve this app on your local machine.");
+                alert.setContentText("Would you like to log in to our Software Engineering Gmail Account?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.get() == ButtonType.OK){
+                    // user chose OK
+                    String email = DB.getEmail(userID);
+                    String fullName = DB.getUserName(userID);
+                    int position = fullName.indexOf(" ");
+
+                    String firstName = fullName.substring(0, position);
+                    String lastName = fullName.substring(position);
+                    Node node = DB.getNodeInfo(nodeID);
+                    String locationName = "";
+                    if (node != null) {
+                        locationName = node.get("longName");
+                    }
+                    String taskStartDateAndTime = date + " " + startTime;
+                    String taskEndDateAndTime = date + " " + endTime;
+                    String notificationDateAndTime = notificationDate + " " + notificationTime;
+
+                    SheetsAndJava.addTodoToSheet(todoID, blankIfNull(title), email, firstName, lastName, blankIfNull(locationName), blankIfNull(taskStartDateAndTime), blankIfNull(taskEndDateAndTime), blankIfNull(notificationDateAndTime));
+
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ScheduleList.fxml"));
+                    App.changeScene(root);
+
                 }
-                String taskStartDateAndTime = date + " " + startTime;
-                String taskEndDateAndTime = date + " " + endTime;
-                String notificationDateAndTime = notificationDate + " " + notificationTime;
+            }
+            else{
+                Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ScheduleList.fxml"));
+                App.changeScene(root);
+            }
 
-                SheetsAndJava.addTodoToSheet(todoID, blankIfNull(title), email, firstName, lastName, blankIfNull(locationName), blankIfNull(taskStartDateAndTime), blankIfNull(taskEndDateAndTime), blankIfNull(notificationDateAndTime));
             }
 
             todo = null;
@@ -415,8 +435,8 @@ public class ToDoDetails {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        }
     }
+
 
     private String blankIfNull(String s) {
         return s == null ? "" : s;

@@ -7,10 +7,7 @@ import edu.wpi.cs3733.D21.teamE.views.serviceRequestObjects.AubonPainItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -105,31 +102,12 @@ public class RequestsDB {
 	public static ArrayList<String> getRequestLocations(String tableType, int userID) {
 		ArrayList<String> listOfLongNames = new ArrayList<>();
 
-		String tableName = "";
-		switch (tableType) {
-			case "floralRequests":
-				tableName = "floralRequests";
-				break;
-			case "medDelivery":
-				tableName = "medDelivery";
-				break;
-			case "sanitationRequest":
-				tableName = "sanitationRequest";
-				break;
-			case "securityServ":
-				tableName = "securityServ";
-				break;
-			case "extTransport":
-				tableName = "extTransport";
-				break;
-		}
-
 		String query;
 
 		if (!DB.getUserType(userID).equals("admin")) {
-			query = "Select longName from node, (Select roomID From " + tableName + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableName + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
+			query = "Select longName from node,(Select roomID From " + tableType + ", (Select requestID from requests Where requestType = '" + tableType + "' and creatorID = " + userID + ") correctType where correctType.requestID = " + tableType + ".requestID) correctStuff where correctStuff.roomID = node.nodeID";
 		} else {
-			query = "Select requestid, longname From node,(Select requestid, roomid From " + tableName + ") correctTable Where node.nodeid = correctTable.roomid Order By requestid";
+			query = "Select longname From node,(Select requestid, roomid From " + tableType + ") correctTable Where node.nodeid = correctTable.roomid Order By requestid";
 		}
 		try (PreparedStatement prepState = connection.prepareStatement(query)) {
 			ResultSet rset = prepState.executeQuery();

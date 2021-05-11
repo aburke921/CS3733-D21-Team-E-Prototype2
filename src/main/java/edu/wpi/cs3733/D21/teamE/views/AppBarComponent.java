@@ -73,6 +73,9 @@ public class AppBarComponent {
     private JFXToggleButton embeddedToggle;
 
     @FXML
+    private JFXButton myToDoButton;
+
+    @FXML
     void getLoginAppBar(ActionEvent event) {
         //if user is logged in - button will log out, otherwise, will take to login page. No...? either way... set userID = 0, and direct to main page
         System.out.println("Login Button Clicked!");
@@ -147,16 +150,20 @@ public class AppBarComponent {
             appLoginButtonLeft.setVisible(false); //remove left login button
             clientToggle.setVisible(false);
             embeddedToggle.setVisible(false);
+            myToDoButton.setVisible(false);
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButton.setVisible(true); //double check visibility (will be overridden by isShowLogin())
+                myToDoButton.setVisible(true);
                 appLoginButton.setText("Hello, " + DB.getUserName(App.userID));
             }
         } else { //if help shouldn't be shown
             appLoginButton.setVisible(false); //remove right login button
             clientToggle.setVisible(false);
             embeddedToggle.setVisible(false);
+            myToDoButton.setVisible(false);
             if (App.userID != 0) { //if a user is logged in, hide remaining login button
                 appLoginButtonLeft.setVisible(true); //double check it is visible
+                myToDoButton.setVisible(true);
                 appLoginButtonLeft.setText("Hello, " + DB.getUserName(App.userID));
             }
         }

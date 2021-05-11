@@ -213,8 +213,8 @@ public class ScheduleMap {
             pane.getChildren().clear();
 
             //SnackBar popup
-            JFXSnackbar bar = new JFXSnackbar(lowerAnchorPane);
-            bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Sorry, something has gone wrong. Please try again.")));
+            //JFXSnackbar bar = new JFXSnackbar(lowerAnchorPane);
+            //bar.enqueue(new JFXSnackbar.SnackbarEvent(new JFXSnackbarLayout("Sorry, something has gone wrong. Please try again.")));
 
         } else { //path is not null
 
@@ -1230,6 +1230,7 @@ public class ScheduleMap {
         //todo passing date as floor parameter breaks it
         findPath();
     }
+
 
 
 

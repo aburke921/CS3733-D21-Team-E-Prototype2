@@ -161,6 +161,9 @@ public class newMapEditor {
 
     private String endID = "test";
 
+    private String nodeStartID;
+    private String nodeEndID;
+
     private String currentFloor = "1"; // set based on button presses
 
     private Path currentFoundPath; // the last found path todo null if no path has been found yet

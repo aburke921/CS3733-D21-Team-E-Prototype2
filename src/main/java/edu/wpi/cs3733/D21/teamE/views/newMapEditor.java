@@ -898,7 +898,7 @@ public class newMapEditor {
         try {
             App.setPageTitle("Map Editor"); //set AppBar title
             App.setHelpText("To enter drag and drop mode select the Drag and Drop button, then select a node and move it to the desired location.\n" +
-                    "To edit a node on the map select the Edit Nodes button. Select the desired node and modify the desired field. When you are finished modifying the desired field or fields click on the Edit Node button. " +
+                    "To edit a node on the map select the Edit Nodes button. \nSelect the desired node and modify the desired field. \nWhen you are finished modifying the desired field or fields click on the Edit Node button. " +
                     "If you truly wish to edit this node on the pop up select Yes if not select Cancel.");
             App.setStackPane(stackPane);
             App.setShowHelp(true);

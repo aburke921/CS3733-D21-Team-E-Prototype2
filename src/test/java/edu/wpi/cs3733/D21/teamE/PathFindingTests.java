@@ -7,11 +7,12 @@ import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-import edu.wpi.cs3733.D21.teamE.views.mapEditorControllers.MapEditor;
+
 import edu.wpi.cs3733.D21.teamE.database.appointmentDB;
 import edu.wpi.cs3733.D21.teamE.database.csvDB;
 
 import edu.wpi.cs3733.D21.teamE.database.makeConnection;
+import edu.wpi.cs3733.D21.teamE.views.newMapEditor;
 import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -352,7 +353,7 @@ public class PathFindingTests {
 
     @Test
     public void testAutoGenIDs() {
-        MapEditor ed = new MapEditor();
+        newMapEditor ed = new newMapEditor();
         assertEquals("eELEV00A01", ed.genNodeID("ELEV","1", "Elevator A Floor 1"));
         assertEquals("ePARK02601", ed.genNodeID("PARK","1", "New Parking Sport Floor 1"));
         assertEquals("eDEPT00102", ed.genNodeID("DEPT","2", "New Department Floor 2"));

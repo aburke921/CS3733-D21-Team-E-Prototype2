@@ -50,7 +50,7 @@
          <children>
             <FlowPane prefHeight="40.0" prefWidth="377.0" style="-fx-background-color: -fx--primary;" HBox.hgrow="ALWAYS">
                <children>
-                  <Label fx:id="appBarTitleLabel" prefHeight="38.0" prefWidth="486.0" textFill="WHITE">
+                  <Label fx:id="appBarTitleLabel" prefHeight="38.0" prefWidth="341.0" textFill="WHITE">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -65,15 +65,25 @@
                   <Insets right="30.0" />
                </padding>
                <children>
-                  <StackPane alignment="CENTER_RIGHT" prefHeight="38.0" prefWidth="466.0">
+                  <StackPane alignment="CENTER_RIGHT">
                      <children>
-                        <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="38.0" prefWidth="521.0">
+                        <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="38.0">
                            <children>
-                              <StackPane alignment="CENTER_RIGHT">
+                              <StackPane alignment="CENTER_RIGHT" maxHeight="38.0" minHeight="38.0" prefHeight="38.0">
                                  <children>
-                                    <JFXToggleButton fx:id="clientToggle" onAction="#clientToggle" prefHeight="60.0" text="Client Driven Database" textFill="WHITE" />
+                                    <JFXToggleButton fx:id="clientToggle" onAction="#clientToggle" text="Client Driven Database" textFill="WHITE" />
                                     <JFXToggleButton fx:id="embeddedToggle" onAction="#embeddedToggle" text="Embedded Driven Database" textFill="WHITE" />
-                                    <JFXButton fx:id="myTodoButtonLeft" style="-fx-background-color: -fx--primary-dark;" text="My To Do" textFill="WHITE" />
+                                    <JFXButton fx:id="myToDoButtonLeft" style="-fx-background-color: -fx--primary-dark;" text="My To Do" textFill="WHITE" />
+                                    <JFXToggleButton fx:id="embeddedToggleLeft" onAction="#embeddedToggle" text="Embedded Driven Database" textFill="WHITE">
+                                       <StackPane.margin>
+                                          <Insets right="91.0" />
+                                       </StackPane.margin>
+                                    </JFXToggleButton>
+                                    <JFXToggleButton fx:id="clientToggleLeft" onAction="#clientToggle" text="Client Driven Database" textFill="WHITE">
+                                       <StackPane.margin>
+                                          <Insets right="91.0" />
+                                       </StackPane.margin>
+                                    </JFXToggleButton>
                                  </children>
                                  <HBox.margin>
                                     <Insets right="20.0" />

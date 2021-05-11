@@ -408,10 +408,10 @@ public class makeConnection {
 		DB.addFloralRequest(new FloralObj(0, 15, 105, "ADEPT00102", "Xavier", "Carnations", 12, "Square", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Get well soon"));
 		DB.addFloralRequest(new FloralObj(0, 16, 105, "ADEPT00301", "Nikki", "Assortment", 1, "None", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate", "Feel Better!"));
 		DB.addFloralRequest(new FloralObj(0, 17, 105, "ADEPT00101", "Monica", "Roses", 6, "Tall", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Love and miss you!!"));
-		DB.updateToDo(48, null, -1, -1, 3, null, "2021-05-12", "9:15", "9:40", null, null, null);
-		DB.updateToDo(49, null, -1, -1, 3, null, "2021-05-12", "10:30", "11:00", null, null, null);
-		DB.updateToDo(50, null, -1, -1, 3, null, "2021-05-12", "13:30", null, null, null, null);
-		DB.updateToDo(51, null, -1, -1, 3, null, "2021-05-12", "15:45", "16:15", null, null, null);
+		DB.updateToDo(48, null, -1, 10, 3, null, "2021-05-12", "9:15", "9:40", null, null, null);
+		DB.updateToDo(49, null, -1, 10, 2, null, "2021-05-12", "10:30", "11:00", null, null, null);
+		DB.updateToDo(50, null, -1, -1, 1, null, "2021-05-12", "13:30", null, null, null, null);
+		DB.updateToDo(51, null, -1, -1, 1, null, "2021-05-12", "15:45", "16:15", null, null, null);
 		DB.updateToDo(52, null, -1, -1, 3, null, "2021-05-12", "21:15", "21:20", null, null, null);
 
 

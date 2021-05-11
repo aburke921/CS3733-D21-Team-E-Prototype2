@@ -7,6 +7,7 @@
 <?import java.lang.String?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -17,7 +18,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.image.ImageView?>
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@../mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.serviceRequestControllers.Floral">
     <children>
         <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
@@ -44,12 +44,12 @@
                                                                   <children>
                                                                       <JFXComboBox fx:id="locationInput" prefHeight="27.0" prefWidth="295.0" promptText="Location">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="5.0" top="20.0"  />
+                                                                              <Insets bottom="5.0" top="20.0" />
                                                                           </VBox.margin>
                                                                       </JFXComboBox>
                                                                       <JFXComboBox fx:id="flowerType" prefHeight="27.0" prefWidth="295.0" promptText="Flower Type">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="5.0" top="20.0"  />
+                                                                              <Insets bottom="5.0" top="20.0" />
                                                                           </VBox.margin>
                                                                           <items>
                                                                               <FXCollections fx:factory="observableArrayList">
@@ -62,7 +62,7 @@
                                                                       </JFXComboBox>
                                                                       <JFXComboBox fx:id="flowerCount" prefHeight="27.0" prefWidth="295.0" promptText="Flower Amount">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="5.0" top="20.0"  />
+                                                                              <Insets bottom="5.0" top="20.0" />
                                                                           </VBox.margin>
                                                                           <items>
                                                                               <FXCollections fx:factory="observableArrayList">
@@ -82,12 +82,12 @@
                                                                               </FXCollections>
                                                                           </items>
                                                                           <VBox.margin>
-                                                                              <Insets bottom="5.0" top="20.0"  />
+                                                                              <Insets bottom="5.0" top="20.0" />
                                                                           </VBox.margin>
                                                                       </JFXComboBox>
                                                                       <JFXTextField fx:id="recipient" prefHeight="27.0" prefWidth="295.0" promptText="Recipient">
                                                                           <VBox.margin>
-                                                                              <Insets bottom="5.0" top="20.0"  />
+                                                                              <Insets bottom="5.0" top="20.0" />
                                                                           </VBox.margin>
                                                                       </JFXTextField>
                                                                       <JFXComboBox fx:id="assignee" prefHeight="27.0" prefWidth="295.0" promptText="Assignee">
@@ -163,8 +163,8 @@
                                                   <children>
                                                       <AnchorPane prefHeight="71.0" prefWidth="1200.0">
                                                           <children>
-                                                              <JFXButton fx:id="cancel" layoutX="455.0" layoutY="45.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" />
-                                                              <JFXButton fx:id="submit" layoutX="532.0" layoutY="46.0" onAction="#saveData" styleClass="submit-button" text="Submit" />
+                                                              <JFXButton fx:id="cancel" layoutX="455.0" layoutY="45.0" onAction="#handleButtonCancel" styleClass="cancel-button" text="Cancel" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="86.0" />
+                                                              <JFXButton fx:id="submit" layoutX="532.0" layoutY="46.0" onAction="#saveData" styleClass="submit-button" text="Submit" AnchorPane.bottomAnchor="17.0" AnchorPane.rightAnchor="11.0" />
                                                           </children>
                                                       </AnchorPane>
                                                   </children>

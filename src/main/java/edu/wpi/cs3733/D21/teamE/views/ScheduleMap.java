@@ -15,7 +15,10 @@ import edu.wpi.cs3733.D21.teamE.pathfinding.SearchContext;
 import edu.wpi.cs3733.D21.teamE.scheduler.Schedule;
 import edu.wpi.cs3733.D21.teamE.scheduler.ToDo;
 import edu.wpi.cs3733.D21.teamE.states.ToDoState;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
 import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -283,6 +286,9 @@ public class ScheduleMap {
 
                 double distance = 0;
 
+                double dashlength = 10;
+                double lineOffset = -20;
+
                 ObservableList<Double> coordsList = FXCollections.observableArrayList();
 
                 int firstNode = 1;
@@ -307,81 +313,34 @@ public class ScheduleMap {
                         if (!(prevYCoord < 1) || !(prevXCoord < 1)) {
                             //technically second node, here to prevent circle from being "under" path line, prev will be fist node
                             firstNode = 0;
+                            /*
                             MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
                             icon.setSize(mapMarkerSize);
                             icon.setLayoutX(prevXCoord + markerIconXOffset);
                             icon.setLayoutY(prevYCoord + markerIconYOffset);
 
+                             */
+
                             if (firstID.equalsIgnoreCase(selectedStartNodeID)) {
                                 System.out.println("SCALE: " + scale);
                                 // True first node
-                                icon.setId("submission-icon");
+                                //icon.setId("submission-icon");
 
                                 //circle = new Circle(prevXCoord, prevYCoord, radius, Color.GREEN);
                             } else {
                                 // First on floor
-                                icon.setId("red-icon");
+                                //icon.setId("red-icon");
 
                                 //circle = new Circle(prevXCoord, prevYCoord, radius, Color.RED);
                             }
 
-
-                            //create a line between this node and the previous node
-                            Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-                            line.setStrokeLineCap(StrokeLineCap.ROUND);
-                            line.setStrokeWidth(strokeWidth);
-                            line.setStroke(Color.RED);
-
-                            g.getChildren().addAll(line, icon);
                         } else {
                             //Track true first node's ID, for node color issue
                             firstID = node.get("id");
                         }
-                        if (!legItr.hasNext()) { //if current node is the ending node for this floor, e.g. last node is also first node on floor
-
-                            MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
-                            icon.setSize(mapMarkerSize);
-                            icon.setLayoutX(xCoord + markerIconXOffset);
-                            icon.setLayoutY(yCoord + markerIconYOffset);
-
-                            if (node.get("id").equals(selectedStartNodeID)) { // start node of entire path
-                                //place a dot on the location
-                                icon.setId("submission-icon");
-                            } else if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
-                                //place a dot on the location
-                                icon.setId("black-icon");
-                            } else { // end node of just this floor
-                                //place a dot on the location
-                                icon.setId("red-icon");
-                            }
-
-                            g.getChildren().addAll(icon);
-                        }
                         //update the coordinates for the previous node
                         prevXCoord = xCoord;
                         prevYCoord = yCoord;
-
-
-                    } else if (!legItr.hasNext()) { //if current node is the ending node for this floor
-
-                        MaterialDesignIconView icon = new MaterialDesignIconView(MaterialDesignIcon.MAP_MARKER);
-                        icon.setSize(mapMarkerSize);
-                        icon.setLayoutX(xCoord + markerIconXOffset);
-                        icon.setLayoutY(yCoord + markerIconYOffset);
-
-                        if (node.get("id").equals(selectedEndNodeID)) { // end node of entire path
-                            //place a dot on the location
-                            icon.setId("black-icon");
-                        } else { // end node of just this floor
-                            //place a dot on the location
-                            icon.setId("red-icon");
-                        }
-
-                        //create a line between this node and the previous node
-                        Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-                        line.setStrokeLineCap(StrokeLineCap.ROUND);
-                        line.setStrokeWidth(strokeWidth);
-                        line.setStroke(Color.RED);
 
                         Label floorLabel = null;
                         FlowPane flowPane = new FlowPane();
@@ -448,21 +407,11 @@ public class ScheduleMap {
                                 setCurrentFloor(finalDestFloor);
                             });
 
-                            g.getChildren().addAll(line, icon, flowPane);
-                        } else {
-                            //otherwise, only add the line and node circle
-                            g.getChildren().addAll(line, icon);
+                            g.getChildren().addAll(flowPane);
                         }
 
                         //else, if current node is not this floors ending node, i.e., path continues
                     } else {
-                        //create a line between this node and the previous node
-                        Line line = new Line(prevXCoord, prevYCoord, xCoord, yCoord);
-                        line.setStrokeLineCap(StrokeLineCap.ROUND);
-                        line.setStrokeWidth(strokeWidth);
-                        line.setStroke(Color.RED);
-
-                        g.getChildren().add(line);
 
                         //update the coordinates for the previous node
                         prevXCoord = xCoord;
@@ -518,26 +467,30 @@ public class ScheduleMap {
                     g.getChildren().add(circle);
                 }
 
-                //Add moving ball along path
-                Circle ball = new Circle(5, Color.RED);
-                g.getChildren().add(ball);
+
+
+                g.setOnMouseEntered(e -> {
+                    JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
+                    JFXListView listView = new JFXListView();
+                    ArrayList<String> nodeInfo = new ArrayList<String>();
+                    ObservableList<String> observableNodeInfo = FXCollections.observableArrayList();
+                    nodeInfo.addAll(observableNodeInfo);
+                    jfxDialogLayout.setBody(new Text("Hi!"));
+                    JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+                    dialog.show();
+                });
 
                 Polyline polyline = new Polyline();
                 polyline.getPoints().addAll(coordsList);
+                polyline.setStroke(Color.web("#006db3"));
+                polyline.setStrokeWidth(2);
+                polyline.getStrokeDashArray().setAll(dashlength, dashlength);
+                pane.getChildren().addAll(polyline);
 
-                PathTransition transition = new PathTransition();
-                transition.setNode(ball);
-
-                if(distance > 100){
-                    double duration = distance / 150;
-                    transition.setDuration(Duration.seconds(duration));
-                } else {
-                    transition.setDuration(Duration.seconds(1));
-                }
-
-                transition.setPath(polyline);
-                transition.setCycleCount(PathTransition.INDEFINITE);
-                transition.play();
+                Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(polyline.strokeDashOffsetProperty(), 0)),
+                        new KeyFrame(Duration.seconds(1), new KeyValue(polyline.strokeDashOffsetProperty(), lineOffset)));
+                timeline.setCycleCount(Timeline.INDEFINITE);
+                timeline.play();
 
                 //add all objects to the scene
                 pane.getChildren().addAll(g);
@@ -706,6 +659,7 @@ public class ScheduleMap {
             }
         });
 
+
         preparePathDisplay();
     }
 
@@ -739,13 +693,7 @@ public class ScheduleMap {
     }
 
     private void hoverNode() {
-        JFXDialogLayout jfxDialogLayout = new JFXDialogLayout();
-        JFXListView listView = new JFXListView();
-        ArrayList<String> nodeInfo = new ArrayList<String>();
-        ObservableList<String> observableNodeInfo = FXCollections.observableArrayList();
-        nodeInfo.addAll(observableNodeInfo);
-        jfxDialogLayout.setBody(listView);
-        JFXDialog dialog = new JFXDialog(stackPane, jfxDialogLayout, JFXDialog.DialogTransition.CENTER);
+
     }
 
 

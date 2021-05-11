@@ -447,7 +447,9 @@ public class ToDoDetails {
         int assignedUserID;
         if(!selfAssign.isSelected()){
             validatedControls.add(userIDInput);
-            assignedUserID = Integer.parseInt(userIDInput.getValue());
+            int userIndex = userIDInput.getSelectionModel().getSelectedIndex();
+            Integer userIDFromList = userIDList.get(userIndex);
+            assignedUserID = userIDFromList;
         } else {
             assignedUserID = App.userID;
         }

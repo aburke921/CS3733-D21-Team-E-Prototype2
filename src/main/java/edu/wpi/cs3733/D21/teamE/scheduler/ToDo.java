@@ -147,7 +147,19 @@ public class ToDo implements Comparable<ToDo>{
     }
 
     public boolean isConflict(Time startTime, Time endTime){
-        return (startTime.compareTo(this.startTime) > 0 && startTime.compareTo(this.endTime) < 0) ||
-                (this.startTime.compareTo(startTime) > 0 && this.startTime.compareTo(endTime) < 0);
+        if(endTime.isEmpty() && this.endTime.isEmpty()){
+            return startTime.compareTo(this.startTime) == 0;
+        } else if(endTime.isEmpty()){
+            return startTime.compareTo(this.startTime) > 0 && startTime.compareTo(this.endTime) < 0;
+        } else if(this.endTime.isEmpty()){
+            return this.startTime.compareTo(startTime) > 0 && this.startTime.compareTo(endTime) < 0;
+        } else {
+            return (startTime.compareTo(this.startTime) >= 0 && startTime.compareTo(this.endTime) <= 0) ||
+                    (this.startTime.compareTo(startTime) >= 0 && this.startTime.compareTo(endTime) <= 0);
+        }
+    }
+
+    public boolean equals(ToDo t){
+        return todoID == t.todoID;
     }
 }

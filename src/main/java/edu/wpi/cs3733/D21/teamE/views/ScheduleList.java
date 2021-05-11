@@ -56,7 +56,13 @@ public class ScheduleList {
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
 
-        datePicker.setValue(LocalDate.now());
+
+        if(App.getToDoDate() == null) {
+            datePicker.setValue(LocalDate.now());
+        } else {
+            datePicker.setValue(App.getToDoDate());
+        }
+
         Date date = new Date(datePicker.getValue());
         setDateLabel(date);
 
@@ -69,6 +75,7 @@ public class ScheduleList {
             public void handle(MouseEvent event) {
                 LocalDate currDate = datePicker.getValue();
                 datePicker.setValue(currDate.minusDays(1));
+                App.setToDoDate(datePicker.getValue());
                 setDateLabel(new Date(datePicker.getValue()));
                 prepareToDoTable(treeTableView, datePicker.getValue().toString());
             }
@@ -79,6 +86,7 @@ public class ScheduleList {
             public void handle(MouseEvent event) {
                 LocalDate currDate = datePicker.getValue();
                 datePicker.setValue(currDate.plusDays(1));
+                App.setToDoDate(datePicker.getValue());
                 setDateLabel(new Date(datePicker.getValue()));
                 prepareToDoTable(treeTableView, datePicker.getValue().toString());
             }
@@ -174,7 +182,7 @@ public class ScheduleList {
         }
     }
 
-    private static String blankIfNull(String s) {
+    private String blankIfNull(String s) {
         return s == null ? "" : s;
     }
 
@@ -224,6 +232,7 @@ public class ScheduleList {
             ToDo todo = treeTableView.getSelectionModel().getSelectedItem().getValue();
             DB.updateToDo(todo.getTodoID(), null, -1, 10, -1, null, null, null, null, null, null, null);
         }
+        prepareToDoTable(treeTableView, datePicker.getValue().toString());
     }
 
     @FXML

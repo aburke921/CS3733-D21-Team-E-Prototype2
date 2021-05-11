@@ -35,6 +35,7 @@ import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -104,6 +105,7 @@ public class App extends Application {
 	private static boolean toEmergency = false;
 
 	private static ToDo editToDo = null;
+	private static LocalDate toDoDate = null;
 
 	private static boolean lockEndPath = false;
 	public static String driverURL;
@@ -137,6 +139,8 @@ public class App extends Application {
 	public static void setToEmergency(boolean toEmergency) { App.toEmergency = toEmergency; }
 	public static ToDo getToDo() { return App.editToDo; }
 	public static void setToDo(ToDo todo) { App.editToDo = todo; }
+	public static LocalDate getToDoDate() { return App.toDoDate; }
+	public static void setToDoDate(LocalDate date) { App.toDoDate = date; }
 
 	public static boolean isLockEndPath() { return lockEndPath; }
 	public static void setLockEndPath(boolean lockEndPath) { App.lockEndPath = lockEndPath; }

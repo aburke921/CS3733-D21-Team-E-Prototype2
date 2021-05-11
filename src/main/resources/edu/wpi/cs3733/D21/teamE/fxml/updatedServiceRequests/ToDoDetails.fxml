@@ -100,14 +100,19 @@
                                                                                 <Insets top="30.0" />
                                                                             </VBox.margin>
                                                                         </JFXTextArea>
-                                                      <JFXDatePicker fx:id="notificationDateInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="278.0" promptText="Notification Date">
+                                                      <JFXCheckBox fx:id="sendNotification" onAction="#sendNotification" text="Send Notification">
                                                          <VBox.margin>
-                                                            <Insets bottom="10.0" top="20.0" />
+                                                            <Insets top="20.0" />
+                                                         </VBox.margin>
+                                                      </JFXCheckBox>
+                                                      <JFXDatePicker fx:id="notificationDateInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="278.0" promptText="Notification Date" visible="false">
+                                                         <VBox.margin>
+                                                            <Insets bottom="10.0" top="10.0" />
                                                          </VBox.margin>
                                                       </JFXDatePicker>
-                                                      <JFXTimePicker fx:id="notificationTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="Notification Time">
+                                                      <JFXTimePicker fx:id="notificationTimeInput" defaultColor="#13a5ed" prefHeight="27.0" prefWidth="284.0" promptText="Notification Time" visible="false">
                                                          <VBox.margin>
-                                                            <Insets top="10.0" />
+                                                            <Insets />
                                                          </VBox.margin>
                                                       </JFXTimePicker>
                                                                     </children>

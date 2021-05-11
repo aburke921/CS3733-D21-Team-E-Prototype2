@@ -43,6 +43,23 @@ public class Schedule implements Iterable<ToDo>{
         return isAvailable;
     }
 
+    public String canAddErrorMessage(Time startTime, Time endTime){
+        boolean isAvailable = true;
+        String errorMessage = "";
+        Iterator<ToDo> itr = schedule.iterator();
+
+        ToDo curr = null;
+        while(isAvailable && itr.hasNext()){
+            curr = itr.next();
+            isAvailable &= !(curr.isConflict(startTime, endTime));
+        }
+        if(!isAvailable) {
+            errorMessage += "Cannot add new ToDo between " + startTime + " and " + endTime + ". ";
+            errorMessage += "Conflicts with ToDo " + ((curr != null) ? curr.getTitle() + ": " + curr.getStartTime() + " and " + curr.getEndTime() : "");
+        }
+        return errorMessage;
+    }
+
     public boolean canChange(ToDo existing, Time newStartTime, Time newEndTime){
         boolean isAvailable = true;
         Iterator<ToDo> itr = schedule.iterator();
@@ -61,6 +78,24 @@ public class Schedule implements Iterable<ToDo>{
         return isAvailable;
     }
 
+    public String canChangeErrorMessage(ToDo existing, Time newStartTime, Time newEndTime){
+        boolean isAvailable = true;
+        String errorMessage = "";
+        Iterator<ToDo> itr = schedule.iterator();
+
+        ToDo curr = null;
+        while(isAvailable && itr.hasNext()){
+            curr = itr.next();
+            if(!curr.equals(existing)){
+                isAvailable &= !(curr.isConflict(newStartTime, newEndTime));
+            }
+        }
+        if(!isAvailable) {
+            errorMessage += "Cannot add new ToDo between " + newStartTime + " and " + newEndTime + ". ";
+            errorMessage += "Conflicts with ToDo " + ((curr != null) ? curr.getTitle() + ": " + curr.getStartTime() + " and " + curr.getEndTime() : "");
+        }
+        return errorMessage;
+    }
 
 
     public List<Node> getLocations(){

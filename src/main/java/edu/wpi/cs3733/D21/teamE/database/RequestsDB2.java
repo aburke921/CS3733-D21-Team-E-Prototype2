@@ -189,7 +189,7 @@ public class RequestsDB2 {
 	public static void addFloralRequest(FloralObj request) {
 		addRequest(request.getUserID(), request.getAssigneeID(), "floral");
 
-		String insertFloralRequest = "Insert Into floralrequests Values ((Select Max(requestID) From requests), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String insertFloralRequest = "Insert Into floralrequests Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertFloralRequest)) {
 			prepState.setString(1, request.getNodeID());
@@ -203,6 +203,7 @@ public class RequestsDB2 {
 			prepState.setString(9, request.getMessage());
 
 			prepState.execute();
+			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, request.getNodeID(), null, null, null, "Recipient: " + request.getRecipient() + "\nFlower: " + request.getFlower() + "\nCount: " + request.getCount() + "\nVase: " + request.getVase() + "\nArrangement: " + request.getArrangement() + "\nStuffed Animal: " + request.getStuffedAnimal() + "\nChocolate: " + request.getChocolate() + "\nMessage: " + request.getMessage(), null, null);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error inserting into floralRequests inside function addFloralRequest()");
@@ -279,7 +280,6 @@ public class RequestsDB2 {
 				query = query + ", ";
 			}
 			query = query + " message = '" + request.getMessage() + "'";
-			added = true;
 		}
 
 		query = query + " where requestID = " + request.getRequestID();

@@ -543,8 +543,7 @@ public class RequestsDB2 {
 		addRequest(userID, assigneeID, "extTransport");
 
 		String insertExtTransport = "Insert Into exttransport " +
-				"Values ((Select Count(*) " +
-				"         From requests), ?, ?, ?, ?, ?, ?, ?, ?)";
+				"Values ((Select Max(ToDoID) From ToDo), ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement prepState = connection.prepareStatement(insertExtTransport)) {
 			prepState.setString(1, roomID);
@@ -557,7 +556,7 @@ public class RequestsDB2 {
 			prepState.setString(8, description);
 
 			prepState.execute();
-
+			ToDoDB.updateToDo(ToDoDB.getMaxToDoID(), null, -1, -1, -1, roomID, null, null, null, "Type: " + requestType + "\nSeverity: " + severity + "\nPatient ID: " + patientID + "\nBlood Pressure: " + bloodPressure + "\nTemperature: " + temperature + "\nOxygen Level: " + oxygenLevel + "\nDescription: " + description, null, null);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error inserting into extTransport inside function addExternalPatientRequest()");

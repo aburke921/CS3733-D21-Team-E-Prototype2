@@ -152,9 +152,16 @@ public class AppBarComponent {
 
         if (App.userID != 0) { //if a user is logged in, hide remaining login button
             appLoginButton.setText("Hello, " + DB.getUserName(App.userID));
+            String userType = DB.getUserType(App.userID);
+
+            if (userType.equals("visitor") || userType.equals("patient")) {
+                myToDoButton.setManaged(false); //visitors and patients can't see todo
+            }
         } else {
             myToDoButton.setManaged(false);
         }
+
+
 
 
         //show the toggle switch if the logged in user is an admin
@@ -219,5 +226,13 @@ public class AppBarComponent {
         }
     }
 
-
+    @FXML
+    public void switchSceneToToDo(ActionEvent actionEvent) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/ScheduleList.fxml"));
+            App.changeScene(root);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

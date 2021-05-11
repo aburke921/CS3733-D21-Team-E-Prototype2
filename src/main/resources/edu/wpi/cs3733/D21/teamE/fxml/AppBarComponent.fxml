@@ -74,7 +74,7 @@
                                     <Insets left="10.0" />
                                  </HBox.margin>
                               </JFXToggleButton>
-                              <JFXButton fx:id="myToDoButton" style="-fx-background-color: -fx--primary-dark;" text="My To Do" textFill="WHITE">
+                              <JFXButton fx:id="myToDoButton" onAction="#switchSceneToToDo" style="-fx-background-color: -fx--primary-dark;" text="My To Do" textFill="WHITE">
                                  <HBox.margin>
                                     <Insets left="10.0" />
                                  </HBox.margin>

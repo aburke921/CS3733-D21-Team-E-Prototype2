@@ -72,12 +72,12 @@
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Text>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: -fx--primary-dark;" text="- 1  upper case character" wrappingWidth="299.130859375">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: -fx--primary-dark;" text="- 1 upper case charachter" wrappingWidth="299.130859375">
                                              <VBox.margin>
                                                 <Insets top="5.0" />
                                              </VBox.margin>
                                           </Text>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: -fx--primary-dark;" text="- 1 special character (available options: $ @ ! # %)" wrappingWidth="299.130859375">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: -fx--primary-dark;" text="- 1 special charachter (available options: $ @ ! # %)" wrappingWidth="299.130859375">
                                              <VBox.margin>
                                                 <Insets top="5.0" />
                                              </VBox.margin>

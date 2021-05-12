@@ -129,8 +129,6 @@ public class ScheduleMap {
 
     private ArrayList<Node> currentMarkers = new ArrayList<>();
 
-    Stage primaryStage;
-
     private static String minETA;
     private static String secETA;
     private static String dist;
@@ -138,10 +136,6 @@ public class ScheduleMap {
     private double scale;
 
     private int[] floorVisits = new int[]{0, 0, 0, 0, 0, 0}; // Number of times each floor has been visited, in order: L2, L1, G, 1, 2, 3
-
-    private String selectedStartNodeID; // selected starting value's ID
-
-    private String selectedEndNodeID; // selected ending value's ID
 
     private String currentFloor = "1"; // set based on button presses
 
@@ -165,7 +159,6 @@ public class ScheduleMap {
 
     /**
      * Uses {@link SearchContext}'s search() function to find the best path,
-     * given the two current start and end positions ({@link #selectedStartNodeID} and {@link #selectedEndNodeID}).
      * Then calls {@link #drawMap(Path, String)}.
      * Sets {@link #currentFoundPath}. Returns a SnackBar when path is null.
      */
@@ -197,7 +190,6 @@ public class ScheduleMap {
         }
         search.setAlgo(algoType);
         //search.setConstraint("SAFE");
-        System.out.println(algoType + " Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
 
         //Call the path search function
         Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
@@ -397,35 +389,6 @@ public class ScheduleMap {
         dialog.show();
     }
 
-    /**
-     * Switches visible floor
-     * @param e Button click action
-     */
-    public void chooseFloor(ActionEvent e) {
-        Button button = ((Button) e.getSource());
-        String floor = button.getText();
-        currFloor.setText(floor);
-
-        setCurrentFloor(floor);
-    }
-
-
-    /**
-     * Clears the path and closes the sidebar
-     *
-     * @param event the calling event's info
-     */
-    @FXML
-    void pathClear(ActionEvent event) {
-
-        //clear map
-        System.out.print("\nCLEARING MAP...");
-        pane.getChildren().clear();
-        minETA = ("00");
-        secETA = ("00");
-        dist = ("");
-        System.out.println(" DONE");
-    }
 
 
 

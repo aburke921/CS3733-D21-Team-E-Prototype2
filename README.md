@@ -1,41 +1,50 @@
-# Getting Started with this code
+# README.md
 
-We require that all teams do their work for CS3733 Projects on a private repository in a Github Organization. 
-In order to turn this code into such a repository, please follow these instructions.
+### QR Code:
 
-https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/duplicating-a-repository 
+There is a button on the main page of the app that opens the device’s default camera to allow the user to scan a QR code with the view finder.
+The QR codes are going to be found inside the hospital so the user can get their phone out and quickly scan for information.
+There are two kinds of QR codes, one for precise indoor locating and one for parking slot registration.
+It allows the app to know where the user is currently is, so it can direct the user to somewhere without the need of locating satellites since it was indoors and has multiple floors.
+The parking slot codes allow the user to keep track of their parked location with the app, they can click a link on their default page to be taken to their car.
 
+Sample QR Code:
+EEXIT00101 Ambulance Parking Exit Floor 1 Location:
+![EEXIT00101 Ambulance Parking Exit Floor 1 Location](src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/EEXIT00101%20Ambulance%20Parking%20Exit%20Floor%201.png)
+Parking Slot #1 Register:
+![Parking Slot #1 Register](src/main/resources/edu/wpi/cs3733/D21/teamE/QRcode/qr-code.png)
 
-# Important Files
-## build.gradle / gradle.properties
-This is the gradle configuration file. Modify this file to add dependencies to your project. In
- general you should only modify the depedencies section of this file, however there are a few
-  modification you will need to make when you begin the project
-  
-  - `mainClassName`
-    - Modifiy this variable to point to your main class. By default it is `edu.wpi.teamname.Main
-    `, but once you update your teamname package to your team letter you will need to update this
-     path.
+### Usable User Accounts
 
+> admin: `admin admin`
 
+> doctor: `staff staff`
 
-## .gitignore
-This file tells git which files to ignore in the repo. It should be correctly configured already
-**Only modify this file if you are sure you know what you are doing**
+> patient: `patient patient`
 
+> visitor: `visitor visitor`
 
-## resources/edu/wpi/teamname/fxml
-Here you will find the Fxml files for the default scenes. This method of accessing resources is how we recommend you organize all your FXML for the project.
+Rest of accounts contained in `CSVs/out/USERACCOUNT.csv`
 
-# Building a jar
-To assemble a jar file for your project, run the "jar" gradle task, either through IntelliJ or by doing
-`gradle jar` on a terminal. Gradle will automatically download all dependencies needed to compile your jar file,
-which will be stored in the build/libs folder.
+### User Management System
 
-Make sure to edit the main class attribute the build.gradle file, you'll need to change it in order to obtain
-a working jar file.
+To use our user management system, please use a valid email account to log in to the application to test any service request, appointment request, and ToDo request functionalities. This will allow you to receive the confirmation and reminder emails we have set up.
 
+> Username: wwong2@wpi.edu
+> Password: admin
 
+If you choose a reminder option for the appointment or ToDo request functionality, a pop up will launch asking you to log into the Gmail account. If you click “Ok”, please follow the steps below:
 
+1. Console will display a link, please open it (the window will open automatically)
+2. In the Google Sign-In page, click “Use another account”
+3. Log into Google with the following username and password:
+   
+> Username: engineeringsoftware3733@gmail.com Password: SoftEngCS3733
 
-
+4. A warning page will be displayed saying “Google has not verified this app”
+5. Click the greyed-out link “Advanced” in the bottom left
+6. Click “Go to QuickStart (unsafe)” link
+7. A popup will be displayed asking to grant Quickstart permission
+8. Click “Allow”
+9. Click blue “Allow” button
+10. Go back to the App being run and Login with email: `wwong@wpi.edu` Password: `admin`

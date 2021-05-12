@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import edu.wpi.cs3733.D21.teamE.App;
+import edu.wpi.cs3733.D21.teamE.DB;
 
 import java.sql.*;
 
@@ -61,29 +62,6 @@ public class appointmentDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.err.println("Error inserting into appointment table inside function addAppointment()");
-			return 0;
-		}
-
-	}
-
-	public static int getMaxAppointmentID() {
-
-		int maxID = 0;
-
-		String query = "Select Max(appointmentid) As maxAppointmentID From appointment";
-
-		try (PreparedStatement prepState = connection.prepareStatement(query)) {
-			ResultSet rset = prepState.executeQuery();
-
-			if (rset.next()) {
-				maxID = rset.getInt("maxAppointmentID");
-			}
-
-			prepState.close();
-			return maxID;
-		} catch (SQLException e) {
-//			e.printStackTrace();
-			System.err.println("Error in getMaxAppointmentID()");
 			return 0;
 		}
 
@@ -147,6 +125,7 @@ public class appointmentDB {
 		try (PreparedStatement prepState = connection.prepareStatement(insertCancelQuery)) {
 			prepState.setInt(1, appointmentID);
 			prepState.execute();
+			DB.updateToDoStatus(appointmentID, 0);
 			return 1;
 		} catch (SQLException e) {
 			e.printStackTrace();

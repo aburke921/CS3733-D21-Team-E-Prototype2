@@ -147,7 +147,7 @@ public class makeConnection {
 
 	public void addDataForPresentation() {
 		//Visitors:
-		// - have access to floral Delivery
+		//1 - 12
 		DB.addUserAccount("bellag@gmail.com", "visitor1", "Bella", "Graham");
 		DB.addUserAccount("terry_reilly123@yahoo.com", "visitor2", "Terry", "Reilly");
 		DB.addUserAccount("smiddle@outlook.com", "visitor3", "Sharon", "Middleton");
@@ -400,7 +400,16 @@ public class makeConnection {
 		DB.updateToDoStatus(45, 10);
 		DB.updateToDoStatus(47, 10);
 
-		//ToDo_app:
+		//Appointments:
+		DB.addAppointment(13, "9:00", "2021-05-12", 20);
+		DB.addAppointment(14, "10:15", "2021-05-12", 21);
+		DB.addAppointment(15, "11:30", "2021-05-12", 22);
+		DB.addAppointment(16, "13:00", "2021-05-12", 23);
+		DB.addAppointment(17, "14:15", "2021-05-12", 24);
+		DB.addAppointment(18, "15:30", "2021-05-12", 25);
+		DB.addAppointment(19, "16:45", "2021-05-12", 26);
+
+		//ToDo_app Demo - Floral Requests:
 		DB.addSpecialUserType("floralDude@mail.com", "WeGotThis", "floralPerson", "Darren", "Rossi");
 		//DB.updateToDo(DB.addCustomToDo(105, "Visit Smith's child and bring her flowers when off duty"), null, -1, -1, 1, "GLABS003L2", "2021-05-12", "12:15", null, "I think she would like roses? IDK, poor kid", null, null);
 		DB.addFloralRequest(new FloralObj(0, 13, 105, "ELABS00101", "Adam", "Roses", 1, "None", "do not Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Hi Adam, I am so sorry to hear about your accident. Please get better soon!"));
@@ -408,11 +417,11 @@ public class makeConnection {
 		DB.addFloralRequest(new FloralObj(0, 15, 105, "CCONF003L1", "Xavier", "Carnations", 12, "Square", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Get well soon"));
 		DB.addFloralRequest(new FloralObj(0, 16, 105, "DDEPT00402", "Nikki", "Assortment", 1, "None", "do not Include arrangement", "Include stuffed Animal", "do not Include Chocolate", "Feel Better!"));
 		DB.addFloralRequest(new FloralObj(0, 17, 105, "ADEPT00101", "Monica", "Roses", 6, "Tall", "Include arrangement", "do not Include stuffed Animal", "Include Chocolate", "Love and miss you!!"));
-		DB.updateToDo(48, null, -1, -1, 3, null, "2021-05-12", "9:15", "9:40", null, null, null);
-		DB.updateToDo(49, null, -1, -1, 2, null, "2021-05-12", "10:30", "11:00", null, null, null);
-		DB.updateToDo(50, null, -1, -1, 1, null, "2021-05-12", "13:30", null, null, null, null);
-		DB.updateToDo(51, null, -1, -1, 1, null, "2021-05-12", "15:45", "16:15", null, null, null);
-		DB.updateToDo(52, null, -1, -1, 3, null, "2021-05-12", "21:15", "21:20", null, null, null);
+		DB.updateToDo(55, null, -1, -1, 3, null, "2021-05-12", "9:15", "9:40", null, null, null);
+		DB.updateToDo(56, null, -1, -1, 2, null, "2021-05-12", "10:30", "11:00", null, null, null);
+		DB.updateToDo(57, null, -1, -1, 1, null, "2021-05-12", "13:30", null, null, null, null);
+		DB.updateToDo(58, null, -1, -1, 1, null, "2021-05-12", "15:45", "16:15", null, null, null);
+		DB.updateToDo(59, null, -1, -1, 3, null, "2021-05-12", "21:15", "21:20", null, null, null);
 
 
 		//Special Accounts:
@@ -435,7 +444,13 @@ public class makeConnection {
 			e.printStackTrace();
 		}
 
+		//ToDo_app Demo - Appointments:
+		DB.addAppointment(19, "9:30", "2021-05-12", 30000);
+		DB.addAppointment(18, "10:45", "2021-05-12", 30000);
+		DB.addAppointment(17, "12:00", "2021-05-12", 30000);
+		DB.addAppointment(16, "13:30", "2021-05-12", 30000);
+		DB.addAppointment(15, "14:45", "2021-05-12", 30000);
+		DB.addAppointment(14, "16:00", "2021-05-12", 30000);
+		DB.addAppointment(13, "17:15", "2021-05-12", 30000);
 	}
-
-
 }

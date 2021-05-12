@@ -296,14 +296,6 @@ public class DB {
 	}
 
 	/**
-	 * increments appointmentID by 1 each time an appointment is made
-	 * @return 0 if ID cannot be incremented, 1 if ID is incremented correctly
-	 */
-	public static int getMaxAppointmentID() {
-		return appointmentDB.getMaxAppointmentID();
-	}
-
-	/**
 	 * edits an appointment
 	 * @param appointmentID is the ID of the appointment
 	 * @param newStartTime  is the new start time of the appointment

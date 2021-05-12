@@ -79,7 +79,22 @@ public class DefaultState implements State{
                     ex.printStackTrace();
                 }
                 break;
+            case "aboutButton":
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/About.fxml"));
+                    App.changeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            case "creditButton":
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/cs3733/D21/teamE/fxml/Credit.fxml"));
+                    App.changeScene(root);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                break;
             }
-
         }
     }

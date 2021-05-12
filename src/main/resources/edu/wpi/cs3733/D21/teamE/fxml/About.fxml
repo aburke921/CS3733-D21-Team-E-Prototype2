@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.About">
+   <children>
+      <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
+      <AnchorPane prefHeight="687.0" prefWidth="1199.0">
+         <children>
+            <StackPane fx:id="stackPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <BorderPane>
+                     <center>
+                        <HBox alignment="CENTER" maxWidth="600.0" prefHeight="610.0" prefWidth="519.0" styleClass="centerPane">
+                           <children>
+                              <FlowPane alignment="CENTER" prefHeight="0.0" prefWidth="888.0">
+                                 <children>
+                                    <ImageView fx:id="imageView" fitHeight="600.0" fitWidth="1200.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true">
+                                       <FlowPane.margin>
+                                          <Insets top="20.0" />
+                                       </FlowPane.margin>
+                                    </ImageView>
+                                 </children>
+                              </FlowPane>
+                           </children>
+                        </HBox>
+                     </center>
+                     <bottom>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The Brigham &amp; Women’s Hospital maps and data used in this application are copyrighted and provided for the sole use of educational purposes." wrappingWidth="767.13671875" BorderPane.alignment="CENTER" />
+                     </bottom>
+                  </BorderPane>
+               </children>
+            </StackPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="71.0" prefWidth="1200.0" />
+      <GridPane>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <JFXButton fx:id="exit" onAction="#exit" prefHeight="27.0" prefWidth="60.0" styleClass="back-button" text="Back" GridPane.halignment="LEFT">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" />
+               </GridPane.margin>
+            </JFXButton>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="10.0" />
+         </padding>
+      </GridPane>
+   </children>
+</VBox>

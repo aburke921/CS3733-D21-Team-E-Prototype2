@@ -57,9 +57,9 @@
                                     </HBox>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <JFXButton fx:id="covidSurvey" minWidth="200.0" onAction="#toCovidSurvey" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="COVID Survey" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="covidSurvey" alignment="CENTER" minWidth="200.0" onAction="#toCovidSurvey" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="COVID Survey" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="15.0" />
                                              </font>
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="LAPTOP" size="40" />
@@ -68,9 +68,9 @@
                                                 <Insets right="50.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton fx:id="pathFinderButton" minWidth="200.0" onAction="#toPathFinder" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Path Finder" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="pathFinderButton" alignment="CENTER" minWidth="200.0" onAction="#toPathFinder" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Path Finder" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="15.0" />
                                              </font>
                                              <graphic>
                                                 <MaterialDesignIconView glyphName="MAGNIFY" size="40" />
@@ -86,9 +86,9 @@
                                     </HBox>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <JFXButton fx:id="ScanQRCodeButton" minWidth="200.0" onAction="#toScanQRCode" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Scan QR Code" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="ScanQRCodeButton" alignment="CENTER" minWidth="200.0" onAction="#toScanQRCode" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Scan QR Code" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="15.0" />
                                              </font>
                                              <graphic>
                                                 <MaterialDesignIconView glyphName="QRCODE" size="40" />
@@ -97,9 +97,9 @@
                                                 <Insets right="50.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton fx:id="DirectionsButton" minWidth="200.0" onAction="#toDirections" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Directions to BWH" textFill="#039be5" wrapText="true">
+                                          <JFXButton fx:id="DirectionsButton" alignment="CENTER" minWidth="200.0" onAction="#toDirections" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Directions to BWH" textFill="#039be5" wrapText="true">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="15.0" />
                                              </font>
                                              <graphic>
                                                 <MaterialDesignIconView glyphName="MAP" size="40" />
@@ -115,9 +115,9 @@
                                     </HBox>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <JFXButton fx:id="scheduleAppointmentButton" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Schedule Appointment" textFill="#039be5" wrapText="true">
+                                          <JFXButton fx:id="scheduleAppointmentButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Schedule Appointment" textFill="#039be5" wrapText="true">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="15.0" />
                                              </font>
                                              <graphic>
                                                 <FontAwesomeIconView glyphName="CALENDAR" size="30" />
@@ -126,9 +126,9 @@
                                                 <Insets right="50.0" />
                                              </HBox.margin>
                                           </JFXButton>
-                                          <JFXButton fx:id="serviceRequestButton" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Service Requests" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                          <JFXButton fx:id="serviceRequestButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Service Requests" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="15.0" />
                                              </font>
                                              <graphic>
                                                 <MaterialDesignIconView glyphName="CLIPBOARD_OUTLINE" size="40" />
@@ -154,15 +154,15 @@
                                              <children>
                                                 <JFXButton fx:id="checkInStatusButton" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Patron Check-In Management" textFill="#039be5" wrapText="true">
                                                    <font>
-                                                      <Font size="14.0" />
+                                                      <Font size="15.0" />
                                                    </font>
                                                    <graphic>
                                                       <FontAwesomeIconView glyphName="CLIPBOARD" size="40" />
                                                    </graphic>
                                                 </JFXButton>
-                                                <JFXButton fx:id="userManagementButton" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="User Management" textFill="#039be5" wrapText="true">
+                                                <JFXButton fx:id="userManagementButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="User Management" textFill="#039be5" wrapText="true">
                                                    <font>
-                                                      <Font size="18.0" />
+                                                      <Font size="15.0" />
                                                    </font>
                                                    <graphic>
                                                       <FontAwesomeIconView glyphName="USERS" size="30" />
@@ -188,9 +188,9 @@
                                           </VBox>
                                           <VBox>
                                              <children>
-                                                <JFXButton fx:id="mapEditorButton" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Map Editor" textFill="#039be5" wrapText="true">
+                                                <JFXButton fx:id="mapEditorButton" alignment="CENTER" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Map Editor" textFill="#039be5" wrapText="true">
                                                    <font>
-                                                      <Font size="18.0" />
+                                                      <Font size="15.0" />
                                                    </font>
                                                    <graphic>
                                                       <FontAwesomeIconView glyphName="EDIT" size="40" />

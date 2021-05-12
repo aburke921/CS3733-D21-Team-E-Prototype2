@@ -141,31 +141,6 @@ public class ServiceRequestStatus {
         System.out.println(test.getChildren().size());
     }
 
-    public void checkoutRequest(TreeTableView<ServiceRequestForm> table) {
-
-        String typeOfForm = table.getSelectionModel().getSelectedItem().getParent().getValue().getId();
-
-        if(typeOfForm.equals("External Patient Form")) {
-
-        }
-        if(typeOfForm.equals("Floral Form")) {
-
-        }
-        if(typeOfForm.equals("Medicine Delivery Form")) {
-
-        }
-        if(typeOfForm.equals("Sanitation Service Form")) {
-
-        }
-        if(typeOfForm.equals("Security Services Form")) {
-
-        }
-    }
-
-    public void checkRequestButton(ActionEvent e) {
-        checkoutRequest(serviceRequestTable);
-    }
-
 
     public void prepareTable(TreeTableView serviceRequestTable) {
         if(serviceRequestTable.getRoot() == null) {
@@ -177,7 +152,7 @@ public class ServiceRequestStatus {
                     new ReadOnlyStringWrapper(p.getValue().getValue().getId()));
             serviceRequestTable.getColumns().add(formColumn);
             //Column 2 - Location
-            TreeTableColumn<ServiceRequestForm, String> locationColumn = new TreeTableColumn<>("Location");
+            TreeTableColumn<ServiceRequestForm, String> locationColumn = new TreeTableColumn<>("Time");
             locationColumn.setPrefWidth(150);
             locationColumn.setCellValueFactory((CellDataFeatures<ServiceRequestForm, String> p) ->
                     new ReadOnlyStringWrapper(p.getValue().getValue().getLocation()));

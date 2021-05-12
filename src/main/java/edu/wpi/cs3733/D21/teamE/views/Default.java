@@ -73,9 +73,6 @@ public class Default {
     @FXML // fx:id="algoTextTop"
     private Label algoTextTop;
 
-    @FXML // fx:id="algoTextBottom"
-    private Label algoTextBottom;
-
     @FXML // fx:id="carParkedText"
     private Label carParkedText;
 
@@ -278,7 +275,6 @@ public class Default {
         if(!userType.equals("admin")) {
             mapEditorButton.setVisible(false);
             algoTextTop.setVisible(false);
-            algoTextBottom.setVisible(false);
             algo.setVisible(false);
             applyChange.setVisible(false);
             userManagementButton.setVisible(false);

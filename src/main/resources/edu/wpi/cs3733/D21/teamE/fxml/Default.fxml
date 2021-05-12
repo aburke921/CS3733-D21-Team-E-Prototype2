@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
 <VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.Default">
    <children>
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
@@ -33,6 +38,23 @@
                                           <Insets top="35.0" />
                                        </VBox.margin>
                                     </ImageView>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <JFXButton fx:id="aboutButton" maxHeight="25.0" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="About Us" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets right="50.0" />
+                                             </HBox.margin>
+                                          </JFXButton>
+                                          <JFXButton fx:id="creditButton" maxHeight="25.0" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Credit Page" textFill="#039be5" wrapText="true">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </JFXButton>
+                                       </children>
+                                    </HBox>
                                     <HBox alignment="CENTER">
                                        <children>
                                           <JFXButton fx:id="covidSurvey" minWidth="200.0" onAction="#toCovidSurvey" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="COVID Survey" textFill="#039be5" wrapText="true" HBox.hgrow="ALWAYS">
@@ -132,7 +154,7 @@
                                              <children>
                                                 <JFXButton fx:id="checkInStatusButton" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Patron Check-In Management" textFill="#039be5" wrapText="true">
                                                    <font>
-                                                      <Font size="18.0" />
+                                                      <Font size="14.0" />
                                                    </font>
                                                    <graphic>
                                                       <FontAwesomeIconView glyphName="CLIPBOARD" size="40" />
@@ -149,6 +171,23 @@
                                                       <Insets top="20.0" />
                                                    </VBox.margin>
                                                 </JFXButton>
+                                                <Label fx:id="carParkedText" text="Your car is parked" textFill="006db3">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                   <VBox.margin>
+                                                      <Insets top="10.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Hyperlink fx:id="LinkToParking" alignment="CENTER" onAction="#toParking" prefWidth="130.0" text="Path to Parking" wrapText="true">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Hyperlink>
+                                             </children>
+                                          </VBox>
+                                          <VBox>
+                                             <children>
                                                 <JFXButton fx:id="mapEditorButton" minWidth="200.0" onAction="#switchScene" prefHeight="60.0" prefWidth="200.0" styleClass="default-button" text="Map Editor" textFill="#039be5" wrapText="true">
                                                    <font>
                                                       <Font size="18.0" />
@@ -157,46 +196,34 @@
                                                       <FontAwesomeIconView glyphName="EDIT" size="40" />
                                                    </graphic>
                                                    <VBox.margin>
-                                                      <Insets top="20.0" />
-                                                   </VBox.margin>
-                                                </JFXButton>
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="TOP_CENTER" prefWidth="200.0">
-                                             <children>
-                                                <Label fx:id="carParkedText" layoutX="24.0" layoutY="79.0" text="Your car is parked" textFill="006db3">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                </Label>
-                                                <Hyperlink fx:id="LinkToParking" alignment="CENTER" onAction="#toParking" prefWidth="130.0" text="Path to Parking" wrapText="true">
-                                                   <VBox.margin>
                                                       <Insets />
                                                    </VBox.margin>
-                                                </Hyperlink>
-                                                <Label fx:id="algoTextTop" text="Change Path Finding" textFill="006db3">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label fx:id="algoTextBottom" text="Algorithm" textFill="006db3">
-                                                   <font>
-                                                      <Font size="16.0" />
-                                                   </font>
-                                                </Label>
-                                                <JFXComboBox fx:id="algo" minWidth="150.0" promptText="Select Algorithm">
-                                                   <VBox.margin>
-                                                      <Insets top="15.0" />
-                                                   </VBox.margin>
-                                                </JFXComboBox>
-                                                <JFXButton fx:id="applyChange" onAction="#changeAlgo" prefWidth="100.0" styleClass="submit-button" text="Apply">
-                                                   <font>
-                                                      <Font size="18.0" />
-                                                   </font>
-                                                   <VBox.margin>
-                                                      <Insets top="10.0" />
-                                                   </VBox.margin>
                                                 </JFXButton>
+                                                <VBox alignment="TOP_CENTER" prefWidth="200.0">
+                                                   <children>
+                                                      <Label fx:id="algoTextTop" text="Path Finding Algorithm" textFill="006db3">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                         <VBox.margin>
+                                                            <Insets />
+                                                         </VBox.margin>
+                                                      </Label>
+                                                      <JFXComboBox fx:id="algo" minWidth="150.0" promptText="Select Algorithm">
+                                                         <VBox.margin>
+                                                            <Insets top="10.0" />
+                                                         </VBox.margin>
+                                                      </JFXComboBox>
+                                                      <JFXButton fx:id="applyChange" onAction="#changeAlgo" prefWidth="100.0" styleClass="submit-button" text="Apply">
+                                                         <VBox.margin>
+                                                            <Insets top="10.0" />
+                                                         </VBox.margin>
+                                                      </JFXButton>
+                                                   </children>
+                                                   <VBox.margin>
+                                                      <Insets top="20.0" />
+                                                   </VBox.margin>
+                                                </VBox>
                                              </children>
                                           </VBox>
                                        </children>

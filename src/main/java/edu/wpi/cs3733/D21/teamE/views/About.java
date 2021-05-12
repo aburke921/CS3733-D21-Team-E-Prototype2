@@ -1,5 +1,6 @@
 package edu.wpi.cs3733.D21.teamE.views;
 
+import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733.D21.teamE.App;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,14 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 public class About {
+
+    @FXML // fx:id="exit"
+    private JFXButton exit;
+
+    @FXML
+    public void initialize() {
+
+    }
 
     @FXML
     private void exit(ActionEvent actionEvent){

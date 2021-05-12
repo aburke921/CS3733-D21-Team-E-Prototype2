@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.fxml.About">
+<VBox prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733.D21.teamE.views.About">
    <children>
       <AnchorPane id="app-bar-top" fx:id="appBarAnchorPane" minHeight="65.0" prefHeight="65.0" prefWidth="1012.0" />
       <AnchorPane prefHeight="687.0" prefWidth="1199.0">
@@ -23,19 +23,16 @@
                <children>
                   <BorderPane>
                      <center>
-                        <HBox maxWidth="600.0" prefHeight="610.0" prefWidth="519.0" styleClass="centerPane">
+                        <HBox alignment="CENTER" maxWidth="600.0" prefHeight="610.0" prefWidth="519.0" styleClass="centerPane">
                            <children>
-                              <FlowPane prefHeight="0.0" prefWidth="888.0">
+                              <FlowPane alignment="CENTER" prefHeight="0.0" prefWidth="888.0">
                                  <children>
-                                    <ImageView fitHeight="700.0" fitWidth="1200.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="imageView" fitHeight="600.0" fitWidth="1200.0" focusTraversable="true" pickOnBounds="true" preserveRatio="true">
                                        <FlowPane.margin>
-                                          <Insets left="-90.0" />
+                                          <Insets top="20.0" />
                                        </FlowPane.margin>
                                     </ImageView>
                                  </children>
-                                 <padding>
-                                    <Insets left="150.0" />
-                                 </padding>
                               </FlowPane>
                            </children>
                         </HBox>

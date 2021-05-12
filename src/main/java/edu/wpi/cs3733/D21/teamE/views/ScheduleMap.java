@@ -116,7 +116,7 @@ public class ScheduleMap {
 
     //private Schedule;
 
-    private Node startNode = null;
+
     private Node endNode = null;
 
     private double stageWidth;
@@ -129,8 +129,6 @@ public class ScheduleMap {
 
     private ArrayList<Node> currentMarkers = new ArrayList<>();
 
-    Stage primaryStage;
-
     private static String minETA;
     private static String secETA;
     private static String dist;
@@ -138,10 +136,6 @@ public class ScheduleMap {
     private double scale;
 
     private int[] floorVisits = new int[]{0, 0, 0, 0, 0, 0}; // Number of times each floor has been visited, in order: L2, L1, G, 1, 2, 3
-
-    private String selectedStartNodeID; // selected starting value's ID
-
-    private String selectedEndNodeID; // selected ending value's ID
 
     private String currentFloor = "1"; // set based on button presses
 
@@ -165,7 +159,6 @@ public class ScheduleMap {
 
     /**
      * Uses {@link SearchContext}'s search() function to find the best path,
-     * given the two current start and end positions ({@link #selectedStartNodeID} and {@link #selectedEndNodeID}).
      * Then calls {@link #drawMap(Path, String)}.
      * Sets {@link #currentFoundPath}. Returns a SnackBar when path is null.
      */
@@ -174,15 +167,6 @@ public class ScheduleMap {
         floorVisits = new int[]{0, 0, 0, 0, 0, 0};
 
         System.out.println("\nFINDING PATH...");
-
-        if (startNode != null) { // if not null, there is a preset start
-            selectedStartNodeID = startNode.get("id");
-            currentFloor = startNode.get("floor");
-        }
-
-        if (endNode != null) { // if not null, there is a preset end
-            selectedEndNodeID = endNode.get("id");
-        }
 
         //Define Search
         SearchContext search = new SearchContext();
@@ -206,7 +190,6 @@ public class ScheduleMap {
         }
         search.setAlgo(algoType);
         //search.setConstraint("SAFE");
-        System.out.println(algoType + " Search with startNodeID of " + selectedStartNodeID + ", and endNodeID of " + selectedEndNodeID + "\n");
 
         //Call the path search function
         Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
@@ -406,42 +389,13 @@ public class ScheduleMap {
         dialog.show();
     }
 
-    /**
-     * Switches visible floor
-     * @param e Button click action
-     */
-    public void chooseFloor(ActionEvent e) {
-        Button button = ((Button) e.getSource());
-        String floor = button.getText();
-        currFloor.setText(floor);
-
-        setCurrentFloor(floor);
-    }
-
-
-    /**
-     * Clears the path and closes the sidebar
-     *
-     * @param event the calling event's info
-     */
-    @FXML
-    void pathClear(ActionEvent event) {
-
-        //clear map
-        System.out.print("\nCLEARING MAP...");
-        pane.getChildren().clear();
-        minETA = ("00");
-        secETA = ("00");
-        dist = ("");
-        System.out.println(" DONE");
-    }
 
 
 
 
     public void drawMap(Path fullPath, String floorNum) {
 
-    //clear map
+        //clear map
         System.out.print("\nCLEARING MAP...");
         pane.getChildren().clear();
         System.out.println(" DONE");
@@ -451,296 +405,299 @@ public class ScheduleMap {
         //for double icons
         ArrayList<String> doubleIconList = new ArrayList<>();
 
-    //updateMarkers();
+        //updateMarkers();
 
-    //if path is null
+        //if path is null
         if (fullPath == null) {
-        //todo snackbar to say no path set
-        return;
-    }
+            //todo snackbar to say no path set
+            return;
+        }
 
-    int legNum = 0;
+        int legNum = 0;
 
-    List<Path> paths = fullPath.splitByFloor();
+        List<Path> paths = fullPath.splitByFloor();
         for(Path path : paths){
-        if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
+            if(path.getStart().get("floor").equalsIgnoreCase(floorNum)){
 
-            ArrayList<MapMarker> markerList = new ArrayList<>(); // List of markers to place at the end of the drawing of the path
+                ArrayList<MapMarker> markerList = new ArrayList<>(); // List of markers to place at the end of the drawing of the path
 
-            double markerIconXOffset = -(scale * 3);
-            double markerIconYOffset = -(scale / 2);
-            String mapMarkerSize = "25";
+                double markerIconXOffset = -(scale * 3);
+                double markerIconYOffset = -(scale / 2);
+                String mapMarkerSize = "25";
 
-            Iterator<Node> legItr = path.iterator();
-            Iterator<Node> legItrCopy = path.iterator();
+                Iterator<Node> legItr = path.iterator();
+                Iterator<Node> legItrCopy = path.iterator();
 
-            Group g = new Group(); //create group to contain all the shapes before we add them to the scene
+                Group g = new Group(); //create group to contain all the shapes before we add them to the scene
 
-            //Use these variables to keep track of the coordinates of the previous node
-            double prevXCoord = 0;
-            double prevYCoord = 0;
+                //Use these variables to keep track of the coordinates of the previous node
+                double prevXCoord = 0;
+                double prevYCoord = 0;
 
-            double distance = 0;
+                double distance = 0;
 
-            double dashlength = 10;
-            double lineOffset = -20;
+                double dashlength = 10;
+                double lineOffset = -20;
 
-            ObservableList<Double> coordsList = FXCollections.observableArrayList();
+                ObservableList<Double> coordsList = FXCollections.observableArrayList();
 
-            boolean firstNode = true;
-            String firstID = null;
+                boolean firstNode = true;
+                String firstID = null;
 
-            //loop through list of nodes and add coordinates to Array List (this will be used to create the polyline)
-            while (legItrCopy.hasNext()) {
-                Node node = legItrCopy.next();
-                //Resize the coordinates to match the resized image
-                double xCoord = (double) node.getX() / scale;
-                double yCoord = (double) node.getY() / scale;
+                //loop through list of nodes and add coordinates to Array List (this will be used to create the polyline)
+                while (legItrCopy.hasNext()) {
+                    Node node = legItrCopy.next();
+                    //Resize the coordinates to match the resized image
+                    double xCoord = (double) node.getX() / scale;
+                    double yCoord = (double) node.getY() / scale;
 
-                coordsList.add(xCoord);
-                coordsList.add(yCoord);
-            }
-
-            Polyline polyline = new Polyline();
-            polyline.getPoints().addAll(coordsList);
-            polyline.setStroke(Color.web("#006db3"));
-            polyline.setStrokeWidth(2);
-            polyline.getStrokeDashArray().setAll(dashlength, dashlength);
-            pane.getChildren().addAll(polyline);
-
-            Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(polyline.strokeDashOffsetProperty(), 0)),
-                    new KeyFrame(Duration.seconds(1), new KeyValue(polyline.strokeDashOffsetProperty(), lineOffset)));
-            timeline.setCycleCount(Timeline.INDEFINITE);
-            timeline.play();
-
-            while (legItr.hasNext()) { //loop through list
-                //this iterator will return a Node object
-                //which is just a container for all the node info like its coordinates
-                Node node = legItr.next();
-
-                //Resize the coordinates to match the resized image
-                double xCoord = (double) node.getX() / scale;
-                double yCoord = (double) node.getY() / scale;
-
-                coordsList.add(xCoord);
-                coordsList.add(yCoord);
-
-                if(prevXCoord >= 1 && prevYCoord >= 1) {
-                    distance += Math.hypot(xCoord - prevXCoord, yCoord - prevYCoord);
+                    coordsList.add(xCoord);
+                    coordsList.add(yCoord);
                 }
 
-                if (!legItr.hasNext()) { //if current node is the ending node for this floor
-                    Label floorLabel = null;
-                    FlowPane flowPane = new FlowPane();
-                    String destFloor = "";
+                Polyline polyline = new Polyline();
+                polyline.getPoints().addAll(coordsList);
+                polyline.setStroke(Color.web("#006db3"));
+                polyline.setStrokeWidth(2);
+                polyline.getStrokeDashArray().setAll(dashlength, dashlength);
+                pane.getChildren().addAll(polyline);
 
-                    String nodeS = Integer.toString(node.getX()) + "." + Integer.toString(node.getY());
+                Timeline timeline = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(polyline.strokeDashOffsetProperty(), 0)),
+                        new KeyFrame(Duration.seconds(1), new KeyValue(polyline.strokeDashOffsetProperty(), lineOffset)));
+                timeline.setCycleCount(Timeline.INDEFINITE);
+                timeline.play();
 
-                    if(!doubleIconList.contains(nodeS)) {
-                        //if the current node is a stair or an elevator, add a label
-                        if ((node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV"))) {
+                while (legItr.hasNext()) { //loop through list
+                    //this iterator will return a Node object
+                    //which is just a container for all the node info like its coordinates
+                    Node node = legItr.next();
+
+                    //Resize the coordinates to match the resized image
+                    double xCoord = (double) node.getX() / scale;
+                    double yCoord = (double) node.getY() / scale;
+
+                    coordsList.add(xCoord);
+                    coordsList.add(yCoord);
+
+                    if(prevXCoord >= 1 && prevYCoord >= 1) {
+                        distance += Math.hypot(xCoord - prevXCoord, yCoord - prevYCoord);
+                    }
+
+                    if (!legItr.hasNext()) { //if current node is the ending node for this floor
+                        Label floorLabel = null;
+                        FlowPane flowPane = new FlowPane();
+                        String destFloor = "";
+
+                        String nodeS = Integer.toString(node.getX()) + "." + Integer.toString(node.getY());
+
+                        if(!doubleIconList.contains(nodeS)) {
+                            //if the current node is a stair or an elevator, add a label
+                            if ((node.get("type").equalsIgnoreCase("STAI") || node.get("type").equalsIgnoreCase("ELEV"))) {
 
 
-                            //iterate through the path
-                            Iterator<Node> fullItr = fullPath.iterator();
-                            while (fullItr.hasNext()) {
+                                //iterate through the path
+                                Iterator<Node> fullItr = fullPath.iterator();
+                                while (fullItr.hasNext()) {
 
-                                Node nodeCopy = fullItr.next();
+                                    Node nodeCopy = fullItr.next();
 
-                                if (node.equals(nodeCopy) && fullItr.hasNext()) {
+                                    if (node.equals(nodeCopy) && fullItr.hasNext()) {
 
-                                    Node nextNode = fullItr.next();
+                                        Node nextNode = fullItr.next();
 
-                                    if (!doubleIconList.contains(nodeS) && (nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV"))) {
+                                        if (!doubleIconList.contains(nodeS) && (nextNode.get("type").equalsIgnoreCase("STAI") || nextNode.get("type").equalsIgnoreCase("ELEV"))) {
 
-                                        //create string for label
-                                        String toFloor = "Go to Floor " + nextNode.get("floor");
-                                        destFloor = nextNode.get("floor");
+                                            //create string for label
+                                            String toFloor = "Go to Floor " + nextNode.get("floor");
+                                            destFloor = nextNode.get("floor");
 
-                                        //add string to label
-                                        floorLabel = new Label(toFloor);
+                                            //add string to label
+                                            floorLabel = new Label(toFloor);
 
-                                        //if current node is on a greater floor than the next
-                                        if (Node.calculateZ(node.get("floor")) > Node.calculateZ(nextNode.get("floor"))) {
-                                            //add down icon
-                                            FontAwesomeIconView iconDown = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_DOWN);
-                                            iconDown.setSize("15");
-                                            floorLabel.setGraphic(iconDown);
-                                        } else { //current node is on a lower floor than next node
-                                            //add up icon
-                                            FontAwesomeIconView iconUP = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_UP);
-                                            iconUP.setSize("15");
-                                            floorLabel.setGraphic(iconUP);
+                                            //if current node is on a greater floor than the next
+                                            if (Node.calculateZ(node.get("floor")) > Node.calculateZ(nextNode.get("floor"))) {
+                                                //add down icon
+                                                FontAwesomeIconView iconDown = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_DOWN);
+                                                iconDown.setSize("15");
+                                                floorLabel.setGraphic(iconDown);
+                                            } else { //current node is on a lower floor than next node
+                                                //add up icon
+                                                FontAwesomeIconView iconUP = new FontAwesomeIconView(FontAwesomeIcon.ARROW_CIRCLE_ALT_UP);
+                                                iconUP.setSize("15");
+                                                floorLabel.setGraphic(iconUP);
+                                            }
+                                            if (!doubleIconList.contains(nodeS)) {
+                                                doubleIconList.add(nodeS);
+                                                System.out.println("ICON PRINTING");
+
+                                                //put the label inside the flowPane
+                                                flowPane.getChildren().add(floorLabel);
+
+                                                //position the flowPane next to the node
+                                                double xCoordLabel = (nextNode.getX() / scale) + 4;
+                                                double yCoordLabel = (nextNode.getY() / scale) - 4;
+                                                flowPane.setLayoutX(xCoordLabel);
+                                                flowPane.setLayoutY(yCoordLabel);
+
+                                                flowPane.getStyleClass().add("floor-change"); //add floor-change css so the child label disappears on hover
+                                                flowPane.setPrefWrapLength(0); //shrink flowPane to be as small as child
+                                            }
                                         }
-                                        if (!doubleIconList.contains(nodeS)) {
-                                            doubleIconList.add(nodeS);
-                                            System.out.println("ICON PRINTING");
 
-                                            //put the label inside the flowPane
-                                            flowPane.getChildren().add(floorLabel);
-
-                                            //position the flowPane next to the node
-                                            double xCoordLabel = (nextNode.getX() / scale) + 4;
-                                            double yCoordLabel = (nextNode.getY() / scale) - 4;
-                                            flowPane.setLayoutX(xCoordLabel);
-                                            flowPane.setLayoutY(yCoordLabel);
-
-                                            flowPane.getStyleClass().add("floor-change"); //add floor-change css so the child label disappears on hover
-                                            flowPane.setPrefWrapLength(0); //shrink flowPane to be as small as child
-                                        }
                                     }
-
                                 }
                             }
                         }
-                    }
 
-                    if(floorLabel != null) {
-                        //if a floor label was made, line and node circle along with the label and its parent flowPane
-                        String finalDestFloor = destFloor;
+                        if(floorLabel != null) {
+                            //if a floor label was made, line and node circle along with the label and its parent flowPane
+                            String finalDestFloor = destFloor;
 
-                        floorLabel.setOnMouseClicked(e -> {
-                            int num = floorMap.get(floorNum);
-                            floorVisits[num] = floorVisits[num] + 1;
-                            setCurrentFloor(finalDestFloor);
-                        });
+                            floorLabel.setOnMouseClicked(e -> {
+                                int num = floorMap.get(floorNum);
+                                floorVisits[num] = floorVisits[num] + 1;
+                                setCurrentFloor(finalDestFloor);
+                            });
 
-                        //g.getChildren().addAll(line, flowPane);
-                        g.getChildren().addAll(flowPane);
-                    } /*else {
+                            //g.getChildren().addAll(line, flowPane);
+                            g.getChildren().addAll(flowPane);
+                        } /*else {
                         //otherwise, only add the line and node circle
                         g.getChildren().add(line);
                     }
                     */
 
-                } else if (firstNode) { //if current node is the starting node
-                    firstNode = false;
+                    } else if (firstNode) { //if current node is the starting node
+                        firstNode = false;
 
 
-                    //update the coordinates for the previous node
-                    prevXCoord = xCoord;
-                    prevYCoord = yCoord;
+                        //update the coordinates for the previous node
+                        prevXCoord = xCoord;
+                        prevYCoord = yCoord;
 
-                    //else, if current node is not this floors ending node, i.e., path continues
-                } else {
-                    //update the coordinates for the previous node
-                    prevXCoord = xCoord;
-                    prevYCoord = yCoord;
+                        //else, if current node is not this floors ending node, i.e., path continues
+                    } else {
+                        //update the coordinates for the previous node
+                        prevXCoord = xCoord;
+                        prevYCoord = yCoord;
+                    }
+
                 }
 
-            }
-
-            for (MapMarker marker : markerList) {
-                g.getChildren().add(marker.makeMarker());
-            }
-
-            Group s = new Group();
-
-            //display nodes
-            for (int i = 0; i < locationArray.size(); i++) {
-                if(locationArray.get(i).get("floor").equals(currentFloor)) {
-                    double xCoord = locationArray.get(i).getX() / scale;
-                    double yCoord = locationArray.get(i).getY() / scale;
-                    Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
-                    if (locationArray.get(i).get("type").equals("HALL")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.web("#7c7c7c"));
-                    }
-                    if (locationArray.get(i).get("type").equals("CONF")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.web("#7f5124"));
-                    }
-                    if (locationArray.get(i).get("type").equals("DEPT")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.web("#74058c"));
-                    }
-                    if (locationArray.get(i).get("type").equals("ELEV")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.web("#769557"));
-                    }
-                    if (locationArray.get(i).get("type").equals("INFO")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.web("#dc721c"));
-                    }
-                    if (locationArray.get(i).get("type").equals("LABS")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.web("#c900ae"));
-                    }
-                    if (locationArray.get(i).get("type").equals("REST")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.web("#b00404"));
-                    }
-                    if (locationArray.get(i).get("type").equals("RETL")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.web("#3d4f9d"));
-                    }
-                    if (locationArray.get(i).get("type").equals("STAI")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.web("#007f52"));
-                    }
-                    if (locationArray.get(i).get("type").equals("SERV")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.web("#005cff"));
-                    }
-                    if (locationArray.get(i).get("type").equals("EXIT")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.web("#90e430"));
-                    }
-                    if (locationArray.get(i).get("type").equals("PARK")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.web("#1299d2"));
-                    }
-                    if (locationArray.get(i).get("type").equals("WALK")) {
-                        circle = new Circle(xCoord, yCoord, 5, Color.BLACK);
-                    }
-                    s.getChildren().add(circle);
+                for (MapMarker marker : markerList) {
+                    g.getChildren().add(marker.makeMarker());
                 }
-            }
-            Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
-            ObservableList<String> observableNodeInfo = FXCollections.observableArrayList();
 
-            JFXListView listView = new JFXListView();
-            listView.setItems(observableNodeInfo);
-            Stage stickyNotesStage = new Stage();
-            stickyNotesStage.initOwner(App.getPrimaryStage());
-            stickyNotesStage.initStyle(StageStyle.UNDECORATED);
-            StackPane stickyNotesPane = new StackPane();
-            stickyNotesPane.setPrefHeight(200);
-            stickyNotesPane.setPrefWidth(300);
-            listView.setStyle("-fx-text-fill: WHITE");
-            listView.setStyle("-fx-background-color: -fx--primary");
-            listView.setStyle("-fx-font-family: Roboto");
-            stickyNotesPane.getChildren().add(listView);
-            stickyNotesStage.setScene(new Scene(stickyNotesPane));
-            s.hoverProperty().addListener((ChangeListener<Boolean>) (Circle, oldValue, newValue) -> {
-                //todo if not start
-                if (newValue) {
-                    System.out.println("ZERO");
-                    Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
-                    stickyNotesStage.setX(mouseLocation.getX()+10);
-                    stickyNotesStage.setY(mouseLocation.getY()-10);
-                    stickyNotesStage.show();
+                Group s = new Group();
 
-                } else {
-                    stickyNotesStage.hide();
+                //display nodes
+                for (int i = 0; i < locationArray.size(); i++) {
+                    if(locationArray.get(i).get("floor").equals(currentFloor)) {
+                        double xCoord = locationArray.get(i).getX() / scale;
+                        double yCoord = locationArray.get(i).getY() / scale;
+                        Circle circle = new Circle(xCoord, yCoord, 2, Color.BLACK);
+                        if (locationArray.get(i).get("type").equals("HALL")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.web("#7c7c7c"));
+                        }
+                        if (locationArray.get(i).get("type").equals("CONF")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.web("#7f5124"));
+                        }
+                        if (locationArray.get(i).get("type").equals("DEPT")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.web("#74058c"));
+                        }
+                        if (locationArray.get(i).get("type").equals("ELEV")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.web("#769557"));
+                        }
+                        if (locationArray.get(i).get("type").equals("INFO")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.web("#dc721c"));
+                        }
+                        if (locationArray.get(i).get("type").equals("LABS")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.web("#c900ae"));
+                        }
+                        if (locationArray.get(i).get("type").equals("REST")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.web("#b00404"));
+                        }
+                        if (locationArray.get(i).get("type").equals("RETL")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.web("#3d4f9d"));
+                        }
+                        if (locationArray.get(i).get("type").equals("STAI")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.web("#007f52"));
+                        }
+                        if (locationArray.get(i).get("type").equals("SERV")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.web("#005cff"));
+                        }
+                        if (locationArray.get(i).get("type").equals("EXIT")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.web("#90e430"));
+                        }
+                        if (locationArray.get(i).get("type").equals("PARK")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.web("#1299d2"));
+                        }
+                        if (locationArray.get(i).get("type").equals("WALK")) {
+                            circle = new Circle(xCoord, yCoord, 5, Color.BLACK);
+                        }
+                        s.getChildren().add(circle);
+                    }
                 }
-            });
+                Schedule scheduleOngoing = DB.getSchedule(App.userID, 1, datePicker.getValue().toString());
+                ObservableList<String> observableNodeInfo = FXCollections.observableArrayList();
+                final Node startNode = DB.getNodeInfo("FEXIT00201");
 
-            s.setOnMouseEntered(e -> {
-                stickyNotesPane.getChildren().removeAll();
-                listView.getItems().clear();
-                observableNodeInfo.removeAll();
-                double X = e.getX();
-                int xInt = (int) X;
-                double Y = e.getY();
-                int yInt = (int) Y;
-                for (int i = 1; i < locationArray.size(); i++) {
-                        System.out.println(locationArray.get(i).get("longName"));
+                JFXListView listView = new JFXListView();
+                listView.setItems(observableNodeInfo);
+                Stage stickyNotesStage = new Stage();
+                stickyNotesStage.initOwner(App.getPrimaryStage());
+                stickyNotesStage.initStyle(StageStyle.UNDECORATED);
+                StackPane stickyNotesPane = new StackPane();
+                stickyNotesPane.setPrefHeight(200);
+                stickyNotesPane.setPrefWidth(300);
+                listView.setStyle("-fx-text-fill: WHITE");
+                listView.setStyle("-fx-background-color: -fx--primary");
+                listView.setStyle("-fx-font-family: Roboto");
+                stickyNotesPane.getChildren().add(listView);
+                stickyNotesStage.setScene(new Scene(stickyNotesPane));
+                s.hoverProperty().addListener((ChangeListener<Boolean>) (Circle, oldValue, newValue) -> {
+                    //todo if not start
+                    if (newValue) {
+                        Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+                        stickyNotesStage.setX(mouseLocation.getX()+10);
+                        stickyNotesStage.setY(mouseLocation.getY()-10);
+                        stickyNotesStage.show();
+
+                    } else {
+                        stickyNotesStage.hide();
+                    }
+                });
+
+                s.setOnMouseEntered(e -> {
+                    stickyNotesPane.getChildren().removeAll();
+                    observableNodeInfo.removeAll();
+                    listView.getItems().clear();
+                    double X = e.getX();
+                    int xInt = (int) X;
+                    double Y = e.getY();
+                    int yInt = (int) Y;
+                    for (int i = 0; i < locationArray.size(); i++) {
                         double nodeX = locationArray.get(i).getX() / scale;
                         int nodeXInt = (int) nodeX;
                         double nodeY = locationArray.get(i).getY() / scale;
                         int nodeYInt = (int) nodeY;
                         //if node coordinates match click coordinates +- 1, autofill fields with node info
                         if (Math.abs(nodeXInt - xInt) <= 5 && Math.abs(nodeYInt - yInt) <= 5) {
-                            for (int j = 0; j < scheduleOngoing.getLocations().size(); j++) {
+                            if (locationArray.get(i).equals(startNode)) {
+                                observableNodeInfo.add("Welcome!");
+                                System.out.println("IN");
+                            } else {
+                                observableNodeInfo.remove("Welcome!");
+                                for (int j = 0; j < scheduleOngoing.getLocations().size(); j++) {
                                     double schedX = scheduleOngoing.getLocations().get(j).getX() / scale;
                                     int schedXInt = (int) schedX;
                                     double schedY = scheduleOngoing.getLocations().get(j).getY() / scale;
                                     int schedYInt = (int) schedY;
                                     if (Math.abs(schedXInt - xInt) <= 5 && Math.abs(schedYInt - yInt) <= 5) {
-                                        if(scheduleOngoing.getLocations().get(j).get("floor").equals(currentFloor)) {
-                                        observableNodeInfo.add("Title: " + scheduleOngoing.get(j).getTitle());
-                                        observableNodeInfo.add("Location: " + scheduleOngoing.get(j).getLocationString());
-                                        observableNodeInfo.add("Time: " + scheduleOngoing.get(j).getStartTime().hourMinString());
-                                        if (scheduleOngoing.get(j).getStatus() == 1) {
+                                        if (scheduleOngoing.getLocations().get(j).get("floor").equals(currentFloor)) {
+                                            observableNodeInfo.add("Title: " + scheduleOngoing.get(j).getTitle());
+                                            observableNodeInfo.add("Location: " + scheduleOngoing.get(j).getLocationString());
+                                            observableNodeInfo.add("Time: " + scheduleOngoing.get(j).getStartTime().hourMinString());
                                             observableNodeInfo.add("Status: Incomplete");
                                         }
                                         switch (scheduleOngoing.get(j).getPriority()) {
@@ -760,62 +717,62 @@ public class ScheduleMap {
                                 }
                             }
                         }
+                        }
+                });
+
+                //add all objects to the scene
+                pane.getChildren().addAll(g, s);
+
+                ArrayList<Double> xCoords = new ArrayList<>();
+                ArrayList<Double> yCoords = new ArrayList<>();
+
+                int i = 0;
+                for (Double coord : coordsList) {
+                    if ((i % 2) == 0) {
+                        xCoords.add(coord);
+                    } else {
+                        yCoords.add(coord);
+                    }
+                    i++;
                 }
-            });
 
-            //add all objects to the scene
-            pane.getChildren().addAll(g, s);
+                // Set to opposites, for comparison
+                double xMin = 5000/scale;
+                double xMax = 0;
 
-            ArrayList<Double> xCoords = new ArrayList<>();
-            ArrayList<Double> yCoords = new ArrayList<>();
-
-            int i = 0;
-            for (Double coord : coordsList) {
-                if ((i % 2) == 0) {
-                    xCoords.add(coord);
-                } else {
-                    yCoords.add(coord);
+                for (Double coord : xCoords) {
+                    if (coord < xMin) {
+                        xMin = coord;
+                    }
+                    if (coord > xMax) {
+                        xMax = coord;
+                    }
                 }
-                i++;
+
+                // Set to opposites, for comparison
+                double yMin = 3400/scale;
+                double yMax = 0;
+
+                for (Double coord : yCoords) {
+                    if (coord < yMin) {
+                        yMin = coord;
+                    }
+                    if (coord > yMax) {
+                        yMax = coord;
+                    }
+                }
+
+                // Descale, back to "original" coords
+                if (legNum == floorVisits[floorMap.get(floorNum)]) {
+                    //zoomToPath(xMin * scale, xMax * scale, yMin * scale, yMax * scale);
+                }
+                legNum++;
+            } else {
+                System.out.println("No path on this floor");
+                //todo snackbar to say no nodes on this floor?
             }
-
-            // Set to opposites, for comparison
-            double xMin = 5000/scale;
-            double xMax = 0;
-
-            for (Double coord : xCoords) {
-                if (coord < xMin) {
-                    xMin = coord;
-                }
-                if (coord > xMax) {
-                    xMax = coord;
-                }
-            }
-
-            // Set to opposites, for comparison
-            double yMin = 3400/scale;
-            double yMax = 0;
-
-            for (Double coord : yCoords) {
-                if (coord < yMin) {
-                    yMin = coord;
-                }
-                if (coord > yMax) {
-                    yMax = coord;
-                }
-            }
-
-            // Descale, back to "original" coords
-            if (legNum == floorVisits[floorMap.get(floorNum)]) {
-                //zoomToPath(xMin * scale, xMax * scale, yMin * scale, yMax * scale);
-            }
-            legNum++;
-        } else {
-            System.out.println("No path on this floor");
-            //todo snackbar to say no nodes on this floor?
         }
     }
-}
 
 
     @FXML
